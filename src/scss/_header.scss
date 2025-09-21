@@ -165,9 +165,8 @@
       align-items: center;
       justify-content: center;
       height: 52px;
-      width: 826px;
-      padding: 6px 0 6px 18px;
-      gap: 8px;
+      padding: 0 18px 0 6px;
+      gap: 12px;
       background-color: #6839c8;
       border-radius: 25px;
       list-style: none;
@@ -178,13 +177,9 @@
 
       li {
         margin: 0;
-        padding-bottom: 40px;
-        margin-bottom: -40px;
-        position: relative;
 
-        &:not(#menu-item-50) {
-          margin-right: 22px;
-        }
+        // padding: 8px 16px;
+        position: relative;
 
         &#menu-item-50 {
           > a {
@@ -218,8 +213,8 @@
             &::after {
               content: "";
               display: inline-block;
-              width: 16px;
-              height: 16px;
+              width: 24px;
+              height: 24px;
               background-image: url("../img/icon_arrow_white.svg");
               background-size: contain;
               background-repeat: no-repeat;
@@ -240,7 +235,9 @@
           line-height: 1;
           color: #fff;
           text-decoration: none;
-          padding: 6px 8px;
+
+          // padding: 6px 8px;
+          padding: 8px 16px;
           border-radius: 16px;
           transition: background-color 0.2s ease;
 
@@ -254,12 +251,13 @@
         .sub-menu {
           display: none;
           position: absolute;
-          top: 52px;
+          top: 104px;
           left: 50%;
           transform: translateX(-27%);
           width: 980px;
           height: 170px;
           padding: 8px;
+          gap: 8px;
           background: #fff;
           border-radius: 20px;
           box-shadow: 0 4px 4px 0 #00000040;
@@ -270,7 +268,7 @@
           li {
             width: 154px;
             height: 154px;
-            margin: 0 !important;
+            margin: 0;
             padding: 16px;
             border-radius: 20px;
             display: flex;
