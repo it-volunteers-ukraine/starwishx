@@ -35,20 +35,20 @@ document.addEventListener('DOMContentLoaded', function () {
 
     if (!submenu) return;
 
-    
+   
     item.addEventListener('mouseenter', () => {
       clearTimeout(timeout);
       submenu.style.display = 'flex';
     });
 
-   
+    
     item.addEventListener('mouseleave', () => {
       timeout = setTimeout(() => {
         submenu.style.display = 'none';
       }, 300); 
     });
 
-   
+    
     submenu.addEventListener('mouseenter', () => {
       clearTimeout(timeout);
     });

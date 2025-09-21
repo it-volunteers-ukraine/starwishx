@@ -33,7 +33,7 @@
     padding: 12px 24px;
     gap: 10px;
     background: #6839c8;
-    border-radius: 25px;
+    border-radius: 40px;
     font-family: Inter, sans-serif;
     font-weight: 500;
     font-size: 18px;
@@ -168,7 +168,7 @@
       padding: 0 18px 0 6px;
       gap: 12px;
       background-color: #6839c8;
-      border-radius: 25px;
+      border-radius: 40px;
       list-style: none;
 
       @media (max-width: 768px) {
@@ -238,7 +238,7 @@
 
           // padding: 6px 8px;
           padding: 8px 16px;
-          border-radius: 16px;
+          border-radius: 40px;
           transition: background-color 0.2s ease;
 
           &:hover,
@@ -251,16 +251,15 @@
         .sub-menu {
           display: none;
           position: absolute;
-          top: 104px;
+          top: 90px;
           left: 50%;
-          transform: translateX(-27%);
-          width: 980px;
+          transform: translateX(-28%);
           height: 170px;
           padding: 8px;
           gap: 8px;
           background: #fff;
           border-radius: 20px;
-          box-shadow: 0 4px 4px 0 #00000040;
+          box-shadow: 4px 4px 4px 4px #00000040;
           z-index: 999;
           list-style: none;
           margin: 0;
@@ -270,7 +269,7 @@
             height: 154px;
             margin: 0;
             padding: 16px;
-            border-radius: 20px;
+            border-radius: 12px;
             display: flex;
             flex-direction: column;
             align-items: center;
