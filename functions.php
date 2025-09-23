@@ -109,3 +109,23 @@ if( function_exists('acf_add_options_page') ) {
     ));
 
 }
+
+// Вывод изображений в подменю
+add_filter('wp_nav_menu_objects', 'add_acf_images_to_submenu_items_only', 10, 2);
+function add_acf_images_to_submenu_items_only($items, $args) {
+  foreach ($items as &$item) {
+    // Пропускаем, если это пункт верхнего уровня (у него нет menu_item_parent)
+    if (empty($item->menu_item_parent)) {
+      continue;
+    }
+
+    // Получаем изображение из ACF
+    $image_id = get_field('images', 'nav_menu_item_' . $item->ID);
+    if ($image_id) {
+      $image_url = wp_get_attachment_image_url($image_id, 'full');
+      // Вставляем изображение ПЕРЕД текстом
+      $item->title = '<img src="' . esc_url($image_url) . '" alt="' . esc_attr($item->title) . '" class="submenu-item-images" />' . $item->title;
+    }
+  }
+  return $items;
+}
