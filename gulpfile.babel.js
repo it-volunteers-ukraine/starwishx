@@ -318,7 +318,7 @@ export const production = () => {
 // Listen for changes
 export const watchForChanges = () => {
   watch("src/scss/**/*.scss", styles);
-  watch("src/images/**/*.{jpg,jpeg,png,svg,gif}", images);
+  watch("src/img/**/*.{jpg,jpeg,png,svg,gif}", images);
   watch(
     ["src/**/*", "!src/{images,js,scss}", "!src/{images,js,scss}/**/*"],
     copy
