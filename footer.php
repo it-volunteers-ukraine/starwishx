@@ -1,38 +1,91 @@
+<?php
+$email_text = esc_html(get_field('email_name', 'options'));
+$email_link = esc_url(get_field('email_link', 'options'));
+$telegram_text = esc_html(get_field('telegram_name', 'options'));
+$telegram_link = esc_html(get_field('telegram_link', 'options'));
+$linkedin_text = esc_html(get_field('linkedin_name', 'options'));
+$linkedin_link = esc_html(get_field('linkedin_link', 'options'));
+
+// print_r("assadas");
+// print_r($email_text);
+// print_r($email_link);
+// print_r($telegram_text);
+// print_r($telegram_link);
+
+?>
+
 <footer class="footer">
     <div class="container">
         <div class="footer-inner">
             <h2 class="footer-title"><?php echo esc_html(get_field('title', 'options')) ?></h2>
 
-            <nav class="nav">
-                <?php wp_nav_menu([
-                    'theme_location'       => 'menu-footer',
-                    'container'            => false,
-                    'menu_class'           => 'menu',
-                    'menu_id'              => false,
-                    'echo'                 => true,
-                    'items_wrap'           => '<ul id="%1$s" class="header_list %2$s">%3$s</ul>',
-                ]);
-                ?>
-            </nav>
-            <img src="<?php echo get_template_directory_uri(); ?>/assets/img/star_wish_x-1920.png" alt="" class="footer-logo">
-            <div class="footer-copyright">
-                <div class="copyright-text">
-                    <p class="copyright-text"><?php echo esc_html(get_field('parts_1', 'options')) ?></p>
-                </div>
-                <div class="copyright-text">
-                    <?php echo esc_html(get_field('parts_2', 'options')) ?>
-                    <a href="<?php echo esc_html(get_field('parts_2_link', 'options')) ?>" class="copyright-link"><?php echo esc_html(get_field('parts_2_text_link', 'options')) ?></a>
-                </div>
-                <div class="copyright-text">
-                    <a href="<?php echo esc_html(get_field('privacy_policy_page', 'options')) ?>" class="copyright-link"><?php echo esc_html(get_field('privacy_policy_text', 'options')) ?></a>
-                </div>
-                <div class="copyright-text">
-                    <a href="<?php echo esc_html(get_field('privacy_data_protection_page', 'options')) ?>" class="copyright-link"><?php echo esc_html(get_field('privacy_data_protection_text', 'options')) ?></a>
-                </div>
-                <?php echo esc_html(get_field('copyright', 'options')) ?>
-            </div>
+            <ul class="socblock">
+                <?php if ($email_text && $email_link): ?>
+                    <li class="socblock-item">
+                        <a href="mailto:<?php echo $email_link; ?>" class="socblock-link socblock-link-email" target="_blank" rel="noopener noreferrer">
+                            <svg class="socblock-icon">
+                                <use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-email"></use>
+                            </svg>
+                            <span>
+                                <?php echo $email_text; ?></a>
+                        </span>
+                    </li>
+                <?php endif; ?>
+                <?php if ($telegram_text && $telegram_link): ?>
+                    <li class="socblock-item">
+                        <a href="<?php echo $telegram_link; ?>" class="socblock-link socblock-link-telegram" target="_blank" rel="noopener noreferrer">
+                            <svg class="socblock-icon">
+                                <use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-telegram"></use>
+                            </svg>
+                            <span>
+                                <?php echo $telegram_text; ?></a>
+                        </span>
+                    </li>
 
+                <?php endif; ?>
+                <?php if ($linkedin_text && $linkedin_link): ?>
+                    <li class="socblock-item">
+                        <a href="<?php echo $linkedin_link; ?>" class="socblock-link socblock-link-linkedin" target="_blank" rel="noopener noreferrer">
+                            <svg class="socblock-icon">
+                                <use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-linkedin"></use>
+                            </svg>
+                            <span>
+                                <?php echo $linkedin_text; ?></a>
+                        </span>
+                    </li>
+                <?php endif; ?>
         </div>
+
+        <nav class="nav">
+            <?php wp_nav_menu([
+                'theme_location'       => 'menu-footer',
+                'container'            => false,
+                'menu_class'           => 'menu',
+                'menu_id'              => false,
+                'echo'                 => true,
+                'items_wrap'           => '<ul id="%1$s" class="footer_list %2$s">%3$s</ul>',
+            ]);
+            ?>
+        </nav>
+        <img src="<?php echo get_template_directory_uri(); ?>/assets/img/star_wish_x-1920.png" alt="" class="footer-logo">
+        <div class="footer-copyright">
+            <div class="copyright-text">
+                <p class="copyright-text"><?php echo esc_html(get_field('parts_1', 'options')) ?></p>
+            </div>
+            <div class="copyright-text">
+                <?php echo esc_html(get_field('parts_2', 'options')) ?>
+                <a href="<?php echo esc_html(get_field('parts_2_link', 'options')) ?>" class="copyright-link"><?php echo esc_html(get_field('parts_2_text_link', 'options')) ?></a>
+            </div>
+            <div class="copyright-text">
+                <a href="<?php echo esc_html(get_field('privacy_policy_page', 'options')) ?>" class="copyright-link"><?php echo esc_html(get_field('privacy_policy_text', 'options')) ?></a>
+            </div>
+            <div class="copyright-text">
+                <a href="<?php echo esc_html(get_field('privacy_data_protection_page', 'options')) ?>" class="copyright-link"><?php echo esc_html(get_field('privacy_data_protection_text', 'options')) ?></a>
+            </div>
+            <?php echo esc_html(get_field('copyright', 'options')) ?>
+        </div>
+
+    </div>
 </footer>
 
 <?php wp_footer(); ?>

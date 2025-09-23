@@ -127,8 +127,8 @@
         },
         {
             "key": "field_68d23c78822d9",
-            "label": "Telehram Link",
-            "name": "telehram_link",
+            "label": "Telegram Link",
+            "name": "telegram_link",
             "aria-label": "",
             "type": "text",
             "instructions": "",
@@ -279,5 +279,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1758608887
+    "modified": 1758622517
 }
