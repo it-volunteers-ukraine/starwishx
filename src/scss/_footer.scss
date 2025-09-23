@@ -45,6 +45,13 @@
   align-items: center;
 }
 
+.socblock-link:hover,
+.footer .menu-item a:hover,
+.footer-copyright a:hover {
+  color: $buttons-color-background-secondary-hover;
+  transition: color $animations;
+}
+
 .socblock-icon {
   width: 24px;
   height: 24px;
