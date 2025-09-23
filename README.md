@@ -10,3 +10,5 @@
 2. `npm i`
 3. `npm run dev` to start working
 4. `npm run build` to build production version of the theme, mostly used for BitBucket pipeline. 
+
+123
