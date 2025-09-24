@@ -43,9 +43,19 @@
 .socblock-link {
   display: flex;
   align-items: center;
+  fill: $icon-color-accent;
+  transition: all $animations;
 }
 
 .socblock-link:hover,
+.socblock-link:hover .socblock-icon {
+  color: $buttons-color-background-secondary-hover;
+  transition: color $animations;
+  fill: $primary-hover;
+
+  // stroke: $primary-hover;
+}
+
 .footer .menu-item a:hover,
 .footer-copyright a:hover {
   color: $buttons-color-background-secondary-hover;
