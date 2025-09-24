@@ -25,6 +25,8 @@ $linkedin_link = esc_html(get_field('linkedin_link', 'options'));
                         <a href="mailto:<?php echo $email_link; ?>" class="socblock-link socblock-link-email" target="_blank" rel="noopener noreferrer">
                             <svg class="socblock-icon">
                                 <use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-email"></use>
+                                <!-- <use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-btn"></use> -->
+                                <!-- <use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-btn-close"></use> -->
                                 <!-- <use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-search"></use> -->
                             </svg>
                             <span>
