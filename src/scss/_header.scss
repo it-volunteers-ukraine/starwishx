@@ -186,7 +186,14 @@
           }
         }
 
+        // === Поиск ===
         .menu-item-search {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: auto;
+          padding: 0 6px; // как у других li
+
           .search-icon {
             width: 26px;
             height: 26px;
@@ -200,28 +207,46 @@
           }
         }
 
+        // === Язык ===
         .menu-item-lang {
+          display: flex;
+          align-items: center;
+          width: 87px; // фиксированная ширина
+          // высота — автоматическая (не задаём)
+
           .lang {
             display: flex;
             align-items: center;
-            gap: 8px;
+            justify-content: space-between;
+            width: 100%;
+            gap: 6px; // небольшой, но не фиксированный отступ (можно регулировать)
+          }
 
-            button {
-              background: none;
-              border: none;
-              font-family: Inter, sans-serif;
-              font-weight: 400;
-              font-size: 18px;
-              color: #fff;
-              cursor: pointer;
-              padding: 8px 12px;
-              border-radius: 40px;
-              transition: background-color 0.2s ease;
+          .lang-btn {
+            background: none;
+            border: none;
+            font-family: Inter, sans-serif;
+            font-weight: 400;
+            font-size: 18px; // как у всего меню
+            color: #fff;
+            cursor: pointer;
+            padding: 0;
+            margin: 0;
+            line-height: 1;
+            display: block;
+            transition: opacity 0.2s ease;
 
-              &:hover {
-                background-color: rgb(255 255 255 / 20%);
-              }
+            &:hover {
+              opacity: 0.8;
             }
+          }
+
+          .lang-separator {
+            color: #fff;
+            font-size: 18px;
+            line-height: 1;
+            user-select: none;
+            flex-shrink: 0; // не сжимается
           }
         }
       }
