@@ -1,9 +1,8 @@
+@use "variables" as *;
+
 .header {
   min-height: 50px;
-  z-index: 10;
   background: #fff;
-  position: fixed;
-  top: 0;
   width: 100%;
 
   .header-inner {
@@ -40,10 +39,6 @@
     color: #fff;
     text-decoration: none;
     transition: background-color 0.2s ease;
-
-    //&:hover {
-    // background: #5a2daf;
-    //}
   }
 
   .header-logo {
@@ -175,35 +170,71 @@
         flex-direction: column;
       }
 
-      li {
-        margin: 0;
+      // === НОВЫЕ СТИЛИ ДЛЯ ПОИСКА И ЯЗЫКА (только на десктопе) ===
+      @media (min-width: 769px) {
+        .menu-item-search,
+        .menu-item-lang {
+          display: flex;
+          align-items: center;
+          height: 100%;
+          margin: 0;
 
-        // padding: 8px 16px;
-        position: relative;
-
-        &#menu-item-50 {
-          > a {
-            display: inline-flex;
+          > div {
+            display: flex;
             align-items: center;
-            justify-content: center;
+            height: 100%;
+          }
+        }
+
+        .menu-item-search {
+          .search-icon {
             width: 26px;
             height: 26px;
-            background-image: url("../img/icon_search.svg");
-            background-size: 16px 16px;
-            background-position: center;
-            background-repeat: no-repeat;
-            text-indent: -9999px;
-            overflow: hidden;
-            border-radius: 50%;
-            transition: background-image 0.2s ease;
+            fill: #fff;
+            cursor: pointer;
+            transition: fill 0.2s ease;
 
             &:hover {
-              background-image: url("../img/icon_search_gray.svg");
+              fill: #bbb;
             }
           }
         }
 
-        &.menu-item-35 {
+        .menu-item-lang {
+          .lang {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+
+            button {
+              background: none;
+              border: none;
+              font-family: Inter, sans-serif;
+              font-weight: 400;
+              font-size: 18px;
+              color: #fff;
+              cursor: pointer;
+              padding: 8px 12px;
+              border-radius: 40px;
+              transition: background-color 0.2s ease;
+
+              &:hover {
+                background-color: rgb(255 255 255 / 20%);
+              }
+            }
+          }
+        }
+      }
+
+      // === КОНЕЦ НОВЫХ СТИЛЕЙ ===
+
+      li {
+        margin: 0;
+        position: relative;
+
+        // УДАЛЕНО: &#menu-item-50 { ... }
+
+        &.menu-item-64 {
           > a {
             display: inline-flex;
             align-items: center;
@@ -235,8 +266,6 @@
           line-height: 1;
           color: #fff;
           text-decoration: none;
-
-          // padding: 6px 8px;
           padding: 8px 16px;
           border-radius: 40px;
           transition: background-color 0.2s ease;
@@ -317,6 +346,7 @@
           align-items: center;
           justify-content: center;
           gap: 8px;
+          transition: all $animations-very-long;
         }
 
         @media (max-width: 992px) {
@@ -331,6 +361,12 @@
     }
   }
 }
+
+.nav {
+  display: flex;
+}
+
+// УДАЛЕНО: .search-icon { ... } — теперь стилизуется внутри .menu
 
 .search-popup {
   .popup__bg {
@@ -389,39 +425,27 @@
     margin-bottom: 5px;
   }
 
-  .popup input {
-    height: 45px;
+  .popup input,
+  .popup textarea {
+    width: 100%;
     font-size: 18px;
     border: none;
     outline: none;
     border-bottom: 1px solid #cfd0d3;
-  }
 
-  .popup input:focus {
-    border-bottom: 1px solid #2982ff;
-  }
+    &:focus {
+      border-bottom: 1px solid #2982ff;
 
-  .popup input:focus + .label__text {
-    color: #2982ff;
+      & + .label__text {
+        color: #2982ff;
+      }
+    }
   }
 
   .popup textarea {
     resize: none;
-    width: 100%;
     height: 150px;
-    border: none;
-    outline: none;
-    border-bottom: 1px solid #cfd0d3;
-    font-size: 18px;
     padding-top: 5px;
-  }
-
-  .popup textarea:focus {
-    border-bottom: 1px solid #2982ff;
-  }
-
-  .popup textarea:focus + .label__text {
-    color: #2982ff;
   }
 
   .popup button {
@@ -437,11 +461,10 @@
     cursor: pointer;
     text-transform: uppercase;
     transition: 0.5s all;
-  }
 
-  .popup button:hover {
-    background: #fff;
-    color: #2982ff;
-    transition: 0.5s all;
+    &:hover {
+      background: #fff;
+      color: #2982ff;
+    }
   }
 }
