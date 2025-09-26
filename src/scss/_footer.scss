@@ -1,3 +1,259 @@
+@use "variables" as *;
+
 .footer {
-  background: #f2f2f2;
+  padding-top: 48px;
+  padding-bottom: 24px;
+  border-top-left-radius: 36px;
+  border-top-right-radius: 36px;
+  background: $surface-secondary;
+  color: $text-white;
+  font-size: 16px;
+}
+
+.footer a {
+  color: $text-white;
+}
+
+.container {
+}
+
+.footer-inner {
+  margin-bottom: 120px;
+}
+
+.footer-title {
+  margin-bottom: 24px;
+  color: $text-accent-2;
+  text-transform: uppercase;
+  font-weight: 500;
+  font-size: 24px;
+}
+
+.footer-title.title-socblock {
+  display: none;
+}
+
+.footer .socblock {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  line-height: 1.3;
+  margin-bottom: 40px;
+}
+
+.socblock-item {
+}
+
+.socblock-link {
+  display: flex;
+  align-items: center;
+  fill: $icon-color-accent;
+  transition: all $animations;
+}
+
+.socblock-link:hover,
+.socblock-link:hover .socblock-icon {
+  color: $buttons-color-background-secondary-hover;
+  transition: color $animations;
+  fill: $primary-hover;
+
+  // stroke: $primary-hover;
+}
+
+.footer .menu-item a:hover,
+.footer-copyright a:hover {
+  color: $buttons-color-background-secondary-hover;
+  transition: color $animations;
+}
+
+.socblock-icon {
+  width: 24px;
+  height: 24px;
+  margin-right: 8px;
+}
+
+.footer .nav {
+  margin-bottom: 120px;
+}
+
+.footer_list {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  line-height: 1.3;
+}
+
+.footer_list .menu-item {
+  padding: 5.5px 12px;
+}
+
+.header_list {
+}
+
+.footer-logo-wrapper {
+  position: relative;
+
+  // margin: 0 1.8vh;
+  margin: 0 calc(0.045 * 100%);
+
+  // padding: 0 calc(0.045 * 100%);
+
+  // width: 200px;
+}
+
+.footer-logo {
+  width: 100%;
+  margin-bottom: 40px;
+}
+
+.footer-logo-satellite {
+  position: absolute;
+  width: calc(100% * 0.04);
+
+  // height: 40px;
+  // top: calc(-100% * 0.13);
+  top: calc(-100% * 0.11);
+  right: calc(-100% * 0.02);
+
+  // right: -30px;
+
+  // fill: $icon-color-accent;
+}
+
+.footer-copyright {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  border-top: 1px solid $icon-color-default-stroke;
+}
+
+.footer-copyright1,
+.footer-copyright2 {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: center;
+}
+
+.footer-copyright a {
+  font-size: 16px;
+  border-bottom: 1px solid $text-white;
+}
+
+.copyright-text {
+  // white-space: pre;
+}
+
+.copyright-link {
+}
+
+@media screen and (min-width: 576px) {
+  .footer-inner {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .footer-socwraper {
+    width: 53%;
+    margin-bottom: 0;
+  }
+
+  .footer .socblock {
+  }
+
+  .footer .nav {
+    // width: auto;
+    flex-grow: 1;
+    margin-bottom: 0;
+  }
+
+  .footer_list {
+    align-items: flex-start;
+    gap: 0;
+  }
+
+  .footer-copyright1,
+  .footer-copyright2 {
+    flex-direction: row;
+
+    // gap: 0;
+    align-items: center;
+  }
+}
+
+@media screen and (min-width: 768px) {
+  .footer-title {
+    font-size: 32px;
+  }
+
+  .nav {
+    max-width: 336px;
+  }
+
+  .footer-logo {
+    margin-bottom: 24px;
+  }
+
+  .footer-logo-satellite {
+    // height: 40px;
+    top: calc(-100% * 0.13);
+
+    // top: calc(-100% * 0.09);
+  }
+
+  .footer-copyright {
+    flex-direction: row;
+    justify-content: center;
+    font-size: 18px;
+
+    // gap: 24px;
+  }
+}
+
+@media screen and (min-width: 768px) {
+  .footer-inner {
+    margin-bottom: 140px;
+  }
+}
+
+@media screen and (min-width: 1440px) {
+  .footer_list {
+    // display: grid;
+    // grid-template-columns: repeat(2, auto);
+    flex-wrap: wrap;
+    flex-direction: row;
+    gap: 8px;
+  }
+
+  .footer_list .menu-item {
+    flex: 1 1 calc(50% - 8px);
+  }
+
+  .footer-inner {
+    margin-bottom: 120px;
+  }
+
+  .footer-title {
+    display: none;
+  }
+
+  .footer-title.title-socblock {
+    display: block;
+
+    // margin-bottom: 24px;
+  }
+}
+
+@media screen and (min-width: 1920px) {
+  .footer-title {
+    font-size: 44px;
+  }
+
+  .footer-logo {
+    margin-bottom: 40px;
+  }
 }
