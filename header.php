@@ -26,9 +26,9 @@ $button = get_field('header_button', 'option' );
   </div>
   <div class="header-center">
     <div class="header-menu">
-      <input class="side-menu" type="checkbox" id="side-menu"/>
-      <label class="hamb" for="side-menu"><span class="hamb-line"></span></label>
-      <nav class="nav">
+      <!-- <input class="side-menu" type="checkbox" id="side-menu"/> -->
+      <!-- <label class="hamb" for="side-menu"><span class="hamb-line"></span></label> -->
+      <nav class="site-head-nav">
         <ul class="menu">
           <?php
           wp_nav_menu([
