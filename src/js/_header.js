@@ -61,3 +61,42 @@
 //     });
 //   });
 // });
+document.addEventListener('DOMContentLoaded', function () {
+  const toggle = document.getElementById('mobile-menu-toggle');
+  const opportunitiesBtn = document.getElementById('opportunities-button-mobile');
+  const mobileSubmenu = document.getElementById('mobile-submenu');
+  const burgerMenu = document.querySelector('.burger-menu');
+  const mobileHeaderButtons = document.querySelector('.mobile-header-buttons');
+
+  if (!toggle || !burgerMenu) return;
+
+  const closeMenu = () => {
+    toggle.checked = false;
+    if (opportunitiesBtn) opportunitiesBtn.classList.remove('active');
+    if (mobileSubmenu) mobileSubmenu.classList.remove('active');
+    if (mobileHeaderButtons) mobileHeaderButtons.classList.remove('active');
+  };
+
+  
+  if (opportunitiesBtn && mobileSubmenu) {
+    opportunitiesBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      opportunitiesBtn.classList.toggle('active');
+      mobileSubmenu.classList.toggle('active');
+    });
+  }
+
+  
+  document.addEventListener('click', (e) => {
+    const isClickInside = 
+      toggle.contains(e.target) ||
+      document.querySelector('.burger-menu-button')?.contains(e.target) ||
+      burgerMenu.contains(e.target) ||
+      mobileHeaderButtons?.contains(e.target);
+
+    if (!isClickInside && toggle.checked) {
+      closeMenu();
+    }
+  });
+});
