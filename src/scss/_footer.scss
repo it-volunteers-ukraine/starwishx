@@ -14,9 +14,6 @@
   color: $text-white;
 }
 
-.container {
-}
-
 .footer-inner {
   margin-bottom: 120px;
 }
@@ -129,6 +126,7 @@
   align-items: center;
   gap: 6px;
   border-top: 1px solid $icon-color-default-stroke;
+  font-size: 14px;
 }
 
 .footer-copyright1,
@@ -140,7 +138,7 @@
 }
 
 .footer-copyright a {
-  font-size: 16px;
+  // font-size: 14px;
   border-bottom: 1px solid $text-white;
 }
 
@@ -179,8 +177,6 @@
   .footer-copyright1,
   .footer-copyright2 {
     flex-direction: row;
-
-    // gap: 0;
     align-items: center;
   }
 }
@@ -208,9 +204,14 @@
   .footer-copyright {
     flex-direction: row;
     justify-content: center;
-    font-size: 18px;
+
+    // font-size: 18px;
 
     // gap: 24px;
+  }
+
+  .footer-copyright1 {
+    margin-right: auto;
   }
 }
 
