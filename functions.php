@@ -134,3 +134,37 @@ function add_acf_images_to_submenu_items_only($items, $args) {
   }
   return $items;
 }
+
+add_action('acf/init', 'acf_add_menu_item_mobile_field');
+function acf_add_menu_item_mobile_field() {
+    if (!function_exists('acf_add_local_field_group')) return;
+
+    acf_add_local_field_group([
+        'key' => 'group_menu_item_mobile',
+        'title' => 'Мобильное меню',
+        'fields' => [
+            [
+                'key' => 'field_mobile_submenu_type',
+                'label' => 'Тип подменю в мобильной версии',
+                'name' => 'mobile_submenu_type',
+                'type' => 'select',
+                'choices' => [
+                    '' => 'Обычный пункт (подменю не отображается)',
+                    'custom_grid' => 'Кастомная сетка (2 ряда, как "Можливості")',
+                ],
+                'default_value' => false,
+                'allow_null' => true,
+                'ui' => true,
+            ],
+        ],
+        'location' => [
+            [
+                [
+                    'param' => 'nav_menu_item',
+                    'operator' => '==',
+                    'value' => 'all', // ← ИСПРАВЛЕНО: было 'location'
+                ],
+            ],
+        ],
+    ]);
+}

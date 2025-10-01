@@ -63,40 +63,83 @@
 // });
 document.addEventListener('DOMContentLoaded', function () {
   const toggle = document.getElementById('mobile-menu-toggle');
-  const opportunitiesBtn = document.getElementById('opportunities-button-mobile');
-  const mobileSubmenu = document.getElementById('mobile-submenu');
-  const burgerMenu = document.querySelector('.burger-menu');
-  const mobileHeaderButtons = document.querySelector('.mobile-header-buttons');
+  if (!toggle) return;
 
-  if (!toggle || !burgerMenu) return;
-
-  const closeMenu = () => {
+  // Закрытие всего мобильного меню
+  const closeEntireMenu = () => {
     toggle.checked = false;
-    if (opportunitiesBtn) opportunitiesBtn.classList.remove('active');
-    if (mobileSubmenu) mobileSubmenu.classList.remove('active');
-    if (mobileHeaderButtons) mobileHeaderButtons.classList.remove('active');
+    // Закрыть все кастомные подменю
+    document.querySelectorAll('.menu-item-opportunities').forEach(item => {
+      item.classList.remove('active');
+      const submenu = item.querySelector('.mobile-submenu');
+      if (submenu) submenu.classList.remove('active');
+    });
+    // Сброс активных пунктов подменю
+    document.querySelectorAll('.mobile-submenu-item.active').forEach(el => {
+      el.classList.remove('active');
+    });
   };
 
-  
-  if (opportunitiesBtn && mobileSubmenu) {
-    opportunitiesBtn.addEventListener('click', (e) => {
+  // Обработка переключения кастомных подменю (с классом .opportunities-toggle)
+  document.querySelectorAll('.opportunities-toggle').forEach(button => {
+    button.addEventListener('click', (e) => {
       e.preventDefault();
       e.stopPropagation();
-      opportunitiesBtn.classList.toggle('active');
-      mobileSubmenu.classList.toggle('active');
-    });
-  }
 
-  
+      const parentItem = button.closest('.menu-item-opportunities');
+      if (!parentItem) return;
+
+      const submenu = parentItem.querySelector('.mobile-submenu');
+      const arrow = button.querySelector('.arrow-icon');
+
+      // Закрыть все остальные подменю
+      document.querySelectorAll('.menu-item-opportunities').forEach(item => {
+        if (item !== parentItem) {
+          item.classList.remove('active');
+          const otherSubmenu = item.querySelector('.mobile-submenu');
+          const otherArrow = item.querySelector('.arrow-icon');
+          if (otherSubmenu) otherSubmenu.classList.remove('active');
+          if (otherArrow) otherArrow.classList.remove('rotated');
+        }
+      });
+
+      // Переключить текущее
+      parentItem.classList.toggle('active');
+      if (submenu) submenu.classList.toggle('active');
+      if (arrow) arrow.classList.toggle('rotated');
+    });
+  });
+
+  // Активация пункта подменю (для цвета #6839C8)
+  document.querySelectorAll('.mobile-submenu-item').forEach(item => {
+    item.addEventListener('click', (e) => {
+      e.stopPropagation();
+      // Снять .active со всех
+      document.querySelectorAll('.mobile-submenu-item').forEach(el => {
+        el.classList.remove('active');
+      });
+      // Добавить текущему
+      item.classList.add('active');
+    });
+  });
+
+  // Закрытие меню при клике вне его области
   document.addEventListener('click', (e) => {
-    const isClickInside = 
-      toggle.contains(e.target) ||
-      document.querySelector('.burger-menu-button')?.contains(e.target) ||
-      burgerMenu.contains(e.target) ||
-      mobileHeaderButtons?.contains(e.target);
+    const isClickInside =
+      e.target.closest('.burger-menu') ||
+      e.target.closest('.burger-menu-button') ||
+      e.target.closest('.mobile-header-buttons') ||
+      e.target.closest('#mobile-menu-toggle');
 
     if (!isClickInside && toggle.checked) {
-      closeMenu();
+      closeEntireMenu();
+    }
+  });
+
+  // Закрытие по нажатию Escape
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && toggle.checked) {
+      closeEntireMenu();
     }
   });
 });

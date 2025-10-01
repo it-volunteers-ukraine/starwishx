@@ -20,6 +20,18 @@
   display: none;
 }
 
+/* Скрыть чекбокс везде */
+.mobile-menu-toggle {
+  position: absolute !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: none !important;
+}
+
 .header {
   min-height: 50px;
   background: #fff;
@@ -259,7 +271,7 @@
   flex-shrink: 0;
 }
 
-// Мобильное меню
+// === МОБИЛЬНЫЕ СТИЛИ (768px и меньше) ===
 @media (max-width: 768px) {
   // Скрыть десктоп
   .header .header-center,
@@ -267,11 +279,18 @@
     display: none !important;
   }
 
+  .header .container {
+    width: 100%;
+    padding: 0;
+    max-width: none;
+  }
+
   .header .header-inner {
     padding: 12px 16px;
     justify-content: space-between;
     align-items: center;
     min-height: 88px;
+    width: 100%;
   }
 
   .header .header-logo {
@@ -280,12 +299,6 @@
     margin-right: auto;
   }
 
-  // Чекбокс
-  .mobile-menu-toggle {
-    display: none;
-  }
-
-  // Кнопка Меню
   .burger-menu-button {
     display: flex;
     flex-direction: row-reverse;
@@ -307,14 +320,6 @@
     margin-left: auto;
   }
 
-  .burger-icon {
-    width: 16px;
-    height: 16px;
-    flex-shrink: 0;
-    fill: currentcolor;
-  }
-
-  // Кнопки поиск, язык, закрытие
   .mobile-header-buttons {
     display: none;
     align-items: center;
@@ -326,10 +331,6 @@
     display: flex;
   }
 
-  #mobile-menu-toggle:not(:checked) ~ .burger-menu-button {
-    display: flex;
-  }
-
   #mobile-menu-toggle:checked ~ .burger-menu-button {
     display: none;
   }
@@ -338,7 +339,6 @@
     display: flex;
     align-items: center;
     gap: 12px;
-    width: 139px;
     height: 44px;
     padding: 12px 18px 12px 6px;
     background: var(--menu-bg);
@@ -363,15 +363,6 @@
     font-weight: 400;
   }
 
-  .lang-btn {
-    background: none;
-    border: none;
-    font: inherit;
-    color: inherit;
-    cursor: pointer;
-    padding: 0;
-  }
-
   .close-menu-button {
     display: flex;
     align-items: center;
@@ -388,33 +379,37 @@
     width: 16px;
     height: 16px;
     fill: #fff;
-    flex-shrink: 0;
   }
 
-  // Мобильное меню
   .burger-menu {
     display: none;
     position: absolute;
     top: 88px;
     left: 0;
     width: 100%;
+    height: calc(100vh - 88px);
     background: #fff;
     padding: 20px 16px;
     flex-direction: column;
     gap: 10px;
     box-shadow: 0 4px 8px rgb(0 0 0 / 10%);
     z-index: 1000;
-    max-height: calc(100vh - 88px);
     overflow-y: auto;
+    box-sizing: border-box;
   }
 
   #mobile-menu-toggle:checked ~ .burger-menu {
     display: flex;
   }
 
-  // Пункты меню
-  .burger-menu .menu-item a,
-  .burger-menu .menu-button {
+  .mobile-menu-list,
+  .mobile-submenu {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .mobile-menu-list .menu-item a {
     display: flex;
     align-items: center;
     justify-content: flex-start;
@@ -423,73 +418,94 @@
     font-size: 16px;
     font-weight: 400;
     line-height: 1.3;
-    color: #000;
+    color: #292929;
     text-decoration: none;
     border-radius: 8px;
   }
 
-  // Пункт Можливості
+  // === ИСПРАВЛЕНО: flex для "Можливості" ===
   #opportunities-button-mobile {
-    position: relative;
-    padding-right: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 12px;
+    border-radius: 8px;
+    color: #292929;
+    text-decoration: none;
+    font-family: Inter, sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1.3;
   }
 
-  #opportunities-button-mobile .arrow-icon {
-    position: absolute;
-    right: 12px;
-    top: 50%;
-    transform: translateY(-50%);
+  .arrow-icon {
+    flex-shrink: 0;
+    margin-left: 8px; // ← 8px от текста
     width: 24px;
     height: 24px;
-    transition: transform 0.3s;
+    transition: transform 0.3s ease;
   }
 
   #opportunities-button-mobile.active .arrow-icon {
-    transform: translateY(-50%) rotate(-180deg);
+    transform: rotate(-180deg);
   }
 
-  // Субменю
   .mobile-submenu {
     display: none;
     width: 100%;
-    gap: 8px;
-    flex-wrap: wrap;
-    flex-direction: row;
-    justify-content: space-between;
-    row-gap: 10px;
     margin: 10px 0;
   }
 
   .mobile-submenu.active {
-    display: flex;
+    display: block;
   }
 
+  .mobile-submenu-row {
+    display: flex;
+    gap: 8px;
+    width: 100%;
+    margin-top: 12px;
+  }
+
+  // === ИСПРАВЛЕНО: закрыт блок правильно ===
   .mobile-submenu-item {
-    flex: 0 0 calc((100% - 16px) / 3);
-    aspect-ratio: 1 / 1;
-    min-height: 60px;
-    border-radius: 20px;
+    position: relative;
+    width: 224px;
+    height: 154px;
+    border-radius: 40px;
     background: rgb(0 0 0 / 35%);
     display: flex;
     align-items: flex-end;
-    justify-content: center;
-    position: relative;
+    justify-content: flex-start;
+    text-decoration: none;
     overflow: hidden;
-    font-family: Inter, sans-serif;
-    font-size: 14px;
-    font-weight: 400;
-    line-height: 1.2;
+    transition: background-color 0.3s ease;
     color: #fffdf8;
+
+    &:hover,
+    &.active {
+      background-color: #6839c8; // ← ЦВЕТ ПРИ НАВЕДЕНИИ И АКТИВНОСТИ
+    }
+
+    .text {
+      position: absolute;
+      top: 88px;
+      left: 8px;
+      width: 138px;
+      height: 54px;
+      font-family: Inter, sans-serif;
+      font-weight: 400;
+      font-size: 14px;
+      line-height: 120%;
+      color: #fffdf8;
+      display: flex;
+      align-items: flex-end;
+      text-align: left;
+      overflow: hidden;
+    }
   }
 
-  .mobile-submenu-item .text {
-    padding: 8px;
-    text-align: left;
-    z-index: 2;
-    width: 100%;
-  }
-
-  // Кнопка входа
   .login-button-mobile {
     width: 164px;
     height: 44px;
@@ -511,6 +527,7 @@
   }
 }
 
+// === ≤ 375px ===
 @media (max-width: 375px) {
   .burger-menu {
     padding: 20px 16px;
@@ -519,8 +536,34 @@
   }
 
   .login-button-mobile {
-    width: calc(100% - 32px);
+    width: 343px;
     margin: 0 auto;
     margin-top: auto;
+  }
+
+  .mobile-submenu-row {
+    height: 106px;
+    gap: 8px;
+    margin-top: 12px;
+  }
+
+  .mobile-submenu-item {
+    width: 106px;
+    height: 106px;
+    border-radius: 20px;
+    padding: 8px;
+    justify-content: center;
+
+    .text {
+      position: static;
+      width: 100%;
+      height: auto;
+      text-align: center;
+      padding: 0;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      line-height: 1.2;
+    }
   }
 }
