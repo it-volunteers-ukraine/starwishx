@@ -86,15 +86,15 @@ $linkedin_link = esc_html(get_field('linkedin_link', 'options'));
                 <div class="copyright-text1">
                     <p class="copyright-text">
                         <?php echo esc_html(get_field('parts_2', 'options')); ?>
-                        <a href="<?php echo esc_html(get_field('parts_2_link', 'options')); ?>" class="copyright-link"><?php echo esc_html(get_field('parts_2_text_link', 'options')); ?></a>
+                        <a href="<?php echo esc_html(get_field('parts_2_link', 'options')); ?>" class="copyright-link" target="_blank"><?php echo esc_html(get_field('parts_2_text_link', 'options')); ?></a>
                     </p>
                 </div>
             </div>
             <div class="footer-copyright2">
-                <a href="<?php echo esc_html(get_field('privacy_policy_page', 'options')); ?>" class="copyright-link"><?php echo esc_html(get_field('privacy_policy_text', 'options')); ?></a>
+                <a href="<?php echo esc_html(get_field('privacy_policy_page', 'options')); ?>" class="copyright-link" target="_blank"><?php echo esc_html(get_field('privacy_policy_text', 'options')); ?></a>
                 <!-- <div class="copyright-text"> -->
                 <!-- </div> -->
-                <a href="<?php echo esc_html(get_field('privacy_data_protection_page', 'options')); ?>" class="copyright-link"><?php echo esc_html(get_field('privacy_data_protection_text', 'options')); ?></a>
+                <a href="<?php echo esc_html(get_field('privacy_data_protection_page', 'options')); ?>" class="copyright-link" target="_blank"><?php echo esc_html(get_field('privacy_data_protection_text', 'options')); ?></a>
                 <!-- <div class="copyright-text"> -->
                 <!-- </div> -->
             </div>
