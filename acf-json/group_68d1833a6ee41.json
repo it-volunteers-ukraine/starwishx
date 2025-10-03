@@ -17,7 +17,7 @@
                 "id": ""
             },
             "return_format": "array",
-            "library": "uploadedTo",
+            "library": "all",
             "min_width": "",
             "min_height": "",
             "min_size": "",
@@ -25,7 +25,7 @@
             "max_height": "",
             "max_size": "",
             "mime_types": "",
-            "allow_in_bindings": 0,
+            "allow_in_bindings": 1,
             "preview_size": "medium"
         }
     ],
@@ -47,5 +47,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1758968172
+    "modified": 1759476090
 }
