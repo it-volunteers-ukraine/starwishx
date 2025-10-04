@@ -207,6 +207,13 @@ function header_set_menu_flags($items, $args) {
     }
     return $items;
 }
+/* убираем пустые <ul class="sub-menu"></ul> */
+add_filter('wp_nav_menu_items', function ($items, $args) {
+    if ($args->theme_location === 'menu-header') {
+        $items = str_replace('<ul class="sub-menu"></ul>', '', $items);
+    }
+    return $items;
+}, 10, 2);
 
 /* ---------- 3. Разрешаем <img> в пунктах меню ---------- */
 add_filter('wp_kses_allowed_html', function($tags){

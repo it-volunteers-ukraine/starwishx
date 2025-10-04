@@ -303,9 +303,9 @@
   opacity: 0.75;
 }
 
-// МОБИЛЬНЫЕ СТИЛИ (768px и меньше)
+/* ==========  МОБИЛЬНЫЕ СТИЛИ  ========== */
 @media (max-width: 768px) {
-  // Скрыть десктоп
+  /* 1. скрываем десктоп */
   .header .header-center,
   .header .header-right {
     display: none !important;
@@ -331,6 +331,7 @@
     margin-right: auto;
   }
 
+  /* 2. кнопка «Меню» */
   .burger-menu-button {
     display: flex;
     flex-direction: row-reverse;
@@ -352,20 +353,15 @@
     margin-left: auto;
   }
 
+  /* 3. шапка внутри бургера */
   .mobile-header-buttons {
     display: none;
     align-items: center;
     gap: 12px;
     margin-left: auto;
   }
-
-  #mobile-menu-toggle:checked ~ .mobile-header-buttons {
-    display: flex;
-  }
-
-  #mobile-menu-toggle:checked ~ .burger-menu-button {
-    display: none;
-  }
+  #mobile-menu-toggle:checked ~ .mobile-header-buttons { display: flex; }
+  #mobile-menu-toggle:checked ~ .burger-menu-button { display: none; }
 
   .search-language-container {
     display: flex;
@@ -413,6 +409,7 @@
     fill: #fff;
   }
 
+  /* 4. сам бургер */
   .burger-menu {
     display: none;
     position: absolute;
@@ -429,11 +426,9 @@
     overflow-y: auto;
     box-sizing: border-box;
   }
+  #mobile-menu-toggle:checked ~ .burger-menu { display: flex; }
 
-  #mobile-menu-toggle:checked ~ .burger-menu {
-    display: flex;
-  }
-
+  /* 5. пункты меню */
   .mobile-menu-list,
   .mobile-submenu {
     list-style: none;
@@ -455,7 +450,7 @@
     border-radius: 8px;
   }
 
-  // ИСПРАВЛЕНО: flex для "Можливості"
+  /* 6. кнопка «Можливості» */
   #opportunities-button-mobile {
     display: flex;
     align-items: center;
@@ -473,7 +468,7 @@
 
   .arrow-icon {
     flex-shrink: 0;
-    margin-left: 8px; // ← 8px от текста
+    margin-left: 8px;
     width: 24px;
     height: 24px;
     transition: transform 0.3s ease;
@@ -483,6 +478,7 @@
     transform: rotate(-180deg);
   }
 
+  /* 7. подменю: СКРЫТО по умолчанию, показано через JS */
   .mobile-submenu {
     display: none;
     width: 100%;
@@ -493,6 +489,7 @@
     display: block;
   }
 
+  /* 8. сетка 2 ряда */
   .mobile-submenu-row {
     display: flex;
     gap: 8px;
@@ -514,7 +511,6 @@
     transition: background-color 0.3s ease;
     color: #fffdf8;
 
-    // Изображение из ACF
     .submenu-image {
       position: absolute;
       top: 0;
@@ -527,7 +523,6 @@
       transition: opacity 0.3s ease;
     }
 
-    // Текст поверх изображения
     .text {
       position: relative;
       z-index: 2;
@@ -548,13 +543,11 @@
     &:hover,
     &.active {
       background-color: #6839c8;
-
-      .submenu-image {
-        opacity: 0;
-      }
+      .submenu-image { opacity: 0; }
     }
   }
 
+  /* 9. кнопка «Увійти» в мобильном меню */
   .login-button-mobile {
     width: 164px;
     height: 44px;
@@ -576,7 +569,7 @@
   }
 }
 
-// ≤ 375px
+/* ==========  375 и меньше  ========== */
 @media (max-width: 375px) {
   .burger-menu {
     padding: 20px 16px;

@@ -19,6 +19,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Обработка переключения кастомных подменю (с классом .opportunities-toggle)
     document.querySelectorAll('.opportunities-toggle').forEach(button => {
+        console.log('JS нашёл кнопку:', button);
         button.addEventListener('click', (e) => {
             e.preventDefault();
             e.stopPropagation();
