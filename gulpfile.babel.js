@@ -22,6 +22,11 @@ import ttf2woff2 from "gulp-ttf2woff2";
 import git from "git-rev-sync";
 import exec from "gulp-exec";
 import rename from 'gulp-rename';
+// const postcssModules = require("postcss-modules");
+import  postcssModules from  "postcss-modules";
+import path from "path";
+
+let cssModulesJSON = {};
 
 const { src, dest, watch, series, parallel } = pkg;
 
@@ -70,6 +75,51 @@ export const styles = () => {
     .pipe(dest("assets/css"))
     .pipe(browserSync.stream());
 };
+
+export const blockStyles = () => {
+  const options = {
+    continueOnError: false, // default = false, true means don't emit error event
+    pipeStdout: false, // default = false, true means stdout is written to file.contents
+  };
+
+  const reportOptions = {
+    err: true, // default = true, false means don't write err
+    stderr: true, // default = true, false means don't write stderr
+    stdout: true, // default = true, false means don't write stdout
+  };
+
+  return src(["inc/acf/blocks/**/*.module.scss"])
+    .pipe(postcss([
+      postcssModules({
+        generateScopedName: "[name]__[local]___[hash:base64:5]",
+        getJSON: (cssFileName, json) => {
+          const fileName = path.basename(cssFileName, ".module.scss");
+          cssModulesJSON[fileName] = json;
+
+          fs.mkdirSync("assets/css/blocks/", {recursive: true});
+          fs.writeFileSync("assets/css/blocks/modules.json", JSON.stringify(cssModulesJSON, null, 2));
+        }
+      })
+    ]))
+    .pipe(
+      exec(
+        (file) =>
+          `stylelint "inc/acf/blocks/**/*.module.scss" --customSyntax postcss-scss --fix`,
+        options
+      ).on("error", (err) => {
+        console.error("stylelint task failed:", err);
+      })
+    )
+    .pipe(exec.reporter(reportOptions))
+    .pipe(gulpif(!PRODUCTION, sourcemaps.init()))
+    .pipe(SASS().on("error", SASS.logError))
+    .pipe(gulpif(PRODUCTION, postcss([autoprefixer])))
+    .pipe(gulpif(PRODUCTION, cleanCss({ compatibility: "ie8" })))
+    .pipe(gulpif(!PRODUCTION, sourcemaps.write()))
+    .pipe(dest("assets/css/blocks"))
+    .pipe(browserSync.stream());
+};
+
 
 // Fonts
 export const otfToTtf = () => {
@@ -325,16 +375,17 @@ export const watchForChanges = () => {
   );
   watch("src/js/**/*.js", scripts);
   watch("inc/acf/blocks/**/*.js", blockScripts);
+  watch("inc/acf/blocks/**/*.module.scss", blockStyles);
   watch("**/*.php", reload);
 };
 
 export const dev = series(
   clean,
-  parallel(styles, fonts, images, copy, scripts, blockScripts, sync, watchForChanges)
+  parallel(styles, fonts, images, copy, scripts, blockScripts, blockStyles, sync, watchForChanges)
 );
 export const build = series(
   clean,
-  parallel(styles, fonts, images, copy, scripts, blockScripts),
+  parallel(styles, fonts, images, copy, scripts, blockScripts, blockStyles),
   pot,
   production
 );
