@@ -64,6 +64,10 @@
   max-height: 80px;
 }
 
+.header .header-login-btn:hover {
+  background: #7b5ae4;
+}
+
 .header .header-login-btn {
   display: inline-flex;
   align-items: center;
@@ -125,21 +129,29 @@
   color: var(--menu-hover-text-color);
 }
 
-.header .menu li.has-custom-arrow > a::after {
-  content: "";
-  display: inline-block;
-  width: 24px;
-  height: 24px;
-  background-image: url("../img/icon_arrow_white.svg");
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center;
-  transition: background-image 0.2s ease;
-  margin-left: 8px; /* отступ от текста */
+/* ===== новая стрелка из спрайта ===== */
+.header .menu li.has-children > a {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
 }
 
-.header .menu li.has-custom-arrow:hover > a::after {
-  background-image: url("../img/icon_arrow_black.svg");
+.header .menu li.has-children .arrow-icon {
+  width: 24px;
+  height: 24px;
+  fill: none;
+  stroke: currentcolor;
+  transition: stroke 0.2s ease, transform 0.2s ease;
+}
+
+/* при наведении на пункт МОЖЛИВОСТІ */
+.header .menu li.has-children:hover > a {
+  color: var(--menu-hover-text-color);   /* #292929 */
+}
+
+/* ➜ стрелка переворачивается вверх ногами */
+.header .menu li.has-children:hover .arrow-icon {
+  transform: rotate(180deg);
 }
 
 .header .sub-menu {
@@ -300,7 +312,7 @@
 }
 
 .header .sub-menu li:hover .submenu-bg-image {
-  opacity: 0.75;
+  opacity: 0;
 }
 
 /* ==========  МОБИЛЬНЫЕ СТИЛИ  ========== */
@@ -373,12 +385,16 @@
     border-radius: 22px;
   }
 
-  .search-language-container .search-icon {
-    width: 16px;
-    height: 16px;
-    fill: none;
-    stroke: #fff;
-    stroke-width: 1;
+  // .search-language-container .search-icon {
+  //   display: block;
+  //   width: 16px;
+  //   height: 16px;
+  // }
+
+  .search-language-container .search-icon svg {
+    width: 100%;
+    height: 100%;
+    display: block;
   }
 
   .language-switch {
@@ -447,7 +463,7 @@
     line-height: 1.3;
     color: #292929;
     text-decoration: none;
-    border-radius: 8px;
+    border-radius: 12px;
   }
 
   /* 6. кнопка «Можливості» */
@@ -474,7 +490,7 @@
     transition: transform 0.3s ease;
   }
 
-  #opportunities-button-mobile.active .arrow-icon {
+  .menu-item-custom-grid.active .arrow-icon {
     transform: rotate(-180deg);
   }
 
@@ -501,7 +517,7 @@
     position: relative;
     width: 224px;
     height: 154px;
-    border-radius: 40px;
+    border-radius: 20px;
     background: rgb(0 0 0 / 35%);
     display: flex;
     align-items: flex-end;
@@ -518,7 +534,6 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
-      border-radius: 40px;
       opacity: 1;
       transition: opacity 0.3s ease;
     }

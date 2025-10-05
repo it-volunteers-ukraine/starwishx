@@ -11,6 +11,7 @@ class Mobile_Menu_Walker extends Walker_Nav_Menu {
 	public function start_el( &$output, $item, $depth = 0, $args = null, $id = 0 ) {
 
 		if ( $item->menu_item_parent ) return; // детей выводим внутри родителя
+		if ( in_array( 'hide-mobile', $item->classes, true ) ) return;
 
 		$classes   = empty( $item->classes ) ? [] : (array) $item->classes;
 		$is_custom = ( $item->mobile_submenu_type === 'custom_grid' && in_array( 'has-children', $classes, true ) );
@@ -29,7 +30,7 @@ class Mobile_Menu_Walker extends Walker_Nav_Menu {
 		/* 2) кастомная сетка */
 		$output .= '<a class="menu-button opportunities-toggle" href="#" aria-expanded="false">';
 		$output .= '<span>' . esc_html( $item->title ) . '</span>';
-		$output .= '<svg class="arrow-icon" width="24" height="24"><use xlink:href="'.get_template_directory_uri().'/assets/img/sprites.svg#icon-arrow-down"></use></svg>';
+		$output .= '<svg class="arrow-icon" width="24" height="24"><use xlink:href="'.get_template_directory_uri().'/src/img/sprites.svg#icon-arrow"></use></svg>';
 		$output .= '</a>';
 
 		// дети
@@ -62,25 +63,4 @@ class Mobile_Menu_Walker extends Walker_Nav_Menu {
 		$output .= '</li>';
 	}
 
-	/* поиск + язык в конец мобильного меню */
-	// public function walk( $elements, $max_depth, ...$args ) {
-	// 	$output = parent::walk( $elements, $max_depth, ...$args );
-	// 	if ( isset( $args[0]->theme_location ) && $args[0]->theme_location === 'menu-header' && $args[0]->walker instanceof $this ) {
-	// 		$output .= '
-	// 		<li class="menu-item menu-item-search">
-	// 			<a class="menu-button" href="#">
-	// 				<svg width="16" height="16"><use xlink:href="'.get_template_directory_uri().'/assets/img/sprites.svg#icon-search"></use></svg>
-	// 				<span>Поиск</span>
-	// 			</a>
-	// 		</li>
-	// 		<li class="menu-item menu-item-lang">
-	// 			<div class="language-switch">
-	// 				<button class="lang-btn">УКР</button>
-	// 				<span class="lang-separator">|</span>
-	// 				<button class="lang-btn">ENG</button>
-	// 			</div>
-	// 		</li>';
-	// 	}
-	// 	return $output;
-	// }
-}
+	}
