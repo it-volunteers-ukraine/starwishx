@@ -1,7 +1,5 @@
 <?php
-/**
- * Desktop walker – подменю с картинкой-фоном + поиск + язык
- */
+
 class Header_Menu_Walker extends Walker_Nav_Menu {
 
 	public function start_lvl( &$output, $depth = 0, $args = null ) {
@@ -19,10 +17,10 @@ class Header_Menu_Walker extends Walker_Nav_Menu {
 
 	$output .= '<li class="' . esc_attr( $class_names ) . '">';
 
-	// ссылка
+	
 	$output .= '<a href="' . esc_url( $item->url ) . '">';
 
-	/* картинка-фон (только подпункты) */
+	
 	if ( $depth === 1 ) {
 		$img_id = get_field( 'images', $item );
 		if ( $img_id ) {
@@ -33,7 +31,7 @@ class Header_Menu_Walker extends Walker_Nav_Menu {
 
 	$output .= '<span class="submenu-text">' . $item->title . '</span>';
 
-	/* ➜ белая стрелка для пунктов с детьми (1-й уровень) */
+	
 	if ( $depth === 0 && in_array( 'has-children', $classes, true ) ) {
 		$output .= '<svg class="arrow-icon" width="24" height="24" aria-hidden="true">
 			<use href="' . get_template_directory_uri() . '/src/img/sprites.svg#icon-arrow"></use>
@@ -47,11 +45,11 @@ public function end_el( &$output, $item, $depth = 0, $args = null ) {
 	$output .= '</li>';
 }
 
-	/* поиск + язык в конец меню */
+	
 	public function walk( $elements, $max_depth, ...$args ) {
 		$output = parent::walk( $elements, $max_depth, ...$args );
 
-		// только для десктопного места
+		
 		if ( isset( $args[0]->theme_location ) && $args[0]->theme_location === 'menu-header' && $args[0]->walker instanceof $this ) {
 			$output .= '
 			<li class="menu-item menu-item-search">

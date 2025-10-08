@@ -18,17 +18,17 @@ $login_button_text = get_field('header_button', 'option') ?: 'Увійти';
     <div class="container">
         <div class="header-inner">
 
-            <!-- Логотип -->
+            
             <div class="header-left">
                 <div class="header-logo">
                     <?php if (has_custom_logo()) echo get_custom_logo(); ?>
                 </div>
             </div>
 
-            <!-- Чекбокс для мобильного меню (скрыт) -->
+            
             <input type="checkbox" id="mobile-menu-toggle" class="mobile-menu-toggle" />
 
-            <!-- Кнопка «Меню» -->
+            
             <label for="mobile-menu-toggle" class="burger-menu-button">
                 <span>Меню</span>
                 <svg class="burger-icon" width="16" height="16" aria-hidden="true">
@@ -36,7 +36,7 @@ $login_button_text = get_field('header_button', 'option') ?: 'Увійти';
                 </svg>
             </label>
 
-            <!-- Кнопки поиска, языка и закрытия (мобильные) -->
+            
             <div class="mobile-header-buttons">
                 <div class="search-language-container">
                     <div class="search-icon">
@@ -57,7 +57,7 @@ $login_button_text = get_field('header_button', 'option') ?: 'Увійти';
                 </label>
             </div>
 
-            <!-- ДЕСКТОП-меню -->
+            
             <div class="header-center">
                 <nav class="site-head-nav">
                     <?php
@@ -73,12 +73,12 @@ $login_button_text = get_field('header_button', 'option') ?: 'Увійти';
                 </nav>
             </div>
 
-            <!-- Десктопная кнопка входа -->
+            
             <div class="header-right">
                 <a href="#" class="header-login-btn"><?php echo esc_html($login_button_text); ?></a>
             </div>
 
-            <!-- МОБИЛЬНОЕ меню -->
+            
             <div class="burger-menu">
                 <?php
                 wp_nav_menu([
@@ -94,6 +94,6 @@ $login_button_text = get_field('header_button', 'option') ?: 'Увійти';
                 <a href="#" class="login-button-mobile"><?php echo esc_html($login_button_text); ?></a>
             </div>
 
-        </div><!-- /.header-inner -->
-    </div><!-- /.container -->
+        </div>
+    </div>
 </header>

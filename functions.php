@@ -4,7 +4,7 @@ function _themeprefix_theme_setup() {
 
 	load_theme_textdomain( wp_get_theme()->get( 'TextDomain' ), get_template_directory() . '/languages' );
 
-	// Add default posts and comments RSS feed links to head.
+	
 	add_theme_support( 'automatic-feed-links' );
 	add_theme_support( 'title-tag' );
 	add_theme_support( 'post-thumbnails' );
@@ -30,7 +30,7 @@ function _themeprefix_theme_setup() {
 		)
 	);
 
-	// Add theme support for selective refresh for widgets.
+	
 	add_theme_support( 'customize-selective-refresh-widgets' );
 
 	add_theme_support(
@@ -45,25 +45,21 @@ function _themeprefix_theme_setup() {
 }
 add_action( 'after_setup_theme', '_themeprefix_theme_setup' );
 
-/**
- * Customizer additions.
- */
+
 require get_template_directory() . '/inc/customizer.php';
 
-/**
- * Enqueue scripts and styles.
- */
+
 function _themeprefix_theme_scripts() {
     $version = wp_get_theme()->get( 'Version' );
 
-    //// styles
+    
     wp_register_style( '_themeprefix-style', get_stylesheet_uri(), [], $version );
     wp_register_style('normalize-css', get_stylesheet_directory_uri() . '/assets/css/normalize.css');
     wp_register_style('swiper-css', get_stylesheet_directory_uri() . '/assets/css/swiper.min.css');
     wp_register_style('lightbox-css', get_stylesheet_directory_uri() . '/assets/css/lightbox.min.css');
-    // common styles for all pages
+   
     wp_register_style('app-css', get_stylesheet_directory_uri() . '/assets/css/app.css', [], $version, 'all');
-    // header-specific (если Gulp компилирует _header.scss в header.css; иначе удалите и используйте app-css)
+    
     if (file_exists(get_stylesheet_directory() . '/assets/css/header.css')) {
         wp_register_style('header-css', get_stylesheet_directory_uri() . '/assets/css/header.css', [], $version, 'all');
         wp_enqueue_style( 'header-css' );
@@ -75,11 +71,11 @@ function _themeprefix_theme_scripts() {
     wp_enqueue_style( 'lightbox-css' );
     wp_enqueue_style( 'app-css' );
 
-    //// scripts
+    
     wp_register_script( 'app-js', get_stylesheet_directory_uri() . '/assets/js/app.js', array('jquery'), $version, true );
     wp_register_script( 'swiper-js', get_stylesheet_directory_uri() . '/assets/swiper.min.js', array('jquery'), $version, true );
     wp_register_script( 'lightbox-js', get_stylesheet_directory_uri() . '/assets/lightbox.js', array('jquery'), $version, true );
-    // header-specific (если Gulp компилирует _header.js в header.js; иначе удалите и используйте app-js)
+    
     if (file_exists(get_stylesheet_directory() . '/assets/js/header.js')) {
         wp_register_script( 'header-js', get_stylesheet_directory_uri() . '/assets/js/header.js', array('jquery'), $version, true );
         wp_enqueue_script( 'header-js' );
@@ -92,11 +88,10 @@ function _themeprefix_theme_scripts() {
 add_action( 'wp_enqueue_scripts', '_themeprefix_theme_scripts' );
 
 
-// Initializing aсf blocks for gutenberg
 require_once get_template_directory() . '/inc/acf/blocks/blocks-init.php';
 
-// add options page (ИСПРАВЛЕНО: перенесено в 'init' для фикса ACF-нотисов)
-add_action('init', '_themeprefix_acf_options_page', 20); // Приоритет 20, чтобы после ACF init
+
+add_action('init', '_themeprefix_acf_options_page', 20); 
 function _themeprefix_acf_options_page() {
     if (!function_exists('acf_add_options_page')) return;
 
@@ -126,26 +121,26 @@ function _themeprefix_acf_options_page() {
     ));
 }
 
-// Вывод изображений в подменю (для десктопа, через wp_nav_menu)
+
 add_filter('wp_nav_menu_objects', 'add_acf_images_to_submenu_items_only', 10, 2);
 function add_acf_images_to_submenu_items_only($items, $args) {
-  if (defined('WP_DEBUG') && WP_DEBUG) { // Отладка только в debug-режиме
+  if (defined('WP_DEBUG') && WP_DEBUG) { 
       error_log('=== ACF Images Filter Debug ===');
   }
   foreach ($items as &$item) {
-    // Пропускаем, если это пункт верхнего уровня
+    
     if (empty($item->menu_item_parent)) {
       continue;
     }
 
-    // Получаем ID изображения из ACF
+   
     $image_id = get_field('images', 'nav_menu_item_' . $item->ID);
     if (defined('WP_DEBUG') && WP_DEBUG) {
         error_log("Десктоп: Пункт {$item->title} (ID: {$item->ID}) | Image ID: " . ($image_id ?: 'пусто'));
     }
     if ($image_id) {
       $image_url = wp_get_attachment_image_url($image_id, 'full');
-      // Вставляем изображение ПЕРЕД текстом
+      
       $item->title = '<img src="' . esc_url($image_url) . '" alt="' . esc_attr($item->title) . '" class="submenu-image" />' . $item->title;
     }
   }
@@ -189,12 +184,11 @@ function acf_add_menu_item_mobile_field() {
     ]);
 }
 
-/* ---------- 1. Подключаем волкеры ---------- */
+
 require get_template_directory() . '/inc/walker-header.php';
 require get_template_directory() . '/inc/walker-mobile.php';
 
-/* ---------- 2. Универсальный фильтр: картинка + классы ---------- */
-// /* ---------- 1. ПРОСТО ставим класс и тип – не трогаем title ---------- */
+
 add_filter('wp_nav_menu_objects', 'header_set_menu_flags', 10, 2);
 function header_set_menu_flags($items, $args) {
     // дети
@@ -207,7 +201,7 @@ function header_set_menu_flags($items, $args) {
     }
     return $items;
 }
-/* убираем пустые <ul class="sub-menu"></ul> */
+
 add_filter('wp_nav_menu_items', function ($items, $args) {
     if ($args->theme_location === 'menu-header') {
         $items = str_replace('<ul class="sub-menu"></ul>', '', $items);
@@ -215,7 +209,7 @@ add_filter('wp_nav_menu_items', function ($items, $args) {
     return $items;
 }, 10, 2);
 
-/* ---------- 3. Разрешаем <img> в пунктах меню ---------- */
+
 add_filter('wp_kses_allowed_html', function($tags){
     $tags['img'] = ['src'=>1,'alt'=>1,'class'=>1,'width'=>1,'height'=>1];
     return $tags;
