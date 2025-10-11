@@ -7,7 +7,7 @@
   border-top-right-radius: 36px;
   background: $surface-secondary;
   color: $text-white;
-  font-size: 16px;
+  font-size: 20px;
 }
 
 .footer a {
@@ -33,7 +33,7 @@
 .footer .socblock {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 18px;
   line-height: 1.3;
   margin-bottom: 40px;
 }
@@ -186,6 +186,10 @@
     font-size: 32px;
   }
 
+  .footer .socblock {
+    font-size: 18px;
+  }
+
   .nav {
     max-width: 336px;
   }
@@ -252,6 +256,14 @@
 @media screen and (min-width: 1920px) {
   .footer-title {
     font-size: 44px;
+  }
+
+  .footer .socblock {
+    font-size: 20px;
+  }
+
+  .footer .menu {
+    font-size: 24px;
   }
 
   .footer-logo {
