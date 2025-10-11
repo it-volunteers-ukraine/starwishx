@@ -32,7 +32,7 @@ $login_button_text = get_field('header_button', 'option') ?: 'Увійти';
             <label for="mobile-menu-toggle" class="burger-menu-button">
                 <span>Меню</span>
                 <svg class="burger-icon" width="16" height="16" aria-hidden="true">
-                    <use xlink:href="<?php echo get_template_directory_uri(); ?>/src/img/sprites.svg#icon-burger"></use>
+                    <use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-burger"></use>
                 </svg>
             </label>
 
@@ -41,7 +41,7 @@ $login_button_text = get_field('header_button', 'option') ?: 'Увійти';
                 <div class="search-language-container">
                     <div class="search-icon">
                         <svg width="16" height="16" aria-hidden="true">
-                            <use xlink:href="<?php echo get_template_directory_uri(); ?>/src/img/sprites.svg#icon-search"></use>
+                            <use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-search"></use>
                         </svg>
                     </div>
                     <div class="language-switch">
@@ -52,7 +52,7 @@ $login_button_text = get_field('header_button', 'option') ?: 'Увійти';
                 </div>
                 <label for="mobile-menu-toggle" class="close-menu-button">
                     <svg class="close-icon" width="16" height="16" aria-hidden="true">
-                        <use xlink:href="<?php echo get_template_directory_uri(); ?>/src/img/sprites.svg#icon-close"></use>
+                        <use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-close"></use>
                     </svg>
                 </label>
             </div>

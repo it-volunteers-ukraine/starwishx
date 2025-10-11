@@ -150,6 +150,23 @@
   transform: rotate(180deg);
 }
 
+/* ---------- мостик для «Можливості» ---------- */
+.header .menu > li.has-children::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 100%;          /* ровно под ссылкой */
+  width: 100%;        /* ширина под-меню */
+  height: 26px;       /* тот же отступ, что и top у .sub-menu */
+  pointer-events: none;
+  z-index: 98;
+}
+
+.header .menu > li.has-children:hover::before {
+  pointer-events: auto; /* «ловит» мышь, пока идём к блоку */
+}
+
 .header .sub-menu {
   display: none;
   position: absolute;
@@ -217,6 +234,13 @@
 
 .header .menu li:hover .sub-menu {
   display: flex;
+}
+
+/* «Можливості» держится подсвеченным, пока под-меню открыто */
+.header .menu li.has-children:hover > a,
+.header .menu li.has-children:has(.sub-menu:hover) > a {
+  background: var(--menu-hover-bg);
+  color: var(--menu-hover-text-color);
 }
 
 .header .menu-item-search {
@@ -309,6 +333,12 @@
 
 .header .sub-menu li:hover .submenu-bg-image {
   opacity: 0;
+}
+
+// Активный пункт меню (WordPress)
+.header .menu > li:not(.menu-item-lang, .menu-item-search) > a.js-active {
+  background: var(--menu-hover-bg);
+  color: var(--menu-hover-text-color);
 }
 
 /* ==========  МОБИЛЬНЫЕ СТИЛИ  ========== */
