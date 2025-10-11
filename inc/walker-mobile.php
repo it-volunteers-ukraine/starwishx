@@ -28,7 +28,7 @@ class Mobile_Menu_Walker extends Walker_Nav_Menu {
 		
 		$output .= '<a class="menu-button opportunities-toggle" href="#" aria-expanded="false">';
 		$output .= '<span>' . esc_html( $item->title ) . '</span>';
-		$output .= '<svg class="arrow-icon" width="24" height="24"><use xlink:href="'.get_template_directory_uri().'/assets/img/sprites.svg#icon-arrow"></use></svg>';
+		$output .= '<svg class="arrow-icon" width="24" height="24"><use xlink:href="'.get_template_directory_uri().'/assets/img/sprites.svg#icon-arrows"></use></svg>';
 		$output .= '</a>';
 
 		

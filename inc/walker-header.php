@@ -34,7 +34,7 @@ class Header_Menu_Walker extends Walker_Nav_Menu {
 	
 	if ( $depth === 0 && in_array( 'has-children', $classes, true ) ) {
 		$output .= '<svg class="arrow-icon" width="24" height="24" aria-hidden="true">
-			<use href="' . get_template_directory_uri() . '/assets/img/sprites.svg#icon-arrow"></use>
+			<use href="' . get_template_directory_uri() . '/assets/img/sprites.svg#icon-arrows"></use>
 		</svg>';
 	}
 
@@ -54,7 +54,7 @@ public function end_el( &$output, $item, $depth = 0, $args = null ) {
 			$output .= '
 			<li class="menu-item menu-item-search">
 				<div class="div-search">
-					<svg class="search-icon"><use xlink:href="'.get_template_directory_uri().'/assets/img/sprites.svg#icon-search"></use></svg>
+					<svg class="search-icon"><use xlink:href="'.get_template_directory_uri().'/assets/img/sprites.svg#icon-find"></use></svg>
 				</div>
 			</li>
 			<li class="menu-item menu-item-lang">

@@ -60,11 +60,12 @@ document.addEventListener('DOMContentLoaded', () => {
     '.header .menu > li:not(.menu-item-lang):not(.menu-item-search) > a'
   );
 
-  const normalise = url => url.replace(/\/$/, '');               // убираем завершающий слэш
+  const normalise = url => url.replace(/\/$/, '');
   const cur = normalise(window.location.href);
+  const isHome = window.location.pathname === '/' || window.location.pathname === '/index.php';
 
   menuLinks.forEach(link => {
-    if (normalise(link.href) === cur) {
+    if (normalise(link.href) === cur && !isHome) {
       link.classList.add('js-active');
     }
   });

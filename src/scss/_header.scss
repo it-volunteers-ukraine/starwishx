@@ -58,9 +58,10 @@
   flex: 0 0 auto;
 }
 
-.header .header-logo {
-  max-width: 80px;
-  max-height: 80px;
+.header .header-logo img,
+.header .header-logo svg {
+  width: 80px;
+  height: 80px;
 }
 
 .header .header-login-btn:hover {
@@ -135,8 +136,8 @@
 }
 
 .header .menu li.has-children .arrow-icon {
-  width: 24px;
-  height: 24px;
+  width: 18px;
+  height: 18px;
   fill: none;
   stroke: currentcolor;
   transition: stroke 0.2s ease, transform 0.2s ease;
@@ -507,6 +508,8 @@
     margin-left: 8px;
     width: 24px;
     height: 24px;
+    fill: none;
+    stroke: currentcolor;
     transition: transform 0.3s ease;
   }
 
