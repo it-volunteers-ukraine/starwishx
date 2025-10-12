@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-  /* ---------- мобильное меню (остаётся прежним) ---------- */
+  /* ---------- мобильное меню ---------- */
   const toggle = document.getElementById('mobile-menu-toggle');
   if (toggle) {
     const closeEntireMenu = () => {
@@ -13,6 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
         .forEach(el => el.classList.remove('active'));
     };
 
+    /* подсветка «Можливості» только при открытом под-меню (мобильный) */
     document.querySelectorAll('.opportunities-toggle').forEach(btn =>
       btn.addEventListener('click', e => {
         e.preventDefault(); e.stopPropagation();
@@ -23,6 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.querySelectorAll('.menu-item-custom-grid').forEach(item => {
           if (item !== parent) {
             item.classList.remove('active');
+            item.classList.remove('mobile-active');
             (item.querySelector('.mobile-submenu')?.classList.remove('active'));
           }
         });
@@ -30,10 +32,18 @@ document.addEventListener('DOMContentLoaded', () => {
         const expanded = parent.classList.contains('active');
         parent.classList.toggle('active');
         submenu?.classList.toggle('active');
+
+        if (!expanded) {
+          parent.classList.add('mobile-active');
+        } else {
+          parent.classList.remove('mobile-active');
+        }
+
         btn.setAttribute('aria-expanded', !expanded);
       })
     );
 
+    /* остальные обработчики мобильного меню */
     document.querySelectorAll('.mobile-submenu-item').forEach(item =>
       item.addEventListener('click', e => {
         e.stopPropagation();
@@ -55,17 +65,16 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  /* ---------- активный пункт меню = ТЕКУЩАЯ СТРАНИЦА ---------- */
+  /* ---------- активный пункт меню (десктоп, кроме «Главной») ---------- */
   const menuLinks = document.querySelectorAll(
-    '.header .menu > li:not(.menu-item-lang):not(.menu-item-search) > a'
+    '.header .menu > li:not(.menu-item-lang):not(.menu-item-search):not(.hide-mobile) > a'
   );
 
   const normalise = url => url.replace(/\/$/, '');
   const cur = normalise(window.location.href);
-  const isHome = window.location.pathname === '/' || window.location.pathname === '/index.php';
 
   menuLinks.forEach(link => {
-    if (normalise(link.href) === cur && !isHome) {
+    if (normalise(link.href) === cur) {
       link.classList.add('js-active');
     }
   });

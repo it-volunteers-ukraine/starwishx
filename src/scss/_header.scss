@@ -517,6 +517,12 @@
     transform: rotate(-180deg);
   }
 
+  /* мобильный пункт «Можливості» – цвет только когда под-меню открыто */
+  .burger-menu .mobile-menu-list li.menu-item-custom-grid.mobile-active > a.menu-button {
+    background: var(--menu-hover-bg);
+    color: #784cdb;
+  }
+
   .mobile-submenu {
     display: none;
     width: 100%;
@@ -580,7 +586,6 @@
       max-width: calc(100% - 16px);
     }
 
-    &:hover,
     &.active {
       background-color: #6839c8;
       .submenu-image { opacity: 0; }
@@ -605,6 +610,12 @@
     justify-content: center;
     margin-top: 10px;
     flex-shrink: 0;
+  }
+
+  /* цвет «Можливості» при ЗАКРЫТОМ под-меню (псевдоклассы не перебивают) */
+  .burger-menu .mobile-menu-list .menu-item-custom-grid:not(.mobile-active) > a.menu-button {
+    color: #292929; // ← исходный цвет текста
+    background: transparent; // ← исходный фон
   }
 }
 
