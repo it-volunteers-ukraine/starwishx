@@ -7,7 +7,22 @@ $default_classes = [
     'text' => 'text',
     'content-text' => 'content-text',
     'contacts' => 'contacts',
-    'icon' => 'icon'
+    'icon' => 'icon',
+    'icon2' => 'icon2',
+    'icon3-wrap' => 'icon3-wrap',
+    'icon3-wrap-in' => 'icon3-wrap-in',
+    'icon3-bg' => 'icon3-bg',
+    'icon3' => 'icon3',
+    'icon4-glow-container1' => 'icon4-glow-container1',
+    'icon4-mask' => 'icon4-mask',
+    'icon4-light' => 'icon4-light',
+    'icon4-bg' => 'icon4-bg',
+    'icon5-bg1' => 'icon5-bg1',
+    'icon5-bg2' => 'icon5-bg2',
+    'icon5-mask' => 'icon5-mask',
+    'icon6-bg' => 'icon6-bg',
+    'icon6-mask' => 'icon6-mask',
+    'icons-tmpl' => 'icons-tmpl'
 
 
 ];
@@ -70,7 +85,43 @@ if (file_exists($modules_file)) {
                 <svg class="<?php echo esc_attr($classes['icon']); ?>">
                     <use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-element_planet_3"></use>
                 </svg>
+                <svg class="<?php echo esc_attr($classes['icon2']); ?>">
+                    <use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-element_planet_3"></use>
+                </svg>
+                <div class="<?php echo esc_attr($classes['icon3-wrap']); ?>">
+                    <!-- <svg class="<?php echo esc_attr($classes['icon3-bg']); ?>">
+                        <use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-star1-bg"></use>
+                    </svg> -->
+                    <img src="<?php echo get_template_directory_uri(); ?>/assets/img/star1-bg.png" class="<?php echo esc_attr($classes['icon3-bg']); ?>" alt="">
+                    <div class="<?php echo esc_attr($classes['icon3-wrap-in']); ?>">
+                        <svg class="<?php echo esc_attr($classes['icon3']); ?>">
+                            <use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-star1-circle"></use>
+                        </svg>
+                    </div>
+                </div>
             </div>
+        </div>
+        <div class="<?php echo esc_attr($classes['icons-tmpl']); ?>">
+            <div class="<?php echo esc_attr($classes['icon4-glow-container1']); ?>">
+                <img src="<?php echo get_template_directory_uri(); ?>/assets/img/star1-icon.png" class="<?php echo esc_attr($classes['icon4-mask']); ?>">
+                <img src="<?php echo get_template_directory_uri(); ?>/assets/img/star1-bg.png" class="<?php echo esc_attr($classes['icon4-bg']); ?>" alt="">
+                <div class="<?php echo esc_attr($classes['icon4-light']); ?>"></div>
+            </div>
+            <div class="<?php echo esc_attr($classes['icon4-glow-container1']); ?>">
+                <!-- <img src="<?php echo get_template_directory_uri(); ?>/assets/img/star1-bg.png" class="<?php echo esc_attr($classes['icon5-bg1']); ?>" alt=""> -->
+                <img src="<?php echo get_template_directory_uri(); ?>/assets/img/star1-bg.png" class="<?php echo esc_attr($classes['icon5-bg2']); ?>" alt="">
+    
+                <img src="<?php echo get_template_directory_uri(); ?>/assets/img/star1-icon.png" class="<?php echo esc_attr($classes['icon5-mask']); ?>">
+            </div>
+            <!-- <div class="<?php echo esc_attr($classes['icon4-glow-container1']); ?>"> -->
+                <!-- <img src="<?php echo get_template_directory_uri(); ?>/assets/img/star1-bg.png" class="<?php echo esc_attr($classes['icon5-bg1']); ?>" alt=""> -->
+                <!-- <div class="<?php echo esc_attr($classes['icon6-bg']); ?>"> -->
+                    
+                <!-- </div> -->
+                <!-- <img src="<?php echo get_template_directory_uri(); ?>/assets/img/star1-bg.png" class="<?php echo esc_attr($classes['icon6-bg']); ?>" alt=""> -->
+    
+                <!-- <img src="<?php echo get_template_directory_uri(); ?>/assets/img/star1-icon.png" class="<?php echo esc_attr($classes['icon6-mask']); ?>"> -->
+            <!-- </div> -->
         </div>
     </div>
 </section>
