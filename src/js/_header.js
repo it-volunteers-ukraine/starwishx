@@ -13,10 +13,10 @@ document.addEventListener('DOMContentLoaded', () => {
         .forEach(el => el.classList.remove('active'));
     };
 
+    /* подсветка «Можливості» только при открытом под-меню (мобильный) */
     document.querySelectorAll('.opportunities-toggle').forEach(btn =>
       btn.addEventListener('click', e => {
-        e.preventDefault();
-        e.stopPropagation();
+        e.preventDefault(); e.stopPropagation();
         const parent = btn.closest('.menu-item-custom-grid');
         if (!parent) return;
         const submenu = parent.querySelector('.mobile-submenu');
@@ -43,6 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
       })
     );
 
+    /* остальные обработчики мобильного меню */
     document.querySelectorAll('.mobile-submenu-item').forEach(item =>
       item.addEventListener('click', e => {
         e.stopPropagation();
@@ -68,6 +69,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const menuLinks = document.querySelectorAll(
     '.header .menu > li:not(.hide-mobile) > a'
   );
+
   const normalise = url => url.replace(/\/$/, '');
   const cur = normalise(window.location.href);
 
@@ -77,32 +79,31 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  /* ---------- заглушки: поиск и переключение языка (десктоп) ---------- */
+  /* ---------- заглушки: поиск и язык (десктоп) ---------- */
   document.querySelectorAll('.menu-item-search').forEach(el => {
     el.addEventListener('click', e => {
       e.preventDefault();
-      alert('Здесь будет поиск');
+      alert('Пошук (десктоп)');
     });
   });
 
   document.querySelectorAll('.menu-item-lang button').forEach(btn => {
-    btn.addEventListener('click', e => {
-      alert('Здесь будет переключение языка');
+    btn.addEventListener('click', () => {
+      alert('Мова (десктоп)');
     });
   });
 
-  /* ---------- заглушки: поиск и переключение языка (мобильная версия) ---------- */
-  const mobileSearchIcon = document.querySelector('.mobile-header-buttons .search-icon');
-  if (mobileSearchIcon) {
-    mobileSearchIcon.addEventListener('click', e => {
+  /* ---------- заглушки: мобильная версия ---------- */
+  document.querySelectorAll('.mobile-header-buttons .search-icon').forEach(el => {
+    el.addEventListener('click', e => {
       e.preventDefault();
-      alert('Здесь будет поиск (мобильная версия)');
+      alert('Пошук (мобільна)');
     });
-  }
+  });
 
   document.querySelectorAll('.mobile-header-buttons .lang-btn').forEach(btn => {
-    btn.addEventListener('click', e => {
-      alert('Здесь будет переключение языка (мобильная версия)');
+    btn.addEventListener('click', () => {
+      alert('Мова (мобільна)');
     });
   });
 });

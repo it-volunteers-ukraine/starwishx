@@ -14,12 +14,14 @@
   --button-text-color: #fff;
 }
 
+/* Скрытие мобильных элементов на десктопе */
 .burger-menu-button,
 .mobile-header-buttons,
 .burger-menu {
   display: none;
 }
 
+/* Скрытие чекбокса мобильного меню */
 .mobile-menu-toggle {
   position: absolute !important;
   opacity: 0 !important;
@@ -31,6 +33,7 @@
   border: none !important;
 }
 
+/* Шапка */
 .header {
   min-height: 50px;
   background: #fff;
@@ -40,36 +43,45 @@
 .header .header-inner {
   display: flex;
   align-items: center;
+  justify-content: space-between; /* ← равномерное распределение */
   position: relative;
   padding: 24px 0;
+  flex-wrap: nowrap;
 }
 
-.header .header-left {
+.header .header-left,
+.header .header-right,
+.burger-menu-button,
+.mobile-header-buttons {
   flex: 0 0 auto;
 }
 
 .header .header-center {
   flex: 1;
   display: flex;
-  align-items: center;
   justify-content: center;
-  gap: 12px; // ← расстояние между меню и доп. элементами
+  min-width: 0; /* ← позволяет flex-контейнеру сжиматься */
 }
 
-.header .header-right {
-  flex: 0 0 auto;
+.header .header-logo {
+  display: flex;              /* центрируем картинку */
+  align-items: center;
+  height: 100%;
+  transition: transform 0.3s ease; /* плавность */
 }
 
+.header .header-logo:hover {
+  transform: scale(1.08);     /* 8 % больше */
+}
+
+/* Логотип */
 .header .header-logo img,
 .header .header-logo svg {
   width: 80px;
   height: 80px;
 }
 
-.header .header-login-btn:hover {
-  background: #7b5ae4;
-}
-
+/* Кнопка "Увійти" */
 .header .header-login-btn {
   display: inline-flex;
   align-items: center;
@@ -88,21 +100,38 @@
   transition: background-color 0.2s ease;
 }
 
+.header .header-login-btn:hover {
+  background: #7b5ae4;
+}
+
+/* ========== ЕДИНЫЙ МЕНЮ-БЛОК ========== */
+.header .menu-container {
+  display: flex;
+  align-items: center;
+  height: 52px;
+  background-color: var(--menu-bg);
+  border-radius: 40px;
+  padding: 0 6px;
+  gap: 12px;
+  max-width: 100%;
+}
+
+/* Навигация */
 .header .site-head-nav {
   display: flex;
+  height: 100%;
 }
 
 .header .menu {
   display: flex;
   align-items: center;
-  justify-content: center;
-  height: 52px;
-  padding: 0 18px 0 6px;
+  height: 100%;
+  margin: 0;
+  padding: 0;
   gap: 12px;
-  background-color: var(--menu-bg);
-  border-radius: 40px;
   list-style: none;
-  position: relative;
+  background: none;
+  border-radius: 0;
 }
 
 .header .menu li {
@@ -123,15 +152,20 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
+  height: 100%;
+  box-sizing: border-box;
 }
 
-/* Только пункты верхнего уровня */
+/* Hover и активные состояния */
 .header .menu > li > a:hover,
-.header .menu > li:has(> .sub-menu:hover) > a {
+.header .menu > li:has(> .sub-menu:hover) > a,
+.header .menu li.has-children:hover > a,
+.header .menu li.has-children:has(.sub-menu:hover) > a {
   background-color: var(--menu-hover-bg);
   color: var(--menu-hover-text-color);
 }
 
+/* Стрелки подменю */
 .header .menu li.has-children > a {
   display: inline-flex;
   align-items: center;
@@ -146,15 +180,11 @@
   transition: stroke 0.2s ease, transform 0.2s ease;
 }
 
-.header .menu li.has-children:hover > a {
-  color: var(--menu-hover-text-color);
-}
-
 .header .menu li.has-children:hover .arrow-icon {
   transform: rotate(180deg);
 }
 
-/* ---------- мостик для «Можливості» ---------- */
+/* Мостик для «Можливості» */
 .header .menu > li.has-children::before {
   content: "";
   position: absolute;
@@ -171,6 +201,7 @@
   pointer-events: auto;
 }
 
+/* Подменю */
 .header .sub-menu {
   display: none;
   position: absolute;
@@ -256,18 +287,12 @@
   display: flex;
 }
 
-/* Подсветка «Можливості» при открытом подменю */
-.header .menu li.has-children:hover > a,
-.header .menu li.has-children:has(.sub-menu:hover) > a {
-  background: var(--menu-hover-bg);
-  color: var(--menu-hover-text-color);
-}
-
-/* ========== НОВЫЕ СТИЛИ: поиск и язык ВНЕ меню ========== */
+/* ========== ДОП. ЭЛЕМЕНТЫ: поиск и язык ========== */
 .header .header-addons {
   display: flex;
   align-items: center;
   gap: 12px;
+  height: 100%;
 }
 
 .header .menu-item-search,
@@ -275,9 +300,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 52px;
-  background-color: var(--menu-bg);
-  border-radius: 40px;
+  height: 100%;
   color: #fff;
 }
 
@@ -292,12 +315,14 @@
   cursor: pointer;
   transition: fill 0.2s ease;
 }
+
 .header .search-icon:hover {
   fill: #bbb;
+  opacity: 0.8;
 }
 
 .header .menu-item-lang {
-  width: 87px;
+  width: auto;
   padding: 0 12px;
 }
 
@@ -323,6 +348,7 @@
   display: block;
   transition: opacity 0.2s ease;
 }
+
 .header .lang-btn:hover {
   opacity: 0.8;
 }
@@ -335,14 +361,64 @@
   flex-shrink: 0;
 }
 
-/* Активный пункт меню (только навигация) */
+/* Активный пункт меню */
 .header .menu > li > a.js-active {
   background: var(--menu-hover-bg);
   color: var(--menu-hover-text-color);
 }
 
+/* ========== 1440 px и меньше ========== */
+@media (max-width: 1440px) {
+  /* 1. Логотип 64×64 */
+  .header .header-logo img,
+  .header .header-logo svg {
+    width: 64px;
+    height: 64px;
+  }
+
+  /* 2. Высота меню 44 px */
+  .header .menu-container {
+    height: 44px;
+    border-radius: 22px; /* ← пропорционально уменьшаем */
+    padding: 0 4px;
+    gap: 8px;
+  }
+
+  /* 3. Высота блока поиска / языка = 44 px */
+  .header .header-addons {
+    height: 44px;
+    gap: 8px;
+    padding: 0 4px;
+  }
+
+  /* 4. Размер текста пунктов меню 16 px */
+  .header .menu li a {
+    font-size: 16px;
+    padding: 6px 10px; /* ← чуть компактнее */
+  }
+
+  /* 5. Иконки и кнопки языка – пропорционально меньше */
+  .header .search-icon {
+    width: 22px;
+    height: 22px;
+  }
+
+  .header .lang-btn,
+  .header .lang-separator {
+    font-size: 16px;
+  }
+
+  /* 6. Кнопка «Увійти» – тоже 44 px высота */
+  .header .header-login-btn {
+    height: 44px;
+    width: 95px;          /* ← чуть уже */
+    font-size: 16px;
+    padding: 10px 20px;
+  }
+}
+
 /* ==========  МОБИЛЬНЫЕ СТИЛИ  ========== */
-@media (max-width: 768px) {
+@media (max-width: 960px) {
   .header .header-center,
   .header .header-right {
     display: none !important;

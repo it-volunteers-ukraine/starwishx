@@ -204,3 +204,56 @@ add_filter('wp_kses_allowed_html', function($tags){
     $tags['img'] = ['src'=>1,'alt'=>1,'class'=>1,'width'=>1,'height'=>1];
     return $tags;
 }, 10, 1);
+/**
+ * Заглушка: триггер поиска (десктоп и мобильная версия)
+ */
+if ( ! function_exists( 'yourtheme_search_trigger' ) ) {
+  function yourtheme_search_trigger() {
+    ?>
+    <div class="menu-item menu-item-search" role="button" tabindex="0" aria-label="<?php esc_attr_e( 'Пошук', '_themedomain' ); ?>">
+      <svg class="search-icon" width="16" height="16" aria-hidden="true">
+        <use xlink:href="<?php echo esc_url( get_template_directory_uri() . '/assets/img/sprites.svg#icon-find' ); ?>"></use>
+      </svg>
+    </div>
+    <?php
+  }
+}
+
+/**
+ * Заглушка: переключатель языка (десктоп)
+ */
+if ( ! function_exists( 'yourtheme_language_switcher' ) ) {
+  function yourtheme_language_switcher() {
+    ?>
+    <div class="menu-item menu-item-lang" aria-label="<?php esc_attr_e( 'Мова', '_themedomain' ); ?>">
+      <div class="lang">
+        <button class="lang-btn">УКР</button>
+        <span class="lang-separator">|</span>
+        <button class="lang-btn">ENG</button>
+      </div>
+    </div>
+    <?php
+  }
+}
+
+/**
+ * Заглушка: поиск + язык для мобильной версии
+ */
+if ( ! function_exists( 'yourtheme_mobile_search_lang' ) ) {
+  function yourtheme_mobile_search_lang() {
+    ?>
+    <div class="search-language-container">
+      <div class="search-icon">
+        <svg width="16" height="16" aria-hidden="true">
+          <use xlink:href="<?php echo esc_url( get_template_directory_uri() . '/assets/img/sprites.svg#icon-find' ); ?>"></use>
+        </svg>
+      </div>
+      <div class="language-switch">
+        <button class="lang-btn">УКР</button>
+        <span class="lang-separator">|</span>
+        <button class="lang-btn">ENG</button>
+      </div>
+    </div>
+    <?php
+  }
+}

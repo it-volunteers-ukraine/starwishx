@@ -18,17 +18,17 @@ $login_button_text = get_field('header_button', 'option') ?: 'Увійти';
     <div class="container">
         <div class="header-inner">
 
-            
+            <!-- Логотип -->
             <div class="header-left">
                 <div class="header-logo">
                     <?php if (has_custom_logo()) echo get_custom_logo(); ?>
                 </div>
             </div>
 
-            
+            <!-- Чекбокс для мобильного меню (скрытый) -->
             <input type="checkbox" id="mobile-menu-toggle" class="mobile-menu-toggle" />
 
-            
+            <!-- Кнопка "Меню" (бургер) -->
             <label for="mobile-menu-toggle" class="burger-menu-button">
                 <span>Меню</span>
                 <svg class="burger-icon" width="16" height="16" aria-hidden="true">
@@ -36,20 +36,9 @@ $login_button_text = get_field('header_button', 'option') ?: 'Увійти';
                 </svg>
             </label>
 
-            
+            <!-- Мобильные кнопки (поиск, язык, крестик) -->
             <div class="mobile-header-buttons">
-                <div class="search-language-container">
-                    <div class="search-icon">
-                        <svg width="16" height="16" aria-hidden="true">
-                            <use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-find"></use>
-                        </svg>
-                    </div>
-                    <div class="language-switch">
-                        <button class="lang-btn">УКР</button>
-                        <span class="lang-separator">|</span>
-                        <button class="lang-btn">ENG</button>
-                    </div>
-                </div>
+                <?php yourtheme_mobile_search_lang(); ?>
                 <label for="mobile-menu-toggle" class="close-menu-button">
                     <svg class="close-icon" width="16" height="16" aria-hidden="true">
                         <use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-x"></use>
@@ -57,48 +46,31 @@ $login_button_text = get_field('header_button', 'option') ?: 'Увійти';
                 </label>
             </div>
 
-            
-           <div class="header-center">
-  <nav class="site-head-nav">
-    <?php
-    wp_nav_menu([
-      'theme_location' => 'menu-header',
-      'container'      => false,
-      'menu_class'     => 'menu',
-      'items_wrap'     => '<ul id="%1$s" class="%2$s">%3$s</ul>',
-      'walker'         => new Header_Menu_Walker(),
-      'fallback_cb'    => false,
-    ]);
-    ?>
-  </nav>
-
-  <?php if ( ! is_admin() ): ?>
-  <div class="header-addons">
-    <!-- Поиск -->
-    <div class="menu-item menu-item-search" role="button" tabindex="0" aria-label="<?php esc_attr_e('Пошук', '_themedomain'); ?>">
-      <svg class="search-icon" width="16" height="16" aria-hidden="true">
-        <use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-find"></use>
-      </svg>
-    </div>
-
-    <!-- Язык -->
-    <div class="menu-item menu-item-lang" aria-label="<?php esc_attr_e('Мова', '_themedomain'); ?>">
-      <div class="lang">
-        <button class="lang-btn">УКР</button>
-        <span class="lang-separator">|</span>
-        <button class="lang-btn">ENG</button>
-      </div>
+            <!-- Центр: меню + доп. элементы (поиск, язык) -->
+            <div class="header-center">
+  <div class="menu-container">
+    <nav class="site-head-nav">
+      <?php wp_nav_menu([
+        'theme_location' => 'menu-header',
+        'container'      => false,
+        'menu_class'     => 'menu',
+        'items_wrap'     => '<ul id="%1$s" class="%2$s">%3$s</ul>',
+        'walker'         => new Header_Menu_Walker(),
+        'fallback_cb'    => false,
+      ]); ?>
+    </nav>
+    <div class="header-addons">
+      <?php yourtheme_search_trigger(); ?>
+      <?php yourtheme_language_switcher(); ?>
     </div>
   </div>
-  <?php endif; ?>
 </div>
-
-            
+            <!-- Кнопка "Увійти" -->
             <div class="header-right">
                 <a href="#" class="header-login-btn"><?php echo esc_html($login_button_text); ?></a>
             </div>
 
-            
+            <!-- Мобильное меню -->
             <div class="burger-menu">
                 <?php
                 wp_nav_menu([
