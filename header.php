@@ -58,20 +58,40 @@ $login_button_text = get_field('header_button', 'option') ?: 'Увійти';
             </div>
 
             
-            <div class="header-center">
-                <nav class="site-head-nav">
-                    <?php
-                    wp_nav_menu([
-                        'theme_location' => 'menu-header',
-                        'container'      => false,
-                        'menu_class'     => 'menu',
-                        'items_wrap'     => '<ul id="%1$s" class="%2$s">%3$s</ul>',
-                        'walker'         => new Header_Menu_Walker(),
-                        'fallback_cb'    => false,
-                    ]);
-                    ?>
-                </nav>
-            </div>
+           <div class="header-center">
+  <nav class="site-head-nav">
+    <?php
+    wp_nav_menu([
+      'theme_location' => 'menu-header',
+      'container'      => false,
+      'menu_class'     => 'menu',
+      'items_wrap'     => '<ul id="%1$s" class="%2$s">%3$s</ul>',
+      'walker'         => new Header_Menu_Walker(),
+      'fallback_cb'    => false,
+    ]);
+    ?>
+  </nav>
+
+  <?php if ( ! is_admin() ): ?>
+  <div class="header-addons">
+    <!-- Поиск -->
+    <div class="menu-item menu-item-search" role="button" tabindex="0" aria-label="<?php esc_attr_e('Пошук', '_themedomain'); ?>">
+      <svg class="search-icon" width="16" height="16" aria-hidden="true">
+        <use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-find"></use>
+      </svg>
+    </div>
+
+    <!-- Язык -->
+    <div class="menu-item menu-item-lang" aria-label="<?php esc_attr_e('Мова', '_themedomain'); ?>">
+      <div class="lang">
+        <button class="lang-btn">УКР</button>
+        <span class="lang-separator">|</span>
+        <button class="lang-btn">ENG</button>
+      </div>
+    </div>
+  </div>
+  <?php endif; ?>
+</div>
 
             
             <div class="header-right">

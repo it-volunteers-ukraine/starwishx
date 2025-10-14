@@ -51,19 +51,7 @@ public function end_el( &$output, $item, $depth = 0, $args = null ) {
 
 		
 		if ( isset( $args[0]->theme_location ) && $args[0]->theme_location === 'menu-header' && $args[0]->walker instanceof $this ) {
-			$output .= '
-			<li class="menu-item menu-item-search">
-				<div class="div-search">
-					<svg class="search-icon"><use xlink:href="'.get_template_directory_uri().'/assets/img/sprites.svg#icon-find"></use></svg>
-				</div>
-			</li>
-			<li class="menu-item menu-item-lang">
-				<div class="lang">
-					<button class="lang-btn">УКР</button>
-					<span class="lang-separator">|</span>
-					<button class="lang-btn">ENG</button>
-				</div>
-			</li>';
+			
 		}
 		return $output;
 	}

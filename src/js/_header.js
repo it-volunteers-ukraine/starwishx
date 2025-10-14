@@ -13,10 +13,10 @@ document.addEventListener('DOMContentLoaded', () => {
         .forEach(el => el.classList.remove('active'));
     };
 
-    /* подсветка «Можливості» только при открытом под-меню (мобильный) */
     document.querySelectorAll('.opportunities-toggle').forEach(btn =>
       btn.addEventListener('click', e => {
-        e.preventDefault(); e.stopPropagation();
+        e.preventDefault();
+        e.stopPropagation();
         const parent = btn.closest('.menu-item-custom-grid');
         if (!parent) return;
         const submenu = parent.querySelector('.mobile-submenu');
@@ -43,7 +43,6 @@ document.addEventListener('DOMContentLoaded', () => {
       })
     );
 
-    /* остальные обработчики мобильного меню */
     document.querySelectorAll('.mobile-submenu-item').forEach(item =>
       item.addEventListener('click', e => {
         e.stopPropagation();
@@ -65,11 +64,10 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  /* ---------- активный пункт меню (десктоп, кроме «Главной») ---------- */
+  /* ---------- активный пункт меню (десктоп) ---------- */
   const menuLinks = document.querySelectorAll(
-    '.header .menu > li:not(.menu-item-lang):not(.menu-item-search):not(.hide-mobile) > a'
+    '.header .menu > li:not(.hide-mobile) > a'
   );
-
   const normalise = url => url.replace(/\/$/, '');
   const cur = normalise(window.location.href);
 
@@ -77,5 +75,34 @@ document.addEventListener('DOMContentLoaded', () => {
     if (normalise(link.href) === cur) {
       link.classList.add('js-active');
     }
+  });
+
+  /* ---------- заглушки: поиск и переключение языка (десктоп) ---------- */
+  document.querySelectorAll('.menu-item-search').forEach(el => {
+    el.addEventListener('click', e => {
+      e.preventDefault();
+      alert('Здесь будет поиск');
+    });
+  });
+
+  document.querySelectorAll('.menu-item-lang button').forEach(btn => {
+    btn.addEventListener('click', e => {
+      alert('Здесь будет переключение языка');
+    });
+  });
+
+  /* ---------- заглушки: поиск и переключение языка (мобильная версия) ---------- */
+  const mobileSearchIcon = document.querySelector('.mobile-header-buttons .search-icon');
+  if (mobileSearchIcon) {
+    mobileSearchIcon.addEventListener('click', e => {
+      e.preventDefault();
+      alert('Здесь будет поиск (мобильная версия)');
+    });
+  }
+
+  document.querySelectorAll('.mobile-header-buttons .lang-btn').forEach(btn => {
+    btn.addEventListener('click', e => {
+      alert('Здесь будет переключение языка (мобильная версия)');
+    });
   });
 });
