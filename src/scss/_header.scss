@@ -123,8 +123,9 @@
   gap: 8px;
 }
 
-.header .menu li a:hover,
-.header .menu li:has(+ .sub-menu:hover) > a {
+/* только верхние пункты */
+.header .menu > li > a:hover,
+.header .menu > li:has(> .sub-menu:hover) > a {
   background-color: var(--menu-hover-bg);
   color: var(--menu-hover-text-color);
 }
