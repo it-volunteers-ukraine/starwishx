@@ -1,5 +1,5 @@
-<svg width="0" height="0" fill="none" style="visibility: hidden; position: absolute;" aria-hidden="true"
-    xmlns="http://www.w3.org/2000/svg">
+<svg width="0" height="0" fill="none" style="visibility: hidden; position: absolute;" aria-hidden="true" 
+        xmlns="http://www.w3.org/2000/svg"> 
     <symbol id="icon-arrow" width="18" height="18" viewBox="0 0 18 18" fill="none">
         <path d="M6.5 4L11.5 9L6.5 14" stroke="#784CDB" stroke-linecap="round" stroke-linejoin="round"/>
     </symbol>
@@ -185,7 +185,7 @@
             </radialGradient>
         </defs>
     </symbol>
-    <symbol id="icon-element_planet_3-circle" width="96" height="96" viewBox="0 0 96 96" fill="none"
+    <symbol id="icon-element_planet_3-circle" viewBox="0 0 96 96" fill="none"
         xmlns="http://www.w3.org/2000/svg">
         <path fill-rule="evenodd" clip-rule="evenodd" d="M48 0C74.5097 0 96 21.4903 96 48C96 74.5097 74.5097 96 48 96C21.4903 96 0 74.5097 0 48C0 21.4903 21.4903 0 48 0ZM48.0035 11.6367C47.9915 11.7499 45.8403 31.9803 38.3063 39.5145C30.7661 47.0546 11.7163 47.9963 11.6402 48C11.7218 48.0135 31.9791 51.369 39.5191 58.909C47.0581 66.4483 47.9995 84.2874 48.0035 84.3633C48.0074 84.2893 48.9495 66.4486 56.4891 58.909C64.0234 51.3751 84.2535 48.0188 84.3668 48C84.2549 47.9948 64.0234 47.0488 56.4891 39.5145C48.9547 31.98 48.0087 11.7482 48.0035 11.6367Z" fill="url(#paint0_radial_1052_90839__star1-circle)"/>
         <defs>
