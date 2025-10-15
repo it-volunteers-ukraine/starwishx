@@ -1,6 +1,7 @@
 <?php
 $default_classes = [
     'container' => 'container',
+    'list' => 'list',
     'item' => 'item',
     'content' => 'content',
     'block-title' => 'block-title',
@@ -37,7 +38,7 @@ if (file_exists($modules_file)) {
 <section class="section ">
     <div class="container <?php echo esc_attr($classes['container']); ?>">
         <?php if ($items) : ?>
-            <div class="list">
+            <div class="<?php echo esc_attr($classes['list']); ?>">
 
                 <?php $count = 0; ?>
                 <?php foreach ($items as $item) : ?>
