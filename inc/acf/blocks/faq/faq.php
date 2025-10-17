@@ -68,7 +68,7 @@ $questions = get_field('questions');
                                     <?php echo esc_html($question['question']); ?>
                                 </span>
                                 <svg width="24" height="24" class="<?php echo esc_attr($classes['accordion-item-header-icon']); ?>">
-                                    <use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/img/sprites.svg#cross"></use>
+                                    <use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-plus"></use>
                                 </svg>
                             </div>
 
