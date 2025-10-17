@@ -23,7 +23,7 @@ body {
 /* Базовые стили (мобильные, до 768px) */
 .h1 {
   font-weight: 300;
-  font-size: 54pt;
+  font-size: 54px;
   line-height: 100%;
 }
 
@@ -35,92 +35,92 @@ body {
 
 .h3 {
   font-weight: 400;
-  font-size: 32pt;
+  font-size: 32px;
   line-height: 120%;
 }
 
 .h4 {
   font-weight: 500;
-  font-size: 28pt;
+  font-size: 28px;
   line-height: 120%;
 }
 
 .h5 {
   font-weight: 500;
-  font-size: 24pt;
+  font-size: 24px;
   line-height: 120%;
 }
 
 .subtitle-text-r {
   font-weight: 400;
-  font-size: 20pt;
+  font-size: 20px;
   line-height: 130%;
 }
 
 .subtitle-text-m {
   font-weight: 500;
-  font-size: 20pt;
+  font-size: 20px;
   line-height: 120%;
 }
 
 .subtitle-text-semibold {
   font-weight: 600;
-  font-size: 20pt;
+  font-size: 20px;
   line-height: 120%;
 }
 
 .big-text-semibold {
   font-weight: 600;
-  font-size: 18pt;
+  font-size: 18px;
   line-height: 120%;
 }
 
 .big-text-m {
   font-weight: 500;
-  font-size: 18pt;
+  font-size: 18px;
   line-height: 120%;
 }
 
 .big-text-r {
   font-weight: 400;
-  font-size: 18pt;
+  font-size: 18px;
   line-height: 120%;
 }
 
 .text-r {
   font-weight: 400;
-  font-size: 16pt;
+  font-size: 16px;
   line-height: 130%;
 }
 
 .btn-text-medium {
   font-weight: 500;
-  font-size: 16pt;
+  font-size: 16px;
   line-height: 120%;
 }
 
 .subtitle-big-r {
   font-weight: 400;
-  font-size: 14pt;
+  font-size: 14px;
   line-height: 120%;
 }
 
 .subtitle-big-semi {
   font-weight: 600;
-  font-size: 14pt;
+  font-size: 14px;
   line-height: 120%;
 }
 
 .text-small {
   font-weight: 400;
-  font-size: 14pt;
+  font-size: 14px;
   line-height: 120%;
 }
 
 /* --- Tablet --- от 768px */
 @media screen and (min-width: 768px) {
   .h1 {
-    font-size: 64pt;
+    font-size: 64px;
   }
 
   .h2-big {
@@ -128,48 +128,48 @@ body {
   }
 
   .h3 {
-    font-size: 40pt;
+    font-size: 40px;
   }
 
   .h4 {
-    font-size: 32pt;
+    font-size: 32px;
   }
 
   .h5 {
-    font-size: 24pt;
+    font-size: 24px;
   }
 
   .subtitle-text-r,
   .subtitle-text-m,
   .subtitle-text-semibold {
-    font-size: 20pt;
+    font-size: 20px;
   }
 
   .big-text-semibold,
   .big-text-m,
   .big-text-r {
-    font-size: 18pt;
+    font-size: 18px;
   }
 
   .text-r {
-    font-size: 16pt;
+    font-size: 16px;
   }
 
   .btn-text-medium {
-    font-size: 16pt;
+    font-size: 16px;
   }
 
   .subtitle-big-r,
   .subtitle-big-semi,
   .text-small {
-    font-size: 14pt;
+    font-size: 14px;
   }
 }
 
 /* --- Desktop --- от 1920px */
 @media screen and (min-width: 1920px) {
   .h1 {
-    font-size: 88pt;
+    font-size: 88px;
   }
 
   .h2-big {
@@ -177,41 +177,41 @@ body {
   }
 
   .h3 {
-    font-size: 54pt;
+    font-size: 54px;
   }
 
   .h4 {
-    font-size: 44pt;
+    font-size: 44px;
   }
 
   .h5 {
-    font-size: 36pt;
+    font-size: 36px;
   }
 
   .subtitle-text-r,
   .subtitle-text-m,
   .subtitle-text-semibold {
-    font-size: 24pt;
+    font-size: 24px;
   }
 
   .big-text-semibold,
   .big-text-m,
   .big-text-r {
-    font-size: 20pt;
+    font-size: 20px;
   }
 
   .text-r {
-    font-size: 18pt;
+    font-size: 18px;
   }
 
   .btn-text-medium {
-    font-size: 18pt;
+    font-size: 18px;
   }
 
   .subtitle-big-r,
   .subtitle-big-semi,
   .text-small {
-    font-size: 16pt;
+    font-size: 16px;
   }
 }
 
@@ -219,7 +219,7 @@ body {
   margin: 80px 0;
 }
 
-@media (max-width: 1920px) {
+@media (min-width: 1920px) {
   .section {
     margin: 120px 0;
   }
