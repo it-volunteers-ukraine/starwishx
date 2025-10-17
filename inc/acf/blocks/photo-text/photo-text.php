@@ -7,7 +7,9 @@ $default_classes = [
     'text' => 'text',
     'content-text' => 'content-text',
     'contacts' => 'contacts',
-    'icon' => 'icon'
+    'icon' => 'icon',
+    'icon-bg' => 'icon-bg',
+    'icon-mask' => 'icon-mask'
 
 
 ];
@@ -67,10 +69,19 @@ if (file_exists($modules_file)) {
                 <!-- </ul> -->
                 <!-- </div> -->
                 <!-- <?php endif; ?> -->
-                <svg class="<?php echo esc_attr($classes['icon']); ?>">
+                <!-- <svg class="<?php echo esc_attr($classes['icon']); ?>">
                     <use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-element_planet_3"></use>
-                </svg>
+                </svg> -->
+                <div class="<?php echo esc_attr($classes['icon']); ?>">
+                    <img src="<?php echo get_template_directory_uri(); ?>/assets/img/star1-bg.png" class="<?php echo esc_attr($classes['icon-bg']); ?>" alt="">
+                    <svg class="<?php echo esc_attr($classes['icon-mask']); ?>">
+                        <use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-element_planet_3-circle"></use>
+                    </svg> 
+                    <!-- <img src="<?php echo get_template_directory_uri(); ?>/assets/img/star1-icon.png" class="<?php echo esc_attr($classes['icon-mask']); ?>"> -->
+                </div>
             </div>
         </div>
+    </div>
+
     </div>
 </section>
