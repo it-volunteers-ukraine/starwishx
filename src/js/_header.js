@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-  /* ---------- мобильное меню ---------- */
+  
   const toggle = document.getElementById('mobile-menu-toggle');
   if (toggle) {
     const closeEntireMenu = () => {
@@ -13,7 +13,12 @@ document.addEventListener('DOMContentLoaded', () => {
         .forEach(el => el.classList.remove('active'));
     };
 
-    /* подсветка «Можливості» только при открытом под-меню (мобильный) */
+    
+    toggle.addEventListener('change', () => {
+      document.body.classList.toggle('menu-open', toggle.checked);
+    });
+
+    
     document.querySelectorAll('.opportunities-toggle').forEach(btn =>
       btn.addEventListener('click', e => {
         e.preventDefault(); e.stopPropagation();
@@ -43,7 +48,6 @@ document.addEventListener('DOMContentLoaded', () => {
       })
     );
 
-    /* остальные обработчики мобильного меню */
     document.querySelectorAll('.mobile-submenu-item').forEach(item =>
       item.addEventListener('click', e => {
         e.stopPropagation();
@@ -65,7 +69,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  /* ---------- активный пункт меню (десктоп) ---------- */
   const menuLinks = document.querySelectorAll(
     '.header .menu > li:not(.hide-mobile) > a'
   );
@@ -79,7 +82,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  /* ---------- заглушки: поиск и язык (десктоп) ---------- */
   document.querySelectorAll('.menu-item-search').forEach(el => {
     el.addEventListener('click', e => {
       e.preventDefault();
@@ -93,7 +95,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  /* ---------- заглушки: мобильная версия ---------- */
   document.querySelectorAll('.mobile-header-buttons .search-icon').forEach(el => {
     el.addEventListener('click', e => {
       e.preventDefault();

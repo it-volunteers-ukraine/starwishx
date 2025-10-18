@@ -282,6 +282,19 @@
     display: none;
   }
 
+  body.menu-open {
+    overflow: hidden;
+    > *:not(.header) { display: none; }
+
+    .header {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      background: $surface-violet;
+      overflow-y: auto;
+    }
+  }
+
   .header .container {
     padding: 0;
   }
