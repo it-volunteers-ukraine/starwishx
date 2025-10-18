@@ -15,6 +15,7 @@
   display: flex;
   align-items: center;
   padding: 12px 0;
+  position: relative;
 }
 
 .header .header-center {
@@ -174,6 +175,7 @@
 .header .header-addons {
   display: flex;
   gap: 12px;
+  font-size: 18px;
 }
 
 .header .menu-item-search,
@@ -255,6 +257,7 @@
   .header .header-addons {
     gap: 8px;
     padding: 0 4px;
+    font-size: 16px;
   }
 
   .header .menu li a {
@@ -273,7 +276,7 @@
   }
 }
 
-@media (max-width: 960px) {
+@media (max-width: 1000px) {
   .header .header-center,
   .header .header-right {
     display: none;

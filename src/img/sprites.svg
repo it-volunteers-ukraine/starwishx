@@ -12,9 +12,6 @@
 <symbol id="icon-arrows" stroke-width="1.5" viewBox="0 0 24 24">
     <path d="M7 10L12 15L17 10" stroke="currentColor" stroke-linecap="round"/>
   </symbol>
-<symbol id="icon-arrow-black" viewBox="0 0 24 24">
-    <path d="M7 10L12 15L17 10" stroke="black" stroke-linecap="round"/>
-  </symbol>
     <symbol id="icon-arrow" width="18" height="18" viewBox="0 0 18 18" fill="none">
         <path d="M6.5 4L11.5 9L6.5 14" stroke="#784CDB" stroke-linecap="round" stroke-linejoin="round"/>
     </symbol>
