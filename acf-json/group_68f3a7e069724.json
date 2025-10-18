@@ -1,11 +1,11 @@
 {
-    "key": "group_68ee029e7884a",
-    "title": "Block Accordion Two Photo",
+    "key": "group_68f3a7e069724",
+    "title": "_Photo for можливості",
     "fields": [
         {
-            "key": "field_68ee029e2b380",
-            "label": "accordion",
-            "name": "accordion",
+            "key": "field_68f3a88206472",
+            "label": "Opportunite",
+            "name": "opportunite",
             "aria-label": "",
             "type": "repeater",
             "instructions": "",
@@ -21,11 +21,11 @@
             "min": 0,
             "max": 0,
             "collapsed": "",
-            "button_label": "Добавить",
+            "button_label": "Add Row",
             "rows_per_page": 20,
             "sub_fields": [
                 {
-                    "key": "field_68ee04662b381",
+                    "key": "field_68f3a8be06473",
                     "label": "Title",
                     "name": "title",
                     "aria-label": "",
@@ -34,7 +34,7 @@
                     "required": 0,
                     "conditional_logic": 0,
                     "wrapper": {
-                        "width": "40",
+                        "width": "",
                         "class": "",
                         "id": ""
                     },
@@ -44,11 +44,11 @@
                     "placeholder": "",
                     "prepend": "",
                     "append": "",
-                    "parent_repeater": "field_68ee029e2b380"
+                    "parent_repeater": "field_68f3a88206472"
                 },
                 {
-                    "key": "field_68ee04712b382",
-                    "label": "Text",
+                    "key": "field_68f3abadb7d29",
+                    "label": "text",
                     "name": "text",
                     "aria-label": "",
                     "type": "textarea",
@@ -56,7 +56,7 @@
                     "required": 0,
                     "conditional_logic": 0,
                     "wrapper": {
-                        "width": "58",
+                        "width": "",
                         "class": "",
                         "id": ""
                     },
@@ -66,19 +66,19 @@
                     "rows": "",
                     "placeholder": "",
                     "new_lines": "",
-                    "parent_repeater": "field_68ee029e2b380"
+                    "parent_repeater": "field_68f3a88206472"
                 },
                 {
-                    "key": "field_68ee047d2b383",
-                    "label": "Photo1",
-                    "name": "photo1",
+                    "key": "field_68f3a8e506474",
+                    "label": "photo",
+                    "name": "photo",
                     "aria-label": "",
                     "type": "image",
-                    "instructions": "Додавати фото вертікальні в пропорціях 4x3",
+                    "instructions": "",
                     "required": 0,
                     "conditional_logic": 0,
                     "wrapper": {
-                        "width": "50",
+                        "width": "",
                         "class": "",
                         "id": ""
                     },
@@ -93,34 +93,7 @@
                     "mime_types": "",
                     "allow_in_bindings": 0,
                     "preview_size": "medium",
-                    "parent_repeater": "field_68ee029e2b380"
-                },
-                {
-                    "key": "field_68ee04902b384",
-                    "label": "Photo2",
-                    "name": "photo2",
-                    "aria-label": "",
-                    "type": "image",
-                    "instructions": "Додавати фото вертікальні в пропорціях 4x3",
-                    "required": 0,
-                    "conditional_logic": 0,
-                    "wrapper": {
-                        "width": "50",
-                        "class": "",
-                        "id": ""
-                    },
-                    "return_format": "array",
-                    "library": "uploadedTo",
-                    "min_width": "",
-                    "min_height": "",
-                    "min_size": "",
-                    "max_width": "",
-                    "max_height": "",
-                    "max_size": "",
-                    "mime_types": "",
-                    "allow_in_bindings": 0,
-                    "preview_size": "medium",
-                    "parent_repeater": "field_68ee029e2b380"
+                    "parent_repeater": "field_68f3a88206472"
                 }
             ]
         }
@@ -130,7 +103,7 @@
             {
                 "param": "block",
                 "operator": "==",
-                "value": "acf\/accordion-two-photo"
+                "value": "acf\/accordion-one-photo"
             }
         ]
     ],
@@ -143,5 +116,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1760791482
+    "modified": 1760799725
 }

@@ -1,0 +1,211 @@
+@use "../../../../src/scss/variables" as *;
+
+.section {
+}
+
+.btn1 {
+  display: none;
+}
+
+.btn2 {
+  display: flex;
+  margin: 0 auto;
+}
+
+.title-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 32px;
+}
+
+.list {
+  margin-bottom: 32px;
+}
+
+.item {
+  position: relative;
+  border-bottom: 1px solid rgba($text-light, 0.5);
+  padding: 20px 0;
+}
+
+.block-title {
+  display: flex;
+  margin-bottom: 8px;
+  background-color: white;
+}
+
+.count {
+  min-width: 30px;
+  font-size: 16px;
+  font-weight: 500;
+  color: $text-accent;
+}
+
+.content {
+  opacity: 0;
+  max-height: 0;
+  position: relative;
+  margin-left: 30px;
+  transition: all 1s ease;
+}
+
+@media (hover: hover) {
+  .item:hover .content,
+  .content:hover,
+  .item:hover .block-photo {
+    opacity: 1;
+    max-height: 500px;
+    transition: all 1.25s ease-in-out;
+  }
+}
+
+.item[data-active] .content,
+.item[data-active] .block-photo {
+  opacity: 1;
+  max-height: 500px;
+  transition: all 1.25s ease-in-out;
+}
+
+.text {
+  font-size: 16px;
+  line-height: 1.3;
+  color: $text-basic;
+}
+
+.block-photo {
+  display: none;
+  opacity: 0;
+}
+
+.photo1,
+.photo2 {
+  width: 120px;
+}
+
+.photo2 {
+  margin-top: 52px;
+}
+
+.photo1-img,
+.photo2-img {
+  border-radius: 12px;
+}
+
+@media screen and (min-width: 768px) {
+  .container {
+  }
+
+  .item {
+  }
+
+  .count {
+    min-width: 38px;
+  }
+
+  .title {
+  }
+
+  .content {
+    margin-left: 38px;
+  }
+
+  .text {
+    min-height: 63px;
+    margin-bottom: 0;
+  }
+
+  .block-photo {
+  }
+
+  .photo1,
+  .photo2 {
+    width: 14.583vw;
+  }
+
+  .photo2 {
+    margin-top: 32px;
+  }
+}
+
+@media screen and (min-width: 1440px) {
+  .btn1 {
+    display: flex;
+  }
+
+  .btn2 {
+    display: none;
+  }
+
+  .container {
+  }
+
+  .item {
+    /* height: 399px; */
+  }
+
+  .block-title,
+  .text {
+    width: 45%;
+  }
+
+  .content {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+
+  .block-photo {
+    position: absolute;
+    display: block;
+    top: -89px;
+    right: 154px;
+  }
+
+  .photo1,
+  .photo2 {
+    width: 225px;
+  }
+
+  .photo2 {
+    margin-top: 51px;
+  }
+
+  .text{}
+}
+
+@media screen and (min-width: 1920px) {
+  .container {
+  }
+
+  .item {
+    /* height: 516px; */
+  }
+
+  .count {
+    font-size: 18px;
+    width: 40px;
+  }
+
+  .title {
+  }
+
+  .content {
+    margin-left: 40px;
+  }
+
+  .block-photo {
+    right: 500px;
+    top: -103px;
+  }
+
+  .photo1,
+  .photo2 {
+    width: 240px;
+  }
+
+  .text {
+    font-size: 18px;
+    width: 30%;
+  }
+}
