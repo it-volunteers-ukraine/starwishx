@@ -51,6 +51,27 @@ body {
   line-height: 120%;
 }
 
+.label-subtitle {
+  display: inline-flex;
+  align-items: center;
+  margin-bottom: 8px;
+  font-size: 14px;
+  text-transform: uppercase;
+  color: $element-block-text;
+  padding: 6px 10px;
+  border-radius: 40px;
+  background-color: $element-block-fill;
+
+  &::before {
+    content: "";
+    width: 4px;
+    height: 4px;
+    background-color: $element-block-text;
+    border-radius: 50%;
+    margin-right: 6.5px;
+  }
+}
+
 .subtitle-text-r {
   font-weight: 400;
   font-size: 20px;
@@ -117,6 +138,25 @@ body {
   line-height: 120%;
 }
 
+/* btns */
+.btn {
+  display: flex;
+  justify-content: center;
+  width: fit-content;
+  align-items: center;
+  color: $buttons-color-text-primary-default;
+  font-size: 16px;
+  font-weight: 500;
+  padding: 12.5px 24px;
+  background-color: $buttons-color-background-primary-default;
+  border-radius: 40px;
+  transition: $animations;
+
+  &:hover {
+    background-color: $buttons-color-background-primary-hover;
+  }
+}
+
 /* --- Tablet --- от 768px */
 @media screen and (min-width: 768px) {
   .h1 {
@@ -137,6 +177,10 @@ body {
 
   .h5 {
     font-size: 24px;
+  }
+
+  .label-subtitle {
+    margin-bottom: 10px;
   }
 
   .subtitle-text-r,
@@ -166,6 +210,12 @@ body {
   }
 }
 
+@media screen and (min-width: 1440px) {
+  .label-subtitle {
+    margin-bottom: 20px;
+  }
+}
+
 /* --- Desktop --- от 1920px */
 @media screen and (min-width: 1920px) {
   .h1 {
@@ -186,6 +236,10 @@ body {
 
   .h5 {
     font-size: 36px;
+  }
+
+  .btn {
+    font-size: 18px;
   }
 
   .subtitle-text-r,
@@ -216,12 +270,12 @@ body {
 }
 
 .section {
-  margin: 80px 0;
+  padding: 80px 0;
 }
 
 @media (min-width: 1920px) {
   .section {
-    margin: 120px 0;
+    padding: 120px 0;
   }
 }
 
