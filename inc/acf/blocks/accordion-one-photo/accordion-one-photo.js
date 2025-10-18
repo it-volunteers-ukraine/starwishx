@@ -2,7 +2,6 @@ function detectMouse() {
     return window.matchMedia("(pointer: fine)").matches;
 }
 
-console.log('detect mouse: ', detectMouse());
 
 const noMouse = !detectMouse();
 
@@ -14,7 +13,7 @@ items.forEach((item) => {
         console.log('no mouse detected, using scroll effect');
         // отслеживаем скролл всей страницы
         window.addEventListener('scroll', () => {
-            console.log('scroll detected');
+            // console.log('scroll detected');
             const rect = item.getBoundingClientRect();
             const itemTop = rect.top;
             const itemBottom = rect.bottom;
@@ -28,7 +27,7 @@ items.forEach((item) => {
             } else {
                 // элемент не в центре экрана
                 item.removeAttribute('data-active');
-                item.classList.remove('active');
+                // item.classList.remove('active');
             }
            
         });
