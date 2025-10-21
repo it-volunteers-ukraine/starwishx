@@ -192,6 +192,13 @@
                 "operator": "==",
                 "value": "acf\/accordion-one-photo"
             }
+        ],
+        [
+            {
+                "param": "block",
+                "operator": "==",
+                "value": "acf\/accordion-one-photo-compact"
+            }
         ]
     ],
     "menu_order": 0,
@@ -203,5 +210,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1760812815
+    "modified": 1761076101
 }
