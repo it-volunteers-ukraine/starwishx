@@ -1,22 +1,15 @@
 <?php
-/**
- * Block: Projects (random posts)
- */
-
 $default_classes = [
-    'section'      => 'section',
-    'container'    => 'container',
-    'title'        => 'title',
-    'grid'         => 'grid',
-    'card'         => 'card',
-    'card-img'     => 'card-img',
-    'card-title'   => 'card-title',
-    'card-excerpt' => 'card-excerpt',
-    'btn-wrap'     => 'btn-wrap',
-    'btn'          => 'btn',
+    'container'      => 'container',
+    'title'          => 'title',
+    'grid'           => 'projects-grid',
+    'card'           => 'project-card',
+    'image'          => 'project-image',
+    'category'       => 'project-category',
+    'date'           => 'project-date',
+    'heading'        => 'project-heading',
 ];
 
-// мержим с темой (аналогично photo-text)
 $modules_file = get_template_directory() . '/assets/css/blocks/modules.json';
 $classes = $default_classes;
 if (file_exists($modules_file)) {
@@ -24,62 +17,56 @@ if (file_exists($modules_file)) {
     $classes = array_merge($default_classes, $modules['projects'] ?? []);
 }
 
-// поля ACF
-$section_title = get_field('section_title') ?: __('Проєкти', '_themedomain');
-$posts_count   = get_field('posts_count') ?: 6;
-$show_btn      = get_field('show_all_button');
-$btn_text      = get_field('button_text')   ?: __('Всі проєкти', '_themedomain');
-$btn_link      = get_field('button_link');
+// Заголовок секции (опционально)
+$section_title = get_field('section_title');
 
-// запрос: только опубликованные, в случайном порядке
-$args = [
-    'post_type'      => 'project',   // замените на свой CPT или 'post'
-    'posts_per_page' => $posts_count,
-    'orderby'        => 'rand',
-    'post_status'    => 'publish',
-];
-$projects = new WP_Query($args);
+// Массив из 4 карточек (repeater)
+$cards = get_field('project_cards');
 ?>
 
-<section class="<?php echo esc_attr($classes['section']); ?>">
-  <div class="<?php echo esc_attr($classes['container']); ?>">
-    <h2 class="<?php echo esc_attr($classes['title']); ?>">
-      <?php echo esc_html($section_title); ?>
-    </h2>
+<section class="section">
+    <div class="container <?php echo esc_attr($classes['container']); ?>">
+        <?php if ($section_title): ?>
+            <h2 class="<?php echo esc_attr($classes['title']); ?>"><?php echo esc_html($section_title); ?></h2>
+        <?php endif; ?>
 
-    <?php if ($projects->have_posts()) : ?>
-      <div class="<?php echo esc_attr($classes['grid']); ?>">
-        <?php while ($projects->have_posts()) : $projects->the_post(); ?>
-          <article class="<?php echo esc_attr($classes['card']); ?>">
-            <a href="<?php the_permalink(); ?>" aria-label="<?php the_title_attribute(); ?>">
-              <?php if (has_post_thumbnail()) : ?>
-                <div class="<?php echo esc_attr($classes['card-img']); ?>">
-                  <?php the_post_thumbnail('medium'); ?>
-                </div>
-              <?php endif; ?>
+        <?php if ($cards): ?>
+            <div class="<?php echo esc_attr($classes['grid']); ?>">
+                <?php foreach ($cards as $card): ?>
+                    <?php
+                    $category = $card['category'] ?? '';
+                    $image = $card['image'] ?? false;
+                    $date = $card['date'] ?? ''; // формат: 2025-10-23 или любой текст
+                    $link = $card['link'] ?? '#';
+                    $heading = $card['heading'] ?? '';
+                    ?>
+                    <a href="<?php echo esc_url($link); ?>" class="<?php echo esc_attr($classes['card']); ?>">
+                        <?php if ($image): ?>
+                            <div class="<?php echo esc_attr($classes['image']); ?>">
+                                <?php echo wp_get_attachment_image($image, 'large'); ?>
+                            </div>
+                        <?php endif; ?>
 
-              <h3 class="<?php echo esc_attr($classes['card-title']); ?>">
-                <?php the_title(); ?>
-              </h3>
+                        <?php if ($category): ?>
+                            <span class="<?php echo esc_attr($classes['category']); ?>">
+                                <?php echo esc_html($category); ?>
+                            </span>
+                        <?php endif; ?>
 
-              <?php if (has_excerpt()) : ?>
-                <p class="<?php echo esc_attr($classes['card-excerpt']); ?>">
-                  <?php echo wp_trim_words(get_the_excerpt(), 12); ?>
-                </p>
-              <?php endif; ?>
-            </a>
-          </article>
-        <?php endwhile; ?>
-        <?php wp_reset_postdata(); ?>
-      </div>
-    <?php endif; ?>
+                        <?php if ($date): ?>
+                            <time class="<?php echo esc_attr($classes['date']); ?>">
+                                <?php echo esc_html($date); ?>
+                            </time>
+                        <?php endif; ?>
 
-    <?php if ($show_btn && $btn_link) : ?>
-      <div class="<?php echo esc_attr($classes['btn-wrap']); ?>">
-        <a href="<?php echo esc_url($btn_link); ?>" class="<?php echo esc_attr($classes['btn']); ?>">
-          <?php echo esc_html($btn_text); ?>
-        </a>
-      </div>
-    <?php endif; ?>
-  </div>
+                        <?php if ($heading): ?>
+                            <h3 class="<?php echo esc_attr($classes['heading']); ?>">
+                                <?php echo esc_html($heading); ?>
+                            </h3>
+                        <?php endif; ?>
+                    </a>
+                <?php endforeach; ?>
+            </div>
+        <?php endif; ?>
+    </div>
 </section>
