@@ -1,16 +1,13 @@
 .projects-section {
-  width: 1920px;
   height: 1024px;
   padding: 200px 80px 120px;
   gap: 32px;
   display: flex;
   flex-direction: column;
-  box-sizing: border-box;
   margin: 0 auto;
 }
 
 .header-block {
-  width: 1760px;
   height: 132px;
   display: flex;
   flex-direction: column;
@@ -18,10 +15,6 @@
 }
 
 .sub-title {
-  font-family: Inter, sans-serif;
-  font-weight: 400;
-  font-size: 16px;
-  line-height: 120%;
   color: #6839c8;
   display: flex;
   align-items: center;
@@ -37,25 +30,19 @@
 }
 
 .main-title {
-  font-family: Inter, sans-serif;
   font-weight: 300;
   font-size: 64px;
   line-height: 120%;
   color: #292929;
-  margin: 0;
 }
 
 .projects-grid {
-  width: 1760px;
   height: 540px;
   display: flex;
   gap: 20px;
 }
 
 .project-card {
-  width: 425px;
-  height: 540px;
-  border-radius: 12px;
   padding: 12px;
   background: #f5f4fe;
   box-sizing: border-box;
@@ -87,26 +74,16 @@
   height: 29px;
   border-radius: 10px;
   padding: 6px 12px;
-  font-family: Inter, sans-serif;
-  font-weight: 400;
   font-size: 14px;
-  line-height: 120%;
-  pointer-events: none;
 }
 
 .project-date {
-  font-family: Inter, sans-serif;
-  font-weight: 400;
   font-size: 14px;
-  line-height: 120%;
   color: #7c7c7c;
 }
 
 .project-heading {
-  font-family: Inter, sans-serif;
   font-weight: 500;
   font-size: 16px;
   line-height: 120%;
-  letter-spacing: 0;
-  margin: 0;
 }
