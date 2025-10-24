@@ -1,69 +1,136 @@
-.title {
-  font-size: 32px;
-  text-align: center;
-  margin-bottom: 40px;
+.projects-section {
+  width: 1920px;
+  height: 1024px;
+  padding: 200px 80px 120px;
+  gap: 32px;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  margin: 0 auto;
+}
+
+.header-block {
+  width: 1760px;
+  height: 132px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.sub-title {
+  font-family: Inter, sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 120%;
+  color: #6839c8;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.sub-title::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  background: #6839c8;
+  border-radius: 50%;
+}
+
+.main-title {
+  font-family: Inter, sans-serif;
+  font-weight: 300;
+  font-size: 64px;
+  line-height: 120%;
+  color: #292929;
+  margin: 0;
 }
 
 .projects-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 24px;
+  width: 1760px;
+  height: 540px;
+  display: flex;
+  gap: 20px;
 }
 
 .project-card {
-  display: block;
+  width: 425px;
+  height: 540px;
+  border-radius: 12px;
+  padding: 12px;
+  background: #f5f4fe;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
   text-decoration: none;
   color: inherit;
-  border-radius: 12px;
-  overflow: hidden;
-  background: #fff;
-  box-shadow: 0 4px 12px rgb(0 0 0 / 8%);
-  transition: transform 0.2s;
+}
 
-  &:hover {
-    transform: translateY(-4px);
-  }
+.img-wrapper {
+  position: relative;
+  width: 401px;
+  height: 373.02px;
 }
 
 .project-image {
   width: 100%;
-  aspect-ratio: 16 / 9;
+  height: 100%;
+  border-radius: 10px;
   object-fit: cover;
-}
-
-.project-category {
-  display: inline-block;
-  font-size: 14px;
-  font-weight: 600;
-  color: #5a67d8;
-  margin-bottom: 8px;
-}
-
-.project-date {
-  font-size: 14px;
-  color: #718096;
-  margin-bottom: 8px;
   display: block;
 }
 
+.project-category {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  height: 29px;
+  border-radius: 10px;
+  padding: 6px 12px;
+  font-family: Inter, sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 120%;
+  pointer-events: none;
+}
+
+.category-dizayn {
+  background: #fef5c7;
+  border: 1px solid #fffceb;
+  color: #d87e07;
+}
+
+.category-razrabotka {
+  background: #e0e7ff;
+  border: 1px solid #c3d0ff;
+  color: #5a67d8;
+}
+
+.category-marketynh {
+  background: #d1f5d3;
+  border: 1px solid #c1e8c3;
+  color: #2f855a;
+}
+
+.category-analityka {
+  background: #fed7d7;
+  border: 1px solid #fbb6b6;
+  color: #c53030;
+}
+
+.project-date {
+  font-family: Inter, sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 120%;
+  color: #7c7c7c;
+}
+
 .project-heading {
-  font-size: 20px;
-  font-weight: 600;
+  font-family: Inter, sans-serif;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 120%;
+  letter-spacing: 0;
   margin: 0;
-}
-
-@media screen and (min-width: 768px) {
-  .projects-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media screen and (min-width: 1200px) {
-  .projects-grid {
-    grid-template-columns: repeat(4, 1fr);
-  }
-
-  .project-heading {
-    font-size: 22px;
-  }
 }
