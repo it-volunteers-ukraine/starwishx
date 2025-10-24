@@ -42,7 +42,7 @@ $cards         = get_field( 'project_cards' );
         <!-- блок 2 : «від серця до серця» + «ПРОЕКТИ» -->
         <div class="<?= esc_attr( $classes['header-block'] ) ?>">
             <span class="<?= esc_attr( $classes['sub-title'] ) ?>">
-                від серця до серця
+                ВІД СЕРЦЯ ДО СЕРЦЯ
             </span>
             <h3 class="<?= esc_attr( $classes['main-title'] ) ?>">
                 ПРОЕКТИ
@@ -54,23 +54,30 @@ $cards         = get_field( 'project_cards' );
             <div class="<?= esc_attr( $classes['projects-grid'] ) ?>">
                 <?php foreach ( $cards as $card ) : ?>
                     <?php
-                    $category = $card['category'] ?? '';
-                    $image_id = $card['image']     ?? false;
-                    $date     = $card['date']      ?? '';
-                    $link     = $card['link']      ?? '#';
-                    $heading  = $card['heading']   ?? '';
+                    $category    = $card['category'] ?? '';
+                    $image_id    = $card['image'] ?? false;
+                    $date        = $card['date'] ?? '';
+                    $link        = $card['link'] ?? '#';
+                    $heading     = $card['heading'] ?? '';
+                    $bg_color    = $card['category_bg_color'] ?? '';
+                    $text_color  = $card['category_text_color'] ?? '';
                     ?>
                     <a href="<?= esc_url( $link ) ?>"
                        class="<?= esc_attr( $classes['project-card'] ) ?>">
 
                         <?php if ( $image_id ) : ?>
                             <div class="<?= esc_attr( $classes['img-wrapper'] ) ?>">
-                                <?= wp_get_attachment_image( $image_id, 'large', false,
-                                     [ 'class' => $classes['project-image'] ] ) ?>
+                                <?= wp_get_attachment_image(
+                                    $image_id,
+                                    'large',
+                                    false,
+                                    [ 'class' => $classes['project-image'] ]
+                                ) ?>
 
                                 <?php if ( $category ) : ?>
-                                    <?php $cat_slug = sanitize_html_class( strtolower( $category ) ); ?>
-                                    <span class="<?= esc_attr( $classes['project-category'] ) ?> category-<?= $cat_slug ?>">
+                                    <span class="<?= esc_attr( $classes['project-category'] ) ?>"
+                                          style="background-color: <?= esc_attr( $bg_color ) ?>;
+                                                 color: <?= esc_attr( $text_color ) ?>;">
                                         <?= esc_html( $category ) ?>
                                     </span>
                                 <?php endif; ?>

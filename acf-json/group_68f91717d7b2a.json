@@ -134,6 +134,46 @@
                     "prepend": "",
                     "append": "",
                     "parent_repeater": "field_68f91718c5b81"
+                },
+                {
+                    "key": "field_68fba3c67990b",
+                    "label": "category_bg_color",
+                    "name": "category_bg_color",
+                    "aria-label": "",
+                    "type": "color_picker",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "",
+                    "enable_opacity": 0,
+                    "return_format": "string",
+                    "allow_in_bindings": 0,
+                    "parent_repeater": "field_68f91718c5b81"
+                },
+                {
+                    "key": "field_68fba40c7990c",
+                    "label": "category_text_color",
+                    "name": "category_text_color",
+                    "aria-label": "",
+                    "type": "color_picker",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "",
+                    "enable_opacity": 0,
+                    "return_format": "string",
+                    "allow_in_bindings": 0,
+                    "parent_repeater": "field_68f91718c5b81"
                 }
             ]
         }
@@ -143,7 +183,7 @@
             {
                 "param": "block",
                 "operator": "==",
-                "value": "all"
+                "value": "acf\/projects"
             }
         ]
     ],
@@ -156,5 +196,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1761156839
+    "modified": 1761322024
 }

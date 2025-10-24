@@ -63,7 +63,7 @@
   flex-direction: column;
   gap: 20px;
   text-decoration: none;
-  color: inherit;
+  color: #464646;
 }
 
 .img-wrapper {
@@ -92,30 +92,6 @@
   font-size: 14px;
   line-height: 120%;
   pointer-events: none;
-}
-
-.category-dizayn {
-  background: #fef5c7;
-  border: 1px solid #fffceb;
-  color: #d87e07;
-}
-
-.category-razrabotka {
-  background: #e0e7ff;
-  border: 1px solid #c3d0ff;
-  color: #5a67d8;
-}
-
-.category-marketynh {
-  background: #d1f5d3;
-  border: 1px solid #c1e8c3;
-  color: #2f855a;
-}
-
-.category-analityka {
-  background: #fed7d7;
-  border: 1px solid #fbb6b6;
-  color: #c53030;
 }
 
 .project-date {
