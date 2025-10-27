@@ -1,41 +1,54 @@
 <?php
 $default_classes = [
-    'projects-section' => 'projects-section',
-    'header-block' => 'header-block',
-    'sub-title' => 'sub-title',
-    'main-title' => 'main-title',
-    'projects-wrapper' => 'projects-wrapper',
-    'projects-grid' => 'projects-grid',
-    'project-card' => 'project-card',
-    'img-wrapper' => 'img-wrapper',
-    'project-image' => 'project-image',
-    'project-category' => 'project-category',
-    'project-date' => 'project-date',
-    'project-heading' => 'project-heading',
+  'projects-section' => 'projects-section',
+  'header-block' => 'header-block',
+  'sub-title' => 'sub-title',
+  'main-title' => 'main-title',
+  'projects-wrapper' => 'projects-wrapper',
+  'projects-grid' => 'projects-grid',
+  'project-card' => 'project-card',
+  'img-wrapper' => 'img-wrapper',
+  'project-image' => 'project-image',
+  'project-category' => 'project-category',
+  'project-date' => 'project-date',
+  'project-heading' => 'project-heading',
+  'arrows' => 'arrows',
+  'arrow' => 'arrow',
+  'arrow-left' => 'arrow-left',
+  'arrow-right' => 'arrow-right',
 ];
 
 $modules_file = get_template_directory() . '/assets/css/blocks/modules.json';
 $classes = $default_classes;
 
 if (file_exists($modules_file)) {
-    $modules = json_decode(file_get_contents($modules_file), true);
-    $classes = array_merge($default_classes, $modules['projects'] ?? []);
+  $modules = json_decode(file_get_contents($modules_file), true);
+  $classes = array_merge($default_classes, $modules['projects'] ?? []);
 }
 
 $cards = get_field('project_cards');
 ?>
 
+<link rel="stylesheet" href="<?= get_template_directory_uri(); ?>/assets/css/projects.module.css">
+
 <section class="<?= esc_attr($classes['projects-section']) ?>">
   <div class="<?= esc_attr($classes['header-block']) ?>">
     <span class="<?= esc_attr($classes['sub-title']) ?>">ВІД СЕРЦЯ ДО СЕРЦЯ</span>
     <h3 class="<?= esc_attr($classes['main-title']) ?>">ПРОЕКТИ</h3>
+    <div class="<?= esc_attr($classes['arrows']) ?>">
+      <svg class="<?= esc_attr($classes['arrow']) ?> <?= esc_attr($classes['arrow-left']) ?>">
+        <use href="<?= get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-arrow_left"></use>
+      </svg>
+      <svg class="<?= esc_attr($classes['arrow']) ?> <?= esc_attr($classes['arrow-right']) ?>">
+        <use href="<?= get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-arrow_right"></use>
+      </svg>
+    </div>
   </div>
 
   <div class="<?= esc_attr($classes['projects-wrapper']) ?>">
     <?php if ($cards) : ?>
       <div class="<?= esc_attr($classes['projects-grid']) ?>">
-        <?php foreach ($cards as $card) : ?>
-          <?php
+        <?php foreach ($cards as $card) :
           $category = $card['category'] ?? '';
           $image_id = $card['image'] ?? false;
           $date = $card['date'] ?? '';
@@ -43,7 +56,7 @@ $cards = get_field('project_cards');
           $heading = $card['heading'] ?? '';
           $bg_color = $card['category_bg_color'] ?? '';
           $text_color = $card['category_text_color'] ?? '';
-          ?>
+        ?>
           <a href="<?= esc_url($link) ?>" class="<?= esc_attr($classes['project-card']) ?>">
             <?php if ($image_id) : ?>
               <div class="<?= esc_attr($classes['img-wrapper']) ?>">
@@ -66,5 +79,6 @@ $cards = get_field('project_cards');
       </div>
     <?php endif; ?>
   </div>
+
   <script src="<?= get_template_directory_uri(); ?>/assets/js/projects.js"></script>
 </section>

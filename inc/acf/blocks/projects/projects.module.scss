@@ -7,13 +7,15 @@
   flex-direction: column;
   gap: 32px;
   box-sizing: border-box;
+  position: relative;
 }
 
 .header-block {
   display: flex;
   flex-direction: column;
   gap: clamp(16px, 1vw, 20px);
-  padding: 0 clamp(90px, 6.25vw, 120px); /* 120 при 1920 → 90 при 1440 */
+  padding: 0 clamp(40px, 4vw, 90px);
+  position: relative;
 }
 
 .sub-title {
@@ -33,10 +35,10 @@
 }
 
 .main-title {
-  font-weight: 300;
   font-size: clamp(48px, 3.33vw, 64px);
   line-height: 120%;
   color: #292929;
+  font-weight: 400;
 }
 
 .projects-wrapper {
@@ -64,6 +66,7 @@
   flex-shrink: 0;
   width: clamp(325px, 22.13vw, 425px);
   box-sizing: border-box;
+  height: clamp(418px, 28.1vw, 540px);
 }
 
 .img-wrapper {
@@ -100,7 +103,35 @@
   font-weight: 500;
   font-size: 16px;
   line-height: 120%;
-  min-height: 2.4em; /* стабилизирует высоту блока под изображением */
+  min-height: 2.4em;
+}
+
+.arrows {
+  position: absolute;
+  right: 40px;
+  bottom: 2px;
+  gap: 15px;
+  pointer-events: none;
+  display: none;
+}
+
+.arrow-left,
+.arrow-right {
+  width: 44px;
+  height: 44px;
+  pointer-events: none;
+  opacity: 1;
+  transition: opacity 0.2s;
+}
+
+.arrow-left.disabled,
+.arrow-right.disabled {
+  opacity: 0.3;
+}
+
+.arrow-left use,
+.arrow-right use {
+  stroke: #292929;
 }
 
 @media (max-width: 1440px) {
@@ -111,9 +142,17 @@
     scroll-behavior: smooth;
   }
 
+  .projects-wrapper::-webkit-scrollbar {
+    display: none;
+  }
+
   .projects-grid {
     flex-wrap: nowrap;
     justify-content: flex-start;
     width: max-content;
+  }
+
+  .arrows {
+    display: flex;
   }
 }
