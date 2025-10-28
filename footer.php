@@ -1,7 +1,7 @@
 <?php
 $footer_title = esc_html(get_field('title', 'options'));
 $email_text = esc_html(get_field('email_name', 'options'));
-$email_link = esc_url(get_field('email_link', 'options'));
+$email_link = esc_html(get_field('email_link', 'options'));
 $telegram_text = esc_html(get_field('telegram_name', 'options'));
 $telegram_link = esc_html(get_field('telegram_link', 'options'));
 $linkedin_text = esc_html(get_field('linkedin_name', 'options'));
