@@ -62,12 +62,22 @@
     max-height: 500px;
     transition: all 1.25s ease-in-out;
   }
+
+  .item:hover {
+    border-bottom: 1px solid $stroke-hover;
+    transition: all 1.25s ease-in-out;
+  }
 }
 
 .item[data-active] .content,
 .item[data-active] .block-photo {
   opacity: 1;
   max-height: 500px;
+  transition: all 1.25s ease-in-out;
+}
+
+.item[data-active] {
+  border-bottom: 1px solid $stroke-hover;
   transition: all 1.25s ease-in-out;
 }
 
