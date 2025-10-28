@@ -91,8 +91,10 @@
 }
 
 .footer-logo {
+  position: relative;
   width: 100%;
   margin: 4px 0;
+  z-index: 1;
 }
 
 .footer-logo-satellite {
@@ -102,6 +104,7 @@
   /* top: calc(-100% * 0.11); */
   top: 0;
   right: calc(-100% * 0.02);
+  z-index: 0;
 }
 
 .footer-copyright {
@@ -183,8 +186,16 @@
     gap: 16px;
   }
 
+  .footer .nav {
+    margin-top: 0;
+  }
+
   .nav {
     max-width: 336px;
+  }
+
+  .footer_list {
+    gap: 8px;
   }
 
   .footer-logo-wrapper {
@@ -218,7 +229,10 @@
   }
 
   .footer_list .menu-item {
-    flex: 1 1 calc(50% - 8px);
+    /* flex: 1 1 calc(50% - 64px); */
+    flex-basis: calc(50% - 64px);
+    flex-grow: 1;
+    flex-shrink: 1;
   }
 
   .footer-inner {
@@ -227,6 +241,23 @@
 
   .footer-title {
     display: none;
+    margin-bottom: 16px;
+  }
+
+  .footer .socblock {
+    margin-bottom: 40px;
+  }
+
+  .nav {
+    max-width: 376px;
+  }
+
+  .footer_list {
+    gap: 12px 80px;
+  }
+
+  .footer-logo-wrapper {
+    margin: 0 calc(0.036 * 100%) 24px;
   }
 
   .footer-logo {
@@ -265,8 +296,12 @@
   }
 
   .footer-logo-wrapper {
-    /* margin: 0 calc(0.025 * 100%); */
+    margin: 0 calc(0.028 * 100%);
     margin-bottom: 40px;
+  }
+
+  .nav {
+    max-width: 500px;
   }
 
   .footer .menu {
@@ -274,6 +309,6 @@
   }
 
   .footer-logo {
-    margin: 36px 0;
+    margin: 33px 0;
   }
 }
