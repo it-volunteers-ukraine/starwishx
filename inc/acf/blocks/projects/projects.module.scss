@@ -1,0 +1,191 @@
+@use "../../../../src/scss/variables" as *;
+
+.projects-section {
+  max-width: 1920px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 200px 0 120px;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  box-sizing: border-box;
+  position: relative;
+}
+
+.header-block {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(16px, 1vw, 20px);
+  padding: 0 clamp(40px, 4vw, 90px);
+  position: relative;
+}
+
+.sub-title {
+  color: $element-block-text;
+  display: flex;
+  align-items: center;
+  gap: clamp(4px, 0.42vw, 8px);
+  font-size: clamp(14px, 0.833vw, 16px);
+  width: clamp(185px, 12vw, 213px);
+  height: clamp(29px, 1.82vw, 35px);
+  justify-content: center;
+  border-radius: 22px;
+  padding: clamp(6px, 0.42vw, 8px) clamp(10px, 0.63vw, 12px);
+  background-color: $element-block-fill;
+}
+
+.sub-title::before {
+  content: "";
+  width: 4px;
+  height: 4px;
+  background: $element-block-text;
+  border-radius: 50%;
+}
+
+.main-title {
+  font-size: clamp(48px, 3.33vw, 64px);
+  line-height: 120%;
+  color: $text-dark;
+  font-weight: 400;
+}
+
+.projects-wrapper {
+  overflow-x: hidden;
+}
+
+.projects-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+  transition: transform 0.3s ease;
+  padding: 0 clamp(40px, 4vw, 0px);
+}
+
+.project-card {
+  padding: 12px;
+  background: $surface-violet;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  text-decoration: none;
+  color: $text-basic;
+  border-radius: 10px;
+  flex-shrink: 0;
+  width: clamp(325px, 22.13vw, 425px);
+  box-sizing: border-box;
+  height: clamp(418px, 28.1vw, 540px);
+}
+
+.img-wrapper {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 401 / 373;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.project-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.project-category {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  border-radius: 10px;
+  padding: 6px 12px;
+  font-size: 14px;
+  line-height: 1;
+}
+
+.project-date {
+  font-size: 14px;
+  color: $text-light;
+}
+
+.project-heading {
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 120%;
+  min-height: 2.4em;
+}
+
+.arrows {
+  position: absolute;
+  right: 40px;
+  bottom: 2px;
+  display: none;
+  gap: 15px;
+  pointer-events: none;
+}
+
+.arrow-left,
+.arrow-right {
+  width: 44px;
+  height: 44px;
+  pointer-events: none;
+  opacity: 1;
+  transition: opacity 0.2s;
+}
+
+.arrow-left:global(.disabled),
+.arrow-right:global(.disabled) {
+  opacity: 0.3;
+}
+
+.arrow-left:global(.disabled) use,
+.arrow-right:global(.disabled) use {
+  stroke: $icon-color-selected-stroke;
+}
+
+.arrow-left use,
+.arrow-right use {
+  stroke: $text-dark;
+}
+
+@media (max-width: 1440px) {
+  .projects-wrapper {
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .projects-wrapper::-webkit-scrollbar {
+    display: none;
+  }
+
+  .projects-grid {
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    width: max-content;
+  }
+
+  .arrows {
+    display: flex;
+  }
+}
+
+@media (max-width: 420px) {
+  .projects-grid {
+    padding: 0 10px;
+  }
+
+  .header-block {
+    padding: 0 10px;
+  }
+
+  .main-title {
+    font-size: 36px;
+  }
+
+  .arrows {
+    display: none;
+  }
+}
