@@ -1,3 +1,5 @@
+@use "../../../../src/scss/variables" as *;
+
 .projects-section {
   max-width: 1920px;
   width: 100%;
@@ -19,7 +21,7 @@
 }
 
 .sub-title {
-  color: #6839c8;
+  color: $element-block-text;
   display: flex;
   align-items: center;
   gap: clamp(4px, 0.42vw, 8px);
@@ -29,21 +31,21 @@
   justify-content: center;
   border-radius: 22px;
   padding: clamp(6px, 0.42vw, 8px) clamp(10px, 0.63vw, 12px);
-  background-color: #dedafa;
+  background-color: $element-block-fill;
 }
 
 .sub-title::before {
   content: "";
   width: 4px;
   height: 4px;
-  background: #6839c8;
+  background: $element-block-text;
   border-radius: 50%;
 }
 
 .main-title {
   font-size: clamp(48px, 3.33vw, 64px);
   line-height: 120%;
-  color: #292929;
+  color: $text-dark;
   font-weight: 400;
 }
 
@@ -62,12 +64,12 @@
 
 .project-card {
   padding: 12px;
-  background: #f5f4fe;
+  background: $surface-violet;
   display: flex;
   flex-direction: column;
   gap: 20px;
   text-decoration: none;
-  color: #464646;
+  color: $text-basic;
   border-radius: 10px;
   flex-shrink: 0;
   width: clamp(325px, 22.13vw, 425px);
@@ -102,7 +104,7 @@
 
 .project-date {
   font-size: 14px;
-  color: #7c7c7c;
+  color: $text-light;
 }
 
 .project-heading {
@@ -137,12 +139,12 @@
 
 .arrow-left:global(.disabled) use,
 .arrow-right:global(.disabled) use {
-  stroke: #999;
+  stroke: $icon-color-selected-stroke;
 }
 
 .arrow-left use,
 .arrow-right use {
-  stroke: #292929;
+  stroke: $text-dark;
 }
 
 @media (max-width: 1440px) {
