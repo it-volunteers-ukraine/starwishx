@@ -16,10 +16,10 @@
         <path d="M6.5 4L11.5 9L6.5 14" stroke="#784CDB" stroke-linecap="round" stroke-linejoin="round"/>
     </symbol>
     <symbol id="icon-arrow_left" width="44" height="44" viewBox="0 0 44 44" fill="none">
-        <path d="M26.5 12L17.5 22L26.5 32" stroke="#292929" stroke-linecap="round"/>
+        <path d="M26.5 12L17.5 22L26.5 32" stroke="currentColor" stroke-linecap="round"/>
     </symbol>
     <symbol id="icon-arrow_right" width="44" height="44" viewBox="0 0 44 44" fill="none">
-        <path d="M17.5 12L26.5 22L17.5 32" stroke="#292929" stroke-linecap="round"/>
+        <path d="M17.5 12L26.5 22L17.5 32" stroke="currentColor" stroke-linecap="round"/>
     </symbol>
     <symbol id="icon-close" width="24" height="24" viewBox="0 0 24 24" fill="none">
         <path d="M6 6L18 18M6 18L18 6" stroke="#292929" stroke-linecap="round"/>

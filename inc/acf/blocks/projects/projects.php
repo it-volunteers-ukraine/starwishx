@@ -34,15 +34,15 @@ $cards = get_field('project_cards');
 <section class="<?= esc_attr($classes['projects-section']) ?>">
   <div class="<?= esc_attr($classes['header-block']) ?>">
     <span class="<?= esc_attr($classes['sub-title']) ?>">ВІД СЕРЦЯ ДО СЕРЦЯ</span>
-    <h3 class="<?= esc_attr($classes['main-title']) ?>">ПРОЕКТИ</h3>
+    <h3 class="<?= esc_attr($classes['main-title']) ?>">ПРОЄКТИ</h3>
     <div class="<?= esc_attr($classes['arrows']) ?>">
-      <svg class="<?= esc_attr($classes['arrow']) ?> <?= esc_attr($classes['arrow-left']) ?>">
-        <use href="<?= get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-arrow_left"></use>
-      </svg>
-      <svg class="<?= esc_attr($classes['arrow']) ?> <?= esc_attr($classes['arrow-right']) ?>">
-        <use href="<?= get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-arrow_right"></use>
-      </svg>
-    </div>
+  <svg class="<?= esc_attr($classes['arrow']) ?> <?= esc_attr($classes['arrow-left']) ?>" data-arrow="left">
+    <use href="<?= get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-arrow_left"></use>
+  </svg>
+  <svg class="<?= esc_attr($classes['arrow']) ?> <?= esc_attr($classes['arrow-right']) ?>" data-arrow="right">
+    <use href="<?= get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-arrow_right"></use>
+  </svg>
+</div>
   </div>
 
   <div class="<?= esc_attr($classes['projects-wrapper']) ?>">

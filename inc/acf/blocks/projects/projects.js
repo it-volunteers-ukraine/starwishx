@@ -1,12 +1,12 @@
 document.addEventListener('DOMContentLoaded', () => {
-  const container = document.querySelector('.projects-wrapper');
-  const leftArrow = document.querySelector('.arrow-left');
-  const rightArrow = document.querySelector('.arrow-right');
+  const container = document.querySelector('[class*="projects-wrapper"]');
+  const leftArrow = document.querySelector('[data-arrow="left"]');
+  const rightArrow = document.querySelector('[data-arrow="right"]');
   if (!container || !leftArrow || !rightArrow) return;
 
-  let isDown = false;
-  let startX;
-  let scrollLeft;
+  // Убираем pointer-events: none для кликабельности
+  leftArrow.style.pointerEvents = 'auto';
+  rightArrow.style.pointerEvents = 'auto';
 
   const updateArrows = () => {
     const maxScroll = container.scrollWidth - container.clientWidth;
@@ -14,9 +14,26 @@ document.addEventListener('DOMContentLoaded', () => {
     rightArrow.classList.toggle('disabled', container.scrollLeft >= maxScroll - 10);
   };
 
+  // Прокрутка по клику
+  const scrollAmount = 300; // пикселей за клик
+
+  leftArrow.addEventListener('click', () => {
+    container.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+  });
+
+  rightArrow.addEventListener('click', () => {
+    container.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+  });
+
+  // Обновление состояния стрелок
   updateArrows();
   container.addEventListener('scroll', updateArrows);
   window.addEventListener('resize', updateArrows);
+
+  // === Перетаскивание (оставляем как есть) ===
+  let isDown = false;
+  let startX;
+  let scrollLeft;
 
   container.addEventListener('mousedown', e => {
     isDown = true;
