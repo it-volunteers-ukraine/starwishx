@@ -4,7 +4,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const rightArrow = document.querySelector('[data-arrow="right"]');
   if (!container || !leftArrow || !rightArrow) return;
 
-  // Убираем pointer-events: none для кликабельности
   leftArrow.style.pointerEvents = 'auto';
   rightArrow.style.pointerEvents = 'auto';
 
@@ -14,8 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
     rightArrow.classList.toggle('disabled', container.scrollLeft >= maxScroll - 10);
   };
 
-  // Прокрутка по клику
-  const scrollAmount = 300; // пикселей за клик
+  const scrollAmount = 300;
 
   leftArrow.addEventListener('click', () => {
     container.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
@@ -25,12 +23,10 @@ document.addEventListener('DOMContentLoaded', () => {
     container.scrollBy({ left: scrollAmount, behavior: 'smooth' });
   });
 
-  // Обновление состояния стрелок
   updateArrows();
   container.addEventListener('scroll', updateArrows);
   window.addEventListener('resize', updateArrows);
 
-  // === Перетаскивание (оставляем как есть) ===
   let isDown = false;
   let startX;
   let scrollLeft;
@@ -59,4 +55,46 @@ document.addEventListener('DOMContentLoaded', () => {
     const walk = (x - startX) * 1.2;
     container.scrollLeft = scrollLeft - walk;
   });
+
+  if (window.matchMedia('(max-width: 420px)').matches) {
+    const section = container.closest('[class*="projects-section"]');
+    if (section && container.scrollWidth > container.clientWidth) {
+      let isAutoScrolling = false;
+
+      const observer = new IntersectionObserver(([{ intersectionRatio }]) => {
+        if (intersectionRatio >= 0.6 && !isAutoScrolling) {
+          isAutoScrolling = true;
+          observer.disconnect(); 
+
+          setTimeout(() => {
+            const targetScroll = container.scrollWidth - container.clientWidth;
+            const duration = 2500; 
+            const startTime = performance.now();
+            const startScroll = container.scrollLeft;
+
+            const animateScroll = (currentTime) => {
+              if (isAutoScrolling) {
+                const elapsed = currentTime - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                const easeOut = 1 - Math.pow(1 - progress, 3);
+                const newScroll = startScroll + (targetScroll - startScroll) * easeOut;
+
+                container.scrollLeft = newScroll;
+
+                if (progress < 1) {
+                  requestAnimationFrame(animateScroll);
+                }
+              }
+            };
+
+            requestAnimationFrame(animateScroll);
+          }, 300); 
+        }
+      }, {
+        threshold: Array.from({ length: 11 }, (_, i) => i / 10) 
+      });
+
+      observer.observe(section);
+    }
+  }
 });
