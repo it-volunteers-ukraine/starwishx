@@ -29,7 +29,7 @@ if (file_exists($modules_file)) {
 $cards = get_field('project_cards');
 ?>
 
-<link rel="stylesheet" href="<?= get_template_directory_uri(); ?>/assets/css/projects.module.css">
+
 
 <section class="<?= esc_attr($classes['projects-section']) ?>">
   <div class="<?= esc_attr($classes['header-block']) ?>">
@@ -59,15 +59,22 @@ $cards = get_field('project_cards');
         ?>
           <a href="<?= esc_url($link) ?>" class="<?= esc_attr($classes['project-card']) ?>">
             <?php if ($image_id) : ?>
-              <div class="<?= esc_attr($classes['img-wrapper']) ?>">
-                <?= wp_get_attachment_image($image_id, 'large', false, ['class' => $classes['project-image']]) ?>
-                <?php if ($category) : ?>
-                  <span class="<?= esc_attr($classes['project-category']) ?>" style="background-color: <?= esc_attr($bg_color) ?>; color: <?= esc_attr($text_color) ?>;">
-                    <?= esc_html($category) ?>
-                  </span>
-                <?php endif; ?>
-              </div>
-            <?php endif; ?>
+  <div class="<?= esc_attr($classes['img-wrapper']) ?>">
+    <?php
+    // Используем категорию как alt, или fallback к пустой строке
+    $alt_text = !empty($category) ? esc_attr($category) : '';
+    echo wp_get_attachment_image($image_id, 'large', false, [
+      'class' => $classes['project-image'],
+      'alt'   => $alt_text,
+    ]);
+    ?>
+    <?php if ($category) : ?>
+      <span class="<?= esc_attr($classes['project-category']) ?>" style="background-color: <?= esc_attr($bg_color) ?>; color: <?= esc_attr($text_color) ?>;">
+        <?= esc_html($category) ?>
+      </span>
+    <?php endif; ?>
+  </div>
+<?php endif; ?>
             <?php if ($date) : ?>
               <time class="<?= esc_attr($classes['project-date']) ?>"><?= esc_html($date) ?></time>
             <?php endif; ?>
