@@ -58,43 +58,35 @@ document.addEventListener('DOMContentLoaded', () => {
 
   if (window.matchMedia('(max-width: 420px)').matches) {
     const section = container.closest('[class*="projects-section"]');
-    if (section && container.scrollWidth > container.clientWidth) {
-      let isAutoScrolling = false;
+    if (!section || container.scrollWidth <= container.clientWidth) return;
 
-      const observer = new IntersectionObserver(([{ intersectionRatio }]) => {
-        if (intersectionRatio >= 0.6 && !isAutoScrolling) {
-          isAutoScrolling = true;
-          observer.disconnect(); 
+    let hasScrolled = false;
 
-          setTimeout(() => {
-            const targetScroll = container.scrollWidth - container.clientWidth;
-            const duration = 2500; 
-            const startTime = performance.now();
-            const startScroll = container.scrollLeft;
+    const observer = new IntersectionObserver(([{ isIntersecting, intersectionRatio }]) => {
+      if (isIntersecting && intersectionRatio >= 0.4 && !hasScrolled) {
+        hasScrolled = true;
+        observer.disconnect();
 
-            const animateScroll = (currentTime) => {
-              if (isAutoScrolling) {
-                const elapsed = currentTime - startTime;
-                const progress = Math.min(elapsed / duration, 1);
-                const easeOut = 1 - Math.pow(1 - progress, 3);
-                const newScroll = startScroll + (targetScroll - startScroll) * easeOut;
+        setTimeout(() => {
+          const target = container.scrollWidth - container.clientWidth;
+          const start = container.scrollLeft;
+          const duration = 2800;
+          const startTime = performance.now();
 
-                container.scrollLeft = newScroll;
+          const animate = (now) => {
+            const t = Math.min((now - startTime) / duration, 1);
+            const ease = 1 - Math.pow(1 - t, 3);
+            container.scrollLeft = start + (target - start) * ease;
+            if (t < 1) requestAnimationFrame(animate);
+          };
 
-                if (progress < 1) {
-                  requestAnimationFrame(animateScroll);
-                }
-              }
-            };
+          requestAnimationFrame(animate);
+        }, 200);
+      }
+    }, {
+      threshold: [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0]
+    });
 
-            requestAnimationFrame(animateScroll);
-          }, 300); 
-        }
-      }, {
-        threshold: Array.from({ length: 11 }, (_, i) => i / 10) 
-      });
-
-      observer.observe(section);
-    }
+    observer.observe(section);
   }
 });
