@@ -32,6 +32,14 @@ $subtitle = get_field('subtitle');
 $btn_text = get_field('btn_text');
 $btn_url = get_field('btn_page');
 
+$is_mode_click_for_touch = get_field('mode_click_for_touch');
+// if ($is_mode_click_for_touch){
+//     print_r("Click mode: true");
+
+// } else{
+//     print_r("Click mode: false");
+// }
+
 // $photo_url = esc_url(get_field('photo')["sizes"]['large']);
 // echo '<pre>'; // Обертываем в теги для форматирования
 // echo var_dump($items);
@@ -53,7 +61,7 @@ if (file_exists($modules_file)) {
                 <a href="<?php esc_url($btn_url); ?>" class="btn <?php echo esc_attr($classes['btn1']); ?>"><?php echo esc_html($btn_text); ?></a>
             </div>
 
-            <div id="slider-one-photo" class="<?php echo esc_attr($classes['list']); ?>">
+            <div id="slider-one-photo" data-click-mode="<?php echo $is_mode_click_for_touch ? 'true' : 'false'; ?>" class="<?php echo esc_attr($classes['list']); ?>">
                 <?php $count = 0; ?>
                 <?php foreach ($items as $item) : ?>
                     <?php

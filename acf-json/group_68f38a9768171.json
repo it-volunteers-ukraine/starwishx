@@ -3,6 +3,27 @@
     "title": "Block Accordion One Photo",
     "fields": [
         {
+            "key": "field_6907a94104a72",
+            "label": "Mode - Click for touch",
+            "name": "mode_click_for_touch",
+            "aria-label": "",
+            "type": "true_false",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "message": "",
+            "default_value": 1,
+            "allow_in_bindings": 0,
+            "ui": 0,
+            "ui_on_text": "",
+            "ui_off_text": ""
+        },
+        {
             "key": "field_68f3b01361159",
             "label": "subtitle",
             "name": "subtitle",
@@ -192,13 +213,6 @@
                 "operator": "==",
                 "value": "acf\/accordion-one-photo"
             }
-        ],
-        [
-            {
-                "param": "block",
-                "operator": "==",
-                "value": "acf\/accordion-one-photo-compact"
-            }
         ]
     ],
     "menu_order": 0,
@@ -210,5 +224,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1761076101
+    "modified": 1762124063
 }
