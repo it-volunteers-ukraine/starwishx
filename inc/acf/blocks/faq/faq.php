@@ -1,9 +1,5 @@
 <?php
 
-$block_css_classes = [
-    'hero1'
-];
-
 $default_classes = [
     'faq' => 'faq',
     'container' => 'container',
@@ -53,14 +49,14 @@ $questions = get_field('questions');
             <?php endif; ?>
 
             <?php if ($questions) : ?>
-                <ol class="<?php echo esc_attr($classes['accordion']); ?>">
+                <ol class="accordion <?php echo esc_attr($classes['accordion']); ?>">
                     <?php foreach ($questions as $index => $question) :
                         $is_first = ($index === 0);
                         $open_class = $is_first ? ' open' : '';
                         $aria_exp = $is_first ? 'true' : 'false';
                     ?>
-                        <li class="<?php echo esc_attr($classes['accordion-item']); ?><?php echo $open_class; ?>">
-                            <div class="<?php echo esc_attr($classes['accordion-item-header']); ?>"
+                        <li class="accordion-item <?php echo esc_attr($classes['accordion-item']); ?><?php echo $open_class; ?>">
+                            <div class="accordion-item-header <?php echo esc_attr($classes['accordion-item-header']); ?>"
                                 role="button"
                                 aria-expanded="<?php echo $aria_exp; ?>"
                                 aria-controls="acc-desc-<?php echo $index; ?>">
@@ -72,7 +68,7 @@ $questions = get_field('questions');
                                 </svg>
                             </div>
 
-                            <div id="acc-desc-<?php echo $index; ?>" class="<?php echo esc_attr($classes['accordion-item-description-wrapper']); ?>">
+                            <div id="acc-desc-<?php echo $index; ?>" class="accordion-item-description-wrapper <?php echo esc_attr($classes['accordion-item-description-wrapper']); ?>">
                                 <div class="<?php echo esc_attr($classes['accordion-item-description']); ?>">
                                     <p><?php echo wp_kses_post($question['answer']); ?></p>
                                 </div>

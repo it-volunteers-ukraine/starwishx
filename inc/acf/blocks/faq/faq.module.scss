@@ -1,0 +1,93 @@
+@use "../../../../src/scss/variables" as *;
+
+.faq {
+  .suptitle {
+    display: inline-block;
+    position: relative;
+    border-radius: 16px;
+    background-color: $surface-violet;
+    padding: 6px 10px 6px 18px;
+    font-size: 14px;
+    line-height: 1.2;
+    text-transform: uppercase;
+
+    &::before {
+      position: absolute;
+      top: 50%;
+      left: 8px;
+      transform: translateY(-50%);
+      content: "•";
+    }
+  }
+
+  .title {
+    font-weight: 300;
+    font-size: clamp(36px, 3vw, 64px);
+    line-height: 1.2;
+    text-transform: uppercase;
+    margin-top: clamp(8px, 3vw, 20px);
+  }
+
+  .accordion {
+    counter-reset: item 0;
+    margin: clamp(16px, 3vw, 32px) auto 0 auto;
+    border-top: 1px solid $stroke-default;
+    max-width: 1464px;
+    list-style: none;
+  }
+
+  .accordion-item {
+    position: relative;
+    counter-increment: item;
+    padding: 16px clamp(32px, 3vw, 109px) 16px clamp(46px, 3vw, 52px);
+
+    &:not(:first-child) {
+      border-top: 1px solid $surface-violet;
+    }
+
+    &::before {
+      position: absolute;
+      top: 20px;
+      left: 0;
+      content: counter(item, decimal-leading-zero) " ";
+      color: $text-accent;
+      font-weight: 500;
+      font-size: 18px;
+    }
+
+    .accordion-item-header {
+      font-weight: 500;
+      font-size: clamp(24px, 3vw, 36px);
+      cursor: pointer;
+    }
+
+    .accordion-item-header-icon {
+      position: absolute;
+      top: 20px;
+      right: 0;
+      transition: transform 0.3s ease-in-out;
+      height: 24px;
+      width: 24px;
+    }
+
+    .accordion-item-description-wrapper {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s ease-in-out;
+    }
+
+    .accordion-item-description {
+      padding-top: 16px;
+    }
+
+    .open {
+      .accordion-item-description-wrapper {
+        max-height: 720px;
+      }
+
+      .accordion-item-header-icon {
+        transform: rotate(45deg);
+      }
+    }
+  }
+}
