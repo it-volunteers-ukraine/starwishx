@@ -135,12 +135,13 @@ document.addEventListener("DOMContentLoaded", function () {
       header.addEventListener("click", toggle);
       header.addEventListener("keydown", (e) => {
         switch (e.key) {
-          case "Enter":
-          case " ":
-          case "Spacebar":
-            e.preventDefault();
-            toggle();
-            break;
+          // Unnecessary if using <button> element, 'cuz by default browser handles Enter/Space
+          // case "Enter":
+          // case " ":
+          // case "Spacebar":
+          //   e.preventDefault();
+          //   toggle();
+          //   break;
           case "ArrowRight":
             e.preventDefault();
             // Check state using ARIA attribute
