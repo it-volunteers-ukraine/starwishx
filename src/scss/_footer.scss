@@ -86,8 +86,15 @@
 
 .footer-logo-wrapper {
   position: relative;
-  margin: 0 calc(0.045 * 100%);
+
+  /* margin: 0 calc(0.045 * 100%); */
   margin-bottom: 40px;
+  font-size: 12.8vw;
+  font-size: calc(13.23vw - 1.62px);
+  text-align: center;
+  color: white;
+  font-weight: 900;
+  font-family: Urbanist, sans-serif;
 }
 
 .footer-logo {
@@ -99,11 +106,13 @@
 
 .footer-logo-satellite {
   position: absolute;
-  width: calc(100% * 0.04);
+  width: calc(100% * 0.05);
 
   /* top: calc(-100% * 0.11); */
   top: 0;
-  right: calc(-100% * 0.02);
+
+  /* right: calc(100% * 0.04); */
+  right: calc(6.62vw - 19.81px);
   z-index: 0;
 }
 
@@ -199,8 +208,10 @@
   }
 
   .footer-logo-wrapper {
-    margin: 0 calc(0.062 * 100%);
+    /* margin: 0 calc(0.062 * 100%); */
     margin-bottom: 24px;
+    font-size: 13vw;
+    font-size: calc(14.88vw - 14.29px);
   }
 
   .footer-logo {
@@ -208,7 +219,8 @@
   }
 
   .footer-logo-satellite {
-    top: calc(-100% * 0.13);
+    /* top: calc(-100% * 0.13); */
+    right: calc(1.34vw - 4.29px);
   }
 
   .footer-copyright {
@@ -257,7 +269,8 @@
   }
 
   .footer-logo-wrapper {
-    margin: 0 calc(0.036 * 100%) 24px;
+    /* margin: 0 calc(0.036 * 100%) 24px; */
+    font-size: calc(13.33vw + 8px);
   }
 
   .footer-logo {
@@ -266,6 +279,7 @@
 
   .footer-logo-satellite {
     top: 0;
+    right: calc(5.21vw - 60px);
   }
 
   .footer-title.title-socblock {
@@ -296,8 +310,14 @@
   }
 
   .footer-logo-wrapper {
-    margin: 0 calc(0.028 * 100%);
+    /* margin: 0 calc(0.028 * 100%); */
     margin-bottom: 40px;
+    font-size: 264px;
+  }
+
+  .footer-logo-satellite {
+    width: 88px;
+    right: 6px;
   }
 
   .nav {
