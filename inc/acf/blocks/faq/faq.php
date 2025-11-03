@@ -1,9 +1,5 @@
 <?php
 
-$block_css_classes = [
-    'hero1'
-];
-
 $default_classes = [
     'faq' => 'faq',
     'container' => 'container',
@@ -15,7 +11,7 @@ $default_classes = [
     'accordion-item' => 'accordion-item',
     'accordion-item-header' => 'accordion-item-header',
     'accordion-item-header-title' => 'accordion-item-header-title',
-    'accordion-item-header-icon' => 'accordion-item-header-icon cross',
+    'accordion-item-header-icon' => 'accordion-item-header-icon',
     'accordion-item-description-wrapper' => 'accordion-item-description-wrapper',
     'accordion-item-description' => 'accordion-item-description'
 ];
@@ -46,34 +42,35 @@ $questions = get_field('questions');
                 <p class="<?php echo esc_attr($classes['suptitle']); ?>"><?php echo $suptitle ?></p>
             <?php endif; ?>
             <?php if ($title) : ?>
-                <h2 class="<?php echo esc_attr($classes['title']); ?>"><?php echo $title ?></h2>
+                <h2 class="h2-big <?php echo esc_attr($classes['title']); ?>"><?php echo $title ?></h2>
             <?php endif; ?>
             <?php if ($text) : ?>
                 <p class="<?php echo esc_attr($classes['text']); ?>"><?php echo $text ?></p>
             <?php endif; ?>
 
             <?php if ($questions) : ?>
-                <ol class="<?php echo esc_attr($classes['accordion']); ?>">
+                <ol class="accordion <?php echo esc_attr($classes['accordion']); ?>">
                     <?php foreach ($questions as $index => $question) :
                         $is_first = ($index === 0);
-                        $open_class = $is_first ? ' open' : '';
                         $aria_exp = $is_first ? 'true' : 'false';
+                        $aria_hidden = $is_first ? 'false' : 'true';
                     ?>
-                        <li class="<?php echo esc_attr($classes['accordion-item']); ?><?php echo $open_class; ?>">
-                            <div class="<?php echo esc_attr($classes['accordion-item-header']); ?>"
-                                role="button"
+                        <li class="accordion-item <?php echo esc_attr($classes['accordion-item']); ?>">
+                            <button class="accordion-item-header <?php echo esc_attr($classes['accordion-item-header']); ?>"
                                 aria-expanded="<?php echo $aria_exp; ?>"
                                 aria-controls="acc-desc-<?php echo $index; ?>">
                                 <span class="<?php echo esc_attr($classes['accordion-item-header-title']); ?>">
                                     <?php echo esc_html($question['question']); ?>
                                 </span>
-                                <svg width="24" height="24" class="<?php echo esc_attr($classes['accordion-item-header-icon']); ?>">
+                                <svg width="24" height="24" class="accordion-item-header-icon cross <?php echo esc_attr($classes['accordion-item-header-icon']); ?>">
                                     <use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-plus"></use>
                                 </svg>
-                            </div>
+                            </button>
 
-                            <div id="acc-desc-<?php echo $index; ?>" class="<?php echo esc_attr($classes['accordion-item-description-wrapper']); ?>">
-                                <div class="<?php echo esc_attr($classes['accordion-item-description']); ?>">
+                            <div id="acc-desc-<?php echo $index; ?>"
+                                class="accordion-item-description-wrapper <?php echo esc_attr($classes['accordion-item-description-wrapper']); ?>"
+                                aria-hidden="<?php echo $aria_hidden; ?>">
+                                <div class="text-r <?php echo esc_attr($classes['accordion-item-description']); ?>">
                                     <p><?php echo wp_kses_post($question['answer']); ?></p>
                                 </div>
                             </div>

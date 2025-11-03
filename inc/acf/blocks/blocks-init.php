@@ -124,16 +124,16 @@ function _themeprefix_acf_init_block_types() {
         //     'enqueue_script' => get_template_directory_uri() . '/assets/js/gallery1.js',
         // ));
 
-        acf_register_block_type(array(
-            'name'  =>  'faq',
-            'title' =>  __('faq', '_themedomain'),
-            'description'   =>  __('Block faq', '_themedomain'),
-            'render_template'   =>  acf_theme_blocks_path('faq/faq.php'),
-            'category'  =>  'ccc-blocks',
-            'icon'  =>  'format-image',
-            'supports'  =>  ['jsx'  =>  true],
-            'enqueue_script' => get_template_directory_uri() . '/assets/js/faq.js',
-        ));
+        // acf_register_block_type(array(
+        //     'name'  =>  'faq',
+        //     'title' =>  __('faq', '_themedomain'),
+        //     'description'   =>  __('Block faq', '_themedomain'),
+        //     'render_template'   =>  acf_theme_blocks_path('faq/faq.php'),
+        //     'category'  =>  'ccc-blocks',
+        //     'icon'  =>  'format-image',
+        //     'supports'  =>  ['jsx'  =>  true],
+        //     'enqueue_script' => get_template_directory_uri() . '/assets/js/faq.js',
+        // ));
 
         // acf_register_block_type(array(
         //     'name'  =>  'google-maps1',
