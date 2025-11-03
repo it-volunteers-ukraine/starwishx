@@ -156,6 +156,10 @@ body {
   &:hover {
     background-color: $buttons-color-background-primary-hover;
   }
+
+  &:active:not(:focus) {
+    background-color: $buttons-color-background-primary-pressed;
+  }
 }
 
 /* --- Tablet --- от 768px */
