@@ -4,7 +4,6 @@ document.addEventListener("DOMContentLoaded", function () {
     ITEM_HEADER: ".accordion-item-header",
     ITEM: ".accordion-item",
     DESCRIPTION_WRAPPER: ".accordion-item-description-wrapper",
-    OPEN: "open",
   };
 
   const TRANSITION = "max-height 0.3s ease";
@@ -31,11 +30,9 @@ document.addEventListener("DOMContentLoaded", function () {
         header.setAttribute("role", "button");
       }
 
-      // Initialize state
+      // Initialize state - ONLY use aria-expanded now
       const headerAriaExpanded = header.getAttribute("aria-expanded");
-      const initiallyOpen =
-        headerAriaExpanded === "true" ||
-        item.classList.contains(SELECTORS.OPEN);
+      const initiallyOpen = headerAriaExpanded === "true";
 
       if (!header.hasAttribute("aria-expanded")) {
         header.setAttribute("aria-expanded", initiallyOpen ? "true" : "false");
@@ -56,14 +53,9 @@ document.addEventListener("DOMContentLoaded", function () {
         panel.style.maxHeight = "0px";
       }
 
-      if (initiallyOpen) {
-        currentlyOpenItem = item;
-      }
-
       function setOpenState(open) {
+        // Calculate heights before changing ARIA attributes
         if (open) {
-          item.classList.add(SELECTORS.OPEN);
-
           // Calculate actual height
           panel.style.maxHeight = "none";
           const height = panel.scrollHeight;
@@ -86,18 +78,19 @@ document.addEventListener("DOMContentLoaded", function () {
             panel.style.maxHeight = "0px";
           });
 
-          item.classList.remove(SELECTORS.OPEN);
           if (currentlyOpenItem === item) {
             currentlyOpenItem = null;
           }
         }
 
+        // Update ARIA attributes (this triggers CSS changes)
         header.setAttribute("aria-expanded", open ? "true" : "false");
         panel.setAttribute("aria-hidden", open ? "false" : "true");
       }
 
       function handleTransitionEnd() {
-        if (item.classList.contains(SELECTORS.OPEN)) {
+        // Only cleanup max-height if the item is expanded
+        if (header.getAttribute("aria-expanded") === "true") {
           panel.style.maxHeight = "none";
         }
       }
@@ -105,7 +98,8 @@ document.addEventListener("DOMContentLoaded", function () {
       panel.addEventListener("transitionend", handleTransitionEnd);
 
       function toggle() {
-        const nowOpen = !item.classList.contains(SELECTORS.OPEN);
+        // Check state using ARIA attribute only
+        const nowOpen = header.getAttribute("aria-expanded") === "false";
 
         // Close previously open item if opening a new one
         if (nowOpen && currentlyOpenItem && currentlyOpenItem !== item) {
@@ -117,7 +111,7 @@ document.addEventListener("DOMContentLoaded", function () {
           );
 
           if (currentHeader && currentPanel) {
-            currentlyOpenItem.classList.remove(SELECTORS.OPEN);
+            // Close the previously open item using ARIA only
             currentHeader.setAttribute("aria-expanded", "false");
             currentPanel.setAttribute("aria-hidden", "true");
 
@@ -128,6 +122,9 @@ document.addEventListener("DOMContentLoaded", function () {
             requestAnimationFrame(() => {
               currentPanel.style.maxHeight = "0px";
             });
+
+            // Update tracking
+            currentlyOpenItem = null;
           }
         }
 
@@ -146,13 +143,15 @@ document.addEventListener("DOMContentLoaded", function () {
             break;
           case "ArrowRight":
             e.preventDefault();
-            if (!item.classList.contains(SELECTORS.OPEN)) {
+            // Check state using ARIA attribute
+            if (header.getAttribute("aria-expanded") === "false") {
               toggle();
             }
             break;
           case "ArrowLeft":
             e.preventDefault();
-            if (item.classList.contains(SELECTORS.OPEN)) {
+            // Check state using ARIA attribute
+            if (header.getAttribute("aria-expanded") === "true") {
               toggle();
             }
             break;

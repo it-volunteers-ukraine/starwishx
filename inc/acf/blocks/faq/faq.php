@@ -52,12 +52,11 @@ $questions = get_field('questions');
                 <ol class="accordion <?php echo esc_attr($classes['accordion']); ?>">
                     <?php foreach ($questions as $index => $question) :
                         $is_first = ($index === 0);
-                        $open_class = $is_first ? ' open' : '';
                         $aria_exp = $is_first ? 'true' : 'false';
+                        $aria_hidden = $is_first ? 'false' : 'true';
                     ?>
-                        <li class="accordion-item <?php echo esc_attr($classes['accordion-item']); ?><?php echo $open_class; ?>">
-                            <div class="accordion-item-header <?php echo esc_attr($classes['accordion-item-header']); ?>"
-                                role="button"
+                        <li class="accordion-item <?php echo esc_attr($classes['accordion-item']); ?>">
+                            <button class="accordion-item-header <?php echo esc_attr($classes['accordion-item-header']); ?>"
                                 aria-expanded="<?php echo $aria_exp; ?>"
                                 aria-controls="acc-desc-<?php echo $index; ?>">
                                 <span class="<?php echo esc_attr($classes['accordion-item-header-title']); ?>">
@@ -66,9 +65,11 @@ $questions = get_field('questions');
                                 <svg width="24" height="24" class="accordion-item-header-icon cross <?php echo esc_attr($classes['accordion-item-header-icon']); ?>">
                                     <use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-plus"></use>
                                 </svg>
-                            </div>
+                            </button>
 
-                            <div id="acc-desc-<?php echo $index; ?>" class="accordion-item-description-wrapper <?php echo esc_attr($classes['accordion-item-description-wrapper']); ?>">
+                            <div id="acc-desc-<?php echo $index; ?>"
+                                class="accordion-item-description-wrapper <?php echo esc_attr($classes['accordion-item-description-wrapper']); ?>"
+                                aria-hidden="<?php echo $aria_hidden; ?>">
                                 <div class="text-r <?php echo esc_attr($classes['accordion-item-description']); ?>">
                                     <p><?php echo wp_kses_post($question['answer']); ?></p>
                                 </div>

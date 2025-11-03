@@ -62,13 +62,22 @@
     }
 
     .accordion-item-header {
+      display: block;
       cursor: pointer;
+      border: none;
+      background: none;
+      width: 100%;
       color: $text-dark;
       font-weight: 500;
       font-size: 24px;
+      text-align: left;
 
       @include media.desktop {
         font-size: 36px;
+      }
+
+      &[aria-expanded="true"] .accordion-item-header-icon {
+        transform: rotate(45deg);
       }
     }
 
@@ -85,20 +94,14 @@
       transition: max-height 0.4s ease-in-out;
       max-height: 0;
       overflow: hidden;
+
+      &[aria-hidden="false"] {
+        max-height: 720px;
+      }
     }
 
     .accordion-item-description {
       padding-top: 16px;
-    }
-
-    .open {
-      .accordion-item-description-wrapper {
-        max-height: 720px;
-      }
-
-      .accordion-item-header-icon {
-        transform: rotate(45deg);
-      }
     }
   }
 }
