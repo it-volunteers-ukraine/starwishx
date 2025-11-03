@@ -1,0 +1,107 @@
+@use "../../../../src/scss/variables" as *;
+@use "../../../../src/scss/mixins/media";
+
+.faq {
+  .suptitle {
+    display: inline-block;
+    position: relative;
+    border-radius: 16px;
+    background-color: $surface-violet;
+    padding: 8px 12px 8px 24px;
+    color: $element-block-text;
+    font-size: 16px;
+    line-height: 1.2;
+    text-transform: uppercase;
+
+    @include media.max-laptop {
+      padding: 6px 10px 6px 18px;
+      font-size: 14px;
+    }
+
+    &::before {
+      position: absolute;
+      top: 46%;
+      left: 8px;
+      transform: translateY(-50%);
+      content: "•";
+    }
+  }
+
+  .title {
+    margin-top: clamp(8px, 3vw, 20px);
+    text-transform: uppercase;
+
+    /* font-size: clamp(36px, 6.25vw, 64px); */
+  }
+
+  .accordion {
+    counter-reset: item 0;
+    margin: clamp(16px, 3vw, 32px) auto 0 auto;
+    border-top: 1px solid $stroke-default;
+    max-width: 1464px;
+    list-style: none;
+  }
+
+  .accordion-item {
+    position: relative;
+    counter-increment: item;
+    padding: 16px clamp(32px, 3vw, 109px) 16px clamp(46px, 3vw, 52px);
+
+    &:not(:first-child) {
+      border-top: 1px solid $surface-violet;
+    }
+
+    &::before {
+      position: absolute;
+      top: 20px;
+      left: 0;
+      content: counter(item, decimal-leading-zero) " ";
+      color: $text-accent;
+      font-weight: 500;
+      font-size: 18px;
+    }
+
+    .accordion-item-header {
+      display: block;
+      cursor: pointer;
+      border: none;
+      background: none;
+      width: 100%;
+      color: $text-dark;
+      font-weight: 500;
+      font-size: 24px;
+      text-align: left;
+
+      @include media.desktop {
+        font-size: 36px;
+      }
+
+      &[aria-expanded="true"] .accordion-item-header-icon {
+        transform: rotate(45deg);
+      }
+    }
+
+    .accordion-item-header-icon {
+      position: absolute;
+      top: 20px;
+      right: 0;
+      transition: transform 0.3s ease-in-out;
+      width: 24px;
+      height: 24px;
+    }
+
+    .accordion-item-description-wrapper {
+      transition: max-height 0.4s ease-in-out;
+      max-height: 0;
+      overflow: hidden;
+
+      &[aria-hidden="false"] {
+        max-height: 720px;
+      }
+    }
+
+    .accordion-item-description {
+      padding-top: 16px;
+    }
+  }
+}
