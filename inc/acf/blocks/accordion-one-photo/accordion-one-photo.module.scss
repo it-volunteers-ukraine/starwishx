@@ -1,8 +1,5 @@
 @use "../../../../src/scss/variables" as *;
 
-.section {
-}
-
 .btn1 {
   display: none;
 }
@@ -144,17 +141,8 @@
 }
 
 @media screen and (min-width: 768px) {
-  .container {
-  }
-
-  .item {
-  }
-
   .count {
     min-width: 38px;
-  }
-
-  .title {
   }
 
   .content {
@@ -164,9 +152,6 @@
   .text {
     /* min-height: 73px; */
     margin-bottom: 0;
-  }
-
-  .block-photo {
   }
 
   .photo1,
@@ -208,12 +193,9 @@
     display: none;
   }
 
-  .container {
-  }
-
-  .item {
-    /* height: 399px; */
-  }
+  /* .item {
+    height: 399px;
+  } */
 
   .content {
     display: flex;
@@ -231,25 +213,18 @@
     background-color: white;
     */
   }
-
-  .text {
-  }
 }
 
 @media screen and (min-width: 1920px) {
-  .container {
-  }
-
+  /*
   .item {
-    /* height: 516px; */
-  }
+     height: 516px;
+    }
+    */
 
   .count {
     font-size: 18px;
     width: 40px;
-  }
-
-  .title {
   }
 
   .content {
