@@ -21,6 +21,7 @@
 
 .main-title {
   text-transform: uppercase;
+  color: $text-dark;
 }
 
 .list {
@@ -38,6 +39,10 @@
   display: flex;
   margin-bottom: 8px;
   background-color: white;
+}
+
+.title {
+  color: $text-dark;
 }
 
 .count {
