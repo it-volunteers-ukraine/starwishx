@@ -1,8 +1,5 @@
 @use "../../../../src/scss/variables" as *;
 
-.list {
-}
-
 .item {
   position: relative;
   border-top: 1px solid rgba($text-light, 0.5);
@@ -83,9 +80,6 @@
 }
 
 @media screen and (min-width: 768px) {
-  .container {
-  }
-
   .item {
     padding: 40px 28px 24px;
 
@@ -94,9 +88,6 @@
 
   .count {
     min-width: 38px;
-  }
-
-  .title {
   }
 
   .content {
@@ -124,9 +115,6 @@
 }
 
 @media screen and (min-width: 1440px) {
-  .container {
-  }
-
   .item {
     height: 399px;
   }
@@ -163,14 +151,9 @@
     width: 80px;
     height: 68px;
   }
-
-  .text{}
 }
 
 @media screen and (min-width: 1920px) {
-  .container {
-  }
-
   .item {
     height: 516px;
   }
@@ -178,9 +161,6 @@
   .count {
     font-size: 18px;
     width: 40px;
-  }
-
-  .title {
   }
 
   .content {
