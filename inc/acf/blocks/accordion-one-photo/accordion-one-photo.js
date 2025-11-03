@@ -5,12 +5,12 @@ function detectMouse() {
 
 const noMouse = !detectMouse();
 const isClickModeForTouch = document.getElementById("slider-one-photo").dataset.clickMode == true ? true : false;
-console.log("clickMode: ", document.getElementById("slider-one-photo").dataset.clickMode)
-console.log("click-mode: ", isClickModeForTouch, typeof isClickModeForTouch);
+// console.log("clickMode: ", document.getElementById("slider-one-photo").dataset.clickMode)
+// console.log("click-mode: ", isClickModeForTouch, typeof isClickModeForTouch);
 
 // const sliderss = document.querySelectorAll("#slider-one-photo"); // лучше использовать класс
 const items = document.getElementById("slider-one-photo").children; // лучше использовать класс
-console.log('items: ', items)
+// console.log('items: ', items)
 const screenHeight = window.innerHeight;
 
 function setHeight(item, index = 'undef') {
@@ -39,7 +39,7 @@ requestAnimationFrame(() => {
         setHeight(item, index);
 
         if (!isClickModeForTouch && noMouse) {
-            console.log('no mouse detected, using scroll effect');
+            // console.log('no mouse detected, using scroll effect');
 
             const itemChildren = item.children[1]//.children[0];
             // console.log("itemChildren", itemChildren);
@@ -88,7 +88,7 @@ requestAnimationFrame(() => {
 
         // Для ховера проверяет высоту
         if (!noMouse) {
-            console.log("!nomouse")
+            // console.log("!nomouse")
             item.addEventListener('mouseenter', () => {
                 setHeight(item);
             })
@@ -98,7 +98,7 @@ requestAnimationFrame(() => {
         if (isClickModeForTouch && noMouse) {
             item.children[0].addEventListener("click", () => {
                 const curClick = item.children[0];
-                console.log("index: ", index)
+                // console.log("index: ", index)
                 array.forEach((el, elIndex) => { 
                     setHeight(el, elIndex);
                     if (index != elIndex){
