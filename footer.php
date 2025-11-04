@@ -76,9 +76,12 @@ $linkedin_link = esc_html(get_field('linkedin_link', 'options'));
         </div>
 
         <div class="footer-logo-wrapper">
-            <span class="footer-logo">STAR WISH X</span>
-            <!-- <img src="<?php echo get_template_directory_uri(); ?>/assets/img/star_wish_x-1920.png" alt="" class="footer-logo"> -->
-            <img src="<?php echo get_template_directory_uri(); ?>/assets/img/star-satellite.svg" class="footer-logo-satellite" alt="" >
+            <!-- <div class="hologram"></div> -->
+            <div class="footer-logo-container">
+                <span class="footer-logo">STAR WISH X</span>
+                <!-- <img src="<?php echo get_template_directory_uri(); ?>/assets/img/star_wish_x-1920.png" alt="" class="footer-logo"> -->
+                <img src="<?php echo get_template_directory_uri(); ?>/assets/img/star-satellite.svg" class="footer-logo-satellite" alt="">
+            </div>
         </div>
 
         <div class="footer-copyright">
