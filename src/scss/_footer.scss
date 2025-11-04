@@ -89,6 +89,7 @@
   margin-bottom: 40px;
   font-size: 12.8vw;
   font-size: calc(13.23vw - 1.62px);
+  line-height: 1;
   color: white;
   font-weight: 900;
   font-family: Urbanist, sans-serif;
@@ -241,7 +242,7 @@
   /* right: calc(100% * 0.04); */
   right: calc(6.62vw - 19.81px);
   right: -1.7vw;
-  top: 0.4vw;
+  top: -0.5vw;
   z-index: 0;
 }
 
@@ -343,9 +344,11 @@
     font-size: calc(14.88vw - 14.29px);
   }
 
+  /*
   .footer-logo {
-    /* margin: 13px 0; */
+    margin: 13px 0;
   }
+  */
 
   .footer-logo-satellite {
     /* top: calc(-100% * 0.13); */
