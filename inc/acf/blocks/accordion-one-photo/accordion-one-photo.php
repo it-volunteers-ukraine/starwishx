@@ -34,12 +34,12 @@ $btn_url = get_field('btn_page');
 
 $is_mode_click_for_touch = get_field('mode_click_for_touch');
 
-if ($is_mode_click_for_touch){
-    print_r("Click mode: true");
+// if ($is_mode_click_for_touch){
+//     print_r("Click mode: true");
 
-} else{
-    print_r("Click mode: false");
-}
+// } else{
+//     print_r("Click mode: false");
+// }
 
 // $photo_url = esc_url(get_field('photo')["sizes"]['large']);
 // echo '<pre>'; // Обертываем в теги для форматирования
