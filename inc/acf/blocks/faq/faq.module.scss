@@ -9,13 +9,11 @@
     background-color: $surface-violet;
     padding: 8px 12px 8px 24px;
     color: $element-block-text;
-    font-size: 16px;
     line-height: 1.2;
     text-transform: uppercase;
 
     @include media.max-laptop {
       padding: 6px 10px 6px 18px;
-      font-size: 14px;
     }
 
     &::before {
@@ -58,11 +56,6 @@
       content: counter(item, decimal-leading-zero) " ";
       color: $text-accent;
       font-weight: 500;
-      font-size: 18px;
-
-      @include media.max-laptop {
-        font-size: 16px;
-      }
     }
 
     .accordion-item-header {
