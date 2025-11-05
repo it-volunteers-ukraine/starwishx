@@ -37,6 +37,11 @@ $width-mobile: 375px;
    }
 }
 
+@mixin min-desktop {
+   @media only screen and (min-width: ($width-desktop)) {
+      @content;
+   }
+}
 @mixin min-laptop {
    @media only screen and (min-width: ($width-laptop)) {
       @content;

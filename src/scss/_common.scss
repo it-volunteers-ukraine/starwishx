@@ -1,5 +1,6 @@
 @use "variables" as *;
 @use "mixins/color" as *;
+@use "mixins/media";
 
 * {
   margin: 0;
@@ -15,6 +16,12 @@ html {
 body {
   font-family: Inter, sans-serif;
   font-style: normal;
+  color: $text-basic;
+  font-size: 16px;
+
+  @include media.min-desktop {
+    font-size: 18px;
+  }
 }
 
 .h-100 {
