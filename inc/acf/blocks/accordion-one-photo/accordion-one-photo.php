@@ -83,7 +83,6 @@ if (file_exists($modules_file)) {
                             <?php if ($text) : ?>
                                 <div class="<?php echo esc_attr($classes['text']); ?>">
                                     <?php echo $text; ?>
-                                    <?php echo $text; ?>
                                 </div>
                             <?php endif; ?>
                             <div class="<?php echo esc_attr($classes['block-photo']); ?>">
