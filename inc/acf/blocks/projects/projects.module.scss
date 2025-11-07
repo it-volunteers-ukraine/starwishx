@@ -165,7 +165,9 @@
     justify-content: flex-start;
     width: max-content;
   }
+}
 
+@media (max-width: 1350px) {
   .arrows {
     display: flex;
   }
