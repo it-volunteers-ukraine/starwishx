@@ -141,6 +141,16 @@
 .footer-logo-container {
   position: relative;
   display: inline-flex;
+  overflow: hidden;
+}
+
+:root {
+  --ange: 0deg;
+}
+
+@keyframes spin {
+  0% { --angle: 0deg; }
+  100% { --angle: 360deg; }
 }
 
 .footer-logo {
@@ -189,7 +199,8 @@
   color: transparent;
   background-clip: text;
   -webkit-text-fill-color: transparent; */
-  background:
+
+  /* background:
     linear-gradient(
       0deg,
       rgb(255 255 255 / 64%),
@@ -208,7 +219,7 @@
       #000 360deg
     ),
     conic-gradient(
-      from 180deg at 50% 50%,
+      from 9deg at 50% 50%,
       #000 0deg,
       #fff 43.53deg,
       #000 90deg,
@@ -227,11 +238,36 @@
       #9298d6 62.96%,
       #49b8a8 82.52%,
       #4c9cc6 100%
+    ); */
+
+  background:
+    conic-gradient(
+      from var(--angle) at 50% 50%,
+      #000 0deg,
+      #fff 43.53deg,
+      #000 90deg,
+      #fff 135deg,
+      #000 180deg,
+      #fff 223.7deg,
+      #000 270.1deg,
+      #fff 313.17deg,
+      #000 360deg
     );
   -webkit-text-fill-color: transparent;
   background-clip: text;
   color: transparent;
-  background-blend-mode: normal, screen, difference, normal;
+  background-blend-mode: screen;
+  animation: spin 6s linear infinite;
+}
+
+/*
+@keyframes spin {
+  0% { --angle: 10deg; }
+  100% { --angle: 360deg; }
+} */
+
+.footer-logo-img {
+  margin: 6px 14px;
 }
 
 .footer-logo-satellite {
