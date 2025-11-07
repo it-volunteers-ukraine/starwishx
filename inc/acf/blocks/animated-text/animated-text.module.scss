@@ -1,63 +1,80 @@
+@use "../../../../src/scss/variables" as *;
+@use "../../../../src/scss/mixins/media" as *;
+
 .animated-text-section {
   display: flex;
   justify-content: center;
   align-items: center;
   width: 100%;
   height: 628px;
-  background: var(--surface-violet, #f5f4fe);
-  padding-left: 386px;
-  padding-right: 386px;
   gap: 10px;
   text-align: center;
-}
+  text-transform: uppercase;
+  background: $surface-violet;
 
-.animated-text-wrapper {
-  width: 100%;
-}
+  .animated-text-content {
+    color: $text-basic;
+    font-weight: 300;
+    font-size: clamp(32px, 4vw, 64px);
+    line-height: 120%;
+    letter-spacing: 0;
 
-.animated-text-content {
-  color: #464646;
-  font-weight: 300;
-  font-size: 64px;
-  line-height: 120%;
-  letter-spacing: 0;
-  text-align: center;
-}
+    .no-wrap {
+      white-space: nowrap;
+    }
 
-/* ----------- 1440px ----------- */
-@media (max-width: 1440px) {
-  .animated-text-section {
+    .text-desktop {
+      display: block;
+    }
+
+    .text-tablet,
+    .text-mobile {
+      display: none;
+    }
+  }
+
+  @include laptop {
     height: 472px;
+
+    .animated-text-content {
+      font-weight: 400;
+    }
   }
 
-  .animated-text-content {
-    font-weight: 400;
-    font-size: 48px;
-  }
-}
-
-/* ----------- 768px ----------- */
-@media (max-width: 768px) {
-  .animated-text-section {
+  @include tablet {
     height: 588px;
-    padding-left: 40px;
-    padding-right: 40px;
+
+    .animated-text-content {
+      font-weight: 400;
+      font-size: clamp(36px, 5vw, 48px);
+      line-height: 115%;
+
+      .text-desktop,
+      .text-mobile {
+        display: none;
+      }
+
+      .text-tablet {
+        display: block;
+      }
+    }
   }
 
-  .animated-text-content {
-    font-size: 48px;
-  }
-}
-
-/* ----------- 375px ----------- */
-@media (max-width: 375px) {
-  .animated-text-section {
+  @include mobile {
     height: 584px;
-    padding-left: 16px;
-    padding-right: 16px;
-  }
 
-  .animated-text-content {
-    font-size: 36px;
+    .animated-text-content {
+      font-size: clamp(28px, 7vw, 36px);
+      line-height: 110%;
+
+      .text-desktop,
+      .text-tablet {
+        display: none;
+      }
+
+      .text-mobile {
+        display: block;
+      }
+    }
   }
 }
