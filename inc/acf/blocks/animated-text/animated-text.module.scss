@@ -11,6 +11,7 @@
   text-align: center;
   text-transform: uppercase;
   background: $surface-violet;
+  border-radius: clamp(48px, calc(48px + (64 - 48) * ((100vw - 1440px) / (1920 - 1440))), 64px);
 
   .animated-text-content {
     color: $text-basic;
@@ -35,6 +36,7 @@
 
   @include laptop {
     height: 472px;
+    border-radius: 48px;
 
     .animated-text-content {
       font-weight: 400;
@@ -43,6 +45,7 @@
 
   @include tablet {
     height: 588px;
+    border-radius: 48px;
 
     .animated-text-content {
       font-weight: 400;
@@ -62,6 +65,7 @@
 
   @include mobile {
     height: 584px;
+    border-radius: 48px;
 
     .animated-text-content {
       font-size: clamp(28px, 7vw, 36px);
