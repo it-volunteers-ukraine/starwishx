@@ -68,7 +68,7 @@ if (file_exists($modules_file)) {
                     <?php
                     $count++;
                     $title = $item['title'];
-                    $text = $item['text'];
+                    $text = trim(esc_html($item['text']));
                     $photo1_url = $item['photo1']["sizes"]['large'];
                     $photo1_alt = $item['photo1']['alt'] ?: $item['photo1']['title'];
                     ?>
