@@ -171,7 +171,7 @@
                     "default_value": "",
                     "maxlength": "",
                     "allow_in_bindings": 0,
-                    "rows": "",
+                    "rows": 8,
                     "placeholder": "",
                     "new_lines": "",
                     "parent_repeater": "field_68f38a976acd9"
@@ -224,5 +224,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1762124063
+    "modified": 1762716101
 }

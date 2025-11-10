@@ -267,7 +267,8 @@ body {
     background-color: $buttons-color-background-primary-hover;
   }
 
-  &:active:not(:focus) {
+  &:active,
+  &:active:hover {
     background-color: $buttons-color-background-primary-pressed;
   }
 
