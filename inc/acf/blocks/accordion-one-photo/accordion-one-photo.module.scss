@@ -1,4 +1,7 @@
 @use "../../../../src/scss/variables" as *;
+@use "../../../../src/scss/mixins/label";
+@use "../../../../src/scss/mixins/media";
+@use "../../../../src/scss/mixins/indents";
 
 .btn1 {
   display: none;
@@ -7,6 +10,11 @@
 .btn2 {
   display: flex;
   margin: 0 auto;
+}
+
+.subtitle {
+  @include label.label-dot;
+  @include indents.label-subtitle;
 }
 
 .title-wrap {
@@ -34,7 +42,6 @@
 
 .block-title {
   display: flex;
-  margin-bottom: 8px;
   background-color: white;
 }
 
@@ -117,6 +124,7 @@
 
 .text {
   font-size: 16px;
+  padding-top: 8px;
 
   /* min-height: 67px; */
   line-height: 1.3;

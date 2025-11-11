@@ -1,6 +1,6 @@
-@use "../media";
+@use "./media";
 
-@mixin label-subtitle{
+@mixin label-subtitle {
   margin-bottom: 8px;
 
   @include media.min-tablet {
@@ -10,5 +10,4 @@
   @include media.min-laptop {
     margin-bottom: 20px;
   }
-
 }
