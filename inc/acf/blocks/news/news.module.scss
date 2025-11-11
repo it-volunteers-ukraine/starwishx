@@ -1,5 +1,5 @@
 @use "../../../../src/scss/variables" as *;
-@use "../../../../src/scss/_common" as *;
+@use "../../../../src/scss/common" as *;
 
 .btn1 {
   display: none;
@@ -89,17 +89,6 @@
   overflow: hidden;
 }
 
-.text {
-}
-
-/*
-.block-photo {
-  display: none;
-  opacity: 0;
-  transition: opacity 750ms ease-out;
-}
-*/
-
 .photo1-img {
 }
 
@@ -125,9 +114,6 @@
       }
     }
   }
-
-  .photo-wrap {
-  }
 }
 
 @media screen and (min-width: 768px) {
@@ -140,21 +126,12 @@
     justify-content: space-between;
     align-items: center;
   }
-
-  .title {
-  }
-
-  .text {
-  }
-
-  .photo1 {
-  }
 }
 
+/*
 @media screen and (min-width: 992px) {
-  .list {
-  }
 }
+*/
 
 @media screen and (min-width: 1440px) {
   .btn1 {
@@ -199,15 +176,5 @@
   .item-title {
     min-height: calc(1.2em * 4);
     -webkit-line-clamp: 4; /* максимум 3 строки */
-  }
-
-  .photo-wrap {
-    height: 373px;
-  }
-
-  .photo1 {
-  }
-
-  .text {
   }
 }
