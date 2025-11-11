@@ -107,7 +107,7 @@ if (file_exists($modules_file)) {
 <section class="section <?php echo esc_attr($classes['section']); ?> ">
     <div class="container ">
         <?php if ($items) : ?>
-            <div class="label-subtitle <?php echo esc_attr($classes['subtitle']); ?>"><?php echo esc_html($label_text); ?></div>
+            <div class="<?php echo esc_attr($classes['subtitle']); ?>"><?php echo esc_html($label_text); ?></div>
             <div class="<?php echo esc_attr($classes['title-wrap']); ?>">
                 <h2 class="h2-big <?php echo esc_attr($classes['title']); ?>"><?php echo esc_html($title); ?></h2>
                 <a href="<?php esc_url($btn_url); ?>" class="btn <?php echo esc_attr($classes['btn1']); ?>"><?php echo esc_html($btn_text); ?></a>
