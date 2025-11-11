@@ -1,5 +1,8 @@
 @use "../../../../src/scss/variables" as *;
 @use "../../../../src/scss/common" as *;
+@use "../../../../src/scss/mixins/label";
+@use "../../../../src/scss/mixins/media";
+@use "../../../../src/scss/mixins/indents";
 
 .btn1 {
   display: none;
@@ -11,7 +14,8 @@
 }
 
 .subtitle {
-  margin-bottom: 8px;
+  @include label.label-dot;
+  @include indents.label-subtitle;
 }
 
 .title-wrap {
@@ -58,29 +62,31 @@
 }
 
 .item-label {
-  @extend .label-subtitle;
+  @include label.label(var(--label-color), var(--label-bg));
 
-  margin-bottom: 0;
+  /* @extend .label-subtitle; */
+
+  /* margin-bottom: 0;
   color: var(--label-color);
-  background-color: var(--label-bg);
+  background-color: var(--label-bg); */
   position: absolute;
   left: 12px;
   top: 12px;
 
-  &::before {
+  /* &::before {
     background-color: var(--label-color);
-  }
+  } */
 }
 
 .item-date {
-  @extend .text-small;
+  /* @extend .text-small; */
 
   margin-bottom: 20px;
   color: $text-light;
 }
 
 .item-title {
-  @extend .btn-text-medium;
+  /* @extend .btn-text-medium; */
 
   display: box;
   min-height: calc(1.2em * 3);
@@ -89,13 +95,9 @@
   overflow: hidden;
 }
 
-.photo1-img {
-}
-
 @media screen and (min-width: 576px) {
   .list {
-    flex-direction: row;
-    flex-wrap: wrap;
+    flex-flow: row wrap;
   }
 
   @media screen and (max-width: 1439.9px) {

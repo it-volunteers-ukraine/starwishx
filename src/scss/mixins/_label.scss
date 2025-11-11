@@ -1,0 +1,47 @@
+@use "../variables" as *;
+@use "./media";
+
+@mixin label($color: $element-block-text, $bg: $element-block-fill) {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 40px;
+  background-color: $bg;
+  padding: 6px 10px;
+  color: $color;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1.2;
+}
+
+@mixin label-dot($color: $element-block-text, $bg: $element-block-fill) {
+  @include label($color, $bg);
+  text-transform: uppercase;
+  &::before {
+    margin-right: 6px;
+    border-radius: 50%;
+    background-color: $color;
+    width: 4px;
+    height: 4px;
+    content: "";
+  }
+
+  /*
+  @include media.min-tablet {
+    margin-bottom: 10px;
+  }
+
+  @include media.min-laptop {
+    margin-bottom: 20px;
+  }
+*/
+  @include media.min-desktop {
+    padding: 8px 12px;
+    font-size: 16px;
+
+    &::before {
+      margin-right: 6px;
+      width: 6px;
+      height: 6px;
+    }
+  }
+}
