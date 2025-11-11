@@ -139,9 +139,9 @@ if (file_exists($modules_file)) {
                                 <div class="<?php echo esc_attr($classes['item-label']); ?>" style="--label-color: <?php echo $label_color_text; ?>; --label-bg: <?php echo $label_color_background; ?>; "><?php echo $item_label; ?></div>
 
                             </div>
-                            <div class="<?php echo esc_attr($classes['item-date']); ?>"><?php echo $item_date; ?></div>
+                            <div class="text-small <?php echo esc_attr($classes['item-date']); ?>"><?php echo $item_date; ?></div>
                             <?php if ($item_title) : ?>
-                                <div class="<?php echo esc_attr($classes['item-title']); ?>">
+                                <div class="btn-text-medium <?php echo esc_attr($classes['item-title']); ?>">
                                     <?php echo $item_title; ?>
                                 </div>
                             <?php endif; ?>

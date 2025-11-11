@@ -14,6 +14,7 @@
   display: flex;
   position: sticky;
   top: 0;
+  /* stylelint-disable-next-line custom-property-pattern */
   top: var(--wp-admin--admin-bar--height, 0);
   background-color: white;
   z-index: 1;
