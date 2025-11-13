@@ -2,75 +2,72 @@
 @use "../../../../src/scss/mixins/media" as *;
 
 .animated-text-section {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  gap: 10px;
-  text-align: center;
-  text-transform: uppercase;
   background: $surface-violet;
-  padding: calc(120px + (160 - 120) * ((100vw - 1440px) / (1920 - 1440))) 386px;
-  border-radius: clamp(48px, calc(48px + (64 - 48) * ((100vw - 1440px) / (1920 - 1440))), 64px);
+  padding: 120px 0;
+  border-radius: 48px;
+}
 
-  .animated-text-content {
+.animated-text-content {
+  p,
+  h1,
+  h2,
+  h3,
+  h4,
+  h5 {
+    text-transform: uppercase;
+
+    /* text-align: center; */
     color: $text-basic;
-    font-weight: 300;
-    font-style: normal;
-    font-size: clamp(32px, 4vw, 64px);
+    font-size: 36px;
+    font-weight: 400;
     line-height: 120%;
-    letter-spacing: 0;
-
-    p {
-      margin: 0;
-    }
+    letter-spacing: 1px;
   }
+}
 
-  @include laptop {
-    padding: 120px 386px;
-    border-radius: 48px;
-
-    .animated-text-content {
-      font-weight: 400;
-      font-style: normal;
-      line-height: 120%;
-      letter-spacing: 0;
-    }
-  }
-
-  @media (max-width: 1440px) and (min-width: 768px) {
-    padding: 120px calc(40px + (386 - 40) * ((100vw - 768px) / (1440 - 768)));
-  }
-
-  @include tablet {
-    padding: 120px 40px;
-
-    .animated-text-content {
-      font-weight: 400;
-      font-style: normal;
-      font-size: clamp(36px, 5vw, 48px);
-      line-height: 120%;
-      letter-spacing: 0;
-    }
-  }
-
-  @media (max-width: 768px) and (min-width: 375px) {
-    padding: 120px calc(16px + (40 - 16) * ((100vw - 375px) / (768 - 375)));
-  }
-
-  @include mobile {
-    padding: 120px 16px;
-
-    .animated-text-content {
-      font-weight: 400;
-      font-style: normal;
-      font-size: clamp(28px, 7vw, 36px);
-      line-height: 120%;
-      letter-spacing: 0;
+@include min-tablet {
+  .animated-text-content {
+    p,
+    h1,
+    h2,
+    h3,
+    h4,
+    h5 {
+      font-size: 48px;
     }
   }
 }
 
-.container {
-  padding: 0;
+@include min-laptop {
+  .animated-text-content {
+    p,
+    h1,
+    h2,
+    h3,
+    h4,
+    h5 {
+      width: 900px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+  }
+}
+
+@include min-desktop {
+  .animated-text-section {
+    padding: 160px 0;
+    border-radius: 64px;
+  }
+
+  .animated-text-content {
+    p,
+    h1,
+    h2,
+    h3,
+    h4,
+    h5 {
+      width: 1166px;
+      font-size: 64px;
+    }
+  }
 }

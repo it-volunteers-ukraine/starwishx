@@ -4,22 +4,23 @@
     "fields": [
         {
             "key": "field_690db3901461b",
-            "label": "animated_text",
-            "name": "animated_text",
+            "label": "text",
+            "name": "text",
             "aria-label": "",
             "type": "wysiwyg",
             "instructions": "",
-            "required": false,
+            "required": 0,
             "conditional_logic": 0,
             "wrapper": {
                 "width": "",
                 "class": "",
                 "id": ""
             },
+            "default_value": "",
+            "allow_in_bindings": 1,
             "tabs": "all",
             "toolbar": "full",
             "media_upload": 1,
-            "default_value": "",
             "delay": 0
         }
     ],
@@ -41,5 +42,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1762789970
+    "modified": 1763046695
 }
