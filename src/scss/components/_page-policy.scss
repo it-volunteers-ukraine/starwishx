@@ -4,9 +4,9 @@
 
 .page-template-page-policy .site-main {
    margin-top: 16px;
+   margin-bottom: 80px;
    @include media.min-tablet {
       margin-top: 32px;
-      margin-bottom: 80px;
    }
 }
 
@@ -51,8 +51,7 @@
       .policy-pdf-icon {
          display: flex;
          align-items: center;
-         width: 32px;
-         height: 32px;
+         max-width: 22px;
       }
 
       .policy-pdf-info {
