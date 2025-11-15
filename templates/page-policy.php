@@ -82,7 +82,7 @@ $back_label = __('Повернутись назад', $td); // Ukrainian label (
             <a href="<?php echo esc_url($back_url); ?>" class="policy-breadcrumbs-back">
                 <svg width="13" height="16" class="icon-arrow-left">
                     <use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-long_arrow_left"></use>
-                </svg> <span><?php echo esc_html($back_label); ?><span></a>
+                </svg> <span><?php echo esc_html($back_label); ?></span></a>
         </nav>
         <?php if (get_the_title()) : ?>
             <h1 id="policy-title-<?php echo esc_attr($post_id); ?>" class="policy-title h3"><?php the_title(); ?></h1>
