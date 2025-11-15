@@ -1,0 +1,94 @@
+@use "../../../../src/scss/variables" as *;
+@use "../../../../src/scss/mixins/media";
+
+.policy {
+  .policy-inner {
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    gap: 48px;
+    align-items: start;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .policy-left {
+    .policy-pdf-link {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      text-decoration: none;
+
+      .pdf-icon img {
+        width: 28px;
+        height: 28px;
+        display: block;
+      }
+
+      .pdf-meta {
+        font-size: 14px;
+        color: $text-basic;
+
+        strong {
+          color: $text-dark;
+          display: block;
+          font-weight: 600;
+        }
+      }
+    }
+
+    & .empty {
+      color: $text-basic;
+      font-style: italic;
+    }
+  }
+
+  .policy-right {
+    .suptitle {
+      /* reuse styles like in FAQ */
+    }
+
+    .title {
+      margin-top: 0;
+      margin-bottom: 8px;
+    }
+
+    .policy-date {
+      color: $text-basic;
+      margin-bottom: 12px;
+    }
+
+    .policy-intro {
+      margin-bottom: 18px;
+    }
+
+    .policy-content {
+      p {
+        margin-bottom: 12px;
+        line-height: 1.6;
+      }
+
+      ul,
+      ol {
+        margin-left: 1.1em;
+        margin-bottom: 12px;
+      }
+
+      h2,
+      h3 {
+        margin-top: 18px;
+        margin-bottom: 8px;
+      }
+    }
+  }
+
+  @include media.max-tablet {
+    .policy-inner {
+      grid-template-columns: 1fr;
+    }
+
+    .policy-left {
+      order: -1;
+      margin-bottom: 18px;
+    }
+  }
+}
