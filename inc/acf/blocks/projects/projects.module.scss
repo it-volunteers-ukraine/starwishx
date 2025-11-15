@@ -29,7 +29,7 @@
   width: clamp(185px, 12vw, 213px);
   height: clamp(29px, 1.82vw, 35px);
   justify-content: center;
-  border-radius: 22px;
+  border-radius: 40px;
   padding: clamp(6px, 0.42vw, 8px) clamp(10px, 0.63vw, 12px);
   background-color: $element-block-fill;
 }
@@ -46,7 +46,7 @@
   font-size: clamp(48px, 3.33vw, 64px);
   line-height: 120%;
   color: $text-dark;
-  font-weight: 400;
+  font-weight: 300;
 }
 
 .projects-wrapper {
@@ -70,7 +70,7 @@
   gap: 20px;
   text-decoration: none;
   color: $text-basic;
-  border-radius: 10px;
+  border-radius: 12px;
   flex-shrink: 0;
   width: clamp(325px, 22.13vw, 425px);
   box-sizing: border-box;
@@ -81,7 +81,7 @@
   position: relative;
   width: 100%;
   aspect-ratio: 401 / 373;
-  border-radius: 10px;
+  border-radius: 12px;
   overflow: hidden;
 }
 
@@ -96,7 +96,7 @@
   position: absolute;
   top: 12px;
   left: 12px;
-  border-radius: 10px;
+  border-radius: 40px;
   padding: 6px 12px;
   font-size: 14px;
   line-height: 1;

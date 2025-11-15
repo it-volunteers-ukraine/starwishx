@@ -1,0 +1,114 @@
+@use "../variables" as *;
+@use "../mixins/media";
+@use "../mixins/utlis" as *;
+
+.page-template-page-policy .site-main {
+   margin-top: 16px;
+   margin-bottom: 80px;
+   @include media.min-tablet {
+      margin-top: 32px;
+   }
+}
+
+.policy-breadcrumbs-back {
+   color: $text-light;
+   display: flex;
+   align-items: center;
+   gap: 4px;
+   svg {
+      height: 16px;
+      @include media.min-desktop {
+         height: 18px;
+      }
+   }
+}
+.policy-title {
+   margin: 12px 0 16px 0;
+   @include media.min-laptop {
+      margin: 16px 0 32px 0;
+   }
+}
+
+.policy-layout {
+   display: grid;
+   grid-template-columns: clamp(325px, 6.625rem + 15.208vw, 398px) 1fr;
+   gap: 20px;
+   align-items: start;
+
+   @include media.max-tablet {
+      grid-template-columns: 1fr;
+      gap: 20px;
+   }
+}
+
+.policy-left {
+   .policy-pdf-link {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      text-decoration: none;
+
+      .policy-pdf-icon {
+         display: flex;
+         align-items: center;
+         max-width: 22px;
+      }
+
+      .policy-pdf-info {
+         .policy-pdf-title {
+            display: block;
+            color: $text-basic;
+         }
+         .policy-pdf-meta {
+            display: block;
+            color: $text-light;
+         }
+      }
+   }
+
+   .policy-pdf-empty {
+      font-style: italic;
+      color: $icon-color-accent;
+   }
+}
+
+.policy-right {
+   .policy-effective-date,
+   .policy-intro {
+      margin-bottom: 24px;
+      @include media.min-laptop {
+         margin-bottom: 32px;
+      }
+   }
+   .policy-content {
+      // content typography
+      h2 {
+         font-weight: 600;
+         font-size: 18px;
+         line-height: 1.2;
+         color: $text-accent;
+
+         @include media.min-desktop {
+            font-size: 20px;
+         }
+      }
+      p {
+         margin-top: 16px;
+      }
+      ul,
+      ol {
+         margin-left: 1.5rem;
+         margin-bottom: 12px;
+      }
+      ul {
+         list-style: disc;
+      }
+      h2,
+      h3 {
+         margin-top: 24px;
+         @include media.min-laptop {
+            margin-top: 32px;
+         }
+      }
+   }
+}
