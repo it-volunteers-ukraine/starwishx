@@ -28,6 +28,8 @@ $default_classes = [
 
 ];
 
+
+$category = 'categories-news';
 $modules_file = get_template_directory() . '/assets/css/blocks/modules.json';
 $classes = $default_classes;
 $title = get_field('title');
@@ -43,7 +45,7 @@ if (file_exists($modules_file)) {
 }
 
 $terms = get_terms([
-    'taxonomy' => 'categories-news',
+    'taxonomy' => $category,
     'hide_empty' => false
 ]);
 
@@ -55,7 +57,7 @@ $query = new WP_Query([
     'order'          => 'DESC',
     'tax_query'      => [
         [
-            'taxonomy' => 'categories-news',
+            'taxonomy' => $category,
             'operator' => 'EXISTS'
         ]
     ]
@@ -64,7 +66,7 @@ $query = new WP_Query([
 if ($query->have_posts()) {
     foreach ($query->posts as $post_item) {
 
-        $term_post = get_the_terms($post_item->ID, 'categories-news');
+        $term_post = get_the_terms($post_item->ID, $category);
         $post_item->term_id = $term_post ? $term_post[0]->term_id : null;
         $post_item->term_name = $term_post ? $term_post[0]->name : null;
 
@@ -76,7 +78,7 @@ wp_reset_postdata();
 
 $news_last = $results;
 
-$res_by_cat = [];
+$res_last_by_cat = [];
 // Получение с каждой категории по последнему посту
 foreach ($terms as $term) {
     $query = new WP_Query([
@@ -84,7 +86,7 @@ foreach ($terms as $term) {
         'posts_per_page' => 1,
         'tax_query' => [
             [
-                'taxonomy' => 'categories-news',
+                'taxonomy' => $category,
                 'field' => 'term_id',
                 'terms' => $term->term_id
             ]
@@ -97,7 +99,42 @@ foreach ($terms as $term) {
         $post_item = $query->posts[0];
 
         // добавляем категорию внутрь объекта
-        $term_post = get_the_terms($post_item->ID, 'categories-news');
+        $term_post = get_the_terms($post_item->ID, $category);
+        $post_item->term_id = $term_post ? $term_post[0]->term_id : null;
+        $post_item->term_name = $term_post ? $term_post[0]->name : null;
+
+        // $post_item->category_term = get_the_terms($post_item->ID, 'categories-news')[0]['term_id    '] ?? null;
+
+        $res_last_by_cat[] = $post_item;
+    }
+
+    wp_reset_postdata();
+}
+
+$last_one_by_category = $res_last_by_cat;
+
+$res_by_cat = [];
+// Получение с каждой категории по последнему посту
+foreach ($terms as $term) {
+    $query = new WP_Query([
+        'post_type' => 'news',
+        'posts_per_page' => 7,
+        'tax_query' => [
+            [
+                'taxonomy' => $category,
+                'field' => 'term_id',
+                'terms' => $term->term_id
+            ]
+        ],
+        'orderby' => 'date',
+        'order' => 'DESC'
+    ]);
+
+    if ($query->have_posts()) {
+        $post_item = $query->posts[0];
+
+        // добавляем категорию внутрь объекта
+        $term_post = get_the_terms($post_item->ID, $category);
         $post_item->term_id = $term_post ? $term_post[0]->term_id : null;
         $post_item->term_name = $term_post ? $term_post[0]->name : null;
 
@@ -109,7 +146,7 @@ foreach ($terms as $term) {
     wp_reset_postdata();
 }
 
-$last_one_by_category = $res_by_cat;
+$res_by_cat = $res_by_cat;
 
 ?>
 
