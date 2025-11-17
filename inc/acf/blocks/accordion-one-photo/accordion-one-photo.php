@@ -76,7 +76,7 @@ if (file_exists($modules_file)) {
                         <?php if ($title) : ?>
                             <div class="<?php echo esc_attr($classes['block-title']); ?>">
                                 <div class="<?php echo esc_attr($classes['count']); ?>"><?php echo sprintf("%02d", $count); ?></div>
-                                <h5 class="h5 <?php echo esc_attr($classes['title']); ?>"><?php echo esc_html($title); ?></h2>
+                                <h3 class="h5 <?php echo esc_attr($classes['title']); ?>"><?php echo esc_html($title); ?></h3>
                             </div>
                         <?php endif; ?>
                         <div class="<?php echo esc_attr($classes['content']); ?>">
