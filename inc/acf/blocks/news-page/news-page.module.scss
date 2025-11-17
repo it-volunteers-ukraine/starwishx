@@ -19,6 +19,7 @@
 }
 
 /* ************************************************************ */
+
 /* Для последних новостей aside +  */
 .lastnews-content {
   display: flex;
@@ -36,6 +37,7 @@
 .lnew-item {
   padding: 8px 0;
   position: relative;
+
   @include max-tablet {
     &::after {
       content: "";
@@ -45,8 +47,8 @@
       height: 1px;
       bottom: 0;
       left: 0;
-      background: linear-gradient(to right, #ffffff, $stroke-default);
-      background: linear-gradient(to right, #ffffff, $stroke-default, #ffffff);
+      background: linear-gradient(to right, #fff, $stroke-default);
+      background: linear-gradient(to right, #fff, $stroke-default, #fff);
     }
   }
 }
@@ -62,13 +64,14 @@
 
 .lnew-title {
   color: $text-basic;
-  display: -webkit-box;
+  display: box;
 
   /* min-height: calc(1.2em * 3); */
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 3; /* максимум 3 строки */
   overflow: hidden;
 }
+
 /* медиа для aside */
 @include min-tablet {
   .lnew-item {
@@ -76,7 +79,8 @@
 
   .lnew-item:not(:last-child) {
     position: relative;
-    /*border-bottom: 1px solid $stroke-default; */
+
+    /* border-bottom: 1px solid $stroke-default; */
     &::after {
       content: "";
       display: block;
@@ -85,8 +89,8 @@
       height: 1px;
       bottom: 0;
       left: 0;
-      background: linear-gradient(to right, #ffffff, $stroke-default);
-      background: linear-gradient(to right, #ffffff, $stroke-default, #ffffff);
+      background: linear-gradient(to right, #fff, $stroke-default);
+      background: linear-gradient(to right, #fff, $stroke-default, #fff);
     }
   }
 
@@ -117,6 +121,7 @@
 
 .newscards-item {
   /* padding-bottom: 12px; */
+
   /* padding-bottom: 12px;
   width: calc(50% - 9px); */
 }
@@ -155,7 +160,7 @@
   color: $text-basic;
 
   /* autoprefixer: ignore next */
-  display: -webkit-box;
+  display: box;
   min-height: calc(1.2em * 3);
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 3; /* максимум 3 строки */
@@ -165,14 +170,16 @@
 /* autoprefixer: off */
 .newcard-text {
   color: $text-light;
-  display: -webkit-box;
-  /*min-height: calc(1.2em * 4); */
+  display: box;
+
+  /* min-height: calc(1.2em * 4); */
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 4; /* максимум 3 строки */
   overflow: hidden;
 }
 
 /* ************************************************************ */
+
 /* media основные */
 @media screen and (min-width: 768px) {
   .title {
@@ -181,6 +188,7 @@
 
   .lastnews {
   }
+
   .lastnews-content {
     display: grid;
     grid-template-columns: 50% 1fr;
@@ -192,6 +200,7 @@
     grid-column: 1;
     grid-row: 1 / span 2;
   }
+
   .newscards .newscards-item:nth-child(-n + 2) {
     grid-column: 2;
   }
@@ -206,6 +215,7 @@
   .lastnews-content {
     grid-template-columns: repeat(3, 1fr);
   }
+
   .newscards .newscards-item:nth-child(-n + 2) {
     grid-column: auto;
   }
@@ -215,12 +225,16 @@
     grid-template-columns: 1fr 1fr; /* две равные половины */
     gap: 18px;
   }
+
   .newscards .newscards-item:nth-last-child(2) {
     grid-column: 1 / span 1; /* левая половина */
-    /*background-color: red; */
+
+    /* background-color: red; */
   }
+
   .newscards .newscards-item:nth-last-child(1) {
     grid-column: 2 / span 2; /* правая половина */
+
     /* background-color: orange; */
   }
 }
@@ -229,6 +243,7 @@
   .title {
     margin-bottom: 32px;
   }
+
   .lastnews-content {
     grid-template-columns: repeat(4, 1fr);
     gap: 20px;
@@ -256,9 +271,12 @@
   .title {
     font-size: 56px;
   }
+
   .lnew-title {
-    /*min-height: calc(1.2em * 4);
-    -webkit-line-clamp: 4; */ /* максимум 3 строки */
+    /* min-height: calc(1.2em * 4);
+    -webkit-line-clamp: 4; */
+
+    /* максимум 3 строки */
   }
 
   .photo-wrap {
