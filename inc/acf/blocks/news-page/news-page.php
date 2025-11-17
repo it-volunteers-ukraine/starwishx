@@ -8,17 +8,19 @@ $default_classes = [
 
     'aside' => 'aside',
     'lnew-item' => 'lnew-item',
+    'lnew-title' => 'lnew-title',
+    'lnew-date' => 'lnew-date',
 
 
     'lastcards' => 'lastcards',
-    'newlast-item' => 'newlast-item',
-    'newlast-content' => 'newlast-content',
-    'newlast-photo-wrap' => 'newlast-photo-wrap',
-    'newlast-photo-img' => 'newlast-photo-img',
-    'newlast-item-label' => 'newlast-item-label',
-    'newlast-item-date' => 'newlast-item-date',
-    'newlast-item-title' => 'newlast-item-title',
-    'newlast-item-desc' => 'newlast-item-desc',
+    'newscards-item' => 'newscards-item',
+    'newcard-content' => 'newcard-content',
+    'newcard-img-wrap' => 'newcard-img-wrap',
+    'newcard-img' => 'newcard-img',
+    'newcard-label' => 'newcard-label',
+    'newcard-date' => 'newcard-date',
+    'newcard-title' => 'newcard-title',
+    'newcard-text' => 'newcard-text',
 
     'item' => 'item',
     'btn1' => 'btn1',
@@ -128,15 +130,15 @@ $last_one_by_category = $res_by_cat;
                         $item_title = get_field('title', $post_id);
                         ?>
                         <div class="<?php echo esc_attr($classes['lnew-item']); ?>">
-                            <div class="text-small <?php echo esc_attr($classes['item-date']); ?>"><?php echo $item_date; ?></div>
-                            <div class="subtitle-text-m <?php echo esc_attr($classes['item-title']); ?>">
+                            <div class="text-small <?php echo esc_attr($classes['lnew-date']); ?>"><?php echo $item_date; ?></div>
+                            <div class="subtitle-text-m <?php echo esc_attr($classes['lnew-title']); ?>">
                                 <?php echo $item_title; ?>
                             </div>
                         </div>
-                        <? endforeach; ?>
-                        <? endif; ?>
+                    <? endforeach; ?>
+                <? endif; ?>
             </div>
-            <div class="<?php echo esc_attr($classes['lastcards']); ?>">
+            <div class="<?php echo esc_attr($classes['newscards']); ?>">
                 <?php foreach ($last_one_by_category as $item) : ?>
                     <?php
                     $post_id = $item->ID;
@@ -156,18 +158,18 @@ $last_one_by_category = $res_by_cat;
                     $photo_alt = $photo['alt'] ?: $photo['title'];
 
                     ?>
-                    <div class="<?php echo esc_attr($classes['newlast-item']); ?>">
-                        <div class="<?php echo esc_attr($classes['newlast-content']); ?>">
-                            <div class="<?php echo esc_attr($classes['newlast-photo-wrap']); ?>">
-                                <img src="<?php echo esc_url($photo_url); ?>" class="<?php echo  esc_attr($classes['newlast-photo-img']); ?>" alt="<?php echo $photo_alt; ?>">
-                                <div class="<?php echo esc_attr($classes['newlast-item-label']); ?>" style="--label-color: <?php echo $label_color_text; ?>; --label-bg: <?php echo $label_color_background; ?>; "><?php echo $item_label; ?></div>
+                    <div class="<?php echo esc_attr($classes['newscards-item']); ?>">
+                        <div class="<?php echo esc_attr($classes['newcard-content']); ?>"> <!-- Проверить может лишнее -->
+                            <div class="<?php echo esc_attr($classes['newcard-img-wrap']); ?>">
+                                <img src="<?php echo esc_url($photo_url); ?>" class="<?php echo  esc_attr($classes['newcard-img']); ?>" alt="<?php echo $photo_alt; ?>">
+                                <div class="<?php echo esc_attr($classes['newcard-label']); ?>" style="--label-color: <?php echo $label_color_text; ?>; --label-bg: <?php echo $label_color_background; ?>; "><?php echo $item_label; ?></div>
 
                             </div>
-                            <div class="text-small <?php echo esc_attr($classes['newlast-item-date']); ?>"><?php echo $item_date; ?></div>
-                            <div class="subtitle-text-m <?php echo esc_attr($classes['newlast-item-title']); ?>">
+                            <div class="text-small <?php echo esc_attr($classes['newcard-date']); ?>"><?php echo $item_date; ?></div>
+                            <div class="subtitle-text-m <?php echo esc_attr($classes['newcard-title']); ?>">
                                 <?php echo $item_title; ?>
                             </div>
-                            <div class="text-r <?php echo esc_attr($classes['newlast-item-desc']); ?>">
+                            <div class="text-r <?php echo esc_attr($classes['newcard-text']); ?>">
                                 <?php echo $item_desc; ?>
                             </div>
                         </div>
