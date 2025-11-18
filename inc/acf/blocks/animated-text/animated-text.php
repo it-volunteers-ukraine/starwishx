@@ -1,13 +1,8 @@
 <?php
 $default_classes = [
   'animated-text-section' => 'animated-text-section',
-  'animated-text-wrapper' => 'animated-text-wrapper',
   'animated-text-content' => 'animated-text-content',
-  'text' => 'text',
-  'text-desktop' => 'text-desktop',
-  'text-tablet' => 'text-tablet',
-  'text-mobile' => 'text-mobile',
-];
+  ];
 
 $modules_file = get_template_directory() . '/assets/css/blocks/modules.json';
 $classes = $default_classes;
@@ -21,8 +16,7 @@ if (file_exists($modules_file)) {
 <section class="section <?php echo esc_attr($classes['animated-text-section']); ?>">
   <div class="container">
     <div class="<?php echo esc_attr($classes['animated-text-content']); ?>">
-      <!-- <p class="text"><?php (get_field('text')); ?></p> -->
-      <?php echo get_field('text'); ?>
+    <?php echo get_field('text'); ?>
     </div>
   </div>
 </section>
