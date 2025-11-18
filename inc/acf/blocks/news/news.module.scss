@@ -64,18 +64,9 @@
 .item-label {
   @include label.label(var(--label-color), var(--label-bg));
 
-  /* @extend .label-subtitle; */
-
-  /* margin-bottom: 0;
-  color: var(--label-color);
-  background-color: var(--label-bg); */
   position: absolute;
-  left: 12px;
-  top: 12px;
-
-  /* &::before {
-    background-color: var(--label-color);
-  } */
+  left: 8px;
+  top: 8px;
 }
 
 .item-date {
