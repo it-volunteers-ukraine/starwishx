@@ -104,7 +104,7 @@ export const blockStyles = () => {
     .pipe(
       exec(
         (file) =>
-          `stylelint "inc/acf/blocks/**/*.module.scss" --customSyntax postcss-scss || true`,
+          `stylelint "inc/acf/blocks/**/*.module.scss" --customSyntax postcss-scss --fix`,
         options
       ).on("error", (err) => {
         console.error("stylelint task failed:", err);

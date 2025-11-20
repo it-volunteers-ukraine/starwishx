@@ -25,8 +25,8 @@
         },
         {
             "key": "field_6914d02ce5e86",
-            "label": "News By Categoru",
-            "name": "news_by_categoru",
+            "label": "News By Category",
+            "name": "news_by_category",
             "aria-label": "",
             "type": "repeater",
             "instructions": "",
@@ -93,5 +93,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1762971855
+    "modified": 1763473981
 }

@@ -22,9 +22,20 @@ $default_classes = [
     'newcard-title' => 'newcard-title',
     'newcard-text' => 'newcard-text',
 
+    'bycat-section' => 'bycat-section',
+    'cat-title' => 'cat-title',
+    'bycat-content' => 'bycat-content',
+    'bycat-item' => 'bycat-item',
+    'bycat-first-item' => 'bycat-first-item',
+    'bycat-other-item' => 'bycat-other-item',
+    'bycat-img-wrap' => 'bycat-img-wrap',
+    'bycat-img' => 'bycat-img',
+    'bycat-date' => 'bycat-date',
+    'bycat-title' => 'bycat-title',
+    'bycat-btn' => 'bycat-btn',
+
     'item' => 'item',
-    'btn1' => 'btn1',
-    'btn2' => 'btn2'
+    'btn' => 'btn',
 
 ];
 
@@ -33,6 +44,15 @@ $category = 'categories-news';
 $modules_file = get_template_directory() . '/assets/css/blocks/modules.json';
 $classes = $default_classes;
 $title = get_field('title');
+
+$news_by_category = get_field('news_by_category');
+// print_r($news_by_category);
+// foreach ($news_by_category as $cat_item) {
+//     $cat_item['category'];
+//     print_r($cat_item['category']);
+//     // print_r($cat_item->category);
+// }
+
 // $label_text = get_field('label_text');
 // $btn_text = get_field('btn_text');
 // $btn_url = get_field('btn_page');
@@ -114,41 +134,92 @@ foreach ($terms as $term) {
 $last_one_by_category = $res_last_by_cat;
 
 $res_by_cat = [];
-// Получение с каждой категории по последнему посту
+
 foreach ($terms as $term) {
+
     $query = new WP_Query([
-        'post_type' => 'news',
+        'post_type'      => 'news',
         'posts_per_page' => 7,
-        'tax_query' => [
+        'tax_query'      => [
             [
                 'taxonomy' => $category,
-                'field' => 'term_id',
-                'terms' => $term->term_id
+                'field'    => 'term_id',
+                'terms'    => $term->term_id
             ]
         ],
-        'orderby' => 'date',
-        'order' => 'DESC'
+        'orderby'        => 'date',
+        'order'          => 'DESC'
     ]);
 
     if ($query->have_posts()) {
-        $post_item = $query->posts[0];
 
-        // добавляем категорию внутрь объекта
-        $term_post = get_the_terms($post_item->ID, $category);
-        $post_item->term_id = $term_post ? $term_post[0]->term_id : null;
-        $post_item->term_name = $term_post ? $term_post[0]->name : null;
+        // создаём массив для этой категории
+        $res_by_cat[$term->term_id] = [
+            'term_id'   => $term->term_id,
+            'term_name' => $term->name,
+            'posts'     => []
+        ];
 
-        // $post_item->category_term = get_the_terms($post_item->ID, 'categories-news')[0]['term_id    '] ?? null;
+        foreach ($query->posts as $post_item) {
 
-        $res_by_cat[] = $post_item;
+            // можно добавить данные категории внутрь поста
+            $post_item->term_id   = $term->term_id;
+            $post_item->term_name = $term->name;
+
+            $res_by_cat[$term->term_id]['posts'][] = $post_item;
+        }
     }
 
     wp_reset_postdata();
 }
 
+
 $res_by_cat = $res_by_cat;
+// echo '<pre>'; // Обертываем в теги для форматирования
+// echo var_dump($res_by_cat);
+// echo '</pre>';
 
 ?>
+<?php
+function render_card_bycat($item, $classes = [], $is_no_photo = false)
+{
+
+    $post_id   = $item->ID;
+
+    $item_date = date('d.m.Y', strtotime($item->post_date));
+    $item_title = get_field('title', $post_id);
+
+
+    $photo = get_field('photo', $post_id);
+    $photo_url = $photo['sizes']['large'] ?? '';
+    $photo_alt = $photo['alt'] ?: ($photo['title'] ?? '');
+    $item_date = date('d.m.Y', strtotime($item->post_date));
+
+    // вывод
+?>
+    <div class="<?php echo esc_attr($classes['bycat-item']); ?>">
+        <?php if (!$is_no_photo) : ?>
+            <div class="<?php echo esc_attr($classes['bycat-img-wrap']); ?>">
+                <img src="<?php echo esc_url($photo_url); ?>"
+                    class="<?php echo esc_attr($classes['bycat-img']); ?>"
+                    alt="<?php echo esc_attr($photo_alt); ?>">
+            </div>
+        <?php endif; ?>
+
+        <div class="text-small <?php echo esc_attr($classes['bycat-date']); ?>">
+            <?php echo esc_html($item_date); ?>
+        </div>
+
+        <div class="subtitle-text-m <?php echo esc_attr($classes['bycat-title']); ?>">
+            <?php echo esc_html($item_title); ?>
+        </div>
+    </div>
+<?php
+}
+?>
+
+
+
 
 <section class="section <?php echo esc_attr($classes['section']); ?> ">
     <div class="container ">
@@ -218,3 +289,31 @@ $res_by_cat = $res_by_cat;
 
     </div>
 </section>
+
+<?php foreach ($news_by_category as $cat_id) : ?>
+    <section class="section <?php echo esc_attr($classes['section']);?> <?php echo esc_attr($classes['bycat-section']);?> ">
+        <div class="container ">
+            <?php
+            $btn_url = '#';
+            $btn_text = 'Показати всі';
+            $cat_name = $res_by_cat[$cat_id['category']]['term_name'];
+            ?>
+            <h2 class="h4 <?php echo esc_attr($classes['cat-title']); ?>"><?php echo esc_html($cat_name); ?></h2>
+            <div class="<?php echo esc_attr($classes['bycat-content']); ?>">
+                <?php $conunt_post = 1; ?>
+                <?php
+                $post_list = $res_by_cat[$cat_id['category']]['posts'];
+                ?>
+                <div class="<?php echo esc_attr($classes['bycat-first-item']); ?> ">
+                    <?php render_card_bycat($post_list[0], $classes); ?>
+                </div>
+                <div class="<?php echo esc_attr($classes['bycat-other-item']); ?> ">
+                    <?php for ($i = 1; $i < count($post_list); $i++) : ?>
+                        <?php render_card_bycat($post_list[$i], $classes, true); ?>
+                    <?php endfor; ?>
+                </div>
+            </div>
+            <a href="<?php esc_url($btn_url); ?>" class="btn <?php echo esc_attr($classes['bycat-btn']); ?>"><?php echo esc_html($btn_text); ?></a>
+        </div>
+    </section>
+<?php endforeach; ?>
