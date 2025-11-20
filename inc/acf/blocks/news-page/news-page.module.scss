@@ -208,9 +208,11 @@
 .bycat-content {
   display: grid;
   gap: 33px;
+  grid-template-areas: "a b";
 }
 
 .bycat-first-item {
+  grid-area: a;
 }
 
 .bycat-first-item .bycat-item {
@@ -219,6 +221,7 @@
 .bycat-other-item {
   display: grid;
   gap: 23px;
+  grid-area: b;
 }
 
 .bycat-other-item .bycat-item {
@@ -282,6 +285,14 @@
 
   .bycat-other-item {
 
+  }
+}
+
+@include min-laptop {
+  .bycat-section:nth-child(4n) .bycat-content,
+  .bycat-section:nth-child(5n) .bycat-content {
+    /* direction: rtl; */
+    grid-template-areas: "b a";
   }
 }
 
