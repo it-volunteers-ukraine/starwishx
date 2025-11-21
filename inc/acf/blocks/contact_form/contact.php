@@ -10,7 +10,6 @@ $default_classes = [
     'title-small'    => 'contact-title-small',
     'title-medium'   => 'contact-title-medium',
     'title-big'      => 'contact-title-big',
-    'subtitle'       => 'contact-subtitle',
 
     'contacts'       => 'contact-list',
     'contact-item'   => 'contact-item',
@@ -40,19 +39,24 @@ if (file_exists($modules_file)) {
 
 
 /* ===========================
-   Поля самого ACF-блока
+   Поля ACF блока
    =========================== */
 
 $small     = get_field('title_small');
 $medium    = get_field('title_medium');
 $big       = get_field('title_big');
-$subtitle  = get_field('subtitle');
 
 $form_name_label         = get_field('form_name_label');
 $form_phone_label        = get_field('form_phone_label');
 $form_email_label        = get_field('form_email_label');
 $form_message_label      = get_field('form_message_label');
+
+$form_name_placeholder   = get_field('form_name_placeholder');
+$form_phone_placeholder  = get_field('form_phone_placeholder');
+$form_email_placeholder  = get_field('form_email_placeholder');
 $form_message_placeholder = get_field('form_message_placeholder');
+
+$subtitle                = get_field('subtitle');  // теперь идёт перед textarea
 $form_counter_label      = get_field('form_counter_label');
 $form_privacy            = get_field('form_privacy_text');
 $form_submit_text        = get_field('form_submit_text');
@@ -75,7 +79,7 @@ $avatars        = get_field('avatars', 'option');
 
 
 /* ===========================
-   Обработка Telegram URL
+   Telegram URL
    =========================== */
 
 $telegram_full_url = '';
@@ -90,7 +94,7 @@ if ($telegram_link) {
 
 
 /* ===========================
-   Обработка LinkedIn URL
+   LinkedIn URL
    =========================== */
 
 $linkedin_full_url = '';
@@ -125,9 +129,6 @@ if ($linkedin_link) {
             <div class="<?= esc_attr($classes['title-big']) ?>"><?= esc_html($big) ?></div>
         <?php endif; ?>
 
-        <?php if ($subtitle): ?>
-            <p class="<?= esc_attr($classes['subtitle']) ?>"><?= esc_html($subtitle) ?></p>
-        <?php endif; ?>
     </div>
 
 
@@ -143,7 +144,6 @@ if ($linkedin_link) {
         </div>
         <?php endif; ?>
 
-
         <?php if ($telegram_link): ?>
         <div class="<?= esc_attr($classes['contact-item']) ?>">
             <span class="<?= esc_attr($classes['contact-label']) ?>">Telegram:</span>
@@ -152,7 +152,6 @@ if ($linkedin_link) {
             </a>
         </div>
         <?php endif; ?>
-
 
         <?php if ($linkedin_link): ?>
         <div class="<?= esc_attr($classes['contact-item']) ?>">
@@ -166,21 +165,20 @@ if ($linkedin_link) {
     </div>
 
 
-    <!-- Аватарки -->
-<?php if (!empty($avatars) && is_array($avatars)): ?>
-<div class="<?= esc_attr($classes['avatars']) ?>">
-    <?php foreach ($avatars as $avatar): 
-        // Теперь avatar_image — это массив, а не ID
-        $image_data = $avatar['avatar_image'] ?? false;
-        $image_id = $image_data['ID'] ?? false;
-        if (!$image_id) continue;
-    ?>
-        <div class="<?= esc_attr($classes['avatar-item']) ?>">
-            <?= wp_get_attachment_image($image_id, 'thumbnail', false, ['alt' => 'Team member']) ?>
-        </div>
-    <?php endforeach; ?>
-</div>
-<?php endif; ?>
+    <!-- Аватары -->
+    <?php if (!empty($avatars) && is_array($avatars)): ?>
+    <div class="<?= esc_attr($classes['avatars']) ?>">
+        <?php foreach ($avatars as $avatar):
+            $img_data = $avatar['avatar_image'] ?? false;
+            $img_id   = $img_data['ID'] ?? false;
+            if (!$img_id) continue;
+        ?>
+            <div class="<?= esc_attr($classes['avatar-item']) ?>">
+                <?= wp_get_attachment_image($img_id, 'thumbnail', false, ['alt' => 'avatar']) ?>
+            </div>
+        <?php endforeach; ?>
+    </div>
+    <?php endif; ?>
 
 
     <!-- Форма -->
@@ -188,22 +186,32 @@ if ($linkedin_link) {
 
         <label class="<?= esc_attr($classes['form-field']) ?>">
             <?= esc_html($form_name_label) ?>
-            <input type="text" name="name">
+            <input type="text" name="name"
+                   placeholder="<?= esc_attr($form_name_placeholder) ?>">
         </label>
 
         <label class="<?= esc_attr($classes['form-field']) ?>">
             <?= esc_html($form_phone_label) ?>
-            <input type="text" name="phone">
+            <input type="text" name="phone"
+                   placeholder="<?= esc_attr($form_phone_placeholder) ?>">
         </label>
 
         <label class="<?= esc_attr($classes['form-field']) ?>">
             <?= esc_html($form_email_label) ?>
-            <input type="email" name="email">
+            <input type="email" name="email"
+                   placeholder="<?= esc_attr($form_email_placeholder) ?>">
         </label>
+
+        <!-- subtitle теперь здесь -->
+        <?php if ($subtitle): ?>
+            <p class="<?= esc_attr($classes['subtitle']) ?>"><?= esc_html($subtitle) ?></p>
+        <?php endif; ?>
 
         <label class="<?= esc_attr($classes['form-textarea']) ?>">
             <?= esc_html($form_message_label) ?>
-            <textarea name="message" maxlength="500" placeholder="<?= esc_attr($form_message_placeholder) ?>"></textarea>
+            <textarea name="message"
+                      maxlength="500"
+                      placeholder="<?= esc_attr($form_message_placeholder) ?>"></textarea>
             <span class="<?= esc_attr($classes['counter']) ?>"><?= esc_html($form_counter_label) ?></span>
         </label>
 
@@ -217,4 +225,6 @@ if ($linkedin_link) {
 
 </div>
 </section>
+
+<!-- Подключение counter.js -->
 <script src="<?= get_template_directory_uri(); ?>/inc/acf/blocks/contact_form/contact.js"></script>

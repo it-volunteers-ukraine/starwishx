@@ -49,6 +49,27 @@
             "label": "title_big",
             "name": "title_big",
             "aria-label": "",
+            "type": "wysiwyg",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "allow_in_bindings": 0,
+            "tabs": "all",
+            "toolbar": "full",
+            "media_upload": 1,
+            "delay": 0
+        },
+        {
+            "key": "field_691c9a14c3530",
+            "label": "form_name_label",
+            "name": "form_name_label",
+            "aria-label": "",
             "type": "text",
             "instructions": "",
             "required": 0,
@@ -66,30 +87,9 @@
             "append": ""
         },
         {
-            "key": "field_691c99b1c352f",
-            "label": "subtitle",
-            "name": "subtitle",
-            "aria-label": "",
-            "type": "textarea",
-            "instructions": "",
-            "required": 0,
-            "conditional_logic": 0,
-            "wrapper": {
-                "width": "",
-                "class": "",
-                "id": ""
-            },
-            "default_value": "",
-            "maxlength": "",
-            "allow_in_bindings": 0,
-            "rows": "",
-            "placeholder": "",
-            "new_lines": ""
-        },
-        {
-            "key": "field_691c9a14c3530",
-            "label": "form_name_label",
-            "name": "form_name_label",
+            "key": "field_69209c9325839",
+            "label": "form_name_placeholder",
+            "name": "form_name_placeholder",
             "aria-label": "",
             "type": "text",
             "instructions": "",
@@ -129,9 +129,51 @@
             "append": ""
         },
         {
+            "key": "field_69209c8925838",
+            "label": "form_phone_placeholder",
+            "name": "form_phone_placeholder",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "maxlength": "",
+            "allow_in_bindings": 0,
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
             "key": "field_691c9a2cc3532",
             "label": "form_email_label",
             "name": "form_email_label",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "maxlength": "",
+            "allow_in_bindings": 0,
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_69209c7c25837",
+            "label": "form_email_placeholder",
+            "name": "form_email_placeholder",
             "aria-label": "",
             "type": "text",
             "instructions": "",
@@ -192,11 +234,11 @@
             "append": ""
         },
         {
-            "key": "field_691c9a69c3535",
-            "label": "form_privacy_text",
-            "name": "form_privacy_text",
+            "key": "field_691c99b1c352f",
+            "label": "subtitle",
+            "name": "subtitle",
             "aria-label": "",
-            "type": "textarea",
+            "type": "text",
             "instructions": "",
             "required": 0,
             "conditional_logic": 0,
@@ -208,9 +250,30 @@
             "default_value": "",
             "maxlength": "",
             "allow_in_bindings": 0,
-            "rows": "",
             "placeholder": "",
-            "new_lines": ""
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_691c9a69c3535",
+            "label": "form_privacy_text",
+            "name": "form_privacy_text",
+            "aria-label": "",
+            "type": "wysiwyg",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "allow_in_bindings": 0,
+            "tabs": "all",
+            "toolbar": "full",
+            "media_upload": 1,
+            "delay": 0
         },
         {
             "key": "field_691c9a73c3536",
@@ -252,5 +315,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1763482311
+    "modified": 1763744981
 }
