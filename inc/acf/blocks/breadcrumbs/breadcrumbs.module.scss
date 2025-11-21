@@ -1,0 +1,77 @@
+@use "../../../../src/scss/variables" as *;
+@use "../../../../src/scss/mixins/media" as *;
+
+.section {
+  padding-top: 16px;
+  padding-bottom: 0;
+}
+
+.list {
+  display: flex;
+}
+
+.item {
+  display: inline;
+  font-family: $text-light;
+}
+
+.item + .item::before {
+  padding: 0 4px;
+  color: $icon-color-accent;
+  content: " > ";
+}
+
+.item.selected span {
+  color: $icon-color-accent;
+  border-bottom: 1px solid $icon-color-accent;
+}
+
+.link {
+  transition: all $animations;
+  border-bottom: 1px solid transparent;
+}
+
+.link:hover {
+  color: darkred;
+  border-bottom: 1px solid red;
+}
+
+.link:active {
+  color: darkred;
+  border-bottom: 2px solid red;
+}
+
+/*
+@include min-tablet {
+  .section {
+    padding-top: 12px;
+    padding-bottom: 12px;
+  }
+
+  .item {
+    font-size: 14px;
+  }
+}
+
+@include min-laptop {
+  .section {
+    padding-top: 24px;
+    padding-bottom: 24px;
+  }
+
+  .item {
+    font-size: 16px;
+  }
+}
+
+@include min-desktop {
+  .section {
+    padding-top: 40px;
+    padding-bottom: 40px;
+  }
+
+  .item {
+    font-size: 20px;
+  }
+}
+*/
