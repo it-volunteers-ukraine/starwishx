@@ -339,3 +339,28 @@ img {
 @media screen and (min-width: 1920px) {
 }
 */
+
+/* ************************************************************** */
+
+/* Свайпер */
+.swiper-paginations {
+  text-align: center;
+  margin-top: 16px;
+  margin-bottom: 10px;
+  line-height: 0;
+}
+
+.swiper-pagination-bullet {
+  width: 20px;
+  height: 4px;
+  background-color: $text-light;
+  border-radius: 2px;
+  opacity: 1;
+}
+
+/* Активный буллет */
+.swiper-pagination-bullet-active {
+  background-color: $icon-color-fill;
+
+  // background-image: url('icon-active.svg');
+}

@@ -11,6 +11,9 @@ $default_classes = [
     'lnew-title' => 'lnew-title',
     'lnew-date' => 'lnew-date',
 
+    'newscards-sw' => 'newscards-sw',
+    'newscards-sw-wr' => 'newscards-sw-wr',
+
 
     'lastcards' => 'lastcards',
     'newscards-item' => 'newscards-item',
@@ -36,6 +39,10 @@ $default_classes = [
 
     'item' => 'item',
     'btn' => 'btn',
+    
+    'swiper-paginations' => 'swiper-paginations',
+
+    
 
 ];
 
@@ -246,6 +253,7 @@ function render_card_bycat($item, $classes = [], $is_no_photo = false)
                     <? endforeach; ?>
                 <? endif; ?>
             </div>
+
             <div class="<?php echo esc_attr($classes['newscards']); ?>">
                 <?php foreach ($last_one_by_category as $item) : ?>
                     <?php
@@ -286,12 +294,53 @@ function render_card_bycat($item, $classes = [], $is_no_photo = false)
             </div>
 
         </div>
+        <div class="swiper mySwiper <?php echo esc_attr($classes['newscards-sw']); ?>">
+            <div class="swiper-wrapper <?php echo esc_attr($classes['newscards-sw-wr']); ?>">
+                <?php foreach ($last_one_by_category as $item) : ?>
+                    <?php
+                    $post_id = $item->ID;
+                    $term_id = $item->term_id;
+                    $term_full = get_term($term_id);
+                    $item_taxonomy = $term_full->taxonomy;
+                    $label_color_text = get_field('label_color_text', $item_taxonomy . '_' . $term_id);
+                    $label_color_background = get_field('label_color_background', $item_taxonomy . '_' . $term_id);
+                    $term_name = $item->term_name;
+                    $item_date = date('d.m.Y', strtotime($item->post_date));
+                    $item_title = get_field('title', $post_id);
+                    $item_desc = get_field('description', $post_id);
+
+                    $item_label = esc_html($term_name);
+                    $photo = get_field('photo', $post_id);
+                    $photo_url = $photo["sizes"]['large'];
+                    $photo_alt = $photo['alt'] ?: $photo['title'];
+
+                    ?>
+                    <div class="swiper-slide <?php echo esc_attr($classes['newscards-item']); ?>">
+                        <div class="<?php echo esc_attr($classes['newcard-content']); ?>"> <!-- Проверить может лишнее -->
+                            <div class="<?php echo esc_attr($classes['newcard-img-wrap']); ?>">
+                                <img src="<?php echo esc_url($photo_url); ?>" class="<?php echo  esc_attr($classes['newcard-img']); ?>" alt="<?php echo $photo_alt; ?>">
+                                <div class="<?php echo esc_attr($classes['newcard-label']); ?>" style="--label-color: <?php echo $label_color_text; ?>; --label-bg: <?php echo $label_color_background; ?>; "><?php echo $item_label; ?></div>
+
+                            </div>
+                            <div class="text-small <?php echo esc_attr($classes['newcard-date']); ?>"><?php echo $item_date; ?></div>
+                            <div class="subtitle-text-m <?php echo esc_attr($classes['newcard-title']); ?>">
+                                <?php echo $item_title; ?>
+                            </div>
+                            <div class="text-r <?php echo esc_attr($classes['newcard-text']); ?>">
+                                <?php echo $item_desc; ?>
+                            </div>
+                        </div>
+                    </div>
+                <? endforeach; ?>
+            </div>
+            <div class="swiper-paginations <?php echo esc_attr($classes['swiper-paginations']); ?>" ></div>
+        </div>
 
     </div>
 </section>
 
 <?php foreach ($news_by_category as $cat_id) : ?>
-    <section class="section <?php echo esc_attr($classes['section']);?> <?php echo esc_attr($classes['bycat-section']);?> ">
+    <section class="section <?php echo esc_attr($classes['section']); ?> <?php echo esc_attr($classes['bycat-section']); ?> ">
         <div class="container ">
             <?php
             $btn_url = '#';
@@ -317,3 +366,5 @@ function render_card_bycat($item, $classes = [], $is_no_photo = false)
         </div>
     </section>
 <?php endforeach; ?>
+
+</body>
