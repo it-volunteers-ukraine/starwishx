@@ -1,5 +1,3 @@
-@use "../../../../src/scss/variables" as *;
-
 .contact-section {
   padding: 24px;
   display: flex;
@@ -21,28 +19,37 @@
 .contact-list {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 14px;
 }
 
 .contact-item {
   display: flex;
-  flex-direction: row;
-  gap: 6px;
-}
+  align-items: center;
+  gap: 8px;
 
-.contact-label {
-  font-weight: 600;
+  .icon {
+    width: 18px;
+    height: 18px;
+    fill: currentcolor;
+  }
 }
 
 .contact-avatars {
   display: flex;
-  flex-direction: row;
-  gap: 20px;
-  margin-top: 10px;
+  gap: 16px;
 
-  img {
-    width: 32px;
-    height: 32px;
+  .contact-avatar-item {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    overflow: hidden;
+
+    img {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+    }
   }
 }
 
@@ -60,12 +67,38 @@
   }
 }
 
+/* LABEL: текст + звезда */
+.contact-form-field,
+.contact-form-textarea {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+
+  .label-text {
+    color: #222;
+  }
+
+  .label-required {
+    color: red;
+    margin-left: 4px;
+    font-weight: bold;
+  }
+
+  /* Чтобы звезда была на той же строке */
+  > span {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+  }
+}
+
 .contact-form-textarea {
   position: relative;
 
   textarea {
     min-height: 110px;
     resize: vertical;
+    padding-bottom: 26px;
   }
 
   .contact-counter {
