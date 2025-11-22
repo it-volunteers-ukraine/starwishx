@@ -1,3 +1,5 @@
+@use "../../../../src/scss/variables" as *;
+
 .contact-section {
   padding: 24px;
   display: flex;
@@ -68,10 +70,11 @@
 
   .contact-counter {
     position: absolute;
-    right: 8px;
-    bottom: 8px;
+    bottom: 6px;
+    left: 10px;
     font-size: 12px;
-    opacity: 0.7;
+    opacity: 0.6;
+    pointer-events: none;
   }
 }
 

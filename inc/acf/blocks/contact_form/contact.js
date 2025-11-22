@@ -5,9 +5,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const counter = textarea.parentElement.querySelector('.contact-counter');
     if (!counter) return;
 
+    const max = parseInt(textarea.getAttribute('maxlength')); // БЕЗ 500
+
     const update = () => {
         const current = textarea.value.length;
-        const max = parseInt(textarea.getAttribute('maxlength')) || 500;
         counter.textContent = `${current} / ${max}`;
     };
 

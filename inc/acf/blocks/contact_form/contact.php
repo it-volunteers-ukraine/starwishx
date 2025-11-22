@@ -5,27 +5,29 @@
    =========================== */
 
 $default_classes = [
-    'section'        => 'contact-section',
-    'titles'         => 'contact-titles',
-    'title-small'    => 'contact-title-small',
-    'title-medium'   => 'contact-title-medium',
-    'title-big'      => 'contact-title-big',
+    'contact-section'        => 'contact-section',
+    'contact-titles'         => 'contact-titles',
+    'contact-title-small'    => 'contact-title-small',
+    'contact-title-medium'   => 'contact-title-medium',
+    'contact-title-big'      => 'contact-title-big',
 
-    'contacts'       => 'contact-list',
-    'contact-item'   => 'contact-item',
-    'contact-label'  => 'contact-label',
-    'contact-value'  => 'contact-value',
+    'contact-list'           => 'contact-list',
+    'contact-item'           => 'contact-item',
+    'contact-label'          => 'contact-label',
+    'contact-value'          => 'contact-value',
 
-    'avatars'        => 'contact-avatars',
-    'avatar-item'    => 'contact-avatar-item',
+    'contact-avatars'        => 'contact-avatars',
+    'contact-avatar-item'    => 'contact-avatar-item',
 
-    'form'           => 'contact-form',
-    'form-field'     => 'contact-form-field',
-    'form-textarea'  => 'contact-form-textarea',
-    'counter'        => 'contact-counter',
-    'privacy'        => 'contact-privacy',
-    'submit'         => 'contact-submit',
-    'container'      => 'contact-container'
+    'contact-form'           => 'contact-form',
+    'contact-form-field'     => 'contact-form-field',
+    'contact-form-textarea'  => 'contact-form-textarea',
+    'contact-counter'        => 'contact-counter',
+
+    'contact-privacy'        => 'contact-privacy',
+    'contact-submit'         => 'contact-submit',
+    'contact-container'      => 'contact-container',
+    'contact-subtitle'       => 'contact-subtitle'
 ];
 
 /* Подключение кастомных классов из modules.json */
@@ -34,7 +36,7 @@ $classes = $default_classes;
 
 if (file_exists($modules_file)) {
     $modules = json_decode(file_get_contents($modules_file), true);
-    $classes = array_merge($default_classes, $modules['contact_form'] ?? []);
+    $classes = array_merge($default_classes, $modules['contact'] ?? []);
 }
 
 
@@ -56,10 +58,16 @@ $form_phone_placeholder  = get_field('form_phone_placeholder');
 $form_email_placeholder  = get_field('form_email_placeholder');
 $form_message_placeholder = get_field('form_message_placeholder');
 
-$subtitle                = get_field('subtitle');  // теперь идёт перед textarea
-$form_counter_label      = get_field('form_counter_label');
+$subtitle                = get_field('subtitle');
+$form_counter_label_raw  = get_field('form_counter_label');
 $form_privacy            = get_field('form_privacy_text');
 $form_submit_text        = get_field('form_submit_text');
+
+/* Лимит символов */
+$char_limit = intval($form_counter_label_raw);
+if ($char_limit < 1) {
+    $char_limit = 500;
+}
 
 
 /* ===========================
@@ -111,29 +119,29 @@ if ($linkedin_link) {
 
 ?>
 
-<section class="<?= esc_attr($classes['section']) ?>">
-<div class="container <?= esc_attr($classes['container']) ?>">
+<section class="<?= esc_attr($classes['contact-section']) ?>">
+<div class="container <?= esc_attr($classes['contact-container']) ?>">
 
     <!-- Заголовки -->
-    <div class="<?= esc_attr($classes['titles']) ?>">
+    <div class="<?= esc_attr($classes['contact-titles']) ?>">
 
         <?php if ($small): ?>
-            <div class="<?= esc_attr($classes['title-small']) ?>"><?= esc_html($small) ?></div>
+            <div class="<?= esc_attr($classes['contact-title-small']) ?>"><?= esc_html($small) ?></div>
         <?php endif; ?>
 
         <?php if ($medium): ?>
-            <div class="<?= esc_attr($classes['title-medium']) ?>"><?= esc_html($medium) ?></div>
+            <div class="<?= esc_attr($classes['contact-title-medium']) ?>"><?= esc_html($medium) ?></div>
         <?php endif; ?>
 
         <?php if ($big): ?>
-            <div class="<?= esc_attr($classes['title-big']) ?>"><?= esc_html($big) ?></div>
+            <div class="<?= esc_attr($classes['contact-title-big']) ?>"><?= esc_html($big) ?></div>
         <?php endif; ?>
 
     </div>
 
 
     <!-- Контакты -->
-    <div class="<?= esc_attr($classes['contacts']) ?>">
+    <div class="<?= esc_attr($classes['contact-list']) ?>">
 
         <?php if ($email_link): ?>
         <div class="<?= esc_attr($classes['contact-item']) ?>">
@@ -167,13 +175,13 @@ if ($linkedin_link) {
 
     <!-- Аватары -->
     <?php if (!empty($avatars) && is_array($avatars)): ?>
-    <div class="<?= esc_attr($classes['avatars']) ?>">
+    <div class="<?= esc_attr($classes['contact-avatars']) ?>">
         <?php foreach ($avatars as $avatar):
             $img_data = $avatar['avatar_image'] ?? false;
             $img_id   = $img_data['ID'] ?? false;
             if (!$img_id) continue;
         ?>
-            <div class="<?= esc_attr($classes['avatar-item']) ?>">
+            <div class="<?= esc_attr($classes['contact-avatar-item']) ?>">
                 <?= wp_get_attachment_image($img_id, 'thumbnail', false, ['alt' => 'avatar']) ?>
             </div>
         <?php endforeach; ?>
@@ -182,42 +190,43 @@ if ($linkedin_link) {
 
 
     <!-- Форма -->
-    <form class="<?= esc_attr($classes['form']) ?>">
+    <form class="<?= esc_attr($classes['contact-form']) ?>">
 
-        <label class="<?= esc_attr($classes['form-field']) ?>">
+        <label class="<?= esc_attr($classes['contact-form-field']) ?>">
             <?= esc_html($form_name_label) ?>
             <input type="text" name="name"
                    placeholder="<?= esc_attr($form_name_placeholder) ?>">
         </label>
 
-        <label class="<?= esc_attr($classes['form-field']) ?>">
+        <label class="<?= esc_attr($classes['contact-form-field']) ?>">
             <?= esc_html($form_phone_label) ?>
             <input type="text" name="phone"
                    placeholder="<?= esc_attr($form_phone_placeholder) ?>">
         </label>
 
-        <label class="<?= esc_attr($classes['form-field']) ?>">
+        <label class="<?= esc_attr($classes['contact-form-field']) ?>">
             <?= esc_html($form_email_label) ?>
             <input type="email" name="email"
                    placeholder="<?= esc_attr($form_email_placeholder) ?>">
         </label>
 
-        <!-- subtitle теперь здесь -->
         <?php if ($subtitle): ?>
-            <p class="<?= esc_attr($classes['subtitle']) ?>"><?= esc_html($subtitle) ?></p>
+            <p class="<?= esc_attr($classes['contact-subtitle']) ?>"><?= esc_html($subtitle) ?></p>
         <?php endif; ?>
 
-        <label class="<?= esc_attr($classes['form-textarea']) ?>">
+        <label class="<?= esc_attr($classes['contact-form-textarea']) ?>">
             <?= esc_html($form_message_label) ?>
             <textarea name="message"
-                      maxlength="500"
+                      maxlength="<?= esc_attr($char_limit) ?>"
                       placeholder="<?= esc_attr($form_message_placeholder) ?>"></textarea>
-            <span class="<?= esc_attr($classes['counter']) ?>"><?= esc_html($form_counter_label) ?></span>
+            <span class="<?= esc_attr($classes['contact-counter']) ?>">
+                0 / <?= esc_html($char_limit) ?>
+            </span>
         </label>
 
-        <p class="<?= esc_attr($classes['privacy']) ?>"><?= esc_html($form_privacy) ?></p>
+        <p class="<?= esc_attr($classes['contact-privacy']) ?>"><?= esc_html($form_privacy) ?></p>
 
-        <button type="submit" class="<?= esc_attr($classes['submit']) ?>">
+        <button type="submit" class="<?= esc_attr($classes['contact-submit']) ?>">
             <?= esc_html($form_submit_text) ?>
         </button>
 
@@ -226,5 +235,4 @@ if ($linkedin_link) {
 </div>
 </section>
 
-<!-- Подключение counter.js -->
 <script src="<?= get_template_directory_uri(); ?>/inc/acf/blocks/contact_form/contact.js"></script>
