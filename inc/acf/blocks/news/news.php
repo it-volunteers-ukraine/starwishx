@@ -147,7 +147,7 @@ if (file_exists($modules_file)) {
                             <?php endif; ?>
                         </div>
                     </div>
-                <? endforeach; ?>
+                <?php endforeach; ?>
             </div>
             <a href="<?php esc_url($btn_url); ?>" class="btn <?php echo esc_attr($classes['btn2']); ?>"><?php echo esc_html($btn_text); ?></a>
         <?php endif; ?>
