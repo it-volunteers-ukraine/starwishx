@@ -141,7 +141,6 @@
 .footer-logo-container {
   position: relative;
   display: inline-flex;
-  overflow: hidden;
 }
 
 :root {
@@ -149,8 +148,13 @@
 }
 
 @keyframes spin {
-  0% { --angle: 0deg; }
-  100% { --angle: 360deg; }
+  0% {
+    --angle: 0deg;
+  }
+
+  100% {
+    --angle: 360deg;
+  }
 }
 
 .footer-logo {
@@ -242,21 +246,21 @@
 
   background:
     conic-gradient(
-      from var(--angle) at 50% 50%,
-      #000 0deg,
-      #fff 43.53deg,
-      #000 90deg,
-      #fff 135deg,
-      #000 180deg,
-      #fff 223.7deg,
-      #000 270.1deg,
-      #fff 313.17deg,
-      #000 360deg
+      from 90deg at 50% 50%,
+      #b6d0f7 0deg,
+      #eef4e1 15deg,
+      #fafcfe 161deg,
+      #e2c1f9 171deg,
+      #bfd1f9 190.8deg,
+      #fafcfe 270deg,
+      #bae4e2 350deg,
+      #b6d0f7 360deg
     );
   -webkit-text-fill-color: transparent;
   background-clip: text;
   color: transparent;
-  background-blend-mode: screen;
+
+  /* background-blend-mode: screen; */
   animation: spin 6s linear infinite;
 }
 
