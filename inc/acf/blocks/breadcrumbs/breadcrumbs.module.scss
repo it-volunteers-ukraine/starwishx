@@ -11,34 +11,21 @@
 }
 
 .item {
-  display: inline;
-  font-family: $text-light;
+
 }
 
-.item + .item::before {
-  padding: 0 4px;
-  color: $icon-color-accent;
-  content: " > ";
-}
-
+/*
 .item.selected span {
   color: $icon-color-accent;
   border-bottom: 1px solid $icon-color-accent;
 }
-
-.link {
-  transition: all $animations;
-  border-bottom: 1px solid transparent;
+*/
+.item {
+  display: flex;
+  align-items: center;
 }
 
-.link:hover {
-  color: darkred;
-  border-bottom: 1px solid red;
-}
-
-.link:active {
-  color: darkred;
-  border-bottom: 2px solid red;
+.item:not*:first-child {
 }
 
 /*

@@ -8,6 +8,10 @@ $default_classes = [
     'link' => 'link'
 ];
 
+echo 'dasdasda';
+$ur = get_permalink();
+print_r('wp_reques: ', get_permalink());
+
 $modules_file = get_template_directory() . '/assets/css/blocks/modules.json';
 $classes = $default_classes;
 
@@ -28,13 +32,13 @@ $active_title = get_the_title();
 <section class="section <?php echo esc_attr($classes["section"]); ?>">
     <div class="container">
         <nav>
-            <ul class="<?php echo esc_attr($classes["list"]); ?>">
+            <ul class="text-r <?php echo esc_attr($classes["list"]); ?>">
                 <li class="<?php echo esc_attr($classes["item"]); ?>">
-                    <a class="<?php echo esc_attr($classes["link"]); ?>" href="<?php echo esc_url($home_url); ?>">
+                    <a class="link-bc" href="<?php echo esc_url($home_url); ?>">
                         <?php echo esc_html($home_title); ?>
                     </a>
                 </li>
-                <li class="<?php echo esc_attr($classes["item"] . ' ' . $classes["selected"]); ?>">
+                <li class="link-bc-selected <?php echo esc_attr($classes["item"]); ?>">
                     <span>
                         <?php echo esc_html($active_title); ?>
                     </span>
