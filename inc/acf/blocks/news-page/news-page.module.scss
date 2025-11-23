@@ -222,6 +222,7 @@
     display: none;
   }
 }
+
 .bycat-img-wrap {
   margin-bottom: 12px;
   height: 250px;
@@ -382,7 +383,6 @@
   .section:last-of-type {
     padding-bottom: 120px;
   }
-
 }
 
 @include min-tablet {
@@ -395,4 +395,3 @@
   margin-top: 20px;
   padding: 10px 0;
 }
-
