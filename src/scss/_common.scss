@@ -1,10 +1,11 @@
 @use "variables" as *;
 @use "mixins/color" as *;
+@use "mixins/media";
 
 * {
+  box-sizing: border-box;
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
   -webkit-tap-highlight-color: transparent;
 }
 
@@ -13,8 +14,14 @@ html {
 }
 
 body {
-  font-family: Inter, sans-serif;
+  color: $text-basic;
   font-style: normal;
+  font-size: 16px;
+  font-family: Inter, sans-serif;
+
+  @include media.min-desktop {
+    font-size: 18px;
+  }
 }
 
 .h-100 {
@@ -25,293 +32,269 @@ body {
 .h1 {
   font-weight: 300;
   font-size: 54px;
-  line-height: 100%;
+  line-height: 1;
+
+  @include media.min-tablet {
+    font-size: 64px;
+  }
+
+  @include media.min-desktop {
+    font-size: 88px;
+  }
 }
 
 .h2-big {
   font-weight: 400;
   font-size: 36px;
-  line-height: 120%;
+  line-height: 1.2;
+
+  @include media.min-tablet {
+    color: $text-dark;
+    font-size: 48px;
+  }
+
+  @include media.min-desktop {
+    font-weight: 300;
+    font-size: 64px;
+  }
 }
 
 .h3 {
   font-weight: 400;
   font-size: 32px;
-  line-height: 120%;
+  line-height: 1.2;
+
+  @include media.min-tablet {
+    font-size: 40px;
+  }
+
+  @include media.min-desktop {
+    font-size: 54px;
+  }
 }
 
 .h4 {
   font-weight: 500;
   font-size: 28px;
-  line-height: 120%;
+  line-height: 1.2;
+
+  @include media.min-tablet {
+    font-size: 32px;
+  }
+
+  @include media.min-desktop {
+    font-size: 44px;
+  }
 }
 
 .h5 {
   font-weight: 500;
   font-size: 24px;
-  line-height: 120%;
+  line-height: 1.2;
+
+  @include media.min-desktop {
+    font-size: 36px;
+  }
 }
 
 .label-subtitle {
   display: inline-flex;
   align-items: center;
-  font-size: 14px;
-  font-weight: 400;
-  line-height: 1.2;
-  text-transform: uppercase;
-  color: $element-block-text;
-  padding: 6px 10px;
   border-radius: 40px;
   background-color: $element-block-fill;
+  padding: 6px 10px;
+  color: $element-block-text;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1.2;
+  text-transform: uppercase;
 
   &::before {
-    content: "";
+    margin-right: 6.5px;
+    border-radius: 50%;
+    background-color: $element-block-text;
     width: 4px;
     height: 4px;
-    background-color: $element-block-text;
-    border-radius: 50%;
-    margin-right: 6.5px;
+    content: "";
+  }
+
+  @include media.min-tablet {
+    margin-bottom: 10px;
+  }
+
+  @include media.min-laptop {
+    margin-bottom: 20px;
+  }
+
+  @include media.min-desktop {
+    padding: 8px 12px;
+    font-size: 16px;
+
+    &::before {
+      margin-right: 6px;
+      width: 6px;
+      height: 6px;
+    }
   }
 }
 
 .subtitle-text-r {
   font-weight: 400;
   font-size: 20px;
-  line-height: 130%;
+  line-height: 1.3;
+
+  @include media.min-desktop {
+    font-size: 24px;
+    line-height: 1.2;
+  }
 }
 
 .subtitle-text-m {
   font-weight: 500;
   font-size: 20px;
-  line-height: 120%;
+  line-height: 1.2;
+
+  @include media.min-desktop {
+    font-size: 24px;
+  }
 }
 
 .subtitle-text-semibold {
   font-weight: 600;
   font-size: 20px;
-  line-height: 120%;
+  line-height: 1.2;
+
+  @include media.min-desktop {
+    font-size: 24px;
+  }
 }
 
 .big-text-semibold {
   font-weight: 600;
   font-size: 18px;
-  line-height: 120%;
+  line-height: 1.2;
+
+  @include media.min-desktop {
+    font-size: 20px;
+  }
 }
 
 .big-text-m {
   font-weight: 500;
   font-size: 18px;
-  line-height: 120%;
+  line-height: 1.2;
+
+  @include media.min-desktop {
+    font-size: 20px;
+  }
 }
 
 .big-text-r {
   font-weight: 400;
   font-size: 18px;
-  line-height: 120%;
+  line-height: 1.2;
+
+  @include media.min-desktop {
+    font-size: 20px;
+  }
 }
 
 .text-r {
   font-weight: 400;
   font-size: 16px;
-  line-height: 130%;
+  line-height: 1.3;
+
+  @include media.min-desktop {
+    font-size: 18px;
+  }
 }
 
 .btn-text-medium {
   font-weight: 500;
   font-size: 16px;
-  line-height: 120%;
+  line-height: 1.2;
+
+  @include media.min-desktop {
+    font-size: 18px;
+  }
 }
 
 .subtitle-big-r {
   font-weight: 400;
   font-size: 14px;
-  line-height: 120%;
+  line-height: 1.2;
+
+  @include media.min-desktop {
+    font-size: 16px;
+  }
 }
 
 .subtitle-big-semi {
   font-weight: 600;
   font-size: 14px;
-  line-height: 120%;
+  line-height: 1.2;
+
+  @include media.min-desktop {
+    font-size: 16px;
+  }
 }
 
 .text-small {
   font-weight: 400;
   font-size: 14px;
-  line-height: 120%;
+  line-height: 1.2;
+
+  @include media.min-desktop {
+    font-size: 16px;
+  }
 }
 
 /* btns */
 .btn {
   display: flex;
   justify-content: center;
-  width: fit-content;
   align-items: center;
-  color: $buttons-color-text-primary-default;
-  font-size: 16px;
-  font-weight: 500;
-  padding: 12.5px 24px;
-  background-color: $buttons-color-background-primary-default;
-  border-radius: 40px;
   transition: $animations;
+  border-radius: 40px;
+  background-color: $buttons-color-background-primary-default;
+  padding: 12.5px 24px;
+  width: fit-content;
+  color: $buttons-color-text-primary-default;
+  font-weight: 500;
+  font-size: 16px;
 
   &:hover {
     background-color: $buttons-color-background-primary-hover;
   }
 
-  &:active:not(:focus) {
+  &:active,
+  &:active:hover {
     background-color: $buttons-color-background-primary-pressed;
   }
-}
 
-/* --- Tablet --- от 768px */
-@media screen and (min-width: 768px) {
-  .h1 {
-    font-size: 64px;
-  }
-
-  .h2-big {
-    font-size: 48px;
-    color: $text-dark;
-  }
-
-  .h3 {
-    font-size: 40px;
-  }
-
-  .h4 {
-    font-size: 32px;
-  }
-
-  .h5 {
-    font-size: 24px;
-  }
-
-  .label-subtitle {
-    margin-bottom: 10px;
-  }
-
-  .subtitle-text-r,
-  .subtitle-text-m,
-  .subtitle-text-semibold {
-    font-size: 20px;
-  }
-
-  .big-text-semibold,
-  .big-text-m,
-  .big-text-r {
+  @include media.min-desktop {
     font-size: 18px;
-  }
-
-  .text-r {
-    font-size: 16px;
-  }
-
-  .btn-text-medium {
-    font-size: 16px;
-  }
-
-  .subtitle-big-r,
-  .subtitle-big-semi,
-  .text-small {
-    font-size: 14px;
-  }
-}
-
-@media screen and (min-width: 1440px) {
-  .label-subtitle {
-    margin-bottom: 20px;
-  }
-}
-
-/* --- Desktop --- от 1920px */
-@media screen and (min-width: 1920px) {
-  .h1 {
-    font-size: 88px;
-  }
-
-  .h2-big {
-    font-size: 64px;
-    font-weight: 300;
-  }
-
-  .h3 {
-    font-size: 54px;
-  }
-
-  .h4 {
-    font-size: 44px;
-  }
-
-  .h5 {
-    font-size: 36px;
-  }
-
-  .btn {
-    font-size: 18px;
-  }
-
-  .subtitle-text-r,
-  .subtitle-text-m,
-  .subtitle-text-semibold {
-    font-size: 24px;
-  }
-
-  .big-text-semibold,
-  .big-text-m,
-  .big-text-r {
-    font-size: 20px;
-  }
-
-  .text-r {
-    font-size: 18px;
-  }
-
-  .btn-text-medium {
-    font-size: 18px;
-  }
-
-  .subtitle-big-r,
-  .subtitle-big-semi,
-  .text-small {
-    font-size: 16px;
-  }
-
-  .label-subtitle {
-    font-size: 16px;
-    padding: 8px 12px;
-
-    &::before {
-      width: 6px;
-      height: 6px;
-      margin-right: 6px;
-    }
   }
 }
 
 .section {
   padding: 80px 0;
-}
 
-@media (min-width: 1920px) {
-  .section {
+  @include media.min-desktop {
     padding: 120px 0;
   }
 }
 
 .container {
-  width: auto;
-  padding: 0 16px;
   margin: 0 auto;
-}
+  padding: 0 16px;
+  width: auto;
 
-@media screen and (min-width: 768px) {
-  .container {
+  @include media.min-tablet {
     padding: 0 40px;
   }
-}
 
-@media screen and (min-width: 1920px) {
-  .container {
+  @include media.min-desktop {
     padding: 0 80px;
   }
 }
@@ -321,9 +304,13 @@ img {
 }
 
 .site-main {
-  margin-top: 112px;
+  /* @media screen and (min-width: 601px) {
+    margin-top: var(--wp-admin--admin-bar--height, 0);
+  } */
 
-  @media screen and (max-width: 768px) {
+  /*  margin-top: 112px;
+
+  @include media.max-tablet {
     margin-top: 98px;
   }
 }
@@ -331,7 +318,52 @@ img {
 .admin-bar .site-main {
   margin-top: 80px;
 
-  @media screen and (max-width: 768px) {
+  @include media.max-tablet {
     margin-top: 52px;
-  }
+  } */
+}
+
+/* --- Tablet --- from 768px */
+
+/*
+@media screen and (min-width: 768px) {
+}
+*/
+
+/* --- Laptop --- from 1440px */
+
+/*
+@media screen and (min-width: 1440px) {
+}
+*/
+
+/* --- Desktop --- from 1920px */
+
+/*
+@media screen and (min-width: 1920px) {
+}
+*/
+
+/* ************************************************************** */
+
+/* Свайпер */
+.swiper-paginations {
+  text-align: center;
+  margin-top: 16px;
+  line-height: 0;
+}
+
+.swiper-pagination-bullet {
+  width: 20px;
+  height: 4px;
+  background-color: $text-light;
+  border-radius: 2px;
+  opacity: 1;
+}
+
+/* Активный буллет */
+.swiper-pagination-bullet-active {
+  background-color: $icon-color-fill;
+
+  // background-image: url('icon-active.svg');
 }

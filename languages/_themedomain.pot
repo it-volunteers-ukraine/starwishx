@@ -6,13 +6,21 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2025-10-13 19:28+0000\n"
+"POT-Creation-Date: 2025-11-10 22:41+0000\n"
 "X-Poedit-Basepath: ..\n"
 "X-Poedit-KeywordsList: __;_e;_ex:1,2c;_n:1,2;_n_noop:1,2;_nx:1,2,4c;_nx_noop:1,2,3c;_x:1,2c;esc_attr__;esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c\n"
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-SearchPathExcluded-0: *.js\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: 404.php:10
+msgid "Схоже сторінка, яку Ви шукаєте, не існує."
+msgstr ""
+
+#: 404.php:23
+msgid "На головну сторінку"
+msgstr ""
 
 #: functions.php:14
 msgid "Primary"
@@ -26,6 +34,46 @@ msgstr ""
 msgid "Footer"
 msgstr ""
 
+#: functions.php:223
+msgid "Пошук"
+msgstr ""
+
+#: functions.php:238
+msgid "Мова"
+msgstr ""
+
+#: inc/acf/blocks/accordion-one-photo/register.php:4
+msgid "Block accordion one photo"
+msgstr ""
+
+#: inc/acf/blocks/accordion-one-photo/register.php:5
+msgid "Block accordion with one photo"
+msgstr ""
+
+#: inc/acf/blocks/accordion-two-photo-compact/register.php:4
+msgid "Block accordion two photo compact"
+msgstr ""
+
+#: inc/acf/blocks/accordion-two-photo-compact/register.php:5
+msgid "Block accordion with two photo compact"
+msgstr ""
+
+#: inc/acf/blocks/accordion-two-photo/register.php:4
+msgid "Block accordion two photo"
+msgstr ""
+
+#: inc/acf/blocks/accordion-two-photo/register.php:5
+msgid "Block accordion with two photo"
+msgstr ""
+
+#: inc/acf/blocks/animated-text/register.php:4
+msgid "Animated Text"
+msgstr ""
+
+#: inc/acf/blocks/animated-text/register.php:5
+msgid "Block for displaying animated text on the homepage"
+msgstr ""
+
 #: inc/acf/blocks/blocks-init.php:11
 msgid "Custom Blocks"
 msgstr ""
@@ -34,12 +82,12 @@ msgstr ""
 msgid "CCC Blocks"
 msgstr ""
 
-#: inc/acf/blocks/blocks-init.php:129
-msgid "faq"
+#: inc/acf/blocks/faq/register.php:4
+msgid "FAQ Block"
 msgstr ""
 
-#: inc/acf/blocks/blocks-init.php:130
-msgid "Block faq"
+#: inc/acf/blocks/faq/register.php:5
+msgid "Frequently Asked Questions Block"
 msgstr ""
 
 #: inc/acf/blocks/photo-text/register.php:4
@@ -48,6 +96,14 @@ msgstr ""
 
 #: inc/acf/blocks/photo-text/register.php:5
 msgid "Block with title, photo, text and contact"
+msgstr ""
+
+#: inc/acf/blocks/projects/register.php:4
+msgid "Projects Banner (Static)"
+msgstr ""
+
+#: inc/acf/blocks/projects/register.php:5
+msgid "Static banner with 4 manually filled project cards"
 msgstr ""
 
 #. translators: %s: search query.

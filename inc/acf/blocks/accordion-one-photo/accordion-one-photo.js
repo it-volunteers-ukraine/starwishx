@@ -4,9 +4,10 @@ function detectMouse() {
 
 
 const noMouse = !detectMouse();
-const isClickModeForTouch = document.getElementById("slider-one-photo").dataset.clickMode == true ? true : false;
-// console.log("clickMode: ", document.getElementById("slider-one-photo").dataset.clickMode)
-// console.log("click-mode: ", isClickModeForTouch, typeof isClickModeForTouch);
+const isClickModeForTouch = document.getElementById("slider-one-photo").dataset.clickMode == 'true' ? true : false;
+// console.log("clickMode: ", document.getElementById("slider-one-photo").dataset.clickMode);
+// console.log("noMouse: ", noMouse);
+// console.log("isClickModeForTouch: ", isClickModeForTouch, typeof isClickModeForTouch);
 
 // const sliderss = document.querySelectorAll("#slider-one-photo"); // лучше использовать класс
 const items = document.getElementById("slider-one-photo").children; // лучше использовать класс
@@ -94,7 +95,7 @@ requestAnimationFrame(() => {
             })
         }
 
-        // Если включенок 
+        // Если включено Click mode
         if (isClickModeForTouch && noMouse) {
             item.children[0].addEventListener("click", () => {
                 const curClick = item.children[0];

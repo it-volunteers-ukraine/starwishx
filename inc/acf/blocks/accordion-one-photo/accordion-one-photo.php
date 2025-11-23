@@ -33,6 +33,7 @@ $btn_text = get_field('btn_text');
 $btn_url = get_field('btn_page');
 
 $is_mode_click_for_touch = get_field('mode_click_for_touch');
+
 // if ($is_mode_click_for_touch){
 //     print_r("Click mode: true");
 
@@ -55,7 +56,7 @@ if (file_exists($modules_file)) {
 <section class="section <?php echo esc_attr($classes['section']); ?> ">
     <div class="container ">
         <?php if ($items) : ?>
-            <div class="label-subtitle <?php echo esc_attr($classes['subtitle']); ?>"><?php echo esc_html($subtitle); ?></div>
+            <div class="<?php echo esc_attr($classes['subtitle']); ?>"><?php echo esc_html($subtitle); ?></div>
             <div class="<?php echo esc_attr($classes['title-wrap']); ?>">
                 <h2 class="h2-big <?php echo esc_attr($classes['main-title']); ?>"><?php echo esc_html($main_title); ?></h2>
                 <a href="<?php esc_url($btn_url); ?>" class="btn <?php echo esc_attr($classes['btn1']); ?>"><?php echo esc_html($btn_text); ?></a>
@@ -67,7 +68,7 @@ if (file_exists($modules_file)) {
                     <?php
                     $count++;
                     $title = $item['title'];
-                    $text = $item['text'];
+                    $text = trim(esc_html($item['text']));
                     $photo1_url = $item['photo1']["sizes"]['large'];
                     $photo1_alt = $item['photo1']['alt'] ?: $item['photo1']['title'];
                     ?>
@@ -75,13 +76,12 @@ if (file_exists($modules_file)) {
                         <?php if ($title) : ?>
                             <div class="<?php echo esc_attr($classes['block-title']); ?>">
                                 <div class="<?php echo esc_attr($classes['count']); ?>"><?php echo sprintf("%02d", $count); ?></div>
-                                <h5 class="h5 <?php echo esc_attr($classes['title']); ?>"><?php echo esc_html($title); ?></h2>
+                                <h3 class="h5 <?php echo esc_attr($classes['title']); ?>"><?php echo esc_html($title); ?></h3>
                             </div>
                         <?php endif; ?>
                         <div class="<?php echo esc_attr($classes['content']); ?>">
                             <?php if ($text) : ?>
                                 <div class="<?php echo esc_attr($classes['text']); ?>">
-                                    <?php echo $text; ?>
                                     <?php echo $text; ?>
                                 </div>
                             <?php endif; ?>

@@ -3,40 +3,11 @@ $width-laptop: 1440px;
 $width-tablet: 768px;
 $width-mobile: 375px;
 
-@mixin desktop {
-   @media only screen and (min-width: ($width-laptop + 1)) {
+@mixin min-desktop {
+   @media only screen and (min-width: ($width-desktop)) {
       @content;
    }
 }
-@mixin laptop {
-   @media only screen and (min-width: ($width-tablet + 1)) and (max-width: $width-laptop) {
-      @content;
-   }
-}
-
-@mixin tablet {
-   @media only screen and (min-width: ($width-mobile + 1)) and (max-width: $width-tablet) {
-      @content;
-   }
-}
-
-@mixin mobile {
-   @media only screen and (max-width: $width-mobile) {
-      @content;
-   }
-}
-
-@mixin max-desktop {
-   @media only screen and (max-width: ($width-desktop)) {
-      @content;
-   }
-}
-@mixin max-laptop {
-   @media only screen and (max-width: ($width-laptop)) {
-      @content;
-   }
-}
-
 @mixin min-laptop {
    @media only screen and (min-width: ($width-laptop)) {
       @content;
@@ -53,8 +24,53 @@ $width-mobile: 375px;
    }
 }
 
+@mixin max-desktop {
+   @media only screen and (max-width: ($width-desktop - 0.02px)) {
+      @content;
+   }
+}
+@mixin max-laptop {
+   @media only screen and (max-width: ($width-laptop - 0.02px)) {
+      @content;
+   }
+}
+@mixin max-tablet {
+   @media only screen and (max-width: ($width-tablet - 0.02px)) {
+      @content;
+   }
+}
+@mixin max-mobile {
+   @media only screen and (max-width: ($width-mobile - 0.02px)) {
+      @content;
+   }
+}
+
+/*
+not used dcurrently
+ for futrue use, just in case
+*/
 @mixin hover-fine {
    @media (hover: hover) and (pointer: fine) {
+      @content;
+   }
+}
+@mixin desktop {
+   @media only screen and (min-width: ($width-desktop)) {
+      @content;
+   }
+}
+@mixin laptop {
+   @media only screen and (min-width: ($width-tablet + 1)) and (max-width: $width-laptop) {
+      @content;
+   }
+}
+@mixin tablet {
+   @media only screen and (min-width: ($width-mobile + 1)) and (max-width: $width-tablet) {
+      @content;
+   }
+}
+@mixin mobile {
+   @media only screen and (max-width: $width-mobile) {
       @content;
    }
 }

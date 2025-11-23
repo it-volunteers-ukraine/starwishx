@@ -1,0 +1,74 @@
+@use "../../../../src/scss/variables" as *;
+@use "../../../../src/scss/mixins/media" as *;
+
+.animated-text-section {
+  background: $surface-violet;
+  padding: 120px 0;
+  border-radius: 48px;
+}
+
+.animated-text-content {
+  p,
+  h1,
+  h2,
+  h3,
+  h4,
+  h5 {
+    text-transform: uppercase;
+
+    /* text-align: center; */
+    color: $text-basic;
+    font-size: 36px;
+    font-weight: 400;
+    line-height: 120%;
+    letter-spacing: 1px;
+  }
+}
+
+@include min-tablet {
+  .animated-text-content {
+    p,
+    h1,
+    h2,
+    h3,
+    h4,
+    h5 {
+      font-size: 48px;
+    }
+  }
+}
+
+@include min-laptop {
+  .animated-text-content {
+    p,
+    h1,
+    h2,
+    h3,
+    h4,
+    h5 {
+      width: 900px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+  }
+}
+
+@include min-desktop {
+  .animated-text-section {
+    padding: 160px 0;
+    border-radius: 64px;
+  }
+
+  .animated-text-content {
+    p,
+    h1,
+    h2,
+    h3,
+    h4,
+    h5 {
+      width: 1166px;
+      font-size: 64px;
+      font-weight: 300;
+    }
+  }
+}

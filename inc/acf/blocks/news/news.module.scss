@@ -1,0 +1,181 @@
+@use "../../../../src/scss/variables" as *;
+@use "../../../../src/scss/common" as *;
+@use "../../../../src/scss/mixins/label";
+@use "../../../../src/scss/mixins/media";
+@use "../../../../src/scss/mixins/indents";
+
+.btn1 {
+  display: none;
+}
+
+.btn2 {
+  display: flex;
+  margin: 0 auto;
+}
+
+.subtitle {
+  @include label.label-dot;
+  @include indents.label-subtitle;
+}
+
+.title-wrap {
+  margin-bottom: 32px;
+}
+
+.title {
+  text-transform: uppercase;
+  color: $text-dark;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 30px;
+}
+
+.item {
+  width: 100%;
+  padding: 12px;
+  background-color: $surface-violet;
+  border-radius: 12px;
+
+  @media screen and (max-width: 992.9px) {
+    &:nth-child(n + 4) {
+      display: none;
+    }
+  }
+}
+
+.photo-wrap {
+  margin-bottom: 20px;
+  position: relative;
+  width: 100%;
+  height: 280px;
+}
+
+.photo-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 12px;
+}
+
+.item-label {
+  @include label.label(var(--label-color), var(--label-bg));
+
+  position: absolute;
+  left: 8px;
+  top: 8px;
+}
+
+.item-date {
+  /* @extend .text-small; */
+
+  margin-bottom: 20px;
+  color: $text-light;
+}
+
+.item-title {
+  /* @extend .btn-text-medium; */
+
+  display: box;
+  min-height: calc(1.2em * 3);
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3; /* максимум 3 строки */
+  overflow: hidden;
+}
+
+@media screen and (min-width: 576px) {
+  .list {
+    flex-flow: row wrap;
+  }
+
+  @media screen and (max-width: 1439.9px) {
+    .item {
+      &:nth-child(6n + 1),
+      &:nth-child(6n + 6) {
+        width: 100%;
+      }
+
+      &:nth-child(6n + 2),
+      &:nth-child(6n + 3),
+      &:nth-child(6n + 4),
+      &:nth-child(6n + 5) {
+        width: 30%;
+        width: calc(100% / 2 - 9px);
+      }
+    }
+  }
+}
+
+@media screen and (min-width: 768px) {
+  .subtitle {
+    margin-bottom: 10px;
+  }
+
+  .title-wrap {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+}
+
+/*
+@media screen and (min-width: 992px) {
+}
+*/
+
+@media screen and (min-width: 1440px) {
+  .btn1 {
+    display: flex;
+  }
+
+  .btn2 {
+    display: none;
+  }
+
+  .subtitle {
+    margin-bottom: 20px;
+  }
+
+  .list {
+    gap: 20px;
+  }
+
+  .item {
+    display: block;
+
+    &:nth-child(6n + 1),
+    &:nth-child(6n + 6) {
+      width: calc(50% - 8px);
+    }
+
+    &:nth-child(6n + 2),
+    &:nth-child(6n + 3),
+    &:nth-child(6n + 4),
+    &:nth-child(6n + 5) {
+      width: 30%;
+      width: calc(50% / 2 - 16px);
+    }
+  }
+
+  .photo-wrap {
+    height: calc(19.38vw + 1px);
+  }
+}
+
+@media screen and (min-width: 1920px) {
+  .title-wrap {
+    margin-bottom: 40px;
+  }
+
+  .item-title {
+    min-height: calc(1.2em * 4);
+    -webkit-line-clamp: 4; /* максимум 3 строки */
+  }
+
+  .photo-wrap {
+    height: 19.429vw;
+  }
+}

@@ -36,7 +36,7 @@ if (file_exists($modules_file)) {
 <section class="section ">
     <div class="container <?php echo esc_attr($classes['container']); ?>">
         <?php if ($title) : ?>
-            <h2 class="<?php echo esc_attr($classes['title']); ?>"><?php echo $title; ?></h2>
+            <h2 class="h3 <?php echo esc_attr($classes['title']); ?>"><?php echo $title; ?></h2>
         <?php endif; ?>
         <div class="<?php echo esc_attr($classes['content']); ?>">
             <?php if ($photo_url) : ?>
@@ -51,33 +51,11 @@ if (file_exists($modules_file)) {
                         <?php echo esc_html($text); ?>
                     </p>
                 <?php endif; ?>
-                <!-- <?php if ($contacts_list) : ?> -->
-                <!-- <div class="<?php echo esc_attr($classes['contacts']); ?>"> -->
-                <!-- <ul> -->
-                <!-- <?php foreach ($contacts_list as $contact) :
-                                $contact_name = $contact['name'];
-                                $contact_link = $contact['link'];
-                        ?> -->
-                <!-- <li> -->
-                <!-- <?php if ($contact_link) : ?> -->
-                <!-- <a href="<?php echo esc_url($contact_link); ?>"><?php echo esc_html($contact_name); ?></a> -->
-                <!-- <?php else : ?> -->
-                <!-- <?php echo esc_html($contact_name); ?> -->
-                <!-- <?php endif; ?> -->
-                <!-- </li> -->
-                <!-- <?php endforeach; ?> -->
-                <!-- </ul> -->
-                <!-- </div> -->
-                <!-- <?php endif; ?> -->
-                <!-- <svg class="<?php echo esc_attr($classes['icon']); ?>">
-                    <use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-element_planet_3"></use>
-                </svg> -->
                 <div class="<?php echo esc_attr($classes['icon']); ?>">
                     <img src="<?php echo get_template_directory_uri(); ?>/assets/img/star1-bg.png" class="<?php echo esc_attr($classes['icon-bg']); ?>" alt="">
                     <svg class="<?php echo esc_attr($classes['icon-mask']); ?>">
                         <use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-element_planet_3-circle"></use>
                     </svg> 
-                    <!-- <img src="<?php echo get_template_directory_uri(); ?>/assets/img/star1-icon.png" class="<?php echo esc_attr($classes['icon-mask']); ?>"> -->
                 </div>
             </div>
         </div>
