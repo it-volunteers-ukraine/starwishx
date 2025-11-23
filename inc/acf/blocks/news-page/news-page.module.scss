@@ -119,13 +119,6 @@
     'newcard-title' => 'newcard-title',
     'newcard-text' => 'newcard-text', */
 
-.newscards-item {
-  /* padding-bottom: 12px; */
-
-  /* padding-bottom: 12px;
-  width: calc(50% - 9px); */
-}
-
 .newcard-img-wrap {
   margin-bottom: 12px;
   margin-bottom: 24px;
@@ -172,7 +165,6 @@
 .newcard-text {
   color: $text-light;
 
-  /* min-height: calc(1.2em * 4); */
   /* stylelint-disable-next-line value-no-vendor-prefix */
   display: -webkit-box;
   -webkit-box-orient: vertical;
@@ -231,14 +223,6 @@
     display: none;
   }
 }
-
-.bycat-other-item .bycat-item {
-}
-
-.bycat-item {
-
-}
-
 .bycat-img-wrap {
   margin-bottom: 12px;
   height: 250px;
@@ -258,10 +242,6 @@
 
 .bycat-title {
   color: $text-basic;
-
-  /* autoprefixer: ignore next */
-
-  /* min-height: calc(1.2em * 3); */
   /* stylelint-disable-next-line value-no-vendor-prefix */
   display: -webkit-box;
   -webkit-box-orient: vertical;
@@ -304,7 +284,6 @@
 
   .bycat-section:nth-child(4n) .bycat-content,
   .bycat-section:nth-child(5n) .bycat-content {
-    /* direction: rtl; */
     grid-template-areas: "b a";
   }
 }
@@ -365,14 +344,10 @@
 
   .newscards .newscards-item:nth-last-child(2) {
     grid-column: 1 / span 1; /* левая половина */
-
-    /* background-color: red; */
   }
 
   .newscards .newscards-item:nth-last-child(1) {
     grid-column: 2 / span 2; /* правая половина */
-
-    /* background-color: orange; */
   }
 }
 
@@ -409,20 +384,6 @@
     padding-bottom: 120px;
   }
 
-  .title {
-    font-size: 56px;
-  }
-
-  .lnew-title {
-    /* min-height: calc(1.2em * 4);
-    -webkit-line-clamp: 4; */
-
-    /* максимум 3 строки */
-  }
-
-  .photo-wrap {
-    /* height: 19.429vw; */
-  }
 }
 
 @include min-tablet {
@@ -436,5 +397,3 @@
   padding: 10px 0;
 }
 
-.newscards-sw .newscards-item {
-}
