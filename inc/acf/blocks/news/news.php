@@ -27,7 +27,6 @@ $title = get_field('title');
 $label_text = get_field('label_text');
 $btn_text = get_field('btn_text');
 $btn_url = get_field('btn_page');
-echo $btn_url;
 
 $is_mode_click_for_touch = get_field('mode_click_for_touch');
 
