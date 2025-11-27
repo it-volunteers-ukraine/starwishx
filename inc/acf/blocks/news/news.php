@@ -27,6 +27,7 @@ $title = get_field('title');
 $label_text = get_field('label_text');
 $btn_text = get_field('btn_text');
 $btn_url = get_field('btn_page');
+echo $btn_url;
 
 $is_mode_click_for_touch = get_field('mode_click_for_touch');
 
@@ -110,7 +111,7 @@ if (file_exists($modules_file)) {
             <div class="<?php echo esc_attr($classes['subtitle']); ?>"><?php echo esc_html($label_text); ?></div>
             <div class="<?php echo esc_attr($classes['title-wrap']); ?>">
                 <h2 class="h2-big <?php echo esc_attr($classes['title']); ?>"><?php echo esc_html($title); ?></h2>
-                <a href="<?php esc_url($btn_url); ?>" class="btn <?php echo esc_attr($classes['btn1']); ?>"><?php echo esc_html($btn_text); ?></a>
+                <a href="<?php echo esc_url($btn_url); ?>" class="btn <?php echo esc_attr($classes['btn1']); ?>"><?php echo esc_html($btn_text); ?></a>
             </div>
 
             <div class="<?php echo esc_attr($classes['list']); ?>">
@@ -149,7 +150,7 @@ if (file_exists($modules_file)) {
                     </div>
                 <?php endforeach; ?>
             </div>
-            <a href="<?php esc_url($btn_url); ?>" class="btn <?php echo esc_attr($classes['btn2']); ?>"><?php echo esc_html($btn_text); ?></a>
+            <a href="<?php echo esc_url($btn_url); ?>" class="btn <?php echo esc_attr($classes['btn2']); ?>"><?php echo esc_html($btn_text); ?></a>
         <?php endif; ?>
     </div>
 </section>
