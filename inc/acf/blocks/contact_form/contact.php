@@ -11,6 +11,8 @@ $default_classes = [
     'contact-section'        => 'contact-section',
     'contact-container'      => 'contact-container',
 
+    'contact-block'          => 'contact-block',
+
     'contact-titles'         => 'contact-titles',
     'contact-title-small'    => 'contact-title-small',
     'contact-title-medium'   => 'contact-title-medium',
@@ -123,65 +125,67 @@ function contact_field_label_html($text, $required, $classes) {
 }
 
 /* Helper: render svg use tag with full sprite path */
-function contact_icon_use($icon_id) {
+function contact_icon_use($icon_id, $classes = []) {
     $sprite = get_template_directory_uri() . '/assets/img/sprites.svg';
-    return '<svg class="icon" aria-hidden="true"><use xlink:href="' . esc_attr($sprite . '#' . $icon_id) . '"></use></svg>';
+    $icon_class = $classes['icon'] ?? 'icon';
+    return '<svg class="' . esc_attr($icon_class) . '" aria-hidden="true"><use xlink:href="' . esc_attr($sprite . '#' . $icon_id) . '"></use></svg>';
 }
 ?>
 
 <section class="<?= esc_attr($classes['contact-section']) ?>">
   <div class="container <?= esc_attr($classes['contact-container']) ?>">
 
-    <!-- Titles -->
-    <div class="<?= esc_attr($classes['contact-titles']) ?>">
-      <?php if ($small): ?><div class="<?= esc_attr($classes['contact-title-small']) ?>"><?= esc_html($small) ?></div><?php endif; ?>
-      <?php if ($medium): ?><div class="<?= esc_attr($classes['contact-title-medium']) ?>"><?= esc_html($medium) ?></div><?php endif; ?>
-      <?php if ($big): ?><div class="<?= esc_attr($classes['contact-title-big']) ?>"><?= esc_html($big) ?></div><?php endif; ?>
-      <?php if ($subtitle): ?><div class="<?= esc_attr($classes['contact-subtitle']) ?>"><?= esc_html($subtitle) ?></div><?php endif; ?>
-    </div>
-
-    <!-- Contacts -->
-    <div class="<?= esc_attr($classes['contact-list']) ?>">
-
-      <?php if ($email_link): ?>
-      <div class="<?= esc_attr($classes['contact-item']) ?>">
-        <?php echo contact_icon_use('icon-email'); ?>
-        <span class="<?= esc_attr($classes['contact-label']) ?>">Email:</span>
-        <a href="mailto:<?= esc_attr($email_link) ?>" class="<?= esc_attr($classes['contact-value']) ?>"><?= esc_html($email_name ?: $email_link) ?></a>
+    <div class="<?= esc_attr($classes['contact-block']) ?>">
+      <!-- Titles -->
+      <div class="<?= esc_attr($classes['contact-titles']) ?>">
+        <?php if ($small): ?><div class="<?= esc_attr($classes['contact-title-small']) ?>"><?= esc_html($small) ?></div><?php endif; ?>
+        <?php if ($medium): ?><div class="<?= esc_attr($classes['contact-title-medium']) ?>"><?= esc_html($medium) ?></div><?php endif; ?>
+        <?php if ($subtitle): ?><div class="<?= esc_attr($classes['contact-subtitle']) ?>"><?= esc_html($subtitle) ?></div><?php endif; ?>
       </div>
-      <?php endif; ?>
 
-      <?php if ($telegram_link): ?>
-      <div class="<?= esc_attr($classes['contact-item']) ?>">
-        <?php echo contact_icon_use('icon-telegram'); ?>
-        <span class="<?= esc_attr($classes['contact-label']) ?>">Telegram:</span>
-        <a href="<?= esc_url($telegram_full_url) ?>" target="_blank" class="<?= esc_attr($classes['contact-value']) ?>">@<?= esc_html($telegram_name ?: $clean_telegram) ?></a>
-      </div>
-      <?php endif; ?>
+      <!-- Contacts -->
+      <div class="<?= esc_attr($classes['contact-list']) ?>">
+        <?php if ($big): ?><div class="<?= esc_attr($classes['contact-title-big']) ?>"><?= esc_html($big) ?></div><?php endif; ?>
 
-      <?php if ($linkedin_link): ?>
-      <div class="<?= esc_attr($classes['contact-item']) ?>">
-        <?php echo contact_icon_use('icon-linkedin'); ?>
-        <span class="<?= esc_attr($classes['contact-label']) ?>">LinkedIn:</span>
-        <a href="<?= esc_url($linkedin_full_url) ?>" target="_blank" class="<?= esc_attr($classes['contact-value']) ?>"><?= esc_html($linkedin_name ?: $clean_linkedin) ?></a>
-      </div>
-      <?php endif; ?>
-
-    </div>
-
-    <!-- Avatars -->
-    <?php if (!empty($avatars) && is_array($avatars)): ?>
-    <div class="<?= esc_attr($classes['contact-avatars']) ?>">
-      <?php foreach ($avatars as $avatar):
-          $img_id = $avatar['avatar_image']['ID'] ?? $avatar['avatar_image'] ?? false;
-          if (!$img_id) continue;
-      ?>
-        <div class="<?= esc_attr($classes['contact-avatar-item']) ?>">
-          <?= wp_get_attachment_image($img_id, [48,48], false, ['alt' => 'avatar']) ?>
+        <?php if ($email_link): ?>
+        <div class="<?= esc_attr($classes['contact-item']) ?>">
+          <?php echo contact_icon_use('icon-email', $classes); ?>
+          <span class="<?= esc_attr($classes['contact-label']) ?>">Email:</span>
+          <a href="mailto:<?= esc_attr($email_link) ?>" class="<?= esc_attr($classes['contact-value']) ?>"><?= esc_html($email_name ?: $email_link) ?></a>
         </div>
-      <?php endforeach; ?>
+        <?php endif; ?>
+
+        <?php if ($telegram_link): ?>
+        <div class="<?= esc_attr($classes['contact-item']) ?>">
+          <?php echo contact_icon_use('icon-telegram', $classes); ?>
+          <span class="<?= esc_attr($classes['contact-label']) ?>">Telegram:</span>
+          <a href="<?= esc_url($telegram_full_url) ?>" target="_blank" class="<?= esc_attr($classes['contact-value']) ?>">@<?= esc_html($telegram_name ?: $clean_telegram) ?></a>
+        </div>
+        <?php endif; ?>
+
+        <?php if ($linkedin_link): ?>
+        <div class="<?= esc_attr($classes['contact-item']) ?>">
+          <?php echo contact_icon_use('icon-linkedin', $classes); ?>
+          <span class="<?= esc_attr($classes['contact-label']) ?>">LinkedIn:</span>
+          <a href="<?= esc_url($linkedin_full_url) ?>" target="_blank" class="<?= esc_attr($classes['contact-value']) ?>"><?= esc_html($linkedin_name ?: $clean_linkedin) ?></a>
+        </div>
+        <?php endif; ?>
+
+        <!-- Avatars -->
+        <?php if (!empty($avatars) && is_array($avatars)): ?>
+        <div class="<?= esc_attr($classes['contact-avatars']) ?>">
+          <?php foreach ($avatars as $avatar):
+              $img_id = $avatar['avatar_image']['ID'] ?? $avatar['avatar_image'] ?? false;
+              if (!$img_id) continue;
+          ?>
+            <div class="<?= esc_attr($classes['contact-avatar-item']) ?>">
+              <?= wp_get_attachment_image($img_id, [48,48], false, ['alt' => 'avatar']) ?>
+            </div>
+          <?php endforeach; ?>
+        </div>
+        <?php endif; ?>
+      </div>
     </div>
-    <?php endif; ?>
 
     <!-- Form -->
     <form class="<?= esc_attr($classes['contact-form']) ?>" novalidate>

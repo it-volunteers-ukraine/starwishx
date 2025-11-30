@@ -5,32 +5,106 @@
   gap: 32px;
 }
 
+.contact-block {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
 .contact-titles {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 12px;
 }
 
-.contact-title-small { font-size: 14px; }
-.contact-title-medium { font-size: 18px; }
-.contact-title-big { font-size: 26px; }
+.contact-title-small {
+  font-weight: 400;
+  font-style: normal;
+  font-size: 14px;
+  line-height: 120%;
+  letter-spacing: 0%;
+  text-transform: uppercase;
+  color: #6839c8;
+  width: 113px;
+  height: 29px;
+  border-radius: 40px;
+  border: 2px solid #edebfc;
+  gap: 4px;
+  padding-top: 6px;
+  padding-right: 10px;
+  padding-bottom: 6px;
+  padding-left: 10px;
+  align-items: center;
+  justify-content: center;
+  display: inline-flex;
+  background-color: #dedafa;
+}
+
+.contact-title-medium {
+  font-weight: 400;
+  font-style: normal;
+  font-size: 36px;
+  line-height: 120%;
+  letter-spacing: 0%;
+  text-transform: uppercase;
+  color: #292929;
+}
+
+.contact-title-big {
+  p,
+  h1,
+  h2,
+  h3,
+  h4,
+  h5 {
+    font-size: 16px;
+    font-weight: 400;
+    font-style: normal;
+    line-height: 130%;
+    letter-spacing: 0%;
+    color: #464646;
+  }
+}
 .contact-subtitle { font-size: 16px; opacity: 0.8; }
 
 .contact-list {
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 12px;
 }
 
 .contact-item {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 12px;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 16px;
+  line-height: 130%;
+  letter-spacing: 0%;
+  color: #292929;
 
   .icon {
-    width: 18px;
-    height: 18px;
-    fill: currentcolor;
+    width: 24px;
+    height: 24px;
+    fill: #784cdb;
+    position: relative;
+    top: 4px;
+    left: 2px;
+    flex-shrink: 0;
+  }
+
+  .contact-label {
+    color: #292929;
+  }
+
+  .contact-value {
+    color: #6839c8;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
   }
 }
 
