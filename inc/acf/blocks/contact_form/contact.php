@@ -147,7 +147,7 @@ function contact_icon_use($icon_id, $classes = []) {
       <!-- Contacts -->
       <div class="<?= esc_attr($classes['contact-list']) ?>">
         <!-- С проверкой -->
-        <?php if ($big): ?><p class="<?= esc_attr($classes['contact-title-big']) ?>"><?= wp_kses_post($big) ?></p><?php endif; ?>
+        <?php if ($big): ?><p class="<?= esc_attr($classes['contact-title-big']) ?>"><?= wp_strip_all_tags($big) ?></p><?php endif; ?>
 
         <div class="<?= esc_attr($classes['contact-group']) ?>">
           <?php if ($email_link): ?>
@@ -220,10 +220,10 @@ function contact_icon_use($icon_id, $classes = []) {
           <?= contact_field_label_html($form_message_label, $req_message, $classes) ?>
         </div>
         <textarea name="message" maxlength="<?= esc_attr($char_limit) ?>" <?= $req_message ? 'required' : '' ?> placeholder="<?= esc_attr($form_message_placeholder) ?>"></textarea>
-        <span class="<?= esc_attr($classes['contact-counter']) ?>">0 / <?= esc_html($char_limit) ?></span>
+        <span class="<?= esc_attr($classes['contact-counter']) ?>">0/<?= esc_html($char_limit) ?></span>
       </label>
 <!-- Без проверки -->
-      <p class="<?= esc_attr($classes['contact-privacy']) ?>"><?= wp_kses_post($form_privacy) ?></p>
+      <p class="<?= esc_attr($classes['contact-privacy']) ?>"><?= wp_strip_all_tags($form_privacy) ?></p>
 
       <button type="submit" class="<?= esc_attr($classes['contact-submit']) ?>"><?= esc_html($form_submit_text) ?></button>
     </form>
