@@ -145,7 +145,8 @@ function contact_icon_use($icon_id, $classes = []) {
 
       <!-- Contacts -->
       <div class="<?= esc_attr($classes['contact-list']) ?>">
-        <?php if ($big): ?><div class="<?= esc_attr($classes['contact-title-big']) ?>"><?= esc_html($big) ?></div><?php endif; ?>
+        <!-- С проверкой -->
+        <?php if ($big): ?><p class="<?= esc_attr($classes['contact-title-big']) ?>"><?= wp_kses_post($big) ?></p><?php endif; ?>
 
         <?php if ($email_link): ?>
         <div class="<?= esc_attr($classes['contact-item']) ?>">
@@ -210,7 +211,7 @@ function contact_icon_use($icon_id, $classes = []) {
         <textarea name="message" maxlength="<?= esc_attr($char_limit) ?>" <?= $req_message ? 'required' : '' ?> placeholder="<?= esc_attr($form_message_placeholder) ?>"></textarea>
         <span class="<?= esc_attr($classes['contact-counter']) ?>">0 / <?= esc_html($char_limit) ?></span>
       </label>
-
+<!-- Без проверки -->
       <p class="<?= esc_attr($classes['contact-privacy']) ?>"><?= wp_kses_post($form_privacy) ?></p>
 
       <button type="submit" class="<?= esc_attr($classes['contact-submit']) ?>"><?= esc_html($form_submit_text) ?></button>
