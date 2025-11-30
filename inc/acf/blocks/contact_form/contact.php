@@ -12,7 +12,7 @@ $default_classes = [
     'contact-container'      => 'contact-container',
 
     'contact-block'          => 'contact-block',
-
+    'contact-group'          => 'contact-group',
     'contact-titles'         => 'contact-titles',
     'contact-title-small'    => 'contact-title-small',
     'contact-title-medium'   => 'contact-title-medium',
@@ -148,29 +148,31 @@ function contact_icon_use($icon_id, $classes = []) {
         <!-- С проверкой -->
         <?php if ($big): ?><p class="<?= esc_attr($classes['contact-title-big']) ?>"><?= wp_kses_post($big) ?></p><?php endif; ?>
 
-        <?php if ($email_link): ?>
-        <div class="<?= esc_attr($classes['contact-item']) ?>">
-          <?php echo contact_icon_use('icon-email', $classes); ?>
-          <span class="<?= esc_attr($classes['contact-label']) ?>">Email:</span>
-          <a href="mailto:<?= esc_attr($email_link) ?>" class="<?= esc_attr($classes['contact-value']) ?>"><?= esc_html($email_name ?: $email_link) ?></a>
-        </div>
-        <?php endif; ?>
+        <div class="<?= esc_attr($classes['contact-group']) ?>">
+          <?php if ($email_link): ?>
+          <div class="<?= esc_attr($classes['contact-item']) ?>">
+            <?php echo contact_icon_use('icon-email', $classes); ?>
+            <span class="<?= esc_attr($classes['contact-label']) ?>">Email:</span>
+            <a href="mailto:<?= esc_attr($email_link) ?>" class="<?= esc_attr($classes['contact-value']) ?>"><?= esc_html($email_name ?: $email_link) ?></a>
+          </div>
+          <?php endif; ?>
 
-        <?php if ($telegram_link): ?>
-        <div class="<?= esc_attr($classes['contact-item']) ?>">
-          <?php echo contact_icon_use('icon-telegram', $classes); ?>
-          <span class="<?= esc_attr($classes['contact-label']) ?>">Telegram:</span>
-          <a href="<?= esc_url($telegram_full_url) ?>" target="_blank" class="<?= esc_attr($classes['contact-value']) ?>">@<?= esc_html($telegram_name ?: $clean_telegram) ?></a>
-        </div>
-        <?php endif; ?>
+          <?php if ($telegram_link): ?>
+          <div class="<?= esc_attr($classes['contact-item']) ?>">
+            <?php echo contact_icon_use('icon-telegram', $classes); ?>
+            <span class="<?= esc_attr($classes['contact-label']) ?>">Telegram:</span>
+            <a href="<?= esc_url($telegram_full_url) ?>" target="_blank" class="<?= esc_attr($classes['contact-value']) ?>">@<?= esc_html($telegram_name ?: $clean_telegram) ?></a>
+          </div>
+          <?php endif; ?>
 
-        <?php if ($linkedin_link): ?>
-        <div class="<?= esc_attr($classes['contact-item']) ?>">
-          <?php echo contact_icon_use('icon-linkedin', $classes); ?>
-          <span class="<?= esc_attr($classes['contact-label']) ?>">LinkedIn:</span>
-          <a href="<?= esc_url($linkedin_full_url) ?>" target="_blank" class="<?= esc_attr($classes['contact-value']) ?>"><?= esc_html($linkedin_name ?: $clean_linkedin) ?></a>
+          <?php if ($linkedin_link): ?>
+          <div class="<?= esc_attr($classes['contact-item']) ?>">
+            <?php echo contact_icon_use('icon-linkedin', $classes); ?>
+            <span class="<?= esc_attr($classes['contact-label']) ?>">LinkedIn:</span>
+            <a href="<?= esc_url($linkedin_full_url) ?>" target="_blank" class="<?= esc_attr($classes['contact-value']) ?>"><?= esc_html($linkedin_name ?: $clean_linkedin) ?></a>
+          </div>
+          <?php endif; ?>
         </div>
-        <?php endif; ?>
 
         <!-- Avatars -->
         <?php if (!empty($avatars) && is_array($avatars)): ?>

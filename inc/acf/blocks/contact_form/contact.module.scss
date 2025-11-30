@@ -51,20 +51,14 @@
 }
 
 .contact-title-big {
-  p,
-  h1,
-  h2,
-  h3,
-  h4,
-  h5 {
-    font-size: 16px;
-    font-weight: 400;
-    font-style: normal;
-    line-height: 130%;
-    letter-spacing: 0%;
-    color: #464646;
-  }
+  font-size: 16px;
+  font-weight: 400;
+  font-style: normal;
+  line-height: 130%;
+  letter-spacing: 0%;
+  color: #464646;
 }
+
 .contact-subtitle { font-size: 16px; opacity: 0.8; }
 
 .contact-list {
@@ -193,4 +187,10 @@
 .contact-submit {
   padding: 14px 20px;
   border-radius: 6px;
+}
+
+.contact-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 }
