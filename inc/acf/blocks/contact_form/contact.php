@@ -35,6 +35,7 @@ $default_classes = [
 
     'label-text'             => 'label-text',
     'label-required'         => 'label-required',
+    'label-wrapper'          => 'label-wrapper',
 
     'contact-privacy'        => 'contact-privacy',
     'contact-submit'         => 'contact-submit'
@@ -194,22 +195,30 @@ function contact_icon_use($icon_id, $classes = []) {
     <form class="<?= esc_attr($classes['contact-form']) ?>" novalidate>
 
       <label class="<?= esc_attr($classes['contact-form-field']) ?>">
-        <?= contact_field_label_html($form_name_label, $req_name, $classes) ?>
+        <div class="<?= esc_attr($classes['label-wrapper']) ?>">
+          <?= contact_field_label_html($form_name_label, $req_name, $classes) ?>
+        </div>
         <input type="text" name="name" <?= $req_name ? 'required' : '' ?> placeholder="<?= esc_attr($form_name_placeholder) ?>">
       </label>
 
       <label class="<?= esc_attr($classes['contact-form-field']) ?>">
-        <?= contact_field_label_html($form_phone_label, $req_phone, $classes) ?>
+        <div class="<?= esc_attr($classes['label-wrapper']) ?>">
+          <?= contact_field_label_html($form_phone_label, $req_phone, $classes) ?>
+        </div>
         <input type="text" name="phone" <?= $req_phone ? 'required' : '' ?> placeholder="<?= esc_attr($form_phone_placeholder) ?>">
       </label>
 
       <label class="<?= esc_attr($classes['contact-form-field']) ?>">
-        <?= contact_field_label_html($form_email_label, $req_email, $classes) ?>
+        <div class="<?= esc_attr($classes['label-wrapper']) ?>">
+          <?= contact_field_label_html($form_email_label, $req_email, $classes) ?>
+        </div>
         <input type="email" name="email" <?= $req_email ? 'required' : '' ?> placeholder="<?= esc_attr($form_email_placeholder) ?>">
       </label>
 
       <label class="<?= esc_attr($classes['contact-form-textarea']) ?>">
-        <?= contact_field_label_html($form_message_label, $req_message, $classes) ?>
+        <div class="<?= esc_attr($classes['label-wrapper']) ?>">
+          <?= contact_field_label_html($form_message_label, $req_message, $classes) ?>
+        </div>
         <textarea name="message" maxlength="<?= esc_attr($char_limit) ?>" <?= $req_message ? 'required' : '' ?> placeholder="<?= esc_attr($form_message_placeholder) ?>"></textarea>
         <span class="<?= esc_attr($classes['contact-counter']) ?>">0 / <?= esc_html($char_limit) ?></span>
       </label>

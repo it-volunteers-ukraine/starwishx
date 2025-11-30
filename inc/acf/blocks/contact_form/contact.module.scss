@@ -180,21 +180,21 @@
   flex-direction: column;
   gap: 4px;
 
+  .label-wrapper {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding-right: 8px;
+    padding-left: 8px;
+    font-size: 14px;
+  }
+
   .label-text {
     color: #292929;
   }
 
   .label-required {
     color: red;
-    margin-left: 4px;
-    font-weight: bold;
-  }
-
-  /* Чтобы звезда была на той же строке */
-  > span {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
   }
 }
 
