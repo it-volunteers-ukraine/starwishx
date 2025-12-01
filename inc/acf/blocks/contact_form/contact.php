@@ -202,11 +202,16 @@ function contact_icon_use($icon_id, $classes = []) {
       </label>
 
       <label class="<?= esc_attr($classes['contact-form-field']) ?>">
-        <div class="<?= esc_attr($classes['label-wrapper']) ?>">
-          <?= contact_field_label_html($form_phone_label, $req_phone, $classes) ?>
-        </div>
-        <input type="text" name="phone" <?= $req_phone ? 'required' : '' ?> placeholder="<?= esc_attr($form_phone_placeholder) ?>">
-      </label>
+  <div class="<?= esc_attr($classes['label-wrapper']) ?>">
+    <?= contact_field_label_html($form_phone_label, $req_phone, $classes) ?>
+  </div>
+  <input type="tel"
+         class="contact-phone-input"
+         name="phone"
+         <?= $req_phone ? 'required' : '' ?>
+         placeholder="<?= esc_attr($form_phone_placeholder) ?>">
+</label>
+
 
       <label class="<?= esc_attr($classes['contact-form-field']) ?>">
         <div class="<?= esc_attr($classes['label-wrapper']) ?>">
@@ -237,6 +242,12 @@ window.contactFormClasses = {
     counter: "<?= esc_js($classes['contact-counter']) ?>"
 };
 </script>
+
+<!-- intl-tel-input (CDN) -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.19/css/intlTelInput.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.19/js/intlTelInput.min.js"></script>
+<!-- utilsScript нужен для форматирования/валидации -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.19/js/utils.js"></script>
 
 <script src="<?= esc_url( get_template_directory_uri() . '/inc/acf/blocks/contact_form/contact.js' ) ?>"></script>
 
