@@ -1,15 +1,16 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const textarea = document.querySelector('.contact-form textarea');
+    const { form, counter: counterClass } = window.contactFormClasses;
+
+    const textarea = document.querySelector(`.${form} textarea`);
     if (!textarea) return;
 
-    const counter = textarea.parentElement.querySelector('.contact-counter');
+    const counter = textarea.parentElement.querySelector(`.${counterClass}`);
     if (!counter) return;
 
-    const max = parseInt(textarea.getAttribute('maxlength')); // БЕЗ 500
+    const max = parseInt(textarea.getAttribute('maxlength'));
 
     const update = () => {
-        const current = textarea.value.length;
-        counter.textContent = `${current} / ${max}`;
+        counter.textContent = `${textarea.value.length} / ${max}`;
     };
 
     textarea.addEventListener('input', update);

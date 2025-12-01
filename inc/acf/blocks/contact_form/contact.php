@@ -230,6 +230,13 @@ function contact_icon_use($icon_id, $classes = []) {
 
   </div>
 </section>
+<!-- Узнать фактические классы, прошедшие через modules.json -->
+<script>
+window.contactFormClasses = {
+    form: "<?= esc_js($classes['contact-form']) ?>",
+    counter: "<?= esc_js($classes['contact-counter']) ?>"
+};
+</script>
 
 <script src="<?= esc_url( get_template_directory_uri() . '/inc/acf/blocks/contact_form/contact.js' ) ?>"></script>
 
