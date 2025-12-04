@@ -228,7 +228,17 @@ function contact_icon_use($icon_id, $classes = []) {
         <span class="<?= esc_attr($classes['contact-counter']) ?>">0/<?= esc_html($char_limit) ?></span>
       </label>
 <!-- Без проверки -->
-      <p class="<?= esc_attr($classes['contact-privacy']) ?>"><?= wp_strip_all_tags($form_privacy) ?></p>
+      <p class="<?= esc_attr($classes['contact-privacy']) ?>">
+    <?= wp_kses($form_privacy, [
+        'a' => [
+            'href' => true,
+            'title' => true,
+            'target' => true,
+            'rel' => true
+        ]
+    ]) ?>
+</p>
+
 
       <button type="submit" class="<?= esc_attr($classes['contact-submit']) ?>"><?= esc_html($form_submit_text) ?></button>
     </form>

@@ -96,23 +96,19 @@
     height: 24px;
     fill: #784cdb;
     position: relative;
-
-    /* top: 4px; */
     left: 2px;
     flex-shrink: 0;
   }
 
-  .contact-label {
-    color: #292929;
-  }
+  /* .contact-label { */
+
+  /* color: #292929; */
+
+  /* } */
 
   .contact-value {
     color: #6839c8;
     text-decoration: none;
-
-    &:hover {
-      text-decoration: underline;
-    }
   }
 }
 
@@ -229,6 +225,15 @@
   letter-spacing: 0%;
   color: #464646;
   opacity: 0.7;
+
+  a,
+  a:visited,
+  a:hover,
+  a:active,
+  a:focus {
+    color: inherit;
+    text-decoration: underline;
+  }
 }
 
 .contact-submit {

@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (textarea) {
         const counter = textarea.parentElement.querySelector(`.${counterClass}`) || textarea.parentElement.querySelector('.contact-counter');
         const max = parseInt(textarea.getAttribute('maxlength')) || 500;
-        const update = () => counter && (counter.textContent = `${textarea.value.length} / ${max}`);
+        const update = () => counter && (counter.textContent = `${textarea.value.length}/${max}`);
         textarea.addEventListener('input', update);
         update();
     }
@@ -23,8 +23,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     .catch(() => callback("UA")); // Украина по умолчанию
             },
             utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.19/js/utils.js",
-            separateDialCode: true,
-            preferredCountries: ["ua","pl","us","gb"]
+            separateDialCode: false,  // показывает код страны слева
+    nationalMode: false,      // ввод только национального номера
+    preferredCountries: ["ua","pl","us","gb"]
         });
 
         // при потере фокуса — записать полный номер в поле
@@ -42,7 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 // пример: если нужно, блокировать отправку при некорректном номере
                 if (!iti.isValidNumber()) {
                     e.preventDefault();
-                    phoneInput.setCustomValidity("Некорректный номер телефона");
+                    phoneInput.setCustomValidity("Некоректний номер телефону");
                     phoneInput.reportValidity();
                 } else {
                     phoneInput.setCustomValidity("");
