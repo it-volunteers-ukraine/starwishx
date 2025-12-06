@@ -1,54 +1,86 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // --- СЧЁТЧИК СИМВОЛОВ (уже настроен ранее) ---
+
+    // --- СЧЁТЧИК СИМВОЛОВ ---
     const { form, counter: counterClass } = window.contactFormClasses || {};
     const textarea = document.querySelector(`.${form} textarea`) || document.querySelector('.contact-form textarea');
+
     if (textarea) {
-        const counter = textarea.parentElement.querySelector(`.${counterClass}`) || textarea.parentElement.querySelector('.contact-counter');
+        const counter =
+            textarea.parentElement.querySelector(`.${counterClass}`) ||
+            textarea.parentElement.querySelector('.contact-counter');
+
         const max = parseInt(textarea.getAttribute('maxlength')) || 500;
+
         const update = () => counter && (counter.textContent = `${textarea.value.length}/${max}`);
+
         textarea.addEventListener('input', update);
         update();
     }
 
     // --- PHONE: intl-tel-input ---
     const phoneInput = document.querySelector('.contact-phone-input');
+    let iti = null;
+
     if (phoneInput && window.intlTelInput) {
-        const iti = window.intlTelInput(phoneInput, {
-            initialCountry: "auto",
+        iti = window.intlTelInput(phoneInput, {
+            initialCountry: 'auto',
             geoIpLookup: function(callback) {
-                // простая ip-lookup — можно заменить или убрать
-                fetch("https://ipapi.co/json/")
+                fetch('https://ipapi.co/json/')
                     .then(res => res.json())
                     .then(data => callback(data.country_code))
-                    .catch(() => callback("UA")); // Украина по умолчанию
+                    .catch(() => callback('UA'));
             },
-            utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.19/js/utils.js",
-            separateDialCode: false,  // показывает код страны слева
-    nationalMode: false,      // ввод только национального номера
-    preferredCountries: ["ua","pl","us","gb"]
+            utilsScript: 'https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.19/js/utils.js',
+            separateDialCode: false,
+            nationalMode: false,
+            preferredCountries: ['ua', 'pl', 'us', 'gb']
         });
 
-        // при потере фокуса — записать полный номер в поле
-        phoneInput.addEventListener("blur", () => {
+        phoneInput.addEventListener('blur', () => {
             try {
-                const full = iti.getNumber(); // E.164, например +380501234567
+                const full = iti.getNumber();
                 if (full) phoneInput.value = full;
-            } catch (e) { /* ignore */ }
+            } catch (_) {}
         });
-
-        // при сабмите формы можно дополнительно валидировать
-        const formEl = phoneInput.closest('form');
-        if (formEl) {
-            formEl.addEventListener('submit', (e) => {
-                // пример: если нужно, блокировать отправку при некорректном номере
-                if (!iti.isValidNumber()) {
-                    e.preventDefault();
-                    phoneInput.setCustomValidity("Некоректний номер телефону");
-                    phoneInput.reportValidity();
-                } else {
-                    phoneInput.setCustomValidity("");
-                }
-            });
-        }
     }
+
+    // --- AJAX ОТПРАВКА ---
+    const formEl = document.querySelector(`.${window.contactFormClasses.form}`);
+    if (!formEl) return;
+
+    formEl.addEventListener('submit', async (e) => {
+        e.preventDefault(); // блокируем переход на URL
+
+        // Валидация телефона
+        if (iti && !iti.isValidNumber()) {
+            phoneInput.setCustomValidity('Некоректний номер телефону');
+            phoneInput.reportValidity();
+            return;
+        } else if (iti) {
+            phoneInput.setCustomValidity('');
+            phoneInput.value = iti.getNumber();
+        }
+
+        const formData = new FormData(formEl);
+        formData.append('action', 'send_contact_form');
+        formData.append('_ajax_nonce', ContactFormAjax.nonce);
+
+        fetch(ContactFormAjax.url, {
+            method: 'POST',
+            body: formData
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                alert('Ваше повідомлення відправлено!');
+                formEl.reset();
+            } else {
+                alert('Помилка: ' + (data.message || 'Невідома помилка'));
+            }
+        })
+        .catch(() => {
+            alert('Сталася помилка під час відправки.');
+        });
+    });
+
 });

@@ -259,6 +259,6 @@ window.contactFormClasses = {
 <!-- utilsScript нужен для форматирования/валидации -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.19/js/utils.js"></script>
 
-<script src="<?= esc_url( get_template_directory_uri() . '/inc/acf/blocks/contact_form/contact.js' ) ?>"></script>
+<!-- <script src="<?= esc_url( get_template_directory_uri() . '/inc/acf/blocks/contact_form/contact.js' ) ?>"></script> -->
 
 
