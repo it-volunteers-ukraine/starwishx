@@ -39,49 +39,49 @@ $terms = get_terms([
 $results = [];
 
 // Получение с каждой категории по последнему посту
-// foreach ($terms as $term) {
-//     $query = new WP_Query([
-//         'post_type' => 'news',
-//         'posts_per_page' => 1,
-//         'tax_query' => [
-//             [
-//                 'taxonomy' => 'categories-news',
-//                 'field' => 'term_id',
-//                 'terms' => $term->term_id
-//             ]
-//         ],
-//         'orderby' => 'date',
-//         'order' => 'DESC'
-//     ]);
+foreach ($terms as $term) {
+    $query = new WP_Query([
+        'post_type' => 'news',
+        'posts_per_page' => 1,
+        'tax_query' => [
+            [
+                'taxonomy' => 'categories-news',
+                'field' => 'term_id',
+                'terms' => $term->term_id
+            ]
+        ],
+        'orderby' => 'date',
+        'order' => 'DESC'
+    ]);
 
-//     if ($query->have_posts()) {
-//         $post_item = $query->posts[0];
+    if ($query->have_posts()) {
+        $post_item = $query->posts[0];
 
-//         // добавляем категорию внутрь объекта
-//         $term_post = get_the_terms($post_item->ID, 'categories-news');
-//         $post_item->term_id = $term_post ? $term_post[0]->term_id : null;
-//         $post_item->term_name = $term_post ? $term_post[0]->name : null;
+        // добавляем категорию внутрь объекта
+        $term_post = get_the_terms($post_item->ID, 'categories-news');
+        $post_item->term_id = $term_post ? $term_post[0]->term_id : null;
+        $post_item->term_name = $term_post ? $term_post[0]->name : null;
 
-//         // $post_item->category_term = get_the_terms($post_item->ID, 'categories-news')[0]['term_id    '] ?? null;
+        // $post_item->category_term = get_the_terms($post_item->ID, 'categories-news')[0]['term_id    '] ?? null;
 
-//         $results[] = $post_item;
-//     }
+        $results[] = $post_item;
+    }
 
-//     wp_reset_postdata();
-// }
+    wp_reset_postdata();
+};
 
-$query = new WP_Query([
-    'post_type'      => 'news',
-    'posts_per_page' => 6,   // сколько нужно вывести
-    'orderby'        => 'date',
-    'order'          => 'DESC',
-    'tax_query'      => [
-        [
-            'taxonomy' => 'categories-news',
-            'operator' => 'EXISTS'
-        ]
-    ]
-]);
+// $query = new WP_Query([
+//     'post_type'      => 'news',
+//     'posts_per_page' => 6,   // сколько нужно вывести
+//     'orderby'        => 'date',
+//     'order'          => 'DESC',
+//     'tax_query'      => [
+//         [
+//             'taxonomy' => 'categories-news',
+//             'operator' => 'EXISTS'
+//         ]
+//     ]
+// ]);
 
 if ($query->have_posts()) {
     foreach ($query->posts as $post_item) {
