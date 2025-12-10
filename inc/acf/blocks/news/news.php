@@ -83,18 +83,18 @@ foreach ($terms as $term) {
 //     ]
 // ]);
 
-if ($query->have_posts()) {
-    foreach ($query->posts as $post_item) {
+// if ($query->have_posts()) {
+//     foreach ($query->posts as $post_item) {
 
-        $term_post = get_the_terms($post_item->ID, 'categories-news');
-        $post_item->term_id = $term_post ? $term_post[0]->term_id : null;
-        $post_item->term_name = $term_post ? $term_post[0]->name : null;
+//         $term_post = get_the_terms($post_item->ID, 'categories-news');
+//         $post_item->term_id = $term_post ? $term_post[0]->term_id : null;
+//         $post_item->term_name = $term_post ? $term_post[0]->name : null;
 
-        $results[] = $post_item;
-    }
-}
+//         $results[] = $post_item;
+//     }
+// }
 
-wp_reset_postdata();
+// wp_reset_postdata();
 
 $items = $results;
 
