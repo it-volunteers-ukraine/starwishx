@@ -278,6 +278,7 @@
 }
 
 /* Опционально: подсветка самого инпута при ошибке */
-.input-error {
+.contact-form input.input-error,
+.contact-form textarea.input-error {
   border-color: #3ce797ff !important;
 }

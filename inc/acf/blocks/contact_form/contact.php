@@ -34,6 +34,7 @@ $default_classes = [
     
     // ДОБАВЛЕНО: класс для контейнера ошибки
     'contact-error'          => 'contact-error', 
+    'input-error'            => 'input-error',
 
     'label-text'             => 'label-text',
     'label-required'         => 'label-required',
@@ -84,8 +85,13 @@ if ($char_limit < 1) $char_limit = 500;
 /* ===========================
    Theme settings (Common Info)
    =========================== */
-$error_text_val = get_field('required_field_text'); 
- $error_msg_safe = $error_text_val ? esc_attr($error_text_val) : 'Заполните это поле';
+
+ $err_required = get_field('required_field_text') ?: 'Заполните это поле';
+$error_msg_safe = esc_attr($err_required);
+$err_email = get_field('invalid_email_text') ?: 'Некорректный Email';
+$err_phone = get_field('invalid_phone_text') ?: 'Некоректний номер телефону';
+
+
 
 $email_link     = get_field('email_link', 'option');
 $email_name     = get_field('email_name', 'option');
@@ -105,7 +111,7 @@ if ($telegram_link) {
     $clean_telegram = trim($telegram_link);
     $clean_telegram = str_replace('https://t.me/', '', $clean_telegram);
     $clean_telegram = ltrim($clean_telegram, '@');
-    $telegram_full_url = 'https://t.me/' . $clean_telegram;
+    $telegram_full_url = 'https://t.me/'. $clean_telegram;
 }
 
 $linkedin_full_url = '';
@@ -115,7 +121,7 @@ if ($linkedin_link) {
     if (strpos($clean_linkedin, 'http') === 0) {
         $linkedin_full_url = $clean_linkedin;
     } else {
-        $linkedin_full_url = 'https://linkedin.com/in/' . $clean_linkedin;
+        $linkedin_full_url = 'https://linkedin.com/in/'. $clean_linkedin;
     }
 }
 
@@ -268,22 +274,25 @@ function contact_icon_use($icon_id, $classes = []) {
 </section>
 
 <script>
-window.contactFormClasses = {
-    form: "<?= esc_js($classes['contact-form']) ?>",
-    counter: "<?= esc_js($classes['contact-counter']) ?>",
-    error: "<?= esc_js($classes['contact-error']) ?>"
+window.contactFormConfig = {
+    classes: {
+        form: "<?= esc_js($classes['contact-form']) ?>",
+        counter: "<?= esc_js($classes['contact-counter']) ?>",
+        inputError: "<?= esc_js($classes['input-error']) ?>",
+        error: "<?= esc_js($classes['contact-error']) ?>"
+    },
+    messages: {
+        required: "<?= esc_js($err_required) ?>",
+        email: "<?= esc_js($err_email) ?>",
+        phone: "<?= esc_js($err_phone) ?>"
+    }
 };
 </script>
 
-<!-- intl-tel-input (CDN) -->
+
+
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.19/css/intlTelInput.css" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.19/js/intlTelInput.min.js"></script>
-<!-- utilsScript нужен для форматирования/валидации -->
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.19/js/utils.js"></script>
 
-<style>
-/* Опционально: подсветка самого инпута при ошибке */
-.input-error {
-  border-color: #ff0505ff !important;
-}
-</style>
