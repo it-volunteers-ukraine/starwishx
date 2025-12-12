@@ -1,11 +1,10 @@
 <?php
 /**
  * contact.php
- * ACF block render for Contact (keys == class names)
  */
 
 /* ===========================
-   Default classes (keys equal values)
+   Default classes
    =========================== */
 $default_classes = [
     'contact-section'        => 'contact-section',
@@ -32,6 +31,9 @@ $default_classes = [
     'contact-form-field'     => 'contact-form-field',
     'contact-form-textarea'  => 'contact-form-textarea',
     'contact-counter'        => 'contact-counter',
+    
+    // ДОБАВЛЕНО: класс для контейнера ошибки
+    'contact-error'          => 'contact-error', 
 
     'label-text'             => 'label-text',
     'label-required'         => 'label-required',
@@ -49,7 +51,6 @@ if (file_exists($modules_file)) {
     // modules.json uses top-level key "contact" — merge if available
     $classes = array_merge($default_classes, $modules['contact'] ?? []);
 }
-
 /* ===========================
    ACF block fields
    =========================== */
@@ -83,6 +84,9 @@ if ($char_limit < 1) $char_limit = 500;
 /* ===========================
    Theme settings (Common Info)
    =========================== */
+$error_text_val = get_field('required_field_text'); 
+ $error_msg_safe = $error_text_val ? esc_attr($error_text_val) : 'Заполните это поле';
+
 $email_link     = get_field('email_link', 'option');
 $email_name     = get_field('email_name', 'option');
 
@@ -192,40 +196,57 @@ function contact_icon_use($icon_id, $classes = []) {
     </div>
 
     <!-- Form -->
-    <form class="<?= esc_attr($classes['contact-form']) ?>" novalidate>
 
+<form class="<?= esc_attr($classes['contact-form']) ?>" novalidate> 
       <label class="<?= esc_attr($classes['contact-form-field']) ?>">
         <div class="<?= esc_attr($classes['label-wrapper']) ?>">
           <?= contact_field_label_html($form_name_label, $req_name, $classes) ?>
         </div>
-        <input type="text" name="name" <?= $req_name ? 'required' : '' ?> placeholder="<?= esc_attr($form_name_placeholder) ?>">
+        <input type="text" 
+               name="name" 
+               <?= $req_name ? 'required' : '' ?> 
+               data-msg="<?= $error_msg_safe ?>"
+               placeholder="<?= esc_attr($form_name_placeholder) ?>">
+        <div class="<?= esc_attr($classes['contact-error']) ?>"></div>
       </label>
 
       <label class="<?= esc_attr($classes['contact-form-field']) ?>">
-  <div class="<?= esc_attr($classes['label-wrapper']) ?>">
-    <?= contact_field_label_html($form_phone_label, $req_phone, $classes) ?>
-  </div>
-  <input type="tel"
-         class="contact-phone-input"
-         name="phone"
-         <?= $req_phone ? 'required' : '' ?>
-         placeholder="<?= esc_attr($form_phone_placeholder) ?>">
-</label>
-
+        <div class="<?= esc_attr($classes['label-wrapper']) ?>">
+           <?= contact_field_label_html($form_phone_label, $req_phone, $classes) ?>
+        </div>
+        <input type="tel"
+               class="contact-phone-input"
+               name="phone"
+               <?= $req_phone ? 'required' : '' ?>
+               data-msg="<?= $error_msg_safe ?>"
+               placeholder="<?= esc_attr($form_phone_placeholder) ?>">
+         <div class="<?= esc_attr($classes['contact-error']) ?>"></div>
+      </label>
 
       <label class="<?= esc_attr($classes['contact-form-field']) ?>">
         <div class="<?= esc_attr($classes['label-wrapper']) ?>">
           <?= contact_field_label_html($form_email_label, $req_email, $classes) ?>
         </div>
-        <input type="email" name="email" <?= $req_email ? 'required' : '' ?> placeholder="<?= esc_attr($form_email_placeholder) ?>">
+        <input type="email" 
+               name="email" 
+               <?= $req_email ? 'required' : '' ?> 
+               data-msg="<?= $error_msg_safe ?>"
+               placeholder="<?= esc_attr($form_email_placeholder) ?>">
+        <div class="<?= esc_attr($classes['contact-error']) ?>"></div>
       </label>
 
       <label class="<?= esc_attr($classes['contact-form-textarea']) ?>">
         <div class="<?= esc_attr($classes['label-wrapper']) ?>">
           <?= contact_field_label_html($form_message_label, $req_message, $classes) ?>
         </div>
-        <textarea name="message" maxlength="<?= esc_attr($char_limit) ?>" <?= $req_message ? 'required' : '' ?> placeholder="<?= esc_attr($form_message_placeholder) ?>"></textarea>
+        <textarea name="message" 
+                  maxlength="<?= esc_attr($char_limit) ?>" 
+                  <?= $req_message ? 'required' : '' ?> 
+                  data-msg="<?= $error_msg_safe ?>"
+                  placeholder="<?= esc_attr($form_message_placeholder) ?>"></textarea>
+        
         <span class="<?= esc_attr($classes['contact-counter']) ?>">0/<?= esc_html($char_limit) ?></span>
+        <div class="<?= esc_attr($classes['contact-error']) ?>"></div>
       </label>
 <!-- Без проверки -->
       <p class="<?= esc_attr($classes['contact-privacy']) ?>">
@@ -241,15 +262,16 @@ function contact_icon_use($icon_id, $classes = []) {
 
 
       <button type="submit" class="<?= esc_attr($classes['contact-submit']) ?>"><?= esc_html($form_submit_text) ?></button>
-    </form>
+      </form>
 
   </div>
 </section>
-<!-- Узнать фактические классы, прошедшие через modules.json -->
+
 <script>
 window.contactFormClasses = {
     form: "<?= esc_js($classes['contact-form']) ?>",
-    counter: "<?= esc_js($classes['contact-counter']) ?>"
+    counter: "<?= esc_js($classes['contact-counter']) ?>",
+    error: "<?= esc_js($classes['contact-error']) ?>"
 };
 </script>
 
@@ -259,6 +281,9 @@ window.contactFormClasses = {
 <!-- utilsScript нужен для форматирования/валидации -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.19/js/utils.js"></script>
 
-<!-- <script src="<?= esc_url( get_template_directory_uri() . '/inc/acf/blocks/contact_form/contact.js' ) ?>"></script> -->
-
-
+<style>
+/* Опционально: подсветка самого инпута при ошибке */
+.input-error {
+  border-color: #ff0505ff !important;
+}
+</style>

@@ -266,3 +266,18 @@
   flex-direction: column;
   gap: 4px;
 }
+
+/* Используем класс из переменной PHP, но для наглядности примерный CSS: */
+.contact-error {
+  min-height: 20px;      /* Резервируем место */
+  font-size: 12px;       /* Размер шрифта ошибки */
+  color: #e74c3c;        /* Цвет ошибки (красный) */
+  line-height: 1.2;
+  margin-top: 4px;
+  transition: all 0.2s ease;
+}
+
+/* Опционально: подсветка самого инпута при ошибке */
+.input-error {
+  border-color: #3ce797ff !important;
+}
