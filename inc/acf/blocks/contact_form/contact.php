@@ -41,7 +41,17 @@ $default_classes = [
     'label-wrapper'          => 'label-wrapper',
 
     'contact-privacy'        => 'contact-privacy',
-    'contact-submit'         => 'contact-submit'
+    'contact-submit'         => 'contact-submit',
+
+    'contact-popup'          => 'contact-popup',
+    'contact-popup-inner'    => 'contact-popup-inner',
+    'contact-popup-icon'     => 'contact-popup-icon',
+    'contact-popup-title'    => 'contact-popup-title',
+    'contact-popup-text'     => 'contact-popup-text',
+    'contact-popup-success' => 'contact-popup-success',
+'contact-popup-error'   => 'contact-popup-error',
+
+
 ];
 
 /* Load compiled module classes if exist */
@@ -82,16 +92,23 @@ $form_counter_label_raw = get_field('form_counter_label');
 $char_limit = intval($form_counter_label_raw);
 if ($char_limit < 1) $char_limit = 500;
 
-/* ===========================
-   Theme settings (Common Info)
-   =========================== */
+
 
  $err_required = get_field('required_field_text') ?: 'Заполните это поле';
 $error_msg_safe = esc_attr($err_required);
 $err_email = get_field('invalid_email_text') ?: 'Некорректный Email';
 $err_phone = get_field('invalid_phone_text') ?: 'Некоректний номер телефону';
 
+$popup_success_title = get_field('popup_success_title');
+$popup_success_text  = get_field('popup_success_text');
 
+$popup_error_title   = get_field('popup_error_title');
+$popup_error_text    = get_field('popup_error_text');
+
+
+/* ===========================
+   Theme settings (Common Info)
+   =========================== */
 
 $email_link     = get_field('email_link', 'option');
 $email_name     = get_field('email_name', 'option');
@@ -271,6 +288,59 @@ function contact_icon_use($icon_id, $classes = []) {
       </form>
 
   </div>
+
+<!-- POPUP SUCCESS -->
+<div id="contact-popup-success"
+     class="<?= esc_attr($classes['contact-popup']) . ' ' . esc_attr($classes['contact-popup-success']) ?>"
+     style="display:none;">
+    <div class="<?= esc_attr($classes['contact-popup-inner']) ?>">
+        <svg class="<?= esc_attr($classes['contact-popup-icon']) ?>" aria-hidden="true">
+            <use xlink:href="<?= esc_url(get_template_directory_uri() . '/assets/img/sprites.svg#icon-good'); ?>"></use>
+        </svg>
+
+        <?php if ($popup_success_title): ?>
+            <div class="<?= esc_attr($classes['contact-popup-title']) ?>">
+                <?= esc_html($popup_success_title) ?>
+            </div>
+        <?php endif; ?>
+
+        <?php if ($popup_success_text): ?>
+            <div class="<?= esc_attr($classes['contact-popup-text']) ?>">
+                <?= esc_html($popup_success_text) ?>
+            </div>
+        <?php endif; ?>
+    </div>
+</div>
+
+
+<!-- POPUP ERROR -->
+<div id="contact-popup-error"
+     class="<?= esc_attr($classes['contact-popup']) . ' ' . esc_attr($classes['contact-popup-error']) ?>"
+     style="display:none;">
+    <div class="<?= esc_attr($classes['contact-popup-inner']) ?>">
+        <svg class="<?= esc_attr($classes['contact-popup-icon']) ?>" aria-hidden="true">
+            <use xlink:href="<?= esc_url(get_template_directory_uri() . '/assets/img/sprites.svg#icon-required'); ?>"></use>
+        </svg>
+
+        <?php if ($popup_error_title): ?>
+            <div class="<?= esc_attr($classes['contact-popup-title']) ?>">
+                <?= esc_html($popup_error_title) ?>
+            </div>
+        <?php endif; ?>
+
+        <?php if ($popup_error_text): ?>
+            <div class="<?= esc_attr($classes['contact-popup-text']) ?>">
+                <?= esc_html($popup_error_text) ?>
+            </div>
+        <?php endif; ?>
+    </div>
+</div>
+
+
+
+
+
+
 </section>
 
 <script>

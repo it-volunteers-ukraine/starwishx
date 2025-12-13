@@ -165,38 +165,67 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        // --- Отправка ---
-        const formData = new FormData(formEl);
-        formData.append('action', 'send_contact_form');
+       
+// --- Отправка ---
+const formData = new FormData(formEl);
+formData.append('action', 'send_contact_form');
 
-        if (typeof ContactFormAjax !== 'undefined') {
-            formData.append('_ajax_nonce', ContactFormAjax.nonce);
+const popupSuccess = document.getElementById('contact-popup-success');
+const popupError = document.getElementById('contact-popup-error');
 
-            fetch(ContactFormAjax.url, {
-                method: 'POST',
-                body: formData,
-            })
-                .then((res) => res.json())
-                .then((data) => {
-                    if (data.success) {
-                        alert('Ваше повідомлення відправлено!');
-                        formEl.reset();
-                        formEl
-                            .querySelectorAll('.' + cfg.classes.inputError)
-                            .forEach((el) =>
-                                el.classList.remove(cfg.classes.inputError)
-                            );
-                    } else {
-                        alert(
-                            'Помилка: ' + (data.message || 'Невідома помилка')
-                        );
-                    }
-                })
-                .catch(() => {
-                    alert('Сталася помилка під час відправки.');
+function showPopup(el) {
+    if (!el) return;
+    // Скрываем заранее, чтобы сброс старого текста/состояния не мешал
+    el.style.display = 'flex';
+    // Удаляем фокус с формы чтобы не мешало (опционально)
+    try { document.activeElement.blur(); } catch (_) {}
+
+    // Авто-скрытие через 3 секунды
+    setTimeout(() => {
+        el.style.display = 'none';
+    }, 3000);
+}
+
+if (typeof ContactFormAjax !== 'undefined') {
+    formData.append('_ajax_nonce', ContactFormAjax.nonce);
+
+    fetch(ContactFormAjax.url, {
+        method: 'POST',
+        body: formData,
+    })
+    .then((res) => res.json())
+    .then((data) => {
+        if (data.success) {
+            // Показываем попап успеха
+            showPopup(popupSuccess);
+
+            // Сбрасываем форму
+            formEl.reset();
+
+            // Удаляем модульный класс ошибки с полей
+            if (cfg && cfg.classes && cfg.classes.inputError) {
+                formEl.querySelectorAll('.' + cfg.classes.inputError).forEach((el) => {
+                    el.classList.remove(cfg.classes.inputError);
                 });
+            }
         } else {
-            console.error('ContactFormAjax object is missing');
+            // Показываем попап ошибки (если есть текст от сервера, можно вставить в popup)
+            if (popupError) {
+                // optionally update text if server provided message:
+                if (data.message) {
+                    const txt = popupError.querySelector('.' + '<?= esc_js($classes["contact-popup-text"]) ?>');
+                    if (txt) txt.textContent = data.message;
+                }
+            }
+            showPopup(popupError);
         }
+    })
+    .catch(() => {
+        showPopup(popupError);
+    });
+} else {
+    console.error('ContactFormAjax object is missing');
+}
+
     });
 });
