@@ -1,12 +1,17 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Получаем классы из окна
-    const { form: formClass, counter: counterClass, error: errorClass } =
-    window.contactFormConfig.classes || {};
+    // Получаем настройки
+    const cfg = window.contactFormConfig || { messages: {}, classes: {} };
+    
+    // Деструктуризация классов с фоллбэками
+    const { 
+        form: formClass = 'contact-form', 
+        counter: counterClass = 'contact-counter', 
+        error: errorClass = 'contact-error',
+        inputError: inputErrorClass = 'input-error'
+    } = cfg.classes || {};
 
-        
-
-    // Глобальный конфиг (исправление cfg → window.contactFormConfig)
-    const cfg = window.contactFormConfig || { messages: {} };
+    // Путь к спрайту (из PHP или дефолтный)
+    const spritePath = cfg.spritePath || '/wp-content/themes/your-theme/assets/img/sprites.svg';
 
     // --- ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ ВАЛИДАЦИИ ---
 
@@ -17,9 +22,24 @@ document.addEventListener('DOMContentLoaded', () => {
             wrapper.querySelector('.contact-error');
 
         if (errorContainer) {
-            errorContainer.textContent = message || 'Ошибка заполнения';
+            const msgText = message || 'Ошибка заполнения';
+            
+            // Генерируем HTML иконки
+            // fill: currentColor позволяет иконке брать цвет текста ошибки (красный)
+            const iconHtml = `
+                <svg class="icon icon-required" aria-hidden="true" style="width: 16px; height: 16px; flex-shrink: 0; fill: currentColor;">
+                    <use xlink:href="${spritePath}#icon-required"></use>
+                </svg>
+            `;
+
+            // Вставляем иконку и текст внутри span для удобства
+            errorContainer.innerHTML = `${iconHtml}<span>${msgText}</span>`;
+            
+            // Если в CSS нет display:flex, можно добавить тут принудительно, 
+            // но лучше оставить это в CSS (см. пункт 1)
+            errorContainer.style.display = 'flex'; 
         }
-        input.classList.add(cfg.classes.inputError);
+        input.classList.add(inputErrorClass);
     };
 
     const clearError = (input) => {
@@ -29,9 +49,9 @@ document.addEventListener('DOMContentLoaded', () => {
             wrapper.querySelector('.contact-error');
 
         if (errorContainer) {
-            errorContainer.textContent = '';
+            errorContainer.innerHTML = ''; // Очищаем весь HTML (иконку и текст)
         }
-        input.classList.remove(cfg.classes.inputError);
+        input.classList.remove(inputErrorClass);
     };
 
     const attachInputListener = (input) => {
@@ -40,26 +60,27 @@ document.addEventListener('DOMContentLoaded', () => {
                 clearError(input);
             }
         });
-        input.addEventListener('change', () => clearError(input));
+        // change тоже полезен для автозаполнения
+        input.addEventListener('change', () => {
+             if (input.value.trim() !== '') clearError(input);
+        });
     };
 
     // --- СЧЁТЧИК СИМВОЛОВ ---
-    const textarea =
-        document.querySelector(`.${formClass} textarea`) ||
-        document.querySelector('.contact-form textarea');
+    const textarea = document.querySelector(`.${formClass} textarea`);
 
     if (textarea) {
-        const counter =
-            textarea.parentElement.querySelector(`.${counterClass}`) ||
-            textarea.parentElement.querySelector('.contact-counter');
+        const wrapper = textarea.closest('label') || textarea.parentElement;
+        const counter = wrapper ? wrapper.querySelector(`.${counterClass}`) : null;
+        
         const max = parseInt(textarea.getAttribute('maxlength')) || 500;
 
         const update = () =>
             counter && (counter.textContent = `${textarea.value.length}/${max}`);
 
         textarea.addEventListener('input', update);
+        // Инициализация при загрузке
         update();
-
         attachInputListener(textarea);
     }
 
@@ -76,14 +97,14 @@ document.addEventListener('DOMContentLoaded', () => {
                     .then((data) => callback(data.country_code))
                     .catch(() => callback('UA'));
             },
-            utilsScript:
-                'https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.19/js/utils.js',
+            utilsScript: 'https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.19/js/utils.js',
             separateDialCode: false,
             nationalMode: false,
             preferredCountries: ['ua', 'pl', 'us', 'gb'],
         });
 
         phoneInput.addEventListener('blur', () => {
+            // При потере фокуса форматируем номер
             try {
                 const full = iti.getNumber();
                 if (full) phoneInput.value = full;
@@ -105,7 +126,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // --- AJAX + Валидация ---
+    // --- AJAX + Валидация при отправке ---
     const formEl = document.querySelector(`.${formClass}`);
     if (!formEl) return;
 
@@ -121,40 +142,42 @@ document.addEventListener('DOMContentLoaded', () => {
             const val = input.value.trim();
 
             if (!val) {
-                const msg = input.dataset.msg || 'Заполните поле';
+                const msg = input.dataset.msg || cfg.messages.required || 'Заполните поле';
                 showError(input, msg);
                 isFormValid = false;
                 if (!firstInvalidInput) firstInvalidInput = input;
             } else {
                 if (input.type === 'email' && !input.value.includes('@')) {
-                    showError(input, cfg.messages.email);
+                    showError(input, cfg.messages.email || 'Некорректный Email');
                     isFormValid = false;
                     if (!firstInvalidInput) firstInvalidInput = input;
                 } else {
-                    clearError(input);
+                    // Если поле заполнено и это не email с ошибкой — очищаем
+                    // (для телефона отдельная проверка ниже)
+                    if (input !== phoneInput) {
+                        clearError(input);
+                    }
                 }
             }
         });
 
-        // Проверка телефона
+        // Проверка телефона (если он есть)
         if (phoneInput && iti) {
             const isPhoneRequired = phoneInput.hasAttribute('required');
             const phoneVal = phoneInput.value.trim();
 
             if (isPhoneRequired && !phoneVal) {
-                showError(
-                    phoneInput,
-                    phoneInput.dataset.msg || 'Заполните поле'
-                );
-                isFormValid = false;
-                if (!firstInvalidInput) firstInvalidInput = phoneInput;
+                // Ошибка уже показана в цикле выше, но можно обновить
+                // showError(...) 
             } else if (phoneVal && !iti.isValidNumber()) {
-                showError(phoneInput, cfg.messages.phone);
+                showError(phoneInput, cfg.messages.phone || 'Некорректный телефон');
                 isFormValid = false;
                 if (!firstInvalidInput) firstInvalidInput = phoneInput;
             } else {
-                phoneInput.value = iti.getNumber();
-                clearError(phoneInput);
+                if (iti.isValidNumber()) {
+                    phoneInput.value = iti.getNumber();
+                    clearError(phoneInput);
+                }
             }
         }
 
@@ -165,67 +188,62 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-       
-// --- Отправка ---
-const formData = new FormData(formEl);
-formData.append('action', 'send_contact_form');
+        // --- Отправка ---
+        const formData = new FormData(formEl);
+        formData.append('action', 'send_contact_form');
 
-const popupSuccess = document.getElementById('contact-popup-success');
-const popupError = document.getElementById('contact-popup-error');
+        const popupSuccess = document.getElementById('contact-popup-success');
+        const popupError = document.getElementById('contact-popup-error');
 
-function showPopup(el) {
-    if (!el) return;
-    // Скрываем заранее, чтобы сброс старого текста/состояния не мешал
-    el.style.display = 'flex';
-    // Удаляем фокус с формы чтобы не мешало (опционально)
-    try { document.activeElement.blur(); } catch (_) {}
-
-    // Авто-скрытие через 3 секунды
-    setTimeout(() => {
-        el.style.display = 'none';
-    }, 3000);
-}
-
-if (typeof ContactFormAjax !== 'undefined') {
-    formData.append('_ajax_nonce', ContactFormAjax.nonce);
-
-    fetch(ContactFormAjax.url, {
-        method: 'POST',
-        body: formData,
-    })
-    .then((res) => res.json())
-    .then((data) => {
-        if (data.success) {
-            // Показываем попап успеха
-            showPopup(popupSuccess);
-
-            // Сбрасываем форму
-            formEl.reset();
-
-            // Удаляем модульный класс ошибки с полей
-            if (cfg && cfg.classes && cfg.classes.inputError) {
-                formEl.querySelectorAll('.' + cfg.classes.inputError).forEach((el) => {
-                    el.classList.remove(cfg.classes.inputError);
-                });
-            }
-        } else {
-            // Показываем попап ошибки (если есть текст от сервера, можно вставить в popup)
-            if (popupError) {
-                // optionally update text if server provided message:
-                if (data.message) {
-                    const txt = popupError.querySelector('.' + '<?= esc_js($classes["contact-popup-text"]) ?>');
-                    if (txt) txt.textContent = data.message;
-                }
-            }
-            showPopup(popupError);
+        function showPopup(el) {
+            if (!el) return;
+            el.style.display = 'flex';
+            try { document.activeElement.blur(); } catch (_) {}
+            setTimeout(() => {
+                el.style.display = 'none';
+            }, 3000);
         }
-    })
-    .catch(() => {
-        showPopup(popupError);
-    });
-} else {
-    console.error('ContactFormAjax object is missing');
-}
 
+        if (typeof ContactFormAjax !== 'undefined') {
+            formData.append('_ajax_nonce', ContactFormAjax.nonce);
+
+            fetch(ContactFormAjax.url, {
+                method: 'POST',
+                body: formData,
+            })
+            .then((res) => res.json())
+            .then((data) => {
+                if (data.success) {
+                    showPopup(popupSuccess);
+                    formEl.reset();
+                    // Удаляем красную обводку
+                    formEl.querySelectorAll(`.${inputErrorClass}`).forEach((el) => {
+                        el.classList.remove(inputErrorClass);
+                    });
+                    // Очищаем тексты ошибок/иконки
+                    formEl.querySelectorAll(`.${errorClass}`).forEach((el) => {
+                         el.innerHTML = '';
+                    });
+                } else {
+                    if (popupError) {
+                        if (data.message) {
+                            // Ищем текст внутри попапа, используя класс из конфига или дефолтный
+                            const textClass = (cfg.classes && cfg.classes['contact-popup-text']) 
+                                ? cfg.classes['contact-popup-text'] 
+                                : 'contact-popup-text';
+                            
+                            const txt = popupError.querySelector(`.${textClass}`);
+                            if (txt) txt.textContent = data.message;
+                        }
+                    }
+                    showPopup(popupError);
+                }
+            })
+            .catch(() => {
+                showPopup(popupError);
+            });
+        } else {
+            console.error('ContactFormAjax object is missing');
+        }
     });
 });

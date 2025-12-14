@@ -355,7 +355,8 @@ window.contactFormConfig = {
         required: "<?= esc_js($err_required) ?>",
         email: "<?= esc_js($err_email) ?>",
         phone: "<?= esc_js($err_phone) ?>"
-    }
+    },
+    spritePath: "<?= esc_url(get_template_directory_uri() . '/assets/img/sprites.svg') ?>"
 };
 </script>
 
