@@ -42,7 +42,6 @@
   height: 29px;
   border-radius: 40px;
   border: 2px solid #edebfc;
-  gap: 4px;
   padding-top: 6px;
   padding-right: 10px;
   padding-bottom: 6px;
@@ -51,6 +50,17 @@
   justify-content: center;
   display: inline-flex;
   background-color: #dedafa;
+  gap: 4px;
+
+  &::before {
+    content: "";
+    display: block;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background-color: currentcolor;
+    flex-shrink: 0;
+  }
 }
 
 .contact-title-medium {
@@ -270,8 +280,8 @@
 /* Используем класс из переменной PHP, но для наглядности примерный CSS: */
 .contact-error {
   min-height: 20px;      /* Резервируем место */
-  font-size: 12px;       /* Размер шрифта ошибки */
-  color: #e74c3c;        /* Цвет ошибки (красный) */
+  font-size: 14px;       /* Размер шрифта ошибки */
+  color: #e90206;        /* Цвет ошибки (красный) */
   line-height: 1.2;
   margin-top: 4px;
   transition: all 0.2s ease;
@@ -280,7 +290,7 @@
 /* Опционально: подсветка самого инпута при ошибке */
 .contact-form input.input-error,
 .contact-form textarea.input-error {
-  border-color: #3ce797ff !important;
+  border-color: rgb(221 42 42) !important;
 }
 
 .contact-popup {
