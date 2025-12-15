@@ -18,6 +18,11 @@
   gap: 80px;
   border-radius: 40px;
   background-color: $surface-violet;
+
+  @include tablet {
+    padding: 32px;
+    gap: 120px;
+  }
 }
 
 .contact-block,
@@ -148,6 +153,7 @@
 .contact-form-textarea {
   @extend %flex-col;
 
+  flex: 1 1 100%;
   gap: 4px;
 
   .label-wrapper {
@@ -306,4 +312,44 @@
 input::placeholder,
 textarea::placeholder {
   color: $text-light;
+}
+
+@include tablet {
+  .contact-section {
+    padding: 80px 40px;
+  }
+
+  .contact-container {
+    padding: 32px;
+    gap: 120px;
+  }
+
+  .contact-title-medium {
+    font-size: 48px;
+  }
+
+  .contact-form {
+    flex-direction: row;
+    flex-wrap: wrap;
+
+    .contact-form-field:nth-child(1),
+    .contact-form-field:nth-child(2) {
+      flex: 1 1 calc(50% - 6px);
+    }
+
+    .contact-form-field:nth-child(3),
+    .contact-form-field:nth-child(4),
+    .contact-form-field:nth-child(5) {
+      flex: 1 1 100%;
+    }
+  }
+
+  .contact-form-textarea {
+    flex: 1 1 100%;
+  }
+
+  .contact-popup-success .contact-popup-inner {
+    width: 445px;
+    height: 168px;
+  }
 }
