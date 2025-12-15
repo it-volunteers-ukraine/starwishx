@@ -59,7 +59,7 @@
                         "class": "",
                         "id": ""
                     },
-                    "taxonomy": "categories-news",
+                    "taxonomy": "category-oportunities",
                     "add_term": 1,
                     "save_terms": 0,
                     "load_terms": 0,
@@ -93,5 +93,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1763473981
+    "modified": 1765802807
 }

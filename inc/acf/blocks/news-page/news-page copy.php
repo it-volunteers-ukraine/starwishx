@@ -52,7 +52,7 @@ $modules_file = get_template_directory() . '/assets/css/blocks/modules.json';
 $classes = $default_classes;
 $title = get_field('title');
 $categories_colors = get_field('categories_labels_color', 'options');
-// print_r($categories_colors);
+print_r($categories_colors);
 
 $news_by_category = get_field('news_by_category');
 // print_r($news_by_category);
@@ -139,6 +139,8 @@ foreach ($terms as $term) {
         $term_post = get_the_terms($post_item->ID, $category);
         $post_item->term_id = $term_post ? $term_post[0]->term_id : null;
         $post_item->term_name = $term_post ? $term_post[0]->name : null;
+
+        // $post_item->category_term = get_the_terms($post_item->ID, 'categories-news')[0]['term_id    '] ?? null;
 
         $res_last_by_cat[] = $post_item;
     }
@@ -269,13 +271,15 @@ function render_card_bycat($item, $classes = [], $is_no_photo = false)
                     $term_id = $item->term_id;
                     $term_full = get_term($term_id);
                     $item_taxonomy = $term_full->taxonomy;
-                    // print_r('term id: ', $item_taxonomy . '_' . $term_id);
-                    // echo $term_id;
+                    // echo "!!@!@!@!";
+                    print_r('term id: ', $item_taxonomy . '_' . $term_id);
+                    echo $term_id;
                     $category_current_color = get_category_by_id($categories_colors, $term_id);
-                    $label_color_text = $category_current_color['label_color_text'];
-                    $label_color_background = $category_current_color['label_color_background'];
-                    $label_color_border = $category_current_color['label_color_border'];
-                    // print_r('label_color_text:',$label_color_text);
+                    print_r( $category_current_color);
+                    // $label_color_text = get_field('label_color_text', $item_taxonomy . '_' . $term_id);
+                    // $label_color_background = get_field('label_color_background', $item_taxonomy . '_' . $term_id);
+                    $label_color_text = #aaa;
+                    $label_color_background = #990;
                     $term_name = $item->term_name;
                     $item_date = date('d.m.Y', strtotime($item->post_date));
                     $item_title = get_field('title', $post_id);
@@ -315,12 +319,8 @@ function render_card_bycat($item, $classes = [], $is_no_photo = false)
                     $term_id = $item->term_id;
                     $term_full = get_term($term_id);
                     $item_taxonomy = $term_full->taxonomy;
-                    // $label_color_text = get_field('label_color_text', $item_taxonomy . '_' . $term_id);
-                    // $label_color_background = get_field('label_color_background', $item_taxonomy . '_' . $term_id);
-                    $category_current_color = get_category_by_id($categories_colors, $term_id);
-                    $label_color_text = $category_current_color['label_color_text'];
-                    $label_color_background = $category_current_color['label_color_background'];
-                    $label_color_border = $category_current_color['label_color_border'];
+                    $label_color_text = get_field('label_color_text', $item_taxonomy . '_' . $term_id);
+                    $label_color_background = get_field('label_color_background', $item_taxonomy . '_' . $term_id);
                     $term_name = $item->term_name;
                     $item_date = date('d.m.Y', strtotime($item->post_date));
                     $item_title = get_field('title', $post_id);
