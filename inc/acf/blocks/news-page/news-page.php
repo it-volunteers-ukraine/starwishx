@@ -347,7 +347,7 @@ function render_card_bycat($item, $classes = [], $is_no_photo = false)
             $btn_text = 'Показати всі';
             $cat_name = $res_by_cat[$cat_id['category']]['term_name'];
             ?>
-            <h2 class="h5 <?php echo esc_attr($classes['cat-title']); ?>"><?php echo esc_html($cat_name); ?></h2>
+            <h2 class="h4 <?php echo esc_attr($classes['cat-title']); ?>"><?php echo esc_html($cat_name); ?></h2>
             <div class="<?php echo esc_attr($classes['bycat-content']); ?>">
                 <?php $conunt_post = 1; ?>
                 <?php
