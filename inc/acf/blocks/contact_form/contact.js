@@ -68,10 +68,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- СЧЁТЧИК СИМВОЛОВ ---
     const textarea = document.querySelector(`.${formClass} textarea`);
+    let counter = null;
 
     if (textarea) {
-        const wrapper = textarea.closest('label') || textarea.parentElement;
-        const counter = wrapper ? wrapper.querySelector(`.${counterClass}`) : null;
+        const textareaWrapper = textarea.closest('[class*="textarea-wrapper"]') || textarea.parentElement;
+        
+        if (textareaWrapper) {
+            counter = textareaWrapper.querySelector(`.${counterClass}`);
+            if (!counter) {
+                counter = textareaWrapper.querySelector('[class*="contact-counter"]');
+            }
+        }
         
         const max = parseInt(textarea.getAttribute('maxlength')) || 500;
 
@@ -197,6 +204,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         function showPopup(el) {
             if (!el) return;
+            // Скрываем оба попапа перед показом нового
+            if (popupSuccess) popupSuccess.style.display = 'none';
+            if (popupError) popupError.style.display = 'none';
+            
             el.style.display = 'flex';
             try { document.activeElement.blur(); } catch (_) {}
             setTimeout(() => {
@@ -216,6 +227,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (data.success) {
                     showPopup(popupSuccess);
                     formEl.reset();
+                    
+                    // Сбрасываем счетчик символов
+                    if (textarea && counter) {
+                        counter.textContent = `0/${parseInt(textarea.getAttribute('maxlength')) || 500}`;
+                    }
+                    
                     // Удаляем красную обводку
                     formEl.querySelectorAll(`.${inputErrorClass}`).forEach((el) => {
                         el.classList.remove(inputErrorClass);

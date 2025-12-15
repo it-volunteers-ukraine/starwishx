@@ -39,6 +39,7 @@ $default_classes = [
     'label-text'             => 'label-text',
     'label-required'         => 'label-required',
     'label-wrapper'          => 'label-wrapper',
+    'textarea-wrapper'       => 'textarea-wrapper',
 
     'contact-privacy'        => 'contact-privacy',
     'contact-submit'         => 'contact-submit',
@@ -262,13 +263,16 @@ function contact_icon_use($icon_id, $classes = []) {
         <div class="<?= esc_attr($classes['label-wrapper']) ?>">
           <?= contact_field_label_html($form_message_label, $req_message, $classes) ?>
         </div>
-        <textarea name="message" 
-                  maxlength="<?= esc_attr($char_limit) ?>" 
-                  <?= $req_message ? 'required' : '' ?> 
-                  data-msg="<?= $error_msg_safe ?>"
-                  placeholder="<?= esc_attr($form_message_placeholder) ?>"></textarea>
         
-        <span class="<?= esc_attr($classes['contact-counter']) ?>">0/<?= esc_html($char_limit) ?></span>
+        <div class="<?= esc_attr($classes['textarea-wrapper']) ?>">
+          <textarea name="message" 
+                    maxlength="<?= esc_attr($char_limit) ?>" 
+                    <?= $req_message ? 'required' : '' ?> 
+                    data-msg="<?= $error_msg_safe ?>"
+                    placeholder="<?= esc_attr($form_message_placeholder) ?>"></textarea>
+          <span class="<?= esc_attr($classes['contact-counter']) ?>">0/<?= esc_html($char_limit) ?></span>
+        </div>
+        
         <div class="<?= esc_attr($classes['contact-error']) ?>"></div>
       </label>
 <!-- Без проверки -->
