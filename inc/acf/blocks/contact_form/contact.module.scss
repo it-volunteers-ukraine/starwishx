@@ -331,6 +331,7 @@ textarea::placeholder {
   .contact-form {
     flex-direction: row;
     flex-wrap: wrap;
+    gap: 12px;
 
     .contact-form-field:nth-child(1),
     .contact-form-field:nth-child(2) {
@@ -348,8 +349,54 @@ textarea::placeholder {
     flex: 1 1 100%;
   }
 
+  .contact-submit {
+    margin-left: auto;
+    align-self: flex-end;
+  }
+
   .contact-popup-success .contact-popup-inner {
     width: 445px;
     height: 168px;
+  }
+}
+
+@include laptop {
+  .contact-container {
+    flex-direction: row;
+    gap: 80px;
+  }
+
+  .contact-block {
+    flex: 0 0 auto;
+  }
+
+  .contact-title-medium {
+    font-size: 48px;
+  }
+
+  .contact-form {
+    flex: 1 1 100%;
+    padding-top: 111px;
+    gap: 12px;
+    flex-direction: row;
+    flex-wrap: wrap;
+
+    .contact-form-field:nth-child(1),
+    .contact-form-field:nth-child(2) {
+      flex: 1 1 calc(50% - 6px);
+    }
+
+    .contact-form-field:nth-child(3),
+    .contact-form-field:nth-child(4),
+    .contact-form-field:nth-child(5) {
+      flex: 1 1 100%;
+    }
+  }
+
+  .contact-submit {
+    width: 138px;
+    height: 44px;
+    margin-left: auto;
+    align-self: flex-end;
   }
 }
