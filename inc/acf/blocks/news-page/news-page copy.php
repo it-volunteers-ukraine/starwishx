@@ -39,10 +39,10 @@ $default_classes = [
 
     'item' => 'item',
     'btn' => 'btn',
-
+    
     'swiper-paginations' => 'swiper-paginations',
 
-
+    
 
 ];
 
@@ -52,7 +52,7 @@ $modules_file = get_template_directory() . '/assets/css/blocks/modules.json';
 $classes = $default_classes;
 $title = get_field('title');
 $categories_colors = get_field('categories_labels_color', 'options');
-// print_r($categories_colors);
+print_r($categories_colors);
 
 $news_by_category = get_field('news_by_category');
 // print_r($news_by_category);
@@ -78,8 +78,7 @@ $terms = get_terms([
     'hide_empty' => false
 ]);
 
-function get_category_by_id($category_color, $category)
-{
+function get_category_by_id ($category_color, $category){
     foreach ($category_color as $cat_item) {
         if ($cat_item['category'] == $category) {
             return $cat_item;
@@ -140,6 +139,8 @@ foreach ($terms as $term) {
         $term_post = get_the_terms($post_item->ID, $category);
         $post_item->term_id = $term_post ? $term_post[0]->term_id : null;
         $post_item->term_name = $term_post ? $term_post[0]->name : null;
+
+        // $post_item->category_term = get_the_terms($post_item->ID, 'categories-news')[0]['term_id    '] ?? null;
 
         $res_last_by_cat[] = $post_item;
     }
@@ -264,134 +265,123 @@ function render_card_bycat($item, $classes = [], $is_no_photo = false)
             </div>
 
             <div class="<?php echo esc_attr($classes['newscards']); ?>">
-                <?php if ($last_one_by_category) : ?>
-                    <?php foreach ($last_one_by_category as $item) : ?>
-                        <?php
-                        $post_id = $item->ID;
-                        $term_id = $item->term_id;
-                        $term_full = get_term($term_id);
-                        $item_taxonomy = $term_full->taxonomy;
-                        // print_r('term id: ', $item_taxonomy . '_' . $term_id);
-                        // echo $term_id;
-                        $category_current_color = get_category_by_id($categories_colors, $term_id);
-                        $label_color_text = $category_current_color['label_color_text'];
-                        $label_color_background = $category_current_color['label_color_background'];
-                        $label_color_border = $category_current_color['label_color_border'];
-                        // print_r('label_color_text:',$label_color_text);
-                        $term_name = $item->term_name;
-                        $item_date = date('d.m.Y', strtotime($item->post_date));
-                        $item_title = get_field('title', $post_id);
-                        $item_desc = get_field('description', $post_id);
+                <?php foreach ($last_one_by_category as $item) : ?>
+                    <?php
+                    $post_id = $item->ID;
+                    $term_id = $item->term_id;
+                    $term_full = get_term($term_id);
+                    $item_taxonomy = $term_full->taxonomy;
+                    // echo "!!@!@!@!";
+                    print_r('term id: ', $item_taxonomy . '_' . $term_id);
+                    echo $term_id;
+                    $category_current_color = get_category_by_id($categories_colors, $term_id);
+                    print_r( $category_current_color);
+                    // $label_color_text = get_field('label_color_text', $item_taxonomy . '_' . $term_id);
+                    // $label_color_background = get_field('label_color_background', $item_taxonomy . '_' . $term_id);
+                    $label_color_text = #aaa;
+                    $label_color_background = #990;
+                    $term_name = $item->term_name;
+                    $item_date = date('d.m.Y', strtotime($item->post_date));
+                    $item_title = get_field('title', $post_id);
+                    $item_desc = get_field('description', $post_id);
 
-                        $item_label = esc_html($term_name);
-                        $photo = get_field('photo', $post_id);
-                        $photo_url = $photo["sizes"]['large'];
-                        $photo_alt = $photo['alt'] ?: $photo['title'];
+                    $item_label = esc_html($term_name);
+                    $photo = get_field('photo', $post_id);
+                    $photo_url = $photo["sizes"]['large'];
+                    $photo_alt = $photo['alt'] ?: $photo['title'];
 
-                        ?>
-                        <div class="<?php echo esc_attr($classes['newscards-item']); ?>">
-                            <div class="<?php echo esc_attr($classes['newcard-content']); ?>"> <!-- Проверить может лишнее -->
-                                <div class="<?php echo esc_attr($classes['newcard-img-wrap']); ?>">
-                                    <img src="<?php echo esc_url($photo_url); ?>" class="<?php echo  esc_attr($classes['newcard-img']); ?>" alt="<?php echo $photo_alt; ?>">
-                                    <!-- <div class="<?php echo esc_attr($classes['item-label']); ?>" style="--label-color: <?php echo $label_color_text; ?>; --label-bg: <?php echo $label_color_background; ?>; --label-border: <?php echo $label_color_border; ?>; "><?php echo $item_label; ?></div> -->
-                                    <div class="<?php echo esc_attr($classes['newcard-label']); ?>" style="--label-color: <?php echo $label_color_text; ?>; --label-bg: <?php echo $label_color_background; ?>; --label-border: <?php echo $label_color_border; ?>; "><?php echo $item_label; ?></div>
+                    ?>
+                    <div class="<?php echo esc_attr($classes['newscards-item']); ?>">
+                        <div class="<?php echo esc_attr($classes['newcard-content']); ?>"> <!-- Проверить может лишнее -->
+                            <div class="<?php echo esc_attr($classes['newcard-img-wrap']); ?>">
+                                <img src="<?php echo esc_url($photo_url); ?>" class="<?php echo  esc_attr($classes['newcard-img']); ?>" alt="<?php echo $photo_alt; ?>">
+                                <div class="<?php echo esc_attr($classes['newcard-label']); ?>" style="--label-color: <?php echo $label_color_text; ?>; --label-bg: <?php echo $label_color_background; ?>; "><?php echo $item_label; ?></div>
 
-                                </div>
-                                <div class="text-small <?php echo esc_attr($classes['newcard-date']); ?>"><?php echo $item_date; ?></div>
-                                <div class="subtitle-text-m <?php echo esc_attr($classes['newcard-title']); ?>">
-                                    <?php echo $item_title; ?>
-                                </div>
-                                <div class="text-r <?php echo esc_attr($classes['newcard-text']); ?>">
-                                    <?php echo $item_desc; ?>
-                                </div>
+                            </div>
+                            <div class="text-small <?php echo esc_attr($classes['newcard-date']); ?>"><?php echo $item_date; ?></div>
+                            <div class="subtitle-text-m <?php echo esc_attr($classes['newcard-title']); ?>">
+                                <?php echo $item_title; ?>
+                            </div>
+                            <div class="text-r <?php echo esc_attr($classes['newcard-text']); ?>">
+                                <?php echo $item_desc; ?>
                             </div>
                         </div>
-                    <? endforeach; ?>
-                <? endif; ?>
+                    </div>
+                <? endforeach; ?>
             </div>
 
         </div>
         <div class="swiper mySwiper <?php echo esc_attr($classes['newscards-sw']); ?>">
             <div class="swiper-wrapper <?php echo esc_attr($classes['newscards-sw-wr']); ?>">
-                <?php if ($last_one_by_category) : ?>
-                    <?php foreach ($last_one_by_category as $item) : ?>
-                        <?php
-                        $post_id = $item->ID;
-                        $term_id = $item->term_id;
-                        $term_full = get_term($term_id);
-                        $item_taxonomy = $term_full->taxonomy;
-                        // $label_color_text = get_field('label_color_text', $item_taxonomy . '_' . $term_id);
-                        // $label_color_background = get_field('label_color_background', $item_taxonomy . '_' . $term_id);
-                        $category_current_color = get_category_by_id($categories_colors, $term_id);
-                        $label_color_text = $category_current_color['label_color_text'];
-                        $label_color_background = $category_current_color['label_color_background'];
-                        $label_color_border = $category_current_color['label_color_border'];
-                        $term_name = $item->term_name;
-                        $item_date = date('d.m.Y', strtotime($item->post_date));
-                        $item_title = get_field('title', $post_id);
-                        $item_desc = get_field('description', $post_id);
+                <?php foreach ($last_one_by_category as $item) : ?>
+                    <?php
+                    $post_id = $item->ID;
+                    $term_id = $item->term_id;
+                    $term_full = get_term($term_id);
+                    $item_taxonomy = $term_full->taxonomy;
+                    $label_color_text = get_field('label_color_text', $item_taxonomy . '_' . $term_id);
+                    $label_color_background = get_field('label_color_background', $item_taxonomy . '_' . $term_id);
+                    $term_name = $item->term_name;
+                    $item_date = date('d.m.Y', strtotime($item->post_date));
+                    $item_title = get_field('title', $post_id);
+                    $item_desc = get_field('description', $post_id);
 
-                        $item_label = esc_html($term_name);
-                        $photo = get_field('photo', $post_id);
-                        $photo_url = $photo["sizes"]['large'];
-                        $photo_alt = $photo['alt'] ?: $photo['title'];
+                    $item_label = esc_html($term_name);
+                    $photo = get_field('photo', $post_id);
+                    $photo_url = $photo["sizes"]['large'];
+                    $photo_alt = $photo['alt'] ?: $photo['title'];
 
-                        ?>
-                        <div class="swiper-slide <?php echo esc_attr($classes['newscards-item']); ?>">
-                            <div class="<?php echo esc_attr($classes['newcard-content']); ?>"> <!-- Проверить может лишнее -->
-                                <div class="<?php echo esc_attr($classes['newcard-img-wrap']); ?>">
-                                    <img src="<?php echo esc_url($photo_url); ?>" class="<?php echo  esc_attr($classes['newcard-img']); ?>" alt="<?php echo $photo_alt; ?>">
-                                    <!-- <div class="<?php echo esc_attr($classes['item-label']); ?>" style="--label-color: <?php echo $label_color_text; ?>; --label-bg: <?php echo $label_color_background; ?>; --label-border: <?php echo $label_color_border; ?>; "><?php echo $item_label; ?></div> -->
-                                    <div class="<?php echo esc_attr($classes['newcard-label']); ?>" style="--label-color: <?php echo $label_color_text; ?>; --label-bg: <?php echo $label_color_background; ?>; --label-border: <?php echo $label_color_border; ?>; "><?php echo $item_label; ?></div>
+                    ?>
+                    <div class="swiper-slide <?php echo esc_attr($classes['newscards-item']); ?>">
+                        <div class="<?php echo esc_attr($classes['newcard-content']); ?>"> <!-- Проверить может лишнее -->
+                            <div class="<?php echo esc_attr($classes['newcard-img-wrap']); ?>">
+                                <img src="<?php echo esc_url($photo_url); ?>" class="<?php echo  esc_attr($classes['newcard-img']); ?>" alt="<?php echo $photo_alt; ?>">
+                                <div class="<?php echo esc_attr($classes['newcard-label']); ?>" style="--label-color: <?php echo $label_color_text; ?>; --label-bg: <?php echo $label_color_background; ?>; "><?php echo $item_label; ?></div>
 
-                                </div>
-                                <div class="text-small <?php echo esc_attr($classes['newcard-date']); ?>"><?php echo $item_date; ?></div>
-                                <div class="subtitle-text-m <?php echo esc_attr($classes['newcard-title']); ?>">
-                                    <?php echo $item_title; ?>
-                                </div>
-                                <div class="text-r <?php echo esc_attr($classes['newcard-text']); ?>">
-                                    <?php echo $item_desc; ?>
-                                </div>
+                            </div>
+                            <div class="text-small <?php echo esc_attr($classes['newcard-date']); ?>"><?php echo $item_date; ?></div>
+                            <div class="subtitle-text-m <?php echo esc_attr($classes['newcard-title']); ?>">
+                                <?php echo $item_title; ?>
+                            </div>
+                            <div class="text-r <?php echo esc_attr($classes['newcard-text']); ?>">
+                                <?php echo $item_desc; ?>
                             </div>
                         </div>
-                    <? endforeach; ?>
-                <? endif; ?>
+                    </div>
+                <? endforeach; ?>
             </div>
-            <div class="swiper-paginations <?php echo esc_attr($classes['swiper-paginations']); ?>"></div>
+            <div class="swiper-paginations <?php echo esc_attr($classes['swiper-paginations']); ?>" ></div>
         </div>
 
     </div>
 </section>
 
-
-<?php if (count($news_by_category) > 0) : ?>
-    <?php foreach ($news_by_category as $cat_id) : ?>
-        <section class="section <?php echo esc_attr($classes['section']); ?> <?php echo esc_attr($classes['bycat-section']); ?> ">
-            <div class="container ">
+<?php foreach ($news_by_category as $cat_id) : ?>
+    <section class="section <?php echo esc_attr($classes['section']); ?> <?php echo esc_attr($classes['bycat-section']); ?> ">
+        <div class="container ">
+            <?php
+            $btn_url = '#';
+            $btn_text = 'Показати всі';
+            $cat_name = $res_by_cat[$cat_id['category']]['term_name'];
+            ?>
+            <h2 class="h5 <?php echo esc_attr($classes['cat-title']); ?>"><?php echo esc_html($cat_name); ?></h2>
+            <div class="<?php echo esc_attr($classes['bycat-content']); ?>">
+                <?php $conunt_post = 1; ?>
                 <?php
-                $btn_url = '#';
-                $btn_text = esc_html(get_field('button_text'));
-                $cat_name = $res_by_cat[$cat_id['category']]['term_name'];
+                $post_list = $res_by_cat[$cat_id['category']]['posts'];
                 ?>
-                <h2 class="h5 <?php echo esc_attr($classes['cat-title']); ?>"><?php echo esc_html($cat_name); ?></h2>
-                <div class="<?php echo esc_attr($classes['bycat-content']); ?>">
-                    <?php $conunt_post = 1; ?>
-                    <?php
-                    $post_list = $res_by_cat[$cat_id['category']]['posts'];
-                    ?>
-                    <div class="<?php echo esc_attr($classes['bycat-first-item']); ?> ">
-                        <?php render_card_bycat($post_list[0], $classes); ?>
-                    </div>
-                    <div class="<?php echo esc_attr($classes['bycat-other-item']); ?> ">
-                        <?php for ($i = 1; $i < count($post_list); $i++) : ?>
-                            <?php render_card_bycat($post_list[$i], $classes, true); ?>
-                        <?php endfor; ?>
-                    </div>
+                <div class="<?php echo esc_attr($classes['bycat-first-item']); ?> ">
+                    <?php render_card_bycat($post_list[0], $classes); ?>
                 </div>
-                <a href="<?php esc_url($btn_url); ?>" class="btn <?php echo esc_attr($classes['bycat-btn']); ?>"><?php echo esc_html($btn_text); ?></a>
+                <div class="<?php echo esc_attr($classes['bycat-other-item']); ?> ">
+                    <?php for ($i = 1; $i < count($post_list); $i++) : ?>
+                        <?php render_card_bycat($post_list[$i], $classes, true); ?>
+                    <?php endfor; ?>
+                </div>
             </div>
-        </section>
-    <?php endforeach; ?>
-<?php endif; ?>
+            <a href="<?php esc_url($btn_url); ?>" class="btn <?php echo esc_attr($classes['bycat-btn']); ?>"><?php echo esc_html($btn_text); ?></a>
+        </div>
+    </section>
+<?php endforeach; ?>
 
 </body>
