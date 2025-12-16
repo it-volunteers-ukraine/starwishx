@@ -21,20 +21,29 @@ $default_classes = [
 
 ];
 
+$category = 'category-oportunities';
 $modules_file = get_template_directory() . '/assets/css/blocks/modules.json';
 $classes = $default_classes;
 $title = get_field('title');
 $label_text = get_field('label_text');
 $btn_text = get_field('btn_text');
 $btn_url = get_field('btn_page');
+$categories_colors = get_field('categories_labels_color', 'options');
 
 $is_mode_click_for_touch = get_field('mode_click_for_touch');
 
 $terms = get_terms([
-    'taxonomy' => 'categories-news',
+    'taxonomy' => $category,
     'hide_empty' => false
 ]);
 
+function get_category_by_id ($category_color, $category){
+    foreach ($category_color as $cat_item) {
+        if ($cat_item['category'] == $category) {
+            return $cat_item;
+        }
+    }
+}
 
 $results = [];
 
@@ -45,7 +54,7 @@ foreach ($terms as $term) {
         'posts_per_page' => 1,
         'tax_query' => [
             [
-                'taxonomy' => 'categories-news',
+                'taxonomy' => $category,
                 'field' => 'term_id',
                 'terms' => $term->term_id
             ]
@@ -58,7 +67,7 @@ foreach ($terms as $term) {
         $post_item = $query->posts[0];
 
         // добавляем категорию внутрь объекта
-        $term_post = get_the_terms($post_item->ID, 'categories-news');
+        $term_post = get_the_terms($post_item->ID, $category);
         $post_item->term_id = $term_post ? $term_post[0]->term_id : null;
         $post_item->term_name = $term_post ? $term_post[0]->name : null;
 
@@ -70,33 +79,8 @@ foreach ($terms as $term) {
     wp_reset_postdata();
 };
 
-// $query = new WP_Query([
-//     'post_type'      => 'news',
-//     'posts_per_page' => 6,   // сколько нужно вывести
-//     'orderby'        => 'date',
-//     'order'          => 'DESC',
-//     'tax_query'      => [
-//         [
-//             'taxonomy' => 'categories-news',
-//             'operator' => 'EXISTS'
-//         ]
-//     ]
-// ]);
-
-// if ($query->have_posts()) {
-//     foreach ($query->posts as $post_item) {
-
-//         $term_post = get_the_terms($post_item->ID, 'categories-news');
-//         $post_item->term_id = $term_post ? $term_post[0]->term_id : null;
-//         $post_item->term_name = $term_post ? $term_post[0]->name : null;
-
-//         $results[] = $post_item;
-//     }
-// }
-
-// wp_reset_postdata();
-
 $items = $results;
+// print_r($items);
 
 if (file_exists($modules_file)) {
     $modules = json_decode(file_get_contents($modules_file), true);
@@ -120,8 +104,10 @@ if (file_exists($modules_file)) {
                     $term_id = $item->term_id;
                     $term_full = get_term($term_id);
                     $item_taxonomy = $term_full->taxonomy;
-                    $label_color_text = get_field('label_color_text', $item_taxonomy . '_' . $term_id);
-                    $label_color_background = get_field('label_color_background', $item_taxonomy . '_' . $term_id);
+                    $category_current_color = get_category_by_id($categories_colors, $term_id);
+                    $label_color_text = $category_current_color['label_color_text'];
+                    $label_color_background = $category_current_color['label_color_background'];
+                    $label_color_border = $category_current_color['label_color_border'];
                     $term_name = $item->term_name;
                     $item_date = date('d.m.Y', strtotime($item->post_date));
                     $item_title = get_field('title', $post_id);
@@ -136,7 +122,7 @@ if (file_exists($modules_file)) {
                         <div class="<?php echo esc_attr($classes['content']); ?>">
                             <div class="<?php echo esc_attr($classes['photo-wrap']); ?>">
                                 <img src="<?php echo esc_url($photo_url); ?>" class="<?php echo  esc_attr($classes['photo-img']); ?>" alt="<?php echo $photo_alt; ?>">
-                                <div class="<?php echo esc_attr($classes['item-label']); ?>" style="--label-color: <?php echo $label_color_text; ?>; --label-bg: <?php echo $label_color_background; ?>; "><?php echo $item_label; ?></div>
+                                <div class="<?php echo esc_attr($classes['item-label']); ?>" style="--label-color: <?php echo $label_color_text; ?>; --label-bg: <?php echo $label_color_background; ?>; --label-border: <?php echo $label_color_border; ?>; "><?php echo $item_label; ?></div>
 
                             </div>
                             <div class="text-small <?php echo esc_attr($classes['item-date']); ?>"><?php echo $item_date; ?></div>

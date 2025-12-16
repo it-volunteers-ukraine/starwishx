@@ -1,20 +1,21 @@
 @use "../variables" as *;
 @use "./media";
 
-@mixin label($color: $element-block-text, $bg: $element-block-fill) {
+@mixin label($color: $element-block-text, $bg: $element-block-fill, $border: $element-block-fill){
   display: inline-flex;
   align-items: center;
   border-radius: 40px;
   background-color: $bg;
   padding: 6px 10px;
   color: $color;
+  border: 1px solid $border;
   font-weight: 400;
   font-size: 14px;
   line-height: 1.2;
 }
 
-@mixin label-dot($color: $element-block-text, $bg: $element-block-fill) {
-  @include label($color, $bg);
+@mixin label-dot($color: $element-block-text, $bg: $element-block-fill, $border: $element-block-fill) {
+  @include label($color, $bg, $border);
   text-transform: uppercase;
   &::before {
     margin-right: 6px;
