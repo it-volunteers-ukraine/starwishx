@@ -364,7 +364,7 @@ function render_card_bycat($item, $classes = [], $is_no_photo = false)
 </section>
 
 
-<?php if ($news_by_category) : ?>
+<?php if (count($news_by_category) > 0) : ?>
     <?php foreach ($news_by_category as $cat_id) : ?>
         <section class="section <?php echo esc_attr($classes['section']); ?> <?php echo esc_attr($classes['bycat-section']); ?> ">
             <div class="container ">
