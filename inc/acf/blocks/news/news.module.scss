@@ -62,7 +62,7 @@
 }
 
 .item-label {
-  @include label.label(var(--label-color), var(--label-bg));
+  @include label.label(var(--label-color), var(--label-bg), var(--label-border));
 
   position: absolute;
   left: 8px;

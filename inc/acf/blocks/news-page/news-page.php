@@ -291,7 +291,8 @@ function render_card_bycat($item, $classes = [], $is_no_photo = false)
                         <div class="<?php echo esc_attr($classes['newcard-content']); ?>"> <!-- Проверить может лишнее -->
                             <div class="<?php echo esc_attr($classes['newcard-img-wrap']); ?>">
                                 <img src="<?php echo esc_url($photo_url); ?>" class="<?php echo  esc_attr($classes['newcard-img']); ?>" alt="<?php echo $photo_alt; ?>">
-                                <div class="<?php echo esc_attr($classes['newcard-label']); ?>" style="--label-color: <?php echo $label_color_text; ?>; --label-bg: <?php echo $label_color_background; ?>; "><?php echo $item_label; ?></div>
+                                <!-- <div class="<?php echo esc_attr($classes['item-label']); ?>" style="--label-color: <?php echo $label_color_text; ?>; --label-bg: <?php echo $label_color_background; ?>; --label-border: <?php echo $label_color_border; ?>; "><?php echo $item_label; ?></div> -->
+                                <div class="<?php echo esc_attr($classes['newcard-label']); ?>" style="--label-color: <?php echo $label_color_text; ?>; --label-bg: <?php echo $label_color_background; ?>; --label-border: <?php echo $label_color_border; ?>; "><?php echo $item_label; ?></div>
 
                             </div>
                             <div class="text-small <?php echo esc_attr($classes['newcard-date']); ?>"><?php echo $item_date; ?></div>
@@ -336,7 +337,8 @@ function render_card_bycat($item, $classes = [], $is_no_photo = false)
                         <div class="<?php echo esc_attr($classes['newcard-content']); ?>"> <!-- Проверить может лишнее -->
                             <div class="<?php echo esc_attr($classes['newcard-img-wrap']); ?>">
                                 <img src="<?php echo esc_url($photo_url); ?>" class="<?php echo  esc_attr($classes['newcard-img']); ?>" alt="<?php echo $photo_alt; ?>">
-                                <div class="<?php echo esc_attr($classes['newcard-label']); ?>" style="--label-color: <?php echo $label_color_text; ?>; --label-bg: <?php echo $label_color_background; ?>; "><?php echo $item_label; ?></div>
+                                <!-- <div class="<?php echo esc_attr($classes['item-label']); ?>" style="--label-color: <?php echo $label_color_text; ?>; --label-bg: <?php echo $label_color_background; ?>; --label-border: <?php echo $label_color_border; ?>; "><?php echo $item_label; ?></div> -->
+                                <div class="<?php echo esc_attr($classes['newcard-label']); ?>" style="--label-color: <?php echo $label_color_text; ?>; --label-bg: <?php echo $label_color_background; ?>; --label-border: <?php echo $label_color_border; ?>; "><?php echo $item_label; ?></div>
 
                             </div>
                             <div class="text-small <?php echo esc_attr($classes['newcard-date']); ?>"><?php echo $item_date; ?></div>
