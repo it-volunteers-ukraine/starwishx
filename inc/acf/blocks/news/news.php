@@ -80,7 +80,7 @@ foreach ($terms as $term) {
 };
 
 $items = $results;
-print_r($items);
+// print_r($items);
 
 if (file_exists($modules_file)) {
     $modules = json_decode(file_get_contents($modules_file), true);
@@ -104,8 +104,6 @@ if (file_exists($modules_file)) {
                     $term_id = $item->term_id;
                     $term_full = get_term($term_id);
                     $item_taxonomy = $term_full->taxonomy;
-                    // $label_color_text = get_field('label_color_text', $item_taxonomy . '_' . $term_id);
-                    // $label_color_background = get_field('label_color_background', $item_taxonomy . '_' . $term_id);
                     $category_current_color = get_category_by_id($categories_colors, $term_id);
                     $label_color_text = $category_current_color['label_color_text'];
                     $label_color_background = $category_current_color['label_color_background'];
