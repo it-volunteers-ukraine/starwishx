@@ -169,13 +169,13 @@ function contact_icon_use($icon_id, $classes = []) {
       <div class="<?= esc_attr($classes['contact-titles']) ?>">
         <?php if ($small): ?><div class="<?= esc_attr($classes['contact-title-small']) ?>"><?= esc_html($small) ?></div><?php endif; ?>
         <?php if ($medium): ?><div class="<?= esc_attr($classes['contact-title-medium']) ?>"><?= esc_html($medium) ?></div><?php endif; ?>
-        <?php if ($subtitle): ?><div class="<?= esc_attr($classes['contact-subtitle']) ?>"><?= esc_html($subtitle) ?></div><?php endif; ?>
+        <?php if ($subtitle): ?><div class="<?= esc_attr($classes['contact-subtitle']) ?>"><?= esc_html($subtitle); ?></div><?php endif; ?>
       </div>
 
       <!-- Contacts -->
       <div class="<?= esc_attr($classes['contact-list']) ?>">
         <!-- С проверкой -->
-        <?php if ($big): ?><p class="<?= esc_attr($classes['contact-title-big']) ?>"><?= wp_strip_all_tags($big) ?></p><?php endif; ?>
+        <?php if ($big): ?><p class="<?= esc_attr($classes['contact-title-big']); ?>"><?php echo $big; ?></p><?php endif; ?>
 
         <div class="<?= esc_attr($classes['contact-group']) ?>">
           <?php if ($email_link): ?>

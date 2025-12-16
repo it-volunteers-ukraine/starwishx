@@ -361,9 +361,15 @@ textarea::placeholder {
 }
 
 @include laptop {
+  .contact-section {
+    padding: 80px 40px;
+    gap: 0;
+  }
+
   .contact-container {
     flex-direction: row;
-    gap: 80px;
+    gap: 0;
+    padding: 32px;
   }
 
   .contact-block {
@@ -402,9 +408,15 @@ textarea::placeholder {
 }
 
 @include desktop {
+  .contact-section {
+    padding: 120px 80px;
+    gap: 0;
+  }
+
   .contact-container {
     flex-direction: row;
-    gap: 80px;
+    gap: 0;
+    padding: 32px;
   }
 
   .contact-block {
@@ -412,7 +424,15 @@ textarea::placeholder {
   }
 
   .contact-title-medium {
-    font-size: 48px;
+    font-size: 64px;
+  }
+
+  .contact-subtitle {
+    font-size: 18px;
+  }
+
+  .contact-title-small {
+    font-size: 16px;
   }
 
   .contact-form {
