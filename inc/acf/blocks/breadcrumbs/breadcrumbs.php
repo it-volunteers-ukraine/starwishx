@@ -51,7 +51,7 @@ $active_title = get_the_title();
                 <li class="<?php echo esc_attr($classes["item"]); ?>">
                     <a class="link-bc" href="<?php echo esc_url($home_url); ?>">
                         <svg class="<?php echo esc_attr($classes["home-icon"]); ?>">
-                            <use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/img/sprites.svg#icon_house"></use>
+                            <use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-house"></use>
                         </svg>
                     </a>
                 </li>
