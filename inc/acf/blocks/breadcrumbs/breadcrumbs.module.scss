@@ -26,18 +26,6 @@
   height: 100%;
 }
 
-/*
-.item {
-
-}
-*/
-
-/*
-.item.selected span {
-  color: $icon-color-accent;
-  border-bottom: 1px solid $icon-color-accent;
-}
-*/
 .item {
   display: flex;
   align-items: center;
@@ -65,39 +53,8 @@
   }
 }
 
-/*
-.item:not*:first-child {
-}
-*/
-
-/*
-@include min-tablet {
-  .section {
-    padding-top: 12px;
-    padding-bottom: 12px;
-  }
-
-  .item {
-    font-size: 14px;
-  }
-}
-*/
-
 @include min-laptop {
   .section {
     padding-top: 32px;
   }
 }
-
-/*
-@include min-desktop {
-  .section {
-    padding-top: 40px;
-    padding-bottom: 40px;
-  }
-
-  .item {
-    font-size: 20px;
-  }
-}
-*/
