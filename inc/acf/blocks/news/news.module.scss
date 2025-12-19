@@ -1,5 +1,4 @@
 @use "../../../../src/scss/variables" as *;
-@use "../../../../src/scss/common" as *;
 @use "../../../../src/scss/mixins/label";
 @use "../../../../src/scss/mixins/media";
 @use "../../../../src/scss/mixins/indents";
@@ -62,20 +61,11 @@
 }
 
 .item-label {
-  @include label.label(var(--label-color), var(--label-bg));
+  @include label.label(var(--label-color), var(--label-bg), var(--label-border));
 
-  /* @extend .label-subtitle; */
-
-  /* margin-bottom: 0;
-  color: var(--label-color);
-  background-color: var(--label-bg); */
   position: absolute;
-  left: 12px;
-  top: 12px;
-
-  /* &::before {
-    background-color: var(--label-color);
-  } */
+  left: 8px;
+  top: 8px;
 }
 
 .item-date {
@@ -119,6 +109,14 @@
 }
 
 @media screen and (min-width: 768px) {
+  .btn1 {
+    display: flex;
+  }
+
+  .btn2 {
+    display: none;
+  }
+
   .subtitle {
     margin-bottom: 10px;
   }
@@ -136,14 +134,6 @@
 */
 
 @media screen and (min-width: 1440px) {
-  .btn1 {
-    display: flex;
-  }
-
-  .btn2 {
-    display: none;
-  }
-
   .subtitle {
     margin-bottom: 20px;
   }

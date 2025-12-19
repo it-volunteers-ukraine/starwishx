@@ -93,7 +93,7 @@ body {
   line-height: 1.2;
 
   @include media.min-desktop {
-    font-size: 24px;
+    font-size: 36px;
   }
 }
 
@@ -277,6 +277,51 @@ body {
   }
 }
 
+/* Базовые стили для ссылок */
+.link-bc {
+  color: $text-light;
+  position: relative;
+
+  &:not(.link-bc-selected):hover {
+    color: $input-color-border-pressed;
+    transition: $animations;
+  }
+
+  &:not(:first-child)::before {
+  }
+}
+
+.link-bc-selected {
+  color: $text-accent;
+  position: relative;
+
+  &:not(:first-child) {
+    margin-left: 26px;
+
+    &::before {
+      content: "";
+      position: absolute;
+      display: inline-block;
+      width: 18px;
+      height: 18px;
+      left: -22px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: url("../img/arrow-right.svg") no-repeat center / contain;
+    }
+  }
+
+  &::after {
+    content: "";
+    width: 100%;
+    height: 1px;
+    bottom: 0;
+    left: 0;
+    background-color: $text-accent;
+    position: absolute;
+  }
+}
+
 .section {
   padding: 80px 0;
 
@@ -303,8 +348,13 @@ img {
   max-width: 100%;
 }
 
+/*
 .site-main {
-  margin-top: 112px;
+   @media screen and (min-width: 601px) {
+    margin-top: var(--wp-admin--admin-bar--height, 0);
+  } */
+
+/*  margin-top: 112px;
 
   @include media.max-tablet {
     margin-top: 98px;
@@ -317,7 +367,7 @@ img {
   @include media.max-tablet {
     margin-top: 52px;
   }
-}
+  } */
 
 /* --- Tablet --- from 768px */
 
@@ -339,3 +389,27 @@ img {
 @media screen and (min-width: 1920px) {
 }
 */
+
+/* ************************************************************** */
+
+/* Свайпер */
+.swiper-paginations {
+  text-align: center;
+  margin-top: 16px;
+  line-height: 0;
+}
+
+.swiper-pagination-bullet {
+  width: 20px;
+  height: 4px;
+  background-color: $text-light;
+  border-radius: 2px;
+  opacity: 1;
+}
+
+/* Активный буллет */
+.swiper-pagination-bullet-active {
+  background-color: $icon-color-fill;
+
+  // background-image: url('icon-active.svg');
+}

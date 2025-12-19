@@ -48,7 +48,7 @@ add_action( 'after_setup_theme', '_themeprefix_theme_setup' );
 /** add fonts */
 function add_google_fonts()
 {
-    wp_enqueue_style('google_web_fonts', 'https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet"', false);
+    wp_enqueue_style('google_web_fonts', 'https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Urbanist:wght@900&display=swap" rel="stylesheet"', false);
 }
 add_action('wp_enqueue_scripts', 'add_google_fonts');
 

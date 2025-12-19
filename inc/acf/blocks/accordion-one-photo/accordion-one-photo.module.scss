@@ -50,7 +50,7 @@
 }
 
 .count {
-  min-width: 30px;
+  min-width: 46px;
   font-size: 16px;
   font-weight: 400;
   color: $text-accent;
@@ -63,7 +63,7 @@
   /* height: 0; */
   pointer-events: none;
   position: relative;
-  margin-left: 30px;
+  margin-left: 46px;
   transition: opacity 400ms ease-out, max-height 750ms linear;
 
   /* transition: opacity 750ms linear, max-height 750ms linear; */
@@ -207,6 +207,9 @@
   /* .item {
     height: 399px;
   } */
+  .section {
+    padding-bottom: 160px;
+  }
 
   .content {
     display: flex;
@@ -232,6 +235,10 @@
      height: 516px;
     }
     */
+
+  .section {
+    padding-bottom: 220px;
+  }
 
   .count {
     font-size: 18px;
