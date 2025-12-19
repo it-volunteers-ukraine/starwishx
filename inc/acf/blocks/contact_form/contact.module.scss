@@ -8,7 +8,6 @@
   @extend %flex-col;
 
   padding: 80px 16px;
-  gap: 10px;
 }
 
 .contact-container {
@@ -67,8 +66,9 @@
   color: $text-dark;
 }
 
-.contact-title-big,
-.contact-subtitle {
+.contact-title-big {
+  @extend %text-base;
+
   font-size: 16px;
   line-height: 130%;
   color: $text-basic;
@@ -102,7 +102,6 @@
 
 .contact-avatars {
   display: flex;
-  gap: -12px;
   margin-top: 8px;
 
   .contact-avatar-item {
@@ -152,6 +151,8 @@
   gap: 4px;
 
   .label-wrapper {
+    @extend %text-base;
+
     display: inline-flex;
     align-items: center;
     gap: 10px;
@@ -198,7 +199,6 @@
 .contact-submit {
   width: 138px;
   height: 44px;
-  padding: 12px 24px;
   font-size: 16px;
   font-weight: 500;
   line-height: 120%;
@@ -280,6 +280,7 @@
     font-weight: 500;
     font-size: 28px;
     line-height: 120%;
+    letter-spacing: 0%;
     color: $text-basic;
     text-align: center;
   }
@@ -306,7 +307,10 @@
 
 input::placeholder,
 textarea::placeholder {
+  @extend %text-base;
+
   color: $text-light;
+  font-size: 16px;
 }
 
 @include min-tablet {
@@ -353,27 +357,26 @@ textarea::placeholder {
     width: 445px;
     height: 168px;
   }
+
+  .contact-popup-error .contact-popup-inner {
+    width: 264px;
+    height: 168px;
+  }
+
+  .contact-popup-title {
+    font-size: 32px;
+  }
 }
 
 @include min-laptop {
-  .contact-section {
-    padding: 80px 40px;
-    gap: 0;
-  }
-
   .contact-container {
     flex-direction: row;
     gap: 0;
-    padding: 32px;
     width: 100%;
   }
 
   .contact-block {
     flex: 0 0 auto;
-  }
-
-  .contact-title-medium {
-    font-size: 48px;
   }
 
   .contact-form {
@@ -396,24 +399,23 @@ textarea::placeholder {
     }
   }
 
-  .contact-submit {
-    width: 138px;
-    height: 44px;
-    margin-left: auto;
-    align-self: flex-end;
+  .contact-popup-success .contact-popup-inner {
+    width: 495px;
+    height: 172px;
+  }
+
+  .contact-popup-text {
+    font-size: 18px;
   }
 }
 
 @include desktop {
   .contact-section {
     padding: 120px 80px;
-    gap: 0;
   }
 
   .contact-container {
     flex-direction: row;
-    gap: 0;
-    padding: 32px;
   }
 
   .contact-block {
@@ -422,14 +424,35 @@ textarea::placeholder {
 
   .contact-title-medium {
     font-size: 64px;
+    font-weight: 300;
   }
 
-  .contact-subtitle {
+  .contact-title-big {
     font-size: 18px;
   }
 
+  .contact-item {
+    font-size: 18px;
+  }
+
+  .contact-avatars {
+    .contact-avatar-item {
+      width: 54px;
+      height: 54px;
+    }
+  }
+
   .contact-title-small {
+    width: 133px;
+    height: 35px;
     font-size: 16px;
+    gap: 6px;
+    padding: 10px 12px;
+
+    &::before {
+      width: 6px;
+      height: 6px;
+    }
   }
 
   .contact-form {
@@ -453,9 +476,31 @@ textarea::placeholder {
   }
 
   .contact-submit {
-    width: 138px;
+    width: 149px;
     height: 44px;
-    margin-left: auto;
-    align-self: flex-end;
+  }
+
+  input::placeholder,
+  textarea::placeholder {
+    font-size: 18px;
+  }
+
+  .contact-popup-success .contact-popup-inner {
+    width: 511px;
+    height: 219px;
+  }
+
+  .contact-popup-error .contact-popup-inner {
+    width: 264px;
+    height: 219px;
+  }
+
+  .contact-popup-icon {
+    width: 40px;
+    height: 40px;
+  }
+
+  .contact-popup-title {
+    font-size: 44px;
   }
 }
