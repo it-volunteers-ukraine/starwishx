@@ -18,11 +18,6 @@
   gap: 80px;
   border-radius: 40px;
   background-color: $surface-violet;
-
-  @include tablet {
-    padding: 32px;
-    gap: 120px;
-  }
 }
 
 .contact-block,
@@ -314,7 +309,7 @@ textarea::placeholder {
   color: $text-light;
 }
 
-@include tablet {
+@include min-tablet {
   .contact-section {
     padding: 80px 40px;
   }
@@ -360,7 +355,7 @@ textarea::placeholder {
   }
 }
 
-@include laptop {
+@include min-laptop {
   .contact-section {
     padding: 80px 40px;
     gap: 0;
@@ -370,6 +365,7 @@ textarea::placeholder {
     flex-direction: row;
     gap: 0;
     padding: 32px;
+    width: 100%;
   }
 
   .contact-block {
@@ -381,7 +377,8 @@ textarea::placeholder {
   }
 
   .contact-form {
-    flex: 1 1 100%;
+    width: 580px;
+    margin-left: auto;
     padding-top: 111px;
     gap: 12px;
     flex-direction: row;
@@ -436,7 +433,8 @@ textarea::placeholder {
   }
 
   .contact-form {
-    flex: 1 1 100%;
+    width: 690px;
+    margin-left: auto;
     padding-top: 111px;
     gap: 12px;
     flex-direction: row;
