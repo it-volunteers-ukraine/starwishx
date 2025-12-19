@@ -89,6 +89,9 @@ add_action( 'wp_enqueue_scripts', '_themeprefix_theme_scripts' );
 
 
 require_once get_template_directory() . '/inc/acf/blocks/blocks-init.php';
+// Contact form AJAX handler
+require get_template_directory() . '/inc/acf/blocks/contact_form/contact-handler.php';
+
 
 
 add_action('init', '_themeprefix_acf_options_page', 20); 
@@ -267,3 +270,28 @@ if ( ! function_exists( 'yourtheme_mobile_search_lang' ) ) {
     <?php
   }
 }
+// Регистрация и локализация скрипта контактной формы
+add_action('wp_enqueue_scripts', function() {
+
+    // Путь к файлу contact.js
+    $script_path = '/inc/acf/blocks/contact_form/contact.js';
+    $script_file = get_template_directory() . $script_path;
+
+    // Регистрируем скрипт
+    wp_register_script(
+        'theme-contact-form',
+        get_template_directory_uri() . $script_path,
+        [], // при необходимости добавь зависимости (например ['jquery'])
+        file_exists($script_file) ? filemtime($script_file) : false,
+        true
+    );
+
+    // Пробрасываем AJAX-настройки
+    wp_localize_script('theme-contact-form', 'ContactFormAjax', [
+        'url'   => admin_url('admin-ajax.php'),
+        'nonce' => wp_create_nonce('contact_form_nonce')
+    ]);
+
+    // Подключаем скрипт
+    wp_enqueue_script('theme-contact-form');
+});
