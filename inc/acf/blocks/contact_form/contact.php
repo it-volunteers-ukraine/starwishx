@@ -299,7 +299,7 @@ function contact_icon_use($icon_id, $classes = []) {
      style="display:none;">
     <div class="<?= esc_attr($classes['contact-popup-inner']) ?>">
         <svg class="<?= esc_attr($classes['contact-popup-icon']) ?>" aria-hidden="true">
-            <use xlink:href="<?= esc_url(get_template_directory_uri() . '/assets/img/sprites.svg#icon-good'); ?>"></use>
+            <use xlink:href="<?= esc_url(get_template_directory_uri() . '/assets/img/sprites.svg#icon-success'); ?>"></use>
         </svg>
 
         <?php if ($popup_success_title): ?>
@@ -323,7 +323,7 @@ function contact_icon_use($icon_id, $classes = []) {
      style="display:none;">
     <div class="<?= esc_attr($classes['contact-popup-inner']) ?>">
         <svg class="<?= esc_attr($classes['contact-popup-icon']) ?>" aria-hidden="true">
-            <use xlink:href="<?= esc_url(get_template_directory_uri() . '/assets/img/sprites.svg#icon-required'); ?>"></use>
+            <use xlink:href="<?= esc_url(get_template_directory_uri() . '/assets/img/sprites.svg#icon-error'); ?>"></use>
         </svg>
 
         <?php if ($popup_error_title): ?>
