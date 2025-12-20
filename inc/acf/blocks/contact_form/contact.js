@@ -145,11 +145,18 @@ document.addEventListener('DOMContentLoaded', () => {
                 isFormValid = false;
                 if (!firstInvalidInput) firstInvalidInput = input;
             } else {
-                if (input.type === 'email' && !input.value.includes('@')) {
-                    showError(input, cfg.messages.email || 'Некоректний Email');
-                    isFormValid = false;
-                    if (!firstInvalidInput) firstInvalidInput = input;
-                } else {
+                if (input.type === 'email') {
+                    const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+                    
+                    if (!emailPattern.test(input.value)) {
+                        showError(input, cfg.messages.email || 'Некоректний Email');
+                        isFormValid = false;
+                        if (!firstInvalidInput) firstInvalidInput = input;
+                    } else {
+                         clearError(input);
+                    }
+                } 
+                else {
                     if (input !== phoneInput) {
                         clearError(input);
                     }
