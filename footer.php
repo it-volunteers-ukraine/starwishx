@@ -1,9 +1,12 @@
 <?php
 $footer_title = esc_html(get_field('title', 'options'));
+$email_title = esc_html(get_field('email_title', 'options'));
 $email_text = esc_html(get_field('email_name', 'options'));
 $email_link = esc_html(get_field('email_link', 'options'));
+$telegram_title = esc_html(get_field('telegram_title', 'options'));
 $telegram_text = esc_html(get_field('telegram_name', 'options'));
 $telegram_link = esc_html(get_field('telegram_link', 'options'));
+$linkedin_title = esc_html(get_field('linkedin_title', 'options'));
 $linkedin_text = esc_html(get_field('linkedin_name', 'options'));
 $linkedin_link = esc_html(get_field('linkedin_link', 'options'));
 
@@ -40,7 +43,7 @@ $linkedin_link = esc_html(get_field('linkedin_link', 'options'));
                                     <use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-telegram"></use>
                                 </svg>
                                 <span>
-                                    <?php echo $telegram_text; ?></a>
+                                    <?php echo $telegram_title; ?></a>
                             </span>
                         </li>
 
@@ -52,7 +55,7 @@ $linkedin_link = esc_html(get_field('linkedin_link', 'options'));
                                     <use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-linkedin"></use>
                                 </svg>
                                 <span>
-                                    <?php echo $linkedin_text; ?></a>
+                                    <?php echo $linkedin_title; ?></a>
                             </span>
                         </li>
                     <?php endif; ?>
