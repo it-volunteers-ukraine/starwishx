@@ -223,8 +223,7 @@ export const fontsStyle = () => {
   return src(`./src`);
   function cb() { }
 };
-// const fonts = series(otfToTtf, ttfToWoff, fontsStyle);
-const fonts = (cb) => cb();
+const fonts = series(otfToTtf, ttfToWoff, fontsStyle);
 
 // Images
 export const images = () => {
