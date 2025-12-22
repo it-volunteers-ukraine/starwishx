@@ -129,10 +129,6 @@
   opacity: 1;
   transition: opacity 0.2s;
   cursor: pointer;
-}
-
-.arrow-left use,
-.arrow-right use {
   stroke: $text-dark;
 }
 
@@ -146,6 +142,7 @@
 .arrow-right:global(.disabled) use {
   stroke: $icon-color-selected-stroke;
 }
+
 /* stylelint-enable selector-pseudo-class-no-unknown */
 
 @media (max-width: 1440px) {
