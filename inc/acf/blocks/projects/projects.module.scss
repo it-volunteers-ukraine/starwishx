@@ -94,8 +94,8 @@
 
 .project-category {
   position: absolute;
-  top: 12px;
-  left: 12px;
+  top: 8px;
+  left: 8px;
   border-radius: 40px;
   padding: 6px 12px;
   font-size: 14px;
@@ -129,8 +129,10 @@
   opacity: 1;
   transition: opacity 0.2s;
   cursor: pointer;
+  stroke: $text-dark;
 }
 
+/* stylelint-disable selector-pseudo-class-no-unknown */
 .arrow-left:global(.disabled),
 .arrow-right:global(.disabled) {
   opacity: 0.3;
@@ -141,10 +143,7 @@
   stroke: $icon-color-selected-stroke;
 }
 
-.arrow-left use,
-.arrow-right use {
-  stroke: $text-dark;
-}
+/* stylelint-enable selector-pseudo-class-no-unknown */
 
 @media (max-width: 1440px) {
   .projects-wrapper {
