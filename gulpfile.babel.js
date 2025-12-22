@@ -23,7 +23,7 @@ import git from "git-rev-sync";
 import exec from "gulp-exec";
 import rename from 'gulp-rename';
 // const postcssModules = require("postcss-modules");
-import  postcssModules from  "postcss-modules";
+import postcssModules from "postcss-modules";
 import path from "path";
 
 let cssModulesJSON = {};
@@ -89,6 +89,7 @@ export const blockStyles = () => {
   };
 
   return src(["inc/acf/blocks/**/*.module.scss"])
+    .pipe(SASS().on("error", SASS.logError))
     .pipe(postcss([
       postcssModules({
         generateScopedName: "[name]__[local]___[hash:base64:5]",
@@ -96,7 +97,7 @@ export const blockStyles = () => {
           const fileName = path.basename(cssFileName, ".module.scss");
           cssModulesJSON[fileName] = json;
 
-          fs.mkdirSync("assets/css/blocks/", {recursive: true});
+          fs.mkdirSync("assets/css/blocks/", { recursive: true });
           fs.writeFileSync("assets/css/blocks/modules.json", JSON.stringify(cssModulesJSON, null, 2));
         }
       })
@@ -112,7 +113,6 @@ export const blockStyles = () => {
     )
     .pipe(exec.reporter(reportOptions))
     .pipe(gulpif(!PRODUCTION, sourcemaps.init()))
-    .pipe(SASS().on("error", SASS.logError))
     .pipe(gulpif(PRODUCTION, postcss([autoprefixer])))
     .pipe(gulpif(PRODUCTION, cleanCss({ compatibility: "ie8" })))
     .pipe(gulpif(!PRODUCTION, sourcemaps.write()))
@@ -221,9 +221,10 @@ export const fontsStyle = () => {
   });
 
   return src(`./src`);
-  function cb() {}
+  function cb() { }
 };
-const fonts = series(otfToTtf, ttfToWoff, fontsStyle);
+// const fonts = series(otfToTtf, ttfToWoff, fontsStyle);
+const fonts = (cb) => cb();
 
 // Images
 export const images = () => {
@@ -314,8 +315,8 @@ export const blockScripts = () => {
         },
       })
     )
-  .pipe(dest("assets/js"))  // сохраняем файлы в assets с поддержкой структуры подпапок
-  .pipe(browserSync.stream());
+    .pipe(dest("assets/js"))  // сохраняем файлы в assets с поддержкой структуры подпапок
+    .pipe(browserSync.stream());
 };
 
 // Translate file
