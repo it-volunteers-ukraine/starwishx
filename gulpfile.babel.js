@@ -15,7 +15,7 @@ import named from "vinyl-named";
 import replace from "gulp-replace";
 import wpPot from "gulp-wp-pot";
 import browserSync from "browser-sync";
-import config from "./config";
+import config from "./config.js";
 import fs from "fs";
 import fonter from "gulp-fonter-fix";
 import ttf2woff2 from "gulp-ttf2woff2";
