@@ -1,19 +1,18 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Получаем настройки
+    
     const cfg = window.contactFormConfig || { messages: {}, classes: {} };
     
-    // Деструктуризация классов с фоллбэками
-    const { 
+        const { 
         form: formClass = 'contact-form', 
         counter: counterClass = 'contact-counter', 
         error: errorClass = 'contact-error',
         inputError: inputErrorClass = 'input-error'
     } = cfg.classes || {};
 
-    // Путь к спрайту (из PHP или дефолтный)
-    const spritePath = cfg.spritePath || '/wp-content/themes/your-theme/assets/img/sprites.svg';
+    
+    const spritePath = cfg.spritePath;
 
-    // --- ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ ВАЛИДАЦИИ ---
+ 
 
     const showError = (input, message) => {
         const wrapper = input.closest('label') || input.parentElement;
@@ -22,23 +21,20 @@ document.addEventListener('DOMContentLoaded', () => {
             wrapper.querySelector('.contact-error');
 
         if (errorContainer) {
-            const msgText = message || 'Ошибка заполнения';
+            const msgText = message || 'Помилка заповнення';
             
-            // Генерируем HTML иконки
-            // fill: currentColor позволяет иконке брать цвет текста ошибки (красный)
+           
             const iconHtml = `
-                <svg class="icon icon-required" aria-hidden="true" style="width: 16px; height: 16px; flex-shrink: 0; fill: currentColor;">
-                    <use xlink:href="${spritePath}#icon-required"></use>
+                <svg>
+                    <use xlink:href="${spritePath}#icon-error"></use>
                 </svg>
             `;
 
-            // Вставляем иконку и текст внутри span для удобства
+            
             errorContainer.innerHTML = `${iconHtml}<span>${msgText}</span>`;
             
-            // Если в CSS нет display:flex, можно добавить тут принудительно, 
-            // но лучше оставить это в CSS (см. пункт 1)
-            errorContainer.style.display = 'flex'; 
-        }
+          
+                   }
         input.classList.add(inputErrorClass);
     };
 
@@ -49,7 +45,7 @@ document.addEventListener('DOMContentLoaded', () => {
             wrapper.querySelector('.contact-error');
 
         if (errorContainer) {
-            errorContainer.innerHTML = ''; // Очищаем весь HTML (иконку и текст)
+            errorContainer.innerHTML = ''; 
         }
         input.classList.remove(inputErrorClass);
     };
@@ -60,13 +56,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 clearError(input);
             }
         });
-        // change тоже полезен для автозаполнения
+        
         input.addEventListener('change', () => {
              if (input.value.trim() !== '') clearError(input);
         });
     };
 
-    // --- СЧЁТЧИК СИМВОЛОВ ---
+    
     const textarea = document.querySelector(`.${formClass} textarea`);
     let counter = null;
 
@@ -86,12 +82,10 @@ document.addEventListener('DOMContentLoaded', () => {
             counter && (counter.textContent = `${textarea.value.length}/${max}`);
 
         textarea.addEventListener('input', update);
-        // Инициализация при загрузке
         update();
         attachInputListener(textarea);
     }
 
-    // --- PHONE (intl-tel-input) ---
     const phoneInput = document.querySelector('.contact-phone-input');
     let iti = null;
 
@@ -111,7 +105,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         phoneInput.addEventListener('blur', () => {
-            // При потере фокуса форматируем номер
             try {
                 const full = iti.getNumber();
                 if (full) phoneInput.value = full;
@@ -125,7 +118,6 @@ document.addEventListener('DOMContentLoaded', () => {
         attachInputListener(phoneInput);
     }
 
-    // Очистка ошибок остальных input
     const allInputs = document.querySelectorAll(`.${formClass} input`);
     allInputs.forEach((input) => {
         if (input !== phoneInput && input !== textarea) {
@@ -133,7 +125,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // --- AJAX + Валидация при отправке ---
     const formEl = document.querySelector(`.${formClass}`);
     if (!formEl) return;
 
@@ -149,18 +140,23 @@ document.addEventListener('DOMContentLoaded', () => {
             const val = input.value.trim();
 
             if (!val) {
-                const msg = input.dataset.msg || cfg.messages.required || 'Заполните поле';
+                const msg = input.dataset.msg || cfg.messages.required || 'Заповніть поле';
                 showError(input, msg);
                 isFormValid = false;
                 if (!firstInvalidInput) firstInvalidInput = input;
             } else {
-                if (input.type === 'email' && !input.value.includes('@')) {
-                    showError(input, cfg.messages.email || 'Некорректный Email');
-                    isFormValid = false;
-                    if (!firstInvalidInput) firstInvalidInput = input;
-                } else {
-                    // Если поле заполнено и это не email с ошибкой — очищаем
-                    // (для телефона отдельная проверка ниже)
+                if (input.type === 'email') {
+                    const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+                    
+                    if (!emailPattern.test(input.value)) {
+                        showError(input, cfg.messages.email || 'Некоректний Email');
+                        isFormValid = false;
+                        if (!firstInvalidInput) firstInvalidInput = input;
+                    } else {
+                         clearError(input);
+                    }
+                } 
+                else {
                     if (input !== phoneInput) {
                         clearError(input);
                     }
@@ -168,16 +164,13 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        // Проверка телефона (если он есть)
         if (phoneInput && iti) {
             const isPhoneRequired = phoneInput.hasAttribute('required');
             const phoneVal = phoneInput.value.trim();
 
             if (isPhoneRequired && !phoneVal) {
-                // Ошибка уже показана в цикле выше, но можно обновить
-                // showError(...) 
             } else if (phoneVal && !iti.isValidNumber()) {
-                showError(phoneInput, cfg.messages.phone || 'Некорректный телефон');
+                showError(phoneInput, cfg.messages.phone || 'Некоректний телефон');
                 isFormValid = false;
                 if (!firstInvalidInput) firstInvalidInput = phoneInput;
             } else {
@@ -195,7 +188,6 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        // --- Отправка ---
         const formData = new FormData(formEl);
         formData.append('action', 'send_contact_form');
 
@@ -204,7 +196,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         function showPopup(el) {
             if (!el) return;
-            // Скрываем оба попапа перед показом нового
             if (popupSuccess) popupSuccess.style.display = 'none';
             if (popupError) popupError.style.display = 'none';
             
@@ -228,23 +219,19 @@ document.addEventListener('DOMContentLoaded', () => {
                     showPopup(popupSuccess);
                     formEl.reset();
                     
-                    // Сбрасываем счетчик символов
                     if (textarea && counter) {
                         counter.textContent = `0/${parseInt(textarea.getAttribute('maxlength')) || 500}`;
                     }
                     
-                    // Удаляем красную обводку
                     formEl.querySelectorAll(`.${inputErrorClass}`).forEach((el) => {
                         el.classList.remove(inputErrorClass);
                     });
-                    // Очищаем тексты ошибок/иконки
                     formEl.querySelectorAll(`.${errorClass}`).forEach((el) => {
                          el.innerHTML = '';
                     });
                 } else {
                     if (popupError) {
                         if (data.message) {
-                            // Ищем текст внутри попапа, используя класс из конфига или дефолтный
                             const textClass = (cfg.classes && cfg.classes['contact-popup-text']) 
                                 ? cfg.classes['contact-popup-text'] 
                                 : 'contact-popup-text';
