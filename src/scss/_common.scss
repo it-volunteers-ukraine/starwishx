@@ -287,8 +287,8 @@ body {
     transition: $animations;
   }
 
-  &:not(:first-child)::before {
-  }
+  /* &:not(:first-child)::before {
+  } */
 }
 
 .link-bc-selected {
