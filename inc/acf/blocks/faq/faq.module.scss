@@ -58,6 +58,15 @@
       font-weight: 500;
     }
 
+    .accordion-item-header-icon {
+      position: absolute;
+      top: 20px;
+      right: 0;
+      transition: transform 0.3s ease-in-out;
+      width: 24px;
+      height: 24px;
+    }
+
     .accordion-item-header {
       display: block;
       cursor: pointer;
@@ -76,15 +85,6 @@
       &[aria-expanded="true"] .accordion-item-header-icon {
         transform: rotate(45deg);
       }
-    }
-
-    .accordion-item-header-icon {
-      position: absolute;
-      top: 20px;
-      right: 0;
-      transition: transform 0.3s ease-in-out;
-      width: 24px;
-      height: 24px;
     }
 
     .accordion-item-description-wrapper {
