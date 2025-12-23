@@ -42,8 +42,8 @@ function theme_send_contact_form() {
         wp_send_json_error(['message' => 'Email повинен містити доменну зону (наприклад .com)'], 422);
     }
 
-    $subject = sprintf('Сообщение с сайта от %s', $name);
-    $body = "Имя: $name\nТелефон: $phone\nEmail: $email\n\nСообщение:\n$message\n";
+    $subject = sprintf('Повідомлення з сайту від %s', $name);
+    $body = "Ім'я: $name\nТелефон: $phone\nEmail: $email\n\nПовідомлення:\n$message\n";
     
     $headers = [];
     if ( is_email( $email ) ) {
