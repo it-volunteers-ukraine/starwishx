@@ -112,11 +112,6 @@
 }
 
 /*
-@include min-laptop {
-}
-*/
-
-/*
     'newlast' => 'newlast',
     'newscards-item' => 'newscards-item',
     'newcard-content' => 'newcard-content',
@@ -216,11 +211,6 @@
 .bycat-first-item {
   grid-area: a;
 }
-
-/*
-.bycat-first-item .bycat-item {
-}
-*/
 
 .bycat-other-item {
   display: grid;
