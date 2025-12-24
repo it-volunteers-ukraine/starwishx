@@ -1,0 +1,372 @@
+@use "../variables" as *;
+@use "../mixins/media" as *;
+
+/* ======================================
+   LAUNCHPAD ADMIN PANEL STYLES
+   ====================================== */
+
+// Main container
+.launchpad-container {
+    min-height: 100vh;
+    // background: $surface-violet;
+    padding: 0;
+}
+
+.launchpad-panel-wrapper {
+    // Ensure the transition feels smooth when switching
+    &[hidden] {
+        display: none !important;
+    }
+}
+
+// Optional: Add a fade-in for the active panel wrapper
+.launchpad-panel-wrapper:not([hidden]) {
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+// Layout structure
+.launchpad-layout {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    min-height: 100vh;
+
+    @include max-laptop {
+        grid-template-columns: 240px 1fr;
+    }
+
+    @include max-tablet {
+        grid-template-columns: 1fr;
+    }
+}
+
+// Sidebar with tabs
+.launchpad-sidebar {
+    background: $surface-primary;
+    border-right: 1px solid $surface-message;
+    padding: 2rem 0;
+
+    @include max-tablet {
+        border-right: none;
+        border-bottom: 1px solid $surface-message;
+        padding: 1rem 0;
+    }
+}
+
+.launchpad-tabs {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 0 1rem;
+
+    @include max-tablet {
+        flex-direction: row;
+        overflow-x: auto;
+        padding: 0 1rem;
+        gap: 1rem;
+    }
+}
+
+.launchpad-tab {
+    display: flex;
+    align-items: center;
+    padding: 1rem 1.5rem;
+    background: transparent;
+    border: none;
+    border-radius: 12px;
+    color: $text-basic;
+    font-size: 1rem;
+    font-weight: 400;
+    text-align: left;
+    cursor: pointer;
+    transition: all $animations;
+    white-space: nowrap;
+    position: relative;
+
+    &:hover {
+        background: $buttons-color-background-secondary-hover;
+        color: $icon-color-primary;
+    }
+
+    &:focus {
+        outline: 2px solid $primary-hover;
+        outline-offset: 2px;
+    }
+
+    &.active {
+        background: $element-block-fill;
+        color: $element-block-text;
+        font-weight: 500;
+
+        &::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 4px;
+            height: 60%;
+            background: $icon-color-fill;
+            border-radius: 2px;
+
+            @include max-tablet {
+                display: none;
+            }
+        }
+    }
+
+    @include max-tablet {
+        padding: 0.75rem 1rem;
+        flex-shrink: 0;
+    }
+}
+
+.tab-text {
+    display: block;
+    line-height: 1.2;
+}
+
+// Main panel area
+.launchpad-main {
+    background: $surface-primary;
+    padding: 2rem;
+    overflow-y: auto;
+
+    @include max-tablet {
+        padding: 1rem;
+    }
+}
+
+.launchpad-panels {
+    // max-width: 1200px;
+    margin: 0 auto;
+}
+
+.launchpad-panel {
+    // display: none;
+    animation: fadeIn 0.3s ease-in-out;
+
+    // &.active {
+    //     display: block;
+    // }
+}
+
+.panel-title {
+    font-size: 2rem;
+    font-weight: 600;
+    color: $text-dark;
+    margin-bottom: 1.5rem;
+    line-height: 1.2;
+
+    @include max-tablet {
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+    }
+}
+
+.panel-content {
+    background: $surface-violet;
+    border-radius: 16px;
+    padding: 2rem;
+
+    @include max-tablet {
+        padding: 1.5rem;
+    }
+
+    p {
+        font-size: 1.125rem;
+        color: $text-basic;
+        line-height: 1.6;
+        margin-bottom: 1.5rem;
+
+        &:last-child {
+            margin-bottom: 0;
+        }
+    }
+}
+
+.placeholder-box {
+    background: $element-card-cult-fill;
+    border: 2px dashed $element-card-cult-stroke;
+    border-radius: 12px;
+    padding: 3rem 2rem;
+    // text-align: center;
+    margin: 2rem 0;
+
+    @include max-tablet {
+        padding: 2rem 1.5rem;
+        margin: 1.5rem 0;
+    }
+
+    // span {
+    // font-size: 1rem;
+    // color: $text-light;
+    // font-weight: 500;
+    // text-transform: uppercase;
+    // letter-spacing: 0.5px;
+    // }
+}
+
+// Animations
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+// Responsive adjustments
+@include max-mobile {
+    .launchpad-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .launchpad-sidebar {
+        padding: 0.75rem 0;
+    }
+
+    .launchpad-tabs {
+        padding: 0 0.75rem;
+    }
+
+    .launchpad-tab {
+        padding: 0.5rem 0.75rem;
+        font-size: 0.875rem;
+    }
+
+    .launchpad-main {
+        padding: 0.75rem;
+    }
+
+    .panel-content {
+        padding: 1rem;
+    }
+
+    .placeholder-box {
+        padding: 1.5rem 1rem;
+    }
+}
+
+// High contrast mode support
+@media (prefers-contrast: high) {
+    .launchpad-tab {
+        border: 2px solid transparent;
+
+        &.active {
+            border-color: $icon-color-fill;
+        }
+    }
+
+    .placeholder-box {
+        border-style: solid;
+    }
+}
+
+// Reduced motion support
+@media (prefers-reduced-motion: reduce) {
+    .launchpad-panel {
+        animation: none;
+    }
+
+    .launchpad-tab {
+        transition: none;
+    }
+}
+
+.opportunity-meta {
+    .draft {
+        color: $icon-color-accent;
+    }
+    .publish {
+        color: $icon-color-done;
+    }
+    .pending {
+        color: $icon-color-fill;
+    }
+}
+
+.launchpad-grid-3-col {
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr);
+    // gap: 1rem;
+
+    @include max-laptop {
+        grid-template-columns: 1fr;
+    }
+}
+.launchpad-grid-auto {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 1rem;
+
+    @include max-laptop {
+        grid-template-columns: 1fr;
+    }
+}
+
+// .form-group-card {
+// background: #fff;
+// padding: 1.5rem;
+// border-radius: 8px;
+// border: 1px solid #ddd;
+
+// h3 {
+//     margin-top: 0;
+//     border-bottom: 1px solid #eee;
+//     padding-bottom: 0.5rem;
+// }
+// }
+
+.profile-form,
+.security-form {
+    // display: flex;
+    flex-direction: column;
+    gap: 8px;
+    .form-actions {
+        display: flex;
+        flex-direction: row;
+        gap: 8px;
+    }
+}
+
+.launchpad-form,
+.security-form {
+    input,
+    textarea,
+    select {
+        border-radius: 8px;
+        border: 1px solid $input-color-border-default;
+        background: $input-color-surface-default;
+        color: $text-light;
+        font-size: 1rem;
+        padding: 12px;
+    }
+
+    .group-card-title {
+        margin-bottom: 1rem;
+    }
+
+    .form-card-data {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .form-select-cetegory {
+        max-width: 250px;
+    }
+
+    .form-field-description {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+}
+
+.w-100 {
+    width: 100%;
+}

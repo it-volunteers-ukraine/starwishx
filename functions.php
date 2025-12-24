@@ -295,3 +295,7 @@ add_action('wp_enqueue_scripts', function() {
     // Подключаем скрипт
     wp_enqueue_script('theme-contact-form');
 });
+
+
+// init for Launchpad - user's dashboard
+require get_template_directory() . '/inc/launchpad/setup.php';
