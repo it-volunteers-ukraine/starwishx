@@ -78,7 +78,7 @@ class OpportunitiesPanel extends AbstractPanel
             'currentView' => $view,
             'options'     => $options,     // Dropdown lists
             'formData'    => $currentFormData, // Actual form values
-            'emptyForm'   => $emptyForm, // <--- ADD THIS LINE
+            'emptyForm'   => $emptyForm,
             'items'       => $opportunities,
             'total'       => $total,
             'page'        => 1,
@@ -103,12 +103,15 @@ class OpportunitiesPanel extends AbstractPanel
         <div class="launchpad-panel launchpad-panel--opportunities">
 
             <!-- VIEW: LIST -->
-            <div data-wp-bind--hidden="!state.isOppListVisible">
+            <div class="launchpad-grid__container" data-wp-bind--hidden="!state.isOppListVisible">
 
                 <div class="launchpad-header-actions" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
                     <h2 class="panel-title" style="margin:0;"><?php esc_html_e('Opportunities List', 'starwishx'); ?></h2>
-                    <button class="btn " data-wp-on--click="actions.opportunities.openAdd">
-                        <?php esc_html_e('Add New', 'starwishx'); ?>
+                    <button class="btn-secondary" data-wp-on--click="actions.opportunities.openAdd">
+                        <svg class="btn-secondary__icon cross">
+                            <use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-plus"></use>
+                        </svg>
+                        <span><?php esc_html_e('Add New', 'starwishx'); ?></span>
                     </button>
                 </div>
 
@@ -131,6 +134,7 @@ class OpportunitiesPanel extends AbstractPanel
                     <template data-wp-each="<?= $this->statePath('items') ?>">
                         <article class="opportunity-card">
                             <div class="opportunity-content">
+
                                 <h3 class="opportunity-title" data-wp-text="context.item.title"></h3>
                                 <div class="opportunity-meta">
                                     <span class="opportunity-date" data-wp-text="context.item.date"></span>
@@ -138,13 +142,17 @@ class OpportunitiesPanel extends AbstractPanel
                                 </div>
                             </div>
                             <div class="opportunity-actions">
-                                <button class="button"
+                                <button class="btn-secondary__small"
                                     data-wp-on--click="actions.opportunities.openEdit"
                                     data-wp-bind--data-id="context.item.id"
                                     data-wp-bind--hidden="!context.item.editUrl">
-                                    <?php esc_html_e('Edit', 'starwishx'); ?>
+                                    <svg class="btn-secondary__small--icon write">
+                                        <use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-write"></use>
+                                    </svg>
+                                    <span><?php esc_html_e('Edit', 'starwishx'); ?></span>
+
                                 </button>
-                                <a class="button" data-wp-bind--href="context.item.viewUrl" target="_blank">
+                                <a class="btn-secondary__small" data-wp-bind--href="context.item.viewUrl" target="_blank">
                                     <?php esc_html_e('View', 'starwishx'); ?>
                                 </a>
                             </div>
@@ -162,10 +170,13 @@ class OpportunitiesPanel extends AbstractPanel
             </div>
 
             <!-- VIEW: FORM (Shared for Add & Edit) -->
-            <div data-wp-bind--hidden="!state.isOppFormVisible">
+            <div class="launchpad-form__container" data-wp-bind--hidden="!state.isOppFormVisible">
                 <div class="launchpad-form-header">
-                    <button class="button-link" type="button" data-wp-on--click="actions.opportunities.cancel">
-                        &larr; <?php esc_html_e('Back to list', 'starwishx'); ?>
+                    <button class="btn-secondary__small" type="button" data-wp-on--click="actions.opportunities.cancel">
+                        <svg class="btn-secondary__small--icon arrow-left">
+                            <use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-long_arrow_left"></use>
+                        </svg>
+                        <?php esc_html_e('Back to list', 'starwishx'); ?>
                     </button>
                     <h2 data-wp-text="state.panels.opportunities.currentView === 'add' ? '<?php esc_html_e('New Opportunity', 'starwishx'); ?>' : '<?php esc_html_e('Edit Opportunity', 'starwishx'); ?>'"></h2>
                 </div>
@@ -173,7 +184,7 @@ class OpportunitiesPanel extends AbstractPanel
                 <form class="launchpad-form" data-wp-on--submit="actions.opportunities.save">
 
                     <!-- Main Title -->
-                    <div class="form-field">
+                    <div class="form-field form-field__title">
                         <label><?php esc_html_e('Opportunity Title', 'starwishx'); ?></label>
                         <input type="text" required class="large-text"
                             data-wp-bind--value="<?= $formPath ?>.title"
