@@ -91,13 +91,13 @@ final class LaunchpadCore
         if (function_exists('wp_register_script_module')) {
             wp_register_script_module(
                 '@starwishx/launchpad',
-                get_template_directory_uri() . '/inc/launchpad/Assets/store.js',
+                // get_template_directory_uri() . '/inc/launchpad/Assets/store.js',
+                get_template_directory_uri() . '/assets/js/store.module.js',
                 array_merge(['@wordpress/interactivity'], $asset['dependencies']),
                 $asset['version']
             );
             wp_enqueue_script_module('@starwishx/launchpad');
         }
-
         // Settings for JS - Added loginUrl here
         wp_add_inline_script(
             'wp-interactivity',
