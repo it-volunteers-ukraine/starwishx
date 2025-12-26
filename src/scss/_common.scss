@@ -277,14 +277,99 @@ body {
   }
 }
 
+.btn-secondary {
+  display: flex;
+  column-gap: 12px;
+  flex-flow: row nowrap;
+  justify-content: center;
+  align-items: center;
+  transition: $animations;
+  border: 1px solid $buttons-color-border-secondary-default;
+  border-radius: 40px;
+  background-color: unset;
+  padding: 12.5px 24px;
+  width: fit-content;
+  color: $buttons-color-text-secondary-default;
+  font-weight: 500;
+  font-size: 16px;
+
+  &:hover {
+    background-color: $buttons-color-background-secondary-hover;
+  }
+
+  &__icon {
+    width: 17px;
+    height: 17px;
+
+    &:focus {
+      color: $buttons-color-text-secondary-pressed;
+    }
+  }
+
+  &:focus {
+    border-color: $buttons-color-background-secondary-pressed;
+    background-color: $buttons-color-background-secondary-pressed;
+    color: $buttons-color-text-secondary-pressed;
+
+    .btn-secondary__icon {
+      color: $buttons-color-text-secondary-pressed;
+    }
+  }
+
+  &:active,
+  &:active:hover {
+    background-color: $buttons-color-background-secondary-pressed;
+  }
+
+  @include media.min-desktop {
+    font-size: 18px;
+  }
+}
+
+.btn-secondary__small {
+  display: flex;
+  column-gap: 12px;
+  flex-flow: row nowrap;
+  justify-content: center;
+  align-items: center;
+  transition: $animations;
+  border: 1px solid $buttons-color-border-secondary-default;
+  border-radius: 40px;
+  background-color: unset;
+  padding: 6px 16px;
+  width: fit-content;
+  min-width: 88px;
+  color: $buttons-color-text-secondary-default;
+  font-weight: 500;
+  font-size: 16px;
+
+  &[hidden] {
+    display: none;
+  }
+
+  &:hover {
+    background-color: $buttons-color-background-secondary-selected;
+  }
+
+  &--icon {
+    width: 14px;
+    height: 14px;
+    color: $icon-color-accent;
+
+    &:focus {
+      color: $buttons-color-text-secondary-pressed;
+    }
+  }
+}
+
 /* Базовые стили для ссылок */
 .link-bc {
-  color: $text-light;
   position: relative;
+  color: $text-light;
 
   &:not(.link-bc-selected):hover {
-    color: $input-color-border-pressed;
     transition: $animations;
+    color: $input-color-border-pressed;
   }
 
   /* &:not(:first-child)::before {
@@ -292,33 +377,33 @@ body {
 }
 
 .link-bc-selected {
-  color: $text-accent;
   position: relative;
+  color: $text-accent;
 
   &:not(:first-child) {
     margin-left: 26px;
 
     &::before {
-      content: "";
-      position: absolute;
       display: inline-block;
-      width: 18px;
-      height: 18px;
-      left: -22px;
+      position: absolute;
       top: 50%;
+      left: -22px;
       transform: translateY(-50%);
       background: url("../img/arrow-right.svg") no-repeat center / contain;
+      width: 18px;
+      height: 18px;
+      content: "";
     }
   }
 
   &::after {
-    content: "";
-    width: 100%;
-    height: 1px;
+    position: absolute;
     bottom: 0;
     left: 0;
     background-color: $text-accent;
-    position: absolute;
+    width: 100%;
+    height: 1px;
+    content: "";
   }
 }
 
@@ -394,17 +479,17 @@ img {
 
 /* Свайпер */
 .swiper-paginations {
-  text-align: center;
   margin-top: 16px;
   line-height: 0;
+  text-align: center;
 }
 
 .swiper-pagination-bullet {
+  opacity: 1;
+  border-radius: 2px;
+  background-color: $text-light;
   width: 20px;
   height: 4px;
-  background-color: $text-light;
-  border-radius: 2px;
-  opacity: 1;
 }
 
 /* Активный буллет */

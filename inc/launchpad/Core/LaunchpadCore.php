@@ -72,10 +72,10 @@ final class LaunchpadCore
     public function registerDefaultPanels(PanelRegistry $registry): void
     {
         $registry->register('profile', new \Launchpad\Panels\ProfilePanel(), 10);
-        $registry->register('favorites', new \Launchpad\Panels\FavoritesPanel(), 20);
-        $registry->register('opportunities', new \Launchpad\Panels\OpportunitiesPanel(), 25);
-        $registry->register('stats', new \Launchpad\Panels\StatsPanel(), 30);
-        $registry->register('security', new \Launchpad\Panels\SecurityPanel(), 40);
+        $registry->register('opportunities', new \Launchpad\Panels\OpportunitiesPanel(), 20);
+        $registry->register('security', new \Launchpad\Panels\SecurityPanel(), 30);
+        $registry->register('stats', new \Launchpad\Panels\StatsPanel(), 40);
+        $registry->register('favorites', new \Launchpad\Panels\FavoritesPanel(), 50);
     }
 
     public function enqueueAssets(): void

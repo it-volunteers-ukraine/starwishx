@@ -6,7 +6,7 @@ config.js
 DS
 .DS_Store
 dist/
-/assets/
+assets/
 
 # JetBrains IDE
 .idea/
@@ -16,5 +16,7 @@ Thumbs.db
 
 production/
 
+# VSCode related
 *.code-workspace
+launch.json
 docs/
