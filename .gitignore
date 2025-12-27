@@ -17,6 +17,7 @@ Thumbs.db
 production/
 
 # VSCode related
+.vscode/
 *.code-workspace
 launch.json
 docs/
