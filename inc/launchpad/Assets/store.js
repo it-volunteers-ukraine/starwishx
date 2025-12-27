@@ -368,10 +368,13 @@ const { state, actions } = store("launchpad", {
       startEdit() {
         const panel = ensurePanel(state, "profile");
         panel.isEditing = true;
+        // Cache original values to support "Cancel"
         panel._original = {
           firstName: panel.firstName,
           lastName: panel.lastName,
           email: panel.email,
+          phone: panel.phone, // NEW
+          telegram: panel.telegram, // NEW
         };
       },
       cancelEdit() {
@@ -382,6 +385,7 @@ const { state, actions } = store("launchpad", {
       updateField() {
         const { ref } = getElement();
         const field = ref?.dataset?.field;
+        // Generic update works for all fields (firstName, phone, etc.)
         if (field) ensurePanel(state, "profile")[field] = ref.value;
       },
       async save(event) {
@@ -399,6 +403,8 @@ const { state, actions } = store("launchpad", {
                 firstName: panel.firstName,
                 lastName: panel.lastName,
                 email: panel.email,
+                phone: panel.phone, // NEW
+                telegram: panel.telegram, // NEW
               },
             }
           );

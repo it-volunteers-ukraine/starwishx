@@ -1,0 +1,66 @@
+{
+    "key": "group_6942164a75686",
+    "title": "Users",
+    "fields": [
+        {
+            "key": "field_6942164aad908",
+            "label": "Phone",
+            "name": "phone",
+            "aria-label": "",
+            "type": "phone_number",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_country": "ua",
+            "placeholder": "+38 044-555-5555",
+            "return_format": "object",
+            "allow_in_bindings": 0,
+            "country": "us"
+        },
+        {
+            "key": "field_694216f3d6610",
+            "label": "Telegram",
+            "name": "telegram",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "maxlength": "",
+            "allow_in_bindings": 0,
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "user_role",
+                "operator": "==",
+                "value": "contributor"
+            }
+        ]
+    ],
+    "menu_order": 0,
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": "",
+    "active": true,
+    "description": "",
+    "show_in_rest": 0,
+    "modified": 1766634066
+}
