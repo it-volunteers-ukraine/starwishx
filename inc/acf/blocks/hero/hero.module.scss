@@ -2,59 +2,13 @@
 @use "../../../../src/scss/mixins/media" as *;
 
 .section {
-  padding-top: 16px;
-  padding-bottom: 0;
+  padding: 0;
+  position: relative;
+  top: -93px;
+  z-index: -1;
 }
 
-.home-icon {
-  width: 24px;
-  height: 24px;
-  fill: $icon-color-default-stroke;
-}
-
-.arrow-icon {
-  width: 18px;
-  height: 18px;
-  fill: $text-accent;
-  margin-right: 4px;
-}
-
-.list {
-  display: inline-flex;
-  gap: 4px;
-  align-items: center;
-  height: 100%;
-}
-
-.item {
-  display: flex;
-  align-items: center;
-  align-self: stretch;
-}
-
-.item a {
-  display: flex;
-  align-items: center;
-  line-height: 1;
-  height: 100%;
-}
-
-.item:last-child a {
-  color: $text-accent;
-  border-bottom: 1px solid $text-accent;
-  border-top: 1px solid transparent;
-}
-
-.item a:hover {
-  color: $input-color-border-pressed;
-
-  & svg {
-    fill: $input-color-border-pressed;
-  }
-}
-
-@include min-laptop {
-  .section {
-    padding-top: 32px;
-  }
+.image {
+  width: 100%;
+  display: block;
 }
