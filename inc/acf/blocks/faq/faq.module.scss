@@ -34,7 +34,7 @@
 
   .accordion {
     counter-reset: item 0;
-    margin: clamp(16px, 3vw, 32px) auto 0 auto;
+    margin: clamp(16px, 3vw, 32px) auto 0;
     border-top: 1px solid $stroke-default;
     max-width: 1464px;
     list-style: none;

@@ -147,8 +147,7 @@
 
 @media (max-width: 1440px) {
   .projects-wrapper {
-    overflow-x: auto;
-    overflow-y: hidden;
+    overflow: auto hidden;
     -webkit-overflow-scrolling: touch;
     scroll-behavior: smooth;
     -ms-overflow-style: none;
