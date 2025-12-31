@@ -84,6 +84,33 @@ function _themeprefix_theme_scripts() {
     wp_enqueue_script( 'lightbox-js' );
     wp_enqueue_script( 'swiper-js' );
     wp_enqueue_script( 'app-js' );
+
+    /** =========================
+     *  СНЕГ ДО 02.01.2026
+     *  ========================= */
+    $end_date = strtotime('2026-01-02 23:59:59');
+    $now      = current_time('timestamp'); // с учётом таймзоны WP
+
+    if ( $now <= $end_date ) {
+
+        wp_enqueue_style(
+            'snow-css',
+            'https://cdn.jsdelivr.net/gh/Alaev-Co/snowflakes/dist/snow.min.css'
+        );
+
+        wp_enqueue_script(
+            'snow-js',
+            'https://cdn.jsdelivr.net/gh/Alaev-Co/snowflakes/dist/Snow.min.js',
+            [],
+            null,
+            true
+        );
+
+        wp_add_inline_script(
+            'snow-js',
+            'new Snow();'
+        );
+    }
 }
 add_action( 'wp_enqueue_scripts', '_themeprefix_theme_scripts' );
 
