@@ -11,6 +11,25 @@ $end_date = esc_html(get_field('end_date'));
 
 $today = current_time('Ymd');
 
+
+if ( $end_date  > $today ) {
+
+        wp_enqueue_style(
+            'snow-css',
+            'https://cdn.jsdelivr.net/gh/Alaev-Co/snowflakes/dist/snow.min.css'
+        );
+
+        wp_enqueue_script(
+            'snow-js',
+            'https://cdn.jsdelivr.net/gh/Alaev-Co/snowflakes/dist/Snow.min.js',
+            [],
+            null,
+            true
+        );
+
+        wp_add_inline_script( 'snow-js', 'new Snow();' );
+    }
+
 $classes = $default_classes;
 $modules_file = get_template_directory() . '/assets/css/blocks/modules.json';
 if (file_exists($modules_file)) {
@@ -23,10 +42,6 @@ if (file_exists($modules_file)) {
 $active_title = get_the_title();
 ?>
 
-<!-- <section class="section <?php echo esc_attr($classes["section"]); ?>"> -->
-<!-- <div class="container"> -->
 <?php if ($end_date > $today) : ?>
     <img class="<?php echo esc_attr($classes['image']); ?>" src="<?php echo $img; ?>" border="0" alt="rozhdestvenskaya-elka-animatsionnaya-kartinka-0335" />
 <?php endif; ?>
-<!-- </div> -->
-<!-- </section> -->
