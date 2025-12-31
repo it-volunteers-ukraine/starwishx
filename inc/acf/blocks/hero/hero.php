@@ -2,8 +2,16 @@
 // Loading classes
 $default_classes = [
     'section' => 'section',
+    'container' => 'container',
     'link' => 'link',
+    'image-wrap' => 'image-wrap',
     'image' => 'image',
+    'title' => 'title',
+    'subtitle' => 'subtitle',
+    'wrap' => 'wrap',
+    'text-block' => 'text-block',
+    'text-bottom' => 'text-bottom',
+    
 
 ];
 
@@ -26,14 +34,25 @@ $title = esc_html(get_field('title'));
 $subtitle = esc_html(get_field('subtitle'));
 $give = esc_html(get_field('give'));
 $get = esc_html(get_field('get'));
+$text_bottom = esc_html(get_field('text_bottom'));
 $image = get_field('image');
 ?>
 
-<section class="section <?php echo esc_attr($classes["section"]); ?>">
-    <div class="<?php echo esc_attr($classes['image-wrap']); ?>">
+<section class="section <?php echo esc_attr($classes["section"]); ?>" style="--hero-bg: url('<?php echo esc_url($image['url']); ?>');">
+    <!-- <div class="<?php echo esc_attr($classes['image-wrap']); ?>">
         <img class="<?php echo esc_attr($classes['image']); ?>" src="<?php echo esc_url($image['url']); ?>" alt="Hero Image">
+    </div> -->
 
-    </div>
-    <div class="container">
+    <div class="container <?php echo esc_attr($classes['container']); ?>">
+        <div class="<?php echo esc_attr($classes['text-block']); ?>">
+            <h1 class="h1 <?php echo esc_attr($classes['title']); ?>"><?php echo $title; ?></h1>
+            <p class="<?php echo esc_attr($classes['subtitle']); ?>"><?php echo $subtitle; ?></p>
+            <div class="<?php echo esc_attr($classes['wrap']); ?>">
+                <a href="#"><?php echo $get; ?></a>
+                <a href="#"><?php echo $give; ?></a>
+            </div>
+            <p class="<?php echo esc_attr($classes['text-bottom']); ?>"><?php echo $text_bottom; ?></p>
+
+        </div>
     </div>
 </section>

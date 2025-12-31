@@ -4,8 +4,8 @@
     "fields": [
         {
             "key": "field_6953322c4bb50",
-            "label": "Titte",
-            "name": "titte",
+            "label": "Title",
+            "name": "title",
             "aria-label": "",
             "type": "text",
             "instructions": "",
@@ -68,7 +68,7 @@
         {
             "key": "field_695332744bb53",
             "label": "To get an opportunity",
-            "name": "to_get_an_opportunity",
+            "name": "get",
             "aria-label": "",
             "type": "text",
             "instructions": "",
@@ -76,6 +76,27 @@
             "conditional_logic": 0,
             "wrapper": {
                 "width": "50",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "maxlength": "",
+            "allow_in_bindings": 0,
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_69550ee057714",
+            "label": "Text Bottom",
+            "name": "text_bottom",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
                 "class": "",
                 "id": ""
             },
@@ -131,5 +152,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1767095104
+    "modified": 1767182089
 }
