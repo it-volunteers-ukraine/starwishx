@@ -154,6 +154,9 @@
   padding: 12px;
   border: 1px solid $input-color-border-default;
   border-radius: 12px;
+  transition: border-color 0.2s ease;
+
+  
 }
 
 .contact-form-field,
@@ -191,7 +194,7 @@
 
 .contact-form-textarea textarea {
   min-height: 147px;
-  resize: vertical;
+  resize: none;
 }
 
 .contact-form-textarea .textarea-wrapper {
@@ -210,6 +213,12 @@
   line-height: 120%;
   color: $text-light;
   pointer-events: none;
+}
+
+.contact-form input:focus,
+.contact-form textarea:focus {
+  border-color: $input-color-border-filled;
+  outline: none;
 }
 
 .contact-privacy {

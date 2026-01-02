@@ -84,6 +84,7 @@ function _themeprefix_theme_scripts() {
     wp_enqueue_script( 'lightbox-js' );
     wp_enqueue_script( 'swiper-js' );
     wp_enqueue_script( 'app-js' );
+
 }
 add_action( 'wp_enqueue_scripts', '_themeprefix_theme_scripts' );
 
