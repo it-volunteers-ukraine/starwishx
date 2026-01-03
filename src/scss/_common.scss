@@ -418,7 +418,7 @@ body {
 .container {
   margin: 0 auto;
   padding: 0 16px;
-  width: auto;
+  width: 100%;
 
   @include media.min-tablet {
     padding: 0 40px;

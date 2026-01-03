@@ -13,13 +13,6 @@
   background-position: center;
 }
 
-
-.container{
-  display: flex;
-  color: white;
-  text-align: center; 
-} 
-
 .image-wrap {
   position: absolute;
   top: 0;
@@ -33,31 +26,34 @@
   display: block;
   width: 100%;
   height: 100%;
-
 }
 
-.title{
+.hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  color: white;
+  text-align: center;
+}
+
+.title {
   margin-bottom: 0;
   margin-top: 19.55vh;
   overflow-wrap: anywhere;
-  
 }
 
-.title, .subtitle{
+.title,
+.subtitle {
   max-width: 512px;
 }
 
-.subtitle{
+.subtitle {
   margin-top: 2.22vh;
   font-size: 20px;
   text-align: center;
 }
-
-
-.text-block{
-  display: flex;
-  flex-direction: column;
-} 
 
 .wrap-link {
   display: flex;
@@ -66,7 +62,7 @@
   white-space: nowrap;
 }
 
-.wrap-link a{
+.wrap-link a {
   color: white;
 }
 
@@ -82,12 +78,12 @@
   color: $buttons-color-border-secondary-pressed;
 }
 
-.text-bottom{
+.text-bottom {
   margin-top: 6vh;
 }
 
-@include min-tablet{
-  .section{
+@include min-tablet {
+  .section {
     padding-bottom: 44px;
   }
 
@@ -95,8 +91,76 @@
     margin-top: 4.44vh;
   }
 
-  .text-bottom{
+  .text-bottom {
     margin-top: 10.33vh;
   }
 
+  .title{
+    max-width: calc(30.95vw + 274.29px);
+  }
+
+  .subtitle {
+    max-width: calc(4.46vw + 477.71px);
+  }
+}
+
+@media screen and (min-width: 1000px) {
+  .section {
+    margin-top: -94px;
+  }
+
+  .wrap-link {
+    width: 100%;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+  }
+
+  .text-bottom {
+    margin-top: 17vh;
+  }
+
+  .wrap-link a:nth-child(2) {
+    margin-top: 0;
+  }
+}
+
+@include min-laptop{
+  .section {
+    margin-top: -109px;
+    padding-bottom: 36px;
+  }
+
+  .title{
+    margin-top: 29.11vh;
+    max-width: calc(92.5vw - 612px);
+  }
+
+  .subtitle {
+    max-width: calc(25.83vw + 170px);
+  }
+
+    .wrap-link{
+    justify-content: space-between;
+    padding: 0 117px;
+  }
+}
+
+@include min-desktop{
+  .section {
+    padding-bottom: 64px;
+  }
+
+  .title{
+    margin-top: 28.8181vh;
+  }
+
+  .text-bottom {
+    margin-top: 13.9090vh;
+  }
+
+  .wrap-link{
+    justify-content: space-between;
+    padding: 0 52px;
+  }
 }

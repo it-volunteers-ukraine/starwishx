@@ -3,6 +3,7 @@
 $default_classes = [
     'section' => 'section',
     'container' => 'container',
+    'hero' => 'hero',
     'link' => 'link',
     'image-wrap' => 'image-wrap',
     'image' => 'image',
@@ -11,7 +12,7 @@ $default_classes = [
     'wrap-link' => 'wrap-link',
     'text-block' => 'text-block',
     'text-bottom' => 'text-bottom',
-    
+
 
 ];
 
@@ -44,7 +45,7 @@ $image = get_field('image');
     </div> -->
 
     <div class="container <?php echo esc_attr($classes['container']); ?>">
-        <div class="<?php echo esc_attr($classes['text-block']); ?>">
+        <div class="<?php echo esc_attr($classes['hero']); ?>">
             <h1 class="h1 <?php echo esc_attr($classes['title']); ?>"><?php echo $title; ?></h1>
             <p class="<?php echo esc_attr($classes['subtitle']); ?>"><?php echo $subtitle; ?></p>
             <div class="<?php echo esc_attr($classes['wrap-link']); ?>">
@@ -52,7 +53,6 @@ $image = get_field('image');
                 <a class="h4" href="#"><?php echo $get; ?></a>
             </div>
             <p class="text-r <?php echo esc_attr($classes['text-bottom']); ?>"><?php echo $text_bottom; ?></p>
-
         </div>
     </div>
 </section>
