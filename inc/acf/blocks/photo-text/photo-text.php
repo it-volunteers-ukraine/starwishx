@@ -32,7 +32,6 @@ if (file_exists($modules_file)) {
 }
 ?>
 
-<!-- <section class="section <?php echo esc_attr($classes['photo-text']); ?>"> -->
 <section class="section ">
     <div class="container <?php echo esc_attr($classes['container']); ?>">
         <?php if ($title) : ?>
@@ -60,6 +59,5 @@ if (file_exists($modules_file)) {
             </div>
         </div>
     </div>
-
     </div>
 </section>
