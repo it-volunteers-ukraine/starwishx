@@ -4,23 +4,16 @@
 @use "../../../../src/scss/mixins/indents";
 
 .section {
-  padding: 40px 0 0;
-}
+  padding: 16px 0 0;
 
-.section:nth-child(2) {
-  padding-top: 16px;
-
+  /*
   @include min-tablet {
     padding-top: 8px;
-  }
+  } */
 
   @include min-laptop {
-    padding-top: 16px;
+    padding-top: 32px;
   }
-}
-
-.section:last-of-type {
-  padding-bottom: 80px;
 }
 
 .btn1 {
@@ -194,6 +187,14 @@
 'bycat-title' => 'bycat-title',
 */
 
+.bycat-section {
+  padding: 40px 0 0;
+}
+
+.bycat-section:last-of-type {
+  padding-bottom: 80px;
+}
+
 .cat-title {
   margin-bottom: 24px;
   color: $text-dark;
@@ -205,6 +206,10 @@
   grid-template-areas:
     "a"
     "b";
+}
+
+.bycat-item{
+  position: relative;
 }
 
 .bycat-first-item {
@@ -277,8 +282,8 @@
     grid-template-areas: "a b";
   }
 
-  .bycat-section:nth-child(4n) .bycat-content,
-  .bycat-section:nth-child(5n) .bycat-content {
+  .bycat-section:nth-of-type(4n + 3) .bycat-content,
+  .bycat-section:nth-of-type(4n + 4) .bycat-content {
     grid-template-areas: "b a";
   }
 }
@@ -286,6 +291,12 @@
 @include min-desktop {
   .bycat-img-wrap {
     height: 360px;
+  }
+}
+
+@media screen and (min-width: 1920px) {
+  .bycat-section:last-of-type {
+    padding-bottom: 120px;
   }
 }
 
@@ -368,12 +379,6 @@
 
   .newcard-img-wrap {
     height: calc(15.42vw + 18px);
-  }
-}
-
-@media screen and (min-width: 1920px) {
-  .section:last-of-type {
-    padding-bottom: 120px;
   }
 }
 

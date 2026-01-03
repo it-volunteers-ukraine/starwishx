@@ -201,6 +201,8 @@ function render_card_bycat($item, $classes = [], $is_no_photo = false)
 {
 
     $post_id   = $item->ID;
+    $term_id   = $item->term_id;
+
 
     $item_date = date('d.m.Y', strtotime($item->post_date));
     $item_title = get_field('title', $post_id);
@@ -210,6 +212,13 @@ function render_card_bycat($item, $classes = [], $is_no_photo = false)
     $photo_url = $photo['sizes']['large'] ?? '';
     $photo_alt = $photo['alt'] ?: ($photo['title'] ?? '');
     $item_date = date('d.m.Y', strtotime($item->post_date));
+    $categories_colors = get_field('categories_labels_color', 'options');
+    $category_current_color = get_category_by_id($categories_colors, $term_id);
+    $label_color_text = $category_current_color['label_color_text'];
+    $label_color_background = $category_current_color['label_color_background'];
+    $label_color_border = $category_current_color['label_color_border'];
+    $term_name = $item->term_name;
+    $item_label = esc_html($term_name);
 
     // вывод
 ?>
@@ -219,6 +228,8 @@ function render_card_bycat($item, $classes = [], $is_no_photo = false)
                 <img src="<?php echo esc_url($photo_url); ?>"
                     class="<?php echo esc_attr($classes['bycat-img']); ?>"
                     alt="<?php echo esc_attr($photo_alt); ?>">
+                <div class="<?php echo esc_attr($classes['newcard-label']); ?>" style="--label-color: <?php echo $label_color_text; ?>; --label-bg: <?php echo $label_color_background; ?>; --label-border: <?php echo $label_color_border; ?>; "><?php echo $item_label; ?></div>
+
             </div>
         <?php endif; ?>
 
@@ -271,13 +282,10 @@ function render_card_bycat($item, $classes = [], $is_no_photo = false)
                         $term_id = $item->term_id;
                         $term_full = get_term($term_id);
                         $item_taxonomy = $term_full->taxonomy;
-                        // print_r('term id: ', $item_taxonomy . '_' . $term_id);
-                        // echo $term_id;
                         $category_current_color = get_category_by_id($categories_colors, $term_id);
                         $label_color_text = $category_current_color['label_color_text'];
                         $label_color_background = $category_current_color['label_color_background'];
                         $label_color_border = $category_current_color['label_color_border'];
-                        // print_r('label_color_text:',$label_color_text);
                         $term_name = $item->term_name;
                         $item_date = date('d.m.Y', strtotime($item->post_date));
                         $item_title = get_field('title', $post_id);
@@ -293,7 +301,6 @@ function render_card_bycat($item, $classes = [], $is_no_photo = false)
                             <div class="<?php echo esc_attr($classes['newcard-content']); ?>"> <!-- Проверить может лишнее -->
                                 <div class="<?php echo esc_attr($classes['newcard-img-wrap']); ?>">
                                     <img src="<?php echo esc_url($photo_url); ?>" class="<?php echo  esc_attr($classes['newcard-img']); ?>" alt="<?php echo $photo_alt; ?>">
-                                    <!-- <div class="<?php echo esc_attr($classes['item-label']); ?>" style="--label-color: <?php echo $label_color_text; ?>; --label-bg: <?php echo $label_color_background; ?>; --label-border: <?php echo $label_color_border; ?>; "><?php echo $item_label; ?></div> -->
                                     <div class="<?php echo esc_attr($classes['newcard-label']); ?>" style="--label-color: <?php echo $label_color_text; ?>; --label-bg: <?php echo $label_color_background; ?>; --label-border: <?php echo $label_color_border; ?>; "><?php echo $item_label; ?></div>
 
                                 </div>
@@ -320,8 +327,6 @@ function render_card_bycat($item, $classes = [], $is_no_photo = false)
                         $term_id = $item->term_id;
                         $term_full = get_term($term_id);
                         $item_taxonomy = $term_full->taxonomy;
-                        // $label_color_text = get_field('label_color_text', $item_taxonomy . '_' . $term_id);
-                        // $label_color_background = get_field('label_color_background', $item_taxonomy . '_' . $term_id);
                         $category_current_color = get_category_by_id($categories_colors, $term_id);
                         $label_color_text = $category_current_color['label_color_text'];
                         $label_color_background = $category_current_color['label_color_background'];
@@ -341,7 +346,6 @@ function render_card_bycat($item, $classes = [], $is_no_photo = false)
                             <div class="<?php echo esc_attr($classes['newcard-content']); ?>"> <!-- Проверить может лишнее -->
                                 <div class="<?php echo esc_attr($classes['newcard-img-wrap']); ?>">
                                     <img src="<?php echo esc_url($photo_url); ?>" class="<?php echo  esc_attr($classes['newcard-img']); ?>" alt="<?php echo $photo_alt; ?>">
-                                    <!-- <div class="<?php echo esc_attr($classes['item-label']); ?>" style="--label-color: <?php echo $label_color_text; ?>; --label-bg: <?php echo $label_color_background; ?>; --label-border: <?php echo $label_color_border; ?>; "><?php echo $item_label; ?></div> -->
                                     <div class="<?php echo esc_attr($classes['newcard-label']); ?>" style="--label-color: <?php echo $label_color_text; ?>; --label-bg: <?php echo $label_color_background; ?>; --label-border: <?php echo $label_color_border; ?>; "><?php echo $item_label; ?></div>
 
                                 </div>
@@ -365,33 +369,38 @@ function render_card_bycat($item, $classes = [], $is_no_photo = false)
 
 
 <?php if (count($news_by_category) > 0) : ?>
-    <?php foreach ($news_by_category as $cat_id) : ?>
-        <section class="section <?php echo esc_attr($classes['section']); ?> <?php echo esc_attr($classes['bycat-section']); ?> ">
-            <div class="container ">
-                <?php
-                $btn_url = '#';
-                $btn_text = esc_html(get_field('button_text'));
-                $cat_name = $res_by_cat[$cat_id['category']]['term_name'];
-                ?>
-                <h2 class="h5 <?php echo esc_attr($classes['cat-title']); ?>"><?php echo esc_html($cat_name); ?></h2>
-                <div class="<?php echo esc_attr($classes['bycat-content']); ?>">
-                    <?php $conunt_post = 1; ?>
+    <div>
+        <?php foreach ($news_by_category as $cat_id) : ?>
+            <section class="section <?php echo esc_attr($classes['section']); ?> <?php echo esc_attr($classes['bycat-section']); ?> ">
+                <div class="container ">
                     <?php
-                    $post_list = $res_by_cat[$cat_id['category']]['posts'];
+                    $btn_url = '#';
+                    $btn_text = esc_html(get_field('button_text'));
+                    $cat_name = $res_by_cat[$cat_id['category']]['term_name'];
+                    $label_color_text = $category_current_color['label_color_text'];
+                    $label_color_background = $category_current_color['label_color_background'];
+                    $label_color_border = $category_current_color['label_color_border'];
                     ?>
-                    <div class="<?php echo esc_attr($classes['bycat-first-item']); ?> ">
-                        <?php render_card_bycat($post_list[0], $classes); ?>
+                    <h2 class="h5 <?php echo esc_attr($classes['cat-title']); ?>"><?php echo esc_html($cat_name); ?></h2>
+                    <div class="<?php echo esc_attr($classes['bycat-content']); ?>">
+                        <?php $conunt_post = 1; ?>
+                        <?php
+                        $post_list = $res_by_cat[$cat_id['category']]['posts'];
+                        ?>
+                        <div class="<?php echo esc_attr($classes['bycat-first-item']); ?> ">
+                            <?php render_card_bycat($post_list[0], $classes); ?>
+                        </div>
+                        <div class="<?php echo esc_attr($classes['bycat-other-item']); ?> ">
+                            <?php for ($i = 1; $i < count($post_list); $i++) : ?>
+                                <?php render_card_bycat($post_list[$i], $classes, true); ?>
+                            <?php endfor; ?>
+                        </div>
                     </div>
-                    <div class="<?php echo esc_attr($classes['bycat-other-item']); ?> ">
-                        <?php for ($i = 1; $i < count($post_list); $i++) : ?>
-                            <?php render_card_bycat($post_list[$i], $classes, true); ?>
-                        <?php endfor; ?>
-                    </div>
+                    <a href="<?php esc_url($btn_url); ?>" class="btn <?php echo esc_attr($classes['bycat-btn']); ?>"><?php echo esc_html($btn_text); ?></a>
                 </div>
-                <a href="<?php esc_url($btn_url); ?>" class="btn <?php echo esc_attr($classes['bycat-btn']); ?>"><?php echo esc_html($btn_text); ?></a>
-            </div>
-        </section>
-    <?php endforeach; ?>
-<?php endif; ?>
+            </section>
+        <?php endforeach; ?>
+        </в>
+    <?php endif; ?>
 
-</body>
+    </body>
