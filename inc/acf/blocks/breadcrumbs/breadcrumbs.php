@@ -2,6 +2,7 @@
 // Loading classes
 $default_classes = [
     'section' => 'section',
+    'breadcumbs-section' => 'breadcumbs-section',
     'list' => 'list',
     'item' => 'item',
     'selected' => 'selected',
@@ -44,7 +45,7 @@ $home_title = get_the_title($home_id);
 $active_title = get_the_title();
 ?>
 
-<section class="section <?php echo esc_attr($classes["section"]); ?>">
+<section class="section breadcumbs-section <?php echo esc_attr($classes["section"]); ?> ">
     <div class="container">
         <nav>
             <ul class="text-r <?php echo esc_attr($classes["list"]); ?>">

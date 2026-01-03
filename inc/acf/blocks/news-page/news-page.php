@@ -365,33 +365,35 @@ function render_card_bycat($item, $classes = [], $is_no_photo = false)
 
 
 <?php if (count($news_by_category) > 0) : ?>
-    <?php foreach ($news_by_category as $cat_id) : ?>
-        <section class="section <?php echo esc_attr($classes['section']); ?> <?php echo esc_attr($classes['bycat-section']); ?> ">
-            <div class="container ">
-                <?php
-                $btn_url = '#';
-                $btn_text = esc_html(get_field('button_text'));
-                $cat_name = $res_by_cat[$cat_id['category']]['term_name'];
-                ?>
-                <h2 class="h5 <?php echo esc_attr($classes['cat-title']); ?>"><?php echo esc_html($cat_name); ?></h2>
-                <div class="<?php echo esc_attr($classes['bycat-content']); ?>">
-                    <?php $conunt_post = 1; ?>
+    <div >
+        <?php foreach ($news_by_category as $cat_id) : ?>
+            <section class="section <?php echo esc_attr($classes['section']); ?> <?php echo esc_attr($classes['bycat-section']); ?> ">
+                <div class="container ">
                     <?php
-                    $post_list = $res_by_cat[$cat_id['category']]['posts'];
+                    $btn_url = '#';
+                    $btn_text = esc_html(get_field('button_text'));
+                    $cat_name = $res_by_cat[$cat_id['category']]['term_name'];
                     ?>
-                    <div class="<?php echo esc_attr($classes['bycat-first-item']); ?> ">
-                        <?php render_card_bycat($post_list[0], $classes); ?>
+                    <h2 class="h5 <?php echo esc_attr($classes['cat-title']); ?>"><?php echo esc_html($cat_name); ?></h2>
+                    <div class="<?php echo esc_attr($classes['bycat-content']); ?>">
+                        <?php $conunt_post = 1; ?>
+                        <?php
+                        $post_list = $res_by_cat[$cat_id['category']]['posts'];
+                        ?>
+                        <div class="<?php echo esc_attr($classes['bycat-first-item']); ?> ">
+                            <?php render_card_bycat($post_list[0], $classes); ?>
+                        </div>
+                        <div class="<?php echo esc_attr($classes['bycat-other-item']); ?> ">
+                            <?php for ($i = 1; $i < count($post_list); $i++) : ?>
+                                <?php render_card_bycat($post_list[$i], $classes, true); ?>
+                            <?php endfor; ?>
+                        </div>
                     </div>
-                    <div class="<?php echo esc_attr($classes['bycat-other-item']); ?> ">
-                        <?php for ($i = 1; $i < count($post_list); $i++) : ?>
-                            <?php render_card_bycat($post_list[$i], $classes, true); ?>
-                        <?php endfor; ?>
-                    </div>
+                    <a href="<?php esc_url($btn_url); ?>" class="btn <?php echo esc_attr($classes['bycat-btn']); ?>"><?php echo esc_html($btn_text); ?></a>
                 </div>
-                <a href="<?php esc_url($btn_url); ?>" class="btn <?php echo esc_attr($classes['bycat-btn']); ?>"><?php echo esc_html($btn_text); ?></a>
-            </div>
-        </section>
-    <?php endforeach; ?>
+            </section>
+        <?php endforeach; ?>
+    </в>
 <?php endif; ?>
 
 </body>
