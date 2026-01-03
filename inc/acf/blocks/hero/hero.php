@@ -8,7 +8,7 @@ $default_classes = [
     'image' => 'image',
     'title' => 'title',
     'subtitle' => 'subtitle',
-    'wrap' => 'wrap',
+    'wrap-link' => 'wrap-link',
     'text-block' => 'text-block',
     'text-bottom' => 'text-bottom',
     
@@ -47,11 +47,11 @@ $image = get_field('image');
         <div class="<?php echo esc_attr($classes['text-block']); ?>">
             <h1 class="h1 <?php echo esc_attr($classes['title']); ?>"><?php echo $title; ?></h1>
             <p class="<?php echo esc_attr($classes['subtitle']); ?>"><?php echo $subtitle; ?></p>
-            <div class="<?php echo esc_attr($classes['wrap']); ?>">
-                <a href="#"><?php echo $get; ?></a>
-                <a href="#"><?php echo $give; ?></a>
+            <div class="<?php echo esc_attr($classes['wrap-link']); ?>">
+                <a class="h4" href="#"><?php echo $give; ?></a>
+                <a class="h4" href="#"><?php echo $get; ?></a>
             </div>
-            <p class="<?php echo esc_attr($classes['text-bottom']); ?>"><?php echo $text_bottom; ?></p>
+            <p class="text-r <?php echo esc_attr($classes['text-bottom']); ?>"><?php echo $text_bottom; ?></p>
 
         </div>
     </div>

@@ -6,7 +6,7 @@
   display: flex;
   margin-top: -88px;
   padding-top: 1px;
-  padding-bottom: 0;
+  padding-bottom: 24px;
   height: 100vh;
   background-image: var(--hero-bg);
   background-size: cover;
@@ -40,10 +40,15 @@
   margin-bottom: 0;
   margin-top: 19.55vh;
   overflow-wrap: anywhere;
+  
+}
+
+.title, .subtitle{
+  max-width: 512px;
 }
 
 .subtitle{
-  margin-top: 20px;
+  margin-top: 2.22vh;
   font-size: 20px;
   text-align: center;
 }
@@ -53,3 +58,45 @@
   display: flex;
   flex-direction: column;
 } 
+
+.wrap-link {
+  display: flex;
+  margin-top: auto;
+  flex-direction: column;
+  white-space: nowrap;
+}
+
+.wrap-link a{
+  color: white;
+}
+
+.wrap-link a:nth-child(2) {
+  margin-top: 4vh;
+}
+
+.wrap-link a:hover {
+  color: $buttons-color-background-secondary-hover;
+}
+
+.wrap-link a:active {
+  color: $buttons-color-border-secondary-pressed;
+}
+
+.text-bottom{
+  margin-top: 6vh;
+}
+
+@include min-tablet{
+  .section{
+    padding-bottom: 44px;
+  }
+
+  .wrap-link a:nth-child(2) {
+    margin-top: 4.44vh;
+  }
+
+  .text-bottom{
+    margin-top: 10.33vh;
+  }
+
+}
