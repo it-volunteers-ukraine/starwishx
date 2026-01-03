@@ -47,7 +47,7 @@ $image = get_field('image');
     <div class="container <?php echo esc_attr($classes['container']); ?>">
         <div class="<?php echo esc_attr($classes['hero']); ?>">
             <h1 class="h1 <?php echo esc_attr($classes['title']); ?>"><?php echo $title; ?></h1>
-            <p class="<?php echo esc_attr($classes['subtitle']); ?>"><?php echo $subtitle; ?></p>
+            <p class="subtitle-text-r <?php echo esc_attr($classes['subtitle']); ?>"><?php echo $subtitle; ?></p>
             <div class="<?php echo esc_attr($classes['wrap-link']); ?>">
                 <a class="h4" href="#"><?php echo $give; ?></a>
                 <a class="h4" href="#"><?php echo $get; ?></a>
