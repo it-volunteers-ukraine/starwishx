@@ -214,9 +214,9 @@ function render_card_bycat($item, $classes = [], $is_no_photo = false)
     $item_date = date('d.m.Y', strtotime($item->post_date));
     $categories_colors = get_field('categories_labels_color', 'options');
     $category_current_color = get_category_by_id($categories_colors, $term_id);
-    $label_color_text = $category_current_color['label_color_text'];
-    $label_color_background = $category_current_color['label_color_background'];
-    $label_color_border = $category_current_color['label_color_border'];
+    $label_color_text = $category_current_color['label_color_text'] ?? 'white';
+    $label_color_background = $category_current_color['label_color_background'] ?? 'grey';
+    $label_color_border = $category_current_color['label_color_border'] ?? 'grey';
     $term_name = $item->term_name;
     $item_label = esc_html($term_name);
 
@@ -283,9 +283,9 @@ function render_card_bycat($item, $classes = [], $is_no_photo = false)
                         $term_full = get_term($term_id);
                         $item_taxonomy = $term_full->taxonomy;
                         $category_current_color = get_category_by_id($categories_colors, $term_id);
-                        $label_color_text = $category_current_color['label_color_text'];
-                        $label_color_background = $category_current_color['label_color_background'];
-                        $label_color_border = $category_current_color['label_color_border'];
+                        $label_color_text = $category_current_color['label_color_text'] ?? 'white';
+                        $label_color_background = $category_current_color['label_color_background'] ?? 'grey';
+                        $label_color_border = $category_current_color['label_color_border'] ?? 'grey';
                         $term_name = $item->term_name;
                         $item_date = date('d.m.Y', strtotime($item->post_date));
                         $item_title = get_field('title', $post_id);
