@@ -10,23 +10,20 @@
   @extend %flex-col;
 
   padding: 80px 16px;
+  height: 1064px;
+gap: 10px;
 }
 
 .promo-container {
   @extend %flex-col;
 
-  width: 100%;
-  max-width: 343px;
-  margin: 0 auto;
-  gap: 16px;
+  height: 100%;
+  gap: 40px;
   background-color: $surface-violet; 
-  border-radius: 40px;
-  padding: 24px;
+  
 }
 
 .promo-image {
-  width: 100%;
-  height: 440px;
   border-radius: 12px;
   overflow: hidden;
   
@@ -40,8 +37,7 @@
 .promo-content {
   @extend %flex-col;
 
-  gap: 40px;
-  min-height: 448px;
+  height: 100%;
   position: relative;
   justify-content: space-between;
 }
