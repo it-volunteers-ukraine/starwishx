@@ -158,57 +158,7 @@ function add_acf_images_to_submenu_items_only($items, $args) {
   return $items;
 }
 
-add_action('add_meta_boxes', function () {
 
-    remove_meta_box(
-        'category-oportunitiesdiv', // ID метабокса
-        'news',                     // post type
-        'side'
-    );
-
-    add_meta_box(
-        'category-oportunitiesdiv',
-        'Category Oportunities',
-        function ($post) {
-
-            wp_terms_checklist($post->ID, [
-                'taxonomy'     => 'category-oportunities',
-                'checked_ontop'=> false,
-                'parent'       => 0, // ТОЛЬКО корневые
-            ]);
-
-        },
-        'news',
-        'side',
-        'default'
-    );
-});
-add_filter('get_terms_args', function ($args, $taxonomies) {
-
-    // только в админке
-    if (!is_admin()) {
-        return $args;
-    }
-
-    // только для нужной таксономии
-    if (
-        empty($taxonomies) ||
-        !in_array('category-oportunities', (array) $taxonomies, true)
-    ) {
-        return $args;
-    }
-
-    // только для post type news
-    $screen = function_exists('get_current_screen') ? get_current_screen() : null;
-    if (!$screen || $screen->post_type !== 'news') {
-        return $args;
-    }
-
-    // ТОЛЬКО корневые категории
-    $args['parent'] = 0;
-
-    return $args;
-}, 10, 2);
 
 add_action('acf/init', 'acf_add_menu_item_mobile_field');
 function acf_add_menu_item_mobile_field() {
@@ -356,3 +306,4 @@ add_action('wp_enqueue_scripts', function() {
 
 // init for Launchpad - user's dashboard
 require get_template_directory() . '/inc/launchpad/setup.php';
+require_once get_template_directory() . '/inc/news-taxonomy-metabox.php';
