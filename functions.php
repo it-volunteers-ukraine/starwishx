@@ -158,6 +158,8 @@ function add_acf_images_to_submenu_items_only($items, $args) {
   return $items;
 }
 
+
+
 add_action('acf/init', 'acf_add_menu_item_mobile_field');
 function acf_add_menu_item_mobile_field() {
     if (!function_exists('acf_add_local_field_group')) return;
@@ -304,3 +306,4 @@ add_action('wp_enqueue_scripts', function() {
 
 // init for Launchpad - user's dashboard
 require get_template_directory() . '/inc/launchpad/setup.php';
+require_once get_template_directory() . '/inc/news-taxonomy-metabox.php';
