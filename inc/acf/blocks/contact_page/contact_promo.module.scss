@@ -42,8 +42,13 @@ gap: 10px;
   justify-content: space-between;
 }
 
+.promo-wrapper {
+  @extend %flex-col;
+
+  gap: 12px;
+}
+
 .promo-title {
-  font-family: Inter, sans-serif;
   font-weight: 500;
   font-size: 24px;
   line-height: 120%;
@@ -52,18 +57,17 @@ gap: 10px;
 }
 
 .promo-text {
-  font-family: Inter, sans-serif;
   font-weight: 400;
   font-size: 16px;
   line-height: 130%;
   color: $text-dark;
-  margin-bottom: 40px;
+  
 }
 
 .promo-contacts {
   @extend %flex-col;
 
-  gap: 12px;
+  gap: 8px;
 }
 
 .contact-item {
@@ -73,32 +77,27 @@ gap: 10px;
   font-size: 16px;
   line-height: 130%;
   color: $text-dark;
+  font-weight: 400;
+  font-style: normal;
+  letter-spacing: 0%;
 }
 
 .contact-item .icon {
   width: 24px;
   height: 24px;
   flex-shrink: 0;
-  fill: $text-dark;
+   fill: $icon-color-accent;
+  position: relative;
+  left: 2px;
 }
 
-.contact-label {
-    display: none; 
-}
 
-@include min-tablet {
-    .contact-label {
-        display: inline;
-    }
-}
 
 .contact-value {
-  color: $text-dark;
+  color: $text-accent;
   text-decoration: none;
   
-  &:hover {
-    color: $text-accent;
-  }
+  
 }
 
 .promo-planet {

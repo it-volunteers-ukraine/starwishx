@@ -11,6 +11,7 @@ $default_classes = [
     'promo-container' => 'promo-container',
     'promo-image'     => 'promo-image',
     'promo-content'   => 'promo-content',
+    'promo-wrapper'   => 'promo-wrapper',
     'promo-title'     => 'promo-title',
     'promo-text'      => 'promo-text',
     'promo-contacts'  => 'promo-contacts',
@@ -98,14 +99,22 @@ if (!function_exists('promo_icon_use')) {
 
         <div class="<?= esc_attr($classes['promo-content']) ?>">
             
-            <div class="promo-info-wrapper">
-                <?php if ($title): ?>
+            <div class="<?= esc_attr($classes['promo-wrapper']) ?>">
+                <!-- <?php if ($title): ?>
                     <h5 class="<?= esc_attr($classes['promo-title']) ?>"><?= esc_html($title) ?></h5>
-                <?php endif; ?>
+                <?php endif; ?> -->
+
+                <?php if ($title): ?>
+                    <div class="<?= esc_attr($classes['promo-title']) ?>"><?= esc_html($title) ?>
+                </div><?php endif; ?>
+
+                <!-- <?php if ($text): ?>
+                    <div class="<?= esc_attr($classes['promo-text']) ?>"><?= wpautop(esc_html($text)) ?></div>
+                <?php endif; ?> -->
 
                 <?php if ($text): ?>
-                    <div class="<?= esc_attr($classes['promo-text']) ?>"><?= wpautop(esc_html($text)) ?></div>
-                <?php endif; ?>
+                    <p class="<?= esc_attr($classes['promo-text']); ?>"><?php echo $text; ?></p>
+                    <?php endif; ?>
 
                 <div class="<?= esc_attr($classes['promo-contacts']) ?>">
                     <?php if ($email_link): ?>
