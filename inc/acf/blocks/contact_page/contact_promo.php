@@ -16,7 +16,6 @@ $default_classes = [
     'promo-text'      => 'promo-text',
     'promo-contacts'  => 'promo-contacts',
     
-    // Переиспользуемые классы (должны совпадать с SCSS)
     'contact-item'    => 'contact-item',
     'contact-label'   => 'contact-label',
     'contact-value'   => 'contact-value',
@@ -26,12 +25,10 @@ $default_classes = [
     'icon-mask'       => 'icon-mask'
 ];
 
-/* Load compiled module classes if exist */
 $modules_file = get_template_directory() . '/assets/css/blocks/modules.json';
 $classes = $default_classes;
 if (file_exists($modules_file)) {
     $modules = json_decode(file_get_contents($modules_file), true);
-    // Ищем ключ 'contact_promo' (или добавь его в modules.json, если там строго)
     $classes = array_merge($default_classes, $modules['contact_promo'] ?? []);
 }
 
@@ -54,7 +51,6 @@ $telegram_name  = get_field('telegram_name', 'option');
 $linkedin_link  = get_field('linkedin_link', 'option');
 $linkedin_name  = get_field('linkedin_name', 'option');
 
-/* Clean telegram / linkedin */
 $telegram_full_url = '';
 $clean_telegram = '';
 if ($telegram_link) {
@@ -75,8 +71,7 @@ if ($linkedin_link) {
     }
 }
 
-/* Helper: render svg use tag */
-// Используем уникальное имя функции или анонимную, чтобы не было конфликта с contact.php
+
 if (!function_exists('promo_icon_use')) {
     function promo_icon_use($icon_id, $classes = []) {
         $sprite = get_template_directory_uri() . '/assets/img/sprites.svg';

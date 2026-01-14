@@ -122,6 +122,16 @@ gap: 10px;
   animation: spin 4s linear infinite;
 }
 
+@keyframes spin {
+  0% {
+    rotate: 0deg;
+  }
+
+  100% {
+    rotate: 360deg;
+  }
+}
+
 @include min-tablet {
   .promo-section {
   padding: 80px 40px;
@@ -187,5 +197,10 @@ gap: 10px;
     width: 425px;
   height: 567px; 
   }
+}
+
+.icon-star {
+  width: 96px;
+  height: 96px
 }
 }
