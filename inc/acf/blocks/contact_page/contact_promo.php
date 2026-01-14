@@ -21,11 +21,9 @@ $default_classes = [
     'contact-label'   => 'contact-label',
     'contact-value'   => 'contact-value',
     'icon'            => 'icon',
-    
-    // Декор
-    'promo-planet'    => 'promo-planet',
-    'planet-inner'    => 'planet-inner',
-    'planet-star'     => 'planet-star',
+    'icon-star'       => 'icon-star',
+    'icon-bg'         => 'icon-bg',
+    'icon-mask'       => 'icon-mask'
 ];
 
 /* Load compiled module classes if exist */
@@ -100,20 +98,16 @@ if (!function_exists('promo_icon_use')) {
         <div class="<?= esc_attr($classes['promo-content']) ?>">
             
             <div class="<?= esc_attr($classes['promo-wrapper']) ?>">
-                <!-- <?php if ($title): ?>
-                    <h5 class="<?= esc_attr($classes['promo-title']) ?>"><?= esc_html($title) ?></h5>
-                <?php endif; ?> -->
+                
 
                 <?php if ($title): ?>
                     <div class="<?= esc_attr($classes['promo-title']) ?>"><?= esc_html($title) ?>
                 </div><?php endif; ?>
 
-                <!-- <?php if ($text): ?>
-                    <div class="<?= esc_attr($classes['promo-text']) ?>"><?= wpautop(esc_html($text)) ?></div>
-                <?php endif; ?> -->
+                
 
                 <?php if ($text): ?>
-                    <p class="<?= esc_attr($classes['promo-text']); ?>"><?php echo $text; ?></p>
+                    <div class="<?= esc_attr($classes['promo-text']); ?>"><?php echo $text; ?></div>
                     <?php endif; ?>
 
                 <div class="<?= esc_attr($classes['promo-contacts']) ?>">
@@ -149,10 +143,12 @@ if (!function_exists('promo_icon_use')) {
                 </div>
             </div>
 
-            <div class="<?= esc_attr($classes['promo-planet']) ?>">
-                <div class="<?= esc_attr($classes['planet-inner']) ?>"></div>
-                <div class="<?= esc_attr($classes['planet-star']) ?>"></div>
-            </div>
+            <div class="<?php echo esc_attr($classes['icon-star']); ?>">
+                    <img src="<?php echo get_template_directory_uri(); ?>/assets/img/star1-bg.png" class="<?php echo esc_attr($classes['icon-bg']); ?>" alt="">
+                    <svg class="<?php echo esc_attr($classes['icon-mask']); ?>">
+                        <use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-element_planet_3-circle"></use>
+                    </svg> 
+                </div>
 
         </div>
     </div>

@@ -19,17 +19,19 @@ gap: 10px;
 
   height: 100%;
   gap: 40px;
-  background-color: $surface-violet; 
+  
   
 }
 
 .promo-image {
+  width: 100%;
+    height: 100%;
   border-radius: 12px;
   overflow: hidden;
   
   img {
-    width: 100%;
-    height: 100%;
+    width: 343px;
+  height: 440px;
     object-fit: cover;
   }
 }
@@ -53,7 +55,7 @@ gap: 10px;
   font-size: 24px;
   line-height: 120%;
   color: $text-dark;
-  margin-bottom: 12px;
+  
 }
 
 .promo-text {
@@ -88,7 +90,7 @@ gap: 10px;
   flex-shrink: 0;
    fill: $icon-color-accent;
   position: relative;
-  left: 2px;
+  
 }
 
 
@@ -100,35 +102,27 @@ gap: 10px;
   
 }
 
-.promo-planet {
-  width: 80px;
-  height: 80px;
-  position: relative;
-  border-radius: 40px;
-  background: linear-gradient(0deg, rgb(255 255 255 / 64%), rgb(255 255 255 / 64%)), conic-gradient(from 180deg at 50% 50%, #000 0deg, #FFF 43.53deg, #000 90deg, #FFF 135deg, #000 180deg, #FFF 223.7deg, #000 270.1deg, #FFF 313.17deg, #000 360deg), radial-gradient(100% 126.92% at 0% 1.36%, #2DBFBD 0%, #CBDD57 24.33%, #DB97DA 43.15%, #9298D6 62.96%, #49B8A8 82.52%, #4C9CC6 100%);
-  background-blend-mode: normal, screen, difference, normal;
-  margin: 0 auto;
-}
-
-.promo-planet .planet-inner {
+.icon-star {
   position: absolute;
-  width: 80px;
-  height: 80px;
   left: 0;
-  top: 0;
-  border-radius: 50%;
-  background: radial-gradient(70.08% 70.08% at 20.08% 16.67%, #DC46C4 1.38%, #139EEB 60.35%, #7B5CDD 100%);
-  mask: radial-gradient(circle at center, transparent 40%, black 41%);
+  bottom: 0;
+  width: 80px;
+  height: 80px;
 }
 
-.promo-planet .planet-star {
+.icon-bg,
+.icon-mask {
+  width: 100%;
+  height: 100%;
+}
+
+.icon-mask {
   position: absolute;
-  width: 60px;
-  height: 60px;
-  left: 10px;
-  top: 10px;
-  background: radial-gradient(70.08% 70.08% at 20.08% 16.67%, #DC46C4 1.38%, #139EEB 60.35%, #7B5CDD 100%);
-  clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+}
+
+.icon-bg {
+  position: absolute;
+  animation: spin 4s linear infinite;
 }
 
 @include min-tablet {
