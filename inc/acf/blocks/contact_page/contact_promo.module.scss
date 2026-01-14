@@ -1,0 +1,206 @@
+@use "../../../../src/scss/variables" as *;
+@use "../../../../src/scss/mixins/media" as *;
+
+%flex-col {
+  display: flex;
+  flex-direction: column;
+}
+
+.promo-section {
+  @extend %flex-col;
+
+  padding: 80px 16px;
+  height: 1064px;
+gap: 10px;
+}
+
+.promo-container {
+  @extend %flex-col;
+
+  height: 100%;
+  gap: 40px;
+  justify-content: center;
+  
+}
+
+.promo-image {
+    height: 100%;
+  border-radius: 12px;
+  overflow: hidden;
+  
+  img {
+  height: 440px;
+    object-fit: cover;
+  }
+}
+
+.promo-content {
+  @extend %flex-col;
+
+  height: 100%;
+  position: relative;
+  
+}
+
+.promo-wrapper {
+  @extend %flex-col;
+
+  gap: 12px;
+}
+
+.promo-title {
+  font-weight: 500;
+  font-size: 24px;
+  line-height: 120%;
+  color: $text-dark;
+  
+}
+
+.promo-text {
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 130%;
+  color: $text-dark;
+  
+}
+
+.promo-contacts {
+  @extend %flex-col;
+
+  gap: 8px;
+}
+
+.contact-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 16px;
+  line-height: 130%;
+  color: $text-dark;
+  font-weight: 400;
+  font-style: normal;
+  letter-spacing: 0%;
+}
+
+.contact-item .icon {
+  width: 24px;
+  height: 24px;
+   fill: $icon-color-accent;
+  
+  
+}
+
+
+
+.contact-value {
+  color: $text-accent;
+  text-decoration: none;
+  
+  
+}
+
+.icon-star {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 80px;
+  height: 80px;
+}
+
+.icon-bg,
+.icon-mask {
+  width: 100%;
+  height: 100%;
+}
+
+.icon-mask {
+  position: absolute;
+}
+
+.icon-bg {
+  position: absolute;
+  animation: spin 4s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    rotate: 0deg;
+  }
+
+  100% {
+    rotate: 360deg;
+  }
+}
+
+@include min-tablet {
+  .promo-section {
+  padding: 80px 40px;
+  height: 608px;
+  
+
+  }
+
+  .promo-container {
+    flex-direction: row;
+    gap: 28px;
+  }
+  
+  .promo-image {
+  img {
+    width: 336px;
+  height: 448px;
+    
+  }
+}
+  
+ 
+}
+
+@include min-laptop {
+  .promo-section {
+  height: 600px;
+  }
+
+  .promo-image {
+  img {
+    width: 330px;
+  height: 440px; 
+  }
+}
+}
+
+@include min-desktop {
+  .promo-section {
+    padding: 120px 40px;
+  height: 807px;
+  }
+
+  .promo-title {
+  font-size: 36px;
+  
+  
+}
+
+.promo-text {
+  font-size: 18;
+
+  
+}
+
+.contact-item {
+  font-size: 18;
+  
+}
+
+  .promo-image {
+  img {
+    width: 425px;
+  height: 567px; 
+  }
+}
+
+.icon-star {
+  width: 96px;
+  height: 96px
+}
+}
