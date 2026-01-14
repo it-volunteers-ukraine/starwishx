@@ -19,7 +19,7 @@ gap: 10px;
 
   height: 100%;
   gap: 40px;
-  
+  justify-content: center;
   
 }
 
@@ -29,7 +29,6 @@ gap: 10px;
   overflow: hidden;
   
   img {
-    width: 343px;
   height: 440px;
     object-fit: cover;
   }
@@ -40,7 +39,7 @@ gap: 10px;
 
   height: 100%;
   position: relative;
-  justify-content: space-between;
+  
 }
 
 .promo-wrapper {
@@ -86,9 +85,8 @@ gap: 10px;
 .contact-item .icon {
   width: 24px;
   height: 24px;
-  flex-shrink: 0;
    fill: $icon-color-accent;
-  position: relative;
+  
   
 }
 
@@ -126,34 +124,68 @@ gap: 10px;
 
 @include min-tablet {
   .promo-section {
-  @extend %flex-col;
-
   padding: 80px 40px;
   height: 608px;
-  gap: 10px;
+  
+
   }
 
   .promo-container {
     flex-direction: row;
-    max-width: 100%;
     gap: 28px;
   }
   
   .promo-image {
-    height: 100%;
-  border-radius: 12px;
-  overflow: hidden;
-  
   img {
-    width: 346px;
+    width: 336px;
   height: 448px;
-    object-fit: cover;
+    
   }
 }
   
-  
-  
-  .promo-planet {
-    margin: 0; 
+ 
+}
+
+@include min-laptop {
+  .promo-section {
+  height: 600px;
   }
+
+  .promo-image {
+  img {
+    width: 330px;
+  height: 440px; 
+  }
+}
+}
+
+@include min-desktop {
+  .promo-section {
+    padding: 120px 40px;
+  height: 807px;
+  }
+
+  .promo-title {
+  font-size: 36px;
+  
+  
+}
+
+.promo-text {
+  font-size: 18;
+
+  
+}
+
+.contact-item {
+  font-size: 18;
+  
+}
+
+  .promo-image {
+  img {
+    width: 425px;
+  height: 567px; 
+  }
+}
 }
