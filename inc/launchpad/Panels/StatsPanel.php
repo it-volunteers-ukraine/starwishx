@@ -1,4 +1,5 @@
 <?php
+// File: inc/launchpad/Panels/StatsPanel.php
 
 declare(strict_types=1);
 
@@ -8,6 +9,13 @@ use Launchpad\Services\StatsService;
 
 class StatsPanel extends AbstractPanel
 {
+
+    private StatsService $service;
+
+    public function __construct(StatsService $service)
+    {
+        $this->service = $service;
+    }
 
     public function getId(): string
     {
@@ -24,15 +32,13 @@ class StatsPanel extends AbstractPanel
         return 'chart-bar';
     }
 
-    public function getInitialState(int $userId): array
+    public function getInitialState(?int $userId = null): array
     {
-        $service = new StatsService();
-
         return [
-            'totalViews'     => $service->getTotalViews($userId),
-            'totalFavorites' => $service->getTotalFavorites($userId),
-            'totalComments'  => $service->getTotalComments($userId),
-            'recentActivity' => $service->getRecentActivity($userId, 10),
+            'totalViews'     => $this->service->getTotalViews($userId),
+            'totalFavorites' => $this->service->getTotalFavorites($userId),
+            'totalComments'  => $this->service->getTotalComments($userId),
+            'recentActivity' => $this->service->getRecentActivity($userId, 10),
         ];
     }
 

@@ -1,0 +1,116 @@
+/**
+ * Gateway Store — Recovery Actions
+ * File: inc/gateway/Assets/recovery/actions.js
+ */
+
+import { getElement, store } from "@wordpress/interactivity";
+import { fetchJson, validators } from "../utils.js";
+
+// Forgot Password Actions
+export const forgotPasswordActions = {
+  updateField() {
+    const { state } = store("gateway");
+    const { ref } = getElement();
+    const field = ref?.dataset?.field;
+    if (field && state.forms?.forgotPassword) {
+      state.forms.forgotPassword[field] = ref.value;
+    }
+  },
+
+  async submit(event) {
+    event.preventDefault();
+    const { state } = store("gateway");
+    const form = state.forms?.forgotPassword;
+    if (!form || form.isSubmitting) return;
+
+    // Client validation
+    if (!validators.email(form.email)) {
+      form.error = "Please enter a valid email address";
+      return;
+    }
+
+    form.isSubmitting = true;
+    form.error = null;
+
+    try {
+      await fetchJson(
+        state,
+        `${state.gatewaySettings.restUrl}password/forgot`,
+        {
+          method: "POST",
+          body: { email: form.email },
+        }
+      );
+
+      form.success = true;
+      form.successMessage =
+        "If an account exists with that email, you'll receive a reset link shortly.";
+    } catch (error) {
+      form.error = error.message;
+    } finally {
+      form.isSubmitting = false;
+    }
+  },
+};
+
+// Reset Password Actions
+export const resetPasswordActions = {
+  updateField() {
+    const { state } = store("gateway");
+    const { ref } = getElement();
+    const field = ref?.dataset?.field;
+    if (field && state.forms?.resetPassword) {
+      state.forms.resetPassword[field] = ref.value;
+    }
+  },
+
+  async submit(event) {
+    event.preventDefault();
+    const { state } = store("gateway");
+    const form = state.forms?.resetPassword;
+    if (!form || form.isSubmitting) return;
+
+    // Client validation
+    if (!validators.minLength(8)(form.newPassword)) {
+      form.error = "Password must be at least 8 characters";
+      return;
+    }
+    if (form.newPassword !== form.confirmPassword) {
+      form.error = "Passwords do not match";
+      return;
+    }
+
+    form.isSubmitting = true;
+    form.error = null;
+
+    try {
+      const url = new URL(window.location);
+
+      const data = await fetchJson(
+        state,
+        `${state.gatewaySettings.restUrl}password/reset`,
+        {
+          method: "POST",
+          body: {
+            login: url.searchParams.get("login"),
+            key: url.searchParams.get("key"),
+            password: form.newPassword,
+          },
+        }
+      );
+
+      if (data.success) {
+        form.success = true;
+        form.successMessage =
+          "Password reset successfully! Redirecting to login...";
+        setTimeout(() => {
+          window.location.href = "/gateway/";
+        }, 2000);
+      }
+    } catch (error) {
+      form.error = error.message;
+    } finally {
+      form.isSubmitting = false;
+    }
+  },
+};

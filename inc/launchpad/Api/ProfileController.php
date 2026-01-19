@@ -10,13 +10,13 @@ use WP_REST_Request;
 use WP_REST_Response;
 use WP_Error;
 
-class ProfileController extends AbstractApiController
+class ProfileController extends AbstractLaunchpadController
 {
     private ProfileService $service;
 
-    public function __construct()
+    public function __construct(ProfileService $service)
     {
-        $this->service = new ProfileService();
+        $this->service = $service;
     }
 
     public function registerRoutes(): void
@@ -29,7 +29,7 @@ class ProfileController extends AbstractApiController
                 'firstName' => ['sanitize_callback' => 'sanitize_text_field'],
                 'lastName'  => ['sanitize_callback' => 'sanitize_text_field'],
                 'email'     => ['sanitize_callback' => 'sanitize_email'],
-                // New Fields
+                // Additional ACF Fields
                 'phone'     => ['sanitize_callback' => 'sanitize_text_field'],
                 'telegram'  => ['sanitize_callback' => 'sanitize_text_field'],
             ],
@@ -41,7 +41,7 @@ class ProfileController extends AbstractApiController
         // Get all params (sanitized by registerRoutes args)
         $params = $request->get_params();
         error_log('REST updateProfile params: ' . print_r($params, true));
-        
+
         // Also log raw body for extra confidence
         $raw_body = $request->get_body();
         error_log('REST raw body: ' . $raw_body);

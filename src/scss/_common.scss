@@ -255,9 +255,38 @@ body {
   justify-content: center;
   align-items: center;
   transition: $animations;
+  cursor: pointer;
   border-radius: 40px;
   background-color: $buttons-color-background-primary-default;
   padding: 12.5px 24px;
+  width: fit-content;
+  color: $buttons-color-text-primary-default;
+  font-weight: 500;
+  font-size: 16px;
+
+  &:hover {
+    background-color: $buttons-color-background-primary-hover;
+  }
+
+  &:active,
+  &:active:hover {
+    background-color: $buttons-color-background-primary-pressed;
+  }
+
+  @include media.min-desktop {
+    font-size: 18px;
+  }
+}
+
+.btn__small {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: $animations;
+  cursor: pointer;
+  border-radius: 40px;
+  background-color: $buttons-color-background-primary-default;
+  padding: 6px 16px;
   width: fit-content;
   color: $buttons-color-text-primary-default;
   font-weight: 500;
@@ -284,6 +313,7 @@ body {
   justify-content: center;
   align-items: center;
   transition: $animations;
+  cursor: pointer;
   border: 1px solid $buttons-color-border-secondary-default;
   border-radius: 40px;
   background-color: unset;
@@ -316,6 +346,12 @@ body {
     }
   }
 
+  &:disabled {
+    cursor: not-allowed;
+    background: $buttons-color-background-secondary-disabled;
+    color: $buttons-color-text-secondary-disabled;
+  }
+
   &:active,
   &:active:hover {
     background-color: $buttons-color-background-secondary-pressed;
@@ -333,6 +369,7 @@ body {
   justify-content: center;
   align-items: center;
   transition: $animations;
+  cursor: pointer;
   border: 1px solid $buttons-color-border-secondary-default;
   border-radius: 40px;
   background-color: unset;
@@ -351,6 +388,12 @@ body {
     background-color: $buttons-color-background-secondary-selected;
   }
 
+  &:disabled {
+    cursor: not-allowed;
+    background: $buttons-color-background-secondary-disabled;
+    color: $buttons-color-text-secondary-disabled;
+  }
+
   &--icon {
     width: 14px;
     height: 14px;
@@ -360,6 +403,37 @@ body {
       color: $buttons-color-text-secondary-pressed;
     }
   }
+}
+
+.btn-tertiary {
+  transition: $animations;
+  cursor: pointer;
+  border: none;
+  background-color: unset;
+  color: $buttons-color-background-primary-default;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 1.2;
+  text-decoration: underline;
+  text-transform: uppercase;
+
+  &:disabled {
+    cursor: not-allowed;
+    color: $buttons-color-background-secondary-disabled;
+  }
+
+  &:hover {
+    color: $buttons-color-background-primary-hover;
+  }
+
+  &:active,
+  &:active:hover {
+    background-color: $buttons-color-background-secondary-pressed;
+  }
+
+  // @include media.min-desktop {
+  //   font-size: 16px;
+  // }
 }
 
 /* Базовые стили для ссылок */

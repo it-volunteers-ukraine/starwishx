@@ -1,0 +1,19 @@
+[hidden],
+.hidden {
+    display: none !important;
+}
+
+// Ensure the Interactivity API isn't fighting with CSS
+[data-wp-interactive] {
+    // Optional: add a tiny fade-in to the whole app to hide the state jump
+    animation: app-appear 0.1s ease-in;
+}
+
+@keyframes app-appear {
+    from {
+        opacity: 0.9;
+    }
+    to {
+        opacity: 1;
+    }
+}
