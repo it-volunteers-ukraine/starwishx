@@ -6,7 +6,7 @@ config.js
 DS
 .DS_Store
 dist/
-assets/
+/assets/
 
 # JetBrains IDE
 .idea/

@@ -2,33 +2,20 @@
 @use "../mixins/media" as *;
 
 /* ======================================
-   LAUNCHPAD ADMIN PANEL STYLES
+   1. CORE LAYOUT & CONTAINER
    ====================================== */
 
-// Main container
 .launchpad-container {
-    // background: $surface-violet;
+    margin-top: 40px;
+    margin-bottom: 64px;
     padding: 0;
-    min-height: 100vh;
+    min-height: 64dvh;
 }
 
-.launchpad-panel-wrapper {
-    // Ensure the transition feels smooth when switching
-    &[hidden] {
-        display: none !important;
-    }
-}
-
-// Optional: Add a fade-in for the active panel wrapper
-.launchpad-panel-wrapper:not([hidden]) {
-    animation: fadeIn 0.3s ease-in-out;
-}
-
-// Layout structure
 .launchpad-layout {
     display: grid;
     grid-template-columns: 280px 1fr;
-    min-height: 100vh;
+    gap: 0.5rem;
 
     @include max-laptop {
         grid-template-columns: 240px 1fr;
@@ -39,15 +26,25 @@
     }
 }
 
-// Sidebar with tabs
+/* ======================================
+   2. SIDEBAR & NAVIGATION
+   ====================================== */
+
 .launchpad-sidebar {
-    border-right: 1px solid $surface-message;
+    // border-right: 1px solid $input-color-border-default;
+    display: flex;
+    flex-direction: column;
     background: $surface-primary;
-    padding: 2rem 0;
+
+    // Sticky footer inside sidebar if needed
+    .launchpad-sidebar-footer {
+        margin-top: auto;
+        padding: 1rem;
+    }
 
     @include max-tablet {
         border-right: none;
-        border-bottom: 1px solid $surface-message;
+        border-bottom: 1px solid $input-color-border-default;
         padding: 1rem 0;
     }
 }
@@ -63,6 +60,12 @@
         gap: 1rem;
         padding: 0 1rem;
         overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+
+        // Hide scrollbar for cleaner mobile look
+        &::-webkit-scrollbar {
+            display: none;
+        }
     }
 }
 
@@ -70,33 +73,40 @@
     display: flex;
     position: relative;
     align-items: center;
+
     transition: all $animations;
     cursor: pointer;
     border: none;
     border-radius: 12px;
+
     background: transparent;
     padding: 1rem 1.5rem;
+    width: 100%;
+
     color: $text-basic;
     font-weight: 400;
     font-size: 1rem;
     text-align: left;
     white-space: nowrap;
 
+    // Interaction States
     &:hover {
         background: $buttons-color-background-secondary-hover;
         color: $icon-color-primary;
     }
 
-    &:focus {
+    &:focus-visible {
         outline: 2px solid $primary-hover;
-        outline-offset: 2px;
+        outline-offset: -2px;
     }
 
+    // Active State
     &.active {
         background: $element-block-fill;
         color: $element-block-text;
         font-weight: 500;
 
+        // Active indicator strip
         &::before {
             position: absolute;
             top: 50%;
@@ -104,6 +114,7 @@
             transform: translateY(-50%);
             border-radius: 2px;
             background: $icon-color-fill;
+
             width: 4px;
             height: 60%;
             content: "";
@@ -114,9 +125,19 @@
         }
     }
 
+    // Mobile adjustments
     @include max-tablet {
         flex-shrink: 0;
         padding: 0.75rem 1rem;
+        width: auto;
+    }
+
+    // High Contrast Mode
+    @media (prefers-contrast: high) {
+        border: 2px solid transparent;
+        &.active {
+            border-color: $icon-color-fill;
+        }
     }
 }
 
@@ -125,57 +146,46 @@
     line-height: 1.2;
 }
 
-// Main panel area
+/* ======================================
+   3. MAIN PANEL AREA
+   ====================================== */
+
 .launchpad-main {
-    background: $surface-primary;
-    padding: 2rem;
-    overflow-y: auto;
+    position: relative; // Context for absolute loaders
+    overflow: hidden;
 
     @include max-tablet {
-        padding: 1rem;
+        min-height: unset;
     }
 }
 
 .launchpad-panels {
-    // max-width: 1200px;
     margin: 0 auto;
+}
+
+.launchpad-panel-wrapper {
+    // Visibility logic
+    &[hidden] {
+        display: none !important;
+    }
+
+    &:not([hidden]) {
+        animation: fadeIn 0.3s ease-in-out;
+    }
 }
 
 .launchpad-panel {
     position: relative;
-    animation: fadeIn 0.3s ease-in-out;
-}
-.launchpad-loading {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    transition: all 300ms ease-in-out;
-    color: $text-accent;
-    font-weight: 600;
-    font-size: 1.5rem;
-}
-.panel-title {
-    margin-bottom: 1.5rem;
-    color: $text-dark;
-    font-weight: 600;
-    font-size: 2rem;
-    line-height: 1.2;
+    padding: 0 0 2rem 0;
 
     @include max-tablet {
-        margin-bottom: 1rem;
-        font-size: 1.5rem;
+        padding-bottom: 1rem;
     }
 }
 
+// Panel Content & Typography
 .panel-content {
     border-radius: 16px;
-    background: $surface-violet;
-    padding: 2rem;
-
-    @include max-tablet {
-        padding: 1.5rem;
-    }
 
     p {
         margin-bottom: 1.5rem;
@@ -189,29 +199,706 @@
     }
 }
 
-.placeholder-box {
-    // text-align: center;
-    margin: 2rem 0;
+/* ======================================
+   4. HEADER & CONTROLS
+   ====================================== */
+
+.launchpad-header {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+
+    // Title Group
+    hgroup {
+        flex: 1 1 100%;
+        max-width: 780px;
+
+        @include min-laptop {
+            flex: 1 1 auto;
+        }
+    }
+
+    .panel-title {
+        margin-bottom: 0.5rem;
+        color: $text-dark;
+        font-weight: 600;
+        font-size: 2rem;
+        line-height: 1.2;
+
+        @include max-tablet {
+            font-size: 1.5rem;
+        }
+    }
+
+    .panel-description {
+        margin: 0;
+        color: $text-light;
+        font-size: 1rem;
+        line-height: 1.5;
+    }
+
+    // Control Bar (Filters & Toggles)
+    .launchpad-controls {
+        display: flex;
+        align-items: center;
+        gap: 2rem;
+        margin-top: 1rem;
+        width: 100%;
+
+        @include min-laptop {
+            order: 3; // Push to bottom on large screens if desired
+        }
+
+        @include max-mobile {
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        .launchpad-filters {
+            position: relative;
+            border-radius: 8px;
+            background: $surface-violet;
+            padding: 10px 9px;
+            .filter-label {
+                position: absolute;
+                top: -7px;
+                left: 12px;
+                opacity: 0.75;
+                color: $text-light;
+                font-size: 0.8rem;
+            }
+            .filter-checkboxes {
+                display: flex;
+                // margin-left: 4px;
+                align-items: center;
+                gap: 1rem;
+                color: $text-light;
+                font-size: 0.85rem;
+
+                .filter-checkbox {
+                    align-items: flex-end;
+                }
+            }
+        }
+    }
+
+    // Add Button
+    .btn-opportunity__add {
+        flex-shrink: 0;
+        margin-top: 0.5rem;
+    }
+}
+
+// Layout Switcher (Icons)
+.btn-group-toggle {
+    display: inline-flex;
+    border-radius: 8px;
+    background: $surface-violet;
+    padding: 4px;
+
+    .layout-check {
+        position: absolute;
+        margin: -1px;
+        padding: 0;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        border: 0;
+        white-space: nowrap;
+
+        // Checked State
+        &:checked + .layout-btn {
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            background: $surface-primary;
+            color: $icon-color-accent;
+        }
+    }
+
+    .layout-btn {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transition: all 0.2s ease;
+        cursor: pointer;
+        border-radius: 6px;
+        padding: 6px 12px;
+        color: $text-light;
+
+        &:hover {
+            color: $text-dark;
+        }
+    }
+}
+
+/* ======================================
+   5. COMPONENT: OPPORTUNITY CARD
+   ====================================== */
+
+.opportunity-card {
+    display: grid;
+
+    // Default: Card Layout (Horizontal)
+    grid-template-columns: 180px 1fr;
+    gap: 1.5rem;
+    transition: all $animations;
+    border-bottom: 2px dashed $dropdown-surface-color-pressed;
+    border-radius: $radius-input;
+    background: $surface-primary;
+    padding: 1.5rem;
+
+    @include max-tablet {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+        padding: 1rem;
+    }
+
+    &__figure {
+        display: flex;
+        position: relative;
+        justify-content: center;
+        align-items: center;
+        border-radius: 8px;
+        background: $surface-violet;
+        aspect-ratio: 4 / 3;
+        width: 100%;
+        overflow: hidden;
+    }
+
+    &__image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    &__placeholder {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: $text-light;
+
+        .dashicons {
+            opacity: 0.3;
+            width: 48px;
+            height: 48px;
+            font-size: 48px;
+        }
+    }
+
+    .opportunity-content {
+        display: flex;
+        flex-direction: column;
+        min-width: 0; // Prevent flex item overflow
+    }
+
+    .opportunity-title {
+        margin-bottom: 0.5rem;
+        color: $text-dark;
+        font-weight: 600;
+        font-size: 1.25rem;
+
+        &:hover {
+            color: $primary-hover;
+        }
+    }
+
+    .opportunity-excerpt {
+        // Truncate text
+        display: -webkit-box;
+        margin-bottom: 1rem;
+        color: $text-light;
+        font-size: 0.95rem;
+        line-height: 1.5;
+        line-clamp: 3;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    .opportunity-actions {
+        display: flex;
+        grid-column: 1 / -1; // Span full width if needed
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-top: auto; // Push to bottom
+
+        @include max-tablet {
+            gap: 6px;
+            margin-top: 1rem;
+        }
+    }
+    .opportunity-taxonomy {
+        display: inline-block;
+        margin-bottom: 8px;
+        font-size: 11px;
+        font-weight: 700;
+        // text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: $text-accent;
+
+        &::before {
+            content: "•";
+            margin-right: 5px;
+            color: $icon-color-fill; // Gold #fac625
+        }
+    }
+}
+
+// Meta Data (Date, Status, Comments)
+.opportunity-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 0.75rem;
+    color: $text-light;
+    font-size: 0.85rem;
+
+    .opportunity-comments {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+
+        .dashicons {
+            width: 16px;
+            height: 16px;
+            color: $icon-color-accent;
+            font-size: 16px;
+        }
+
+        .comments-number {
+            font-weight: 600;
+        }
+    }
+}
+
+/* ======================================
+   6. COMPONENT: STATUS BADGE
+   ====================================== */
+
+.status-badge {
+    border-radius: 4px;
+
+    // Define colors using CSS variables locally or map to SCSS vars
+    // Default fallback
+    background-color: $input-color-border-default;
+    padding: 4px 8px;
+    color: $text-light;
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 1;
+    text-transform: capitalize;
+
+    &[data-status="draft"] {
+        background-color: #f2f2f2; // Consider adding to variables: $surface-neutral
+        color: $text-light;
+    }
+
+    &[data-status="pending"] {
+        border: 1px solid rgba($element-card-social-text, 0.2);
+        background-color: $element-card-social-fill;
+        color: $element-card-social-text;
+    }
+
+    &[data-status="publish"] {
+        background-color: $element-card-tech-stroke;
+        color: $element-card-tech-text;
+    }
+}
+
+// Conditional Button Display based on Status
+.btn-opportunity__review {
+    &[data-status="pending"],
+    &[data-status="publish"] {
+        display: none;
+    }
+}
+
+/* ======================================
+   7. GRID LAYOUT MODIFIERS
+   ====================================== */
+
+.opportunities-grid {
+    display: grid;
+    gap: 1.5rem;
+    transition: all 0.3s ease-in-out;
+
+    // Compact Layout (List View)
+    &[data-layout="compact"] {
+        grid-template-columns: 1fr;
+
+        .opportunity-card {
+            grid-template-columns: 80px 1fr auto; // Icon | Content | Actions
+            align-items: center;
+            gap: 1rem;
+            padding: 0.75rem 1rem;
+
+            &__figure {
+                aspect-ratio: 1;
+                width: 80px;
+            }
+            .opportunity-content {
+                display: grid;
+                // grid-template-columns: repeat(3, 1fr);
+                grid-template-columns: minmax(150px, 300px) minmax(60px, 80px) auto;
+                grid-template-rows: auto;
+                row-gap: 4px;
+                column-gap: 1rem;
+
+                .opportunity-title {
+                    margin-bottom: 0;
+                }
+                .opportunity-meta {
+                    grid-column-start: 1;
+                    grid-row-start: 2;
+                    margin-bottom: 0;
+                    .opportunity-date {
+                        order: 1;
+                    }
+                    .opportunity-badge {
+                        order: 2;
+                    }
+                    .opportunity-comments {
+                        order: 3;
+                    }
+                }
+                .opportunity-info {
+                    grid-row: span 3 / span 3;
+                    grid-column-start: 2;
+                    grid-row-start: 1;
+                    .opportunity-range {
+                        display: inline-flex;
+                        flex-flow: column wrap;
+                        gap: 4px;
+                        span {
+                            line-height: 1;
+                        }
+                        &__icon {
+                            display: none;
+                        }
+                    }
+                }
+
+                .opportunity-taxonomy {
+                    grid-column-start: 1;
+                    grid-row-start: 3;
+                }
+                .opportunity-excerpt {
+                    // display: none;
+                    grid-row: span 3 / span 3;
+                    grid-column-start: 3;
+                    grid-row-start: 1;
+                }
+            }
+
+            .opportunity-actions {
+                grid-column: auto;
+                margin-top: 0;
+            }
+
+            @include max-tablet {
+                grid-template-columns: 1fr;
+                .opportunity-actions {
+                    width: 100%;
+                }
+            }
+        }
+    }
+
+    // Card Layout (Default)
+    &[data-layout="card"] {
+        // grid-template-columns: 1fr;
+        // Styles inherited from default .opportunity-card
+        .opportunity-card {
+            // grid-template-columns: 1fr;
+            // display: flex;
+            // grid-template-columns: repeat(2, 1fr);
+            grid-template-columns: 1fr minmax(100px, 250px);
+            grid-template-rows: auto;
+            .opportunity-content {
+                order: 1;
+                .opportunity-excerpt {
+                    max-width: 570px;
+                }
+            }
+            .opportunity-actions {
+                order: 2;
+                grid-column-start: 1;
+                grid-row-start: 2;
+            }
+            .opportunity-card__figure {
+                order: 3;
+                grid-row: span 2 / span 2;
+                grid-column-start: 2;
+                grid-row-start: 1;
+            }
+        }
+    }
+
+    // Grid Layout (Columns)
+    &[data-layout="grid"] {
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+
+        .opportunity-card {
+            grid-template-columns: 1fr; // Stack vertically
+
+            &__figure {
+                aspect-ratio: 16 / 9;
+            }
+
+            .opportunity-actions {
+                margin-top: 1rem;
+            }
+        }
+    }
+}
+
+/* ======================================
+   8. COMPONENT: PROFILE CARD
+   ====================================== */
+
+.profile-card {
+    display: grid;
+    grid-template-rows: auto auto;
+    grid-template-columns: auto 1fr;
+    gap: 1.5rem;
     border: 2px dashed $element-card-cult-stroke;
     border-radius: 12px;
-    background: $element-card-cult-fill;
-    padding: 3rem 2rem;
+
+    background: $surface-primary;
+    padding: 1.5rem;
+    max-width: 640px;
+
+    @include max-tablet {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+        padding: 1rem;
+    }
+
+    .profile-avatar {
+        grid-row: span 2;
+        border: 2px solid $element-card-social-text;
+        border-radius: $radius-input;
+        width: 120px;
+        height: 120px;
+        object-fit: cover;
+
+        @include max-tablet {
+            grid-row: auto;
+            width: 80px;
+            height: 80px;
+        }
+    }
+
+    .profile-info {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+
+        h2 {
+            margin-bottom: 0.5rem;
+            color: $text-dark;
+            font-size: 1.5rem;
+        }
+    }
+
+    .profile-meta {
+        color: $text-basic;
+        font-size: 0.95rem;
+
+        div {
+            margin-top: 4px;
+        }
+    }
+
+    &__controls {
+        display: flex;
+        grid-column: 2;
+        align-items: flex-start;
+        gap: 0.5rem;
+
+        @include max-tablet {
+            grid-column: 1;
+            flex-wrap: wrap;
+        }
+    }
+}
+
+/* ======================================
+   9. FORMS & INPUTS
+   ====================================== */
+
+.launchpad-form,
+.profile-form,
+.security-form,
+.password-form {
+    // Shared Inputs
+    input[type="text"],
+    input[type="email"],
+    input[type="password"],
+    input[type="url"],
+    input[type="date"],
+    textarea,
+    select {
+        transition: border-color $animations;
+        border: 1px solid $input-color-border-filled;
+        border-radius: $radius-input;
+        background: $input-color-surface-default;
+        padding: 12px;
+        width: 100%;
+        color: $text-dark; // Changed from text-light for better readability
+        font-size: 1rem;
+
+        &::placeholder {
+            color: $input-color-text-default;
+        }
+
+        &:focus {
+            outline: none;
+            box-shadow: 0 0 0 1px $input-color-border-filled;
+            border-color: $input-color-border-filled;
+        }
+
+        &:disabled {
+            cursor: not-allowed;
+            background: $input-color-surface-disabled;
+            color: $input-color-text-disabled;
+        }
+    }
+
+    // Form Layout Helpers
+    .form-group-card {
+        margin-bottom: 2rem;
+
+        .group-card-title {
+            margin-bottom: 1rem;
+            color: $text-dark;
+            font-weight: 600;
+            font-size: 1.25rem;
+        }
+    }
+
+    .form-field {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        margin-bottom: 1rem;
+        width: 100%;
+
+        label {
+            margin-left: 2px;
+            color: $text-basic;
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+    }
+
+    .form-row {
+        display: flex;
+        gap: 1rem;
+
+        @include max-tablet {
+            flex-direction: column;
+            gap: 0;
+        }
+
+        > .form-field {
+            flex: 1;
+        }
+    }
+
+    .form-actions {
+        display: flex;
+        gap: 1rem;
+        margin-top: 2rem;
+        border-top: 1px solid $input-color-border-default;
+        padding-top: 1rem;
+    }
+}
+
+.launchpad-form {
+    &-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+    &__container {
+        transition: background 0.4s ease-in-out;
+        border-radius: $radius-xl;
+        background: $surface-violet;
+        padding: 32px;
+        .btn-secondary__small {
+            background: $surface-primary;
+            &:hover {
+                background-color: $buttons-color-background-secondary-selected;
+            }
+
+            &:disabled {
+                cursor: not-allowed;
+                background: $buttons-color-background-secondary-disabled;
+                color: $buttons-color-text-secondary-disabled;
+            }
+        }
+        @include max-mobile {
+            padding: 24px;
+        }
+    }
+}
+.password-form,
+.profile-form {
+    max-width: 520px;
+}
+
+// Specific Grids within forms
+.launchpad-grid-3-col {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+
+    @include max-laptop {
+        grid-template-columns: 1fr;
+    }
+}
+
+.launchpad-grid-auto {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+}
+
+// Placeholder Box style (used in forms and lists)
+.placeholder-box {
+    margin: 2rem 0;
 
     @include max-tablet {
         margin: 1.5rem 0;
-        padding: 2rem 1.5rem;
     }
-
-    // span {
-    // font-size: 1rem;
-    // color: $text-light;
-    // font-weight: 500;
-    // text-transform: uppercase;
-    // letter-spacing: 0.5px;
-    // }
 }
 
-// Animations
+/* ======================================
+   10. LOADING STATES & ANIMATIONS
+   ====================================== */
+
+.launchpad-loading {
+    display: flex;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    transform: translate(-50%, -50%);
+    z-index: 10;
+
+    color: $text-accent;
+    font-weight: 600;
+    font-size: 1.25rem;
+}
+
+// Fade In Animation
 @keyframes fadeIn {
     from {
         transform: translateY(10px);
@@ -223,108 +910,172 @@
     }
 }
 
-// Responsive adjustments
-@include max-mobile {
-    .launchpad-layout {
-        grid-template-columns: 1fr;
-    }
-
-    .launchpad-sidebar {
-        padding: 0.75rem 0;
-    }
-
-    .launchpad-tabs {
-        padding: 0 0.75rem;
-    }
-
-    .launchpad-tab {
-        padding: 0.5rem 0.75rem;
-        font-size: 0.875rem;
-    }
-
-    .launchpad-main {
-        padding: 0.75rem;
-    }
-
-    .panel-content {
-        padding: 1rem;
-    }
-
-    .placeholder-box {
-        padding: 1.5rem 1rem;
+// Shimmer Effect / Skeleton Loading
+@keyframes shimmer {
+    100% {
+        transform: translateX(100%);
     }
 }
 
-// High contrast mode support
-@media (prefers-contrast: high) {
-    .launchpad-tab {
-        border: 2px solid transparent;
+.launchpad-form__container[data-is-loading="true"] {
+    background: $surface-primary;
+    pointer-events: none;
+    label,
+    h2,
+    h3,
+    .btn,
+    .btn-secondary__small {
+        position: relative;
+        border-color: transparent !important;
+        border-radius: 4px;
+        background-color: $surface-violet;
+        overflow: hidden;
+        color: transparent !important;
 
-        &.active {
-            border-color: $icon-color-fill;
+        &::after {
+            position: absolute;
+            transform: translateX(-100%);
+            animation: shimmer 1.5s infinite;
+            inset: 0;
+            background: linear-gradient(
+                90deg,
+                rgba(255, 255, 255, 0) 0,
+                rgba(255, 255, 255, 0.4) 50%,
+                rgba(255, 255, 255, 0) 100%
+            );
+            content: "";
         }
     }
 
-    .placeholder-box {
-        border-style: solid;
+    input,
+    textarea,
+    select {
+        border-color: transparent !important;
+        background-color: $surface-violet !important;
+        color: transparent !important;
+
+        &::placeholder {
+            color: transparent;
+        }
+
+        &::after {
+            position: absolute;
+            transform: translateX(-100%);
+            animation: shimmer 1.5s infinite;
+            inset: 0;
+            background: linear-gradient(
+                90deg,
+                rgba(255, 255, 255, 0) 0,
+                rgba(255, 255, 255, 0.4) 50%,
+                rgba(255, 255, 255, 0) 100%
+            );
+            /* Reuse shimmer logic */
+            content: "";
+        }
     }
 }
 
-// Reduced motion support
-@media (prefers-reduced-motion: reduce) {
-    .launchpad-panel {
-        animation: none;
-    }
+/* ======================================
+   11. UTILITIES & ACCESSIBILITY
+   ====================================== */
 
-    .launchpad-tab {
+// Visibility Helpers
+[hidden] {
+    display: none !important;
+}
+
+// Reduced Motion
+@media (prefers-reduced-motion: reduce) {
+    .launchpad-panel,
+    .launchpad-tab,
+    .opportunity-card,
+    .launchpad-panel-wrapper:not([hidden]) {
+        animation: none;
         transition: none;
     }
 }
 
-.opportunity-meta {
-    .draft {
-        color: $icon-color-accent;
+/* ======================================
+   CUSTOM CHECKBOX STYLES
+   ====================================== */
+
+.filter-checkbox,
+.launchpad-form__checkbox {
+    display: inline-flex;
+    position: relative;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    box-sizing: border-box;
+    user-select: none;
+
+    // 1. Hide the default ugly checkbox
+    input[type="checkbox"] {
+        appearance: none;
+        -webkit-appearance: none;
+        position: relative;
+        transition: all 0.2s ease-in-out;
+
+        cursor: pointer;
+        margin: 0;
+        border: 1px solid $stroke-default;
+        border-radius: 4px;
+
+        background-color: $surface-primary;
+
+        width: 20px;
+        height: 20px;
+
+        // Hover Effect (Unchecked)
+        &:hover {
+            border-color: $input-color-border-hover;
+        }
+
+        // 2. Checked State (The Yellow Box)
+        &:checked {
+            border-color: $icon-color-fill; // Hide border by matching bg
+            background-color: $icon-color-fill; // The Golden Yellow (#fac625)
+        }
+
+        // 3. The Checkmark (Created with CSS)
+        &::after {
+            position: absolute;
+            top: 0px;
+
+            // Checkmark Shape (L-shape rotated)
+            left: 5px;
+            transform: rotate(45deg) scale(0.8);
+            opacity: 0;
+            transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: solid $icon-color-primary; // Dark color (#292929)
+            border-width: 0 1px 1px 0;
+            width: 7px;
+            height: 13px;
+            content: "";
+        }
+
+        // Show Checkmark when checked
+        &:checked::after {
+            transform: rotate(45deg) scale(1);
+            opacity: 1;
+        }
+
+        // Focus state for accessibility
+        &:focus-visible {
+            outline: 2px solid $primary-hover;
+            outline-offset: 2px;
+        }
     }
-    .publish {
-        color: $icon-color-done;
-    }
-    .pending {
-        color: $icon-color-fill;
-    }
+
+    // span {
+    //     font-size: 1.125rem;
+    //     font-weight: 500;
+    //     line-height: 1;
+    //     padding-top: 2px;
+    // }
 }
 
-.launchpad-grid-3-col {
-    display: grid !important;
-    grid-template-columns: repeat(3, 1fr);
-    // gap: 1rem;
-
-    @include max-laptop {
-        grid-template-columns: 1fr;
-    }
-}
-.launchpad-grid-auto {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-    gap: 1rem;
-
-    @include max-laptop {
-        grid-template-columns: 1fr;
-    }
-}
-
-// .form-group-card {
-// background: #fff;
-// padding: 1.5rem;
-// border-radius: 8px;
-// border: 1px solid #ddd;
-
-// h3 {
-//     margin-top: 0;
-//     border-bottom: 1px solid #eee;
-//     padding-bottom: 0.5rem;
-// }
-// }
-
+.password-form:not([hidden]),
 .profile-form:not([hidden]),
 .profile-card:not([hidden]),
 .launchpad-grid__container:not([hidden]),
@@ -332,103 +1083,45 @@
     animation: fadeIn 0.3s ease-in-out;
 }
 
-.security-form,
-.profile-form,
-.profile-card {
-    &[hidden] {
-        display: none;
-    }
-}
-
-.profile-form,
-.security-form {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    .form-field {
-        max-width: 378px;
-    }
-    .form-actions {
+.opportunity-info {
+    .opportunity-range {
         display: flex;
-        flex-direction: row;
+        align-items: center;
         gap: 8px;
-        margin-top: 1rem;
-    }
-}
-
-.profile-form,
-.security-form,
-.launchpad-form {
-    input,
-    textarea,
-    select {
-        border: 1px solid $input-color-border-default;
-        border-radius: $radius-input;
-        background: $input-color-surface-default;
-        padding: 12px;
+        margin-top: 4px;
         color: $text-light;
-        font-size: 1rem;
-    }
+        font-size: 0.85rem;
 
-    .group-card-title {
-        margin-bottom: 1rem;
-    }
-
-    .form-card-data {
-        display: flex;
-        flex-direction: column;
-        gap: 1rem;
-    }
-
-    .form-select-cetegory {
-        max-width: 412px;
-    }
-    .form-field {
-        display: flex;
-        flex-flow: column wrap;
-        gap: 4px;
-        width: 100%;
-        label {
-            margin-left: 13px;
+        .dashicons {
             font-size: 14px;
+            width: 14px;
+            height: 14px;
+            opacity: 0.7;
+        }
+
+        .range-sep {
+            opacity: 0.5;
         }
     }
-    .form-field__title {
-        margin-top: 1rem;
-    }
-    .form-field-description {
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-        width: 100%;
-    }
-}
-.opportunities-grid {
-    display: flex;
-    row-gap: 12px;
-    flex-flow: column nowrap;
-}
-.opportunity-card {
-    border-bottom: 2px dashed $dropdown-surface-color-pressed;
-    padding-bottom: 10px;
-}
-.opportunity-actions {
-    display: flex;
-    column-gap: 12px;
-    flex-flow: row nowrap;
-    margin-top: 35px;
 }
 
-.profile-card {
-    display: flex;
-    row-gap: 1rem;
-    flex-flow: column wrap;
-    .profile-avatar {
-        border: 2px solid $element-card-social-text;
-        border-radius: $radius-input;
-        width: fit-content;
-        max-width: 240px;
-        max-height: 240px;
-        overflow: hidden;
+.status-badge--expired {
+    background-color: rgba($icon-color-error, 0.1) !important;
+    color: $icon-color-error !important;
+    // border: 1px solid rgba($icon-color-error, 0.2);
+    font-size: 10px;
+    // text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.opportunity-card {
+    &[data-expired="true"] {
+        .opportunity-card__image {
+            filter: grayscale(1);
+            opacity: 0.6;
+        }
+        .opportunity-title {
+            color: $text-light;
+        }
     }
 }

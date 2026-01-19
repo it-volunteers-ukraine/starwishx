@@ -1,4 +1,5 @@
 <?php
+// File: inc/launchpad/Core/AccessController.php
 
 declare(strict_types=1);
 
@@ -10,7 +11,7 @@ class AccessController
     private const LAUNCHPAD_ROLES = [
         'subscriber',
         'contributor',
-        'author',
+        // 'author',
     ];
 
     public function init(): void
@@ -76,7 +77,7 @@ class AccessController
         global $pagenow;
 
         if ($pagenow === 'profile.php' && $this->shouldUseLaunchpad()) {
-            wp_redirect(home_url('/launchpad/?panel=profile'));
+            wp_redirect(home_url('/launchpad/?panel=opportunities'));
             exit;
         }
     }

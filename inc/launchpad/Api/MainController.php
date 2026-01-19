@@ -9,7 +9,7 @@ use Launchpad\Core\PanelRegistry;
 use WP_REST_Request;
 use WP_REST_Response;
 
-class MainController extends AbstractApiController
+class MainController extends AbstractLaunchpadController
 {
     private PanelRegistry $registry;
 
@@ -35,14 +35,16 @@ class MainController extends AbstractApiController
         ]);
     }
 
-    public function getPanelState(WP_REST_Request $request): WP_REST_Response
+    public function getPanelState(WP_REST_Request $request): \WP_REST_Response|\WP_Error
     {
         $panelId = $request->get_param('id');
         $panel = $this->registry->get($panelId);
 
         // This should technically be caught by validate_callback, but safety first
         if (!$panel) {
-            return new WP_REST_Response(['error' => 'Panel not found'], 404);
+            // Here we use the standard helper. 
+            // JS will find the message in 'data.message'
+            return $this->error(__('Panel not found.', 'starwishx'), 404, 'panel_missing');
         }
 
         // Reuse the EXACT same state logic as the initial SSR load

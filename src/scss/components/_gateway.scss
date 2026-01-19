@@ -1,0 +1,87 @@
+@use "../variables" as *;
+@use "../mixins/media" as *;
+
+.gateway-container {
+    display: flex;
+    background-color: $surface-violet;
+    min-height: 100dvh;
+}
+.gateway-layout {
+    margin: auto;
+    border-radius: 40px;
+    background: #fff;
+    padding: 40px;
+}
+.gateway-card {
+    min-width: 640px;
+    .btn {
+        width: 100%;
+    }
+}
+.gateway-header {
+    text-align: center;
+    margin: 0 auto;
+}
+
+.gateway-forms {
+    max-width: 320px;
+    margin: 0 auto;
+}
+.gateway-form-wrapper {
+    &[hidden] {
+        display: none !important;
+    }
+    animation: fadeIn 0.4s ease-in-out;
+}
+.gateway-form {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    margin-top: 32px;
+    min-width: 320px;
+    // animation: fadeIn 0.3s ease-in-out;
+    &__title {
+        text-align: center;
+    }
+    input,
+    textarea,
+    select {
+        border: 1px solid $input-color-border-default;
+        border-radius: $radius-input;
+        padding: 12px;
+        color: $text-light;
+        font-size: 1rem;
+        background-color: $input-color-surface-default;
+    }
+    .form-field {
+        display: flex;
+        flex-flow: column wrap;
+        gap: 4px;
+        width: 100%;
+        // input {
+        // }
+        label {
+            margin-left: 13px;
+            font-size: 14px;
+        }
+        &--checkbox {
+            flex-flow: row nowrap;
+            align-items: center;
+        }
+    }
+    .buttons-group {
+        display: flex;
+        row-gap: 12px;
+        flex-flow: column wrap;
+    }
+    .gateway-links {
+        display: flex;
+        flex-flow: row nowrap;
+        font-weight: normal;
+        font-size: 14px;
+        line-height: 1.2;
+    }
+    .gateway-link__password {
+        white-space: nowrap;
+    }
+}

@@ -1,5 +1,5 @@
 <?php
-
+// File: inc/launchpad/Panels/FavoritesPanel.php
 declare(strict_types=1);
 
 namespace Launchpad\Panels;
@@ -8,6 +8,15 @@ use Launchpad\Services\FavoritesService;
 
 class FavoritesPanel extends AbstractPanel
 {
+    private FavoritesService $service;
+
+    /**
+     * Dependency Injection via Constructor
+     */
+    public function __construct(FavoritesService $service)
+    {
+        $this->service = $service;
+    }
 
     public function getId(): string
     {
@@ -24,11 +33,11 @@ class FavoritesPanel extends AbstractPanel
         return 'heart';
     }
 
-    public function getInitialState(int $userId): array
+    public function getInitialState(?int $userId = null): array
     {
-        $service = new FavoritesService();
-        $favorites = $service->getUserFavorites($userId, 20, 0);
-        $total = $service->countUserFavorites($userId);
+        // We'r injected service here instead of 'new FavoritesService()'
+        $favorites = $this->service->getUserFavorites($userId, 20, 0);
+        $total     = $this->service->countUserFavorites($userId);
 
         return [
             'items'       => $favorites,

@@ -9,14 +9,14 @@ use Launchpad\Services\FavoritesService;
 use WP_REST_Request;
 use WP_REST_Response;
 
-class FavoritesController extends AbstractApiController
+class FavoritesController extends AbstractLaunchpadController
 {
     private FavoritesService $service;
 
     public function __construct(?FavoritesService $service = null)
     {
         // Dependency Injection allows for mocking in tests
-        $this->service = $service ?? new FavoritesService();
+        $this->service = $service;
     }
 
     public function registerRoutes(): void
