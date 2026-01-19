@@ -62,6 +62,24 @@ export const styles = () => {
     .pipe(browserSync.stream());
 };
 
+export const templatesStyles = () => {
+  return src(["src/scss/template-parts/*.scss"])
+    .pipe(
+      stylelint({
+        fix: true,
+        reporters: [{ formatter: "string", console: true }],
+      })
+    )
+    .pipe(gulpif(!PRODUCTION, sourcemaps.init()))
+    .pipe(SASS().on("error", SASS.logError))
+    .pipe(gulpif(PRODUCTION, postcss([autoprefixer])))
+    .pipe(gulpif(PRODUCTION, cleanCss({ compatibility: "ie8" })))
+    .pipe(gulpif(!PRODUCTION, sourcemaps.write()))
+    .pipe(dest("assets/css/template-parts"))
+    .pipe(browserSync.stream());
+};
+
+
 export const blockStyles = () => {
   return src(["inc/acf/blocks/**/*.module.scss"])
     .pipe(
@@ -301,6 +319,7 @@ export const production = () => {
 
 export const watchForChanges = () => {
   watch("src/scss/**/*.scss", styles);
+  watch("src/scss/template-parts/*.scss", templatesStyles);
   watch("src/img/**/*.{jpg,jpeg,png,svg,gif}", images);
   watch(
     ["src/**/*", "!src/{images,js,scss}", "!src/{images,js,scss}/**/*"],
@@ -317,6 +336,7 @@ export const dev = series(
   clean,
   parallel(
     styles,
+    templatesStyles,
     fonts,
     images,
     copy,
@@ -332,6 +352,7 @@ export const build = series(
   clean,
   parallel(
     styles,
+    templatesStyles,
     fonts,
     images,
     copy,

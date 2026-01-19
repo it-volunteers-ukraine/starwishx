@@ -16,14 +16,14 @@ $default_classes = [
 
 
     'lastcards' => 'lastcards',
-    'newscards-item' => 'newscards-item',
-    'newcard-content' => 'newcard-content',
-    'newcard-img-wrap' => 'newcard-img-wrap',
-    'newcard-img' => 'newcard-img',
+    // 'newscards-item' => 'newscards-item',
+    // 'newcard-content' => 'newcard-content',
+    // 'newcard-img-wrap' => 'newcard-img-wrap',
+    // 'newcard-img' => 'newcard-img',
     'newcard-label' => 'newcard-label',
-    'newcard-date' => 'newcard-date',
-    'newcard-title' => 'newcard-title',
-    'newcard-text' => 'newcard-text',
+    // 'newcard-date' => 'newcard-date',
+    // 'newcard-title' => 'newcard-title',
+    // 'newcard-text' => 'newcard-text',
 
     'bycat-section' => 'bycat-section',
     'cat-title' => 'cat-title',
@@ -278,41 +278,17 @@ function render_card_bycat($item, $classes = [], $is_no_photo = false)
                 <?php if ($last_one_by_category) : ?>
                     <?php foreach ($last_one_by_category as $item) : ?>
                         <?php
-                        $post_id = $item->ID;
-                        $term_id = $item->term_id;
-                        $term_full = get_term($term_id);
-                        $item_taxonomy = $term_full->taxonomy;
-                        $category_current_color = get_category_by_id($categories_colors, $term_id);
-                        $label_color_text = $category_current_color['label_color_text'] ?? 'white';
-                        $label_color_background = $category_current_color['label_color_background'] ?? 'grey';
-                        $label_color_border = $category_current_color['label_color_border'] ?? 'grey';
-                        $term_name = $item->term_name;
-                        $item_date = date('d.m.Y', strtotime($item->post_date));
-                        $item_title = get_field('title', $post_id);
-                        $item_desc = get_field('description', $post_id);
-
-                        $item_label = esc_html($term_name);
-                        $photo = get_field('photo', $post_id);
-                        $photo_url = $photo["sizes"]['large'];
-                        $photo_alt = $photo['alt'] ?: $photo['title'];
+                        get_template_part(
+                            'template-parts/new-card',
+                            null,
+                            [
+                                'item'    => $item,
+                                'classes' => $classes,
+                            ]
+                        );
 
                         ?>
-                        <div class="<?php echo esc_attr($classes['newscards-item']); ?>">
-                            <div class="<?php echo esc_attr($classes['newcard-content']); ?>"> <!-- Проверить может лишнее -->
-                                <div class="<?php echo esc_attr($classes['newcard-img-wrap']); ?>">
-                                    <img src="<?php echo esc_url($photo_url); ?>" class="<?php echo  esc_attr($classes['newcard-img']); ?>" alt="<?php echo $photo_alt; ?>">
-                                    <div class="<?php echo esc_attr($classes['newcard-label']); ?>" style="--label-color: <?php echo $label_color_text; ?>; --label-bg: <?php echo $label_color_background; ?>; --label-border: <?php echo $label_color_border; ?>; "><?php echo $item_label; ?></div>
 
-                                </div>
-                                <div class="text-small <?php echo esc_attr($classes['newcard-date']); ?>"><?php echo $item_date; ?></div>
-                                <div class="subtitle-text-m <?php echo esc_attr($classes['newcard-title']); ?>">
-                                    <?php echo $item_title; ?>
-                                </div>
-                                <div class="text-r <?php echo esc_attr($classes['newcard-text']); ?>">
-                                    <?php echo $item_desc; ?>
-                                </div>
-                            </div>
-                        </div>
                     <? endforeach; ?>
                 <? endif; ?>
             </div>

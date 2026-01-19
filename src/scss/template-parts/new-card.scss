@@ -1,0 +1,69 @@
+@use "../variables" as *;
+@use "../mixins/label";
+
+/*
+    'newlast' => 'newlast',
+    'newscards-item' => 'newscards-item',
+    'newcard-content' => 'newcard-content',
+    'newcard-img-wrap' => 'newcard-img-wrap',
+    'newcard-img' => 'newcard-img',
+    'newcard-label' => 'newcard-label',
+    'newcard-date' => 'newcard-date',
+    'newcard-title' => 'newcard-title',
+    'newcard-text' => 'newcard-text', */
+
+.newcard-img-wrap {
+  margin-bottom: 24px;
+  position: relative;
+  width: 100%;
+  height: 250px;
+}
+
+.newcard-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 12px;
+}
+
+.newcard-label {
+  @include label.label(
+    var(--label-color),
+    var(--label-bg),
+    var(--label-border)
+  );
+
+  position: absolute;
+  top: 8px;
+  left: 8px;
+}
+
+.newcard-date {
+  margin-bottom: 12px;
+  color: $text-light;
+  text-align: right;
+}
+
+.newcard-title {
+  margin-bottom: 12px;
+  color: $text-basic;
+
+  /* autoprefixer: ignore next */
+  min-height: calc(1.2em * 3);
+  /* stylelint-disable-next-line value-no-vendor-prefix */
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3; /* максимум 3 строки */
+  overflow: hidden;
+}
+
+/* autoprefixer: off */
+.newcard-text {
+  color: $text-light;
+
+  /* stylelint-disable-next-line value-no-vendor-prefix */
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 4; /* максимум 3 строки */
+  overflow: hidden;
+}
