@@ -1,7 +1,13 @@
 <?php
 
 /**
- * Launchpad Setup
+ * Setup for
+ * Launchpad user admin panel app
+ * Version: 0.3.1
+ * Author: DevFrappe
+ * Email: dev.frappe@proton.me
+ * 
+ * License: GPL v2 or later
  *
  * Include from functions.php:
  * require_once get_template_directory() . '/inc/launchpad/setup.php';
@@ -79,4 +85,4 @@ add_action('wp_trash_post', function ($post_id) {
 // Initialize Launchpad
 add_action('after_setup_theme', function () {
     \launchpad();
-}, 5);
+}, 20);

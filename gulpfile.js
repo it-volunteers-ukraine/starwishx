@@ -22,8 +22,8 @@ import ttf2woff2 from "ttf2woff2";
 import { Transform } from "stream";
 import git from "git-rev-sync";
 import path from "path";
-import changed from "gulp-changed"; // Speed boost
-import stylelint from "gulp-stylelint-esm"; // Native speed
+import changed from "gulp-changed";
+import stylelint from "gulp-stylelint-esm";
 import postcssModules from "postcss-modules";
 import rename from "gulp-rename";
 
@@ -51,7 +51,7 @@ export const styles = () => {
       stylelint({
         fix: true,
         reporters: [{ formatter: "string", console: true }],
-      })
+      }),
     )
     .pipe(gulpif(!PRODUCTION, sourcemaps.init()))
     .pipe(SASS().on("error", SASS.logError))
@@ -86,7 +86,7 @@ export const blockStyles = () => {
       stylelint({
         fix: true,
         reporters: [{ formatter: "string", console: true }],
-      })
+      }),
     )
     .pipe(
       postcss([
@@ -98,11 +98,11 @@ export const blockStyles = () => {
             fs.mkdirSync("assets/css/blocks/", { recursive: true });
             fs.writeFileSync(
               "assets/css/blocks/modules.json",
-              JSON.stringify(cssModulesJSON, null, 2)
+              JSON.stringify(cssModulesJSON, null, 2),
             );
           },
         }),
-      ])
+      ]),
     )
     .pipe(gulpif(!PRODUCTION, sourcemaps.init()))
     .pipe(SASS().on("error", SASS.logError))
@@ -117,7 +117,7 @@ export const blockStyles = () => {
 export const otfToTtf = () => {
   const srcDir = "./src/fonts";
   if (!fs.existsSync(srcDir)) return Promise.resolve();
-  return src(`${srcDir}/*.otf`)
+  return src(`${srcDir}/*.otf`, { encoding: false })
     .pipe(fonter({ formats: ["ttf"] }))
     .pipe(dest("./assets/fonts/"));
 };
@@ -142,14 +142,15 @@ export const ttfToWoff = () => {
   const srcDir = "./src/fonts";
   if (!fs.existsSync(srcDir)) return Promise.resolve();
 
-  const produceWoff = src(`${srcDir}/*.ttf`)
+  const produceWoff = src(`${srcDir}/*.ttf`, { encoding: false })
     .pipe(fonter({ formats: ["woff"] }))
     .pipe(dest("./assets/fonts"));
-  const produceWoff2 = src(`${srcDir}/*.ttf`)
+  const produceWoff2 = src(`${srcDir}/*.ttf`, { encoding: false })
     .pipe(new VinylTransform())
     .pipe(dest("./assets/fonts"));
   const copyExisting = src(`${srcDir}/*.{woff,woff2}`, {
     allowEmpty: true,
+    encoding: false,
   }).pipe(dest("./assets/fonts"));
 
   return Promise.all([
@@ -184,9 +185,20 @@ const fonts = series(otfToTtf, ttfToWoff, fontsStyle);
 
 // Optimized Images with 'changed'
 export const images = () => {
-  return src(["src/img/**/*.{jpg,jpeg,png,svg,gif}"], { allowEmpty: true })
+  return src(["src/img/**/*.{jpg,jpeg,png,gif,webp,avif}"], {
+    allowEmpty: true,
+    encoding: false,
+  })
     .pipe(changed("assets/img")) // Skip if file hasn't changed
     .pipe(gulpif(PRODUCTION, imagemin()))
+    .pipe(dest("assets/img"));
+};
+
+// for now just copy svgs
+// .pipe(gulpif(PRODUCTION, imagemin()))
+export const svgs = () => {
+  return src("src/img/**/*.svg")
+    .pipe(changed("assets/img"))
     .pipe(dest("assets/img"));
 };
 
@@ -201,7 +213,7 @@ export const copy = () => {
       "src/js/swiper.min.js",
       "src/js/lightbox.js",
     ],
-    { allowEmpty: true }
+    { allowEmpty: true },
   )
     .pipe(changed("assets")) // Only copy modified files
     .pipe(dest("assets"));
@@ -258,9 +270,17 @@ export const blockScripts = () => {
 };
 
 export const moduleScripts = () => {
-  return src(["inc/launchpad/Assets/*.js", "inc/launchpad/Assets/*.mjs"], {
-    allowEmpty: true,
-  })
+  return src(
+    [
+      "inc/launchpad/Assets/*.js",
+      "inc/launchpad/Assets/*.mjs",
+      "inc/gateway/Assets/*.js",
+      "inc/gateway/Assets/*.mjs",
+    ],
+    {
+      allowEmpty: true,
+    },
+  )
     .pipe(named())
     .pipe(webpack(webpackConfig(PRODUCTION, true))) // true = ESM mode
     .pipe(rename({ suffix: ".module" }))
@@ -304,7 +324,7 @@ export const production = () => {
       "!config.js",
       "!.stylelintrc",
     ],
-    { allowEmpty: true }
+    { allowEmpty: true },
   )
     .pipe(replace("_themename", config.theme.name))
     .pipe(replace("_themeuri", config.theme.uri))
@@ -320,14 +340,16 @@ export const production = () => {
 export const watchForChanges = () => {
   watch("src/scss/**/*.scss", styles);
   watch("src/scss/template-parts/*.scss", templatesStyles);
-  watch("src/img/**/*.{jpg,jpeg,png,svg,gif}", images);
+  watch("src/img/**/*.{jpg,jpeg,png,gif,webp,avif}", images);
+  watch("src/img/**/*.svg", svgs);
   watch(
     ["src/**/*", "!src/{images,js,scss}", "!src/{images,js,scss}/**/*"],
-    copy
+    copy,
   );
   watch("src/js/**/*.js", scripts);
   watch("inc/acf/blocks/**/*.js", blockScripts);
   watch("inc/launchpad/Assets/**/*.{js,mjs}", moduleScripts);
+  watch("inc/gateway/Assets/**/*.{js,mjs}", moduleScripts);
   watch("inc/acf/blocks/**/*.module.scss", blockStyles);
   watch("**/*.php", reload);
 };
@@ -339,13 +361,14 @@ export const dev = series(
     templatesStyles,
     fonts,
     images,
+    svgs,
     copy,
     scripts,
     blockScripts,
     moduleScripts, // New task
-    blockStyles
+    blockStyles,
   ),
-  parallel(sync, watchForChanges)
+  parallel(sync, watchForChanges),
 );
 
 export const build = series(
@@ -355,14 +378,15 @@ export const build = series(
     templatesStyles,
     fonts,
     images,
+    svgs,
     copy,
     scripts,
     blockScripts,
     moduleScripts, // New task
-    blockStyles
+    blockStyles,
   ),
   pot,
-  production
+  production,
 );
 
 export default dev;

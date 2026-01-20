@@ -6,6 +6,10 @@
 @use "footer" as *;
 @use "components/404" as *;
 @use "components/page-policy" as *;
+@use "components/lg-shared" as *;
 @use "components/launchpad" as *;
+@use "components/gateway" as *;
+@use "components/comments" as *;
+@use "components/single-opportunity" as *;
 
 // @use "/inc/launchpad/Assets/launchpad" as *;

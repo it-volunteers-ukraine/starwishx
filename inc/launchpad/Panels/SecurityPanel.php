@@ -22,7 +22,7 @@ class SecurityPanel extends AbstractPanel
         return 'shield';
     }
 
-    public function getInitialState(int $userId): array
+    public function getInitialState(?int $userId = null): array
     {
         return [
             'currentPassword'  => '',

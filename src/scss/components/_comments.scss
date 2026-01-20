@@ -1,0 +1,467 @@
+@use "../variables" as *;
+@use "../mixins/media";
+
+/* ======================================
+   COMMENTS / REVIEWS SECTION
+   ====================================== */
+
+.comments-area {
+    margin: 80px auto;
+    padding: 0;
+    max-width: 1024px;
+
+    // @include media.min-tablet {
+    //     margin-top: 60px;
+    // }
+    fieldset {
+        border: none;
+        padding: 0;
+        margin: 0;
+    }
+}
+
+/* --- Header --- */
+.comments-header {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 32px;
+    padding-bottom: 24px;
+    // border-bottom: 1px solid $input-color-border-default;
+    &__button {
+        svg {
+            fill: currentColor;
+            margin-right: 8px;
+        }
+    }
+    &__info {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+
+        .h5 {
+            margin: 0;
+            // color: $text-dark;
+            // Match h3 mixin/class sizes roughly
+            // font-weight: 600;
+        }
+
+        .rating-badge {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            border-radius: 12px;
+            background: $element-card-social-fill;
+            padding: 4px 8px;
+            color: $text-light;
+            color: $text-dark;
+            font-weight: 600;
+            font-size: 1rem;
+
+            .count {
+                margin-left: 4px;
+                color: $text-light;
+                font-weight: 400;
+            }
+
+            .icon-star {
+                fill: $icon-color-fill;
+                width: 16px;
+                height: 16px;
+            }
+        }
+    }
+}
+
+/* --- Form --- */
+.comments-form-wrapper {
+    animation: fadeIn 0.3s ease-in-out;
+    margin-bottom: 40px;
+}
+
+.comment-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    border-radius: $radius-input;
+    background-color: $surface-violet; // Light background for form area
+    padding: 24px;
+
+    .form-control {
+        transition: border-color $animations;
+        border: 1px solid $input-color-border-default;
+        border-radius: $radius-input;
+        background: $input-color-surface-default;
+        padding: 16px;
+        width: 100%;
+        min-height: 120px;
+        resize: vertical;
+        color: $text-dark;
+        font-size: 1rem;
+        font-family: inherit;
+
+        &::placeholder {
+            color: $input-color-text-default;
+        }
+
+        &:focus {
+            outline: none;
+            box-shadow: 0 0 0 1px $input-color-border-filled;
+            border-color: $input-color-border-filled;
+        }
+    }
+
+    .form-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 12px;
+    }
+    .form-rating-input {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 8px;
+
+        .label {
+            color: $text-dark;
+            font-weight: 500;
+        }
+
+        .stars-input {
+            display: flex;
+            gap: 4px;
+        }
+
+        .star-btn {
+            transition: transform 0.1s;
+            cursor: pointer;
+            border: none;
+            background: none;
+            padding: 0;
+            color: $stroke-default;
+
+            svg {
+                fill: currentColor;
+                width: 24px;
+                height: 24px;
+            }
+
+            &:hover {
+                transform: scale(1.1);
+                color: $icon-color-fill;
+            }
+
+            // Active state (via data-wp-class--active)
+            &.active {
+                color: $icon-color-fill; // Gold
+            }
+        }
+    }
+}
+
+/* --- List Items --- */
+.comments-list {
+    display: flex;
+    flex-direction: column;
+    // gap: 24px;
+}
+
+.comment-item {
+    border-bottom: 1px solid $input-color-border-default;
+    padding: 24px 0;
+
+    // First item shouldn't have top padding if needed,
+    // but usually consistent spacing is better.
+    &:first-child {
+        padding-top: 0;
+    }
+
+    // Last item border removal
+    &:last-child {
+        border-bottom: none;
+    }
+}
+
+/* Item Header: Name & Date */
+.comment-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 8px;
+
+    .comment-author {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+
+        .avatar {
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            object-fit: cover;
+        }
+
+        .author-name {
+            color: $text-light; // Sample shows lighter text for name
+            font-weight: 400; // Not bold in the sample
+            font-size: 16px;
+        }
+    }
+
+    .comment-date {
+        color: $input-color-text-default; // Light grey
+        font-size: 14px;
+    }
+}
+
+/* Item Body */
+.comment-body {
+    margin-bottom: 12px;
+    color: $text-dark;
+    font-size: 16px;
+    line-height: 1.5;
+
+    p {
+        margin: 0;
+    }
+}
+
+/* Item Rating (Stars) */
+.comment-rating {
+    margin-top: 8px;
+    .stars {
+        color: $icon-color-fill; // Yellow/Gold
+        font-size: 14px;
+        letter-spacing: 2px;
+    }
+    .stars-display {
+        display: flex;
+        gap: 2px;
+        color: $stroke-default; // Base color (grey)
+
+        svg {
+            fill: currentColor;
+            width: 16px;
+            height: 16px;
+        }
+
+        // Logic to color stars based on parent data attribute
+        // If data-rating="3", first 3 stars are gold
+        &[data-rating="1"] .star-1,
+        &[data-rating="2"] .star-1,
+        &[data-rating="2"] .star-2,
+        &[data-rating="3"] .star-1,
+        &[data-rating="3"] .star-2,
+        &[data-rating="3"] .star-3,
+        &[data-rating="4"] .star-1,
+        &[data-rating="4"] .star-2,
+        &[data-rating="4"] .star-3,
+        &[data-rating="4"] .star-4,
+        &[data-rating="5"] svg {
+            color: $icon-color-fill;
+        }
+    }
+}
+
+.comment-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 8px;
+}
+
+.btn-link-edit {
+    cursor: pointer;
+    border: none;
+    background: none;
+    padding: 0;
+    color: $input-color-text-default; // Grey
+    font-size: 13px;
+    text-decoration: underline;
+
+    &:hover {
+        color: $primary-hover;
+    }
+}
+
+.comment-edit-mode {
+    animation: fadeIn 0.2s;
+    border-radius: 12px;
+    background: $surface-violet; // Distinct background for editing
+    padding: 16px;
+}
+
+.comments-pagination {
+    display: flex;
+    .comments-pagination__button {
+        margin-left: auto;
+    }
+}
+
+.badge-author {
+    display: inline-flex;
+    align-items: center;
+    border-radius: 4px;
+    background-color: $element-card-tech-fill; // Light green background
+    padding: 2px 8px;
+    color: $element-card-tech-text; // Darker green text
+    // font-weight: 500;
+    font-size: 12px;
+    line-height: 1;
+    letter-spacing: 0.5px;
+}
+
+.comment-replies {
+    margin-top: 16px;
+    margin-left: 20px; // Indent
+    border-left: 2px solid $input-color-border-default; // Visual thread line
+    padding-left: 16px;
+}
+
+.reply-item {
+    margin-bottom: 16px;
+
+    .avatar-small {
+        border-radius: 50%;
+        width: 32px;
+        height: 32px;
+    }
+
+    .reply-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 4px;
+        font-size: 14px;
+        .comment-author {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+
+            .avatar {
+                border-radius: 50%;
+                width: 40px;
+                height: 40px;
+                object-fit: cover;
+            }
+
+            .author-name {
+                color: $text-light; // Sample shows lighter text for name
+                font-weight: 400; // Not bold in the sample
+                font-size: 16px;
+            }
+        }
+
+        .comment-date {
+            color: $input-color-text-default; // Light grey
+            font-size: 14px;
+        }
+    }
+    .reply-footer {
+        display: flex;
+        .comment-actions {
+            margin-left: auto;
+        }
+    }
+}
+
+.comment-actions {
+    display: flex;
+    gap: 16px;
+}
+
+.btn-link-reply {
+    @extend .btn-link-edit; // Reuse edit link styles
+    color: $primary-hover;
+}
+
+/* --- Utilities --- */
+.no-comments {
+    border-radius: $radius-input;
+    background: $surface-violet;
+    padding: 32px;
+    color: $text-light;
+    text-align: center;
+}
+
+.alert.error {
+    margin-bottom: 16px;
+    border-radius: 8px;
+    background: $input-color-surface-error;
+    padding: 12px;
+    color: $icon-color-error;
+    font-size: 14px;
+}
+
+/* Animation */
+@keyframes fadeIn {
+    from {
+        transform: translateY(-10px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* Container holds the value */
+.stars-input[data-value="1"] .star-btn:nth-child(-n + 1),
+.stars-input[data-value="2"] .star-btn:nth-child(-n + 2),
+.stars-input[data-value="3"] .star-btn:nth-child(-n + 3),
+.stars-input[data-value="4"] .star-btn:nth-child(-n + 4),
+.stars-input[data-value="5"] .star-btn:nth-child(-n + 5) {
+    // color: var(--color-star-active, #ffb900);
+    color: $icon-color-hover;
+}
+
+.stars-input .star-btn {
+    /* Transition for smoother feel */
+    transition: color 0.2s;
+    // color: var(--color-star-inactive, #ccc);
+    color: $icon-color-fill;
+}
+
+/* Disable interaction when form is sending */
+// fieldset[disabled] {
+//     opacity: 0.6;
+//     pointer-events: none; /* Prevents clicks on custom elements */
+//     border: none; /* Reset default fieldset border */
+//     padding: 0;
+//     margin: 0;
+// }
+
+/* When the fieldset is disabled (during network request), fade it out */
+fieldset[disabled] {
+    opacity: 0.6;
+    pointer-events: none; /* Prevent clicks */
+    transition: opacity 0.2s ease;
+    border: none; /* Remove default fieldset border */
+    padding: 0;
+    margin: 0;
+}
+
+/* Status Badges */
+// .form-status-area {
+// margin-bottom: 1rem;
+// margin-top: 10px;
+// font-size: 1rem;
+// min-height: 20px; /* Prevent layout jump */
+// }
+
+.status-message {
+    color: $icon-color-done;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.error-message {
+    color: $icon-color-error;
+}
+.sending-message {
+    color: $text-accent;
+    font-style: italic;
+}

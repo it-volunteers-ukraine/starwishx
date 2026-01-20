@@ -9,7 +9,7 @@ use WP_REST_Request;
 use WP_REST_Response;
 use WP_Error;
 
-class SecurityController extends AbstractApiController
+class SecurityController extends AbstractLaunchpadController
 {
     public function registerRoutes(): void
     {
@@ -39,7 +39,7 @@ class SecurityController extends AbstractApiController
         wp_set_password($newPass, $user->ID);
 
         // Note: wp_set_password invalidates auth cookies.
-        // The frontend store.js must handle the redirect to login immediately.
+        // The frontend launchpad-store.js must handle the redirect to login immediately.
         return $this->success([
             'success' => true,
             'message' => __('Password changed. Please log in again.', 'starwishx'),

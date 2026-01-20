@@ -1,6 +1,5 @@
 <?php
 // File: inc/launchpad/Services/ProfileService.php
-
 declare(strict_types=1);
 
 namespace Launchpad\Services;
@@ -26,7 +25,7 @@ class ProfileService
         // --- PHONE NUMBER HANDLING ---
         $phoneRaw = get_field('phone', $acfId);
         $phoneString = '';
-        error_log('phone field raw: ' . print_r($phoneRaw, true));
+        // error_log('phone field raw: ' . print_r($phoneRaw, true));
 
         if (is_array($phoneRaw)) {
             // If ACF returned an array, try the international or e164 keys
