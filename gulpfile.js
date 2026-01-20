@@ -236,7 +236,7 @@ const webpackConfig = (prod, isModule = false) => {
 };
 
 export const scripts = () => {
-  return src(["src/js/app.js"], { allowEmpty: true })
+  return src(["src/js/*.js"], { allowEmpty: true })
     .pipe(named())
     .pipe(webpack(webpackConfig(PRODUCTION)))
     .pipe(dest("assets/js"))
