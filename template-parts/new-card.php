@@ -8,6 +8,9 @@
 
 $item   = $args['item'];
 $classes = $args['classes'] ?? [];
+$swiper = $args['swiper'] ?? false;
+
+$swiper_class = $swiper ? 'swiper-slide' : '';
 // echo '<pre>';
 // print_r($item);
 // echo '</pre>';
@@ -33,7 +36,7 @@ $label_color_border     = $category_current_color['label_color_border'] ?? 'grey
 $item_label = esc_html($item->term_name);
 ?>
 
-<div class="newcard-content">
+<div class="<?php echo $swiper_class; ?> newcard-content">
     <div class="newcard-img-wrap">
         <img
             src="<?php echo esc_url($photo_url); ?>"
