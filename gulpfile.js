@@ -261,6 +261,14 @@ export const scripts = () => {
     .pipe(browserSync.stream());
 };
 
+export const vendorScripts = () => {
+  return src(["src/js/vendor/*.js"], { allowEmpty: true })
+    // .pipe(named())
+    // .pipe(webpack(webpackConfig(PRODUCTION)))
+    .pipe(dest("assets/js/vendor"))
+    .pipe(browserSync.stream());
+};
+
 export const blockScripts = () => {
   return src(["inc/acf/blocks/**/*.js"], { allowEmpty: true })
     .pipe(named())
@@ -347,6 +355,7 @@ export const watchForChanges = () => {
     copy,
   );
   watch("src/js/**/*.js", scripts);
+  watch("src/js/vendor/*.js", vendorScripts);
   watch("inc/acf/blocks/**/*.js", blockScripts);
   watch("inc/launchpad/Assets/**/*.{js,mjs}", moduleScripts);
   watch("inc/gateway/Assets/**/*.{js,mjs}", moduleScripts);
@@ -364,6 +373,7 @@ export const dev = series(
     svgs,
     copy,
     scripts,
+    vendorScripts,
     blockScripts,
     moduleScripts, // New task
     blockStyles,
@@ -381,6 +391,7 @@ export const build = series(
     svgs,
     copy,
     scripts,
+    vendorScripts,
     blockScripts,
     moduleScripts, // New task
     blockStyles,

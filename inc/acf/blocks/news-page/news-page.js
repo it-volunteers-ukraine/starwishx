@@ -1,22 +1,14 @@
-(function () {
-    if (typeof Swiper === 'undefined') {
-        console.error('Swiper not loaded');
-        return;
-    }
+document.addEventListener("DOMContentLoaded", function () {
+    var swiper = new Swiper(".mySwiper", {
+        slidesPerView: 1,
+        spaceBetween: 20,
+        pagination: {
+            el: ".swiper-paginations",
+            clickable: true,
+        },
+        loop: true, // если нужен бесконечный скролл
+    }, 100);
 
-    document.querySelectorAll('.mySwiper').forEach(function (el) {
-        if (el.swiper) return;
+});
 
-        new Swiper(el, {
-            slidesPerView: 1,
-            spaceBetween: 20,
-            loop: true,
-            pagination: {
-                el: el.querySelector('.swiper-pagination'),
-                clickable: true,
-            },
-        });
-    });
-
-    console.log('news-page.js loaded');
-})();
+// console.log('news-page.js loaded');
