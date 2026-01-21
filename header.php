@@ -66,12 +66,11 @@
                         </div>
                     </div>
                 </div>
-                <!-- Кнопка "Увійти" -->
+                <!-- 3-state Button Login / Cabinet / Logout -->
                 <div class="header-right">
-                    <a href="#" class="header-login-btn"><?php echo esc_html($login_button_text); ?></a>
+                    <?php get_template_part('template-parts/header-launchpad-control', null, ['variant' => 'desktop']); ?>
                 </div>
-
-                <!-- Мобильное меню -->
+                <!-- Mobile menu -->
                 <div class="burger-menu">
                     <?php
                     wp_nav_menu([
@@ -84,9 +83,8 @@
                         'depth'          => 2,
                     ]);
                     ?>
-                    <a href="#" class="login-button-mobile"><?php echo esc_html($login_button_text); ?></a>
+                    <?php get_template_part('template-parts/header-launchpad-control', null, ['variant' => 'desktop']); ?>
                 </div>
-
             </div>
         </div>
     </header>

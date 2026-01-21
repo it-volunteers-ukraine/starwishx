@@ -131,17 +131,17 @@ get_header();
 
             </nav>
 
-            <div class="launchpad-sidebar-footer">
-                <!-- <a href="< ?php echo esc_url(home_url('/')); ?>" class="launchpad-back">
+            <!-- <div class="launchpad-sidebar-footer"> -->
+            <!-- <a href="< ?php echo esc_url(home_url('/')); ?>" class="launchpad-back">
                     <span class="dashicons dashicons-arrow-left-alt"></span>
                     < ?php esc_html_e('Back to Site', 'starwishx'); ?>
                 </a> -->
-
-                <a class="btn-secondary__small" href="<?php echo esc_url(wp_logout_url(home_url())); ?>" class="launchpad-logout">
-                    <!-- <span class="dashicons dashicons-exit"></span> -->
-                    <?php esc_html_e('Logout', 'starwishx'); ?>
-                </a>
-            </div>
+            <!-- 
+                <a class="btn-secondary__small" href="< ?php echo esc_url(wp_logout_url(home_url())); ? >" class="launchpad-logout">
+                    <span class="dashicons dashicons-exit"></span>
+                    < ?php esc_html_e('Logout', 'starwishx'); ? >
+                </a> -->
+            <!-- </div> -->
         </aside>
 
         <!-- Main Workspace Area -->
