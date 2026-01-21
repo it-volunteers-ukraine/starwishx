@@ -1,4 +1,5 @@
 @use "../variables" as *;
+@use "../mixins/media" as *;
 @use "../mixins/label";
 
 /*
@@ -44,6 +45,10 @@
   text-align: right;
 }
 
+.newcard-lg .newcard-date{
+  text-align: left;
+}
+
 .newcard-title {
   margin-bottom: 12px;
   color: $text-basic;
@@ -66,4 +71,14 @@
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 4; /* максимум 3 строки */
   overflow: hidden;
+}
+
+@include min-laptop {
+  .newcard-img-wrap {
+    height: calc(15.42vw + 18px);
+  }
+
+  .newcard-lg .newcard-img-wrap {
+    height: calc(24.17vw - 104px);
+  }
 }

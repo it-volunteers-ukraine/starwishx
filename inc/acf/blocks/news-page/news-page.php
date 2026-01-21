@@ -53,7 +53,7 @@ $classes = $default_classes;
 $title = get_field('title');
 $categories_colors = get_field('categories_labels_color', 'options');
 // print_r($categories_colors);
-$category_current_color = get_category_by_id($categories_colors, $term_id);
+// $category_current_color = get_category_by_id($categories_colors, $term_id);
 
 $news_by_category = get_field('news_by_category');
 // print_r($news_by_category);
@@ -197,57 +197,6 @@ $res_by_cat = $res_by_cat;
 // echo '</pre>';
 
 ?>
-<?php
-function render_card_bycat($item, $classes = [], $is_no_photo = false)
-{
-
-    $post_id   = $item->ID;
-    $term_id   = $item->term_id;
-
-
-    $item_date = date('d.m.Y', strtotime($item->post_date));
-    $item_title = get_field('title', $post_id);
-
-
-    $photo = get_field('photo', $post_id);
-    $photo_url = $photo['sizes']['large'] ?? '';
-    $photo_alt = $photo['alt'] ?: ($photo['title'] ?? '');
-    $item_date = date('d.m.Y', strtotime($item->post_date));
-    $categories_colors = get_field('categories_labels_color', 'options');
-    $category_current_color = get_category_by_id($categories_colors, $term_id);
-    $label_color_text = $category_current_color['label_color_text'] ?? 'white';
-    $label_color_background = $category_current_color['label_color_background'] ?? 'grey';
-    $label_color_border = $category_current_color['label_color_border'] ?? 'grey';
-    $term_name = $item->term_name;
-    $item_label = esc_html($term_name);
-
-    // вывод
-?>
-    <div class="<?php echo esc_attr($classes['bycat-item']); ?>">
-        <?php if (!$is_no_photo) : ?>
-            <div class="<?php echo esc_attr($classes['bycat-img-wrap']); ?>">
-                <img src="<?php echo esc_url($photo_url); ?>"
-                    class="<?php echo esc_attr($classes['bycat-img']); ?>"
-                    alt="<?php echo esc_attr($photo_alt); ?>">
-                <div class="<?php echo esc_attr($classes['newcard-label']); ?>" style="--label-color: <?php echo $label_color_text; ?>; --label-bg: <?php echo $label_color_background; ?>; --label-border: <?php echo $label_color_border; ?>; "><?php echo $item_label; ?></div>
-
-            </div>
-        <?php endif; ?>
-
-        <div class="text-small <?php echo esc_attr($classes['bycat-date']); ?>">
-            <?php echo esc_html($item_date); ?>
-        </div>
-
-        <div class="subtitle-text-m <?php echo esc_attr($classes['bycat-title']); ?>">
-            <?php echo esc_html($item_title); ?>
-        </div>
-    </div>
-<?php
-}
-?>
-
-
-
 
 <section class="section <?php echo esc_attr($classes['section']); ?> ">
     <div class="container ">
@@ -329,22 +278,44 @@ function render_card_bycat($item, $classes = [], $is_no_photo = false)
                     $btn_url = '#';
                     $btn_text = esc_html(get_field('button_text'));
                     $cat_name = $res_by_cat[$cat_id['category']]['term_name'];
-                    $label_color_text       = $category_current_color['label_color_text'] ?? 'white';
-                    $label_color_background = $category_current_color['label_color_background'] ?? 'grey';
-                    $label_color_border     = $category_current_color['label_color_border'] ?? 'grey';
                     ?>
                     <h2 class="h5 <?php echo esc_attr($classes['cat-title']); ?>"><?php echo esc_html($cat_name); ?></h2>
                     <div class="<?php echo esc_attr($classes['bycat-content']); ?>">
-                        <?php $conunt_post = 1; ?>
                         <?php
                         $post_list = $res_by_cat[$cat_id['category']]['posts'];
                         ?>
                         <div class="<?php echo esc_attr($classes['bycat-first-item']); ?> ">
-                            <?php render_card_bycat($post_list[0], $classes); ?>
+                            <?php
+                            get_template_part(
+                                'template-parts/new-card',
+                                null,
+                                [
+                                    'item'    => $post_list[0],
+                                    'classes' => $classes,
+                                    'swiper'  => false,
+                                    'is_card_lg' => true,
+                                    "no_desc" => true,
+                                    'no_photo' => false,
+                                ]
+                            );
+                            ?>
                         </div>
                         <div class="<?php echo esc_attr($classes['bycat-other-item']); ?> ">
                             <?php for ($i = 1; $i < count($post_list); $i++) : ?>
-                                <?php render_card_bycat($post_list[$i], $classes, true); ?>
+                                <?php
+                                get_template_part(
+                                    'template-parts/new-card',
+                                    null,
+                                    [
+                                        'item'    => $post_list[$i],
+                                        'classes' => $classes,
+                                        'swiper'  => false,
+                                        'is_card_lg' => true,
+                                        "no_desc" => true,
+                                        'no_photo' => true,
+                                    ]
+                                );
+                                ?>
                             <?php endfor; ?>
                         </div>
                     </div>
