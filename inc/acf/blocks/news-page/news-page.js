@@ -8,6 +8,7 @@ document.addEventListener("DOMContentLoaded", function () {
         },
         loop: true, // если нужен бесконечный скролл
     }, 100);
+
 });
 
-сonsole.log('news-page.js loaded');
+// console.log('news-page.js loaded');

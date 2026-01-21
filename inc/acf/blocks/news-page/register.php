@@ -9,3 +9,4 @@ acf_register_block_type(array(
     'icon'  =>  'format-image',
     'category' => 'custom-blocks',
 ));
+?>
