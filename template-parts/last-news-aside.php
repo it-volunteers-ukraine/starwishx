@@ -43,7 +43,7 @@ $news_last = $results;
 
 <?php if ($news_last) : ?>
     <?php if ($title) : ?>
-        <h2 class="h3 title"><?php echo esc_html($title); ?></h2>
+        <h2 class="h3 lnew-main_title"><?php echo esc_html($title); ?></h2>
     <?php endif; ?>
     <?php foreach ($news_last as $item) : ?>
         <?php
