@@ -69,12 +69,12 @@ $item_label = esc_html($item->term_name);
         <?php echo esc_html($item_date); ?>
     </div>
 
-    <div class="subtitle-text-m <?php echo esc_attr($classes['newcard-title'] ?? 'newcard-title'); ?>">
+    <div class="subtitle-text-m newcard-title">
         <?php echo esc_html($item_title); ?>
     </div>
 
     <?php if ($item_desc) : ?>
-        <div class="text-r <?php echo esc_attr($classes['newcard-text'] ?? 'newcard-text'); ?>">
+        <div class="text-r newcard-text">
             <?php echo esc_html($item_desc); ?>
         </div>
     <?php endif; ?>

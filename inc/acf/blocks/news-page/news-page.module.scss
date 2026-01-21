@@ -41,70 +41,9 @@
   gap: 4px;
 }
 
-.lnew-item {
-  padding: 8px 0;
-  position: relative;
-
-  @include max-tablet {
-    &::after {
-      content: "";
-      display: block;
-      position: absolute;
-      width: 100%;
-      height: 1px;
-      bottom: 0;
-      left: 0;
-      background: linear-gradient(to right, #fff, $stroke-default);
-      background: linear-gradient(to right, #fff, $stroke-default, #fff);
-    }
-  }
-}
-
 .newscards {
   display: none;
 }
-
-.lnew-date {
-  margin-bottom: 8px;
-  color: $text-light;
-}
-
-.lnew-title {
-  color: $text-basic;
-
-  /* min-height: calc(1.2em * 3); */
-  /* stylelint-disable-next-line value-no-vendor-prefix */
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 3; /* максимум 3 строки */
-  overflow: hidden;
-}
-
-/* медиа для aside */
-@include min-tablet {
-  .lnew-item:not(:last-child) {
-    position: relative;
-
-    /* border-bottom: 1px solid $stroke-default; */
-    &::after {
-      content: "";
-      display: block;
-      position: absolute;
-      width: 100%;
-      height: 1px;
-      bottom: 0;
-      left: 0;
-      background: linear-gradient(to right, #fff, $stroke-default);
-      background: linear-gradient(to right, #fff, $stroke-default, #fff);
-    }
-  }
-
-  .lnew-date {
-    margin-bottom: 12px;
-  }
-}
-
-
 
 /* ************************************************************ */
 

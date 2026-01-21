@@ -203,25 +203,17 @@ $res_by_cat = $res_by_cat;
         <h2 class="h3 <?php echo esc_attr($classes['title']); ?>"><?php echo esc_html($title); ?></h2>
         <div class="<?php echo esc_attr($classes['lastnews-content']); ?>">
             <div class="<?php echo esc_attr($classes['aside']); ?>">
-                <?php if ($news_last) : ?>
-                    <?php foreach ($news_last as $item) : ?>
-                        <?php
-                        $post_id = $item->ID;
-                        $term_id = $item->term_id;
-                        $term_full = get_term($term_id);
-                        $item_taxonomy = $term_full->taxonomy;
-                        $term_name = $item->term_name;
-                        $item_date = date('d.m.Y', strtotime($item->post_date));
-                        $item_title = get_field('title', $post_id);
-                        ?>
-                        <div class="<?php echo esc_attr($classes['lnew-item']); ?>">
-                            <div class="text-small <?php echo esc_attr($classes['lnew-date']); ?>"><?php echo $item_date; ?></div>
-                            <div class="subtitle-text-m <?php echo esc_attr($classes['lnew-title']); ?>">
-                                <?php echo $item_title; ?>
-                            </div>
-                        </div>
-                    <? endforeach; ?>
-                <? endif; ?>
+                <?php
+                get_template_part(
+                    'template-parts/last-news-aside',
+                    null,
+                    [
+                        'count_news'    => 8,
+                        'title'         => null,
+                        'line_clamp'    => 3,
+                    ]
+                );
+                ?>
             </div>
 
             <div class="<?php echo esc_attr($classes['newscards']); ?>">
