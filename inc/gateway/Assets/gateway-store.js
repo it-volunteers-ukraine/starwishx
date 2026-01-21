@@ -1,7 +1,5 @@
 /**
  * Gateway Interactivity API Store
- * Set of user auth forms
- *
  * File: inc/gateway/Assets/gateway-store.js
  */
 
@@ -10,7 +8,7 @@ import { store, getElement } from "@wordpress/interactivity";
 // Import modules
 import { loginActions } from "./auth/actions.js";
 import {
-  forgotPasswordActions,
+  lostPasswordActions, // Renamed from forgotPasswordActions
   resetPasswordActions,
 } from "./recovery/actions.js";
 
@@ -18,9 +16,16 @@ import {
 const gatewayState = {
   activeView: "login",
 
-  // Getter uses 'this' to refer to state proxy
+  // Helper to convert 'lost-password' to 'lostPassword'
+  toCamel(str) {
+    return str.replace(/([-_][a-z])/g, (group) =>
+      group.toUpperCase().replace("-", "").replace("_", ""),
+    );
+  },
+
   get currentForm() {
-    return this.forms?.[this.activeView] || {};
+    const key = this.toCamel(this.activeView);
+    return this.forms?.[key] || {};
   },
 };
 
@@ -29,15 +34,11 @@ const { state, actions } = store("gateway", {
   state: gatewayState,
 
   actions: {
-    /**
-     * Sync state from URL on load/popstate.
-     */
     syncStateFromUrl() {
       const url = new URL(window.location);
       const view = url.searchParams.get("view") || "login";
       state.activeView = view;
 
-      // Use the formMap from PHP to toggle boolean flags
       if (state.formMap) {
         Object.entries(state.formMap).forEach(([id, stateKey]) => {
           state[stateKey] = id === view;
@@ -45,9 +46,6 @@ const { state, actions } = store("gateway", {
       }
     },
 
-    /**
-     * Switch view via link click.
-     */
     switchView(event) {
       event.preventDefault();
       const { ref } = getElement();
@@ -56,21 +54,20 @@ const { state, actions } = store("gateway", {
       actions.syncStateFromUrl();
     },
 
-    // Auth Modules (Plain objects)
-
+    // Auth Modules
     login: loginActions,
 
-    forgotPassword: forgotPasswordActions,
+    lostPassword: lostPasswordActions, // Name must match the data-wp-on attribute in PHP
 
     resetPassword: resetPasswordActions,
   },
 });
 
-// Init
+// Init logic (popstate/DOMContentLoaded omitted for brevity)
 window.addEventListener("popstate", () => actions.syncStateFromUrl());
 if (document.readyState === "loading") {
   document.addEventListener("DOMContentLoaded", () =>
-    actions.syncStateFromUrl()
+    actions.syncStateFromUrl(),
   );
 } else {
   actions.syncStateFromUrl();

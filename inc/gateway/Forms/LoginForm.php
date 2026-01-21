@@ -133,7 +133,7 @@ class LoginForm extends AbstractForm
                 <!-- Forgot Password -->
                 <a
                     class="gateway-link__password"
-                    href="?view=forgot-password"
+                    href="?view=lost-password"
                     data-wp-on--click="actions.switchView">
                     <?php esc_html_e('Forgot password?', 'starwishx'); ?>
                 </a>

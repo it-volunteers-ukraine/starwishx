@@ -110,7 +110,7 @@ final class GatewayCore
     {
         $registry->register('login', new \Gateway\Forms\LoginForm(), 10);
         $registry->register('register', new \Gateway\Forms\RegisterForm(), 20);
-        $registry->register('forgot-password', new \Gateway\Forms\ForgotPasswordForm(), 30);
+        $registry->register('lost-password', new \Gateway\Forms\LostPasswordForm(), 30);
         $registry->register('reset-password', new \Gateway\Forms\ResetPasswordForm(), 40);
     }
 

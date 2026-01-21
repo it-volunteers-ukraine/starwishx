@@ -18,15 +18,17 @@ class StateAggregator implements StateAggregatorInterface
         ];
 
         foreach ($forms as $id => $form) {
-            $stateKey = $form->getStateKey();
+            // Convert 'lost-password' to 'lostPassword' for JS property access
+            $jsFriendlyKey = str_replace(' ', '', lcfirst(ucwords(str_replace(['-', '_'], ' ', $id))));
+            $stateKey = $form->getStateKey(); // e.g., 'isLostPasswordActive'
 
             $state['formMap'][$id] = $stateKey;
 
             if ($form instanceof StateProviderInterface) {
-                $state['forms'][$id] = $form->getInitialState($userId);
+                // Use the camelCase key here!
+                $state['forms'][$jsFriendlyKey] = $form->getInitialState($userId);
             }
 
-            // Set the boolean for SSR
             $state[$stateKey] = ($id === $activeFormId);
         }
 

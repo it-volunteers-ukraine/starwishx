@@ -6,45 +6,32 @@
 import { getElement, store } from "@wordpress/interactivity";
 import { fetchJson, validators } from "../utils.js";
 
-// Forgot Password Actions
-export const forgotPasswordActions = {
+// Phase 1: Lost Password Actions (Requesting the link)
+export const lostPasswordActions = {
   updateField() {
     const { state } = store("gateway");
     const { ref } = getElement();
     const field = ref?.dataset?.field;
-    if (field && state.forms?.forgotPassword) {
-      state.forms.forgotPassword[field] = ref.value;
+    if (field && state.forms?.lostPassword) {
+      state.forms.lostPassword[field] = ref.value;
     }
   },
 
   async submit(event) {
     event.preventDefault();
     const { state } = store("gateway");
-    const form = state.forms?.forgotPassword;
+    const form = state.forms?.lostPassword; // This now exists!
     if (!form || form.isSubmitting) return;
-
-    // Client validation
-    if (!validators.email(form.email)) {
-      form.error = "Please enter a valid email address";
-      return;
-    }
 
     form.isSubmitting = true;
     form.error = null;
 
     try {
-      await fetchJson(
-        state,
-        `${state.gatewaySettings.restUrl}password/forgot`,
-        {
-          method: "POST",
-          body: { email: form.email },
-        }
-      );
-
+      await fetchJson(state, `${state.gatewaySettings.restUrl}password/lost`, {
+        method: "POST",
+        body: { user_login: form.userLogin },
+      });
       form.success = true;
-      form.successMessage =
-        "If an account exists with that email, you'll receive a reset link shortly.";
     } catch (error) {
       form.error = error.message;
     } finally {
@@ -53,7 +40,7 @@ export const forgotPasswordActions = {
   },
 };
 
-// Reset Password Actions
+// Phase 2: Reset Password Actions (Setting the new password)
 export const resetPasswordActions = {
   updateField() {
     const { state } = store("gateway");
@@ -96,7 +83,7 @@ export const resetPasswordActions = {
             key: url.searchParams.get("key"),
             password: form.newPassword,
           },
-        }
+        },
       );
 
       if (data.success) {
@@ -104,6 +91,7 @@ export const resetPasswordActions = {
         form.successMessage =
           "Password reset successfully! Redirecting to login...";
         setTimeout(() => {
+          // Switch view back to login
           window.location.href = "/gateway/";
         }, 2000);
       }
