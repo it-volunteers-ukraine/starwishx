@@ -50,29 +50,34 @@ export const resetPasswordActions = {
       state.forms.resetPassword[field] = ref.value;
     }
   },
-
   async submit(event) {
     event.preventDefault();
     const { state } = store("gateway");
     const form = state.forms?.resetPassword;
     if (!form || form.isSubmitting) return;
-
     // Client validation
-    if (!validators.minLength(8)(form.newPassword)) {
-      form.error = "Password must be at least 8 characters";
+    const password = form.newPassword;
+    if (!validators.minLength(12)(password)) {
+      form.error = "Password must be at least 12 characters long";
       return;
     }
-    if (form.newPassword !== form.confirmPassword) {
+    // Check password match
+    if (password !== form.confirmPassword) {
       form.error = "Passwords do not match";
       return;
     }
-
+    // Client-side strength validation (server will validate too)
+    const hasUpper = /[A-Z]/.test(password);
+    const hasNumber = /[0-9]/.test(password);
+    const hasSpecial = /[^A-Za-z0-9]/.test(password);
+    if (!hasUpper || !hasNumber || !hasSpecial) {
+      form.error = "Password must include uppercase, numbers, and symbols";
+      return;
+    }
     form.isSubmitting = true;
     form.error = null;
-
     try {
       const url = new URL(window.location);
-
       const data = await fetchJson(
         state,
         `${state.gatewaySettings.restUrl}password/reset`,
@@ -85,18 +90,23 @@ export const resetPasswordActions = {
           },
         },
       );
-
       if (data.success) {
         form.success = true;
         form.successMessage =
+          data.message ||
           "Password reset successfully! Redirecting to login...";
+
+        // Clear form fields
+        form.newPassword = "";
+        form.confirmPassword = "";
+
+        // Redirect after 2 seconds
         setTimeout(() => {
-          // Switch view back to login
           window.location.href = state.gatewaySettings.baseUrl || "/gateway/";
         }, 2000);
       }
     } catch (error) {
-      form.error = error.message;
+      form.error = error.message || "Password reset failed. Please try again.";
     } finally {
       form.isSubmitting = false;
     }
