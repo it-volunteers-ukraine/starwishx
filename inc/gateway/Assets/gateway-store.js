@@ -5,18 +5,18 @@
 
 import { store, getElement } from "@wordpress/interactivity";
 
-// Import modules
 import { loginActions } from "./auth/actions.js";
+import { registerActions } from "./register/actions.js";
 import {
-  lostPasswordActions, // Renamed from forgotPasswordActions
+  lostPasswordActions,
   resetPasswordActions,
 } from "./recovery/actions.js";
 
-// Define State
 const gatewayState = {
   activeView: "login",
 
-  // Helper to convert 'lost-password' to 'lostPassword'
+  // Helper to convert kebab to camel 'lost-password' to 'lostPassword'
+  // todo: check we still need id since have similar in backend now
   toCamel(str) {
     return str.replace(/([-_][a-z])/g, (group) =>
       group.toUpperCase().replace("-", "").replace("_", ""),
@@ -54,12 +54,13 @@ const { state, actions } = store("gateway", {
       actions.syncStateFromUrl();
     },
 
-    // Auth Modules
     login: loginActions,
 
-    lostPassword: lostPasswordActions, // Name must match the data-wp-on attribute in PHP
+    lostPassword: lostPasswordActions,
 
     resetPassword: resetPasswordActions,
+
+    register: registerActions,
   },
 });
 
