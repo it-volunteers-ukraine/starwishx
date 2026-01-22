@@ -148,6 +148,7 @@ final class GatewayCore
             sprintf('window.gatewaySettings = %s;', wp_json_encode([
                 'nonce'   => wp_create_nonce('wp_rest'),
                 'restUrl' => rest_url('gateway/v1/'),
+                'baseUrl' => home_url('/gateway/'), // NEW: Supports subdirectory installations
             ])),
             'before'
         );

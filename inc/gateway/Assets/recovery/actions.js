@@ -92,7 +92,7 @@ export const resetPasswordActions = {
           "Password reset successfully! Redirecting to login...";
         setTimeout(() => {
           // Switch view back to login
-          window.location.href = "/gateway/";
+          window.location.href = state.gatewaySettings.baseUrl || "/gateway/";
         }, 2000);
       }
     } catch (error) {

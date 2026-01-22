@@ -1,12 +1,15 @@
 <?php
 
+/**
+ * Reset password form.
+ * 
+ * File: inc/gateway/Forms/ResetPasswordForm.php
+ */
+
 declare(strict_types=1);
 
 namespace Gateway\Forms;
 
-/**
- * Reset password form.
- */
 class ResetPasswordForm extends AbstractForm
 {
     public function getId(): string
@@ -16,7 +19,7 @@ class ResetPasswordForm extends AbstractForm
 
     public function getLabel(): string
     {
-        return __('Reset Password', 'starwishx');
+        return _x('Reset Password', 'gateway', 'starwishx');
     }
 
     public function getInitialState(?int $userId = null): array
@@ -35,26 +38,27 @@ class ResetPasswordForm extends AbstractForm
     {
         $this->startBuffer();
 ?>
-        <form class="gateway-form gateway-form--reset-password" data-wp-on--submit="actions.resetPassword.submit">
+        <form class="gateway-form gateway-form--reset-password"
+            data-wp-on--submit="actions.<?php echo esc_attr($this->getJsId()); ?>.submit">
             <h2 class="gateway-form__title"><?php esc_html_e('Set New Password', 'starwishx'); ?></h2>
 
-            <div data-wp-bind--hidden="state.forms.resetPassword.success">
+            <div data-wp-bind--hidden="state.forms.<?php echo esc_attr($this->getJsId()); ?>.success">
                 <div class="form-field">
                     <label for="gw-new-password"><?php esc_html_e('New Password', 'starwishx'); ?></label>
                     <input type="password" id="gw-new-password" name="newPassword" required
-                        data-wp-bind--value="state.forms.resetPassword.newPassword"
-                        data-wp-on--input="actions.resetPassword.updateField" data-field="newPassword">
+                        data-wp-bind--value="state.forms.<?php echo esc_attr($this->getJsId()); ?>.newPassword"
+                        data-wp-on--input="actions.<?php echo esc_attr($this->getJsId()); ?>.updateField" data-field="newPassword">
                 </div>
 
                 <div class="form-field">
                     <label for="gw-confirm-password"><?php esc_html_e('Confirm Password', 'starwishx'); ?></label>
                     <input type="password" id="gw-confirm-password" name="confirmPassword" required
-                        data-wp-bind--value="state.forms.resetPassword.confirmPassword"
-                        data-wp-on--input="actions.resetPassword.updateField" data-field="confirmPassword">
+                        data-wp-bind--value="state.forms.<?php echo esc_attr($this->getJsId()); ?>.confirmPassword"
+                        data-wp-on--input="actions.<?php echo esc_attr($this->getJsId()); ?>.updateField" data-field="confirmPassword">
                 </div>
 
                 <button type="submit" class="btn btn-primary btn-block"
-                    data-wp-bind--disabled="state.forms.resetPassword.isSubmitting">
+                    data-wp-bind--disabled="state.forms.<?php echo esc_attr($this->getJsId()); ?>.isSubmitting">
                     <?php esc_html_e('Reset Password', 'starwishx'); ?>
                 </button>
             </div>

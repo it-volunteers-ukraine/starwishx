@@ -1,12 +1,15 @@
 <?php
 
+/**
+ * Registration form.
+ * 
+ * File: inc/gateway/Forms/RegisterForm.php
+ */
+
 declare(strict_types=1);
 
 namespace Gateway\Forms;
 
-/**
- * Registration form.
- */
 class RegisterForm extends AbstractForm
 {
     public function getId(): string
@@ -16,7 +19,7 @@ class RegisterForm extends AbstractForm
 
     public function getLabel(): string
     {
-        return __('Register', 'starwishx');
+        return _x('Register', 'gateway', 'starwishx');
     }
 
     public function getInitialState(?int $userId = null): array
@@ -40,32 +43,33 @@ class RegisterForm extends AbstractForm
     {
         $this->startBuffer();
 ?>
-        <form class="gateway-form gateway-form--register" data-wp-on--submit="actions.register.submit">
+        <form class="gateway-form gateway-form--register"
+            data-wp-on--submit="actions.<?php echo esc_attr($this->getJsId()); ?>.submit">
             <h2 class="gateway-form__title"><?php esc_html_e('Create Account', 'starwishx'); ?></h2>
 
             <div class="form-field">
-                <label for="gw-reg-username"><?php esc_html_e('Username', 'starwishx'); ?></label>
+                <label for="gw-reg-username"><?php _ex('Username', 'gateway', 'starwishx'); ?></label>
                 <input type="text" id="gw-reg-username" name="username" required
-                    data-wp-bind--value="state.forms.register.username"
-                    data-wp-on--input="actions.register.updateField" data-field="username">
+                    data-wp-bind--value="state.forms.<?php echo esc_attr($this->getJsId()); ?>.username"
+                    data-wp-on--input="actions.<?php echo esc_attr($this->getJsId()); ?>.updateField" data-field="username">
             </div>
 
             <div class="form-field">
-                <label for="gw-reg-email"><?php esc_html_e('Email', 'starwishx'); ?></label>
+                <label for="gw-reg-email"><?php _ex('Email', 'gateway', 'starwishx'); ?></label>
                 <input type="email" id="gw-reg-email" name="email" required
-                    data-wp-bind--value="state.forms.register.email"
-                    data-wp-on--input="actions.register.updateField" data-field="email">
+                    data-wp-bind--value="state.forms.<?php echo esc_attr($this->getJsId()); ?>.email"
+                    data-wp-on--input="actions.<?php echo esc_attr($this->getJsId()); ?>.updateField" data-field="email">
             </div>
 
             <div class="form-field">
-                <label for="gw-reg-password"><?php esc_html_e('Password', 'starwishx'); ?></label>
+                <label for="gw-reg-password"><?php _ex('Password', 'gateway', 'starwishx'); ?></label>
                 <input type="password" id="gw-reg-password" name="password" required
-                    data-wp-bind--value="state.forms.register.password"
-                    data-wp-on--input="actions.register.updateField" data-field="password">
+                    data-wp-bind--value="state.forms.<?php echo esc_attr($this->getJsId()); ?>.password"
+                    data-wp-on--input="actions.<?php echo esc_attr($this->getJsId()); ?>.updateField" data-field="password">
             </div>
 
             <button type="submit" class="btn btn-primary btn-block"
-                data-wp-bind--disabled="state.forms.register.isSubmitting">
+                data-wp-bind--disabled="state.forms.<?php echo esc_attr($this->getJsId()); ?>.isSubmitting">
                 <?php esc_html_e('Register', 'starwishx'); ?>
             </button>
 
