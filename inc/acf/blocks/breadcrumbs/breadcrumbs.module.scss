@@ -40,13 +40,15 @@
 }
 
 .item:last-child a {
-  color: $text-accent;
-  border-bottom: 1px solid $text-accent;
+  color: $stroke-hover;
+  border-bottom: 1px solid $stroke-hover;
   border-top: 1px solid transparent;
 }
 
 .item a:hover {
-  color: $input-color-border-pressed;
+  color: $buttons-color-background-primary-pressed;
+  border-bottom: 1px solid $buttons-color-background-primary-pressed;
+
 
   & svg {
     fill: $input-color-border-pressed;
