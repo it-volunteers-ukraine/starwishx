@@ -38,10 +38,11 @@ class ResetPasswordForm extends AbstractForm
         <form class="gateway-form gateway-form--reset-password"
             data-wp-on--submit="actions.<?php echo esc_attr($this->getJsId()); ?>.submit">
             <h2 class="gateway-form__title"><?php esc_html_e('Set New Password', 'starwishx'); ?></h2>
-            <div data-wp-bind--hidden="state.forms.<?php echo esc_attr($this->getJsId()); ?>.success">
-                <p class="gateway-form__intro">
-                    <?php esc_html_e('Your password must be at least 12 characters and include uppercase, numbers, and symbols.', 'starwishx'); ?>
-                </p>
+            <p class="gateway-form__intro">
+                <?php esc_html_e('Your password must be at least 12 characters and include uppercase, numbers, and symbols.', 'starwishx'); ?>
+            </p>
+
+            <div class="gateway-fields__container" data-wp-bind--hidden="state.forms.<?php echo esc_attr($this->getJsId()); ?>.success">
                 <div class="form-field">
                     <label for="gw-new-password"><?php esc_html_e('New Password', 'starwishx'); ?></label>
                     <input type="password" id="gw-new-password" name="newPassword" required
