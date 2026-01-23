@@ -83,7 +83,7 @@
                         'depth'          => 2,
                     ]);
                     ?>
-                    <?php get_template_part('template-parts/header-launchpad-control', null, ['variant' => 'desktop']); ?>
+                    <?php get_template_part('template-parts/header-launchpad-control', null, ['variant' => 'mobile']); ?>
                 </div>
             </div>
         </div>
