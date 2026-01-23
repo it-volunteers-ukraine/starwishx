@@ -40,9 +40,9 @@ class RegisterForm extends AbstractForm
 ?>
         <form class="gateway-form" data-wp-on--submit="actions.<?php echo $jsId; ?>.submit">
             <h2 class="gateway-form__title"><?php esc_html_e('Create Account', 'starwishx'); ?></h2>
-            <p class="gateway-form__intro"><?php esc_html_e('Enter your details to receive an activation link.', 'starwishx'); ?></p>
 
             <div class="gateway-fields__container" data-wp-bind--hidden="state.forms.<?php echo $jsId; ?>.success">
+                <p class="gateway-form__intro"><?php esc_html_e('Enter your details to receive an activation link.', 'starwishx'); ?></p>
 
                 <div class="form-field">
                     <label><?php _ex('Username', 'gateway', 'starwishx'); ?></label>

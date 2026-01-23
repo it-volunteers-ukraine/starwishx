@@ -48,6 +48,8 @@
         min-width: 320px;
     }
     // animation: fadeIn 0.3s ease-in-out;
+    .gateway-alert--success,
+    .gateway-alert--error,
     .gateway-form__intro {
         background-color: $surface-violet;
         border: 1px solid $input-color-border-default;
