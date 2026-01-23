@@ -46,10 +46,46 @@ const { state, actions } = store("gateway", {
       }
     },
 
+    /**
+     * Reset a form to its initial state.
+     * Called when navigating away from a form view.
+     *
+     * @param {string} formKey - Camel-cased form key (e.g., 'lostPassword', 'register')
+     */
+    resetFormState(formKey) {
+      const form = state.forms?.[formKey];
+      if (!form) return;
+
+      Object.keys(form).forEach((key) => {
+        // We don't want to reset 'fieldErrors' structure, just the values
+        if (key === "fieldErrors" && typeof form[key] === "object") {
+          Object.keys(form[key]).forEach((errorKey) => {
+            form[key][errorKey] = null;
+          });
+          return;
+        }
+
+        const value = form[key];
+        if (typeof value === "string") form[key] = "";
+        if (typeof value === "boolean") form[key] = false;
+        if (typeof value === "number") form[key] = 0;
+        // successMessage or error are usually strings, so they are caught above
+      });
+    },
+
     switchView(event) {
       event.preventDefault();
       const { ref } = getElement();
       const url = new URL(ref.href, window.location);
+
+      // Reset the current form before switching views
+      const currentView = state.activeView;
+      const currentFormKey = state.toCamel(currentView);
+      if (state.forms?.[currentFormKey]) {
+        actions.resetFormState(currentFormKey);
+      }
+
+      // Navigate to new view
       window.history.pushState({}, "", url);
       actions.syncStateFromUrl();
     },
