@@ -72,7 +72,7 @@ if ($policy_date_raw) {
 // Breadcrumb/back link: try referer, fallback to site home
 $referer = wp_get_referer();
 $back_url = $referer ? $referer : home_url();
-$back_label = __('Повернутись назад', $td); // Ukrainian label (translateable)
+$back_label = __('Повернутись назад', $td);
 ?>
 
 <main id="main" class="site-main">

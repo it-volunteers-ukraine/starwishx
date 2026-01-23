@@ -109,3 +109,25 @@
         white-space: nowrap;
     }
 }
+
+.gateway-breadcrumbs {
+    position: absolute;
+    .gateway-breadcrumbs-back {
+        margin-top: 40px;
+        margin-left: 40px;
+        @include media.min-laptop {
+            margin-top: 60px;
+            margin-left: 80px;
+        }
+        color: $text-light;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        svg {
+            height: 16px;
+            @include media.min-desktop {
+                height: 18px;
+            }
+        }
+    }
+}
