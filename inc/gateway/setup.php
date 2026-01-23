@@ -3,7 +3,7 @@
 /**
  * Setup for
  * Gateway - user auth app
- * Version: 0.3.1
+ * Version: 0.4.0
  * Author: DevFrappe
  * Email: dev.frappe@proton.me
  * 
