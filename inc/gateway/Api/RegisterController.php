@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Gateway\Api;
 
 use Shared\Core\AbstractApiController;
+use Gateway\Services\RegisterService;
 use WP_REST_Request;
 use WP_REST_Response;
 use WP_Error;
@@ -15,6 +16,12 @@ use WP_Error;
 class RegisterController extends AbstractApiController
 {
     protected $namespace = 'gateway/v1';
+    private RegisterService $service;
+
+    public function __construct(?RegisterService $service = null)
+    {
+        $this->service = $service ?? new RegisterService();
+    }
 
     public function registerRoutes(): void
     {
@@ -25,26 +32,24 @@ class RegisterController extends AbstractApiController
             'args'                => [
                 'username' => ['required' => true, 'sanitize_callback' => 'sanitize_user'],
                 'email'    => ['required' => true, 'sanitize_callback' => 'sanitize_email'],
-                'password' => ['required' => true],
             ],
         ]);
     }
 
     public function register(WP_REST_Request $request): WP_REST_Response|WP_Error
     {
-        $username = $request->get_param('username');
-        $email = $request->get_param('email');
-        $password = $request->get_param('password');
+        $result = $this->service->handleRegistration(
+            (string) $request->get_param('username'),
+            (string) $request->get_param('email')
+        );
 
-        $user_id = wp_create_user($username, $password, $email);
-
-        if (is_wp_error($user_id)) {
-            return $this->error($user_id->get_error_message());
+        if (is_wp_error($result)) {
+            return $result;
         }
 
         return $this->success([
             'success' => true,
-            'message' => __('Registration successful!', 'starwishx'),
+            'message' => __('Registration successful! Please check your email to set your password.', 'starwishx'),
         ]);
     }
 }

@@ -2,7 +2,7 @@
 
 /**
  * Gateway - user auth app
- * Version: 0.3.1
+ * Version: 0.4.0
  * Author: DevFrappe
  * Email: dev.frappe@proton.me
  * License: GPL v2 or later
@@ -110,7 +110,7 @@ final class GatewayCore
     {
         $registry->register('login', new \Gateway\Forms\LoginForm(), 10);
         $registry->register('register', new \Gateway\Forms\RegisterForm(), 20);
-        $registry->register('forgot-password', new \Gateway\Forms\ForgotPasswordForm(), 30);
+        $registry->register('lost-password', new \Gateway\Forms\LostPasswordForm(), 30);
         $registry->register('reset-password', new \Gateway\Forms\ResetPasswordForm(), 40);
     }
 
@@ -148,6 +148,7 @@ final class GatewayCore
             sprintf('window.gatewaySettings = %s;', wp_json_encode([
                 'nonce'   => wp_create_nonce('wp_rest'),
                 'restUrl' => rest_url('gateway/v1/'),
+                'baseUrl' => home_url('/gateway/'), // NEW: Supports subdirectory installations
             ])),
             'before'
         );

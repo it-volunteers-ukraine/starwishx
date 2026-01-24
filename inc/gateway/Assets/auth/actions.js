@@ -61,7 +61,7 @@ export const loginActions = {
             password: form.password,
             remember: form.rememberMe,
           },
-        }
+        },
       );
 
       if (data.success && data.redirectTo) {
