@@ -14,11 +14,11 @@
   color: $text-dark;
   font-size: 32px;
 
-  @mixin min-tablet {
+ @include min-tablet {
     font-size: 40px;
   }
 
-  @mixin min-desktop {
+  @include min-desktop {
     font-size: 54px;
   }
 }
