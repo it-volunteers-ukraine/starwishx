@@ -135,6 +135,10 @@ add_action('wp_head', function () {
 // get_header('gateway');
 locate_template('templates/header-gateway.php', true, true);
 
+$td = '_themedomain';
+$back_label = __('Назад', $td);
+$referer = wp_get_referer();
+$back_url = $referer ? $referer : home_url();
 ?>
 
 <main
@@ -142,6 +146,12 @@ locate_template('templates/header-gateway.php', true, true);
     class="site-main gateway-container"
     data-wp-interactive="gateway">
 
+    <nav class="gateway-breadcrumbs">
+        <a href="<?php echo esc_url($back_url); ?>" class="gateway-breadcrumbs-back">
+            <svg width="13" height="16" class="icon-arrow-left">
+                <use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-long_arrow_left"></use>
+            </svg> <span><?php echo esc_html($back_label); ?></span></a>
+    </nav>
     <div class="gateway-layout">
         <div class="gateway-card">
 

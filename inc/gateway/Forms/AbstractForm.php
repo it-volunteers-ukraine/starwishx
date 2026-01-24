@@ -30,4 +30,14 @@ abstract class AbstractForm implements RenderableInterface, StateProviderInterfa
         $camel = str_replace(' ', '', ucwords(str_replace(['-', '_'], ' ', $id)));
         return 'is' . $camel . 'Active';
     }
+
+    /**
+     * Returns JavaScript-friendly ID (camelCase).
+     * Converts: 'lost-password' → 'lostPassword', 'reset-password' → 'resetPassword'
+     * Ensures alignment with JS store action naming.
+     */
+    public function getJsId(): string
+    {
+        return str_replace(' ', '', lcfirst(ucwords(str_replace(['-', '_'], ' ', $this->getId()))));
+    }
 }

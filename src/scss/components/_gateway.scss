@@ -1,5 +1,5 @@
 @use "../variables" as *;
-@use "../mixins/media" as *;
+@use "../mixins/media";
 
 .gateway-container {
     display: flex;
@@ -11,9 +11,15 @@
     border-radius: 40px;
     background: #fff;
     padding: 40px;
+    @include media.max-tablet {
+        // padding: 11px;
+        padding: clamp(11px, 3vw, 20px);
+    }
 }
 .gateway-card {
-    min-width: 640px;
+    @include media.min-tablet {
+        min-width: clamp(500px, 40vw, 640px);
+    }
     .btn {
         width: 100%;
     }
@@ -38,9 +44,24 @@
     flex-direction: column;
     gap: 24px;
     margin-top: 32px;
-    min-width: 320px;
+    @include media.min-mobile {
+        min-width: 320px;
+    }
     // animation: fadeIn 0.3s ease-in-out;
-    &__title {
+    .gateway-alert--success,
+    .gateway-alert--error,
+    .gateway-form__intro {
+        background-color: $surface-violet;
+        border: 1px solid $input-color-border-default;
+        border-radius: $radius-input;
+        padding: 12px;
+    }
+    .gateway-fields__container {
+        display: flex;
+        flex-flow: column wrap;
+        gap: 24px;
+    }
+    .gateway-form__title {
         text-align: center;
     }
     input,
@@ -80,8 +101,33 @@
         font-weight: normal;
         font-size: 14px;
         line-height: 1.2;
+        @include media.max-tablet {
+            margin-bottom: 20px;
+        }
     }
     .gateway-link__password {
         white-space: nowrap;
+    }
+}
+
+.gateway-breadcrumbs {
+    position: absolute;
+    .gateway-breadcrumbs-back {
+        margin-top: 40px;
+        margin-left: 40px;
+        @include media.min-laptop {
+            margin-top: 60px;
+            margin-left: 80px;
+        }
+        color: $text-light;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        svg {
+            height: 16px;
+            @include media.min-desktop {
+                height: 18px;
+            }
+        }
     }
 }

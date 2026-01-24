@@ -70,7 +70,7 @@ class RedirectHandler
         $redirect = match ($action) {
             'register'        => $this->buildGatewayUrl('register'),
             'lostpassword',
-            'retrievepassword' => $this->buildGatewayUrl('forgot-password'),
+            'retrievepassword' => $this->buildGatewayUrl('lost-password'),
             'rp',
             'resetpass'       => $this->buildResetUrl(),
             default           => $this->buildGatewayUrl('login'),
@@ -137,7 +137,7 @@ class RedirectHandler
      */
     public function filterLostPasswordUrl(string $url): string
     {
-        return home_url('/gateway/?view=forgot-password');
+        return home_url('/gateway/?view=lost-password');
     }
 
     /**
@@ -163,7 +163,7 @@ class RedirectHandler
 
     //     return $logout_url;
     // }
-    
+
     // private static $inFilter = false;
     // public function filterLogoutUrl(string $url, string $redirect = ''): string
     // {
