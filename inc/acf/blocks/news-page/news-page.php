@@ -151,9 +151,7 @@ foreach ($terms as $term) {
 $last_one_by_category = $res_last_by_cat;
 
 $res_by_cat = [];
-
 foreach ($terms as $term) {
-
     $query = new WP_Query([
         'post_type'      => 'news',
         'posts_per_page' => 7,

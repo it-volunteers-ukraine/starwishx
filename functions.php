@@ -338,3 +338,6 @@ add_filter('single_template', function ($template) {
   }
   return $template;
 });
+
+// Для пагинации и фильтров
+require_once get_template_directory() . '/inc/rewrites.php';

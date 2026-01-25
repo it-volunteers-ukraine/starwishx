@@ -44,6 +44,8 @@ $label_color_background = $category_current_color['label_color_background'] ?? '
 $label_color_border     = $category_current_color['label_color_border'] ?? 'grey';
 
 $item_label = esc_html($item->term_name);
+
+
 ?>
 
 <div class="<?php echo $swiper_class; ?> newcard-content <?php echo $card_lg_class; ?>">
