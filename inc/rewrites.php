@@ -15,29 +15,29 @@ add_action('init', function () {
     $pages = [
         'news-by-category' => [
             'query_var' => 'news_cat',
-        ],
-        'opportunities' => [
-            'query_var' => 'event_cat',
+            'parent' => 'news'
         ],
     ];
 
     foreach ($pages as $slug => $config) {
 
-        // /news/category-slug/
+        $parent = $config['parent'] ?? '';
+        $pagename = $parent ? $parent . '/' . $slug : $slug;
+
+        // Для страницы с категорией
         add_rewrite_rule(
-            "^{$slug}/([^/]+)/?$",
-            "index.php?pagename={$slug}&{$config['query_var']}=\$matches[1]",
+            "^{$parent}/{$slug}/([^/]+)/?$",
+            "index.php?pagename={$pagename}&{$config['query_var']}=\$matches[1]",
             'top'
         );
     }
 });
 
-/**
- * Register custom query vars
- */
+// Query vars
 add_filter('query_vars', function ($vars) {
     return array_merge($vars, [
         'news_cat',
-        'event_cat',
     ]);
 });
+
+?>

@@ -1,4 +1,6 @@
 <?php
+// http://starwishx.local/news-by-category/kultura-ta-khobi/?page_num=2&per_page=4
+// http://starwishx.local/news/news-by-category/kultura-ta-khobi/?page_num=2&per_page=4
 // Loading classes
 $default_classes = [
     'section' => 'section',
@@ -20,21 +22,41 @@ if (file_exists($modules_file)) {
 }
 
 global $post;
+
 $breadcrumbs = [];
 
-while ($post) {
+// --- Определяем категорию, если есть ---
+$category = 'category-oportunities';
+$category_slug = get_query_var('news_cat');
+$term = null;
+if ($category_slug) {
+    $term = get_term_by('slug', $category_slug, $category);
+}
+
+$current_post = $post; // чтобы не ломать $post
+while ($current_post) {
     $breadcrumbs[] = [
-        'title' => get_the_title($post),
-        'link'  => get_permalink($post),
+        'title' => get_the_title($current_post),
+        'link'  => get_permalink($current_post),
     ];
 
-    if ($post->post_parent) {
-        $post = get_post($post->post_parent);
+    if ($current_post->post_parent) {
+        $current_post = get_post($current_post->post_parent);
     } else {
-        $post = false;
+        $current_post = false;
     }
 }
 $breadcrumbs = array_reverse($breadcrumbs);
+
+// --- Подмена последнего элемента на категорию, если есть ---
+if ($term) {
+    // Последний элемент массива — текущая страница
+    $last_index = count($breadcrumbs) - 1;
+    $breadcrumbs[$last_index] = [
+        'title' => $term->name,
+        'link'  => '' // последняя, активная, не кликабельная
+    ];
+}
 
 // Home page
 $home_id = get_option('page_on_front');
