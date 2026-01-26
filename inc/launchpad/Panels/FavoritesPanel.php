@@ -52,53 +52,76 @@ class FavoritesPanel extends AbstractPanel
     {
         $this->startBuffer();
 ?>
-        <div class="launchpad-panel launchpad-panel--favorites">
+        <!-- Outer wrapper uses main launchpad store -->
+        <div class="launchpad-panel launchpad-panel--favorites" data-wp-interactive="launchpad">
             <h2 class="panel-title"><?php esc_html_e('My Favorites', 'starwishx'); ?></h2>
-
             <div
                 class="launchpad-alert launchpad-alert--error"
                 data-wp-bind--hidden="!<?= $this->statePath('error') ?>"
                 data-wp-text="<?= $this->statePath('error') ?>"></div>
-
             <div
                 class="launchpad-loading"
                 data-wp-bind--hidden="!<?= $this->statePath('isLoading') ?>">
                 <span class="spinner is-active"></span>
                 <?php esc_html_e('Loading...', 'starwishx'); ?>
             </div>
-
             <div
                 class="favorites-empty"
-                data-wp-bind--hidden="<?= $this->statePath('items') ?>.length > 0 || <?= $this->statePath('isLoading') ?>">
+                data-wp-bind--hidden="state.shouldHideFavoritesEmpty">
                 <span class="dashicons dashicons-heart"></span>
                 <p><?php esc_html_e('No favorites yet.', 'starwishx'); ?></p>
             </div>
-
+            <!-- GRID -->
             <div class="favorites-grid" data-wp-bind--hidden="<?= $this->statePath('items') ?>.length === 0">
-                <template data-wp-each="<?= $this->statePath('items') ?>">
-                    <article class="favorite-card">
-                        <img
-                            class="favorite-thumbnail"
-                            data-wp-bind--src="context.item.thumbnail"
-                            data-wp-bind--alt="context.item.title" />
+                <template data-wp-each--item="<?= $this->statePath('items') ?>">
+                    <article
+                        class="favorite-card"
+                        data-wp-bind--hidden="state.isCurrentItemFavorite">
+                        <!-- Thumbnail Figure -->
+                        <div class="favorite-card__figure">
+                            <a data-wp-bind--href="context.item.url" target="_blank">
+                                <!-- Actual Image -->
+                                <img
+                                    class="favorite-card__image"
+                                    data-wp-bind--src="context.item.thumbnail"
+                                    data-wp-bind--alt="context.item.title"
+                                    data-wp-bind--hidden="!context.item.thumbnail" />
+
+                                <!-- Fallback Placeholder -->
+                                <div class="favorite-card__placeholder" data-wp-bind--hidden="context.item.thumbnail">
+                                    <span class="dashicons dashicons-heart"></span>
+                                </div>
+                            </a>
+                        </div>
                         <div class="favorite-content">
-                            <h3 class="favorite-title" data-wp-text="context.item.title"></h3>
+                            <a data-wp-bind--href="context.item.url" target="_blank">
+                                <h3 class="favorite-title" data-wp-text="context.item.title"></h3>
+                            </a>
+                            <!-- Meta (could include date added, etc.) -->
+                            <div class="favorite-meta">
+                                <span class="favorite-type"><?php esc_html_e('Opportunity', 'starwishx'); ?></span>
+                            </div>
+                            <!-- Excerpt -->
+                            <p class="favorite-excerpt"
+                                data-wp-text="context.item.excerpt"
+                                data-wp-bind--hidden="!context.item.excerpt"></p>
                         </div>
                         <div class="favorite-actions">
-                            <a class="button" data-wp-bind--href="context.item.url">
+                            <a class="btn-secondary__small" data-wp-bind--href="context.item.url" target="_blank">
                                 <?php esc_html_e('View', 'starwishx'); ?>
                             </a>
+                            <!-- No wrapper div changing namespace. Passed ID via data-id attribute (bridge across namespaces). Used 'launchpad/favorites::' syntax. -->
                             <button
-                                class="button button-link-delete"
-                                data-wp-bind--data-post-id="context.item.id"
-                                data-wp-on--click="actions.favorites.remove">
+                                class="btn-secondary__small button-link-delete"
+                                data-wp-bind--data-id="context.item.id"
+                                data-wp-class--is-active="state.isCurrentItemFavorite"
+                                data-wp-on--click="launchpad/favorites::actions.toggle">
                                 <?php esc_html_e('Remove', 'starwishx'); ?>
                             </button>
                         </div>
                     </article>
                 </template>
             </div>
-
             <div
                 class="favorites-pagination"
                 data-wp-bind--hidden="!<?= $this->statePath('hasMore') ?>">

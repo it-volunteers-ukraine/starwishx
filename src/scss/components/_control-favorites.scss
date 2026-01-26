@@ -1,0 +1,218 @@
+@use "../variables" as *;
+@use "../mixins/media" as *;
+/* ======================================
+   CONTROL: FAVORITES CHECKBOX
+   ====================================== */
+.control-favorites-wrapper {
+    display: inline-block;
+}
+
+// Hide the actual checkbox but keep it accessible
+.btn-favorite__checkbox {
+    position: absolute;
+    opacity: 0;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+    white-space: nowrap;
+
+    // Focus state transfers to label
+    &:focus-visible + .btn-favorite {
+        outline: 2px solid $primary-hover;
+        outline-offset: 2px;
+    }
+
+    // Checked state triggers label active class via data-wp-class
+}
+
+.btn-favorite {
+    // Reset button styles
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+
+    transition: all 0.3s ease;
+    cursor: pointer;
+
+    border: 2px solid $input-color-border-default;
+    border-radius: 24px; // Pill shape
+    background: $surface-primary;
+
+    padding: 0.5rem 1rem;
+
+    color: $text-light;
+    font-weight: 500;
+    font-size: 0.95rem;
+    line-height: 1.2;
+
+    // Hover State (Inactive)
+    &:hover:not(.is-active) {
+        border-color: $input-color-border-filled;
+        background: $surface-violet;
+        color: $text-basic;
+    }
+
+    // Active State
+    &.is-active {
+        border-color: rgba($icon-color-fill, 0.4); // Gold border
+        background: rgba($icon-color-fill, 0.1); // Light gold background
+        color: $text-dark;
+
+        .btn-favorite__icon--active {
+            animation: heartBeat 0.5s ease-in-out;
+        }
+    }
+
+    // Note: Focus state is now handled by checkbox input above
+
+    // Icon Container
+    &__icon {
+        display: inline-flex;
+        position: relative;
+        align-items: center;
+        justify-content: center;
+        width: 20px;
+        height: 20px;
+        font-size: 18px;
+        line-height: 1;
+        // Hide inactive icon when active
+        .btn-favorite__icon--inactive,
+        .btn-favorite__icon--active {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            transition: all 0.3s ease;
+        }
+
+        .btn-favorite__icon--inactive {
+            opacity: 1;
+        }
+
+        .btn-favorite__icon--active {
+            opacity: 0;
+            transform: translate(-50%, -50%) scale(0.8);
+        }
+    }
+
+    // When Active: Swap icon visibility
+    &.is-active &__icon {
+        .btn-favorite__icon--inactive {
+            opacity: 0;
+            transform: translate(-50%, -50%) scale(0.8);
+        }
+
+        .btn-favorite__icon--active {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1);
+        }
+    }
+
+    // Text Container
+    &__text {
+        display: inline-flex;
+        position: relative;
+        min-width: 110px; // Prevent layout shift
+
+        .btn-favorite__text--inactive,
+        .btn-favorite__text--active {
+            transition: opacity 0.2s ease;
+        }
+
+        .btn-favorite__text--inactive {
+            opacity: 1;
+        }
+
+        .btn-favorite__text--active {
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: 0;
+        }
+    }
+
+    // When Active: Swap text visibility
+    &.is-active &__text {
+        .btn-favorite__text--inactive {
+            opacity: 0;
+        }
+
+        .btn-favorite__text--active {
+            position: static;
+            opacity: 1;
+        }
+    }
+
+    // Mobile Responsive
+    @include max-mobile {
+        padding: 0.4rem 0.75rem;
+        font-size: 0.85rem;
+
+        &__text {
+            min-width: 90px;
+        }
+    }
+}
+// Heart Beat Animation
+@keyframes heartBeat {
+    0%,
+    100% {
+        transform: translate(-50%, -50%) scale(1);
+    }
+    25% {
+        transform: translate(-50%, -50%) scale(1.2);
+    }
+    50% {
+        transform: translate(-50%, -50%) scale(1);
+    }
+    75% {
+        transform: translate(-50%, -50%) scale(1.1);
+    }
+}
+// Variant: Compact (for use in cards/lists)
+.btn-favorite--compact {
+    padding: 0.375rem 0.75rem;
+    font-size: 0.85rem;
+
+    .btn-favorite__icon {
+        width: 16px;
+        height: 16px;
+        font-size: 14px;
+    }
+
+    .btn-favorite__text {
+        min-width: 80px;
+    }
+}
+// Variant: Icon Only (no text)
+.btn-favorite--icon-only {
+    padding: 0.5rem;
+
+    .btn-favorite__text {
+        display: none;
+    }
+
+    .btn-favorite__icon {
+        margin: 0;
+    }
+}
+
+/* Base state: Not favorite */
+.btn-favorite .btn-favorite__icon--active,
+.btn-favorite .btn-favorite__text--active {
+    display: none;
+}
+
+/* Active state: Is favorite */
+.btn-favorite.is-active .btn-favorite__icon--inactive,
+.btn-favorite.is-active .btn-favorite__text--inactive {
+    display: none;
+}
+.btn-favorite.is-active .btn-favorite__icon--active,
+.btn-favorite.is-active .btn-favorite__text--active {
+    display: inline;
+}

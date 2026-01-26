@@ -8,6 +8,7 @@ namespace Launchpad\Api;
 use Launchpad\Services\FavoritesService;
 use WP_REST_Request;
 use WP_REST_Response;
+use WP_Error;
 
 class FavoritesController extends AbstractLaunchpadController
 {
@@ -28,7 +29,7 @@ class FavoritesController extends AbstractLaunchpadController
             'permission_callback' => [$this, 'checkLoggedIn'],
             'args'                => [
                 'page'     => ['type' => 'integer', 'default' => 1],
-                'per_page' => ['type' => 'integer', 'default' => 20],
+                'per_page' => ['type' => 'integer', 'default' => 4],
             ],
         ]);
 
@@ -44,6 +45,12 @@ class FavoritesController extends AbstractLaunchpadController
                 'callback'            => [$this, 'removeFavorite'],
                 'permission_callback' => [$this, 'checkLoggedIn'],
             ],
+        ]);
+
+        register_rest_route($this->namespace, '/favorites/toggle/(?P<id>\\d+)', [
+            'methods'             => 'POST',
+            'callback'            => [$this, 'toggleFavorite'],
+            'permission_callback' => [$this, 'checkLoggedIn'],
         ]);
     }
 
@@ -87,5 +94,20 @@ class FavoritesController extends AbstractLaunchpadController
         );
 
         return $this->success(['success' => $success]);
+    }
+
+    public function toggleFavorite(WP_REST_Request $request): WP_REST_Response|WP_Error
+    {
+        $postId = (int) $request->get_param('id');
+        $userId = get_current_user_id();
+
+        // Validate post exists
+        if (!get_post($postId)) {
+            return $this->error('Post not found', 404);
+        }
+
+        $result = $this->service->toggleFavorite($userId, $postId);
+
+        return $this->success($result);
     }
 }

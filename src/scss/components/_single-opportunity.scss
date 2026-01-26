@@ -1,11 +1,25 @@
+@use "../variables" as *;
+@use "../mixins/media";
+
 .single-opportunity {
-    .opportunity-header {
-        margin-top: 80px;
-    }
     .opportunity-header,
     .opportunity-layout {
         margin: 0 auto;
         padding: 0;
         max-width: 1024px;
+    }
+    .opportunity-header {
+        margin-top: 80px;
+        .opportunity-badges {
+            display: flex;
+            flex-flow: column wrap;
+            gap: 4px;
+        }
+    }
+    .content-block {
+        margin-top: 24px;
+        @include media.min-laptop {
+            margin-top: 12px;
+        }
     }
 }

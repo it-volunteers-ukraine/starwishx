@@ -23,7 +23,7 @@ class FavoritesService
             return [
                 'id'        => $post->ID,
                 'title'     => get_the_title($post),
-                'excerpt'   => get_the_excerpt($post),
+                'excerpt'   => get_the_excerpt($post) ?: wp_trim_words($post->post_content, 20),
                 'url'       => get_permalink($post),
                 'thumbnail' => get_the_post_thumbnail_url($post, 'medium') ?: '',
             ];
@@ -51,5 +51,18 @@ class FavoritesService
     public function isFavorite(int $userId, int $postId): bool
     {
         return $this->repository->isFavorite($userId, $postId);
+    }
+
+    public function toggleFavorite(int $userId, int $postId): array
+    {
+        $isFavorite = $this->repository->isFavorite($userId, $postId);
+
+        if ($isFavorite) {
+            $this->repository->removeFavorite($userId, $postId);
+            return ['isFavorite' => false, 'action' => 'removed'];
+        } else {
+            $this->repository->addFavorite($userId, $postId);
+            return ['isFavorite' => true, 'action' => 'added'];
+        }
     }
 }
