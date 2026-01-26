@@ -7,38 +7,20 @@ $default_classes = [
     'lastnews-content' => 'lastnews-content',
 
     'aside' => 'aside',
-    'lnew-item' => 'lnew-item',
-    'lnew-title' => 'lnew-title',
-    'lnew-date' => 'lnew-date',
 
     'newscards-sw' => 'newscards-sw',
     'newscards-sw-wr' => 'newscards-sw-wr',
 
-
-    'lastcards' => 'lastcards',
-    // 'newscards-item' => 'newscards-item',
-    // 'newcard-content' => 'newcard-content',
-    // 'newcard-img-wrap' => 'newcard-img-wrap',
-    // 'newcard-img' => 'newcard-img',
-    // 'newcard-label' => 'newcard-label',
-    // 'newcard-date' => 'newcard-date',
-    // 'newcard-title' => 'newcard-title',
-    // 'newcard-text' => 'newcard-text',
-
     'bycat-section' => 'bycat-section',
     'cat-title' => 'cat-title',
     'bycat-content' => 'bycat-content',
-    'bycat-item' => 'bycat-item',
     'bycat-first-item' => 'bycat-first-item',
     'bycat-other-item' => 'bycat-other-item',
-    'bycat-img-wrap' => 'bycat-img-wrap',
-    'bycat-img' => 'bycat-img',
-    'bycat-date' => 'bycat-date',
-    'bycat-title' => 'bycat-title',
     'bycat-btn' => 'bycat-btn',
 
-    'item' => 'item',
+    // 'item' => 'item',
     'btn' => 'btn',
+    'cat-link' => 'cat-link',
 
     'swiper-paginations' => 'swiper-paginations',
 
@@ -46,6 +28,24 @@ $default_classes = [
 
 ];
 
+global $wp;
+global $post;
+$base_url = home_url($wp->request);
+$news_page = $post;
+// print_r($news_page);
+$childrens = get_children([
+    'post_parent' => $news_page->ID,
+    'post_type'   => 'page',
+    'post_status' => 'publish',
+]);
+// print_r($chldren);
+// echo '<pre>'; // Обертываем в теги для форматирования
+// echo var_dump($childrens);
+// echo '</pre>';
+// echo 'news_page: ' . $news_page;
+// echo 'base_url=' . esc_url($base_url);
+$category_base_url = get_permalink(reset($childrens)->ID);
+// echo 'children=' . esc_url($children);
 
 $category = 'category-oportunities';
 $modules_file = get_template_directory() . '/assets/css/blocks/modules.json';
@@ -56,16 +56,7 @@ $categories_colors = get_field('categories_labels_color', 'options');
 // $category_current_color = get_category_by_id($categories_colors, $term_id);
 
 $news_by_category = get_field('news_by_category');
-// print_r($news_by_category);
-// foreach ($news_by_category as $cat_item) {
-//     $cat_item['category'];
-//     print_r($cat_item['category']);
-//     // print_r($cat_item->category);
-// }
 
-// $label_text = get_field('label_text');
-// $btn_text = get_field('btn_text');
-// $btn_url = get_field('btn_page');
 
 $is_mode_click_for_touch = get_field('mode_click_for_touch');
 
@@ -88,6 +79,7 @@ function get_category_by_id($category_color, $category)
     }
 }
 
+// получение последних новостей
 $results = [];
 $query = new WP_Query([
     'post_type'      => 'news',
@@ -102,6 +94,7 @@ $query = new WP_Query([
     ]
 ]);
 
+// добавляем данные категории внутрь поста
 if ($query->have_posts()) {
     foreach ($query->posts as $post_item) {
 
@@ -150,6 +143,7 @@ foreach ($terms as $term) {
 
 $last_one_by_category = $res_last_by_cat;
 
+// Получение новостей по категориям для блока ниже
 $res_by_cat = [];
 foreach ($terms as $term) {
     $query = new WP_Query([
@@ -172,6 +166,7 @@ foreach ($terms as $term) {
         $res_by_cat[$term->term_id] = [
             'term_id'   => $term->term_id,
             'term_name' => $term->name,
+            'term_slug' => $term->slug,
             'posts'     => []
         ];
 
@@ -265,11 +260,14 @@ $res_by_cat = $res_by_cat;
             <section class="section <?php echo esc_attr($classes['section']); ?> <?php echo esc_attr($classes['bycat-section']); ?> ">
                 <div class="container ">
                     <?php
-                    $btn_url = '#';
                     $btn_text = esc_html(get_field('button_text'));
                     $cat_name = $res_by_cat[$cat_id['category']]['term_name'];
+                    $cat_slug = $res_by_cat[$cat_id['category']]['term_slug'];
+                    $category_url = $category_base_url . $cat_slug . '/';
                     ?>
-                    <h2 class="h5 <?php echo esc_attr($classes['cat-title']); ?>"><?php echo esc_html($cat_name); ?></h2>
+                    <a href="<?php echo $category_url; ?>" class="<?php echo esc_attr($classes['cat-link']); ?> ">
+                        <h2 class="h5 <?php echo esc_attr($classes['cat-title']); ?>"><?php echo esc_html($cat_name); ?></h2>
+                    </a>
                     <div class="<?php echo esc_attr($classes['bycat-content']); ?>">
                         <?php
                         $post_list = $res_by_cat[$cat_id['category']]['posts'];
@@ -309,7 +307,7 @@ $res_by_cat = $res_by_cat;
                             <?php endfor; ?>
                         </div>
                     </div>
-                    <a href="<?php esc_url($btn_url); ?>" class="btn <?php echo esc_attr($classes['bycat-btn']); ?>"><?php echo esc_html($btn_text); ?></a>
+                    <a href="<?php echo $category_url; ?>" class="btn <?php echo esc_attr($classes['bycat-btn']); ?>"><?php echo esc_html($btn_text); ?></a>
                 </div>
             </section>
         <?php endforeach; ?>
