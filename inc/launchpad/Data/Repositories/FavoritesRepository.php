@@ -112,4 +112,26 @@ class FavoritesRepository
 
         return (int) $wpdb->get_var($sql);
     }
+
+    public function deleteByPost(int $postId): bool
+    {
+        global $wpdb;
+        $result = $wpdb->delete(
+            $this->getTable(),
+            ['object_id' => $postId],
+            ['%d']
+        );
+        return $result !== false;
+    }
+
+    public function deleteByUser(int $userId): bool
+    {
+        global $wpdb;
+        $result = $wpdb->delete(
+            $this->getTable(),
+            ['user_id' => $userId],
+            ['%d']
+        );
+        return $result !== false;
+    }
 }

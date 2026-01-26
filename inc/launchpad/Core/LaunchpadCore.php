@@ -2,7 +2,7 @@
 
 /**
  * Launchpad user admin panel app
- * Version: 0.4.0
+ * Version: 0.4.1
  * Author: DevFrappe
  * Email: dev.frappe@proton.me
  * 
@@ -22,12 +22,16 @@ use Launchpad\Services\ProfileService;
 use Launchpad\Services\StatsService;
 use Launchpad\Services\SecurityService;
 use Launchpad\Services\CommentsService;
+use Launchpad\Data\Repositories\FavoritesRepository;
 
 final class LaunchpadCore
 {
     // We store the services here so they live as long as the Core lives
     /** @var array<string, object> Shared service instances */
     private array $services = [];
+
+    // Store the repository instance here to avoid excessed instantiation
+    private FavoritesRepository $favoritesRepo;
 
     private static ?self $instance = null;
     private PanelRegistry $registry;
@@ -63,10 +67,10 @@ final class LaunchpadCore
         $this->stateAggregator = $aggregator;
         $this->accessController = $access;
 
-        // 1. Initialize services immediately so they are ready for anything
+        // Initialize services immediately
         $this->initServices();
 
-        // 2. Start WordPress hooks
+        // Start WordPress hooks
         $this->bootstrap();
     }
 
@@ -75,7 +79,14 @@ final class LaunchpadCore
      */
     private function initServices(): void
     {
-        $this->services['favorites']     = new FavoritesService();
+        // $this->services['favorites']     = new FavoritesService();
+        // Initialize Repository ONCE
+        $this->favoritesRepo             = new FavoritesRepository();
+        // Inject the SAME repository instance into the Service (Optional, but cleaner if Service supports it)
+        // For now, we keep the service creation as is, assuming it creates its own or accepts one.
+        // If FavoritesService constructor accepts ($repo), you should pass $this->favoritesRepo there too.
+        $this->services['favorites']     = new FavoritesService($this->favoritesRepo);
+
         $this->services['profile']       = new ProfileService();
         $this->services['opportunities'] = new OpportunitiesService();
         $this->services['security']      = new SecurityService();
@@ -104,6 +115,10 @@ final class LaunchpadCore
 
         // Register default panels
         add_action('launchpad_register_panels', [$this, 'registerDefaultPanels'], 5);
+
+        // Data cleanup hooks
+        add_action('delete_post', [$this, 'cleanupPostFavorites']);
+        add_action('delete_user', [$this, 'cleanupUserFavorites']);
     }
 
     /**
@@ -179,10 +194,17 @@ final class LaunchpadCore
 
     public function enqueueAssets(): void
     {
-        // Main Dashboard App
-        if (is_page('launchpad')) {
+        $userId = get_current_user_id();
 
-            // JS Module
+        // Always enqueue Favorites Store if user is logged in
+        // both for frontend and backend as we separate it
+        // if (is_user_logged_in()) {
+        //     $this->enqueueFavoritesStore($userId);
+        // }
+
+        // Main Dashboard App
+        if (is_page('launchpad') && is_user_logged_in()) {
+
             $asset_path = get_template_directory() . '/inc/launchpad/Assets/store.asset.php';
             $asset = file_exists($asset_path) ? include $asset_path : ['dependencies' => [], 'version' => '1.0.0'];
 
@@ -209,11 +231,14 @@ final class LaunchpadCore
             );
 
             wp_enqueue_style('dashicons');
+
+            $this->enqueueFavoritesStore($userId);
         }
 
-        // 2. Single Opportunity Comments App (New)
-        if (is_singular('opportunity')) {
+        // Single Opportunity post Interactive Comments App
+        if (is_singular('opportunity') && is_user_logged_in()) {
             $this->enqueueCommentsAssets();
+            $this->enqueueFrontendStore($userId);
         }
     }
 
@@ -250,5 +275,105 @@ final class LaunchpadCore
     public function getService(string $id): ?object
     {
         return $this->services[$id] ?? null;
+    }
+
+    /**
+     * Enqueue the standalone Favorites Domain Store
+     * Used on both frontend and backend
+     */
+    private function enqueueFavoritesStore(int $userId): void
+    {
+        $asset_path = get_template_directory() . '/inc/launchpad/Assets/store.asset.php';
+        $asset = file_exists($asset_path) ? include $asset_path : ['dependencies' => [], 'version' => '1.0.0'];
+
+        if (function_exists('wp_register_script_module')) {
+            wp_register_script_module(
+                '@starwishx/launchpad-favorites',
+                get_template_directory_uri() . '/inc/launchpad/Assets/favorites-store.js',
+                array_merge(['@wordpress/interactivity'], $asset['dependencies']),
+                $asset['version']
+            );
+            wp_enqueue_script_module('@starwishx/launchpad-favorites');
+        }
+
+        // Hydrate state for launchpad/favorites namespace
+        // REUSE the instance:
+        $ids = $this->favoritesRepo->getFavoriteIds($userId, 'post', 9999, 0);
+
+        // Inject 'config' directly into the state
+        wp_interactivity_state('launchpad/favorites', [
+            'myFavoriteIds' => $ids,
+            'config'        => [
+                'nonce'   => wp_create_nonce('wp_rest'),
+                'restUrl' => rest_url('launchpad/v1/'),
+            ]
+        ]);
+
+        // Output global settings reliably using footer action
+        add_action('wp_footer', function () {
+            echo '<script id="launchpad-global-settings">';
+            echo 'window.launchpadGlobal = ' . wp_json_encode([
+                'nonce'   => wp_create_nonce('wp_rest'),
+                'restUrl' => rest_url('launchpad/v1/')
+            ]) . ';';
+            echo '</script>';
+        });
+    }
+
+    /**
+     * Enqueue Isolated Frontend Store
+     */
+    private function enqueueFrontendStore(int $userId): void
+    {
+        // 1. Register Script
+        $asset_path = get_template_directory() . '/inc/launchpad/Assets/store.asset.php';
+        $asset = file_exists($asset_path) ? include $asset_path : ['dependencies' => [], 'version' => '1.0.0'];
+
+        if (function_exists('wp_register_script_module')) {
+            wp_register_script_module(
+                '@starwishx/frontend-opportunities',
+                get_template_directory_uri() . '/inc/launchpad/Assets/single-opportunity-store.js',
+                array_merge(['@wordpress/interactivity'], $asset['dependencies']),
+                $asset['version']
+            );
+            wp_enqueue_script_module('@starwishx/frontend-opportunities');
+        }
+
+        // 2. Prepare Data (Map Structure)
+        $statusMap = [];
+        $repo = $this->favoritesRepo; // Reuse instance
+
+        if (is_singular('opportunity')) {
+            // SINGLE PAGE: 1 DB Query, 1 Result.
+            $post_id = get_the_ID();
+            $is_fav = $repo->isFavorite($userId, $post_id);
+            $statusMap[$post_id] = $is_fav;
+        }
+        /* 
+        // Future Archive Logic:
+        elseif (is_post_type_archive('opportunity')) {
+             // Logic to fetch IDs for current loop query only
+        } 
+        */
+
+        // 3. Hydrate
+        wp_interactivity_state('starwishx/opportunities', [
+            'statusMap' => $statusMap, // { 624: true }
+            'config'    => [
+                'nonce'   => wp_create_nonce('wp_rest'),
+                'restUrl' => rest_url('launchpad/v1/')
+            ]
+        ]);
+    }
+
+    public function cleanupPostFavorites(int $postId): void
+    {
+        // REUSE the instance:
+        $this->favoritesRepo->deleteByPost($postId);
+    }
+
+    public function cleanupUserFavorites(int $userId): void
+    {
+        $this->favoritesRepo->deleteByUser($userId);
     }
 }

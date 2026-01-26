@@ -81,6 +81,14 @@ $back_url = $referer ?: home_url('/launchpad/?panel=opportunities');
                         <span class="badge badge--secondary"><?php echo esc_html($sub_term->name); ?></span>
                 <?php endforeach;
                 endif; ?>
+                <!-- Favorite Control -->
+                <?php
+                if (is_user_logged_in()) {
+                    get_template_part('template-parts/control-favorites', null, [
+                        'post_id' => $post_id
+                    ]);
+                }
+                ?>
             </div>
         </header>
 
@@ -93,17 +101,17 @@ $back_url = $referer ?: home_url('/launchpad/?panel=opportunities');
                 <div class="info-card info-card--dates">
                     <h3 class="info-card__title"><?php esc_html_e('Терміни', $td); ?></h3>
                     <div class="date-row">
-                        <strong><?php esc_html_e('Початок:', $td); ?></strong>
+                        <strong><?php esc_html_e('з:', $td); ?></strong>
                         <span><?php echo esc_html($date_start); ?></span>
                     </div>
                     <div class="date-row">
-                        <strong><?php esc_html_e('Кінець:', $td); ?></strong>
+                        <strong><?php esc_html_e('по:', $td); ?></strong>
                         <span><?php echo esc_html($date_end); ?></span>
                     </div>
                 </div>
 
                 <!-- Contact Card -->
-                <div class="info-card">
+                <!-- <div class="info-card">
                     <h3 class="info-card__title"><?php esc_html_e('Контакти заявника', $td); ?></h3>
                     <ul class="contact-list">
                         <?php if ($applicant_name) : ?>
@@ -116,23 +124,15 @@ $back_url = $referer ?: home_url('/launchpad/?panel=opportunities');
                             <li><strong><?php esc_html_e('Тел:', $td); ?></strong> <?php echo esc_html($applicant_phone); ?></li>
                         <?php endif; ?>
                     </ul>
-                </div>
+                </div> -->
 
                 <!-- Entity Card -->
                 <div class="info-card">
-                    <h3 class="info-card__title"><?php esc_html_e('Локація та Компанія', $td); ?></h3>
-                    <p>
-                        <strong><?php echo esc_html($company); ?></strong><br>
-                        <?php
-                        if ($country_id) echo esc_html(get_term($country_id)->name);
-                        if ($city) echo ', ' . esc_html($city);
-                        ?>
-                    </p>
-                    <?php if ($source_url) : ?>
-                        <a href="<?php echo esc_url($source_url); ?>" class="btn-link" target="_blank" rel="nofollow">
-                            <?php esc_html_e('Офіційне посилання', $td); ?>
-                        </a>
-                    <?php endif; ?>
+                    <h3 class="info-card__title"><?php esc_html_e('Локація', $td); ?></h3>
+                    <?php
+                    if ($country_id) echo esc_html(get_term($country_id)->name);
+                    if ($city) echo ', ' . esc_html($city);
+                    ?>
                 </div>
 
                 <!-- Seekers Taxonomy -->
@@ -141,7 +141,7 @@ $back_url = $referer ?: home_url('/launchpad/?panel=opportunities');
                         <h3 class="info-card__title"><?php esc_html_e('Для кого', $td); ?></h3>
                         <div class="tag-cloud">
                             <?php foreach ($seeker_ids as $s_id) : ?>
-                                <span class="tag"><?php echo esc_html(get_term($s_id)->name); ?></span>
+                                <span class="tag"><?php echo esc_html(get_term($s_id)->name); ?></span><br>
                             <?php endforeach; ?>
                         </div>
                     </div>
@@ -166,7 +166,6 @@ $back_url = $referer ?: home_url('/launchpad/?panel=opportunities');
 
             <!-- MAIN CONTENT: Description & Requirements -->
             <article class="opportunity-main">
-
                 <?php if ($description) : ?>
                     <section class="content-block">
                         <h2 class="content-block__title"><?php esc_html_e('Опис можливості', $td); ?></h2>
@@ -185,34 +184,31 @@ $back_url = $referer ?: home_url('/launchpad/?panel=opportunities');
                     </section>
                 <?php endif; ?>
 
+                <section class="content-block">
+                    <h2 class="content-block__title"><?php esc_html_e('Першоджерело', $td); ?></h2>
+                    <div class="content-block__text">
+                        <strong><?php echo esc_html($company); ?></strong>
+
+                        <?php if ($source_url) : ?>
+                            <a href="<?php echo esc_url($source_url); ?>" class="btn-link" target="_blank" rel="nofollow">
+                                <?php esc_html_e('Посилання', $td); ?>
+                            </a>
+                        <?php endif; ?>
+                    </div>
+                </section>
+
                 <?php if ($details) : ?>
                     <section class="content-block content-block--details">
-                        <h2 class="content-block__title"><?php esc_html_e('Додаткові деталі', $td); ?></h2>
+                        <h2 class="content-block__title"><?php esc_html_e('Додаткова інформація', $td); ?></h2>
                         <div class="content-block__text">
                             <?php echo wp_kses_post(nl2br($details)); ?>
                         </div>
                     </section>
                 <?php endif; ?>
 
-                <!-- 3. COMMENTS SECTION -->
-                <!-- <section class="opportunity-comments" id="comments">
-                    <hr class="comments-divider">
-
-                    < ?php
-                    // We use the standard WordPress comments_template()
-                    // Ensure you have a comments.php file in your theme.
-                    // If not, WP will fallback to its internal legacy template.
-                    if (comments_open() || get_comments_number()) :
-                        comments_template();
-                    endif;
-                    ? >
-                </section> -->
-                <!-- <section class="opportunity-comments" id="comments"> -->
-                <!-- <hr class="comments-divider"> -->
                 <?php
                 get_template_part('template-parts/comments', 'interactive');
                 ?>
-                <!-- </section> -->
             </article>
         </div>
     </div> <!-- container -->

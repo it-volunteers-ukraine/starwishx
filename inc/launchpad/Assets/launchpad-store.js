@@ -18,6 +18,7 @@ import { coreActions } from "./core/actions.js";
 import { opportunitiesActions } from "./opportunities/actions.js";
 import { opportunitiesGetters } from "./opportunities/getters.js";
 import { favoritesActions } from "./favorites/actions.js";
+import { favoritesPanelGetters } from "./favorites/getters.js";
 import { securityActions } from "./security/actions.js";
 import { profileActions } from "./profile/actions.js";
 import { profileGetters } from "./profile/getters.js";
@@ -36,7 +37,13 @@ const launchpadState = {
  * This copies the 'getter logic' without executing it.
  * 'this' inside opportunitiesGetters refer to launchpadState
  */
-extendState(launchpadState, opportunitiesGetters, profileGetters, coreGetters);
+extendState(
+  launchpadState,
+  opportunitiesGetters,
+  profileGetters,
+  coreGetters,
+  favoritesPanelGetters,
+);
 
 /**
  * STORE DEFINITION
@@ -66,7 +73,7 @@ const { actions } = store("launchpad", {
 window.addEventListener("popstate", () => actions.syncStateFromUrl());
 if (document.readyState === "loading") {
   document.addEventListener("DOMContentLoaded", () =>
-    actions.syncStateFromUrl()
+    actions.syncStateFromUrl(),
   );
 } else {
   actions.syncStateFromUrl();

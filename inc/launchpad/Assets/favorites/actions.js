@@ -1,36 +1,41 @@
 /**
- * Launchpad Store — Favorites Actions
+ * Favorites Actions for Main Launchpad Store
  *
- * All actions under the `actions.favorites` namespace.
- * Uses Store Locator pattern: store("launchpad") to access state.
+ * This only handles pagination in the Favorites Panel.
+ * The toggle action lives in favorites-store.js
  *
- * File: inc/launchpad/Assets/store/favorites/actions.js
+ * File: inc/launchpad/Assets/favorites/actions.js
  */
-
-import { getElement, store } from "@wordpress/interactivity";
+import { store } from "@wordpress/interactivity";
 import { ensurePanel, fetchJson } from "../utils.js";
-
-/**
- * Favorites actions - plain object.
- * We explicitly locate the store to avoid 'this' context issues.
- */
 export const favoritesActions = {
   /**
-   * Remove item from favorites
+   * Load more favorites (pagination in Favorites panel)
    */
-  async remove() {
+  async loadMore() {
     const { state } = store("launchpad");
-    const postId = getElement().ref?.dataset?.postId;
     const p = ensurePanel(state, "favorites");
+
+    if (p.isLoading) return;
+
+    p.isLoading = true;
     try {
-      await fetchJson(
+      const nextPage = (p.page || 1) + 1;
+      const data = await fetchJson(
         state,
-        `${state.launchpadSettings.restUrl}favorites/${postId}`,
-        { method: "DELETE" }
+        `${state.launchpadSettings.restUrl}favorites?page=${nextPage}&per_page=20`,
       );
-      p.items = (p.items || []).filter((item) => item.id != postId);
+      if (data?.items) {
+        p.items = [...(p.items || []), ...data.items];
+        p.page = nextPage;
+        p.total = data.total;
+        p.totalPages = data.total_pages;
+        p.hasMore = nextPage < data.total_pages;
+      }
     } catch (error) {
       p.error = error.message;
+    } finally {
+      p.isLoading = false;
     }
   },
 };
