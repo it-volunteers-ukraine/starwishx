@@ -20,6 +20,8 @@
   display: none;
 }
 
+
+
 .title {
   color: $text-dark;
   margin-bottom: 16px;
@@ -261,4 +263,15 @@
 .newscards-sw {
   margin-top: 20px;
   padding: 10px 0;
+}
+
+.cat-link > *{
+  display: inline-block;
+  border-bottom: 1px solid transparent;
+  transition: all $animations;
+}
+
+.cat-link:hover > * {
+  color: $buttons-color-background-primary-hover ;
+  border-bottom: 1px solid $buttons-color-background-primary-hover;
 }
