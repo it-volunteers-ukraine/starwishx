@@ -157,7 +157,7 @@ $back_url = $referer ? $referer : home_url();
 
             <!-- BRANDING SECTION -->
             <header class="gateway-header">
-                <a href="<?php echo esc_url(home_url('/')); ?>" class="gateway-logo" rel="home">
+                <!-- <a href="< ?php echo esc_url(home_url('/')); ? >" class="gateway-logo" rel="home"> -->
                     <?php if (has_custom_logo()) : ?>
                         <?php the_custom_logo(); ?>
                     <?php else : ?>
