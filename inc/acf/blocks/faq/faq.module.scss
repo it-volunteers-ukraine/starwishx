@@ -5,7 +5,7 @@
   .suptitle {
     display: inline-block;
     position: relative;
-    border-radius: 16px;
+    border-radius: $radius-element;
     background-color: $surface-violet;
     padding: 8px 12px 8px 24px;
     color: $element-block-text;
@@ -91,6 +91,11 @@
       transition: max-height 0.4s ease-in-out;
       max-height: 0;
       overflow: hidden;
+      font-size: 14px;
+
+      @include media.min-desktop {
+        font-size: 16px;
+      }
 
       &[aria-hidden="false"] {
         max-height: 720px;

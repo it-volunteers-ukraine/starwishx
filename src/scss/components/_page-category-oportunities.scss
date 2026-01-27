@@ -20,26 +20,77 @@
     display: flex;
     flex-flow: column wrap;
     align-items: start;
-    gap: 20px;
+    gap: 12px;
     border: 1px solid #e6e6e6;
-    border-radius: 8px;
-    margin: 0;
-    padding: 0;
-}
+    border-radius: $radius-image;
+    background: linear-gradient(
+        0deg,
+        rgb(245 244 254 / 50%) 0%,
+        rgb(245 244 254 / 25%) 10%,
+        rgb(245 244 254 / 15%) 15%,
+        rgb(245 244 254 / 7%) 25%,
+        rgb(245 244 254 / 0.01%) 35%,
+        rgba(0, 0, 0, 0) 100%
+    );
+    // background: linear-gradient(
+    //     0deg,
+    //     rgb(222 218 250 / 50%) 0%,
+    //     rgb(222 218 250 / 25%) 10%,
+    //     rgb(222 218 250 / 15%) 15%,
+    //     rgb(222 218 250 / 7%) 25%,
+    //     rgb(222 218 250 / 0.01%) 35%,
+    //     rgba(0, 0, 0, 0) 100%
+    // );
 
-.cat-oportunities-link {
-    display: contents;
-    color: inherit;
-    text-decoration: none;
-}
+    .cat-oportunities-link {
+        display: contents;
+        color: inherit;
+        text-decoration: none;
+    }
 
-.cat-oportunities-item img {
-    border-radius: 6px;
-    // width: 120px;
-    // height: 80px;
-    width: 100%;
-    height: 360px;
-    object-fit: cover;
+    .cat-oportunities-image {
+        position: relative;
+        width: 100%;
+        &::before {
+            position: absolute;
+            border-radius: $radius-image;
+            // z-index: 1;
+            // background: linear-gradient(
+            //     180deg,
+            //     rgb(0 0 0 / 50%) 0%,
+            //     rgb(0 0 0 / 25%) 10%,
+            //     rgb(0 0 0 / 15%) 15%,
+            //     rgb(0 0 0 / 7%) 25%,
+            //     rgb(0 0 0 / 0.01%) 35%,
+            //     rgba(0, 0, 0, 0) 100%
+            // );
+            background: linear-gradient(
+                180deg,
+                rgb(0 0 0 / 50%) 0%,
+                rgb(0 0 0 / 25%) 10%,
+                rgb(0 0 0 / 15%) 15%,
+                rgb(0 0 0 / 7%) 25%,
+                rgb(0 0 0 / 0.01%) 35%,
+                rgb(0 0 0 / 0.01%) 65%,
+                rgb(0 0 0 / 7%) 75%,
+                rgb(0 0 0 / 15%) 85%,
+                rgb(0 0 0 / 25%) 90%,
+                rgb(0 0 0 / 50%) 100%
+            );
+            // rgba(0, 0, 0, 0) 100%
+            width: 100%;
+            height: 100%;
+            content: "";
+        }
+    }
+    img {
+        border-radius: $radius-image;
+        // width: 120px;
+        // height: 80px;
+        width: 100%;
+        height: 360px;
+        object-fit: cover;
+    }
 }
 
 .cat-oportunities-meta-wrap {
@@ -47,6 +98,27 @@
     justify-content: space-between;
     align-items: baseline;
     gap: 0.5rem;
+}
+
+.cat-oportunities-image__caption {
+    --label-color: #784cdb;
+    --label-bg: #dedafa;
+    --label-border: #edebfc;
+    display: inline-flex;
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    align-items: center;
+
+    box-shadow: 4px 4px 16px -4px #fff;
+    border: 1px solid var(--label-border);
+    border-radius: $radius-element;
+    background-color: var(--label-bg);
+    padding: 6px 10px;
+    color: var(--label-color);
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 1.2;
 }
 
 .cat-oportunities-name {
@@ -59,10 +131,26 @@
     color: #666;
 }
 
-.cat-oportunities-description {
-    grid-column: 2 / -1;
-    margin-top: 0.5rem;
-    color: #333;
+.cat-oportunities-description-wrap {
+    position: absolute;
+    // bottom: 8px;
+    // left: 8px;
+    bottom: 0;
+    left: 0;
+    backdrop-filter: blur(5px);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: $radius-image;
+    // background-color: rgba(0, 0, 0, 0.4);
+    // border-radius: 0 0 $radius-element $radius-element;
+    background-color: rgba(51, 51, 51, 0.5);
+    padding: 8px;
+    min-height: 25%;
+    .cat-oportunities-description {
+        color: #fff;
+        font-size: 0.95rem;
+        // grid-column: 2 / -1;
+    }
 }
 
 .cat-oportunities-children {
@@ -70,7 +158,7 @@
     grid-column: 2 / -1;
     flex-wrap: wrap;
     gap: 6px;
-    margin: 0.5rem 0 0;
+    margin: 0 8px 0 8px;
     padding: 0;
     list-style: none;
 }
@@ -80,6 +168,7 @@
     border-radius: 5px;
     background: #fafafa;
     padding: 0.35rem 0.5rem;
+    font-size: 15px;
 }
 
 .child-count {
@@ -88,8 +177,13 @@
 }
 
 .cat-oportunities-posttype-meta {
-    grid-column: 2 / -1;
-    margin-top: 0.5rem;
+    // grid-column: 2 / -1;
+    margin: auto 0 8px 8px;
+    color: #777;
+}
+.cat-oportunities-posttype-meta--top {
+    // grid-column: 2 / -1;
+    margin: 0 0 0 8px;
     color: #777;
 }
 
@@ -99,6 +193,167 @@
     }
 
     .cat-oportunities-item img {
+        width: 100%;
+        height: auto;
+    }
+}
+
+/* Minimal styles for term archive — adapt to your theme */
+.tax-category-oportunities .site-main {
+    margin-bottom: 80px;
+}
+
+.term-header {
+    position: relative;
+    img {
+        border-radius: $radius-image;
+        width: 100%;
+        max-height: 360px;
+        object-fit: cover;
+    }
+    &::before {
+        position: absolute;
+        top: 0;
+        left: 0;
+        backdrop-filter: blur(5px);
+        // background: rgba(255, 255, 255, 0.2);
+        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        border-radius: $radius-image;
+        background-color: rgba(0, 0, 0, 0.4);
+        width: 100%;
+        height: 100%;
+        content: "";
+        -webkit-backdrop-filter: blur(5px);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+
+        // backdrop-filter: blur(16px) saturate(180%);
+        // -webkit-backdrop-filter: blur(16px) saturate(180%);
+        // background-color: rgba(104, 57, 200, 0.75);
+        // border-radius: 12px;
+        // border: 1px solid rgba(209, 213, 219, 0.3);
+
+        // backdrop-filter: blur(6px) saturate(30%);
+        // -webkit-backdrop-filter: blur(6px) saturate(30%);
+        // background-color: rgba(104, 57, 200, 0.75);
+        // border-radius: 12px;
+        // border: 1px solid rgba(209, 213, 219, 0.3);
+    }
+}
+
+.term-title {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    margin-top: 1rem;
+    color: $text-white;
+    font-size: 2rem;
+}
+.term-description-wrap {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    backdrop-filter: blur(5px);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: $radius-image;
+    // background-color: rgba(0, 0, 0, 0.4);
+    // border-radius: 0 0 $radius-element $radius-element;
+    background-color: rgba(51, 51, 51, 0.5);
+    padding: 8px;
+    width: 100%;
+    min-height: 25%;
+    text-align: center;
+    .term-description {
+        margin: 0 auto;
+        max-width: 740px;
+        color: #fff;
+        font-size: 15px;
+    }
+}
+
+.term-children {
+    padding: 12px 4px 0;
+    ul {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        padding: 0;
+        list-style: none;
+    }
+}
+
+.term-posts-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(443px, 1fr));
+    gap: 20px;
+    margin-top: 1.25rem;
+}
+
+/* Minimal styling for list item */
+.opportunity-list-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    border: 1px solid #eee;
+    border-radius: 6px;
+    padding: 0.75rem;
+}
+.oli-link {
+    display: flex;
+    column-gap: 8px;
+    flex-flow: row nowrap;
+}
+.oli-thumbnail {
+    flex: 0 0 140px;
+    text-align: center;
+    img {
+        border-radius: $radius-image;
+        width: 140px;
+        height: auto;
+        max-height: 94px;
+        object-fit: cover;
+    }
+    .oli-placeholder {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: $radius-image;
+        width: 140px;
+        height: 94px;
+        color: $text-light;
+        .dashicons {
+            opacity: 0.3;
+            width: 32px;
+            height: 32px;
+            font-size: 32px;
+        }
+    }
+}
+.oli-title {
+    margin: 0 0 0.35rem;
+    font-size: 1.05rem;
+}
+
+.oli-meta {
+    margin-top: 4px;
+    margin-bottom: 0.5rem;
+    color: #777;
+    font-size: 0.85rem;
+    // margin: 4px 0 4px;
+}
+
+.oli-excerpt {
+    color: #333;
+    font-size: 0.9rem;
+}
+
+@media (max-width: 600px) {
+    .opportunity-list-item {
+        flex-direction: column;
+    }
+
+    .oli-thumbnail img {
         width: 100%;
         height: auto;
     }

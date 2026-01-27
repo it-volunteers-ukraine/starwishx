@@ -11,10 +11,10 @@
 .btn-favorite__checkbox {
     position: absolute;
     opacity: 0;
-    width: 1px;
-    height: 1px;
     margin: -1px;
     padding: 0;
+    width: 1px;
+    height: 1px;
     overflow: hidden;
     clip: rect(0, 0, 0, 0);
     border: 0;
@@ -73,8 +73,8 @@
     &__icon {
         display: inline-flex;
         position: relative;
-        align-items: center;
         justify-content: center;
+        align-items: center;
         width: 20px;
         height: 20px;
         font-size: 18px;
@@ -94,21 +94,21 @@
         }
 
         .btn-favorite__icon--active {
-            opacity: 0;
             transform: translate(-50%, -50%) scale(0.8);
+            opacity: 0;
         }
     }
 
     // When Active: Swap icon visibility
     &.is-active &__icon {
         .btn-favorite__icon--inactive {
-            opacity: 0;
             transform: translate(-50%, -50%) scale(0.8);
+            opacity: 0;
         }
 
         .btn-favorite__icon--active {
-            opacity: 1;
             transform: translate(-50%, -50%) scale(1);
+            opacity: 1;
         }
     }
 

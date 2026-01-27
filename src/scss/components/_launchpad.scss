@@ -729,7 +729,6 @@
 /* ======================================
    9. FORMS & INPUTS
    ====================================== */
-
 .launchpad-form,
 .profile-form,
 .security-form,
@@ -748,7 +747,7 @@
         background: $input-color-surface-default;
         padding: 12px;
         width: 100%;
-        color: $text-dark; // Changed from text-light for better readability
+        color: $text-dark;
         font-size: 1rem;
 
         &::placeholder {

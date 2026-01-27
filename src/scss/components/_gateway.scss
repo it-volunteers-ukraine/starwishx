@@ -25,8 +25,11 @@
     }
 }
 .gateway-header {
-    text-align: center;
-    margin: 0 auto;
+    display: flex;
+    .custom-logo-link,
+    .gateway-logo {
+        margin: 0 auto;
+    }
 }
 
 .gateway-forms {
@@ -64,15 +67,47 @@
     .gateway-form__title {
         text-align: center;
     }
-    input,
+    // input,
+    // textarea,
+    // select {
+    //     border: 1px solid $input-color-border-default;
+    //     border-radius: $radius-input;
+    //     padding: 12px;
+    //     color: $text-light;
+    //     font-size: 1rem;
+    //     background-color: $input-color-surface-default;
+    // }
+    input[type="text"],
+    input[type="email"],
+    input[type="password"],
+    input[type="url"],
+    input[type="date"],
     textarea,
     select {
-        border: 1px solid $input-color-border-default;
+        transition: border-color $animations;
+        border: 1px solid $input-color-border-filled;
         border-radius: $radius-input;
+        // background-color: $input-color-surface-default;
         padding: 12px;
-        color: $text-light;
+        width: 100%;
+        color: $text-dark;
         font-size: 1rem;
-        background-color: $input-color-surface-default;
+
+        &::placeholder {
+            color: $input-color-text-default;
+        }
+
+        &:focus {
+            outline: none;
+            box-shadow: 0 0 0 1px $input-color-border-filled;
+            border-color: $input-color-border-filled;
+        }
+
+        &:disabled {
+            cursor: not-allowed;
+            background: $input-color-surface-disabled;
+            color: $input-color-text-disabled;
+        }
     }
     .form-field {
         display: flex;
