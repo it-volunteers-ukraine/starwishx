@@ -42,12 +42,12 @@
 
 :where(button, input, progress, select, textarea) {
     appearance: none;
-    // background: transparent;
+    background: transparent;
     // border: none;
-    // color: inherit;
-    // font: inherit;
+    color: inherit;
+    font: inherit;
     hanging-punctuation: none;
-    // line-height: inherit;
+    line-height: inherit;
     // text-align: start;
     touch-action: manipulation;
 }
