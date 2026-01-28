@@ -146,7 +146,7 @@ class OpportunitiesService
     public function getFormOptions(): array
     {
         return [
-            'categories' => $this->getTerms('category-oportunities'),
+            'categories' => $this->getHierarchicalCategoryTerms('category-oportunities'),
             'countries'  => $this->getTerms('country'),
             'seekers'    => $this->getTerms('category-seekers'),
         ];
@@ -164,6 +164,51 @@ class OpportunitiesService
             'id' => $t->term_id,
             'name' => $t->name
         ], $terms);
+    }
+
+    /**
+     * Get terms hierarchically (Parent -> Children).
+     */
+    private function getHierarchicalCategoryTerms(string $taxonomy): array
+    {
+        // 1. Get Parents (Term ID 0)
+        $parents = get_terms([
+            'taxonomy'   => $taxonomy,
+            'hide_empty' => false,
+            'parent'     => 0,
+            'orderby'    => 'name',
+        ]);
+
+        if (is_wp_error($parents)) {
+            return [];
+        }
+
+        $result = [];
+        foreach ($parents as $parent) {
+            // 2. Get Children for each parent
+            $children = get_terms([
+                'taxonomy'   => $taxonomy,
+                'hide_empty' => false,
+                'parent'     => $parent->term_id,
+                'orderby'    => 'name',
+            ]);
+
+            $childData = [];
+            if (!is_wp_error($children)) {
+                $childData = array_map(fn($c) => [
+                    'id'   => $c->term_id,
+                    'name' => $c->name
+                ], $children);
+            }
+
+            $result[] = [
+                'id'       => $parent->term_id,
+                'name'     => $parent->name,
+                'children' => $childData,
+            ];
+        }
+
+        return $result;
     }
 
     /**
@@ -196,7 +241,7 @@ class OpportunitiesService
             'company'         => get_field('opportunity_company', $postId) ?: '',
             'date_starts'     => $this->formatDateForInput(get_field('opportunity_date_starts', $postId)),
             'date_ends'       => $this->formatDateForInput(get_field('opportunity_date_ends', $postId)),
-            'category'        => get_field('opportunity_category', $postId) ?: '',
+            'category'        => $getIntArray('opportunity_category'), // Now an array
             'country'         => get_field('country', $postId) ?: '',
             'city'            => get_field('city', $postId) ?: '',
             'sourcelink'      => get_field('opportunity_sourcelink', $postId) ?: '',
@@ -278,26 +323,20 @@ class OpportunitiesService
 
             // Taxonomies: Save to ACF field AND actual WP Taxonomy
             // wp_set_object_terms returns WP_Error or Term IDs
-            // Category
-            $catId = (int) ($data['category'] ?? 0);
-            update_field('opportunity_category', $catId, $id);
-            wp_set_object_terms($id, $catId, 'category-oportunities');
-            // $catRes = wp_set_object_terms($id, (int)($data['category'] ?? 0), 'category-oportunities');
-            // if (is_wp_error($catRes)) throw new \Exception(__('Failed to save category.', 'starwishx'));
+            // Category (Multi/Hierarchical)
+            $categories = array_map('intval', $data['category'] ?? []);
+            update_field('opportunity_category', $categories, $id);
+            wp_set_object_terms($id, $categories, 'category-oportunities');
 
             // Country
             $countryId = (int) ($data['country'] ?? 0);
             update_field('country', $countryId, $id);
             wp_set_object_terms($id, $countryId, 'country');
-            // $countRes = wp_set_object_terms($id, (int)($data['country'] ?? 0), 'country');
-            // if (is_wp_error($countRes)) throw new \Exception(__('Failed to save country.', 'starwishx'));
 
             // Seekers (Multi)
             $seekers = array_map('intval', $data['seekers'] ?? []);
             update_field('opportunity_seekers', $seekers, $id);
             wp_set_object_terms($id, $seekers, 'category-seekers');
-            // $seekRes = wp_set_object_terms($id, $seekers, 'category-seekers');
-            // if (is_wp_error($seekRes)) throw new \Exception(__('Failed to save seekers.', 'starwishx'));
 
             // Group 3
             update_field('opportunity_description', $data['description'], $id);

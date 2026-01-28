@@ -46,7 +46,7 @@ class OpportunitiesPanel extends AbstractPanel
             'company' => '',
             'date_starts' => '',
             'date_ends' => '',
-            'category' => '',
+            'category' => [], // Array for multiple selection
             'country' => '',
             'city' => '',
             'sourcelink' => '',
@@ -374,17 +374,20 @@ class OpportunitiesPanel extends AbstractPanel
                                         <input type="text" required data-wp-bind--value="<?= $formPath ?>.company" data-wp-on--input="actions.opportunities.updateForm" data-field="company">
                                     </div>
 
-                                    <div class="form-row">
-                                        <div class="form-field">
-                                            <label><?php esc_html_e('Start Date', 'starwishx'); ?></label>
-                                            <input type="date" required data-wp-bind--value="<?= $formPath ?>.date_starts" data-wp-on--input="actions.opportunities.updateForm" data-field="date_starts">
-                                        </div>
-                                        <div class="form-field">
-                                            <label><?php esc_html_e('End Date', 'starwishx'); ?></label>
-                                            <input type="date" required data-wp-bind--value="<?= $formPath ?>.date_ends" data-wp-on--input="actions.opportunities.updateForm" data-field="date_ends">
-                                        </div>
+                                    <!-- <div class="form-row"> -->
+                                    <div class="form-field">
+                                        <label><?php esc_html_e('Start Date', 'starwishx'); ?></label>
+                                        <input type="date" required data-wp-bind--value="<?= $formPath ?>.date_starts" data-wp-on--input="actions.opportunities.updateForm" data-field="date_starts">
                                     </div>
+                                    <div class="form-field">
+                                        <label><?php esc_html_e('End Date', 'starwishx'); ?></label>
+                                        <input type="date" required data-wp-bind--value="<?= $formPath ?>.date_ends" data-wp-on--input="actions.opportunities.updateForm" data-field="date_ends">
+                                    </div>
+                                    <!-- </div> -->
 
+                                </div>
+
+                                <div class="launchpad-grid-auto">
                                     <div class="form-field">
                                         <label><?php esc_html_e('Country', 'starwishx'); ?></label>
                                         <select required data-wp-bind--value="<?= $formPath ?>.country" data-wp-on--change="actions.opportunities.updateForm" data-field="country">
@@ -394,23 +397,10 @@ class OpportunitiesPanel extends AbstractPanel
                                             </template>
                                         </select>
                                     </div>
-                                </div>
 
-                                <div class="launchpad-grid-auto">
                                     <div class="form-field">
                                         <label><?php esc_html_e('City', 'starwishx'); ?></label>
                                         <input type="text" required data-wp-bind--value="<?= $formPath ?>.city" data-wp-on--input="actions.opportunities.updateForm" data-field="city">
-                                    </div>
-
-                                    <div class="form-field">
-                                        <label><?php esc_html_e('Category', 'starwishx'); ?></label>
-                                        <select required data-wp-bind--value="<?= $formPath ?>.category" data-wp-on--change="actions.opportunities.updateForm" data-field="category"
-                                            class="form-select-cetegory">
-                                            <option value=""><?php esc_html_e('Select Category', 'starwishx'); ?></option>
-                                            <template data-wp-each="<?= $optPath ?>.categories">
-                                                <option data-wp-bind--value="context.item.id" data-wp-text="context.item.name"></option>
-                                            </template>
-                                        </select>
                                     </div>
 
                                     <div class="form-field">
@@ -419,9 +409,33 @@ class OpportunitiesPanel extends AbstractPanel
                                     </div>
                                 </div>
 
-                                <!-- Seekers (Checkboxes)
-                                 style="max-height: 150px; overflow-y: auto; border: 1px solid #ddd; padding: 10px;"
-                                  -->
+                                <div class="form-field">
+                                    <label><?php esc_html_e('Opportunity Category', 'starwishx'); ?></label>
+                                    <!-- Hierarchical Checkboxes -->
+                                    <div class="category-group-container ">
+                                        <template data-wp-each="<?= $optPath ?>.categories">
+                                            <div class="category-group">
+                                                <!-- Parent Category Name (Header) -->
+                                                <h4 class="category-group-title"
+                                                    data-wp-text="context.item.name"></h4>
+
+                                                <!-- Checkboxes for Children -->
+                                                <div class="category-group-items launchpad-grid-3-col--sm">
+                                                    <template data-wp-each--child="context.item.children">
+                                                        <label class="launchpad-form__checkbox">
+                                                            <input type="checkbox"
+                                                                data-wp-bind--value="context.child.id"
+                                                                data-wp-bind--checked="state.isCategoryChecked"
+                                                                data-wp-on--change="actions.opportunities.toggleCategory">
+                                                            <span data-wp-text="context.child.name"></span>
+                                                        </label>
+                                                    </template>
+                                                </div>
+                                            </div>
+                                        </template>
+                                    </div>
+                                </div>
+
                                 <div class="form-field">
                                     <label><?php esc_html_e('Seekers', 'starwishx'); ?></label>
                                     <div class="checkbox-group launchpad-grid-3-col">

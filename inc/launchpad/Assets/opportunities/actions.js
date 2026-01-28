@@ -23,7 +23,7 @@ export const opportunitiesActions = {
     const p = state.panels.opportunities;
     p.formData = p.emptyForm
       ? deepClone(p.emptyForm)
-      : { id: null, title: "", seekers: [], subcategory: [] };
+      : { id: null, title: "", seekers: [], subcategory: [], category: [] };
   },
 
   async loadSingle(id) {
@@ -38,10 +38,15 @@ export const opportunitiesActions = {
       const data = await fetchJson(
         state,
         `${state.launchpadSettings.restUrl}opportunities/${id}`,
-        { panelId: "opportunities" }
+        { panelId: "opportunities" },
       );
       if (data) {
         p.formData = data;
+        if (!Array.isArray(p.formData.category)) {
+          p.formData.category = p.formData.category
+            ? [p.formData.category]
+            : [];
+        }
       }
     } catch (e) {
       p.error = e.message;
@@ -92,7 +97,7 @@ export const opportunitiesActions = {
           method: id ? "PUT" : "POST",
           body: p.formData,
           panelId: "opportunities",
-        }
+        },
       );
       actions.opportunities.cancel();
       await actions.loadPanelState("opportunities");
@@ -127,7 +132,7 @@ export const opportunitiesActions = {
           method: "POST",
           body: { status: "pending" },
           panelId: "opportunities",
-        }
+        },
       );
       await actions.loadPanelState("opportunities");
     } catch (error) {
@@ -165,6 +170,17 @@ export const opportunitiesActions = {
       : s.filter((id) => id !== val);
   },
 
+  toggleCategory() {
+    const { state } = store("launchpad");
+    const { ref } = getElement();
+    const p = state.panels.opportunities;
+    const val = Number(ref.value);
+    let c = Array.isArray(p.formData.category) ? [...p.formData.category] : [];
+    p.formData.category = ref.checked
+      ? [...new Set([...c, val])]
+      : c.filter((id) => id !== val);
+  },
+
   async loadMore() {
     const { state } = store("launchpad");
     const p = ensurePanel(state, "opportunities");
@@ -184,7 +200,7 @@ export const opportunitiesActions = {
       const data = await fetchJson(
         state,
         `${state.launchpadSettings.restUrl}opportunities?${params.toString()}`,
-        { panelId: "opportunities" }
+        { panelId: "opportunities" },
       );
 
       if (data && data.items) {
@@ -241,7 +257,7 @@ export const opportunitiesActions = {
       const data = await fetchJson(
         state,
         `${state.launchpadSettings.restUrl}opportunities?${params.toString()}`,
-        { panelId: "opportunities" }
+        { panelId: "opportunities" },
       );
       if (data) {
         p.items = data.items;

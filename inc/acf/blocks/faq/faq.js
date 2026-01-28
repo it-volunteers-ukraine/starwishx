@@ -104,10 +104,10 @@ document.addEventListener("DOMContentLoaded", function () {
         // Close previously open item if opening a new one
         if (nowOpen && currentlyOpenItem && currentlyOpenItem !== item) {
           const currentHeader = currentlyOpenItem.querySelector(
-            SELECTORS.ITEM_HEADER
+            SELECTORS.ITEM_HEADER,
           );
           const currentPanel = currentlyOpenItem.querySelector(
-            SELECTORS.DESCRIPTION_WRAPPER
+            SELECTORS.DESCRIPTION_WRAPPER,
           );
 
           if (currentHeader && currentPanel) {

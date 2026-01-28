@@ -75,6 +75,17 @@ export const opportunitiesGetters = {
   },
 
   /**
+   * Is the current category checkbox checked?
+   * Used in: data-wp-bind--checked="state.isCategoryChecked"
+   */
+  get isCategoryChecked() {
+    // We expect context.child.id from the inner loop
+    const id = getContext()?.child?.id;
+    const selected = this.panels.opportunities?.formData?.category;
+    return Array.isArray(selected) && selected.some((s) => s == id);
+  },
+
+  /**
    * Can the current item/form be edited?
    */
   get canEdit() {
@@ -138,7 +149,7 @@ export const opportunitiesGetters = {
     const active = this.panels.opportunities?.filters?.statuses || [];
     return active.includes(status);
   },
-  
+
   /**
    * Get the expiration label text based on item context
    */

@@ -18,10 +18,11 @@
     gap: 0.5rem;
 
     @include max-laptop {
-        grid-template-columns: 240px 1fr;
+        grid-template-columns: 180px 1fr;
     }
 
-    @include max-tablet {
+    // @include max-tablet {
+    @media only screen and (max-width: ($width-tablet + 290px - 0.02px)) {
         grid-template-columns: 1fr;
     }
 }
@@ -55,12 +56,14 @@
     gap: 0.5rem;
     padding: 0 1rem;
 
-    @include max-tablet {
+    // @include max-tablet {
+    @media only screen and (max-width: ($width-tablet + 290px - 0.02px)) {
         flex-direction: row;
+        flex-wrap: nowrap;
         gap: 1rem;
         padding: 0 1rem;
         overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
+        // -webkit-overflow-scrolling: touch;
 
         // Hide scrollbar for cleaner mobile look
         &::-webkit-scrollbar {
@@ -408,10 +411,10 @@
         // Truncate text
         display: -webkit-box;
         margin-bottom: 1rem;
+        line-clamp: 3;
         color: $text-light;
         font-size: 0.95rem;
         line-height: 1.5;
-        line-clamp: 3;
         -webkit-line-clamp: 3;
         -webkit-box-orient: vertical;
         overflow: hidden;
@@ -432,15 +435,15 @@
     .opportunity-taxonomy {
         display: inline-block;
         margin-bottom: 8px;
-        font-size: 11px;
+        color: $text-accent;
         font-weight: 700;
+        font-size: 11px;
         // text-transform: uppercase;
         letter-spacing: 0.05em;
-        color: $text-accent;
 
         &::before {
-            content: "•";
             margin-right: 5px;
+            content: "•";
             color: $icon-color-fill; // Gold #fac625
         }
     }
@@ -541,18 +544,18 @@
             }
             .opportunity-content {
                 display: grid;
+                grid-template-rows: auto;
                 // grid-template-columns: repeat(3, 1fr);
                 grid-template-columns: minmax(150px, 300px) minmax(60px, 80px) auto;
-                grid-template-rows: auto;
-                row-gap: 4px;
                 column-gap: 1rem;
+                row-gap: 4px;
 
                 .opportunity-title {
                     margin-bottom: 0;
                 }
                 .opportunity-meta {
-                    grid-column-start: 1;
                     grid-row-start: 2;
+                    grid-column-start: 1;
                     margin-bottom: 0;
                     .opportunity-date {
                         order: 1;
@@ -566,8 +569,8 @@
                 }
                 .opportunity-info {
                     grid-row: span 3 / span 3;
-                    grid-column-start: 2;
                     grid-row-start: 1;
+                    grid-column-start: 2;
                     .opportunity-range {
                         display: inline-flex;
                         flex-flow: column wrap;
@@ -582,14 +585,14 @@
                 }
 
                 .opportunity-taxonomy {
-                    grid-column-start: 1;
                     grid-row-start: 3;
+                    grid-column-start: 1;
                 }
                 .opportunity-excerpt {
                     // display: none;
                     grid-row: span 3 / span 3;
-                    grid-column-start: 3;
                     grid-row-start: 1;
+                    grid-column-start: 3;
                 }
             }
 
@@ -612,11 +615,11 @@
         // grid-template-columns: 1fr;
         // Styles inherited from default .opportunity-card
         .opportunity-card {
+            grid-template-rows: auto;
             // grid-template-columns: 1fr;
             // display: flex;
             // grid-template-columns: repeat(2, 1fr);
             grid-template-columns: 1fr minmax(100px, 250px);
-            grid-template-rows: auto;
             .opportunity-content {
                 order: 1;
                 .opportunity-excerpt {
@@ -624,15 +627,15 @@
                 }
             }
             .opportunity-actions {
-                order: 2;
-                grid-column-start: 1;
                 grid-row-start: 2;
+                grid-column-start: 1;
+                order: 2;
             }
             .opportunity-card__figure {
-                order: 3;
                 grid-row: span 2 / span 2;
-                grid-column-start: 2;
                 grid-row-start: 1;
+                grid-column-start: 2;
+                order: 3;
             }
         }
     }
@@ -789,8 +792,8 @@
         label {
             margin-left: 2px;
             color: $text-basic;
-            font-weight: 500;
-            font-size: 0.9rem;
+            // font-weight: 500;
+            font-size: 0.85rem;
         }
     }
 
@@ -851,13 +854,34 @@
     max-width: 520px;
 }
 
-// Specific Grids within forms
 .launchpad-grid-3-col {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 1rem;
 
     @include max-laptop {
+        grid-template-columns: 1fr;
+    }
+}
+
+.launchpad-grid-3-col--sm {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 4px;
+    @include max-laptop {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    @include max-tablet {
+        grid-template-columns: 2fr;
+    }
+}
+
+.launchpad-grid-2-col {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+
+    @include max-tablet {
         grid-template-columns: 1fr;
     }
 }
@@ -1010,6 +1034,7 @@
 
     // 1. Hide the default ugly checkbox
     input[type="checkbox"] {
+        flex: 0 0 20px;
         appearance: none;
         -webkit-appearance: none;
         position: relative;
@@ -1074,6 +1099,33 @@
     // }
 }
 
+.category-group-container {
+    border: 1px solid $input-color-border-filled;
+    border-radius: $radius-input;
+    background: $input-color-surface-default;
+    padding: 12px;
+}
+
+.category-group {
+    margin-bottom: 16px;
+    border-bottom: 1px dashed $input-color-border-default;
+    padding-bottom: 16px;
+
+    &:last-child {
+        margin-bottom: 0;
+        border-bottom: none;
+        padding-bottom: 0;
+    }
+
+    .category-group-title {
+        margin-bottom: 8px;
+        color: $text-dark;
+        font-weight: 600;
+        // inline styles in PHP generally handle this, but adding backup
+        font-size: 0.9rem;
+    }
+}
+
 .password-form:not([hidden]),
 .profile-form:not([hidden]),
 .profile-card:not([hidden]),
@@ -1092,10 +1144,10 @@
         font-size: 0.85rem;
 
         .dashicons {
-            font-size: 14px;
+            opacity: 0.7;
             width: 14px;
             height: 14px;
-            opacity: 0.7;
+            font-size: 14px;
         }
 
         .range-sep {
@@ -1116,8 +1168,8 @@
 .opportunity-card {
     &[data-expired="true"] {
         .opportunity-card__image {
-            filter: grayscale(1);
             opacity: 0.6;
+            filter: grayscale(1);
         }
         .opportunity-title {
             color: $text-light;
@@ -1184,8 +1236,8 @@
     // Content Grid
     .favorite-content {
         display: grid;
-        grid-template-columns: minmax(150px, 300px) auto;
         grid-template-rows: auto auto;
+        grid-template-columns: minmax(150px, 300px) auto;
         column-gap: 1rem;
         row-gap: 4px;
         min-width: 0; // Prevent overflow
@@ -1193,13 +1245,13 @@
             grid-template-columns: 1fr;
         }
         a {
-            text-decoration: none;
             color: inherit;
+            text-decoration: none;
         }
     }
     .favorite-title {
-        grid-column-start: 1;
         grid-row-start: 1;
+        grid-column-start: 1;
         margin-bottom: 0;
         color: $text-dark;
         font-weight: 600;
@@ -1209,9 +1261,9 @@
         }
     }
     .favorite-meta {
-        grid-column-start: 1;
-        grid-row-start: 2;
         display: flex;
+        grid-row-start: 2;
+        grid-column-start: 1;
         align-items: center;
         gap: 8px;
         margin-bottom: 0;
@@ -1229,21 +1281,21 @@
         }
     }
     .favorite-excerpt {
-        grid-column-start: 2;
-        grid-row: span 2;
         // Truncate text
         display: -webkit-box;
+        grid-row: span 2;
+        grid-column-start: 2;
         margin: 0;
+        line-clamp: 2;
         color: $text-light;
         font-size: 0.9rem;
         line-height: 1.4;
-        line-clamp: 2;
         -webkit-line-clamp: 2;
         -webkit-box-orient: vertical;
         overflow: hidden;
         @include max-tablet {
-            grid-column-start: 1;
             grid-row: auto;
+            grid-column-start: 1;
             margin-top: 0.5rem;
         }
     }
@@ -1254,8 +1306,8 @@
         gap: 8px;
         margin-top: 0;
         @include max-tablet {
-            width: 100%;
             margin-top: 1rem;
+            width: 100%;
         }
         .button-link-delete {
             background: transparent;
