@@ -286,7 +286,10 @@ function contact_icon_use($icon_id, $classes = []) {
         ]
     ]) ?>
 </p>
-
+        
+       <div style="display:none !important;">
+           <input type="text" name="honeypot" tabindex="-1" autocomplete="off">
+       </div>
 
       <button type="submit" class="<?= esc_attr($classes['contact-submit']) ?>"><?= esc_html($form_submit_text) ?></button>
       </form>

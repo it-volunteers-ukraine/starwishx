@@ -341,3 +341,5 @@ add_filter('single_template', function ($template) {
 
 // Для пагинации и фильтров
 require_once get_template_directory() . '/inc/rewrites.php';
+// Various helper functions
+require_once get_template_directory() . '/inc/theme-helpers.php';
