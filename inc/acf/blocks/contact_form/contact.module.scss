@@ -155,8 +155,7 @@
   border: 1px solid $input-color-border-default;
   border-radius: 12px;
   transition: border-color 0.2s ease;
-
-  
+  background-color: $surface-primary;
 }
 
 .contact-form-field,
@@ -248,9 +247,15 @@
   cursor: pointer;
   transition: background-color 0.3s ease;
   align-self: flex-end;
+  text-align: center;
 
-  &:hover { background-color: $buttons-color-background-primary-hover; }
-  &:active { background-color: $buttons-color-background-primary-pressed; }
+  &:hover {
+    background-color: $buttons-color-background-primary-hover;
+  }
+
+  &:active {
+    background-color: $buttons-color-background-primary-pressed;
+  }
 }
 
 .contact-group {

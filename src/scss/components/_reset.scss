@@ -43,12 +43,12 @@
 :where(button, input, progress, select, textarea) {
     appearance: none;
     background: transparent;
-    border: none;
+    // border: none;
     color: inherit;
     font: inherit;
     hanging-punctuation: none;
     line-height: inherit;
-    text-align: start;
+    // text-align: start;
     touch-action: manipulation;
 }
 
@@ -92,7 +92,7 @@
 }
 
 :where(dialog, [popover]) {
-    background: transparent;
+    // background: transparent;
     border: none;
     color: inherit;
     margin: auto;

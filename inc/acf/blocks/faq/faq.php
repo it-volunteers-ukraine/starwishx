@@ -70,7 +70,7 @@ $questions = get_field('questions');
                             <div id="acc-desc-<?php echo $index; ?>"
                                 class="accordion-item-description-wrapper <?php echo esc_attr($classes['accordion-item-description-wrapper']); ?>"
                                 aria-hidden="<?php echo $aria_hidden; ?>">
-                                <div class="text-r <?php echo esc_attr($classes['accordion-item-description']); ?>">
+                                <div class="<?php echo esc_attr($classes['accordion-item-description']); ?>">
                                     <p><?php echo wp_kses_post($question['answer']); ?></p>
                                 </div>
                             </div>
