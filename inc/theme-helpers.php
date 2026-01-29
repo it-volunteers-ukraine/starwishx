@@ -33,6 +33,12 @@ function sw_strip_urls(string $text): string
     // Remove www. domains (requires at least one dot after www + TLD-like structure)
     $text = preg_replace('#\bwww\.[^\s<>"\']+\.[^\s<>"\']+#i', '', $text);
 
+    // "The Dot Breaker" 
+    // This finds a dot between two letters/numbers that DOES NOT have a space after it.
+    // Example: bit.ly -> bit. ly
+    // It ignores numbers like 10.5 by checking for letters on the right side.
+    $text = preg_replace('/([a-z0-9])\.([a-z]{2,})/i', '$1. $2', $text);
+
     return $text;
 }
 

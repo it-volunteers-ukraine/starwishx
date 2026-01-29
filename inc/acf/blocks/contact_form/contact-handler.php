@@ -30,7 +30,7 @@ function theme_send_contact_form()
     $raw_email   = $_POST['email']   ?? '';
     $raw_phone   = $_POST['phone']   ?? '';
 
-    if (sw_contains_url($raw_name) || sw_contains_url($raw_message)) {
+    if (sw_contains_url($raw_name)) {
         wp_send_json_error(['message' => 'Посилання у полях заборонені'], 422);
     }
     // Sanitization with our helpers from File: inc/theme-helpers.php
