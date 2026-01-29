@@ -133,6 +133,10 @@ gap: 10px;
 }
 
 @include min-tablet {
+  .promo-content {
+    width: 330px;
+  }
+
   .promo-section {
   padding: 80px 40px;
   height: 608px;
@@ -170,6 +174,10 @@ gap: 10px;
 }
 
 @include min-desktop {
+  .promo-content {
+    width: 417px;
+  }
+
   .promo-section {
     padding: 120px 40px;
   height: 807px;
