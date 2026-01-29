@@ -18,7 +18,7 @@ $title = get_the_title();
 
 <section class="section title-page-section <?php echo esc_attr($classes["section"]); ?>">
     <div class="container">
-        <div class="<?php echo esc_attr($classes["title"]); ?>">
+        <h1 class="h3  <?php echo esc_attr($classes["title"]); ?>">
             <?php echo esc_html($title); ?>
         </div>
     </div>
