@@ -94,16 +94,13 @@ if (!function_exists('promo_icon_use')) {
             
             <div class="<?= esc_attr($classes['promo-wrapper']) ?>">
                 
-
                 <?php if ($title): ?>
-                    <h2 class="h5 <?= esc_attr($classes['promo-title']) ?>"><?= esc_html($title) ?>
-                </h2><?php endif; ?>
-
-                
+                    <h2 class="h5 <?= esc_attr($classes['promo-title']) ?>"><?= esc_html($title) ?></h2>
+                <?php endif; ?>
 
                 <?php if ($text): ?>
                     <div class="<?= esc_attr($classes['promo-text']); ?>"><?php echo $text; ?></div>
-                    <?php endif; ?>
+                <?php endif; ?>
 
                 <div class="<?= esc_attr($classes['promo-contacts']) ?>">
                     <?php if ($email_link): ?>
@@ -139,11 +136,11 @@ if (!function_exists('promo_icon_use')) {
             </div>
 
             <div class="<?php echo esc_attr($classes['icon-star']); ?>">
-                    <img src="<?php echo get_template_directory_uri(); ?>/assets/img/star1-bg.png" class="<?php echo esc_attr($classes['icon-bg']); ?>" alt="">
-                    <svg class="<?php echo esc_attr($classes['icon-mask']); ?>">
-                        <use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-element_planet_3-circle"></use>
-                    </svg> 
-                </div>
+                <img src="<?php echo get_template_directory_uri(); ?>/assets/img/star1-bg.png" class="<?php echo esc_attr($classes['icon-bg']); ?>" alt="">
+                <svg class="<?php echo esc_attr($classes['icon-mask']); ?>">
+                    <use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-element_planet_3-circle"></use>
+                </svg> 
+            </div>
 
         </div>
     </div>
