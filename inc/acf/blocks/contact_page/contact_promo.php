@@ -96,8 +96,8 @@ if (!function_exists('promo_icon_use')) {
                 
 
                 <?php if ($title): ?>
-                    <div class="<?= esc_attr($classes['promo-title']) ?>"><?= esc_html($title) ?>
-                </div><?php endif; ?>
+                    <h2 class="h5 <?= esc_attr($classes['promo-title']) ?>"><?= esc_html($title) ?>
+                </h2><?php endif; ?>
 
                 
 
