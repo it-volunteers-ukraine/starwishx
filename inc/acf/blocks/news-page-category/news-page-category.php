@@ -95,21 +95,12 @@ $posts = $posts_list->posts;
 // echo var_dump($posts);
 // echo '</pre>';
 
-function get_category_by_id($category_color, $category)
-{
-    foreach ($category_color as $cat_item) {
-        if ($cat_item['category'] == $category) {
-            return $cat_item;
-        }
-    }
-}
-
 ?>
 
 <section class="section <?php echo esc_attr($classes['section']); ?> ">
     <div class="container ">
         <h1 class="h3 <?php echo esc_attr($classes['title']); ?>"><?php echo esc_html($title); ?></h1>
-        <div class="<?php echo esc_attr($classes['newscards']); ?>">
+        <div class="cards-list <?php echo esc_attr($classes['newscards']); ?>">
             <?php if ($posts) : ?>
                 <?php foreach ($posts as $item) : ?>
                     <?php

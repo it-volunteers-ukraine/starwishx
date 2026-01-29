@@ -110,4 +110,3 @@ add_action('admin_head', function () {
     </style>
     <?php
 });
-?>

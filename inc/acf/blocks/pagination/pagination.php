@@ -8,11 +8,13 @@
 
 $default_classes = [
     'section' => 'section',
+    'pagination' => 'pagination',
     'pagination-section' => 'pagination-section',
     'selected' => 'selected',
     'link' => 'link',
     'link-disabled' => 'link-disabled',
     'arrow-icon' => 'arrow-icon',
+    'load-more' => 'load-more',
 
 ];
 
@@ -27,10 +29,22 @@ if (file_exists($modules_file)) {
 // 1. Current URL
 // -----------------------------
 global $wp;
+global $post;
+
+// echo '<pre>';
+// print_r($wp);
+// echo '</pre>';
+$wp_request = $wp->request;
 $base_url = home_url($wp->request);
+$post_name = $post->post_name;
+// echo 'base_url: ' . $base_url . '<br>';
 $category = 'category-oportunities';
 $category_slug = get_query_var('news_cat');
-// echo 'category_slug: ' . $category_slug . '<br>';
+
+$path = trim($wp->request, '/');
+$parts = explode('/', $path);
+
+$post_type = $parts[0] ?? null;
 
 // -----------------------------
 // 2. Params
@@ -41,8 +55,17 @@ $allowed_per_page = [12, 8, 4];
 $per_page = isset($_GET['per_page']) ? (int) $_GET['per_page'] : 12;
 $per_page = in_array($per_page, $allowed_per_page) ? $per_page : 12;
 
+echo 'request: ' . $wp_request . '<br>';
+echo 'post_type: ' . $post_type . '<br>';
+echo 'post_name: ' . $post_name . '<br>';
+echo 'category: ' . $category . '<br>';
+echo 'category_slug: ' . $category_slug . '<br>';
+echo 'page: ' . $page . '<br>';
+echo 'per_page: ' . $per_page . '<br>';
+// -----------------------------
+
 $query = new WP_Query([
-    'post_type'      => 'news',
+    'post_type'      => $post_type,
     'posts_per_page' => $per_page,
     'paged'          => 1,
     'fields'         => 'ids', // важно!
@@ -55,7 +78,11 @@ $query = new WP_Query([
         ]
     ],
 ]);
+
+// echo '<pre>';
 // print_r($query);
+// echo '</pre>';
+
 $total_posts = (int) $query->found_posts;
 $total_pages = (int) ceil($total_posts / $per_page);
 echo 'total_posts: ' . $total_posts . '<br>';
@@ -65,7 +92,7 @@ echo 'total_pages: ' . $total_pages . '<br>';
 // 3. Fake total pages (optional)
 // -----------------------------
 // Если не знаешь сколько страниц — можно убрать стрелки
-$total_pages = 999; // или null
+// $total_pages = 999; // или null
 
 // -----------------------------
 // 4. URL builder
@@ -82,49 +109,74 @@ function pagination_url($base_url, $page, $per_page)
 
 <section class="section breadcumbs-section <?php echo esc_attr($classes["section"]); ?> ">
     <div class="container">
-        <nav class="pagination">
+        <nav class="<?php echo esc_attr($classes["pagination"]); ?> ">
 
             <!-- Prev -->
             <?php if ($page == 1): ?>
             <?php endif; ?>
             <?php $prev_disabled = $page == 1 ? $classes['link-disabled'] : ''; ?>
-            <a href="<?= pagination_url($base_url, $page - 1, $per_page); ?>" class="<?php echo $prev_disabled; ?>" rel="prev">
-                &lt;
-            </a>
 
-            <!-- Numbers -->
-            <?php
-            $page_i = $page == 1 ? 1 : $page - 1;
-            $page_i_end = $page == 1 ? 3 : $page + 1;
-            for ($i = $page_i; $i <= $page_i_end; $i++): ?>
-                <?php
-                $link_disabled = $total_pages && $i > $total_pages ? $classes['link-disabled'] : '';
-                $current_page_class = $page == $i ? $classes['selected'] : '';
-                ?>
-                <a href="<?= pagination_url($base_url, $i, $per_page); ?> <?php echo $link_disabled; ?>"
-                    class="<?php echo $current_page_class; ?>">
-                    <?= $i; ?>
+            <div>
+                <a href="<?= pagination_url($base_url, $page - 1, $per_page); ?>" class="<?php echo $prev_disabled; ?>" rel="prev">
+                    &lt;
                 </a>
-            <?php endfor; ?>
 
-            <!-- Next -->
-            <a href="<?= pagination_url($base_url, $page + 1, $per_page); ?>" rel="next">
-                &gt;
-            </a>
+                <!-- Numbers -->
+                <?php
+                $page_i = $page == 1 ? 1 : $page - 1;
+                $page_i_end = $page == 1 ? 3 : $page + 1;
+                for ($i = $page_i; $i <= $page_i_end; $i++): ?>
+                    <?php
+                    $link_disabled = $total_pages && $i > $total_pages ? $classes['link-disabled'] : '';
+                    $current_page_class = $page == $i ? $classes['selected'] : '';
+                    ?>
+                    <a href="<?= pagination_url($base_url, $i, $per_page); ?>"
+                        class="<?php echo $current_page_class; ?> <?php echo $link_disabled; ?>">
+                        <?= $i; ?>
+                    </a>
+                <?php endfor; ?>
+
+                <!-- Next -->
+                <?php $next_disabled = $total_pages && $page >= $total_pages ? $classes['link-disabled'] : ''; ?>
+                <a href="<?= pagination_url($base_url, $page + 1, $per_page); ?>" class="<?php echo $next_disabled; ?> " rel="next">
+                    &gt;
+                </a>
+
+            </div>
+            <?php
+            $load_next_page = $page < $total_pages ? $page + 1 : $total_pages;
+            $load_more_disabled = $total_pages && $page >= $total_pages ? $classes['link-disabled'] : '';
+            ?>
+            <button
+                id="load-more"
+                type="button"
+                data-post-type = <?php echo $post_name; ?>
+                data-page="1"
+                data-category="<?= esc_attr(get_query_var('news_cat')); ?>"
+                data-per-page="<?= esc_attr($per_page); ?>"
+                class="btn <?php echo esc_attr($classes["load-more"]); ?>  <?php echo esc_attr($load_more_disabled); ?>">
+                Load more
+            </button>
+            <!-- <a href="?page_num=2" class="btn <?php echo esc_attr($classes["load-more"]); ?>  <?php echo esc_attr($load_more_disabled); ?>"
+                onclick="event.preventDefault(); loadNews({page:2, perPage:12, category:'kultura-ta-khobi'})">
+                load more
+            </a> -->
+            <form method="get" class="per-page">
+
+                <input type="hidden" name="page_num" value="1">
+
+                <select name="per_page" onchange="this.form.submit()">
+                    <?php foreach ([4, 8, 12] as $value): ?>
+                        <option value="<?= $value; ?>" <?= selected($per_page, $value, false); ?>>
+                            <?= $value; ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+
+            </form>
+
+
 
         </nav>
-        <form method="get" class="per-page">
-
-            <input type="hidden" name="page_num" value="1">
-
-            <select name="per_page" onchange="this.form.submit()">
-                <?php foreach ([4, 8, 12] as $value): ?>
-                    <option value="<?= $value; ?>" <?= selected($per_page, $value, false); ?>>
-                        <?= $value; ?>
-                    </option>
-                <?php endforeach; ?>
-            </select>
-
-        </form>
     </div>
 </section>

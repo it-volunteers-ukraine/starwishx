@@ -10,6 +10,18 @@
   color: red;
 }
 
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 24px;
+}
+
+.load-more{
+  margin-left: auto;
+  margin-right: 30px;
+}
+
 .link-disabled {
   pointer-events: none;
   opacity: 0.5;

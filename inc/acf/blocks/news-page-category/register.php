@@ -17,4 +17,3 @@ acf_register_block_type([
     'category' => 'custom-blocks',
 ]);
 
-?>

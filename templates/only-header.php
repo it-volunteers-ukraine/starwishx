@@ -10,8 +10,8 @@ get_header(); // Подключаем header
 <main id="primary" class="site-main">
     <?php
     // Контент страницы или поста
-    if ( have_posts() ) :
-        while ( have_posts() ) : the_post();
+    if (have_posts()) :
+        while (have_posts()) : the_post();
             the_content();
         endwhile;
     endif;

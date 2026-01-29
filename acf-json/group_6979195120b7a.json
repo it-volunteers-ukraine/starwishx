@@ -1,0 +1,67 @@
+{
+    "key": "group_6979195120b7a",
+    "title": "Block Pagination",
+    "fields": [
+        {
+            "key": "field_6979195155350",
+            "label": "Per Page Array Data",
+            "name": "per_page_array_data",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "Для селектору \"кількість постів на сторінці\" через кому задати значення варіантів значень \"Кількість карток на сторінку\" PerPage. \r\nПриклад: 4,8,12. \r\nПусте поле - тоді селектор вибору не буде відображатися.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "60",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "4,8,12",
+            "maxlength": "",
+            "allow_in_bindings": 0,
+            "placeholder": "Введить через кому значення для селектору \"Карток на сторінці\"",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_69791a5955351",
+            "label": "Default Per Page",
+            "name": "default_per_page",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "Задайте \"Значення за замовчунням\" для визначення кількості карток для відображення. Тут мусить буди одне із значень з попереднього поля. Якщо нема значень, то тут просто задаеться число карток на сторінці, або для пагінації \"Показати більше\"",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "40",
+                "class": "",
+                "id": ""
+            },
+            "default_value": 12,
+            "maxlength": "",
+            "allow_in_bindings": 0,
+            "placeholder": "Введіть одне із чисел із селектору або будь яке чісло",
+            "prepend": "",
+            "append": ""
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "block",
+                "operator": "==",
+                "value": "acf\/pagination"
+            }
+        ]
+    ],
+    "menu_order": 0,
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": "",
+    "active": true,
+    "description": "",
+    "show_in_rest": 0,
+    "modified": 1769547325
+}

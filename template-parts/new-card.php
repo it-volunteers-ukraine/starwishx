@@ -37,13 +37,12 @@ $photo_alt = $photo['alt'] ?: ($photo['title'] ?? '');
 
 $categories_colors = get_field('categories_labels_color', 'options');
 $category_current_color = get_category_by_id($categories_colors, $term_id);
-// print_r($category_current_color);
 
 $label_color_text       = $category_current_color['label_color_text'] ?? 'white';
 $label_color_background = $category_current_color['label_color_background'] ?? 'grey';
 $label_color_border     = $category_current_color['label_color_border'] ?? 'grey';
 
-$item_label = esc_html($item->term_name);
+$item_label = esc_html($item->term_name ?? '');;
 
 
 ?>

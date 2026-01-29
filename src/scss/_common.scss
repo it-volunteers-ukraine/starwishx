@@ -2,6 +2,10 @@
 @use "mixins/color" as *;
 @use "mixins/media";
 
+:root {
+  color-scheme: light;
+}
+
 // * {
 //   box-sizing: border-box;
 //   margin: 0;

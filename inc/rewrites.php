@@ -40,4 +40,4 @@ add_filter('query_vars', function ($vars) {
     ]);
 });
 
-?>
+

@@ -32,6 +32,7 @@ global $wp;
 global $post;
 $base_url = home_url($wp->request);
 $news_page = $post;
+$post_name = $post->post_name;
 // print_r($news_page);
 $childrens = get_children([
     'post_parent' => $news_page->ID,
@@ -70,19 +71,19 @@ $terms = get_terms([
     'hide_empty' => false
 ]);
 
-function get_category_by_id($category_color, $category)
-{
-    foreach ($category_color as $cat_item) {
-        if ($cat_item['category'] == $category) {
-            return $cat_item;
-        }
-    }
-}
+// function get_category_by_id($category_color, $category)
+// {
+//     foreach ($category_color as $cat_item) {
+//         if ($cat_item['category'] == $category) {
+//             return $cat_item;
+//         }
+//     }
+// }
 
 // получение последних новостей
 $results = [];
 $query = new WP_Query([
-    'post_type'      => 'news',
+    'post_type'      => $post_name,
     'posts_per_page' => 8,   // сколько нужно вывести
     'orderby'        => 'date',
     'order'          => 'DESC',
@@ -114,7 +115,7 @@ $res_last_by_cat = [];
 // Получение с каждой категории по последнему посту
 foreach ($terms as $term) {
     $query = new WP_Query([
-        'post_type' => 'news',
+        'post_type' => $post_name,
         'posts_per_page' => 1,
         'tax_query' => [
             [
@@ -147,7 +148,7 @@ $last_one_by_category = $res_last_by_cat;
 $res_by_cat = [];
 foreach ($terms as $term) {
     $query = new WP_Query([
-        'post_type'      => 'news',
+        'post_type'      => $post_name,
         'posts_per_page' => 7,
         'tax_query'      => [
             [

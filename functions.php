@@ -314,6 +314,10 @@ add_action('wp_enqueue_scripts', function () {
   wp_enqueue_script('theme-contact-form');
 });
 
+// disable dark mode
+// add_action('wp_head', function () {
+//   echo '<meta name="color-scheme" content="light">';
+// });
 
 // init for Shared infrastructure
 require_once get_template_directory() . '/inc/shared/setup.php';
@@ -341,3 +345,8 @@ add_filter('single_template', function ($template) {
 
 // Для пагинации и фильтров
 require_once get_template_directory() . '/inc/rewrites.php';
+
+// для загрузки AJAX обработчиков
+require get_template_directory() . '/inc/ajax.php';
+
+require_once get_template_directory() . '/inc/helpers.php';
