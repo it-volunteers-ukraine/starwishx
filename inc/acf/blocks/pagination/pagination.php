@@ -9,6 +9,7 @@
 $default_classes = [
     'section' => 'section',
     'pagination' => 'pagination',
+    'pages' => 'pages',
     'pagination-section' => 'pagination-section',
     'selected' => 'selected',
     'link' => 'link',
@@ -57,9 +58,28 @@ $post_type = $parts[0] ?? null;
 // -----------------------------
 $page = isset($_GET['page_num']) ? max(1, (int) $_GET['page_num']) : 1;
 
-$allowed_per_page = [12, 8, 4];
+$btn_loadmore = get_field('text_button_loadmore');
+$btn_loading = get_field('text_button_loading');
+$default_per_page = get_field('default_per_page');
+print_r($default_per_page);
+$default_per_page_array_str = get_field('per_page_array_data');
+$default_per_page_array = array_reverse(
+    array_map('intval', explode(',', (string) $default_per_page_array_str))
+);
+print_r($default_per_page_array);
+echo "<br>";
+$default_per_page_is_empty = empty($default_per_page_array);
+
+$allowed_per_page = !$default_per_page_is_empty
+    ? $default_per_page_array
+    : [12, 8, 4];
+
+echo 'default_per_page: ' . $default_per_page;
 $per_page = isset($_GET['per_page']) ? (int) $_GET['per_page'] : 12;
-$per_page = in_array($per_page, $allowed_per_page) ? $per_page : 12;
+echo 'per_page: '. $per_page;
+$per_page = in_array($per_page, $allowed_per_page, true) ? $per_page : 12;
+echo 'per_page: '. $per_page;
+
 
 // echo 'request: ' . $wp_request . '<br>';
 // echo 'post_type: ' . $post_type . '<br>';
@@ -122,10 +142,11 @@ function pagination_url($base_url, $page, $per_page)
             <?php endif; ?>
             <?php $prev_disabled = $page == 1 ? true : false; ?>
 
-            <div>
+            <!-- <div class="<?php echo esc_attr($classes('pages')); ?>"> -->
+            <div >
                 <a id='pagination-prev'
-                    href="<?= pagination_url($base_url, $page - 1, $per_page); ?>" 
-                    class="" 
+                    href="<?= pagination_url($base_url, $page - 1, $per_page); ?>"
+                    class=""
                     data-link-disabled=<?php echo $prev_disabled; ?>
                     rel="prev">
                     &lt;
@@ -161,7 +182,7 @@ function pagination_url($base_url, $page, $per_page)
             <?php
             $load_next_page = $page < $total_pages ? $page + 1 : $total_pages;
             $load_more_disabled = $total_pages && $page >= $total_pages ? $classes['link-disabled'] : '';
-            $load_more_hidden = $total_pages && $page >= $total_pages ? "display: none" : 0; ;
+            $load_more_hidden = $total_pages && $page >= $total_pages ? "display: none" : 0;;
             ?>
             <button
                 id="load-more"
@@ -170,7 +191,7 @@ function pagination_url($base_url, $page, $per_page)
                 data-page="<?php echo $page; ?>"
                 data-category="<?= esc_attr(get_query_var('news_cat')); ?>"
                 data-per-page="<?= esc_attr($per_page); ?>"
-                style = "<?php echo $load_more_hidden; ?>"
+                style="<?php echo $load_more_hidden; ?>"
                 class="btn <?php echo esc_attr($classes["load-more"]); ?>  <?php echo esc_attr($load_more_disabled); ?>">
                 Load more
             </button>
@@ -185,7 +206,6 @@ function pagination_url($base_url, $page, $per_page)
                         </option>
                     <?php endforeach; ?>
                 </select>
-
             </form>
 
 

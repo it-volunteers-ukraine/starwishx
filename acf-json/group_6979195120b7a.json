@@ -3,6 +3,48 @@
     "title": "Block Pagination",
     "fields": [
         {
+            "key": "field_697c718eb98e3",
+            "label": "Text Button - LoadMore",
+            "name": "text_button_loadmore",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "Показати більше",
+            "maxlength": "",
+            "allow_in_bindings": 0,
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_697c71b7b98e4",
+            "label": "Text Button Loading",
+            "name": "text_button_loading",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "Завантаження...",
+            "maxlength": "",
+            "allow_in_bindings": 0,
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
             "key": "field_6979195155350",
             "label": "Per Page Array Data",
             "name": "per_page_array_data",
@@ -63,5 +105,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1769547325
+    "modified": 1769763382
 }
