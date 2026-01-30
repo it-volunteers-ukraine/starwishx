@@ -37,14 +37,6 @@ $terms = get_terms([
     'hide_empty' => false
 ]);
 
-function get_category_by_id ($category_color, $category){
-    foreach ($category_color as $cat_item) {
-        if ($cat_item['category'] == $category) {
-            return $cat_item;
-        }
-    }
-}
-
 $results = [];
 
 // Получение с каждой категории по последнему посту
