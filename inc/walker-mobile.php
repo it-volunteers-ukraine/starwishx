@@ -63,8 +63,9 @@ class Mobile_Menu_Walker extends Walker_Nav_Menu
 					foreach ($row as $ch) {
 						$img_id = get_field('images', $ch->ID);
 						$url    = $img_id ? wp_get_attachment_image_url($img_id, 'full') : '';
+						$alt    = $img_id ? get_post_meta($img_id, '_wp_attachment_image_alt', true) : '';
 						$output .= '<a class="mobile-submenu-item" href="' . esc_url(get_post_meta($ch->ID, '_menu_item_url', true)) . '">';
-						if ($url) $output .= '<img src="' . esc_url($url) . '" alt="" class="submenu-image">';
+						if ($url) $output .= '<img src="' . esc_url($url) . '" alt="' . esc_attr($alt) . '" class="submenu-image">';
 						$output .= '<span class="text">' . esc_html($ch->post_title) . '</span></a>';
 					}
 					$output .= '</div>';
