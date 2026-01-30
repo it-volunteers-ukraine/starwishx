@@ -35,7 +35,10 @@ if ($category_slug) {
 
 $current_post = $post; // чтобы не ломать $post
 while ($current_post) {
+    // echo remove_query_arg( [], get_permalink( $current_post ) );
+    // echo get_the_permalink($current_post);
     $breadcrumbs[] = [
+
         'title' => get_the_title($current_post),
         'link'  => get_permalink($current_post),
     ];
@@ -51,10 +54,13 @@ $breadcrumbs = array_reverse($breadcrumbs);
 // --- Подмена последнего элемента на категорию, если есть ---
 if ($term) {
     // Последний элемент массива — текущая страница
+    $url = strtok(home_url(add_query_arg([])), '?');
+    $url = rtrim($url, '/');
+
     $last_index = count($breadcrumbs) - 1;
     $breadcrumbs[$last_index] = [
         'title' => $term->name,
-        'link'  => '' // последняя, активная, не кликабельная
+        'link'  => $url // последняя, активная, не кликабельная
     ];
 }
 
@@ -79,11 +85,16 @@ $active_title = get_the_title();
                     </a>
                 </li>
                 <?php foreach ($breadcrumbs as $crumb): ?>
+                    <!-- <?php
+                            echo '<pre>';
+                            print_r($crumb);
+                            echo '</pre>';
+                            ?> -->
                     <li class="<?php echo esc_attr($classes["item"]); ?>">
                         <svg class="<?php echo esc_attr($classes["arrow-icon"]); ?>">
                             <use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-arrow"></use>
                         </svg>
-                        <a class="link-bc" href="<?php echo esc_url($crumb['link']); ?>">
+                        <a class="link-bc" href="<?php echo $crumb['link']; ?>">
                             <?php echo esc_html($crumb['title']); ?>
                         </a>
                     </li>

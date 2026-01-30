@@ -34,6 +34,12 @@ global $post;
 // echo '<pre>';
 // print_r($wp);
 // echo '</pre>';
+
+// echo '<pre>';
+// print_r($post);
+// echo '</pre>';
+
+
 $wp_request = $wp->request;
 $base_url = home_url($wp->request);
 $post_name = $post->post_name;
@@ -55,13 +61,13 @@ $allowed_per_page = [12, 8, 4];
 $per_page = isset($_GET['per_page']) ? (int) $_GET['per_page'] : 12;
 $per_page = in_array($per_page, $allowed_per_page) ? $per_page : 12;
 
-echo 'request: ' . $wp_request . '<br>';
-echo 'post_type: ' . $post_type . '<br>';
-echo 'post_name: ' . $post_name . '<br>';
-echo 'category: ' . $category . '<br>';
-echo 'category_slug: ' . $category_slug . '<br>';
-echo 'page: ' . $page . '<br>';
-echo 'per_page: ' . $per_page . '<br>';
+// echo 'request: ' . $wp_request . '<br>';
+// echo 'post_type: ' . $post_type . '<br>';
+// echo 'post_name: ' . $post_name . '<br>';
+// echo 'category: ' . $category . '<br>';
+// echo 'category_slug: ' . $category_slug . '<br>';
+// echo 'page: ' . $page . '<br>';
+// echo 'per_page: ' . $per_page . '<br>';
 // -----------------------------
 
 $query = new WP_Query([
@@ -85,8 +91,8 @@ $query = new WP_Query([
 
 $total_posts = (int) $query->found_posts;
 $total_pages = (int) ceil($total_posts / $per_page);
-echo 'total_posts: ' . $total_posts . '<br>';
-echo 'total_pages: ' . $total_pages . '<br>';
+// echo 'total_posts: ' . $total_posts . '<br>';
+// echo 'total_pages: ' . $total_pages . '<br>';
 
 // -----------------------------
 // 3. Fake total pages (optional)
@@ -161,7 +167,7 @@ function pagination_url($base_url, $page, $per_page)
                 id="load-more"
                 type="button"
                 data-post-type=<?php echo $post_name; ?>
-                data-page="1"
+                data-page="<?php echo $page; ?>"
                 data-category="<?= esc_attr(get_query_var('news_cat')); ?>"
                 data-per-page="<?= esc_attr($per_page); ?>"
                 style = "<?php echo $load_more_hidden; ?>"
