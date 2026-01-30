@@ -1,0 +1,221 @@
+@use "../variables" as *;
+
+// $heart-off: lightpink;
+$heart-off: $buttons-color-background-primary-disabled;
+$heart-on: $icon-color-error;
+$transition-duration: 200ms;
+$transition-ease: ease;
+
+@mixin transform($scale: 1, $rotate: 45deg) {
+    transform: scale($scale) rotate($rotate);
+}
+
+.heart {
+    position: relative;
+    --size: 11px;
+    width: var(--size);
+    height: var(--size);
+    cursor: pointer;
+    margin-right: 4px;
+
+    &__lines {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+    }
+
+    &__line {
+        position: absolute;
+        top: 15%;
+        left: 50%;
+        width: calc(var(--size) * 1.5);
+        height: calc(var(--size) * 0.2);
+        background: $heart-on;
+        border-radius: 50%;
+        opacity: 0;
+        transform: translate(-50%, -50%) rotate(var(--angle, 0deg)) scale(0);
+        transform-origin: center;
+    }
+
+    &__line:nth-child(1) {
+        --angle: 0deg;
+    }
+    &__line:nth-child(2) {
+        --angle: 60deg;
+    }
+    &__line:nth-child(3) {
+        --angle: 120deg;
+    }
+    &__line:nth-child(4) {
+        --angle: 180deg;
+    }
+    &__line:nth-child(5) {
+        --angle: 240deg;
+    }
+    &__line:nth-child(6) {
+        --angle: 300deg;
+    }
+
+    &__checkbox {
+        appearance: none;
+        position: absolute;
+        top: calc(var(--size) * -0.4);
+        left: calc(var(--size) * -0.2);
+        width: calc(var(--size) * 1.5);
+        height: calc(var(--size) * 1.5);
+        z-index: 2;
+        cursor: pointer;
+        @include transform;
+
+        &:focus {
+            outline: none;
+        }
+
+        &:hover ~ .heart__icon {
+            @include transform($scale: 1.1);
+        }
+
+        &:checked ~ .heart__icon {
+            animation: heartAnimation forwards 1s;
+        }
+
+        &:checked ~ .heart__lines .heart__line {
+            animation: heartLines 800ms ease-out forwards;
+        }
+    }
+
+    &__icon {
+        width: var(--size);
+        height: var(--size);
+        background: $heart-off;
+        @include transform;
+        position: absolute;
+        top: 0;
+        left: 0;
+        transition: transform 200ms ease-out;
+
+        &::before,
+        &::after {
+            content: "";
+            display: block;
+            background: inherit;
+            width: var(--size);
+            height: var(--size);
+            border-radius: 50%;
+            position: absolute;
+        }
+
+        &::before {
+            top: 0;
+            left: -50%;
+        }
+
+        &::after {
+            left: 0;
+            top: -50%;
+        }
+    }
+}
+
+@keyframes heartAnimation {
+    0% {
+        @include transform($scale: 1.1);
+    }
+
+    25% {
+        @include transform($scale: 0.7);
+    }
+
+    45% {
+        @include transform($scale: 1.4);
+        background: $heart-on;
+    }
+
+    70% {
+        @include transform($scale: 1);
+        background: $heart-on;
+    }
+
+    100% {
+        @include transform($scale: 1.1);
+        background: $heart-on;
+    }
+}
+
+.heart-label {
+    cursor: pointer;
+    margin-right: 14px;
+    text-align: right;
+}
+
+/* make the two spans overlap but the container size equals the larger text */
+.heart-label__text {
+    display: inline-grid; // container sized to the largest child
+    align-items: center;
+    position: relative;
+    white-space: nowrap;
+}
+
+/* both spans sit in the same grid cell */
+.heart-label__text > span {
+    grid-area: 1 / 1; // stack them
+    transition:
+        opacity $transition-duration $transition-ease,
+        transform $transition-duration $transition-ease,
+        visibility 0s linear $transition-duration; // visibility delayed
+    will-change: opacity, transform;
+    pointer-events: none; // prevent the hidden one from catching events
+}
+
+/* default (not favorite) */
+.heart-label__text--inactive {
+    opacity: 1;
+    transform: translateY(0);
+    visibility: visible;
+}
+
+.heart-label__text--active {
+    opacity: 0;
+    transform: translateY(0.15em); /* small offset for a subtle slide in/out */
+    visibility: hidden;
+}
+
+/* when .is-active is present, swap roles */
+.heart-label.is-active {
+    /* inactive fades out and becomes hidden after the fade */
+    .heart-label__text--inactive {
+        opacity: 0;
+        transform: translateY(-0.15em);
+        visibility: hidden; /* delayed by transition rule on the element */
+        transition:
+            opacity $transition-duration $transition-ease,
+            transform $transition-duration $transition-ease,
+            visibility 0s linear $transition-duration;
+    }
+
+    /* active fades in immediately */
+    .heart-label__text--active {
+        opacity: 1;
+        transform: translateY(0);
+        visibility: visible; /* made visible immediately when class toggles */
+        transition:
+            opacity $transition-duration $transition-ease,
+            transform $transition-duration $transition-ease,
+            visibility 0s linear 0s;
+    }
+}
+
+@keyframes heartLines {
+    0% {
+        opacity: 0;
+        transform: translate(-50%, -50%) rotate(var(--angle, 0deg)) scale(0);
+    }
+    40% {
+        opacity: 1;
+        transform: translate(-50%, -50%) rotate(var(--angle, 0deg)) scale(1);
+    }
+    100% {
+        opacity: 0;
+        transform: translate(-50%, -50%) rotate(var(--angle, 0deg)) scale(2);
+    }
+}

@@ -37,6 +37,20 @@ $seeker_ids     = get_field('opportunity_seekers'); // Array of IDs
 // Dates (ACF returns d/m/Y per config)
 $date_start = get_field('opportunity_date_starts');
 $date_end   = get_field('opportunity_date_ends');
+$date_start_iso = '';
+$date_end_iso = '';
+if ($date_start) {
+    $date_obj = DateTime::createFromFormat('d/m/Y', $date_start);
+    if ($date_obj) {
+        $date_start_iso = $date_obj->format('Y-m-d');
+    }
+}
+if ($date_end) {
+    $date_obj = DateTime::createFromFormat('d/m/Y', $date_end);
+    if ($date_obj) {
+        $date_end_iso = $date_obj->format('Y-m-d');
+    }
+}
 
 // Content
 $description  = get_field('opportunity_description');
