@@ -5,13 +5,15 @@
  *
  * @var array $args
  */
+$args = $args ?? []; // Prevent "undefined variable" 
 
-$count_news = $args['count_news'] ?? 8;
-$title = $args['title'] ?? null;
-$line_clamp = $args['line_clamp'] ?? 3;
+$count_news  = $args['count_news'] ?? 8;
+$title       = $args['title'] ?? null;
+$title_class = $args['title_class'] ?? "h3";
+$line_clamp  = $args['line_clamp'] ?? 3;
 
-$category = 'category-oportunities';
-$post_type = 'news';
+$category    = 'category-oportunities';
+$post_type   = 'news';
 
 $results = [];
 $query = new WP_Query([
@@ -43,7 +45,9 @@ $news_last = $results;
 
 <?php if ($news_last) : ?>
     <?php if ($title) : ?>
-        <h2 class="h3 lnew-main_title"><?php echo esc_html($title); ?></h2>
+        <h2 class="lnew-main_title <?php echo esc_html($title_class); ?>">
+            <?php echo esc_html($title); ?>
+        </h2>
     <?php endif; ?>
     <?php foreach ($news_last as $item) : ?>
         <?php
