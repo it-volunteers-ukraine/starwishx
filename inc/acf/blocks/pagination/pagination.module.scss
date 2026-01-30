@@ -6,9 +6,11 @@
   padding-bottom: 0;
 }
 
-.selected {
+a[data-is-active="1"] {
   color: red;
 }
+
+
 
 .pagination {
   display: flex;
@@ -22,7 +24,7 @@
   margin-right: 30px;
 }
 
-.link-disabled {
+.link-disabled, a[data-link-disabled="1"] {
   pointer-events: none;
   opacity: 0.5;
 }
