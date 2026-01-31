@@ -68,7 +68,7 @@
                 </div>
                 <!-- 3-state Button Login / Cabinet / Logout -->
                 <div class="header-right">
-                    <?php get_template_part('template-parts/header-launchpad-control', null, ['variant' => 'desktop']); ?>
+                    <?php get_template_part('template-parts/control-header-auth', null, ['variant' => 'desktop']); ?>
                 </div>
                 <!-- Mobile menu -->
                 <div class="burger-menu">
@@ -83,7 +83,7 @@
                         'depth'          => 2,
                     ]);
                     ?>
-                    <?php get_template_part('template-parts/header-launchpad-control', null, ['variant' => 'mobile']); ?>
+                    <?php get_template_part('template-parts/control-header-auth', null, ['variant' => 'mobile']); ?>
                 </div>
             </div>
         </div>

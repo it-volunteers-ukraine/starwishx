@@ -39,6 +39,7 @@
 }
 
 .header {
+  .header-desktop-btn,
   .header-logout-btn,
   .header-cabinet-btn,
   .header-login-btn {
@@ -54,6 +55,7 @@
     font-size: 18px;
   }
 
+  .header-desktop-btn:hover,
   .header-logout-btn:hover,
   .header-cabinet-btn:hover,
   .header-login-btn:hover {
@@ -502,6 +504,7 @@
     }
   }
 
+  .header-mobile-btn,
   .cabinet-button-mobile,
   .logout-button-mobile,
   .login-button-mobile {

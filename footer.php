@@ -20,10 +20,10 @@ $linkedin_link = esc_html(get_field('linkedin_link', 'options'));
 
 <footer class="footer">
     <div class="container">
-        <h4 class="footer-title"><?php echo $footer_title; ?></h4>
+        <h2 class="footer-title"><?php echo $footer_title; ?></h2>
         <div class="footer-inner">
             <div class="footer-socwraper">
-                <h4 class="footer-title title-socblock"><?php echo $footer_title; ?></h4>
+                <h3 class="footer-title title-socblock"><?php echo $footer_title; ?></h3>
                 <ul class="socblock">
                     <?php if ($email_text && $email_link): ?>
                         <li class="socblock-item">
@@ -32,8 +32,9 @@ $linkedin_link = esc_html(get_field('linkedin_link', 'options'));
                                     <use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-email"></use>
                                 </svg>
                                 <span>
-                                    <?php echo $email_text; ?></a>
-                            </span>
+                                    <?php echo $email_text; ?>
+                                </span>
+                            </a>
                         </li>
                     <?php endif; ?>
                     <?php if ($telegram_text && $telegram_link): ?>
@@ -43,10 +44,10 @@ $linkedin_link = esc_html(get_field('linkedin_link', 'options'));
                                     <use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-telegram"></use>
                                 </svg>
                                 <span>
-                                    <?php echo $telegram_title; ?></a>
-                            </span>
+                                    <?php echo $telegram_title; ?>
+                                </span>
+                            </a>
                         </li>
-
                     <?php endif; ?>
                     <?php if ($linkedin_text && $linkedin_link): ?>
                         <li class="socblock-item">
@@ -55,8 +56,9 @@ $linkedin_link = esc_html(get_field('linkedin_link', 'options'));
                                     <use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-linkedin"></use>
                                 </svg>
                                 <span>
-                                    <?php echo $linkedin_title; ?></a>
-                            </span>
+                                    <?php echo $linkedin_title; ?>
+                                </span>
+                            </a>
                         </li>
                     <?php endif; ?>
                 </ul>

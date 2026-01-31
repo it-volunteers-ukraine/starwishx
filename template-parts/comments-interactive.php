@@ -50,14 +50,14 @@ wp_interactivity_state('launchpadComments', [
 ]);
 ?>
 
-<section id="comments" class="comments-area"
+<footer id="comments" class="comments-area"
     data-wp-interactive="launchpadComments"
     data-wp-context='{ "postId": <?php echo $post_id; ?> }'>
 
     <!-- HEADER SECTION -->
-    <header class="comments-header">
+    <div class="comments-header" aria-labelledby="reviews-heading">
         <div class="comments-header__info">
-            <h5 class="h5"><?php esc_html_e('Reviews', 'starwishx'); ?></h5>
+            <h5 id="reviews-heading" class="h5"><?php esc_html_e('Reviews', 'starwishx'); ?></h5>
 
             <!-- LOGIC MOVED TO GETTER: hasRatings -->
             <span class="rating-badge" data-wp-bind--hidden="!state.hasRatings">
@@ -87,7 +87,7 @@ wp_interactivity_state('launchpadComments', [
                 <?php esc_html_e('Enter to comment', 'starwishx'); ?>
             </a>
         <?php endif; ?>
-    </header>
+    </div>
 
     <!-- <div class="alert error" data-wp-bind--hidden="!state.error" data-wp-text="state.error"></div> -->
 
@@ -386,4 +386,4 @@ wp_interactivity_state('launchpadComments', [
             <span data-wp-bind--hidden="!state.isLoading"><?php esc_html_e('Loading...', 'starwishx'); ?></span>
         </button>
     </div>
-</section>
+</footer>

@@ -6,6 +6,7 @@
   "type": "module",
   "scripts": {
     "dev": "gulp",
+    "start": "gulp --gulpfile gulpfile.nobs.js",
     "build": "gulp build --prod",
     "style:lint": "stylelint 'src/**/*.scss' --customSyntax postcss-scss",
     "style:fix": "stylelint 'src/**/*.scss' --customSyntax postcss-scss --fix"
