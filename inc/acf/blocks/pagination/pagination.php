@@ -9,13 +9,21 @@
 $default_classes = [
     'section' => 'section',
     'pagination' => 'pagination',
-    'pages' => 'pages',
     'pagination-section' => 'pagination-section',
+    'pages' => 'pages',
+    'form-select-perpage' => 'form-select-perpage',
+    'select-perpage' => 'select-perpage',
+
     'selected' => 'selected',
+    'nav-arrow' => 'nav-arrow',
+    'nav-arrow-rotate' => 'nav-arrow-rotate',
+    'nav-icon' => 'nav-icon',
     'link' => 'link',
     'link-disabled' => 'link-disabled',
+    'page-num' => 'page-num',
+
     'arrow-icon' => 'arrow-icon',
-    'load-more' => 'load-more',
+    'load-more' => 'load-more'
 
 ];
 
@@ -41,6 +49,7 @@ global $post;
 // echo '</pre>';
 
 
+
 $wp_request = $wp->request;
 $base_url = home_url($wp->request);
 $post_name = $post->post_name;
@@ -61,24 +70,28 @@ $page = isset($_GET['page_num']) ? max(1, (int) $_GET['page_num']) : 1;
 $btn_loadmore = get_field('text_button_loadmore');
 $btn_loading = get_field('text_button_loading');
 $default_per_page = get_field('default_per_page');
-print_r($default_per_page);
 $default_per_page_array_str = get_field('per_page_array_data');
-$default_per_page_array = array_reverse(
-    array_map('intval', explode(',', (string) $default_per_page_array_str))
-);
-print_r($default_per_page_array);
-echo "<br>";
-$default_per_page_is_empty = empty($default_per_page_array);
+// echo '<pre>';
+// var_dump($default_per_page_array_str);
+// echo '</pre>';
+// echo 'btn_loadmore: ' . $btn_loadmore . '<br>';
+// echo 'btn_loading: ' . $btn_loading . '<br>';
+// echo 'default_per_page: ' . $default_per_page . '<br>';
+// echo 'default_per_page_array_str: ' . $default_per_page_array_str . '<br>';
+$default_per_page_array = 
+array_reverse(array_map('intval', explode(',', (string) $default_per_page_array_str)));
+// echo '<pre>';
+// var_dump($default_per_page_array);
+// echo '</pre>';
 
-$allowed_per_page = !$default_per_page_is_empty
+$default_per_page_array_is_empty = empty($default_per_page_array_str);
+// var_dump($default_per_page_array_is_empty);
+$allowed_per_page = !$default_per_page_array_is_empty
     ? $default_per_page_array
     : [12, 8, 4];
 
-echo 'default_per_page: ' . $default_per_page;
 $per_page = isset($_GET['per_page']) ? (int) $_GET['per_page'] : 12;
-echo 'per_page: '. $per_page;
 $per_page = in_array($per_page, $allowed_per_page, true) ? $per_page : 12;
-echo 'per_page: '. $per_page;
 
 
 // echo 'request: ' . $wp_request . '<br>';
@@ -114,11 +127,6 @@ $total_pages = (int) ceil($total_posts / $per_page);
 // echo 'total_posts: ' . $total_posts . '<br>';
 // echo 'total_pages: ' . $total_pages . '<br>';
 
-// -----------------------------
-// 3. Fake total pages (optional)
-// -----------------------------
-// Если не знаешь сколько страниц — можно убрать стрелки
-// $total_pages = 999; // или null
 
 // -----------------------------
 // 4. URL builder
@@ -142,14 +150,15 @@ function pagination_url($base_url, $page, $per_page)
             <?php endif; ?>
             <?php $prev_disabled = $page == 1 ? true : false; ?>
 
-            <!-- <div class="<?php echo esc_attr($classes('pages')); ?>"> -->
-            <div >
+            <div class="btn-text-medium <?php echo esc_attr($classes['pages']); ?>">
                 <a id='pagination-prev'
                     href="<?= pagination_url($base_url, $page - 1, $per_page); ?>"
-                    class=""
+                    class="<?php echo esc_attr($classes['nav-arrow']); ?> <?php echo esc_attr($classes['nav-arrow-rotate']); ?>"
                     data-link-disabled=<?php echo $prev_disabled; ?>
                     rel="prev">
-                    &lt;
+                    <svg class="<?php echo esc_attr($classes["nav-icon"]); ?>">
+                        <use href="<?php echo get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-arrow"></use>
+                    </svg>
                 </a>
 
                 <!-- Numbers -->
@@ -166,7 +175,7 @@ function pagination_url($base_url, $page, $per_page)
                     <a id='pagination-<?php echo $count; ?>' href="<?= pagination_url($base_url, $i, $per_page); ?>"
                         data-is-active="<?php echo $is_active; ?>"
                         data-link-disabled="<?php echo $link_disabled ? 1 : 0; ?>"
-                        class="">
+                        class="<?php echo esc_attr($classes['page-num']); ?>">
                         <?= $i; ?>
                     </a>
                     <?php $count++; ?>
@@ -174,8 +183,13 @@ function pagination_url($base_url, $page, $per_page)
 
                 <!-- Next -->
                 <?php $next_disabled = $total_pages && $page >= $total_pages ? $classes['link-disabled'] : ''; ?>
-                <a id='pagination-next' href="<?= pagination_url($base_url, $page + 1, $per_page); ?>" class="<?php echo $next_disabled; ?> " rel="next">
-                    &gt;
+                <a id='pagination-next'
+                    href="<?= pagination_url($base_url, $page + 1, $per_page); ?>"
+                    class="<?php echo esc_attr($classes['nav-arrow']); ?>"
+                    rel="next">
+                    <svg class="<?php echo esc_attr($classes["nav-icon"]); ?>">
+                        <use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-arrow"></use>
+                    </svg>
                 </a>
 
             </div>
@@ -191,22 +205,26 @@ function pagination_url($base_url, $page, $per_page)
                 data-page="<?php echo $page; ?>"
                 data-category="<?= esc_attr(get_query_var('news_cat')); ?>"
                 data-per-page="<?= esc_attr($per_page); ?>"
+                data-text-loadmore=<?php echo $btn_loadmore; ?>
+                data-text-loading=<?php echo $btn_loading; ?>
                 style="<?php echo $load_more_hidden; ?>"
                 class="btn <?php echo esc_attr($classes["load-more"]); ?>  <?php echo esc_attr($load_more_disabled); ?>">
-                Load more
+                <?php echo $btn_loadmore; ?>
             </button>
-            <form method="get" class="per-page">
+            <?php if (!$default_per_page_array_is_empty) : ?>
+                <form method="get" class="<?php echo esc_attr($classes['form-select-perpage']); ?>">
 
-                <input type="hidden" name="page_num" value="1">
+                    <input type="hidden" name="page_num" value="1">
 
-                <select name="per_page" onchange="this.form.submit()">
-                    <?php foreach ([4, 8, 12] as $value): ?>
-                        <option value="<?= $value; ?>" <?= selected($per_page, $value, false); ?>>
-                            <?= $value; ?>
-                        </option>
-                    <?php endforeach; ?>
-                </select>
-            </form>
+                    <select name="per_page" class="btn-text-medium <?php echo esc_attr($classes["select-perpage"]); ?>" onchange="this.form.submit()">
+                        <?php foreach ([4, 8, 12] as $value): ?>
+                            <option value="<?= $value; ?>" <?= selected($per_page, $value, false); ?>>
+                                <?= $value; ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                </form>
+            <?php endif; ?>
 
 
 
