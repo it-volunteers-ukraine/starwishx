@@ -182,10 +182,11 @@ function pagination_url($base_url, $page, $per_page)
                 <?php endfor; ?>
 
                 <!-- Next -->
-                <?php $next_disabled = $total_pages && $page >= $total_pages ? $classes['link-disabled'] : ''; ?>
+                <?php $next_disabled = $total_pages && $page >= $total_pages ? true : false; ?>
                 <a id='pagination-next'
                     href="<?= pagination_url($base_url, $page + 1, $per_page); ?>"
                     class="<?php echo esc_attr($classes['nav-arrow']); ?>"
+                    data-link-disabled=<?php echo $next_disabled; ?>
                     rel="next">
                     <svg class="<?php echo esc_attr($classes["nav-icon"]); ?>">
                         <use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-arrow"></use>
