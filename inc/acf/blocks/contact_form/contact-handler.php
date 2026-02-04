@@ -16,6 +16,8 @@ add_action('wp_ajax_nopriv_send_contact_form', 'theme_send_contact_form');
 
 function theme_send_contact_form()
 {
+    define('MESSAGE_MAX_LENGTH', 500);
+
     if (strtoupper($_SERVER['REQUEST_METHOD'] ?? '') !== 'POST') {
         wp_send_json_error(['message' => 'Invalid request method'], 405);
     }
@@ -45,6 +47,10 @@ function theme_send_contact_form()
     }
     // Sanitization with our helpers from File: inc/theme-helpers.php
     $name    = sw_sanitize_text_field($raw_name);
+    if (mb_strlen($raw_message, 'UTF-8') > MESSAGE_MAX_LENGTH) {
+        $raw_message = mb_substr($raw_message, 0, MESSAGE_MAX_LENGTH, 'UTF-8');
+        $raw_message .= "\n\n--- [Частина повідомлення була видалена через перевищення ліміту в " . MESSAGE_MAX_LENGTH . " символів] ---";
+    }
     $message = sw_sanitize_textarea_field($raw_message);
     $email   = sanitize_email($raw_email);
     // Double check email validation after sanitize
