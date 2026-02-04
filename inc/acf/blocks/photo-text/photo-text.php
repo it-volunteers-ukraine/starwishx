@@ -54,10 +54,9 @@ if (file_exists($modules_file)) {
                     <img src="<?php echo get_template_directory_uri(); ?>/assets/img/star1-bg.png" class="<?php echo esc_attr($classes['icon-bg']); ?>" alt="">
                     <svg class="<?php echo esc_attr($classes['icon-mask']); ?>">
                         <use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-element_planet_3-circle"></use>
-                    </svg> 
+                    </svg>
                 </div>
             </div>
         </div>
-    </div>
     </div>
 </section>
