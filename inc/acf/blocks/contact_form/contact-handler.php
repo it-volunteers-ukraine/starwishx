@@ -30,6 +30,16 @@ function theme_send_contact_form()
     $raw_email   = $_POST['email']   ?? '';
     $raw_phone   = $_POST['phone']   ?? '';
 
+    if (!empty($raw_email)) {
+        // Validate RAW data
+        $domain_part = explode('@', $raw_email)[1] ?? '';
+        if (!is_email($raw_email) || strpos($domain_part, '.') === false) {
+            wp_send_json_error(['message' => 'Вказано невірний формат Email'], 422);
+        }
+    } else {
+        wp_send_json_error(['message' => 'Коректно заповніть поле Email'], 422);
+    }
+
     if (sw_contains_url($raw_name)) {
         wp_send_json_error(['message' => 'Посилання у полях заборонені'], 422);
     }
@@ -37,6 +47,15 @@ function theme_send_contact_form()
     $name    = sw_sanitize_text_field($raw_name);
     $message = sw_sanitize_textarea_field($raw_message);
     $email   = sanitize_email($raw_email);
+    // Double check email validation after sanitize
+    if (!empty($email)) {
+        if (!is_email($email) || strpos(explode('@', $email)[1] ?? '', '.') === false) {
+            wp_send_json_error(['message' => 'Вказано невірний формат Email'], 422);
+        }
+    } else {
+        wp_send_json_error(['message' => 'Коректно заповніть поле Email'], 422);
+    }
+
     // Optional for phone. "+" is processed Ok. Keep sanitize_text_field() instead in other case
     $phone   = sw_sanitize_text_field($raw_phone);
 
@@ -44,12 +63,6 @@ function theme_send_contact_form()
         wp_send_json_error(['message' => 'Заповніть необхідні поля'], 422);
     }
 
-    // Email validation: optional — only validate if provided
-    if (!empty($email)) {
-        if (!is_email($email) || strpos(explode('@', $email)[1] ?? '', '.') === false) {
-            wp_send_json_error(['message' => 'Вказано невірний формат Email'], 422);
-        }
-    }
     $email_to = get_field('email_link', 'option') ?: get_option('admin_email');
     $subject  = sprintf('Повідомлення з сайту від %s', $name);
 
