@@ -156,6 +156,7 @@
   border-radius: 12px;
   transition: border-color 0.2s ease;
   background-color: $surface-primary;
+  word-break: break-all;
 }
 
 .contact-form-field,
