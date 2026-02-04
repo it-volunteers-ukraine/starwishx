@@ -1,4 +1,5 @@
 @use "../../../../src/scss/variables" as *;
+@use "../../../../src/scss/mixins/media" as *;
 
 .title {
   color: $text-dark;
@@ -23,6 +24,7 @@
 
 .photo {
   max-width: 544px;
+  align-self: center;
 }
 
 .photo img {
@@ -68,9 +70,9 @@
   }
 }
 
-@media screen and (min-width: 768px) {
+@include min-tablet {
   .container {
-    max-width: 768px;
+    max-width: $width-tablet;
   }
 
   .title {
@@ -95,7 +97,7 @@
   }
 }
 
-@media screen and (min-width: 1440px) {
+@include min-laptop {
   .container {
     max-width: 750px;
   }
@@ -105,7 +107,7 @@
   }
 }
 
-@media screen and (min-width: 1920px) {
+@include min-desktop {
   .container {
     max-width: 1030px;
   }
