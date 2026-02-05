@@ -1,7 +1,18 @@
+console.log("~!!!!!");
 const btn = document.getElementById('load-more');
 const container = document.querySelector('.cards-list');
 
-if (btn && container) {
+
+// if (!btn) return;
+// if (!btn && !btn.dataset) {
+
+// console.log('textLoadMore: ', textLoadMore);
+// console.log('textLoading: ', textLoading);
+
+// if (btn && btn.dataset?.textLoadmore != null && btn.dataset?.textLoading != null && container) {
+if (btn?.dataset?.textLoadmore && container) {
+    const textLoadMore = btn.dataset.textLoadmore;
+    const textLoading = btn.dataset.textLoading;
     btn.addEventListener('click', () => {
         let page = parseInt(btn.dataset.page, 10) + 1;
         const perPage = btn.dataset.perPage;
@@ -9,7 +20,7 @@ if (btn && container) {
         const postType = btn.dataset.postType;
 
         btn.disabled = true;
-        btn.textContent = 'Loading...';
+        btn.textContent = textLoading;
 
         const params = new URLSearchParams({
             action: 'load_news',
@@ -32,7 +43,7 @@ if (btn && container) {
                 // Обновляем dataset страницы
                 btn.dataset.page = page;
                 btn.disabled = false;
-                btn.textContent = 'Load more';
+                btn.textContent = textLoadMore;
 
                 // Если достигли конца
                 if (resPage >= resTotalPage) {
@@ -63,7 +74,7 @@ if (btn && container) {
                     const pageLink = document.getElementById(`pagination-${i}`);
                     if (!pageLink) continue;
 
-                    const newPageNum = startNum + i -1;
+                    const newPageNum = startNum + i - 1;
 
                     pageLink.innerText = newPageNum;
                     pageLink.href = updateQueryString(pageLink.href, 'page_num', newPageNum);

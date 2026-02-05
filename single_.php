@@ -7,6 +7,7 @@ get_header();
         <div class="container">
 
             <?php
+            echo "@!!@!@!@!@!@";
             while ( have_posts() ) :
                 the_post();
 

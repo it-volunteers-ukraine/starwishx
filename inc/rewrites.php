@@ -2,42 +2,37 @@
 if (!defined('ABSPATH')) exit;
 
 /**
- * Rewrite rules for pages with category in URL
- * /news/{category}/
- * /opportunities/{category}/
- *
- * Pagination and per_page are handled via GET params:
- * ?page=2&per_page=8
+ * Rewrite rules for news:
+ * 1) /news/{category}/       - категория
+ * 2) /news/{slug}/           - одиночный пост
  */
 
+// Инициализация rewrite
 add_action('init', function () {
 
-    $pages = [
-        'news-by-category' => [
-            'query_var' => 'news_cat',
-            'parent' => 'news'
-        ],
-    ];
+    $single_template_slug = 'news-template'; // страница для одиночного поста
+    $category_page_slug = 'news-by-category'; // страница категорий
+    $category_parent = 'news';
 
-    foreach ($pages as $slug => $config) {
+    // ----- 1) Для одиночных постов -----
+    add_rewrite_rule(
+        '^news/([^/]+)/?$',
+        'index.php?pagename=' . $single_template_slug . '&news_slug=$matches[1]',
+        'top'
+    );
 
-        $parent = $config['parent'] ?? '';
-        $pagename = $parent ? $parent . '/' . $slug : $slug;
+    // ----- 2) Для категорий -----
+    add_rewrite_rule(
+        "^{$category_parent}/{$category_page_slug}/([^/]+)/?$",
+        "index.php?pagename={$category_parent}/{$category_page_slug}&news_cat=\$matches[1]",
+        'top'
+    );
 
-        // Для страницы с категорией
-        add_rewrite_rule(
-            "^{$parent}/{$slug}/([^/]+)/?$",
-            "index.php?pagename={$pagename}&{$config['query_var']}=\$matches[1]",
-            'top'
-        );
-    }
 });
 
-// Query vars
+// Добавляем query vars
 add_filter('query_vars', function ($vars) {
-    return array_merge($vars, [
-        'news_cat',
-    ]);
+    $vars[] = 'news_slug';
+    $vars[] = 'news_cat';
+    return $vars;
 });
-
-

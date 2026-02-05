@@ -206,8 +206,8 @@ function pagination_url($base_url, $page, $per_page)
                 data-page="<?php echo $page; ?>"
                 data-category="<?= esc_attr(get_query_var('news_cat')); ?>"
                 data-per-page="<?= esc_attr($per_page); ?>"
-                data-text-loadmore=<?php echo $btn_loadmore; ?>
-                data-text-loading=<?php echo $btn_loading; ?>
+                data-text-loadmore="<?php echo $btn_loadmore; ?>"
+                data-text-loading="<?php echo $btn_loading; ?>"
                 style="<?php echo $load_more_hidden; ?>"
                 class="btn <?php echo esc_attr($classes["load-more"]); ?>  <?php echo esc_attr($load_more_disabled); ?>">
                 <?php echo $btn_loadmore; ?>
