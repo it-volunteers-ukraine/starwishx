@@ -1,5 +1,7 @@
 @use "../../../../src/scss/variables" as *;
 @use "../../../../src/scss/mixins/media" as *;
+@use "../../../../src/scss/mixins/label"; 
+@use "../../../../src/scss/mixins/indents"; 
 
 %flex-col {
   display: flex;
@@ -45,31 +47,10 @@
 }
 
 .contact-title-small {
-  @extend %text-base;
-
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 113px;
-  height: 29px;
-  padding: 6px 10px;
-  font-size: 14px;
-  line-height: 120%;
-  text-transform: uppercase;
-  color: $element-block-text;
-  background-color: $element-card-cult-fill;
-  border: 2px solid $element-card-cult-stroke;
-  border-radius: 40px;
-  gap: 4px;
-
-  &::before {
-    content: "";
-    width: 4px;
-    height: 4px;
-    border-radius: 50%;
-    background-color: currentcolor;
-    flex-shrink: 0;
-  }
+  @include label.label-dot; 
+  @include indents.label-subtitle; 
+  
+  
 }
 
 .contact-title-medium {
@@ -483,18 +464,7 @@ textarea::placeholder {
     height: 54px;
   }
 
-  .contact-title-small {
-    width: 133px;
-    height: 35px;
-    font-size: 16px;
-    gap: 6px;
-    padding: 10px 12px;
-  }
-
-  .contact-title-small::before {
-    width: 6px;
-    height: 6px;
-  }
+  
 
   .contact-form {
     width: 690px;
