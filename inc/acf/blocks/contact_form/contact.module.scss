@@ -49,7 +49,10 @@
 .contact-title-small {
   @include label.label-dot; 
   @include indents.label-subtitle; 
-  
+
+  background-color: $element-card-cult-fill;
+  border-color: $element-card-cult-stroke;
+  align-self: flex-start;
   
 }
 
