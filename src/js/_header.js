@@ -108,7 +108,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const formSearch = document.getElementById('form-search');
   const formSearchInputRef = formSearch.querySelector('.search-input');
   const formClearRef = formSearch.querySelector('.form-clear-btn');
-  const formSpeachRef = formSearch.querySelector('.speech');
+  const formSpeechRef = formSearch.querySelector('.speech');
   
   formClearRef.addEventListener('click', () => {
     formSearchInputRef.value = "";
@@ -155,10 +155,13 @@ document.addEventListener('DOMContentLoaded', () => {
     recognition.interimResults = false; // только финальный текст
     recognition.continuous = false; // одна фраза
   
-    formSpeachRef.addEventListener('click', () => {
-      console.log('record start');
-      recognition.start();
-    });
+    if (formSpeechRef){
+      formSpeechRef.addEventListener('click', () => {
+        console.log('record start');
+        recognition.start();
+      });
+
+    }
   
     recognition.onresult = e => {
       const text = e.results[0][0].transcript;
