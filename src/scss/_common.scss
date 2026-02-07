@@ -592,3 +592,44 @@ img {
 
   // background-image: url('icon-active.svg');
 }
+
+/* Modal */
+.modal {
+  padding-left: 16px;
+  padding-right: 16px;
+
+  /* display: none; */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  padding-top: 100px; /* Location of the box */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: $background-modal; /* Black w/ opacity */
+  opacity: 0;
+  visibility: hidden;
+  transition: 0.3s;
+}
+
+.modal.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.modal-content {
+  margin: auto;
+  display: block;
+  width: 80%;
+  max-width: 700px;
+}
+
+.modal-main{
+  margin-left: auto;
+  margin-right: auto;
+  padding: 16px;
+  width: auto;
+  background-color: $surface-violet;
+  border-radius: $modal-radius;
+}
