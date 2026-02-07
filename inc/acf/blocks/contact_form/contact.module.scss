@@ -1,5 +1,7 @@
 @use "../../../../src/scss/variables" as *;
 @use "../../../../src/scss/mixins/media" as *;
+@use "../../../../src/scss/mixins/label"; 
+@use "../../../../src/scss/mixins/indents"; 
 
 %flex-col {
   display: flex;
@@ -45,31 +47,13 @@
 }
 
 .contact-title-small {
-  @extend %text-base;
+  @include label.label-dot; 
+  @include indents.label-subtitle; 
 
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 113px;
-  height: 29px;
-  padding: 6px 10px;
-  font-size: 14px;
-  line-height: 120%;
-  text-transform: uppercase;
-  color: $element-block-text;
   background-color: $element-card-cult-fill;
-  border: 2px solid $element-card-cult-stroke;
-  border-radius: 40px;
-  gap: 4px;
-
-  &::before {
-    content: "";
-    width: 4px;
-    height: 4px;
-    border-radius: 50%;
-    background-color: currentcolor;
-    flex-shrink: 0;
-  }
+  border-color: $element-card-cult-stroke;
+  align-self: flex-start;
+  
 }
 
 .contact-title-medium {
@@ -236,8 +220,7 @@
 }
 
 .contact-submit {
-  width: 138px;
-  height: 44px;
+  padding: 12px 24px;
   font-size: 16px;
   font-weight: 500;
   line-height: 120%;
@@ -247,7 +230,7 @@
   border-radius: 40px;
   cursor: pointer;
   transition: background-color 0.3s ease;
-  align-self: flex-end;
+  margin-left: auto;
   text-align: center;
 
   &:hover {
@@ -392,10 +375,7 @@ textarea::placeholder {
     flex: 1 1 100%;
   }
 
-  .contact-submit {
-    margin-left: auto;
-    align-self: flex-end;
-  }
+  
 
   .contact-popup-success .contact-popup-inner {
     width: 445px;
@@ -417,6 +397,7 @@ textarea::placeholder {
     flex-direction: row;
     gap: 0;
     width: 100%;
+    border-radius: 48px;
   }
 
   .contact-block {
@@ -483,18 +464,7 @@ textarea::placeholder {
     height: 54px;
   }
 
-  .contact-title-small {
-    width: 133px;
-    height: 35px;
-    font-size: 16px;
-    gap: 6px;
-    padding: 10px 12px;
-  }
-
-  .contact-title-small::before {
-    width: 6px;
-    height: 6px;
-  }
+  
 
   .contact-form {
     width: 690px;
@@ -515,10 +485,7 @@ textarea::placeholder {
     flex: 1 1 100%;
   }
 
-  .contact-submit {
-    width: 149px;
-    height: 44px;
-  }
+  
 
   input::placeholder,
   textarea::placeholder {
