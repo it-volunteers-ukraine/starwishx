@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-  
+
   const toggle = document.getElementById('mobile-menu-toggle');
   if (toggle) {
     const closeEntireMenu = () => {
@@ -13,12 +13,12 @@ document.addEventListener('DOMContentLoaded', () => {
         .forEach(el => el.classList.remove('active'));
     };
 
-    
+
     toggle.addEventListener('change', () => {
       document.body.classList.toggle('menu-open', toggle.checked);
     });
 
-    
+
     document.querySelectorAll('.opportunities-toggle').forEach(btn =>
       btn.addEventListener('click', e => {
         e.preventDefault(); e.stopPropagation();
@@ -82,12 +82,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  document.querySelectorAll('.menu-item-search').forEach(el => {
-    el.addEventListener('click', e => {
-      e.preventDefault();
-      alert('Пошук (десктоп)');
-    });
-  });
 
   document.querySelectorAll('.menu-item-lang button').forEach(btn => {
     btn.addEventListener('click', () => {
@@ -107,4 +101,74 @@ document.addEventListener('DOMContentLoaded', () => {
       alert('Мова (мобільна)');
     });
   });
+
+
+  // modal form
+  const searchModalRef = document.getElementById('searchModal');
+  const formSearch = document.getElementById('form-search');
+  const formSearchInputRef = formSearch.querySelector('.search-input');
+  const formClearRef = formSearch.querySelector('.form-clear-btn');
+  const formSpeachRef = formSearch.querySelector('.speech');
+  
+  formClearRef.addEventListener('click', () => {
+    formSearchInputRef.value = "";
+    formSearchInputRef.focus();
+  })
+
+  document.querySelectorAll('.menu-item-search').forEach(el => {
+    el.addEventListener('click', e => {
+      e.preventDefault();
+      // alert('Пошук (десктоп)');
+      searchModalRef.classList.add('active');
+      setTimeout(() => {
+        formSearchInputRef.focus();
+      }, 50);
+
+    });
+  });
+
+  searchModalRef.addEventListener('click', e => {
+    if (e.target === searchModalRef) {
+      closeModal(searchModalRef, formSearchInputRef)
+    }
+  })
+  searchModalRef.addEventListener('keydown', e => {
+    if (e.key === 'Escape') {
+      closeModal(searchModalRef, formSearchInputRef)
+    }
+  })
+
+  const closeModal = (modalRef, input) => {
+    modalRef.classList.remove('active');
+    input.value = "";
+  }
+
+  const SpeechRecognition =
+    window.SpeechRecognition || window.webkitSpeechRecognition;
+  
+  if (!SpeechRecognition) {
+    alert('Голосовой ввод не поддерживается в этом браузере 😢');
+  } else {
+    const recognition = new SpeechRecognition();
+  
+    recognition.lang = 'ru-RU'; // язык
+    recognition.interimResults = false; // только финальный текст
+    recognition.continuous = false; // одна фраза
+  
+    formSpeachRef.addEventListener('click', () => {
+      console.log('record start');
+      recognition.start();
+    });
+  
+    recognition.onresult = e => {
+      const text = e.results[0][0].transcript;
+      formSearchInputRef.value = text;
+      formSearchInputRef.focus();
+    };
+  
+    recognition.onerror = e => {
+      console.log('Ошибка:', e.error);
+    };
+  }
 });
+
