@@ -25,7 +25,7 @@ $swiper_class = $swiper ? 'swiper-slide' : '';
 // echo '</pre>';
 
 $post_id = $item->ID;
-$term_id = $item->term_id;
+$term_id = $item->term_id ?? null;
 
 $item_date  = date('d.m.Y', strtotime($item->post_date));
 $item_title = get_field('title', $post_id);
@@ -36,6 +36,10 @@ $photo_url = $photo['sizes']['large'] ?? '';
 $photo_alt = $photo['alt'] ?: ($photo['title'] ?? '');
 
 $categories_colors = get_field('categories_labels_color', 'options');
+
+// if ($term_id != ""){
+
+// }
 $category_current_color = get_category_by_id($categories_colors, $term_id);
 
 $label_color_text       = $category_current_color['label_color_text'] ?? 'white';

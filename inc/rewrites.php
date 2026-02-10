@@ -17,6 +17,10 @@ add_action('init', function () {
             'query_var' => 'news_cat',
             'parent' => 'news'
         ],
+        'search' => [
+            'query_var' => 'search_term',
+            'parent' => ''  // корневой endpoint: /search/{term}/
+        ],
     ];
 
     foreach ($pages as $slug => $config) {

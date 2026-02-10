@@ -30,6 +30,9 @@
     <symbol id="icon-arrow_right" width="44" height="44" viewBox="0 0 44 44" fill="none">
         <path d="M17.5 12L26.5 22L17.5 32" stroke="currentColor" stroke-linecap="round"/>
     </symbol>
+    <symbol id="icon-arrow_down" viewBox="0 0 24 24" fill="none">
+        <path d="M7 10L12 15L17 10" stroke="#292929" stroke-linecap="round"/>
+    </symbol>
     <symbol id="icon-close"  viewBox="0 0 24 24" fill="none">
         <path d="M6 6L18 18M6 18L18 6" stroke="#292929" stroke-linecap="round"/>
     </symbol>

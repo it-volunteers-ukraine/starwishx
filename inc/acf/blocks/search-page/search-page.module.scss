@@ -1,0 +1,185 @@
+@use "../../../../src/scss/variables" as *;
+@use "../../../../src/scss/mixins/label";
+@use "../../../../src/scss/mixins/media" as *;
+@use "../../../../src/scss/mixins/indents";
+
+.section {
+  padding: 16px 0 54px;
+
+  /*
+  @include min-tablet {
+    padding-top: 8px;
+  } */
+
+  @include min-laptop {
+    padding-top: 32px;
+  }
+}
+
+.title {
+  color: $text-dark;
+  margin-bottom: 16px;
+}
+
+.block-filter{
+  display: flex;
+  margin-bottom: 16px;
+  padding: 12px 0;
+  flex-direction: row-reverse;
+  justify-content: space-between;
+  align-items: center;
+  color: $text-light;
+}
+
+.filter {
+  display: flex;
+  align-items: center;
+}
+
+
+
+.filter-title{
+  display: none;
+}
+
+.filter-data{
+  color: $text-dark;
+}
+
+.sort-icon{
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 24px;
+  height: 24px;
+  }
+
+.newscards {
+  display: grid;
+  gap: 30px;
+}
+
+/*
+.newscards > div:last-child {
+  grid-column: 1 / -1;
+} */
+
+@include min-tablet {
+  .section {
+    padding-bottom: 40px;
+  }
+
+.block-filter{
+  padding: 12px 40px; 
+  flex-direction: row;
+}
+
+.filter-title{
+  display: inline;
+}
+
+
+
+  .newscards {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 40px 16px;
+  }
+}
+
+@media screen and (min-width: 992px) {
+  .newscards {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@include min-laptop {
+  .title {
+    margin-bottom: 32px;
+  }
+
+.block-filter{
+  margin-bottom: 24px;; 
+}
+
+  .newscards {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 36px 20px;
+  }
+}
+
+/*
+@include min-desktop {
+
+}
+
+@media screen and (min-width: 1920px) {
+
+} */
+
+/* ************************************************************ */
+
+/* media основные */
+
+@media screen and (min-width: 992px) {
+  .lastnews-content {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .newscards .newscards-item:nth-child(-n + 2) {
+    grid-column: auto;
+  }
+
+  .newscards .newscards-item:nth-last-child(1),
+  .newscards .newscards-item:nth-last-child(2) {
+    grid-template-columns: 1fr 1fr; /* две равные половины */
+    gap: 18px;
+  }
+
+  .newscards .newscards-item:nth-last-child(2) {
+    grid-column: 1 / span 1; /* левая половина */
+  }
+
+  .newscards .newscards-item:nth-last-child(1) {
+    grid-column: 2 / span 2; /* правая половина */
+  }
+}
+
+@media screen and (min-width: 1440px) {
+  .lastnews-content {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+  }
+
+  .newscards .newscards-item:nth-last-child(1),
+  .newscards .newscards-item:nth-last-child(2) {
+    grid-column: auto;
+  }
+
+  .btn1 {
+    display: flex;
+  }
+
+  .subtitle {
+    margin-bottom: 20px;
+  }
+}
+
+@include min-tablet {
+  .newscards-sw {
+    display: none;
+  }
+}
+
+.newscards-sw {
+  margin-top: 20px;
+  padding: 10px 0;
+}
+
+
+.my-select{
+  color: green;
+}
+
+.my-select select {
+  border: none;
+}
