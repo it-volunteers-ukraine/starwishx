@@ -447,7 +447,10 @@
     transform: rotate(-180deg);
   }
 
-  .burger-menu .mobile-menu-list .menu-item-custom-grid.mobile-active > a.menu-button {
+  .burger-menu
+    .mobile-menu-list
+    .menu-item-custom-grid.mobile-active
+    > a.menu-button {
     color: $icon-color-accent;
   }
 
@@ -521,7 +524,10 @@
     line-height: 1.2;
   }
 
-  .burger-menu .mobile-menu-list .menu-item-custom-grid:not(.mobile-active) > a.menu-button {
+  .burger-menu
+    .mobile-menu-list
+    .menu-item-custom-grid:not(.mobile-active)
+    > a.menu-button {
     background: transparent;
     color: $icon-color-primary;
   }
@@ -558,13 +564,12 @@
   }
 }
 
-
 /* seatch */
-.search-form{
+.search-form {
   position: relative;
 }
 
-.search-input{
+.search-input {
   width: 100%;
   padding: 12px;
   padding-right: 94px;
@@ -572,14 +577,30 @@
   border: none;
   border-radius: $radius-input;
   background-color: $text-white;
-
+  transition: box-shadow $animations-long;
 }
 
-.search-input:focus{
-  outline-color: $input-color-border-pressed;
+.search-input:focus {
+  /* outline-color: $input-color-border-pressed; */
+  outline: none;
+  box-shadow: inset -7px -8px 9px -8px $buttons-color-background-primary-default;
+  box-shadow:
+    inset -7px -8px 9px -8px $buttons-color-background-primary-default,
+    2px 4px 8px -3px #6c6087;
+  box-shadow:
+    2px 8px 9px -7px #6839c8,
+    inset 2px 4px 8px -3px #6c6087;
+  box-shadow:
+    inset -7px 9px 9px -8px $buttons-color-background-primary-default,
+    2px 4px 8px -3px $buttons-color-background-primary-pressed;
+  box-shadow:
+    inset -7px 9px 9px -8px $buttons-color-background-primary-default,
+    2px 4px 8px -3px #6c6087;
+  box-shadow: inset 2px 4px 8px -3px #6c6087;
+  box-shadow: 2px 4px 8px -3px #6c6087;
 }
 
-.search-submit-bth{
+.search-submit-bth {
   width: 47px;
   height: 100%;
   position: absolute;
@@ -594,11 +615,11 @@
   transition: all $animations;
 }
 
-.search-submit-bth:hover{
+.search-submit-bth:hover {
   background-color: $buttons-color-background-primary-hover;
 }
 
-.form-clear-btn{
+.form-clear-btn {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -610,7 +631,7 @@
   cursor: pointer;
 }
 
-.form-clear-icon{
+.form-clear-icon {
   width: 20px;
   height: 20px;
 }
@@ -619,7 +640,7 @@
   right: 94px;
 }
 
-.search-submit-icon{
+.search-submit-icon {
   width: 20px;
   height: 20px;
   border: none;

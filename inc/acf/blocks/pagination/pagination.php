@@ -57,6 +57,7 @@ $post_name = $post->post_name;
 $category = 'category-oportunities';
 $category_slug = get_query_var('news_cat');
 
+
 $path = trim($wp->request, '/');
 $parts = explode('/', $path);
 
@@ -92,30 +93,47 @@ $allowed_per_page = !$default_per_page_array_is_empty
 
 $per_page = isset($_GET['per_page']) ? (int) $_GET['per_page'] : 12;
 $per_page = in_array($per_page, $allowed_per_page, true) ? $per_page : 12;
+$search_term = isset($_GET['search']) ? $_GET['search'] : '';
 
+// Получить post_type из мета, если нет, то 'news'
+$post_type = get_post_meta(get_the_ID(), 'post_type', 'news');
+
+
+if ($category && $category_slug){
+    $tax_query = [
+        'taxonomy' => $category,
+        'field'    => 'slug',
+        'terms'    => $category_slug,
+    ];
+} else {
+    $tax_query = null;
+}
 
 // echo 'request: ' . $wp_request . '<br>';
-// echo 'post_type: ' . $post_type . '<br>';
+// // echo 'post_type: ' . $post_type . '<br>';
+// echo 'post_type: '; // . $post_type . '<br>';
+// print_r($post_type);
+// echo '<br>';
+// echo 'tax_query: ';
+// print_r($tax_query);
+// echo '<br>';
 // echo 'post_name: ' . $post_name . '<br>';
 // echo 'category: ' . $category . '<br>';
 // echo 'category_slug: ' . $category_slug . '<br>';
 // echo 'page: ' . $page . '<br>';
 // echo 'per_page: ' . $per_page . '<br>';
+// echo isset($test) ? '$test: ' . $test  . '<br>' : "";
 // -----------------------------
 
 $query = new WP_Query([
     'post_type'      => $post_type,
     'posts_per_page' => $per_page,
+    's'              => $search_term,
     'paged'          => 1,
     'fields'         => 'ids', // важно!
     'no_found_rows'  => false, // нужно для pagination
-    'tax_query'      => [
-        [
-            'taxonomy' => $category,
-            'field'    => 'slug',
-            'terms'    => $category_slug,
-        ]
-    ],
+    // 'tax_query'      => [$tax_query],
+    'tax_query'      => [$tax_query],
 ]);
 
 // echo '<pre>';
@@ -126,18 +144,6 @@ $total_posts = (int) $query->found_posts;
 $total_pages = (int) ceil($total_posts / $per_page);
 // echo 'total_posts: ' . $total_posts . '<br>';
 // echo 'total_pages: ' . $total_pages . '<br>';
-
-
-// -----------------------------
-// 4. URL builder
-// -----------------------------
-function pagination_url($base_url, $page, $per_page)
-{
-    return esc_url(add_query_arg([
-        'page_num' => $page,
-        'per_page' => $per_page,
-    ], $base_url));
-}
 
 ?>
 
@@ -168,7 +174,7 @@ function pagination_url($base_url, $page, $per_page)
                 $count = 1;
                 for ($i = $page_i; $i <= $page_i_end; $i++): ?>
                     <?php
-                    $link_disabled = $total_pages && $i > $total_pages ? true : false;
+                    $link_disabled = $total_pages >= 0 && $i > $total_pages ? true : false;
                     $current_page_class = $page == $i ? $classes['selected'] : '';
                     $is_active = $page == $i ? true : false;
                     ?>

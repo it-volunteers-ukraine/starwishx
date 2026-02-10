@@ -9,12 +9,16 @@ $default_classes = [
 
 ];
 
+$post_type = ['news'];
+update_post_meta(get_the_ID(), 'post_type', $post_type);
+
 $category_slug = get_query_var('news_cat');
 if (!$category_slug) {
     echo '<p>Категория не указана.</p>';
     get_footer();
     exit;
 }
+
 
 $category = 'category-oportunities';
 $term = get_term_by('slug', $category_slug, $category);

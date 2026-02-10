@@ -3,7 +3,7 @@
   <div class="modal-content modal-main">
 
 
-    <form id="form-search" role="search" class="search-form" method="get" action="<?php echo home_url('/'); ?>">
+    <form id="form-search" role="search" class="search-form" method="get" action="<?php echo home_url('/search'); ?>">
       <input type="input" name="search" class="search-input"  placeholder="Напиши слово для пошуку">
       <!-- <span id="clear-form" class="clear-form-icon">&times;</span> -->
        <div id="clear-form" class="form-clear-btn">
