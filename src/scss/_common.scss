@@ -44,7 +44,7 @@ body {
 }
 
 .d-none {
-  display: none;
+  display: none !important;
 }
 
 /* Базовые стили (мобильные, до 768px) */

@@ -7,8 +7,8 @@
         margin-bottom: 16px;
         .btn-back {
             display: inline-flex;
-            align-items: center;
             column-gap: 4px;
+            align-items: center;
         }
     }
     &__layout {
@@ -19,6 +19,7 @@
         }
         .opportunity-main {
             display: flex;
+            flex: 1 1 auto;
             flex-flow: column wrap;
             gap: 20px;
             @include media.min-laptop {
@@ -27,8 +28,31 @@
             .featured-figure {
                 position: relative;
                 border-radius: $radius-image;
-                overflow: hidden;
                 height: 320px;
+                overflow: hidden;
+                &::before {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    z-index: 1;
+                    background: linear-gradient(
+                        180deg,
+                        rgb(0 0 0 / 50%) 0%,
+                        rgb(0 0 0 / 25%) 10%,
+                        rgb(0 0 0 / 15%) 15%,
+                        rgb(0 0 0 / 7%) 25%,
+                        rgb(0 0 0 / 0.01%) 35%,
+                        rgb(0 0 0 / 0.01%) 65%,
+                        rgb(0 0 0 / 7%) 75%,
+                        rgb(0 0 0 / 15%) 85%,
+                        rgb(0 0 0 / 25%) 90%,
+                        rgb(0 0 0 / 50%) 100%
+                    );
+                    width: 100%;
+                    height: 100%;
+                    content: "";
+                }
+
                 .featured-figure__image {
                     position: absolute;
                     top: 0;
@@ -56,11 +80,17 @@
                     justify-content: center;
                     align-items: center;
                     border-radius: 8px;
-                    background: $surface-violet;
                     aspect-ratio: 4 / 3;
                     width: 100%;
                     overflow: hidden;
                     color: $text-light;
+                }
+                .control-favorites-wrapper {
+                    position: absolute;
+                    right: 0;
+                    bottom: 0;
+                    z-index: 3;
+                    margin: 16px;
                 }
             }
             .opportunity-article {
@@ -70,41 +100,48 @@
                     }
                 }
                 .opportunity-article-meta__wrapper {
-                    display: grid;
-                    grid-template-columns: repeat(2, 1fr);
+                    display: flex;
+                    flex-flow: column wrap;
+                    @include media.min-tabland {
+                        display: grid;
+                        grid-template-columns: auto minmax(140px, 1fr);
+                    }
                     gap: 10px;
                     .opportunity-article-meta {
                         display: flex;
-                        flex-flow: column wrap;
                         row-gap: 9px;
+                        flex-flow: column wrap;
                         .info-card {
                             .info-card__title {
                                 display: inline-flex;
-                                align-items: center;
                                 column-gap: 4px;
-                                font-size: 1rem;
+                                align-items: center;
                                 color: $text-light;
+                                font-size: 1rem;
                                 .info-card__icon {
-                                    color: $buttons-color-background-primary-default;
                                     width: 18px;
                                     height: 18px;
+                                    color: $icon-color-accent;
                                 }
                             }
                         }
                     }
                     .opportunity-social {
                         display: flex;
-                        flex-direction: column;
+                        flex-direction: row;
                         justify-content: space-between;
-                        align-items: flex-end;
+                        @include media.min-tabland {
+                            flex-direction: column;
+                            align-items: flex-end;
+                        }
                         &__share {
                             display: inline-flex;
-                            align-items: center;
                             column-gap: 9px;
+                            align-items: center;
                             .icon-share {
-                                color: $buttons-color-background-primary-default;
                                 width: 18px;
                                 height: 18px;
+                                color: $icon-color-accent;
                             }
                         }
                         .opportunity-badges {
@@ -123,33 +160,29 @@
             }
         }
         .opportunity-aside {
-            direction: rtl;
-            overflow-y: scroll;
-            max-height: 754px;
-            padding-left: 20px;
             margin-left: 12px;
+            padding-left: 20px;
+            max-height: 754px;
+            overflow-y: scroll;
+            direction: rtl;
             &::-webkit-scrollbar {
                 display: block;
                 width: 5px;
             }
             &::-webkit-scrollbar-track {
-                background: $surface-violet;
                 margin-bottom: 60px;
             }
 
             &::-webkit-scrollbar-thumb {
-                background-color: $buttons-color-background-primary-disabled;
                 border-right: none;
                 border-left: none;
                 border-radius: 4px;
             }
             // &::-webkit-scrollbar-track-piece:end {
-            //     background: transparent;
             //     margin-bottom: 10px;
             // }
 
             // &::-webkit-scrollbar-track-piece:start {
-            //     background: transparent;
             //     margin-top: 10px;
             // }
             .news-container {
@@ -172,9 +205,56 @@
                     margin-bottom: 18px;
                 }
                 .lnew-date {
-                    font-size: 14px;
-                    color: $text-light;
                     margin-bottom: 2px;
+                    color: $text-light;
+                    font-size: 14px;
+                }
+            }
+        }
+    }
+
+    .info-card__categories {
+        position: relative;
+        z-index: 2;
+        margin: 10px;
+    }
+
+    .tag-cloud__category {
+        .tag-list {
+            display: inline-flex;
+            flex-wrap: wrap;
+            gap: 4px;
+            .tag-category {
+                border: 1px solid;
+                border-radius: $radius-element;
+                padding: 4px 8px;
+                font-size: 14px;
+            }
+        }
+    }
+    .tag-cloud__locations,
+    .tag-cloud__seekers {
+        .tag-list {
+            padding-left: 1.5rem;
+            list-style-position: inside;
+            .tag-locations,
+            .tag-seekers {
+                list-style: disc;
+            }
+            @include media.min-tablet {
+                display: inline-flex;
+                flex-wrap: wrap;
+                gap: 4px;
+                padding-left: unset;
+                .tag-locations,
+                .tag-seekers {
+                    border: 1px dotted $text-light;
+                    border-radius: $radius-element;
+                    padding: 4px 8px;
+                    font-style: normal;
+                    font-weight: 400;
+                    font-size: 15px;
+                    list-style: none;
                 }
             }
         }

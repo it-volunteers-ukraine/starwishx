@@ -39,8 +39,11 @@
     <symbol id="icon-long_arrow_left" width="16" height="16" viewBox="0 0 16 16" fill="none">
         <path d="M5 4L1 8M1 8L5 12M1 8H14" stroke="#292929" stroke-linecap="round" stroke-linejoin="round"/>
     </symbol>
-    <symbol id="icon-plus" width="24" height="24" viewBox="0 0 24 24" fill="none">
-        <path d="M4 11.9999H20.9706M12.4853 20.4852V3.51465" stroke="#292929" stroke-linecap="round"/>
+    <symbol id="icon-plus-small" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" viewBox="0 0 13 13">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M12.5 6.5h-6m0 0h-6m6 0v-6m0 6v6"/>
+    </symbol>
+    <symbol id="icon-plus" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" viewBox="0 0 18 18">
+        <path stroke-linecap="round" d="M.5 8.985h16.97m-8.485 8.486V.5"/>
     </symbol>
     <symbol id="icon-plus_small16" width="16" height="16" viewBox="0 0 16 16" fill="none">
         <path d="M14 8H8M8 8H2M8 8V2M8 8V14" stroke="black" stroke-linecap="round" stroke-linejoin="round"/>
@@ -112,7 +115,7 @@
         <path class="icc-main" d="M15.425 2.25C16.266 2.25 16.829 3.048 16.637 3.813L16.588 3.966L14.49 9.35H17C17.985 9.35 18.532 10.404 18.1 11.204L18 11.36L10.53 21.407C9.99 22.132 8.909 21.631 9.003 20.802L9.788 13.892H7C6.093 13.892 5.513 12.968 5.845 12.157L5.85 12.146L9.756 3.018C9.85091 2.79088 10.0108 2.59684 10.2155 2.46021C10.4203 2.32359 10.6608 2.25046 10.907 2.25H15.425Z" fill="#FAC625"/>
     </symbol>
 
-    <symbol id="icon-search" width="24" height="24" viewBox="0 0 24 24" fill="none">
+    <symbol id="icon-search" viewBox="0 0 24 24" fill="none">
         <path d="M16.893 16.92L19.973 20M19 11.5C19 13.4891 18.2098 15.3968 16.8033 16.8033C15.3968 18.2098 13.4891 19 11.5 19C9.51088 19 7.60322 18.2098 6.1967 16.8033C4.79018 15.3968 4 13.4891 4 11.5C4 9.51088 4.79018 7.60322 6.1967 6.1967C7.60322 4.79018 9.51088 4 11.5 4C13.4891 4 15.3968 4.79018 16.8033 6.1967C18.2098 7.60322 19 9.51088 19 11.5Z" stroke-linecap="round" stroke-linejoin="round"/>
     </symbol>
     <symbol id="icon-good" width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -270,5 +273,11 @@
     </symbol>
     <symbol id="icon-share" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 20">
         <path d="M15 14.136c-.76 0-1.44.302-1.96.774l-7.13-4.167A3.3 3.3 0 0 0 6 10.04a3.3 3.3 0 0 0-.09-.703l7.05-4.126a2.98 2.98 0 0 0 2.04.813c1.66 0 3-1.345 3-3.012A3.002 3.002 0 0 0 15 0c-1.66 0-3 1.345-3 3.012 0 .241.04.472.09.703L5.04 7.84A2.98 2.98 0 0 0 3 7.028c-1.66 0-3 1.345-3 3.012a3.002 3.002 0 0 0 3 3.012c.79 0 1.5-.311 2.04-.813l7.12 4.177c-.05.21-.08.431-.08.652A2.93 2.93 0 0 0 15 20a2.93 2.93 0 0 0 2.92-2.932A2.93 2.93 0 0 0 15 14.136Z"/>
+    </symbol>
+    <symbol id="icon-arrow-down" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 11 7">
+        <path stroke="currentColor" stroke-linecap="round" d="m.5.5 5 5 5-5"/>
+    </symbol>
+    <symbol id="icon-search-small" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" viewBox="0 0 15 15">
+        <path stroke-linecap="round" stroke-linejoin="round" d="m11.244 11.267 2.567 2.566M13 6.75a6.25 6.25 0 1 1-12.5 0 6.25 6.25 0 0 1 12.5 0Z"/>
     </symbol>
 </svg>

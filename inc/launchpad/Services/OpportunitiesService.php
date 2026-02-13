@@ -226,6 +226,21 @@ class OpportunitiesService
         // Helper to safely get array of ints
         $getIntArray = fn($field) => array_map('intval', get_field($field, $postId) ?: []);
 
+        // Fetch Locations
+        global $wpdb;
+
+        // Join pivot table (wp_opportunity_locations) with dictionary (wp_katottg)
+        // "SELECT k.code, k.name, k.level, k.category
+        //  FROM wp_katottg k
+        //  INNER JOIN wp_opportunity_locations ol ON k.code = ol.katottg_code
+        //  WHERE ol.post_id = %d",
+        $locations = $wpdb->get_results($wpdb->prepare(
+            "SELECT code, name_category_oblast as name, level, category 
+                FROM wp_v_opportunity_search
+                WHERE post_id = %d",
+            $postId
+        ), ARRAY_A);
+
         // Map ACF fields to our simplified FormData structure
         return [
             'id' => $post->ID,
@@ -242,7 +257,10 @@ class OpportunitiesService
             'date_starts'     => $this->formatDateForInput(get_field('opportunity_date_starts', $postId)),
             'date_ends'       => $this->formatDateForInput(get_field('opportunity_date_ends', $postId)),
             'category'        => $getIntArray('opportunity_category'), // Now an array
+
             'country'         => get_field('country', $postId) ?: '',
+            'locations'       => $locations,
+            // We keep 'city' just for now in case to not brake things
             'city'            => get_field('city', $postId) ?: '',
             'sourcelink'      => get_field('opportunity_sourcelink', $postId) ?: '',
 
@@ -343,11 +361,46 @@ class OpportunitiesService
             update_field('opportunity_requirements', $data['requirements'], $id);
             update_field('opportunity_details', $data['details'], $id);
 
+            // Save Locations (Pivot Table)
+            if (isset($data['locations']) && is_array($data['locations'])) {
+                // A. Clear existing locations for this post
+                $wpdb->delete('wp_opportunity_locations', ['post_id' => $id]);
+
+                // B. Extract just the codes from the frontend objects
+                $codes = array_column($data['locations'], 'code');
+
+                if (!empty($codes)) {
+                    // C. SECURITY: Verify codes exist in database to prevent bad data
+                    // Create placeholders like: "%s, %s, %s"
+                    $placeholders = implode(',', array_fill(0, count($codes), '%s'));
+
+                    // Select only codes that actually exist in dictionary
+                    $validCodes = $wpdb->get_col($wpdb->prepare(
+                        "SELECT code FROM wp_katottg WHERE code IN ($placeholders)",
+                        ...$codes
+                    ));
+
+                    // D. Bulk Insert
+                    if (!empty($validCodes)) {
+                        $values = [];
+                        $queryPlaceholders = [];
+                        foreach ($validCodes as $code) {
+                            array_push($values, $id, $code);
+                            $queryPlaceholders[] = "(%d, %s)";
+                        }
+
+                        $sql = "INSERT INTO wp_opportunity_locations (post_id, katottg_code) VALUES " . implode(', ', $queryPlaceholders);
+                        $wpdb->query($wpdb->prepare($sql, $values));
+                    }
+                    // error_log($sql);
+                }
+            }
+
             $wpdb->query('COMMIT');
             return $id;
         } catch (\Throwable $e) {
             $wpdb->query('ROLLBACK');
-            // Log the actual error for the developer
+            // Log the actual error
             error_log('OpportunitiesService Save Failure: ' . $e->getMessage());
 
             return new WP_Error('db_transaction_failed', $e->getMessage());
@@ -418,5 +471,47 @@ class OpportunitiesService
         }
 
         return $date ? $date->format($format) : $dateStr;
+    }
+
+    /** 
+     * Autocomplete Location Search 
+     * Uses the View for pre-formatted names.
+     * 
+     * @param string $search User input
+     * @param array $levels Optional array of levels (1=Oblast, 2=Raion, 3=Hromada, 4=Settlement)
+     */
+    public function searchKatottg(string $search, array $levels = []): array
+    {
+        global $wpdb;
+
+        // Optimization: Search start of string first for index utilization, then fuzzy?
+        // For UX "Kyiv", "Vinnytsia" usually match start. Let's use standard fuzzy for coverage.
+        // $like = '%' . $wpdb->esc_like($search) . '%';
+        $like = $wpdb->esc_like($search) . '%';
+
+        // Base Query against the VIEW
+        $sql = "SELECT code, name_category_oblast as name, level, category_short as category 
+                FROM wp_v_katottg_search
+                WHERE name LIKE %s";
+
+        $params = [$like];
+
+        // Apply Level Filter if provided
+        if (!empty($levels)) {
+            // Securely build placeholders: %d, %d, %d
+            $placeholders = implode(',', array_fill(0, count($levels), '%d'));
+
+            $sql .= " AND level IN ($placeholders)";
+
+            // Append integers to params
+            foreach ($levels as $lvl) {
+                $params[] = (int) $lvl;
+            }
+        }
+
+        // Limit results for performance
+        $sql .= " ORDER BY level ASC, name ASC LIMIT 10";
+
+        return $wpdb->get_results($wpdb->prepare($sql, $params), ARRAY_A);
     }
 }

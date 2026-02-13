@@ -10,6 +10,8 @@
 import { getElement, getContext, store } from "@wordpress/interactivity"; // Import store
 import { deepClone, ensurePanel, fetchJson } from "../utils.js";
 
+let locationSearchTimeout = null;
+
 /**
  * Opportunity actions.
  * ARCHITECTURE CHANGE: We use store("launchpad") to access state/actions
@@ -284,5 +286,198 @@ export const opportunitiesActions = {
     p.isLayoutCompact = val === "compact";
     p.isLayoutCard = val === "card";
     p.isLayoutGrid = val === "grid";
+  },
+
+  /**
+   * Generic internal helper to avoid code duplication
+   */
+  async _performLocSearch(query, levels, resultKey) {
+    const { state } = store("launchpad");
+    const p = state.panels.opportunities;
+
+    if (locationSearchTimeout) clearTimeout(locationSearchTimeout);
+
+    if (query.length < 1) {
+      p.formData[resultKey] = [];
+      return;
+    }
+
+    locationSearchTimeout = setTimeout(async () => {
+      try {
+        // Build URL with levels array: levels[]=1&levels[]=2
+        const params = new URLSearchParams();
+        params.append("search", query);
+        levels.forEach((lvl) => params.append("levels[]", lvl));
+
+        const results = await fetchJson(
+          state,
+          `${state.launchpadSettings.restUrl}opportunities/locations?${params.toString()}`,
+        );
+        p.formData[resultKey] = results || [];
+      } catch (e) {
+        console.error(e);
+        p.formData[resultKey] = [];
+      }
+    }, 300);
+  },
+
+  /**
+   * Wrapper 1: Search Oblasts (Level 1)
+   */
+  async searchKatottgOblast() {
+    const { state, actions } = store("launchpad");
+    const { ref } = getElement();
+    const query = ref.value;
+    state.panels.opportunities.formData.searchOblast = query;
+    actions.opportunities._performLocSearch(query, [1], "resultsOblast");
+  },
+
+  /**
+   * Wrapper 2: Search Raions (Level 2)
+   */
+  async searchKatottgRaion() {
+    const { state, actions } = store("launchpad");
+    const { ref } = getElement();
+    const query = ref.value;
+    state.panels.opportunities.formData.searchRaion = query;
+    actions.opportunities._performLocSearch(query, [2, 3], "resultsRaion");
+  },
+
+  /**
+   * Wrapper 3: Search Cities/Settlements (Level 3 & 4)
+   * We include Level 3 (Hromada) and 4 (Settlements) to cover all "places"
+   */
+  async searchKatottgCity() {
+    const { state, actions } = store("launchpad");
+    const { ref } = getElement();
+    const query = ref.value;
+    state.panels.opportunities.formData.searchCity = query;
+    actions.opportunities._performLocSearch(query, [4, 5], "resultsCity");
+  },
+
+  /**
+   * Search Handler with Module-Scoped Debounce
+   * DEPRECATED!
+   */
+  async searchLocations() {
+    const { state } = store("launchpad");
+    const { ref } = getElement();
+    const p = state.panels.opportunities;
+
+    const query = ref.value;
+    p.locationSearchQuery = query;
+
+    // Clear existing timeout
+    if (locationSearchTimeout) {
+      clearTimeout(locationSearchTimeout);
+      locationSearchTimeout = null;
+    }
+
+    if (query.length < 2) {
+      p.locationResults = [];
+      return;
+    }
+
+    // Set new timeout
+    locationSearchTimeout = setTimeout(async () => {
+      try {
+        // UI: Optional loading indicator could go here (p.isSearchingLoc = true)
+        const results = await fetchJson(
+          state,
+          `${state.launchpadSettings.restUrl}opportunities/locations?search=${encodeURIComponent(query)}`,
+        );
+        p.locationResults = results || [];
+      } catch (e) {
+        console.error("Location search failed", e);
+        p.locationResults = [];
+      }
+    }, 300); // 300ms debounce
+  },
+
+  /**
+   * Add Location: Works for ALL 3 boxes.
+   * We need to identify WHICH box triggered it to clear that specific input.
+   */
+  addLocation(event) {
+    const { state } = store("launchpad");
+    const { item } = getContext(); // The result item clicked
+    const p = state.panels.opportunities;
+
+    // 1. Add to shared chips list
+    if (!Array.isArray(p.formData.locations)) p.formData.locations = [];
+    if (!p.formData.locations.some((l) => l.code === item.code)) {
+      p.formData.locations.push(item);
+    }
+
+    // 2. Determine which list we clicked to clear IT specifically
+    // We can infer this based on the item level
+    const level = parseInt(item.level);
+
+    if (level === 1) {
+      p.formData.searchOblast = "";
+      p.formData.resultsOblast = [];
+    } else if (level === 2) {
+      p.formData.searchRaion = "";
+      p.formData.resultsRaion = [];
+    } else {
+      p.formData.searchCity = "";
+      p.formData.resultsCity = [];
+    }
+  },
+
+  removeLocation(event) {
+    event.preventDefault(); // Prevent form submission
+    const { state } = store("launchpad");
+    const { item } = getContext();
+    const p = state.panels.opportunities;
+
+    p.formData.locations = p.formData.locations.filter(
+      (l) => l.code !== item.code,
+    );
+  },
+
+  /**
+   * Simplified Open Date Picker
+   * @param {Event} event - The native DOM event triggered by data-wp-on--click
+   */
+  openDatePicker(event) {
+    // 1. Get the button and the associated input
+    const button = event.currentTarget;
+    const container = button.closest(".input-date-iconed");
+    const dateInput = container?.querySelector('input[type="date"]');
+
+    if (!dateInput) return;
+
+    // 2. Modern: showPicker() (Chrome, Edge, Firefox, Opera)
+    if ("showPicker" in HTMLInputElement.prototype) {
+      try {
+        dateInput.showPicker();
+        return;
+      } catch (err) {
+        // Fallback if showPicker fails (e.g. prevented by browser security)
+      }
+    }
+
+    // 3. Fallback: Focus (Required for iOS/Android to trigger native wheels)
+    dateInput.focus();
+
+    // 4. Desktop Safari Fallback (The Click Simulation)
+    // We check purely for "not touch" to target Desktop Safari specifically.
+    // Focusing usually works for mobile Safari, but Desktop needs the clicks.
+    const isTouch = navigator.maxTouchPoints > 0 || "ontouchstart" in window;
+
+    if (!isTouch) {
+      // Dispatch sequence to force open in webkit desktop
+      const events = ["mousedown", "click", "mouseup"];
+      events.forEach((type) => {
+        dateInput.dispatchEvent(
+          new MouseEvent(type, {
+            bubbles: true,
+            cancelable: true,
+            view: window,
+          }),
+        );
+      });
+    }
   },
 };

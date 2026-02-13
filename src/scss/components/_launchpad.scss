@@ -611,7 +611,7 @@
     }
 
     // Card Layout (Default)
-    &[data-layout="card"] {
+    &[data-layout="grid"] {
         // grid-template-columns: 1fr;
         // Styles inherited from default .opportunity-card
         .opportunity-card {
@@ -641,7 +641,7 @@
     }
 
     // Grid Layout (Columns)
-    &[data-layout="grid"] {
+    &[data-layout="card"] {
         grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
 
         .opportunity-card {
@@ -848,6 +848,14 @@
             padding: 24px;
         }
     }
+    .form-actions {
+        flex-wrap: wrap;
+        button:last-child {
+            margin-left: auto;
+        }
+        @include max-tablet {
+        }
+    }
 }
 .password-form,
 .profile-form {
@@ -856,11 +864,13 @@
 
 .launchpad-grid-3-col {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: 1fr;
     gap: 1rem;
-
-    @include max-laptop {
-        grid-template-columns: 1fr;
+    @include min-tablet {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    @include min-laptop {
+        grid-template-columns: repeat(3, 1fr);
     }
 }
 
@@ -1344,4 +1354,200 @@
     display: flex;
     justify-content: center;
     margin-top: 2rem;
+}
+
+.locations-selected-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.locations-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin-bottom: 12px;
+    border: 1px dashed $primary-hover;
+    border-radius: $radius-input;
+    padding: 10px;
+    min-height: 40px;
+}
+
+.btn-chip {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    transition: $animations;
+    cursor: pointer;
+    border: 1px solid $buttons-color-border-secondary-default;
+    border-radius: $radius-xl;
+    background-color: $buttons-color-background-secondary-default;
+    // padding: 12.5px 20px;
+    padding: 6px 14px;
+    width: fit-content;
+    color: $text-dark;
+    // font-weight: 500;
+    font-size: 14px;
+    // font-size: 0.9rem;
+
+    &:hover {
+        background-color: $buttons-color-background-secondary-hover;
+        color: $text-accent;
+    }
+
+    &:active,
+    &:active:hover {
+        background-color: $buttons-color-background-secondary-selected;
+    }
+
+    @include min-desktop {
+        font-size: 1rem;
+    }
+    .btn-chip__icon {
+        margin-left: 6px;
+        border: none;
+        font-size: 14px;
+        svg {
+            transform: rotate(45deg);
+            width: 14px;
+            height: 14px;
+            color: $icon-color-primary;
+        }
+    }
+}
+
+.location-chip {
+    // display: inline-flex;
+    // align-items: center;
+    // background: $surface-violet; // Use your variables
+    // border: 1px solid $input-color-border-filled;
+    // border-radius: 16px;
+    // padding: 4px 12px;
+    // font-size: 0.9rem;
+
+    .location-remove-btn {
+        cursor: pointer;
+        margin-left: 6px;
+        border: none;
+        background: transparent;
+        color: $text-light;
+        font-weight: bold;
+        &:hover {
+            color: $icon-color-error;
+        }
+    }
+}
+
+.location-search-wrapper {
+    position: relative;
+    padding-right: 12px;
+    .location-dropdown {
+        position: absolute;
+        top: 100%;
+        right: 0;
+        left: 0;
+        z-index: 100;
+        margin: 4px 0 0;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        border: 1px solid $input-color-border-default;
+        border-radius: $radius-input;
+        background: $surface-primary;
+        padding: 8px;
+        padding-right: 12px;
+        max-height: 200px;
+        overflow-y: auto;
+        list-style: none;
+
+        &::-webkit-scrollbar {
+            display: block;
+            width: 6px;
+        }
+        &::-webkit-scrollbar-track {
+            background: $surface-violet;
+            // margin-bottom: 60px;
+        }
+
+        &::-webkit-scrollbar-thumb {
+            border-right: none;
+            border-left: none;
+            border-radius: 4px;
+            background-color: $buttons-color-background-primary-disabled;
+        }
+
+        .location-result-item {
+            display: flex;
+            justify-content: space-between;
+            transition: $animations;
+            cursor: pointer;
+            // border: 1px solid $input-color-border-default;
+            border-radius: $radius-input;
+            background-color: $surface-primary;
+            padding: 4px 10px;
+            &:hover {
+                background: $dropdown-surface-color-selected;
+            }
+            &:active,
+            &:active:hover {
+                background-color: $dropdown-surface-color-pressed;
+            }
+            .loc-meta {
+                opacity: 0.6;
+                font-size: 0.75em;
+            }
+        }
+    }
+}
+.input-iconed {
+    display: inline-block; /* or width:100% if you want full width */
+    position: relative;
+    width: 100%;
+    input[type="text"] {
+        padding-left: 36px;
+    }
+    svg {
+        position: absolute;
+        top: 50%;
+        left: 12px; /* distance from input left edge */
+        transform: translateY(-50%);
+        fill: currentColor; /* inherit text color — set color on wrapper/input if needed */
+        width: 16px;
+        height: 16px;
+        pointer-events: none; /* let clicks go to the input */
+        color: #666;
+    }
+}
+.input-date-iconed {
+    position: relative;
+    color: $icon-color-accent;
+    input[type="date"] {
+        padding-right: 44px;
+        -webkit-appearance: none;
+        appearance: none;
+        &::-webkit-calendar-picker-indicator,
+        &::-webkit-clear-button,
+        &::-webkit-inner-spin-button {
+            display: none;
+        }
+    }
+    .input-date-iconed__btn {
+        display: inline-flex;
+        position: absolute;
+        top: 50%;
+        right: 8px; /* distance from right edge */
+        justify-content: center;
+        align-items: center;
+        transform: translateY(-50%);
+        cursor: pointer;
+        border: none;
+        background: transparent;
+        padding: 0;
+        width: 28px;
+        height: 28px;
+    }
+}
+
+.location-input-wrapper {
+    .location-results {
+    }
 }

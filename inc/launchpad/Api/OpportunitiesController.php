@@ -54,6 +54,22 @@ class OpportunitiesController extends AbstractLaunchpadController
             'category'        => ['type' => 'array', 'items' => ['type' => 'integer']],
             'subcategory'     => ['type' => 'array', 'items' => ['type' => 'integer']],
             'country'         => ['sanitize_callback' => 'absint'],
+            'locations' => [
+                'type' => 'array',
+                'items' => [
+                    'type' => 'object',
+                    'properties' => [
+                        'code' => [
+                            'type' => 'string',
+                            'required' => true,
+                            'sanitize_callback' => 'sanitize_text_field'
+                        ],
+                        // We allow name/level to pass through for UI convenience, 
+                        // but Service ignores them for DB insert.
+                        'name' => ['type' => 'string', 'sanitize_callback' => 'sanitize_text_field'],
+                    ]
+                ],
+            ],
             'city'            => ['sanitize_callback' => 'sanitize_text_field'],
             'sourcelink'      => ['sanitize_callback' => 'esc_url_raw'],
             'seekers'         => ['type' => 'array', 'items' => ['type' => 'integer']],
@@ -124,6 +140,44 @@ class OpportunitiesController extends AbstractLaunchpadController
                 ],
             ],
         ]);
+
+        // Locations Search Endpoint
+        register_rest_route($this->namespace, '/opportunities/locations', [
+            'methods'             => 'GET',
+            'callback'            => [$this, 'searchLocations'],
+            'permission_callback' => [$this, 'checkLoggedIn'],
+            'args'                => [
+                'search' => [
+                    'required' => true,
+                    'sanitize_callback' => 'sanitize_text_field',
+                    'validate_callback' => function ($p) {
+                        return strlen($p) >= 2;
+                    }
+                ],
+                'levels' => [
+                    'type' => 'array',
+                    'items' => [
+                        'type' => 'integer',
+                        'sanitize_callback' => 'absint'
+                    ],
+                    'default' => []
+                ]
+            ]
+        ]);
+    }
+
+    public function searchLocations(WP_REST_Request $request): WP_REST_Response
+    {
+        // $query = $request->get_param('search');
+        // $results = $this->service->searchKatottg($query);
+        // return $this->success($results);
+
+        $query = $request->get_param('search');
+        $levels = $request->get_param('levels') ?: []; // Get the array
+
+        $results = $this->service->searchKatottg($query, $levels);
+
+        return $this->success($results);
     }
 
     /**
@@ -223,6 +277,7 @@ class OpportunitiesController extends AbstractLaunchpadController
             'date_ends'       => $request->get_param('date_ends'),
             'category'        => (array) $request->get_param('category'),
             'country'         => $request->get_param('country'),
+            'locations'       => (array) $request->get_param('locations'),
             'city'            => $request->get_param('city'),
             'sourcelink'      => $request->get_param('sourcelink'),
             'subcategory'     => (array) $request->get_param('subcategory'),

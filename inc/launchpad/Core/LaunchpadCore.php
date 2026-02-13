@@ -2,7 +2,7 @@
 
 /**
  * Launchpad user admin panel app
- * Version: 0.4.1
+ * Version: 0.5.1
  * Author: DevFrappe
  * Email: dev.frappe@proton.me
  * 
@@ -250,7 +250,8 @@ final class LaunchpadCore
         if (function_exists('wp_register_script_module')) {
             wp_register_script_module(
                 '@starwishx/launchpad-comments',
-                get_template_directory_uri() . '/inc/launchpad/Assets/comments-store.js',
+                // get_template_directory_uri() . '/inc/launchpad/Assets/comments-store.js',
+                get_template_directory_uri() . '/assets/js/comments-store.module.js',
                 array_merge(['@wordpress/interactivity'], $asset['dependencies']),
                 $asset['version']
             );
@@ -289,7 +290,8 @@ final class LaunchpadCore
         if (function_exists('wp_register_script_module')) {
             wp_register_script_module(
                 '@starwishx/launchpad-favorites',
-                get_template_directory_uri() . '/inc/launchpad/Assets/favorites-store.js',
+                // get_template_directory_uri() . '/inc/launchpad/Assets/favorites-store.js',
+                get_template_directory_uri() . '/assets/js/favorites-store.module.js',
                 array_merge(['@wordpress/interactivity'], $asset['dependencies']),
                 $asset['version']
             );

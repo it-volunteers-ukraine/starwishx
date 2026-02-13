@@ -158,4 +158,28 @@ export const opportunitiesGetters = {
     if (!item?.isExpired) return "";
     return "Outdated"; // Or use a translation from state.settings if available
   },
+
+  /**
+   * Check if selected country is Ukraine.
+   * We scan the 'options.countries' list to find the ID for "Ukraine".
+   */
+  get isUkraineSelected() {
+    const p = this.panels.opportunities;
+    if (!p || !p.formData || !p.formData.country) return false;
+
+    const selectedId = parseInt(p.formData.country);
+
+    // Find the country object in options to check name
+    // Assuming options.countries is loaded
+    if (p.options && p.options.countries) {
+      const country = p.options.countries.find((c) => c.id === selectedId);
+      // Check against localized name or slug if available.
+      // For stability, checking "Ukraine" string or specific ID is common.
+      // Adjust "Ukraine" string based on your exact term name in DB.
+      return (
+        country && (country.name === "Ukraine" || country.name === "Україна")
+      );
+    }
+    return false;
+  },
 };

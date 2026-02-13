@@ -276,6 +276,8 @@ export const moduleScripts = () => {
       "inc/launchpad/Assets/*.mjs",
       "inc/gateway/Assets/*.js",
       "inc/gateway/Assets/*.mjs",
+      "inc/listing/Assets/*.js",
+      "inc/listing/Assets/*.mjs",
     ],
     {
       allowEmpty: true,
@@ -294,7 +296,7 @@ export const pot = () => {
 };
 
 export const production = () => {
-  let version = "1.0.0"; // Default fallback
+  let version = "1.0.0";
 
   try {
     // Check if .git directory exists before calling git-rev-sync
@@ -350,6 +352,7 @@ export const watchForChanges = () => {
   watch("inc/acf/blocks/**/*.js", blockScripts);
   watch("inc/launchpad/Assets/**/*.{js,mjs}", moduleScripts);
   watch("inc/gateway/Assets/**/*.{js,mjs}", moduleScripts);
+  watch("inc/listing/Assets/**/*.{js,mjs}", moduleScripts);
   watch("inc/acf/blocks/**/*.module.scss", blockStyles);
 };
 

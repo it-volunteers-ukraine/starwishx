@@ -3,7 +3,7 @@
 /**
  * Setup for
  * Launchpad user admin panel app
- * Version: 0.4.1
+ * Version: 0.5.1
  * Author: DevFrappe
  * Email: dev.frappe@proton.me
  * 

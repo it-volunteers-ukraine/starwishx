@@ -48,6 +48,7 @@ class OpportunitiesPanel extends AbstractPanel
             'date_ends' => '',
             'category' => [], // Array for multiple selection
             'country' => '',
+            'locations' => [], // Must be initialized as array
             'city' => '',
             'sourcelink' => '',
             'seekers' => [],
@@ -377,38 +378,153 @@ class OpportunitiesPanel extends AbstractPanel
                                     <!-- <div class="form-row"> -->
                                     <div class="form-field">
                                         <label><?php esc_html_e('Start Date', 'starwishx'); ?></label>
-                                        <input type="date" required data-wp-bind--value="<?= $formPath ?>.date_starts" data-wp-on--input="actions.opportunities.updateForm" data-field="date_starts">
+                                        <div class="input-date-iconed">
+                                            <input type="date" required data-wp-bind--value="<?= $formPath ?>.date_starts" data-wp-on--input="actions.opportunities.updateForm" data-field="date_starts">
+                                            <button type="button" class="input-date-iconed__btn" data-wp-on--click="actions.opportunities.openDatePicker" aria-label="<?php esc_attr_e('Open calendar', 'starwishx'); ?>">
+                                                <svg width="18" height="18" aria-hidden="true" focusable="false" viewBox="0 0 24 24">
+                                                    <use href="<?php echo get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-calendar"></use>
+                                                </svg>
+                                            </button>
+                                        </div>
                                     </div>
                                     <div class="form-field">
                                         <label><?php esc_html_e('End Date', 'starwishx'); ?></label>
-                                        <input type="date" required data-wp-bind--value="<?= $formPath ?>.date_ends" data-wp-on--input="actions.opportunities.updateForm" data-field="date_ends">
+                                        <div class="input-date-iconed">
+                                            <input type="date" required data-wp-bind--value="<?= $formPath ?>.date_ends" data-wp-on--input="actions.opportunities.updateForm" data-field="date_ends">
+                                            <button type="button" class="input-date-iconed__btn" data-wp-on--click="actions.opportunities.openDatePicker" aria-label="<?php esc_attr_e('Open calendar', 'starwishx'); ?>">
+                                                <svg width="18" height="18" aria-hidden="true" focusable="false" viewBox="0 0 24 24">
+                                                    <use href="<?php echo get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-calendar"></use>
+                                                </svg>
+                                            </button>
+                                        </div>
                                     </div>
-                                    <!-- </div> -->
-
                                 </div>
 
                                 <div class="launchpad-grid-auto">
+                                    <!-- Country Select -->
                                     <div class="form-field">
                                         <label><?php esc_html_e('Country', 'starwishx'); ?></label>
-                                        <select required data-wp-bind--value="<?= $formPath ?>.country" data-wp-on--change="actions.opportunities.updateForm" data-field="country">
+                                        <select required
+                                            data-wp-bind--value="<?= $formPath ?>.country"
+                                            data-wp-on--change="actions.opportunities.updateForm"
+                                            data-field="country">
                                             <option value=""><?php esc_html_e('Select Country', 'starwishx'); ?></option>
                                             <template data-wp-each="<?= $optPath ?>.countries">
                                                 <option data-wp-bind--value="context.item.id" data-wp-text="context.item.name"></option>
                                             </template>
                                         </select>
                                     </div>
-
-                                    <div class="form-field">
-                                        <label><?php esc_html_e('City', 'starwishx'); ?></label>
-                                        <input type="text" required data-wp-bind--value="<?= $formPath ?>.city" data-wp-on--input="actions.opportunities.updateForm" data-field="city">
-                                    </div>
-
                                     <div class="form-field">
                                         <label><?php esc_html_e('Link', 'starwishx'); ?></label>
                                         <input type="url" required data-wp-bind--value="<?= $formPath ?>.sourcelink" data-wp-on--input="actions.opportunities.updateForm" data-field="sourcelink">
                                     </div>
+
                                 </div>
 
+                                <div class="form-field form-field-locations" data-wp-bind--hidden="!state.isUkraineSelected">
+                                    <label>
+                                        <?php esc_html_e('Locations (KATOTTG)', 'starwishx'); ?>
+                                        <span class="description"><?php esc_html_e('Filter by administrative level', 'starwishx'); ?></span>
+                                    </label>
+
+                                    <!-- 1. The Selected Chips (Shared for all 3 inputs) -->
+                                    <!-- Showing this AT THE TOP is better UX so user sees what they added immediately -->
+                                    <div class="locations-chips"
+                                        data-wp-bind--hidden="!state.panels.opportunities.formData.locations.length">
+                                        <template data-wp-each="state.panels.opportunities.formData.locations">
+                                            <span class="location-chip btn-chip">
+                                                <!-- Using the name from the View (name_category_oblast) -->
+                                                <span data-wp-text="context.item.name"></span>
+                                                <!-- &times; Button-->
+                                                <button class="location-remove btn-chip__icon" data-wp-on--click="actions.opportunities.removeLocation">
+                                                    <svg class="">
+                                                        <use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-plus-small"></use>
+                                                    </svg>
+                                                </button>
+                                            </span>
+                                        </template>
+                                    </div>
+
+                                    <!-- 2. The 3-Column Search Grid -->
+                                    <div class="launchpad-grid-3-col">
+
+                                        <!-- BOX 1: OBLAST -->
+                                        <div class="location-input-wrapper location-search-wrapper">
+                                            <label>Oblast / Region</label>
+                                            <div class="input-iconed">
+                                                <input type="text"
+                                                    placeholder="<?php esc_attr_e('Kyivska, Lvivska...', 'starwishx'); ?>"
+                                                    data-wp-bind--value="state.panels.opportunities.formData.searchOblast"
+                                                    data-wp-on--input="actions.opportunities.searchKatottgOblast"
+                                                    autocomplete="off">
+                                                <svg class="">
+                                                    <use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-search-small"></use>
+                                                </svg>
+                                            </div>
+
+                                            <ul class="location-results location-dropdown" data-wp-bind--hidden="!state.panels.opportunities.formData.resultsOblast.length">
+                                                <template data-wp-each="state.panels.opportunities.formData.resultsOblast">
+                                                    <li class="location-result-item" data-wp-on--click="actions.opportunities.addLocation"
+                                                        tabindex="0"
+                                                        role="button">
+                                                        <span data-wp-text="context.item.name"></span>
+                                                    </li>
+                                                </template>
+                                            </ul>
+                                        </div>
+
+                                        <!-- BOX 2: RAION -->
+                                        <div class="location-input-wrapper location-search-wrapper">
+                                            <label>Raion / District / Hromada</label>
+                                            <div class="input-iconed">
+                                                <input type="text"
+                                                    placeholder="<?php esc_attr_e('Buchanskyi, Stryiskyi...', 'starwishx'); ?>"
+                                                    data-wp-bind--value="state.panels.opportunities.formData.searchRaion"
+                                                    data-wp-on--input="actions.opportunities.searchKatottgRaion"
+                                                    autocomplete="off">
+                                                <svg class="">
+                                                    <use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-search-small"></use>
+                                                </svg>
+                                            </div>
+                                            <ul class="location-results location-dropdown" data-wp-bind--hidden="!state.panels.opportunities.formData.resultsRaion.length">
+                                                <template data-wp-each="state.panels.opportunities.formData.resultsRaion">
+                                                    <li class="location-result-item" data-wp-on--click="actions.opportunities.addLocation"
+                                                        tabindex="0"
+                                                        role="button">
+                                                        <span data-wp-text="context.item.name"></span>
+                                                        <!-- <small data-wp-text="context.item.category"></small> -->
+                                                    </li>
+                                                </template>
+                                            </ul>
+                                        </div>
+
+                                        <!-- BOX 3: CITY/HROMADA -->
+                                        <div class="location-input-wrapper location-search-wrapper">
+                                            <label>City / Settlement / City district</label>
+                                            <div class="input-iconed">
+                                                <input type="text"
+                                                    placeholder="<?php esc_attr_e('Bucha, Irpin, Kyiv...', 'starwishx'); ?>"
+                                                    data-wp-bind--value="state.panels.opportunities.formData.searchCity"
+                                                    data-wp-on--input="actions.opportunities.searchKatottgCity"
+                                                    autocomplete="off">
+                                                <svg class="">
+                                                    <use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-search-small"></use>
+                                                </svg>
+                                            </div>
+                                            <ul class="location-results location-dropdown" data-wp-bind--hidden="!state.panels.opportunities.formData.resultsCity.length">
+                                                <template data-wp-each="state.panels.opportunities.formData.resultsCity">
+                                                    <li class="location-result-item" data-wp-on--click="actions.opportunities.addLocation"
+                                                        tabindex="0"
+                                                        role="button">
+                                                        <span data-wp-text="context.item.name"></span>
+                                                        <!-- <small data-wp-text="context.item.category"></small> -->
+                                                    </li>
+                                                </template>
+                                            </ul>
+                                        </div>
+
+                                    </div>
+                                </div>
                                 <div class="form-field">
                                     <label><?php esc_html_e('Opportunity Category', 'starwishx'); ?></label>
                                     <!-- Hierarchical Checkboxes -->

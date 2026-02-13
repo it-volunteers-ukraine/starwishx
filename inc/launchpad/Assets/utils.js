@@ -37,7 +37,25 @@ const DEFAULT_PANEL_STATE = {
   _loaded: false,
   items: [],
   currentView: "list",
-  formData: { seekers: [], subcategory: [] },
+  formData: {
+    seekers: [],
+    subcategory: [],
+    // Shared list of selected chips
+    locations: [],
+
+    // --- SPLIT SEARCH STATES ---
+    // 1. Oblast
+    searchOblast: "",
+    resultsOblast: [],
+
+    // 2. Raion
+    searchRaion: "",
+    resultsRaion: [],
+
+    // 3. City/Settlement
+    searchCity: "",
+    resultsCity: [],
+  },
   layout: "compact",
   isLayoutCompact: true,
   isLayoutCard: false,
@@ -80,7 +98,7 @@ export function ensurePanel(state, panelId) {
 export async function fetchJson(
   state,
   url,
-  { method = "GET", body = null, panelId = null } = {}
+  { method = "GET", body = null, panelId = null } = {},
 ) {
   // Cancel any previous request for this panel
   if (panelId) {

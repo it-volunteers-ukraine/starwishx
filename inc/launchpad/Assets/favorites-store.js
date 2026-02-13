@@ -56,9 +56,20 @@ const { state } = store("launchpad/favorites", {
   },
 
   actions: {
-    async toggle(event) {
-      if (event) event.preventDefault();
-      const id = resolveId();
+    async toggle(eventOrId) {
+      let id = null;
+      let event = null;
+
+      if (typeof eventOrId === "number" || typeof eventOrId === "string") {
+        // Called programmatically with ID
+        id = Number(eventOrId);
+      } else {
+        // Called via Event handler
+        event = eventOrId;
+        if (event && event.preventDefault) event.preventDefault();
+        id = resolveId(); // Uses getContext() or element ref
+      }
+
       if (!id) return;
 
       // Access state via 'state' variable is fine in actions (async),
