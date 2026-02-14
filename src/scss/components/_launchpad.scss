@@ -246,8 +246,10 @@
     // Control Bar (Filters & Toggles)
     .launchpad-controls {
         display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
         align-items: center;
-        gap: 2rem;
+        gap: 12px;
         margin-top: 1rem;
         width: 100%;
 
@@ -260,28 +262,74 @@
             gap: 1rem;
         }
         .launchpad-filters {
-            position: relative;
             border-radius: 8px;
-            background: $surface-violet;
+            // background: $surface-violet;
             padding: 10px 9px;
             .filter-label {
-                position: absolute;
-                top: -7px;
-                left: 12px;
-                opacity: 0.75;
                 color: $text-light;
-                font-size: 0.8rem;
+                font-weight: 600;
+                font-size: 18px;
             }
             .filter-checkboxes {
                 display: flex;
                 // margin-left: 4px;
                 align-items: center;
                 gap: 1rem;
+                margin-top: 4px;
                 color: $text-light;
                 font-size: 0.85rem;
 
                 .filter-checkbox {
                     align-items: flex-end;
+                }
+            }
+        }
+        .layout-switcher {
+            @include max-tablet {
+                display: none;
+                order: -1;
+                margin-left: auto;
+            }
+            .btn-group-toggle {
+                display: inline-flex;
+                border-radius: 8px;
+                background: $surface-violet;
+                padding: 4px;
+
+                .layout-check {
+                    position: absolute;
+                    margin: -1px;
+                    padding: 0;
+                    width: 1px;
+                    height: 1px;
+                    overflow: hidden;
+                    clip: rect(0, 0, 0, 0);
+                    border: 0;
+                    white-space: nowrap;
+
+                    // Checked State
+                    &:checked + .layout-btn {
+                        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+                        background: $surface-primary;
+                        color: $icon-color-accent;
+                    }
+                }
+
+                .layout-btn {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    transition: all 0.2s ease;
+                    cursor: pointer;
+                    border-radius: 6px;
+                    padding: 6px 12px;
+                    color: $text-light;
+                    .btn-chip__icon {
+                        color: $buttons-color-background-primary-default;
+                    }
+                    &:hover {
+                        color: $text-dark;
+                    }
                 }
             }
         }
@@ -294,69 +342,40 @@
     }
 }
 
-// Layout Switcher (Icons)
-.btn-group-toggle {
-    display: inline-flex;
-    border-radius: 8px;
-    background: $surface-violet;
-    padding: 4px;
-
-    .layout-check {
-        position: absolute;
-        margin: -1px;
-        padding: 0;
-        width: 1px;
-        height: 1px;
-        overflow: hidden;
-        clip: rect(0, 0, 0, 0);
-        border: 0;
-        white-space: nowrap;
-
-        // Checked State
-        &:checked + .layout-btn {
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            background: $surface-primary;
-            color: $icon-color-accent;
-        }
-    }
-
-    .layout-btn {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        transition: all 0.2s ease;
-        cursor: pointer;
-        border-radius: 6px;
-        padding: 6px 12px;
-        color: $text-light;
-
-        &:hover {
-            color: $text-dark;
-        }
-    }
-}
-
 /* ======================================
    5. COMPONENT: OPPORTUNITY CARD
    ====================================== */
 
 .opportunity-card {
-    display: grid;
-
-    // Default: Card Layout (Horizontal)
-    grid-template-columns: 180px 1fr;
-    gap: 1.5rem;
+    // display: grid;
+    // grid-template-columns: 180px 1fr;
+    // grid-template-columns: 80px 1fr auto;
+    // grid-template-columns: auto 1fr;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 12px;
     transition: all $animations;
-    border-bottom: 2px dashed $dropdown-surface-color-pressed;
+    container: opportunityCard / inline-size;
+    border: 1px solid $stroke-default;
     border-radius: $radius-input;
     background: $surface-primary;
-    padding: 1.5rem;
-
-    @include max-tablet {
-        grid-template-columns: 1fr;
-        gap: 1rem;
-        padding: 1rem;
+    padding: 12px;
+    min-height: 120px;
+    @container opportunityCard (max-width: 759px) {
+        // grid-template-columns: 1fr auto;
+        // background-color: $surface-violet;
     }
+    .opportunity-card__content-wrapper {
+        display: grid;
+        grid-template-columns: 80px auto;
+        gap: 10px;
+    }
+    // @include max-tablet {
+    // grid-template-columns: 1fr;
+    // gap: 1rem;
+    // padding: 1rem;
+    // }
 
     &__figure {
         display: flex;
@@ -368,32 +387,60 @@
         aspect-ratio: 4 / 3;
         width: 100%;
         overflow: hidden;
-    }
+        &__image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        &__placeholder {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: $text-light;
 
-    &__image {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-    }
-
-    &__placeholder {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        color: $text-light;
-
-        .dashicons {
-            opacity: 0.3;
-            width: 48px;
-            height: 48px;
-            font-size: 48px;
+            .dashicons {
+                opacity: 0.3;
+                width: 48px;
+                height: 48px;
+                font-size: 48px;
+            }
         }
     }
 
     .opportunity-content {
+        @container opportunityCard (max-width: 559px) {
+            grid-row: 1;
+            grid-column: 2;
+        }
         display: flex;
         flex-direction: column;
-        min-width: 0; // Prevent flex item overflow
+        min-width: 0;
+        .opportunity-meta {
+            display: flex;
+            flex-flow: column wrap;
+            gap: 12px;
+            margin-bottom: 0.75rem;
+            color: $text-light;
+            font-size: 0.85rem;
+            .opportunity-meta__container-date {
+            }
+            .opportunity-comments {
+                display: inline-flex;
+                align-items: center;
+                gap: 4px;
+
+                .dashicons {
+                    width: 16px;
+                    height: 16px;
+                    color: $icon-color-accent;
+                    font-size: 16px;
+                }
+
+                .comments-number {
+                    font-weight: 600;
+                }
+            }
+        }
     }
 
     .opportunity-title {
@@ -409,27 +456,32 @@
 
     .opportunity-excerpt {
         // Truncate text
-        display: -webkit-box;
-        margin-bottom: 1rem;
-        line-clamp: 3;
-        color: $text-light;
-        font-size: 0.95rem;
-        line-height: 1.5;
-        -webkit-line-clamp: 3;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
+        // display: -webkit-box;
+        // margin-bottom: 1rem;
+        // line-clamp: 3;
+        // color: $text-light;
+        // font-size: 0.95rem;
+        // line-height: 1.5;
+        // -webkit-line-clamp: 3;
+        // -webkit-box-orient: vertical;
+        // overflow: hidden;
+        display: none;
     }
 
     .opportunity-actions {
         display: flex;
-        grid-column: 1 / -1; // Span full width if needed
-        flex-wrap: wrap;
-        gap: 12px;
-        margin-top: auto; // Push to bottom
-
-        @include max-tablet {
-            gap: 6px;
-            margin-top: 1rem;
+        flex-flow: column wrap;
+        align-items: flex-end;
+        gap: 25px;
+        @container (max-width: 559px) {
+            width: 100%;
+            // grid-column-end: -1;
+            grid-column: 1 / -1;
+            // @include max-laptop {
+            // gap: 6px;
+            // margin-top: 140px;
+            flex-flow: row nowrap;
+            justify-content: space-between;
         }
     }
     .opportunity-taxonomy {
@@ -449,73 +501,48 @@
     }
 }
 
-// Meta Data (Date, Status, Comments)
-.opportunity-meta {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 0.75rem;
-    color: $text-light;
-    font-size: 0.85rem;
-
-    .opportunity-comments {
-        display: inline-flex;
-        align-items: center;
-        gap: 4px;
-
-        .dashicons {
-            width: 16px;
-            height: 16px;
-            color: $icon-color-accent;
-            font-size: 16px;
-        }
-
-        .comments-number {
-            font-weight: 600;
-        }
-    }
-}
-
 /* ======================================
    6. COMPONENT: STATUS BADGE
    ====================================== */
 
 .status-badge {
-    border-radius: 4px;
-
-    // Define colors using CSS variables locally or map to SCSS vars
-    // Default fallback
-    background-color: $input-color-border-default;
-    padding: 4px 8px;
+    border: 1px solid;
+    border-radius: $radius-element;
+    // background-color: $input-color-border-default;
+    padding: 6px 10px;
     color: $text-light;
-    font-weight: 500;
-    font-size: 12px;
+    font-size: 14px;
     line-height: 1;
     text-transform: capitalize;
 
     &[data-status="draft"] {
-        background-color: #f2f2f2; // Consider adding to variables: $surface-neutral
+        // background-color: #f2f2f2;
         color: $text-light;
     }
 
     &[data-status="pending"] {
-        border: 1px solid rgba($element-card-social-text, 0.2);
+        border: 1px solid rgba($element-card-social-stroke, 0.2);
         background-color: $element-card-social-fill;
         color: $element-card-social-text;
     }
 
     &[data-status="publish"] {
-        background-color: $element-card-tech-stroke;
+        border-color: $element-card-tech-stroke;
+        background-color: $element-card-tech-fill;
         color: $element-card-tech-text;
     }
 }
 
-// Conditional Button Display based on Status
 .btn-opportunity__review {
     &[data-status="pending"],
     &[data-status="publish"] {
         display: none;
+    }
+}
+.btn-opportunity__edit {
+    &[data-status="pending"] {
+        margin-top: auto;
+        margin-left: auto;
     }
 }
 
@@ -527,17 +554,23 @@
     display: grid;
     gap: 1.5rem;
     transition: all 0.3s ease-in-out;
-
+    .opportunity-info {
+        display: none;
+    }
     // Compact Layout (List View)
     &[data-layout="compact"] {
-        grid-template-columns: 1fr;
+        // grid-template-columns: 1fr;
 
         .opportunity-card {
-            grid-template-columns: 80px 1fr auto; // Icon | Content | Actions
+            // grid-template-columns: 80px 1fr auto; // Icon | Content | Actions
             align-items: center;
             gap: 1rem;
             padding: 0.75rem 1rem;
-
+            // @include max-tablet {
+            //     .opportunity-actions {
+            //         width: 100%;
+            //     }
+            // }
             &__figure {
                 aspect-ratio: 1;
                 width: 80px;
@@ -545,8 +578,7 @@
             .opportunity-content {
                 display: grid;
                 grid-template-rows: auto;
-                // grid-template-columns: repeat(3, 1fr);
-                grid-template-columns: minmax(150px, 300px) minmax(60px, 80px) auto;
+                // grid-template-columns: minmax(150px, 300px) minmax(60px, 80px) auto;
                 column-gap: 1rem;
                 row-gap: 4px;
 
@@ -568,20 +600,21 @@
                     }
                 }
                 .opportunity-info {
-                    grid-row: span 3 / span 3;
-                    grid-row-start: 1;
-                    grid-column-start: 2;
-                    .opportunity-range {
-                        display: inline-flex;
-                        flex-flow: column wrap;
-                        gap: 4px;
-                        span {
-                            line-height: 1;
-                        }
-                        &__icon {
-                            display: none;
-                        }
-                    }
+                    display: none;
+                    // grid-row: span 3 / span 3;
+                    // grid-row-start: 1;
+                    // grid-column-start: 2;
+                    // .opportunity-range {
+                    //     display: inline-flex;
+                    //     flex-flow: column wrap;
+                    //     gap: 4px;
+                    //     span {
+                    //         line-height: 1;
+                    //     }
+                    //     &__icon {
+                    //         display: none;
+                    //     }
+                    // }
                 }
 
                 .opportunity-taxonomy {
@@ -598,63 +631,61 @@
 
             .opportunity-actions {
                 grid-column: auto;
-                margin-top: 0;
-            }
-
-            @include max-tablet {
-                grid-template-columns: 1fr;
-                .opportunity-actions {
-                    width: 100%;
-                }
+                // margin-top: 0;
             }
         }
     }
 
-    // Card Layout (Default)
     &[data-layout="grid"] {
-        // grid-template-columns: 1fr;
-        // Styles inherited from default .opportunity-card
-        .opportunity-card {
-            grid-template-rows: auto;
-            // grid-template-columns: 1fr;
-            // display: flex;
-            // grid-template-columns: repeat(2, 1fr);
-            grid-template-columns: 1fr minmax(100px, 250px);
-            .opportunity-content {
-                order: 1;
-                .opportunity-excerpt {
-                    max-width: 570px;
-                }
-            }
-            .opportunity-actions {
-                grid-row-start: 2;
-                grid-column-start: 1;
-                order: 2;
-            }
-            .opportunity-card__figure {
-                grid-row: span 2 / span 2;
-                grid-row-start: 1;
-                grid-column-start: 2;
-                order: 3;
-            }
+        @include min-tabland {
+            grid-template-columns: repeat(3, 1fr);
         }
+        @include max-tabland {
+            grid-template-columns: repeat(2, 1fr);
+        }
+        @include max-tablet {
+            grid-template-columns: auto;
+        }
+        // .opportunity-card {
+        //     grid-template-rows: auto;
+        //     grid-template-columns: 1fr minmax(100px, 250px);
+        //     .opportunity-content {
+        //         order: 1;
+        //         .opportunity-excerpt {
+        //             max-width: 570px;
+        //         }
+        //     }
+        //     .opportunity-actions {
+        //         grid-row-start: 2;
+        //         grid-column-start: 1;
+        //         order: 2;
+        //     }
+        //     .opportunity-card__figure {
+        //         grid-row: span 2 / span 2;
+        //         grid-row-start: 1;
+        //         grid-column-start: 2;
+        //         order: 3;
+        //     }
+        // }
     }
 
     // Grid Layout (Columns)
     &[data-layout="card"] {
-        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-
-        .opportunity-card {
-            grid-template-columns: 1fr; // Stack vertically
-
-            &__figure {
-                aspect-ratio: 16 / 9;
-            }
-
-            .opportunity-actions {
-                margin-top: 1rem;
-            }
+        @include min-tabland {
+            grid-template-columns: repeat(2, 1fr);
         }
+        // grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        // .opportunity-card {
+        //     grid-template-columns: 1fr;
+
+        //     &__figure {
+        //         aspect-ratio: 16 / 9;
+        //     }
+
+        //     .opportunity-actions {
+        //         margin-top: 1rem;
+        //     }
+        // }
     }
 }
 
