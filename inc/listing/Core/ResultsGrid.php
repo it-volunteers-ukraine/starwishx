@@ -48,9 +48,9 @@ class ResultsGrid implements RenderableInterface
             <!-- The Grid -->
             <!-- data-wp-bind--class="state.layoutClass" -->
             <div
-                class="listing-grid opportunities-grid1 results-grid"
+                class="listing-grid opportunities-grid results-grid"
                 data-wp-bind--hidden="!state.hasResults"
-                data-layout="grid">
+                data-layout="compact">
                 <template data-wp-each--item="state.results" data-wp-key="context.item.id">
                     <?php echo $this->renderCard(); ?>
                 </template>
@@ -78,66 +78,57 @@ class ResultsGrid implements RenderableInterface
     {
         $this->startBuffer();
     ?>
-        <article class="opportunity-card" data-layout="grid">
+        <article class="opportunity-card">
 
-            <figure class="opportunity-card__figure listing-card__figure">
-                <a class="listing-card__figure--link" data-wp-bind--href="context.item.url">
-                    <img class="listing-card__image"
-                        data-wp-bind--src="context.item.thumbnail" data-wp-bind--hidden="!context.item.thumbnail" data-wp-bind--alt="context.item.title">
-                    <!-- Fallback Placeholder (shown if no image) -->
-                    <div class="opportunity-card__placeholder" data-wp-bind--hidden="context.item.thumbnail">
-                        <svg width="40" height="40" class="icon-heart">
-                            <use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-heart"></use>
-                        </svg>
-                    </div>
-                </a>
-                <div class="control-favorites-wrapper control-favorites-wrapper--icon-only">
-                    <div
-                        class="heart-label"
-                        data-wp-class--is-active="state.isFavorited"
-                        data-wp-on--click="actions.toggleFavorite"
-                        role="button"
-                        tabindex="0">
-                        <span class="heart-label__text">
-                            <span class="heart-label__text--inactive">
-                                <?php esc_html_e('Add to favorites', 'starwishx'); ?>
+            <div class="opportunity-card__content">
+                <figure class="opportunity-card__figure listing-card__figure">
+                    <a class="listing-card__figure--link" data-wp-bind--href="context.item.url">
+                        <img class="listing-card__image"
+                            data-wp-bind--src="context.item.thumbnail" data-wp-bind--hidden="!context.item.thumbnail" data-wp-bind--alt="context.item.title">
+                        <!-- Fallback Placeholder (shown if no image) -->
+                        <div class="opportunity-card__placeholder" data-wp-bind--hidden="context.item.thumbnail">
+                            <svg width="40" height="40" class="icon-heart">
+                                <use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-heart"></use>
+                            </svg>
+                        </div>
+                    </a>
+                    <div class="control-favorites-wrapper control-favorites-wrapper--icon-only">
+                        <div
+                            class="heart-label"
+                            data-wp-class--is-active="state.isFavorited"
+                            data-wp-on--click="actions.toggleFavorite"
+                            role="button"
+                            tabindex="0">
+                            <span class="heart-label__text">
+                                <span class="heart-label__text--inactive">
+                                    <?php esc_html_e('Add to favorites', 'starwishx'); ?>
+                                </span>
+                                <span class="heart-label__text--active">
+                                    <?php esc_html_e('In favorites', 'starwishx'); ?>
+                                </span>
                             </span>
-                            <span class="heart-label__text--active">
-                                <?php esc_html_e('In favorites', 'starwishx'); ?>
-                            </span>
-                        </span>
-                    </div>
-                    <div class="heart">
-                        <input
-                            type="checkbox"
-                            class="heart__checkbox"
-                            data-wp-bind--checked="state.isFavorited"
-                            data-wp-on--change="actions.toggleFavorite"
-                            aria-label="<?php esc_attr_e('Toggle Favorite', 'starwishx'); ?>">
-                        <div class="heart__icon"></div>
-                        <div class="heart__lines" aria-hidden="true">
-                            <span class="heart__line"></span>
-                            <span class="heart__line"></span>
-                            <span class="heart__line"></span>
-                            <span class="heart__line"></span>
-                            <span class="heart__line"></span>
-                            <span class="heart__line"></span>
+                        </div>
+                        <div class="heart">
+                            <input
+                                type="checkbox"
+                                class="heart__checkbox"
+                                data-wp-bind--checked="state.isFavorited"
+                                data-wp-on--change="actions.toggleFavorite"
+                                aria-label="<?php esc_attr_e('Toggle Favorite', 'starwishx'); ?>">
+                            <div class="heart__icon"></div>
+                            <div class="heart__lines" aria-hidden="true">
+                                <span class="heart__line"></span>
+                                <span class="heart__line"></span>
+                                <span class="heart__line"></span>
+                                <span class="heart__line"></span>
+                                <span class="heart__line"></span>
+                                <span class="heart__line"></span>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-            </figure>
-            <div class="opportunity-card__content">
-                <span class="categories">
-                    <template data-wp-each--cat="context.item.categories">
-                        <span data-wp-text="context.cat.name"
-                            data-wp-bind--class="state.categoryClass">
-                        </span>
-                    </template>
-                </span>
-                <a data-wp-bind--href="context.item.url">
-                    <h3 class="opportunity-card__title card-title" data-wp-text="context.item.title"></h3>
-                </a>
+                </figure>
+
 
                 <!-- <div class="control-favorites-wrapper">
                     <div
@@ -170,6 +161,16 @@ class ResultsGrid implements RenderableInterface
                     </div>
                 </div> -->
                 <div class="opportunity-card__meta">
+                    <span class="categories">
+                        <template data-wp-each--cat="context.item.categories">
+                            <span data-wp-text="context.cat.name"
+                                data-wp-bind--class="state.categoryClass">
+                            </span>
+                        </template>
+                    </span>
+                    <a data-wp-bind--href="context.item.url">
+                        <h3 class="opportunity-card__title card-title" data-wp-text="context.item.title"></h3>
+                    </a>
                     <div class="opportunity-card__dates">
                         <span data-wp-bind--hidden="!context.item.date_starts">
                             <?php esc_html_e('From:', 'starwishx'); ?>
@@ -188,19 +189,21 @@ class ResultsGrid implements RenderableInterface
                         Country:&nbsp;
                         <span class="country" data-wp-bind--hidden="!context.item.country" data-wp-text="context.item.country"></span>
                     </span>
-                </div>
-                <p class="opportunity-card__excerpt card-text" data-wp-text="context.item.excerpt"></p>
-                <span data-wp-bind--hidden="!state.seekersList">
-                    Recievers:&nbsp;
-                    <span data-wp-text="state.seekersList"></span>
-                </span>
+                    <p class="opportunity-card__excerpt card-text" data-wp-text="context.item.excerpt"></p>
+                    <span data-wp-bind--hidden="!state.seekersList">
+                        Recievers:&nbsp;
+                        <span data-wp-text="state.seekersList"></span>
+                    </span>
+                </div> <!-- Meta -->
+
                 <!-- <div class="seekers" data-wp-bind--hidden="!context.item.seekers.length">
                     <span class="seekers__label">Seekers:</span>
                     <template data-wp-each--seeker="context.item.seekers">
                         <span class="seeker-chip" data-wp-text="context.seeker.name"></span>
                     </template>
                 </div> -->
-
+            </div>
+            <div class="opportunity-card__footer">
                 <span class="location locations-chips locations-chips--listing">
                     <template data-wp-each--loc="context.item.locations">
                         <span class="location-chip1 btn-chip1" data-wp-text="context.loc.name"></span>&sol;

@@ -14,7 +14,7 @@ use Shared\Contracts\StateProviderInterface;
 interface PanelInterface extends StateProviderInterface
 {
     /**
-     * Dashicon name without 'dashicons-' prefix.
+     * Icon Id from SVG sprite 
      */
     public function getIcon(): string;
 

@@ -153,7 +153,7 @@
         },
         {
             "key": "field_693740c49c465",
-            "label": "Opportunity subcategory",
+            "label": "Opportunity subcategory (deprecated)",
             "name": "opportunity_subcategory",
             "aria-label": "",
             "type": "taxonomy",
@@ -205,12 +205,12 @@
         },
         {
             "key": "field_6937429b9c467",
-            "label": "City",
+            "label": "City (deprecated)",
             "name": "city",
             "aria-label": "",
             "type": "text",
             "instructions": "",
-            "required": 1,
+            "required": 0,
             "conditional_logic": 0,
             "wrapper": {
                 "width": "",
@@ -345,7 +345,7 @@
                 "class": "",
                 "id": ""
             },
-            "return_format": "array",
+            "return_format": "id",
             "library": "uploadedTo",
             "min_size": "",
             "max_size": "",
@@ -371,5 +371,6 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1769561607
+    "display_title": "",
+    "modified": 1771150499
 }

@@ -1,7 +1,5 @@
 @use "components/reset" as *;
 @use "variables" as *;
-
-// @use "mixins/color" as *;
 @use "common" as *;
 @use "header" as *;
 @use "footer" as *;
@@ -11,9 +9,7 @@
 @use "components/launchpad" as *;
 @use "components/gateway" as *;
 @use "components/comments" as *;
+@use "components/listing" as *;
 @use "components/single-opportunity" as *;
 @use "components/control-favorites" as *;
 @use "components/page-category-oportunities" as *;
-@use "components/page-listing-oportunities" as *;
-
-// @use "/inc/launchpad/Assets/launchpad" as *;
