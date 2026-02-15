@@ -490,7 +490,7 @@
         flex-flow: column wrap;
         align-items: flex-end;
         gap: 25px;
-        @container (max-width: 559px) {
+        @container (max-width: 723px) {
             width: 100%;
             // grid-column-end: -1;
             grid-column: 1 / -1;
