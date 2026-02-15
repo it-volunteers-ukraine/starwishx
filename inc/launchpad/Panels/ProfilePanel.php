@@ -27,7 +27,7 @@ class ProfilePanel extends AbstractPanel
 
     public function getIcon(): string
     {
-        return 'admin-users';
+        return 'icon-settings';
     }
 
     public function getInitialState(?int $userId = null): array

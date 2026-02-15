@@ -30,7 +30,7 @@ class FavoritesPanel extends AbstractPanel
 
     public function getIcon(): string
     {
-        return 'heart';
+        return 'icon-heart';
     }
 
     public function getInitialState(?int $userId = null): array

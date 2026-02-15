@@ -28,7 +28,7 @@ class OpportunitiesPanel extends AbstractPanel
 
     public function getIcon(): string
     {
-        return 'megaphone';
+        return 'icon-opportunities';
     }
 
     public function getInitialState(?int $userId = null): array

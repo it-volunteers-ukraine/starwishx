@@ -16,7 +16,7 @@
     display: grid;
     grid-template-columns: 280px 1fr;
     gap: 0.5rem;
-
+    overflow: hidden;
     @include max-laptop {
         grid-template-columns: 180px 1fr;
     }
@@ -47,6 +47,7 @@
         border-right: none;
         border-bottom: 1px solid $input-color-border-default;
         padding: 1rem 0;
+        overflow: hidden;
     }
 }
 
@@ -55,14 +56,14 @@
     flex-flow: column wrap;
     gap: 0.5rem;
     padding: 0 1rem;
+    overflow-x: auto;
 
     // @include max-tablet {
     @media only screen and (max-width: ($width-tablet + 290px - 0.02px)) {
         flex-direction: row;
         flex-wrap: nowrap;
-        gap: 1rem;
-        padding: 0 1rem;
-        overflow-x: auto;
+        gap: 4px;
+        padding: 0;
         // -webkit-overflow-scrolling: touch;
 
         // Hide scrollbar for cleaner mobile look
@@ -70,76 +71,92 @@
             display: none;
         }
     }
-}
 
-.launchpad-tab {
-    display: flex;
-    position: relative;
-    align-items: center;
+    .launchpad-tab {
+        display: flex;
+        position: relative;
+        align-items: center;
 
-    transition: all $animations;
-    cursor: pointer;
-    border: none;
-    border-radius: 12px;
+        transition: all $animations;
+        cursor: pointer;
+        border: none;
+        border-radius: 12px;
 
-    background: transparent;
-    padding: 1rem 1.5rem;
-    width: 100%;
+        background: transparent;
+        padding: 1rem 1.5rem;
+        width: 100%;
 
-    color: $text-basic;
-    font-weight: 400;
-    font-size: 1rem;
-    text-align: left;
-    white-space: nowrap;
+        color: $buttons-color-text-secondary-default;
+        font-weight: 400;
+        font-size: 1rem;
+        text-align: left;
+        white-space: nowrap;
 
-    // Interaction States
-    &:hover {
-        background: $buttons-color-background-secondary-hover;
-        color: $icon-color-primary;
-    }
-
-    &:focus-visible {
-        outline: 2px solid $primary-hover;
-        outline-offset: -2px;
-    }
-
-    // Active State
-    &.active {
-        background: $element-block-fill;
-        color: $element-block-text;
-        font-weight: 500;
-
-        // Active indicator strip
-        &::before {
-            position: absolute;
-            top: 50%;
-            left: 0;
-            transform: translateY(-50%);
-            border-radius: 2px;
-            background: $icon-color-fill;
-
-            width: 4px;
-            height: 60%;
-            content: "";
-
-            @include max-tablet {
-                display: none;
-            }
+        @include max-tablet {
+            flex-shrink: 0;
+            padding: 0.75rem 1rem;
+            width: auto;
         }
-    }
 
-    // Mobile adjustments
-    @include max-tablet {
-        flex-shrink: 0;
-        padding: 0.75rem 1rem;
-        width: auto;
-    }
+        .launchpad-tab__icon {
+            width: 18px;
+            height: 18px;
+            color: $icon-color-default-stroke;
+            margin-right: 0.5rem;
+            font-size: 18px;
+            transition: all $animations;
+        }
 
-    // High Contrast Mode
-    @media (prefers-contrast: high) {
-        border: 2px solid transparent;
+        // Interaction States
+        &:hover {
+            background: $buttons-color-background-secondary-hover;
+            color: $icon-color-primary;
+        }
+
+        &:focus-visible {
+            outline: 2px solid $primary-hover;
+            outline-offset: -2px;
+        }
+
+        // Active State
         &.active {
-            border-color: $icon-color-fill;
+            background: $element-block-fill;
+            color: $element-block-text;
+            font-weight: 500;
+            .launchpad-tab__icon {
+                color: $icon-color-accent;
+                svg {
+                    fill: $icon-color-accent;
+                }
+            }
+
+            // @include max-tablet {
+
+            // Active indicator strip
+            // &::before {
+            //     position: absolute;
+            //     top: 50%;
+            //     left: 0;
+            //     transform: translateY(-50%);
+            //     border-radius: 2px;
+            //     background: $icon-color-fill;
+
+            //     width: 4px;
+            //     height: 60%;
+            //     content: "";
+
+            //     @include max-tablet {
+            //         display: none;
+            //     }
+            // }
+        }
+
+        // High Contrast Mode
+        @media (prefers-contrast: high) {
+            border: 2px solid transparent;
+            &.active {
+                border-color: $icon-color-fill;
+            }
         }
     }
 }
@@ -211,7 +228,7 @@
     flex-wrap: wrap;
     justify-content: space-between;
     align-items: flex-start;
-    gap: 1rem;
+    // gap: 20px;
     margin-bottom: 1.5rem;
 
     // Title Group
@@ -250,7 +267,7 @@
         justify-content: space-between;
         align-items: center;
         gap: 12px;
-        margin-top: 1rem;
+        margin-top: 20px;
         width: 100%;
 
         @include min-laptop {
@@ -552,7 +569,7 @@
 
 .opportunities-grid {
     display: grid;
-    gap: 1.5rem;
+    gap: 12px;
     transition: all 0.3s ease-in-out;
     .opportunity-info {
         display: none;
@@ -933,9 +950,8 @@
     gap: 1rem;
 }
 
-// Placeholder Box style (used in forms and lists)
 .placeholder-box {
-    margin: 2rem 0;
+    margin: 20px 0 0 0;
 
     @include max-tablet {
         margin: 1.5rem 0;
@@ -1578,7 +1594,7 @@
     }
 }
 
-.location-input-wrapper {
-    .location-results {
-    }
-}
+// .location-input-wrapper {
+//     .location-results {
+//     }
+// }
