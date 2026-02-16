@@ -203,7 +203,7 @@ class ResultsGrid implements RenderableInterface
                     </template>
                 </div> -->
             </div>
-            <div class="opportunity-card__footer">
+            <div class="opportunity-card__footer" data-wp-bind--hidden="!context.item.locations.length">
                 <span class="location locations-chips locations-chips--listing">
                     <template data-wp-each--loc="context.item.locations">
                         <span class="location-chip1 btn-chip1" data-wp-text="context.loc.name"></span>&sol;
