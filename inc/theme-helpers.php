@@ -245,6 +245,7 @@ function sw_get_opportunity_view_data(int $post_id): array
             $root_categories[$current->term_id] = $current;
         }
     }
+    $root_categories = array_values($root_categories);
 
     // Dates - specific handling for ACF stored format vs UI format
     $raw_start = get_post_meta($post_id, 'opportunity_date_starts', true);
@@ -257,12 +258,15 @@ function sw_get_opportunity_view_data(int $post_id): array
     $country_id   = get_field('country', $post_id);
     $country_name = $country_id ? get_term($country_id, 'country')?->name : __('Worldwide', 'starwishx');
 
+    $seeker_ids = get_field('opportunity_seekers', $post_id) ?: [];
+    $seeker_terms = sw_get_prepared_terms($seeker_ids, 'category-seekers');
+
     // Return clean data object
     return [
         // Simple text fields -> Use get_post_meta (Faster)
         'applicant_name'  => get_post_meta($post_id, 'opportunity_applicant_name', true),
         'company'         => get_post_meta($post_id, 'opportunity_company', true),
-        //!city is deprecared
+        //? city is deprecared now
         // 'city'            => get_post_meta($post_id, 'city', true),
         'source_url'      => get_post_meta($post_id, 'opportunity_sourcelink', true),
         'description'     => get_post_meta($post_id, 'opportunity_description', true),
@@ -270,9 +274,10 @@ function sw_get_opportunity_view_data(int $post_id): array
         'details'         => get_post_meta($post_id, 'opportunity_details', true),
 
         // Complex fields -> Use get_field (Easier handling of arrays/objects)
-        'country_id'      => $country_id,
+        // 'country_id'      => $country_id, //? not sure its even needed now
         'country_name'    => $country_name,
-        'seeker_ids'      => get_field('opportunity_seekers', $post_id),
+        // 'seeker_ids'      => $seeker_ids, //? not sure its even needed now
+        'seeker_terms'    => $seeker_terms,
         'document'        => get_field('opportunity_document', $post_id),
 
         // Calculated Data
@@ -281,4 +286,130 @@ function sw_get_opportunity_view_data(int $post_id): array
         'date_start'      => $d_start,
         'date_end'        => $d_end,
     ];
+}
+
+/**
+ * Retrieve and validate WordPress term objects by their IDs.
+ * 
+ * Fetches term objects in a single database query and filters out any invalid results.
+ * More efficient than calling get_term() in a loop for multiple IDs.
+ * 
+ * @param array $term_ids Array of term IDs to fetch
+ * @param string $taxonomy Taxonomy name (e.g., 'category', 'post_tag')
+ * @return array Array of WP_Term objects, indexed by term_id. Empty if no valid terms.
+ * 
+ * @example
+ * $terms = sw_get_prepared_terms([1, 2, 3], 'category');
+ * foreach ($terms as $term) {
+ *     echo $term->name;
+ * }
+ */
+function sw_get_prepared_terms(array $term_ids, string $taxonomy): array
+{
+    if (empty($term_ids) || !taxonomy_exists($taxonomy)) {
+        return [];
+    }
+
+    $terms = get_terms([
+        'taxonomy' => $taxonomy,
+        'include' => array_map('intval', $term_ids), // Sanitize IDs
+        'hide_empty' => false,
+    ]);
+
+    return (is_array($terms) && !is_wp_error($terms)) ? $terms : [];
+}
+
+/**
+ * Render a tag list with optional collapsible "show more" and per-term slug classes.
+ * 
+ * @param array  $items           Array of items (term objects, arrays, or strings)
+ * @param string $item_class      Base CSS class for each <li> (e.g., 'tag-seekers')
+ * @param int    $visible_count   Number of items to show before collapsing (use high value for no collapse)
+ * @param string $container_class CSS class for the outer <ul> (default 'tag-list')
+ * @param bool   $add_term_slug   If true, append term->slug to item class for WP_Term objects
+ * @return string HTML output or empty string if no valid items
+ */
+function sw_render_collapsible_tag_list(
+    array $items,
+    string $item_class,
+    int $visible_count = 3,
+    string $container_class = 'tag-list',
+    bool $add_term_slug = false
+): string {
+    if (empty($items)) {
+        return '';
+    }
+
+    // Extract and validate items, keeping originals for slug access
+    $valid_items = [];
+    foreach ($items as $item) {
+        $name = is_object($item) ? ($item->name ?? '') : (is_array($item) ? ($item['name'] ?? '') : trim((string) $item));
+
+        if ($name !== '') {
+            $valid_items[] = $item; // Keep original (with potential ->slug)
+        }
+    }
+
+    if (empty($valid_items)) {
+        return '';
+    }
+
+    $total = count($valid_items);
+
+    // Helper to render a single <li>
+    $render_item = function ($item) use ($item_class, $add_term_slug) {
+        $name = is_object($item) ? ($item->name ?? '') : (is_array($item) ? ($item['name'] ?? '') : (string) $item);
+
+        $extra_class = '';
+        if ($add_term_slug && is_object($item) && !empty($item->slug)) {
+            $extra_class = ' ' . esc_attr($item->slug);
+        }
+
+        return sprintf(
+            '<li class="%s">%s</li>',
+            esc_attr($item_class . $extra_class),
+            esc_html($name)
+        );
+    };
+
+    // Early return: no collapsing needed
+    if ($total <= $visible_count || $visible_count <= 0) {
+        $all_html = implode('', array_map($render_item, $valid_items));
+
+        return sprintf(
+            '<ul class="%s">%s</ul>',
+            esc_attr($container_class),
+            $all_html
+        );
+    }
+
+    // Collapsing needed
+    $visible_items = array_slice($valid_items, 0, $visible_count);
+    $hidden_items  = array_slice($valid_items, $visible_count);
+    $remaining     = count($hidden_items);
+
+    $visible_html = implode('', array_map($render_item, $visible_items));
+    $hidden_html  = implode('', array_map($render_item, $hidden_items));
+
+    // Use improved classes from previous review (optional but recommended)
+    $more_item_class   = $container_class . '__more-item';
+    $details_class     = $container_class . '__details';
+    $summary_class     = $container_class . '__summary';
+    $hidden_list_class = $container_class . ' ' . $container_class . '__hidden';
+
+    $summary_text = $remaining === 1
+        ? __('Show 1 more', 'starwishx')
+        : sprintf(_n('Show %d more', 'Show %d more', $remaining, 'starwishx'), $remaining);
+
+    return sprintf(
+        '<ul class="%s">%s<li class="%s"><details class="%s"><summary class="%s">%s</summary><ul class="%s">%s</ul></details></li></ul>',
+        esc_attr($container_class),
+        $visible_html,
+        esc_attr($more_item_class),
+        esc_attr($details_class),
+        esc_attr($summary_class),
+        $summary_text,
+        esc_attr($hidden_list_class),
+        $hidden_html
+    );
 }
