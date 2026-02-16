@@ -404,6 +404,7 @@
         aspect-ratio: 4 / 3;
         width: 100%;
         overflow: hidden;
+        color: $text-basic;
         &__image {
             width: 100%;
             height: 100%;
@@ -1598,3 +1599,7 @@
 //     .location-results {
 //     }
 // }
+
+.opportunity-card__title {
+    color: $text-basic;
+}

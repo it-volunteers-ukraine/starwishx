@@ -241,22 +241,22 @@
             .tag-seekers {
                 list-style: disc;
             }
-            @include media.min-tablet {
-                display: inline-flex;
-                flex-wrap: wrap;
-                gap: 4px;
-                padding-left: unset;
-                .tag-locations,
-                .tag-seekers {
-                    border: 1px dotted $text-light;
-                    border-radius: $radius-element;
-                    padding: 4px 8px;
-                    font-style: normal;
-                    font-weight: 400;
-                    font-size: 15px;
-                    list-style: none;
-                }
-            }
+            // @include media.min-tablet {
+            //     display: inline-flex;
+            //     flex-wrap: wrap;
+            //     gap: 4px;
+            //     padding-left: unset;
+            //     .tag-locations,
+            //     .tag-seekers {
+            //         border: 1px dotted $text-light;
+            //         border-radius: $radius-element;
+            //         padding: 4px 8px;
+            //         font-style: normal;
+            //         font-weight: 400;
+            //         font-size: 15px;
+            //         list-style: none;
+            //     }
+            // }
         }
     }
 }

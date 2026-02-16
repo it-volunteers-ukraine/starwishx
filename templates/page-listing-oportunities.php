@@ -116,8 +116,5 @@ get_header();
 </main>
 
 <?php
-if (!function_exists('get_taxonomy_top_level_colors_styles')) {
-    require_once get_template_directory() . '/inc/theme-helpers.php';
-}
 
 get_footer();

@@ -28,7 +28,6 @@ if (!empty($css)) {
 
 get_header();
 ?>
-
 <nav class="opportunity-breadcrumbs container" aria-label="<?php esc_attr_e('Breadcrumb', $td); ?>">
     <a href="<?php echo esc_url($back_url); ?>" class="btn-back">
         <svg width="13" height="16" class="icon-arrow-left">
@@ -118,6 +117,12 @@ get_header();
                                     </ul>
                                 </dd>
                                 <!-- < ?php $loc_names = array_column($data['locations'], 'name'); echo esc_html(implode(', ', $loc_names)); ? > -->
+                            <?php elseif (!empty($data['country_name'])) : ?>
+                                <dd class="tag-cloud tag-cloud__locations">
+                                    <ul class="tag-list">
+                                        <li class="tag-locations"><?php echo esc_html($data['country_name']); ?></li>
+                                    </ul>
+                                </dd>
                             <?php endif; ?>
                         </div>
 

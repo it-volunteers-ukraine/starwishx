@@ -197,7 +197,7 @@ class ListingService
         return [
             'id'         => $post->ID,
             'title'      => get_the_title($post),
-            'excerpt'    => wp_trim_words(get_post_meta($post->ID, 'opportunity_description', true), 25),
+            'excerpt'    => wp_trim_words(get_post_meta($post->ID, 'opportunity_description', true), 38, ' …'),
             'thumbnail'  => get_the_post_thumbnail_url($post, 'medium') ?: null,
             'company'    => get_post_meta($post->ID, 'opportunity_company', true),
             'locations'  => $locations,

@@ -254,6 +254,9 @@ function sw_get_opportunity_view_data(int $post_id): array
     $d_end     = sw_format_date_for_ui($raw_end,   'd.m.y', true);
     // error_log(print_r($d_start) . print_r($raw_start));
 
+    $country_id   = get_field('country', $post_id);
+    $country_name = $country_id ? get_term($country_id, 'country')?->name : __('Worldwide', 'starwishx');
+
     // Return clean data object
     return [
         // Simple text fields -> Use get_post_meta (Faster)
@@ -267,7 +270,8 @@ function sw_get_opportunity_view_data(int $post_id): array
         'details'         => get_post_meta($post_id, 'opportunity_details', true),
 
         // Complex fields -> Use get_field (Easier handling of arrays/objects)
-        'country_id'      => get_field('country', $post_id),
+        'country_id'      => $country_id,
+        'country_name'    => $country_name,
         'seeker_ids'      => get_field('opportunity_seekers', $post_id),
         'document'        => get_field('opportunity_document', $post_id),
 
