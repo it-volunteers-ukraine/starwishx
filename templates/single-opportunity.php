@@ -48,11 +48,15 @@ get_header();
                         <?php esc_html_e('Категорія', $td); ?>
                     </dt>
                     <dd class="tag-cloud tag-cloud__category">
-                        <ul class="tag-list">
-                            <?php foreach ($data['root_categories'] as $cat) : ?>
-                                <li class="tag-category <?php echo esc_attr($cat->slug); ?>"><?php echo esc_html($cat->name); ?></li>
-                            <?php endforeach; ?>
-                        </ul>
+                        <?php
+                        echo sw_render_collapsible_tag_list(
+                            $data['root_categories'],
+                            'tag-category',
+                            1991, // Forces full display
+                            'tag-list',
+                            true
+                        );
+                        ?>
                     </dd>
                 </div>
             <?php endif; ?>
@@ -110,11 +114,12 @@ get_header();
                             </dt>
                             <?php if (!empty($data['locations'])) : ?>
                                 <dd class="tag-cloud tag-cloud__locations">
-                                    <ul class="tag-list">
-                                        <?php foreach ($data['locations'] as $loc) : ?>
-                                            <li class="tag-locations"><?php echo esc_html(trim($loc->name)); ?></li>
-                                        <?php endforeach; ?>
-                                    </ul>
+                                    <!-- <ul class="tag-list">
+                                        < ?php foreach ($data['locations'] as $loc) : ?>
+                                            <li class="tag-locations">< ?php echo esc_html(trim($loc->name)); ?></li>
+                                        < ?php endforeach; ?>
+                                    </ul> -->
+                                    <?= sw_render_collapsible_tag_list($data['locations'], 'tag-locations', 5); ?>
                                 </dd>
                                 <!-- < ?php $loc_names = array_column($data['locations'], 'name'); echo esc_html(implode(', ', $loc_names)); ? > -->
                             <?php elseif (!empty($data['country_name'])) : ?>
@@ -127,7 +132,7 @@ get_header();
                         </div>
 
                         <!-- 4. Seekers -->
-                        <?php if (!empty($data['seeker_ids'])) : ?>
+                        <?php if (!empty($data['seeker_terms'])) : ?>
                             <div class="info-card">
                                 <dt class="info-card__title">
                                     <svg width="24" height="24" class="info-card__icon">
@@ -135,12 +140,15 @@ get_header();
                                     </svg>
                                     <?php esc_html_e('Для кого', $td); ?>
                                 </dt>
-                                <dd class="tag-cloud tag-cloud__seekers">
+                                <!-- <dd class="tag-cloud tag-cloud__seekers">
                                     <ul class="tag-list">
-                                        <?php foreach ($data['seeker_ids'] as $s_id) : ?>
-                                            <li class="tag-seekers"><?php echo esc_html(get_term($s_id)->name); ?></li>
-                                        <?php endforeach; ?>
+                                        < ?php foreach ($data['seeker_ids'] as $s_id) : ?>
+                                            <li class="tag-seekers">< ?php echo esc_html(get_term($s_id)->name); ?></li>
+                                        < ?php endforeach; ?>
                                     </ul>
+                                </dd> -->
+                                <dd class="tag-cloud tag-cloud__seekers">
+                                    <?= sw_render_collapsible_tag_list($data['seeker_terms'], 'tag-seekers', 5); ?>
                                 </dd>
                             </div>
                         <?php endif; ?>
