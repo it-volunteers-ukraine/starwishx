@@ -595,41 +595,46 @@ img {
 
 /* Modal */
 .modal {
-  padding-left: 16px;
-  padding-right: 16px;
-
   /* display: none; */
   position: fixed; /* Stay in place */
-  z-index: 1; /* Sit on top */
-  padding-top: 100px; /* Location of the box */
-  left: 0;
   top: 0;
+  left: 0;
+  visibility: hidden;
+  opacity: 0;
+  z-index: 1; /* Sit on top */
+  transition: 0.3s;
+  background-color: $background-modal; /* Black w/ opacity */
+  padding-top: 100px; /* Location of the box */
+  padding-right: 16px;
+  padding-left: 16px;
   width: 100%; /* Full width */
   height: 100%; /* Full height */
   overflow: auto; /* Enable scroll if needed */
-  background-color: $background-modal; /* Black w/ opacity */
-  opacity: 0;
-  visibility: hidden;
-  transition: 0.3s;
 }
 
 .modal.active {
-  opacity: 1;
   visibility: visible;
+  opacity: 1;
 }
 
 .modal-content {
-  margin: auto;
   display: block;
+  margin: auto;
   width: 80%;
   max-width: 700px;
 }
 
-.modal-main{
-  margin-left: auto;
+.modal-main {
   margin-right: auto;
+  margin-left: auto;
+  border-radius: $modal-radius;
+  background-color: $surface-violet;
   padding: 16px;
   width: auto;
-  background-color: $surface-violet;
-  border-radius: $modal-radius;
+}
+
+.page-template-page-listing-oportunities,
+.page-template-page-launchpad,
+.single-opportunity {
+  word-break: break-all;
 }
