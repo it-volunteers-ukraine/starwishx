@@ -99,12 +99,12 @@
         }
 
         .launchpad-tab__icon {
+            transition: all $animations;
+            margin-right: 0.5rem;
             width: 18px;
             height: 18px;
             color: $icon-color-default-stroke;
-            margin-right: 0.5rem;
             font-size: 18px;
-            transition: all $animations;
         }
 
         // Interaction States
@@ -364,157 +364,171 @@
    ====================================== */
 
 .opportunity-card {
+    container: opportunityCard / inline-size;
     // display: grid;
-    // grid-template-columns: 180px 1fr;
+    // grid-template-columns: 1fr 180px;
     // grid-template-columns: 80px 1fr auto;
     // grid-template-columns: auto 1fr;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    gap: 12px;
-    transition: all $animations;
-    container: opportunityCard / inline-size;
     border: 1px solid $stroke-default;
     border-radius: $radius-input;
     background: $surface-primary;
-    padding: 12px;
-    min-height: 120px;
-    @container opportunityCard (max-width: 759px) {
-        // grid-template-columns: 1fr auto;
-        // background-color: $surface-violet;
-    }
-    .opportunity-card__content-wrapper {
-        display: grid;
-        grid-template-columns: 80px auto;
-        gap: 10px;
-    }
-    // @include max-tablet {
-    // grid-template-columns: 1fr;
-    // gap: 1rem;
-    // padding: 1rem;
-    // }
-
-    &__figure {
+    .opportunity-card--inner {
         display: flex;
-        position: relative;
-        justify-content: center;
-        align-items: center;
-        border-radius: 8px;
-        background: $surface-violet;
-        aspect-ratio: 4 / 3;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        gap: 12px;
+        transition: all $animations;
+        padding: 12px;
         width: 100%;
-        overflow: hidden;
-        color: $text-basic;
-        &__image {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
+        min-height: 120px;
+        @container opportunityCard (min-width: 759.01px) {
+            flex-wrap: nowrap;
+            // display: grid;
+            // grid-template-columns: 1fr auto;
+            // background-color: $surface-violet;
         }
-        &__placeholder {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: $text-light;
+        .opportunity-card__content-wrapper {
+            display: grid;
+            grid-template-columns: 80px auto;
+            gap: 10px;
 
-            .dashicons {
-                opacity: 0.3;
-                width: 48px;
-                height: 48px;
-                font-size: 48px;
-            }
-        }
-    }
+            // @include max-tablet {
+            // grid-template-columns: 1fr;
+            // gap: 1rem;
+            // padding: 1rem;
+            // }
 
-    .opportunity-content {
-        @container opportunityCard (max-width: 559px) {
-            grid-row: 1;
-            grid-column: 2;
-        }
-        display: flex;
-        flex-direction: column;
-        min-width: 0;
-        .opportunity-meta {
-            display: flex;
-            flex-flow: column wrap;
-            gap: 12px;
-            margin-bottom: 0.75rem;
-            color: $text-light;
-            font-size: 0.85rem;
-            .opportunity-meta__container-date {
-            }
-            .opportunity-comments {
-                display: inline-flex;
+            .opportunity-card__figure {
+                display: flex;
+                position: relative;
+                justify-content: center;
                 align-items: center;
-                gap: 4px;
+                border-radius: 8px;
+                background: $surface-violet;
+                aspect-ratio: 4 / 3;
+                width: 100%;
+                overflow: hidden;
 
-                .dashicons {
-                    width: 16px;
-                    height: 16px;
-                    color: $icon-color-accent;
-                    font-size: 16px;
+                &--link {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    width: 100%;
+                    height: 100%;
+                    color: $text-light;
+
+                    &__image {
+                        width: 100%;
+                        height: 100%;
+                        object-fit: cover;
+                    }
+                    &__placeholder {
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+
+                        .dashicons {
+                            opacity: 0.3;
+                            width: 48px;
+                            height: 48px;
+                            font-size: 48px;
+                        }
+                    }
                 }
+            }
 
-                .comments-number {
-                    font-weight: 600;
+            .opportunity-content {
+                @container opportunityCard (max-width: 559px) {
+                    grid-row: 1;
+                    grid-column: 2;
+                }
+                display: flex;
+                flex-direction: column;
+                min-width: 0;
+                .opportunity-meta {
+                    display: flex;
+                    flex-flow: column wrap;
+                    gap: 12px;
+                    margin-bottom: 0.75rem;
+                    color: $text-light;
+                    font-size: 0.85rem;
+                    .opportunity-meta__container-date {
+                    }
+                    .opportunity-comments {
+                        display: inline-flex;
+                        align-items: center;
+                        gap: 4px;
+
+                        .dashicons {
+                            width: 16px;
+                            height: 16px;
+                            color: $icon-color-accent;
+                            font-size: 16px;
+                        }
+
+                        .comments-number {
+                            font-weight: 600;
+                        }
+                    }
                 }
             }
         }
-    }
+        .opportunity-title {
+            margin-bottom: 0.5rem;
+            color: $text-dark;
+            font-weight: 600;
+            font-size: 1.25rem;
 
-    .opportunity-title {
-        margin-bottom: 0.5rem;
-        color: $text-dark;
-        font-weight: 600;
-        font-size: 1.25rem;
-
-        &:hover {
-            color: $primary-hover;
+            &:hover {
+                color: $primary-hover;
+            }
         }
-    }
 
-    .opportunity-excerpt {
-        // Truncate text
-        // display: -webkit-box;
-        // margin-bottom: 1rem;
-        // line-clamp: 3;
-        // color: $text-light;
-        // font-size: 0.95rem;
-        // line-height: 1.5;
-        // -webkit-line-clamp: 3;
-        // -webkit-box-orient: vertical;
-        // overflow: hidden;
-        display: none;
-    }
+        .opportunity-excerpt {
+            // Truncate text
+            // display: -webkit-box;
+            // margin-bottom: 1rem;
+            // line-clamp: 3;
+            // color: $text-light;
+            // font-size: 0.95rem;
+            // line-height: 1.5;
+            // -webkit-line-clamp: 3;
+            // -webkit-box-orient: vertical;
+            // overflow: hidden;
+            display: none;
+        }
 
-    .opportunity-actions {
-        display: flex;
-        flex-flow: column wrap;
-        align-items: flex-end;
-        gap: 25px;
-        @container (max-width: 723px) {
-            width: 100%;
-            // grid-column-end: -1;
-            grid-column: 1 / -1;
-            // @include max-laptop {
-            // gap: 6px;
-            // margin-top: 140px;
-            flex-flow: row nowrap;
+        .opportunity-actions {
+            display: flex;
+            flex: 1 0 180px;
+            flex-flow: column wrap;
             justify-content: space-between;
+            align-items: flex-end;
+            gap: 25px;
+            @container (max-width: 723px) {
+                // grid-column-end: -1;
+                grid-column: 1 / -1;
+                // @include max-laptop {
+                // gap: 6px;
+                // margin-top: 140px;
+                flex-flow: row nowrap;
+                width: 100%;
+            }
         }
-    }
-    .opportunity-taxonomy {
-        display: inline-block;
-        margin-bottom: 8px;
-        color: $text-accent;
-        font-weight: 700;
-        font-size: 11px;
-        // text-transform: uppercase;
-        letter-spacing: 0.05em;
+        .opportunity-taxonomy {
+            display: inline-block;
+            margin-bottom: 8px;
+            color: $text-accent;
+            font-weight: 700;
+            font-size: 11px;
+            // text-transform: uppercase;
+            letter-spacing: 0.05em;
 
-        &::before {
-            margin-right: 5px;
-            content: "•";
-            color: $icon-color-fill; // Gold #fac625
+            &::before {
+                margin-right: 5px;
+                content: "•";
+                color: $icon-color-fill; // Gold #fac625
+            }
         }
     }
 }

@@ -65,7 +65,7 @@ get_header();
             <?php else : ?>
                 <div class="featured-image__placeholder">
                     <svg width="40" height="40" class="icon-heart">
-                        <use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-heart"></use>
+                        <use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-opportunities"></use>
                     </svg>
                 </div>
             <?php endif; ?>

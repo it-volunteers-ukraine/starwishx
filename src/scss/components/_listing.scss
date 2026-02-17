@@ -307,7 +307,7 @@
                 display: flex;
                 flex-flow: column wrap;
                 gap: 3px;
-                .opportunity-card__title{
+                .opportunity-card__title {
                     margin: 8px 0;
                 }
             }
@@ -320,6 +320,8 @@
             position: relative;
             width: 100%;
             overflow: hidden;
+            background-color: $buttons-color-background-secondary-hover;
+            border-radius: $radius-image;
             .listing-card__figure--link {
                 position: absolute;
                 z-index: 1;
@@ -384,6 +386,10 @@
             .opportunity-card__placeholder {
                 position: absolute;
                 inset: 0;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                color: $text-light;
             }
         }
     }
