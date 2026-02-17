@@ -218,88 +218,93 @@ class OpportunitiesPanel extends AbstractPanel
                             data-wp-bind--data-status="context.item.status"
                             data-wp-bind--data-expired="context.item.isExpired"
                             data-wp-bind--data-layout="state.panels.opportunities.layout">
-                            <div class="opportunity-card__content-wrapper">
-                                <figure class="opportunity-card__figure">
-                                    <a data-wp-bind--href="context.item.viewUrl" target="_blank">
-                                        <img
-                                            class="opportunity-card__image"
-                                            data-wp-bind--src="context.item.thumbnailUrl"
-                                            data-wp-bind--alt="context.item.title"
-                                            data-wp-bind--hidden="!context.item.thumbnailUrl" />
-                                        <!-- Fallback Placeholder -->
-                                        <div class="opportunity-card__placeholder" data-wp-bind--hidden="context.item.thumbnailUrl">
-                                            <span class="dashicons dashicons-format-image"></span>
-                                        </div>
-                                    </a>
-                                </figure>
+                            <div class="opportunity-card--inner">
+                                <div class="opportunity-card__content-wrapper">
+                                    <figure class="opportunity-card__figure">
+                                        <a class="opportunity-card__figure--link" data-wp-bind--href="context.item.viewUrl" target="_blank">
+                                            <img
+                                                class="opportunity-card__image"
+                                                data-wp-bind--src="context.item.thumbnailUrl"
+                                                data-wp-bind--alt="context.item.title"
+                                                data-wp-bind--hidden="!context.item.thumbnailUrl" />
+                                            <!-- Fallback Placeholder -->
+                                            <div class="opportunity-card__placeholder" data-wp-bind--hidden="context.item.thumbnailUrl">
+                                                <svg width="20" height="20" class="icon-heart">
+                                                    <use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-opportunities"></use>
+                                                </svg>
+                                                <!-- <span class="dashicons dashicons-format-image"></span> -->
+                                            </div>
+                                        </a>
+                                    </figure>
 
-                                <div class="opportunity-content">
-                                    <a data-wp-bind--href="context.item.viewUrl" target="_blank">
-                                        <h3 class="opportunity-title" data-wp-text="context.item.title"></h3>
-                                    </a>
-                                    <div class="opportunity-meta">
-                                        <div class="opportunity-meta__container-date">
-                                            <span class="opportunity-date" data-wp-text="context.item.date"></span>
-                                            <!-- Expired Label -->
-                                            <span
-                                                class="status-badge status-badge--expired"
-                                                data-wp-bind--hidden="!context.item.isExpired">
-                                                <?php esc_html_e('Finished', 'starwishx'); ?>
-                                            </span>
-                                            <!-- Comments Count Label -->
-                                            <div class="opportunity-comments"
-                                                data-wp-bind--hidden="!context.item.commentsCount">
-                                                <span class="dashicons1 dashicons-admin-comments1">Comments:</span>
-                                                <span class="comments-number" data-wp-text="context.item.commentsCount"></span>
+                                    <div class="opportunity-content">
+                                        <a data-wp-bind--href="context.item.viewUrl" target="_blank">
+                                            <h3 class="opportunity-title" data-wp-text="context.item.title"></h3>
+                                        </a>
+                                        <div class="opportunity-meta">
+                                            <div class="opportunity-meta__container-date">
+                                                <span class="opportunity-date" data-wp-text="context.item.date"></span>
+                                                <!-- Expired Label -->
+                                                <span
+                                                    class="status-badge status-badge--expired"
+                                                    data-wp-bind--hidden="!context.item.isExpired">
+                                                    <?php esc_html_e('Finished', 'starwishx'); ?>
+                                                </span>
+                                                <!-- Comments Count Label -->
+                                                <div class="opportunity-comments"
+                                                    data-wp-bind--hidden="!context.item.commentsCount">
+                                                    <span class="dashicons1 dashicons-admin-comments1">Comments:</span>
+                                                    <span class="comments-number" data-wp-text="context.item.commentsCount"></span>
+                                                </div>
+                                            </div>
+                                            <div class="opportunity-meta__container-statuses">
+                                                <!-- Visual Label -->
+                                                <span
+                                                    class="status-badge"
+                                                    data-wp-bind--data-status="context.item.status"
+                                                    data-wp-text="context.item.status">
+                                                </span>
                                             </div>
                                         </div>
-                                        <div class="opportunity-meta__container-statuses">
-                                            <!-- Visual Label -->
-                                            <span
-                                                class="status-badge"
-                                                data-wp-bind--data-status="context.item.status"
-                                                data-wp-text="context.item.status">
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <!-- <div class="opportunity-taxonomy"
+                                        <!-- <div class="opportunity-taxonomy"
                                     data-wp-text="context.item.categoryName"
                                     data-wp-bind--hidden="!context.item.categoryName">
                                 </div> -->
-                                    <div class="opportunity-info">
-                                        <div class="opportunity-range">
-                                            <span class="opportunity-range__title">Lasts</span>
-                                            <span data-wp-text="context.item.dateStarts"></span>
-                                            <span class="opportunity-range__icon dashicons dashicons-calendar-alt"></span>
-                                            <span class="range-sep">—</span>
-                                            <span data-wp-text="context.item.dateEnds"></span>
+                                        <div class="opportunity-info">
+                                            <div class="opportunity-range">
+                                                <span class="opportunity-range__title">Lasts</span>
+                                                <span data-wp-text="context.item.dateStarts"></span>
+                                                <span class="opportunity-range__icon dashicons dashicons-calendar-alt"></span>
+                                                <span class="range-sep">—</span>
+                                                <span data-wp-text="context.item.dateEnds"></span>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <!-- <p class="opportunity-excerpt"
+                                        <!-- <p class="opportunity-excerpt"
                                     data-wp-text="context.item.excerpt"
                                     data-wp-bind--hidden="!context.item.excerpt"></p> -->
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="opportunity-actions">
-                                <!-- <a class="btn-secondary__small btn-opportunity__view" data-wp-bind--href="context.item.viewUrl" target="_blank">
+                                <div class="opportunity-actions">
+                                    <!-- <a class="btn-secondary__small btn-opportunity__view" data-wp-bind--href="context.item.viewUrl" target="_blank">
                                     < ?php esc_html_e('View', 'starwishx'); ? >
                                 </a> -->
-                                <!-- Submit -->
-                                <button class="btn-secondary__small btn-opportunity__review"
-                                    data-wp-on--click="actions.opportunities.quickSubmit"
-                                    data-wp-bind--disabled="!state.canEdit"
-                                    data-wp-bind--hidden="state.isPublish"
-                                    data-wp-bind--data-status="context.item.status">
-                                    <span><?php esc_html_e('Submit for Review', 'starwishx'); ?></span>
-                                </button>
-                                <button class="btn-tertiary btn-opportunity__edit"
-                                    data-wp-on--click="actions.opportunities.openEdit"
-                                    data-wp-bind--data-id="context.item.id"
-                                    data-wp-bind--disabled="!state.canEdit"
-                                    data-wp-bind--hidden="state.isPublish"
-                                    data-wp-bind--data-status="context.item.status">
-                                    <span><?php esc_html_e('Edit', 'starwishx'); ?></span>
-                                </button>
+                                    <!-- Submit -->
+                                    <button class="btn-secondary__small btn-opportunity__review"
+                                        data-wp-on--click="actions.opportunities.quickSubmit"
+                                        data-wp-bind--disabled="!state.canEdit"
+                                        data-wp-bind--hidden="state.isPublish"
+                                        data-wp-bind--data-status="context.item.status">
+                                        <span><?php esc_html_e('Submit for Review', 'starwishx'); ?></span>
+                                    </button>
+                                    <button class="btn-tertiary btn-opportunity__edit"
+                                        data-wp-on--click="actions.opportunities.openEdit"
+                                        data-wp-bind--data-id="context.item.id"
+                                        data-wp-bind--disabled="!state.canEdit"
+                                        data-wp-bind--hidden="state.isPublish"
+                                        data-wp-bind--data-status="context.item.status">
+                                        <span><?php esc_html_e('Edit', 'starwishx'); ?></span>
+                                    </button>
+                                </div>
                             </div>
                         </article>
                     </template>

@@ -88,7 +88,7 @@ class ResultsGrid implements RenderableInterface
                         <!-- Fallback Placeholder (shown if no image) -->
                         <div class="opportunity-card__placeholder" data-wp-bind--hidden="context.item.thumbnail">
                             <svg width="40" height="40" class="icon-heart">
-                                <use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-heart"></use>
+                                <use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-opportunities"></use>
                             </svg>
                         </div>
                     </a>
