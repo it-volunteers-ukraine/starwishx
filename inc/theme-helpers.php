@@ -265,7 +265,7 @@ function sw_get_opportunity_view_data(int $post_id): array
         'country_name'    => $country_name,
         // 'seeker_ids'      => $seeker_ids, //? not sure its even needed now
         'seeker_terms'    => $seeker_terms,
-        'document' => sw_prepare_document($raw_document),
+        'document'        => sw_prepare_document(sw_get_field('opportunity_document', $post_id)),
 
         // Calculated Data
         'locations'       => $locations,
@@ -273,6 +273,13 @@ function sw_get_opportunity_view_data(int $post_id): array
         'date_start'      => $d_start,
         'date_end'        => $d_end,
     ];
+}
+
+// Normalize ACF false -> null globally
+function sw_get_field(string $key, mixed $context = false): mixed
+{
+    $value = function_exists('get_field') ? get_field($key, $context) : null;
+    return $value !== false ? $value : null;
 }
 
 /**
@@ -356,16 +363,15 @@ function sw_get_root_terms(int $post_id, string $taxonomy): array
 
 /**
  * Normalizes an ACF file field value into a consistent document array.
- * Handles all ACF return formats: array, int (ID), or null.
+ * Handles all ACF return formats: array, int (ID), null, or false (ACF no-value).
  *
- * @param array|int|null $raw ACF file field value
+ * @param array|int|bool|null $raw ACF file field value
  * @return array{url: string, title: string, filesize: int}|null
  */
-function sw_prepare_document(array|int|null $raw): ?array
+function sw_prepare_document(mixed $raw): ?array
 {
-    if (empty($raw)) return null;
+    if (empty($raw)) return null; // handles false, null, 0, []
 
-    // Already an array (ACF return format = Array)
     if (is_array($raw)) {
         return [
             'url'      => $raw['url'] ?? '',
@@ -374,7 +380,6 @@ function sw_prepare_document(array|int|null $raw): ?array
         ];
     }
 
-    // ID format - fetch attachment manually
     if (is_int($raw)) {
         $url = wp_get_attachment_url($raw);
         if (!$url) return null;
