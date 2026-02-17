@@ -22,6 +22,7 @@ use Launchpad\Services\ProfileService;
 use Launchpad\Services\StatsService;
 use Launchpad\Services\SecurityService;
 use Launchpad\Services\CommentsService;
+use Launchpad\Services\MediaService;
 use Launchpad\Data\Repositories\FavoritesRepository;
 
 final class LaunchpadCore
@@ -93,6 +94,7 @@ final class LaunchpadCore
         // Stats depends on Favorites - we pass the shared instance here
         $this->services['stats']         = new StatsService($this->services['favorites']);
         $this->services['comments']      = new CommentsService();
+        $this->services['media']         = new MediaService();
     }
 
     private function bootstrap(): void
@@ -119,6 +121,12 @@ final class LaunchpadCore
         // Data cleanup hooks
         add_action('delete_post', [$this, 'cleanupPostFavorites']);
         add_action('delete_user', [$this, 'cleanupUserFavorites']);
+
+        // Cron job for orphan cleanup
+        add_action('launchpad_daily_cleanup', [$this->services['media'], 'cleanupOrphans']);
+        if (!wp_next_scheduled('launchpad_daily_cleanup')) {
+            wp_schedule_event(time(), 'daily', 'launchpad_daily_cleanup');
+        }
     }
 
     /**
@@ -152,6 +160,7 @@ final class LaunchpadCore
             // new \Launchpad\Api\SecurityController(),
             new \Launchpad\Api\SecurityController($this->services['security']),
             new \Launchpad\Api\CommentsController($this->services['comments']),
+            new \Launchpad\Api\MediaController($this->services['media']),
         ];
 
         // Register routes for each controller

@@ -76,6 +76,13 @@ class OpportunitiesController extends AbstractLaunchpadController
             'description'     => ['sanitize_callback' => 'sanitize_textarea_field'],
             'requirements'    => ['sanitize_callback' => 'sanitize_textarea_field'],
             'details'         => ['sanitize_callback' => 'sanitize_textarea_field'],
+            'document_id'    => [
+                'required'          => false,
+                'sanitize_callback' => 'absint',
+                'validate_callback' => function($param) {
+                    return is_numeric($param) || is_null($param);
+                }
+            ],
         ];
 
         // 1. COLLECTION: GET /opportunities (List)
@@ -285,6 +292,7 @@ class OpportunitiesController extends AbstractLaunchpadController
             'description'     => $request->get_param('description'),
             'requirements'    => $request->get_param('requirements'),
             'details'         => $request->get_param('details'),
+            'document_id'     => $request->get_param('document_id'),
         ];
 
         // Pass the strictly controlled $id to the service

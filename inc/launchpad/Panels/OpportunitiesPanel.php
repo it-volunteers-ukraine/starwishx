@@ -55,7 +55,9 @@ class OpportunitiesPanel extends AbstractPanel
             'subcategory' => [],
             'description' => '',
             'requirements' => '',
-            'details' => ''
+            'details' => '',
+            'document' => null,
+            'document_id' => null,
         ];
 
         // 3. Routing Logic (List vs Edit vs Add)
@@ -589,6 +591,79 @@ class OpportunitiesPanel extends AbstractPanel
                                 <div class="form-field form-field-description">
                                     <label><?php esc_html_e('Details', 'starwishx'); ?></label>
                                     <textarea rows="4" class="widefat" data-wp-bind--value="<?= $formPath ?>.details" data-wp-on--input="actions.opportunities.updateForm" data-field="details"></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- GROUP 4: Document -->
+                        <div class="form-group-card placeholder-box">
+                            <h3 class="group-card-title"><?php esc_html_e('Document', 'starwishx'); ?></h3>
+                            <div class="form-card-data">
+                                <div class="form-field">
+                                    <label>
+                                        <?php esc_html_e('Attachment (PDF, DOCX) max size 5Mb.', 'starwishx'); ?>
+                                    </label>
+
+                                    <input type="file" id="opp-doc-upload"
+                                        accept=".pdf,.doc,.docx"
+                                        style="display:none;"
+                                        data-wp-on--change="actions.opportunities.handleFileSelect">
+
+                                    <!-- Empty State -->
+                                    <div data-wp-bind--hidden="state.panels.opportunities.formData.document" class="documents-chips">
+                                        <button type="button" class="document-btn btn-chip"
+                                            data-wp-on--click="actions.opportunities.triggerFileSelect"
+                                            data-wp-bind--disabled="state.panels.opportunities.isSaving">
+                                            <!-- <span class="dashicons dashicons-paperclip"></span> -->
+                                            <svg width="18" height="18" aria-hidden="true" class="document-btn__icon">
+                                                <use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-clip"></use>
+                                            </svg>
+                                            <?php esc_html_e('Attach File', 'starwishx'); ?>
+                                        </button>
+                                    </div>
+
+                                    <!-- Preview State -->
+                                    <div class="locations-chips" data-wp-bind--hidden="!state.panels.opportunities.formData.document">
+                                        <span class="location-chip btn-chip btn-chip--document">
+                                            <span class="btn-chip--document__content">
+                                                <span class="dashicons dashicons-media-document"></span>
+
+                                                <!-- Link to file if it exists and is not pending -->
+                                                <a data-wp-bind--href="state.panels.opportunities.formData.document.url"
+                                                    target="_blank"
+                                                    data-wp-bind--hidden="state.panels.opportunities.formData.document.isPending"
+                                                    style="text-decoration:none; color:inherit;">
+                                                    <span data-wp-text="state.panels.opportunities.formData.document.name"></span>
+                                                </a>
+
+                                                <!-- Just Text if Pending -->
+                                                <span data-wp-bind--hidden="!state.panels.opportunities.formData.document.isPending"
+                                                    data-wp-text="state.panels.opportunities.formData.document.name"></span>
+
+                                                <small style="opacity: 0.7;" data-wp-text="state.panels.opportunities.formData.document.size"></small>
+                                            </span>
+
+                                            <span style="display:flex; align-items:center; gap:8px;">
+                                                <span class="status-badge" style="font-size:10px;"
+                                                    data-wp-bind--hidden="!state.panels.opportunities.formData.document.isPending">
+                                                    <?php esc_html_e('Pending Save', 'starwishx'); ?>
+                                                </span>
+
+                                                <!-- Spinner instead of Progress Bar -->
+                                                <span class="spinner is-active"
+                                                    style="margin:0;"
+                                                    data-wp-bind--hidden="!state.panels.opportunities.isUploading"></span>
+
+                                                <button type="button" class="location-remove btn-chip__icon"
+                                                    data-wp-on--click="actions.opportunities.removeDocument"
+                                                    data-wp-bind--disabled="state.panels.opportunities.isSaving">
+                                                    <svg>
+                                                        <use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-plus-small"></use>
+                                                    </svg>
+                                                </button>
+                                            </span>
+                                        </span>
+                                    </div>
                                 </div>
                             </div>
                         </div>

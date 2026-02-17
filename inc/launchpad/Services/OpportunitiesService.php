@@ -272,7 +272,42 @@ class OpportunitiesService
             'description'     => get_field('opportunity_description', $postId) ?: '',
             'requirements'    => get_field('opportunity_requirements', $postId) ?: '',
             'details'         => get_field('opportunity_details', $postId) ?: '',
+
+            // Document handling
+            'document'        => $this->getDocumentData($postId),
         ];
+    }
+
+    /**
+     * Get document data for an opportunity.
+     */
+    private function getDocumentData(int $postId): ?array
+    {
+        $doc_field = get_field('opportunity_document', $postId);
+        $doc_id = 0;
+        $doc_data = null;
+
+        if (is_array($doc_field) && isset($doc_field['ID'])) {
+            $doc_id = (int) $doc_field['ID'];
+        } elseif (is_numeric($doc_field)) {
+            $doc_id = (int) $doc_field;
+        }
+
+        if ($doc_id) {
+            $url = wp_get_attachment_url($doc_id);
+            $path = get_attached_file($doc_id);
+            if ($url && file_exists($path)) {
+                $doc_data = [
+                    'id'        => $doc_id,
+                    'name'      => basename($path),
+                    'url'       => $url,
+                    'size'      => size_format(filesize($path), 2),
+                    'isPending' => false
+                ];
+            }
+        }
+
+        return $doc_data;
     }
 
     /**
@@ -360,6 +395,42 @@ class OpportunitiesService
             update_field('opportunity_description', $data['description'], $id);
             update_field('opportunity_requirements', $data['requirements'], $id);
             update_field('opportunity_details', $data['details'], $id);
+
+            // Handle Document Upload/Removal
+            if (isset($data['document_id'])) {
+                $new_doc_id = (int)$data['document_id'];
+                $old_doc_field = get_field('opportunity_document', $id);
+                $old_doc_id = is_array($old_doc_field) ? (int)$old_doc_field['ID'] : (int)$old_doc_field;
+
+                // A. User Removed Document
+                if ($new_doc_id === 0 && $old_doc_id > 0) {
+                    update_field('opportunity_document', '', $id);
+                    wp_delete_attachment($old_doc_id, true);
+                }
+                // B. User Added/Changed Document
+                elseif ($new_doc_id > 0 && $new_doc_id !== $old_doc_id) {
+                    // SECURITY: Verify Ownership
+                    $is_owned_by_user = (int)get_post_field('post_author', $new_doc_id) === get_current_user_id();
+                    $is_temp_file = get_post_meta($new_doc_id, '_launchpad_temp_upload', true);
+
+                    if ($is_owned_by_user && $is_temp_file) {
+                        // 1. Link logic
+                        update_field('opportunity_document', $new_doc_id, $id);
+                        wp_update_post([
+                            'ID'          => $new_doc_id,
+                            'post_parent' => $id
+                        ]);
+
+                        // 2. Remove Flags (Claim the file)
+                        delete_post_meta($new_doc_id, '_launchpad_temp_upload');
+
+                        // 3. Garbage collect old file
+                        if ($old_doc_id > 0) {
+                            wp_delete_attachment($old_doc_id, true);
+                        }
+                    }
+                }
+            }
 
             // Save Locations (Pivot Table)
             if (isset($data['locations']) && is_array($data['locations'])) {
