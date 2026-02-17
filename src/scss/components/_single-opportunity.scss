@@ -121,6 +121,7 @@
                             }
                         }
                     }
+
                     .opportunity-social {
                         display: flex;
                         flex-direction: row;
@@ -143,6 +144,17 @@
                             display: flex;
                             flex-flow: column wrap;
                             gap: 4px;
+                        }
+                    }
+                }
+                .info-card--file {
+                    .file-download {
+                        display: flex;
+                        flex-flow: row nowrap;
+                        gap: 8px;
+                        color: $text-basic;
+                        .icon-file {
+                            color: $icon-color-accent;
                         }
                     }
                 }

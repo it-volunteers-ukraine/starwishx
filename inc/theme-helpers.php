@@ -77,12 +77,10 @@ function sw_sanitize_textarea_field(string $input): string
     return trim($text);
 }
 
-
-// --- Usage: add_action( 'wp_head', 'get_taxonomy_top_level_colors_styles' ); ---
 /**
  * Sanitize a CSS color value (hex, rgb(), rgba() only).
  */
-function _sanitize_css_color($color)
+function sw_sanitize_css_color($color): ?string
 {
     if (! $color) {
         return null;
@@ -95,16 +93,29 @@ function _sanitize_css_color($color)
     }
 
     // rgb() or rgba()
-    if (preg_match('/^rgba?\(\s*\d{1,3}\s*,\s*\d{1,3}\s*,\s*\d{1,3}(?:\s*,\s*(?:0|1|0?\.\d+))?\s*\)$/i', $color)) {
-        return $color;
+    if (preg_match('/^rgba?\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})(?:\s*,\s*(?:0|1|0?\.\d+))?\s*\)$/i', $color, $m)) {
+        if ($m[1] <= 255 && $m[2] <= 255 && $m[3] <= 255) {
+            return $color;
+        }
     }
 
     return null;
 }
 
 /**
+ * Get term meta with ACF fallback.
+ */
+function sw_get_term_field(string $key, int $term_id, string $taxonomy): mixed
+{
+    $context = "term_{$term_id}";
+    return function_exists('get_field')
+        ? get_field($key, $context)
+        : get_term_meta($term_id, $key, true);
+}
+
+/**
  * Generate CSS rules for top‑level terms of a given taxonomy.
- *
+ * Usage: add_action( 'wp_head', 'get_taxonomy_top_level_colors_styles' );
  * @param string $taxonomy Taxonomy name. Default 'category-oportunities'.
  * @return string CSS rules, empty string if no terms or no colors defined.
  */
@@ -132,21 +143,13 @@ function get_taxonomy_top_level_colors_styles(string $taxonomy = 'category-oport
             continue;
         }
 
-        // Get colors – ACF first, then fallback to term meta
-        $context = "term_{$term->term_id}";
-        if (function_exists('get_field')) {
-            $bg     = get_field('cat_opportunity_color_background', $context);
-            $text   = get_field('cat_opportunity_color_text', $context);
-            $border = get_field('cat_opportunity_color_border', $context);
-        } else {
-            $bg     = get_term_meta($term->term_id, 'cat_opportunity_color_background', true);
-            $text   = get_term_meta($term->term_id, 'cat_opportunity_color_text', true);
-            $border = get_term_meta($term->term_id, 'cat_opportunity_color_border', true);
-        }
+        $bg     = sw_sanitize_css_color(sw_get_term_field('cat_opportunity_color_background', $term->term_id, $taxonomy));
+        $text   = sw_sanitize_css_color(sw_get_term_field('cat_opportunity_color_text', $term->term_id, $taxonomy));
+        $border = sw_sanitize_css_color(sw_get_term_field('cat_opportunity_color_border', $term->term_id, $taxonomy));
 
-        $bg     = _sanitize_css_color($bg);
-        $text   = _sanitize_css_color($text);
-        $border = _sanitize_css_color($border);
+        $bg     = sw_sanitize_css_color($bg);
+        $text   = sw_sanitize_css_color($text);
+        $border = sw_sanitize_css_color($border);
 
         if (! $bg && ! $text && ! $border) {
             continue;
@@ -191,7 +194,6 @@ function sw_parse_date(?string $raw, array $tryFormats = ['Ymd', 'd/m/Y', 'Y-m-d
     return null;
 }
 
-
 /**
  * Format date for UI; can return string or both formats.
  *
@@ -224,28 +226,11 @@ function sw_get_opportunity_view_data(int $post_id): array
     //? Note: call ListingService::getLocations($post_id) to avoid code duplication
     $locations = $wpdb->get_results($wpdb->prepare(
         "SELECT code, name_category_oblast as name, level, category 
-         FROM wp_v_opportunity_search 
+         FROM {$wpdb->prefix}v_opportunity_search 
          WHERE post_id = %d
          ORDER BY level ASC, name ASC",
         $post_id
     ));
-
-    // Fetch Root Categories
-    $root_categories = [];
-    $terms = get_the_terms($post_id, 'category-oportunities');
-    if (!empty($terms) && !is_wp_error($terms)) {
-        foreach ($terms as $term) {
-            $current = $term;
-            // Recursive climb to parent
-            while ($current->parent !== 0) {
-                $parent = get_term($current->parent, 'category-oportunities');
-                if (!$parent || is_wp_error($parent)) break;
-                $current = $parent;
-            }
-            $root_categories[$current->term_id] = $current;
-        }
-    }
-    $root_categories = array_values($root_categories);
 
     // Dates - specific handling for ACF stored format vs UI format
     $raw_start = get_post_meta($post_id, 'opportunity_date_starts', true);
@@ -260,6 +245,8 @@ function sw_get_opportunity_view_data(int $post_id): array
 
     $seeker_ids = get_field('opportunity_seekers', $post_id) ?: [];
     $seeker_terms = sw_get_prepared_terms($seeker_ids, 'category-seekers');
+
+    $raw_document = get_field('opportunity_document', $post_id);
 
     // Return clean data object
     return [
@@ -278,11 +265,11 @@ function sw_get_opportunity_view_data(int $post_id): array
         'country_name'    => $country_name,
         // 'seeker_ids'      => $seeker_ids, //? not sure its even needed now
         'seeker_terms'    => $seeker_terms,
-        'document'        => get_field('opportunity_document', $post_id),
+        'document' => sw_prepare_document($raw_document),
 
         // Calculated Data
         'locations'       => $locations,
-        'root_categories' => $root_categories,
+        'root_categories' => sw_get_root_terms($post_id, 'category-oportunities'),
         'date_start'      => $d_start,
         'date_end'        => $d_end,
     ];
@@ -317,6 +304,89 @@ function sw_get_prepared_terms(array $term_ids, string $taxonomy): array
     ]);
 
     return (is_array($terms) && !is_wp_error($terms)) ? $terms : [];
+}
+
+/**
+ * Resolves root (top-level) ancestor terms for a given post.
+ * 
+ * Fetches the entire taxonomy tree in a single query, then traverses
+ * parent relationships in memory to avoid N+1 database calls.
+ *
+ * @param int    $post_id  Post ID
+ * @param string $taxonomy Taxonomy name
+ * @return WP_Term[] Array of unique root WP_Term objects
+ */
+function sw_get_root_terms(int $post_id, string $taxonomy): array
+{
+    $post_terms = get_the_terms($post_id, $taxonomy);
+    if (empty($post_terms) || is_wp_error($post_terms)) {
+        return [];
+    }
+
+    // Single query - fetch ALL terms of this taxonomy with parent data
+    $all_terms = get_terms([
+        'taxonomy'   => $taxonomy,
+        'hide_empty' => false,
+        'fields'     => 'all', // We need parent IDs
+    ]);
+
+    if (is_wp_error($all_terms) || empty($all_terms)) {
+        return [];
+    }
+
+    // Build lookup map: term_id => WP_Term (pure memory traversal from here)
+    $term_map = array_column($all_terms, null, 'term_id');
+
+    // Climb to root using map, no DB calls
+    $root_categories = [];
+    foreach ($post_terms as $term) {
+        $current = $term;
+
+        while ($current->parent !== 0) {
+            $parent = $term_map[$current->parent] ?? null;
+            if (!$parent) break;
+            $current = $parent;
+        }
+
+        $root_categories[$current->term_id] = $current;
+    }
+
+    return array_values($root_categories);
+}
+
+/**
+ * Normalizes an ACF file field value into a consistent document array.
+ * Handles all ACF return formats: array, int (ID), or null.
+ *
+ * @param array|int|null $raw ACF file field value
+ * @return array{url: string, title: string, filesize: int}|null
+ */
+function sw_prepare_document(array|int|null $raw): ?array
+{
+    if (empty($raw)) return null;
+
+    // Already an array (ACF return format = Array)
+    if (is_array($raw)) {
+        return [
+            'url'      => $raw['url'] ?? '',
+            'title'    => $raw['title'] ?? '',
+            'filesize' => (int)($raw['filesize'] ?? 0),
+        ];
+    }
+
+    // ID format - fetch attachment manually
+    if (is_int($raw)) {
+        $url = wp_get_attachment_url($raw);
+        if (!$url) return null;
+
+        return [
+            'url'      => $url,
+            'title'    => get_the_title($raw),
+            'filesize' => (int)(get_post_meta($raw, '_wp_attachment_metadata', true)['filesize'] ?? 0),
+        ];
+    }
+
+    return null;
 }
 
 /**

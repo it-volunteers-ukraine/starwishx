@@ -452,8 +452,8 @@
                     margin-bottom: 0.75rem;
                     color: $text-light;
                     font-size: 0.85rem;
-                    .opportunity-meta__container-date {
-                    }
+                    // .opportunity-meta__container-date {
+                    // }
                     .opportunity-comments {
                         display: inline-flex;
                         align-items: center;
@@ -1435,7 +1435,6 @@
     padding: 10px;
     min-height: 40px;
 }
-
 .btn-chip {
     display: inline-flex;
     justify-content: center;
@@ -1478,7 +1477,6 @@
         }
     }
 }
-
 .location-chip {
     // display: inline-flex;
     // align-items: center;
@@ -1498,6 +1496,37 @@
         &:hover {
             color: $icon-color-error;
         }
+    }
+}
+
+.document-btn {
+    svg {
+        width: 24px;
+        height: 24px;
+        color: $icon-color-accent;
+    }
+    .document-btn__icon {
+        color: $icon-color-accent;
+
+        fill: $icon-color-accent;
+    }
+}
+
+.btn-chip--document {
+    gap: 8px;
+    .btn-chip--document__content {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        overflow: hidden;
+    }
+}
+
+.documents-chips {
+    .btn-chip {
+        border: 1px dashed $input-color-border-default;
+        border-radius: 12px;
+        padding: 14px 25px;
     }
 }
 
