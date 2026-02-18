@@ -633,8 +633,8 @@ img {
   width: auto;
 }
 
-.page-template-page-listing-oportunities,
+// .page-template-page-listing-oportunities,
 .page-template-page-launchpad,
 .single-opportunity {
-  word-break: break-all;
+  overflow-wrap: anywhere;
 }
