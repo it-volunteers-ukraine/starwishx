@@ -26,7 +26,7 @@ if (! $show_label) {
 ?>
 
 <div
-    class="<?= esc_attr(implode(' ', $wrapper_classes)) ?>"
+    class="<?php esc_attr_e(implode(' ', $wrapper_classes)) ?>"
     data-wp-interactive="starwishx/opportunities"
     data-wp-context='{ "id": <?= (int)$post_id ?> }'>
     <?php if ($show_label) : ?>
@@ -35,13 +35,13 @@ if (! $show_label) {
             class="heart-label"
             data-wp-class--is-active="state.isFavorite">
             <span class="heart-label__text">
-                <span class="heart-label__text--inactive"><?php esc_html_e('Add to favorites', 'starwishx'); ?></span>
-                <span class="heart-label__text--active"><?php esc_html_e('In favorites', 'starwishx'); ?></span>
+                <span class="heart-label__text--inactive"><?php esc_html_e('Додати до обраних', 'starwishx'); ?></span>
+                <span class="heart-label__text--active"><?php esc_html_e('Обране', 'starwishx'); ?></span>
             </span>
         </label>
     <?php endif; ?>
 
-    <div class="heart">
+    <div class="heart" title="<?php esc_attr_e('Обране', 'starwishx'); ?>">
         <input
             type="checkbox"
             class="heart__checkbox"

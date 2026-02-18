@@ -289,6 +289,7 @@
         display: flex;
         flex-flow: column nowrap;
         align-items: flex-start !important;
+        padding: 12px;
 
         .opportunity-card__content {
             // display: flex;
@@ -320,13 +321,16 @@
             position: relative;
             width: 100%;
             overflow: hidden;
-            background-color: $buttons-color-background-secondary-hover;
+            // background-color: $buttons-color-background-secondary-hover;
+            background-color: $dropdown-surface-color-hover;
             border-radius: $radius-image;
             .listing-card__figure--link {
                 position: absolute;
                 z-index: 1;
                 width: 100%;
                 height: 100%;
+            }
+            .listing-card__figure--link:not(.placeholder) {
                 &::before {
                     position: absolute;
                     inset: 0;
@@ -381,6 +385,11 @@
                     background: transparent;
                     width: 40px;
                     height: 40px;
+                }
+                .heart {
+                    .heart__icon {
+                        // background: $stroke-default;
+                    }
                 }
             }
             .opportunity-card__placeholder {

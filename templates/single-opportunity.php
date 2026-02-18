@@ -228,9 +228,9 @@ get_header();
     <aside class="opportunity-aside">
         <div class="news-container">
             <?php get_template_part('template-parts/last-news', 'aside', [
-                'title' => 'News',
+                'title' => __('Новини', '_themedomain'),
                 'title_class' => 'h5',
-                'count_news' => 10,
+                'count_news' => 7,
                 'line_clamp' => 3
             ]); ?>
         </div>

@@ -82,7 +82,7 @@ class ResultsGrid implements RenderableInterface
 
             <div class="opportunity-card__content">
                 <figure class="opportunity-card__figure listing-card__figure">
-                    <a class="listing-card__figure--link" data-wp-bind--href="context.item.url">
+                    <a class="listing-card__figure--link" data-wp-bind--href="context.item.url" data-wp-class--placeholder="!context.item.thumbnail">
                         <img class="listing-card__image"
                             data-wp-bind--src="context.item.thumbnail" data-wp-bind--hidden="!context.item.thumbnail" data-wp-bind--alt="context.item.title">
                         <!-- Fallback Placeholder (shown if no image) -->
