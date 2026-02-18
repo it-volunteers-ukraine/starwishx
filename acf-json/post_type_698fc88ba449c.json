@@ -46,7 +46,7 @@
     "public": true,
     "hierarchical": false,
     "exclude_from_search": false,
-    "publicly_queryable": true,
+    "publicly_queryable": false,
     "show_ui": true,
     "show_in_menu": true,
     "admin_menu_parent": "",
@@ -86,5 +86,5 @@
     "delete_with_user": false,
     "register_meta_box_cb": "",
     "enter_title_here": "",
-    "modified": 1771173012
+    "modified": 1771404169
 }

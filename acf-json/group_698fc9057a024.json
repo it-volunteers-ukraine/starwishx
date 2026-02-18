@@ -16,8 +16,8 @@
                 "class": "",
                 "id": ""
             },
-            "default_country": "us",
-            "placeholder": "+1 555-555-5555",
+            "default_country": "ua",
+            "placeholder": "+38 044-555-5555",
             "return_format": "object",
             "allow_in_bindings": 0,
             "country": "us"
@@ -80,5 +80,5 @@
     "description": "",
     "show_in_rest": 0,
     "display_title": "",
-    "modified": 1771031983
+    "modified": 1771404070
 }
