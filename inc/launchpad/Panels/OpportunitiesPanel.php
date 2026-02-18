@@ -113,6 +113,20 @@ class OpportunitiesPanel extends AbstractPanel
         $view = isset($_GET['view']) ? sanitize_text_field($_GET['view']) : 'list';
         $isListView = ($view === 'list');
         $isFormView = ($view === 'add' || $view === 'edit');
+        $opportunity_fields = acf_get_fields('group_69373c79e9c9a');
+
+        // a lookup map for labels to ensure SSOT (Single Source of Truth)
+        // Maps 'opportunity_company' => 'Company' (or whatever is set in ACF)
+        $labels = [];
+        $placeholders = [];
+        $instructions = [];
+        if ($opportunity_fields) {
+            foreach ($opportunity_fields as $field) {
+                $labels[$field['name']] = $field['label'];
+                $placeholders[$field['name']] = $field['placeholder'] ?? '';
+                $instructions[$field['name']] = $field['instructions'] ?? '';
+            }
+        }
 
         $this->startBuffer();
 
@@ -342,8 +356,9 @@ class OpportunitiesPanel extends AbstractPanel
 
                     <!-- Main Title -->
                     <div class="form-field form-field__title">
-                        <label><?php esc_html_e('Opportunity Title', 'starwishx'); ?></label>
+                        <label><?php echo esc_html($labels['title'] ?? __('Opportunity Title', 'starwishx')); ?></label>
                         <input type="text" required class="large-text"
+                            placeholder="<?php echo esc_attr($placeholders['title'] ?? ''); ?>"
                             data-wp-bind--value="<?= $formPath ?>.title"
                             data-wp-on--input="actions.opportunities.updateForm"
                             data-wp-bind--disabled="<?= $isLoadingPath ?>"
@@ -358,16 +373,25 @@ class OpportunitiesPanel extends AbstractPanel
                             <h3 class="group-card-title"><?php esc_html_e('Applicant Info', 'starwishx'); ?></h3>
                             <div class="form-card-data launchpad-grid-3-col">
                                 <div class="form-field">
-                                    <label><?php esc_html_e('Name', 'starwishx'); ?></label>
-                                    <input type="text" required data-wp-bind--value="<?= $formPath ?>.applicant_name" data-wp-on--input="actions.opportunities.updateForm" data-field="applicant_name">
+                                    <label><?php echo esc_html($labels['opportunity_applicant_name'] ?? __('Name', 'starwishx')); ?></label>
+                                    <input type="text" required
+                                        placeholder="<?php echo esc_attr($placeholders['opportunity_applicant_name'] ?? ''); ?>"
+                                        data-wp-bind--value="<?= $formPath ?>.applicant_name"
+                                        data-wp-on--input="actions.opportunities.updateForm" data-field="applicant_name">
                                 </div>
                                 <div class="form-field">
-                                    <label><?php esc_html_e('Email', 'starwishx'); ?></label>
-                                    <input type="email" required data-wp-bind--value="<?= $formPath ?>.applicant_mail" data-wp-on--input="actions.opportunities.updateForm" data-field="applicant_mail">
+                                    <label><?php echo esc_html($labels['opportunity_applicant_mail'] ?? __('Email', 'starwishx')); ?></label>
+                                    <input type="email" required
+                                        placeholder="<?php echo esc_attr($placeholders['opportunity_applicant_mail'] ?? ''); ?>"
+                                        data-wp-bind--value="<?= $formPath ?>.applicant_mail"
+                                        data-wp-on--input="actions.opportunities.updateForm" data-field="applicant_mail">
                                 </div>
                                 <div class="form-field">
-                                    <label><?php esc_html_e('Phone', 'starwishx'); ?></label>
-                                    <input type="text" required data-wp-bind--value="<?= $formPath ?>.applicant_phone" data-wp-on--input="actions.opportunities.updateForm" data-field="applicant_phone">
+                                    <label><?php echo esc_html($labels['opportunity_applicant_phone'] ?? __('Phone', 'starwishx')); ?></label>
+                                    <input type="text" required
+                                        placeholder="<?php echo esc_attr($placeholders['opportunity_applicant_phone'] ?? ''); ?>"
+                                        data-wp-bind--value="<?= $formPath ?>.applicant_phone"
+                                        data-wp-on--input="actions.opportunities.updateForm" data-field="applicant_phone">
                                 </div>
                             </div>
                         </div>
@@ -378,13 +402,16 @@ class OpportunitiesPanel extends AbstractPanel
                             <div class="form-card-data ">
                                 <div class="launchpad-grid-auto">
                                     <div class="form-field">
-                                        <label><?php esc_html_e('Company', 'starwishx'); ?></label>
-                                        <input type="text" required data-wp-bind--value="<?= $formPath ?>.company" data-wp-on--input="actions.opportunities.updateForm" data-field="company">
+                                        <!-- <label>< ?php acf_label( 'my_field_name' ); ? ></label> -->
+                                        <label><?php echo esc_html($labels['opportunity_company'] ?? __('Company', 'starwishx')); ?></label>
+                                        <input type="text" required
+                                            placeholder="<?php echo esc_attr($placeholders['opportunity_company'] ?? ''); ?>"
+                                            data-wp-bind--value="<?= $formPath ?>.company" data-wp-on--input="actions.opportunities.updateForm" data-field="company">
                                     </div>
 
                                     <!-- <div class="form-row"> -->
                                     <div class="form-field">
-                                        <label><?php esc_html_e('Start Date', 'starwishx'); ?></label>
+                                        <label><?php echo esc_html($labels['opportunity_date_starts'] ?? __('Start Date', 'starwishx')); ?></label>
                                         <div class="input-date-iconed">
                                             <input type="date" required data-wp-bind--value="<?= $formPath ?>.date_starts" data-wp-on--input="actions.opportunities.updateForm" data-field="date_starts">
                                             <button type="button" class="input-date-iconed__btn" data-wp-on--click="actions.opportunities.openDatePicker" aria-label="<?php esc_attr_e('Open calendar', 'starwishx'); ?>">
@@ -395,7 +422,7 @@ class OpportunitiesPanel extends AbstractPanel
                                         </div>
                                     </div>
                                     <div class="form-field">
-                                        <label><?php esc_html_e('End Date', 'starwishx'); ?></label>
+                                        <label><?php echo esc_html($labels['opportunity_date_ends'] ?? __('End Date', 'starwishx')); ?></label>
                                         <div class="input-date-iconed">
                                             <input type="date" required data-wp-bind--value="<?= $formPath ?>.date_ends" data-wp-on--input="actions.opportunities.updateForm" data-field="date_ends">
                                             <button type="button" class="input-date-iconed__btn" data-wp-on--click="actions.opportunities.openDatePicker" aria-label="<?php esc_attr_e('Open calendar', 'starwishx'); ?>">
@@ -410,7 +437,7 @@ class OpportunitiesPanel extends AbstractPanel
                                 <div class="launchpad-grid-auto">
                                     <!-- Country Select -->
                                     <div class="form-field">
-                                        <label><?php esc_html_e('Country', 'starwishx'); ?></label>
+                                        <label><?php echo esc_html($labels['country'] ?? __('Country', 'starwishx')); ?></label>
                                         <select required
                                             data-wp-bind--value="<?= $formPath ?>.country"
                                             data-wp-on--change="actions.opportunities.updateForm"
@@ -422,8 +449,10 @@ class OpportunitiesPanel extends AbstractPanel
                                         </select>
                                     </div>
                                     <div class="form-field">
-                                        <label><?php esc_html_e('Link', 'starwishx'); ?></label>
-                                        <input type="url" required data-wp-bind--value="<?= $formPath ?>.sourcelink" data-wp-on--input="actions.opportunities.updateForm" data-field="sourcelink">
+                                        <label><?php echo esc_html($labels['opportunity_sourcelink'] ?? __('Link', 'starwishx')); ?></label>
+                                        <input type="url" required
+                                            placeholder="<?php echo esc_attr($placeholders['opportunity_sourcelink'] ?? ''); ?>"
+                                            data-wp-bind--value="<?= $formPath ?>.sourcelink" data-wp-on--input="actions.opportunities.updateForm" data-field="sourcelink">
                                     </div>
 
                                 </div>
@@ -533,7 +562,7 @@ class OpportunitiesPanel extends AbstractPanel
                                     </div>
                                 </div>
                                 <div class="form-field">
-                                    <label><?php esc_html_e('Opportunity Category', 'starwishx'); ?></label>
+                                    <label><?php echo esc_html($labels['opportunity_category'] ?? __('Opportunity Category', 'starwishx')); ?></label>
                                     <!-- Hierarchical Checkboxes -->
                                     <div class="category-group-container ">
                                         <template data-wp-each="<?= $optPath ?>.categories">
@@ -560,7 +589,7 @@ class OpportunitiesPanel extends AbstractPanel
                                 </div>
 
                                 <div class="form-field">
-                                    <label><?php esc_html_e('Seekers', 'starwishx'); ?></label>
+                                    <label><?php echo esc_html($labels['opportunity_seekers'] ?? __('Seekers', 'starwishx')); ?></label>
                                     <div class="checkbox-group launchpad-grid-3-col">
                                         <template data-wp-each="<?= $optPath ?>.seekers">
                                             <label class="launchpad-form__checkbox">
@@ -581,29 +610,31 @@ class OpportunitiesPanel extends AbstractPanel
                             <h3 class="group-card-title"><?php esc_html_e('Description', 'starwishx'); ?></h3>
                             <div class="form-card-data">
                                 <div class="form-field form-field-description">
-                                    <label><?php esc_html_e('Main Description', 'starwishx'); ?></label>
-                                    <textarea rows="6" required class="widefat" data-wp-bind--value="<?= $formPath ?>.description" data-wp-on--input="actions.opportunities.updateForm" data-field="description"></textarea>
+                                    <label><?php echo esc_html($labels['opportunity_description'] ?? __('Main Description', 'starwishx')); ?></label>
+                                    <textarea rows="6" required class="widefat"
+                                        placeholder="<?php echo esc_attr($placeholders['opportunity_description'] ?? ''); ?>"
+                                        data-wp-bind--value="<?= $formPath ?>.description" data-wp-on--input="actions.opportunities.updateForm" data-field="description"></textarea>
                                 </div>
                                 <div class="form-field form-field-description">
-                                    <label><?php esc_html_e('Requirements', 'starwishx'); ?></label>
-                                    <textarea rows="6" required class="widefat" data-wp-bind--value="<?= $formPath ?>.requirements" data-wp-on--input="actions.opportunities.updateForm" data-field="requirements"></textarea>
+                                    <label><?php echo esc_html($labels['opportunity_requirements'] ?? __('Requirements', 'starwishx')); ?></label>
+                                    <textarea rows="6" required class="widefat"
+                                        placeholder="<?php echo esc_attr($placeholders['opportunity_requirements'] ?? ''); ?>"
+                                        data-wp-bind--value="<?= $formPath ?>.requirements" data-wp-on--input="actions.opportunities.updateForm" data-field="requirements"></textarea>
                                 </div>
                                 <div class="form-field form-field-description">
-                                    <label><?php esc_html_e('Details', 'starwishx'); ?></label>
-                                    <textarea rows="4" class="widefat" data-wp-bind--value="<?= $formPath ?>.details" data-wp-on--input="actions.opportunities.updateForm" data-field="details"></textarea>
+                                    <label><?php echo esc_html($labels['opportunity_details'] ?? __('Details', 'starwishx')); ?></label>
+                                    <textarea rows="4" class="widefat"
+                                        placeholder="<?php echo esc_attr($placeholders['opportunity_details'] ?? ''); ?>"
+                                        data-wp-bind--value="<?= $formPath ?>.details" data-wp-on--input="actions.opportunities.updateForm" data-field="details"></textarea>
                                 </div>
                             </div>
                         </div>
 
                         <!-- GROUP 4: Document -->
                         <div class="form-group-card placeholder-box">
-                            <h3 class="group-card-title"><?php esc_html_e('Document', 'starwishx'); ?></h3>
+                            <h3 class="group-card-title"><?php echo esc_html($labels['opportunity_document'] ?? __('Document', 'starwishx')); ?></h3>
                             <div class="form-card-data">
                                 <div class="form-field">
-                                    <label>
-                                        <?php esc_html_e('Attachment (PDF, DOCX) max size 5Mb.', 'starwishx'); ?>
-                                    </label>
-
                                     <input type="file" id="opp-doc-upload"
                                         accept=".pdf,.doc,.docx"
                                         style="display:none;"
@@ -618,7 +649,9 @@ class OpportunitiesPanel extends AbstractPanel
                                             <svg width="18" height="18" aria-hidden="true" class="document-btn__icon">
                                                 <use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-clip"></use>
                                             </svg>
-                                            <?php esc_html_e('Attach File', 'starwishx'); ?>
+                                            
+                                            <?php echo esc_html($instructions['opportunity_document'] ?? __('Attach File', 'starwishx')); ?>
+                                            <!-- < ?php esc_html_e('Attach File', 'starwishx'); ?> -->
                                         </button>
                                     </div>
 
@@ -664,6 +697,9 @@ class OpportunitiesPanel extends AbstractPanel
                                             </span>
                                         </span>
                                     </div>
+                                    <label>
+                                        <?php esc_html_e('Формат (PDF, DOCX) Максимальний розмір 5Mb.', 'starwishx'); ?>
+                                    </label>
                                 </div>
                             </div>
                         </div>
@@ -671,31 +707,31 @@ class OpportunitiesPanel extends AbstractPanel
                     </div> <!-- End Grid -->
 
                     <div class="form-actions">
-                        <!-- STANDARD SAVE (Preserves current status or Draft) -->
-                        <!-- data-wp-bind--disabled="<?= $this->statePath('isSaving') ?>" -->
+                        <!-- data-wp-bind--disabled="< ?= $this->statePath('isSaving') ?>" -->
+                        <!-- Save Draft -->
                         <button type="submit" class="btn__small"
                             data-wp-bind--disabled="state.panels.opportunities.isSaving"
                             data-wp-bind--hidden="!state.canEdit">
-                            <?php esc_html_e('Save Draft', 'starwishx'); ?>
+                            <?php esc_html_e('Зберегти чернетку', 'starwishx'); ?>
                         </button>
 
-                        <!-- WORKFLOW ACTION: SUBMIT FOR REVIEW -->
+                        <!-- WORKFLOW ACTION: Submit for Review -->
                         <!-- Only show if status is not already 'pending' or 'publish' -->
-                        <!-- data-wp-bind--disabled="<?= $this->statePath('isSaving') ?>" -->
+                        <!-- data-wp-bind--disabled="< ?= $this->statePath('isSaving') ?>" -->
                         <button
                             type="button"
                             class="btn-secondary__small launchpad-form__btn--review"
                             data-wp-on--click="actions.opportunities.submitForReview"
                             data-wp-bind--disabled="state.panels.opportunities.isSaving"
                             data-wp-bind--hidden="!state.canEdit">
-                            <?php esc_html_e('Submit for Review', 'starwishx'); ?>
+                            <?php esc_html_e('Відправити на модерацію', 'starwishx'); ?>
                         </button>
-
+                        <!-- Back to list -->
                         <button class="btn-secondary__small" type="button" data-wp-on--click="actions.opportunities.cancel">
                             <svg class="btn-secondary__small--icon arrow-left">
                                 <use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-long_arrow_left"></use>
                             </svg>
-                            <?php esc_html_e('Back to list', 'starwishx'); ?>
+                            <?php esc_html_e('Назад до списку', 'starwishx'); ?>
                         </button>
                         <!-- indicator for non-editable items -->
                         <!-- <div class="status-alert" data-wp-bind--hidden="state.canEdit">

@@ -4,7 +4,7 @@
     "fields": [
         {
             "key": "field_69373c7a1073c",
-            "label": "Opportunity applicant name",
+            "label": "Імʼя та прізвище",
             "name": "opportunity_applicant_name",
             "aria-label": "",
             "type": "text",
@@ -19,7 +19,7 @@
             "default_value": "",
             "maxlength": "",
             "allow_in_bindings": 0,
-            "placeholder": "",
+            "placeholder": "Вкажіть імʼя та прізвище",
             "prepend": "",
             "append": ""
         },
@@ -66,7 +66,7 @@
         },
         {
             "key": "field_69373e88ee195",
-            "label": "Opportunity company",
+            "label": "Назва організації",
             "name": "opportunity_company",
             "aria-label": "",
             "type": "text",
@@ -81,17 +81,17 @@
             "default_value": "",
             "maxlength": "",
             "allow_in_bindings": 0,
-            "placeholder": "",
+            "placeholder": "Вкажіть назву надавача можливості",
             "prepend": "",
             "append": ""
         },
         {
             "key": "field_69373f3db73a4",
-            "label": "Opportunity date starts",
+            "label": "Дата старту можливості",
             "name": "opportunity_date_starts",
             "aria-label": "",
             "type": "date_picker",
-            "instructions": "",
+            "instructions": "Оберіть дату",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -107,11 +107,11 @@
         },
         {
             "key": "field_69373f67b73a5",
-            "label": "Opportunity date ends",
+            "label": "Дата завершення можливості",
             "name": "opportunity_date_ends",
             "aria-label": "",
             "type": "date_picker",
-            "instructions": "",
+            "instructions": "Оберіть дату",
             "required": 1,
             "conditional_logic": 0,
             "wrapper": {
@@ -127,7 +127,7 @@
         },
         {
             "key": "field_69373fdb049db",
-            "label": "Opportunity category",
+            "label": "Оберіть категорію можливості",
             "name": "opportunity_category",
             "aria-label": "",
             "type": "taxonomy",
@@ -179,11 +179,11 @@
         },
         {
             "key": "field_6937425f9c466",
-            "label": "Country",
+            "label": "Оберіть країну для можливості",
             "name": "country",
             "aria-label": "",
             "type": "taxonomy",
-            "instructions": "",
+            "instructions": "Оберіть країну",
             "required": 1,
             "conditional_logic": 0,
             "wrapper": {
@@ -226,7 +226,7 @@
         },
         {
             "key": "field_693742e29c468",
-            "label": "Opportunity sourcelink",
+            "label": "Посилання на першоджерело",
             "name": "opportunity_sourcelink",
             "aria-label": "",
             "type": "url",
@@ -240,11 +240,11 @@
             },
             "default_value": "",
             "allow_in_bindings": 0,
-            "placeholder": ""
+            "placeholder": "Додайте посилання"
         },
         {
             "key": "field_693747eaf0639",
-            "label": "Opportunity seekers",
+            "label": "Для кого відкрита можливість",
             "name": "opportunity_seekers",
             "aria-label": "",
             "type": "taxonomy",
@@ -270,7 +270,7 @@
         },
         {
             "key": "field_69374825f063a",
-            "label": "Opportunity description",
+            "label": "Опишіть можливість",
             "name": "opportunity_description",
             "aria-label": "",
             "type": "textarea",
@@ -286,12 +286,12 @@
             "maxlength": 2000,
             "allow_in_bindings": 0,
             "rows": "",
-            "placeholder": "",
+            "placeholder": "Додайте інформацію про можливість. Опишіть суть.",
             "new_lines": ""
         },
         {
             "key": "field_6937484ff063b",
-            "label": "Opportunity requirements",
+            "label": "Опишіть умови отримання можливості",
             "name": "opportunity_requirements",
             "aria-label": "",
             "type": "textarea",
@@ -307,12 +307,12 @@
             "maxlength": 1000,
             "allow_in_bindings": 0,
             "rows": "",
-            "placeholder": "",
+            "placeholder": "Додайте умови, наприклад, “Навчання доступно для наступних категорій населення...”",
             "new_lines": ""
         },
         {
             "key": "field_6937491cf063c",
-            "label": "Opportunity details",
+            "label": "Додаткова інформація",
             "name": "opportunity_details",
             "aria-label": "",
             "type": "textarea",
@@ -328,16 +328,16 @@
             "maxlength": 1000,
             "allow_in_bindings": 0,
             "rows": "",
-            "placeholder": "",
+            "placeholder": "Опишіть деталі, які здаються для Вас важливими та ключовими",
             "new_lines": ""
         },
         {
             "key": "field_69374928f063d",
-            "label": "Opportunity document",
+            "label": "Додаткові документи (за наявності)",
             "name": "opportunity_document",
             "aria-label": "",
             "type": "file",
-            "instructions": "",
+            "instructions": "Прикріпити документ",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -372,5 +372,5 @@
     "description": "",
     "show_in_rest": 0,
     "display_title": "",
-    "modified": 1771340370
+    "modified": 1771418248
 }
