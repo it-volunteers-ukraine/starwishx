@@ -1,0 +1,84 @@
+{
+    "key": "group_698fc9057a024",
+    "title": "CPT NGOs",
+    "fields": [
+        {
+            "key": "field_698fc905333bd",
+            "label": "NGO phone",
+            "name": "ngo_phone",
+            "aria-label": "",
+            "type": "phone_number",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_country": "us",
+            "placeholder": "+1 555-555-5555",
+            "return_format": "object",
+            "allow_in_bindings": 0,
+            "country": "us"
+        },
+        {
+            "key": "field_698fcd82cb8ef",
+            "label": "NGO email",
+            "name": "ngo_email",
+            "aria-label": "",
+            "type": "email",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "allow_in_bindings": 0,
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_698fcd99cb8f0",
+            "label": "NGO site",
+            "name": "ngo_site",
+            "aria-label": "",
+            "type": "url",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "allow_in_bindings": 0,
+            "placeholder": ""
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "post_type",
+                "operator": "==",
+                "value": "ngo"
+            }
+        ]
+    ],
+    "menu_order": 0,
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": "",
+    "active": true,
+    "description": "",
+    "show_in_rest": 0,
+    "display_title": "",
+    "modified": 1771031983
+}
