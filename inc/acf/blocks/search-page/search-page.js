@@ -2,12 +2,17 @@ const mySrcSelect = 'custom-select'
 
 var x, i, j, l, ll, selElmnt, a, b, c;
 /* Look for any elements with the class "custom-select": */
+// найти все элементы с определенным классом
 x = document.getElementsByClassName(mySrcSelect);
-console.log('mySrcSelect: ', mySrcSelect );
+console.log('mySrcSelect: ', mySrcSelect, 'length: ', x.length);
 l = x.length;
 for (i = 0; i < l; i++) {
+  // выбираем все select 
+  console.log('x[i]: ', x[i]);
   selElmnt = x[i].getElementsByTagName("select")[0];
   ll = selElmnt.length;
+  console.log('selElmnt.length: ', selElmnt.length);
+  console.log('selElmnt: ', selElmnt);
   /* For each element, create a new DIV that will act as the selected item: */
   a = document.createElement("DIV");
   a.setAttribute("class", "select-selected");
@@ -16,11 +21,17 @@ for (i = 0; i < l; i++) {
   /* For each element, create a new DIV that will contain the option list: */
   b = document.createElement("DIV");
   b.setAttribute("class", "select-items select-hide");
+
   for (j = 1; j < ll; j++) {
     /* For each option in the original select element,
     create a new DIV that will act as an option item: */
+    // var currentelem = selElmnt.options[j];
     c = document.createElement("DIV");
     c.innerHTML = selElmnt.options[j].innerHTML;
+    if (selElmnt.options[j].hasAttribute('selected')) {
+      c.classList.add('same-as-selected');
+    }
+    console.dir(`selElmnt.options[${j}]: ${selElmnt.options[j]}`);
     c.addEventListener("click", function (e) {
       /* When an item is clicked, update the original select box,
       and the selected item: */
@@ -32,6 +43,8 @@ for (i = 0; i < l; i++) {
         if (s.options[i].innerHTML == this.innerHTML) {
           s.selectedIndex = i;
           h.innerHTML = this.innerHTML;
+          // Вызвать change
+          s.dispatchEvent(new Event('change'));
           y = this.parentNode.getElementsByClassName("same-as-selected");
           yl = y.length;
           for (k = 0; k < yl; k++) {

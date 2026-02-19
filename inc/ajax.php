@@ -70,14 +70,10 @@ function ajax_load_news()
 
 
     ob_start();
-    // echo 'OK';
     $posts = $query->posts;
-
     $count = 0;
     foreach ($posts as $item) {
         $count++;
-
-
         $item->term_id = $term_id;
 
     get_template_part(

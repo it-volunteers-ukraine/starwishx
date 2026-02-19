@@ -6,7 +6,8 @@ acf_register_block_type([
 
         // Подключаем CSS/JS для блока
         wp_enqueue_style('new-card-css', get_template_directory_uri() . '/assets/css/template-parts/new-card.css');
-        wp_enqueue_style('custom-select-css', get_template_directory_uri() . '/assets/css/custom-select.css');
+        wp_enqueue_style('sortby-css', get_template_directory_uri() . '/assets/css/template-parts/sortby-and-result-posts.css');
+        // wp_enqueue_style('custom-select-css', get_template_directory_uri() . '/assets/css/custom-select.css');
         wp_enqueue_style('search-page-css', get_template_directory_uri() . '/assets/css/blocks/search-page/search-page.module.css');
         wp_enqueue_script('search-page-js', get_template_directory_uri() . '/assets/js/search-page.js', ['jquery'], null, true);
 

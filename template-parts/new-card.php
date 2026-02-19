@@ -20,9 +20,6 @@ if ($is_card_lg) {
 $card_lg_class = $is_card_lg ? ' newcard-lg ' : '';
 
 $swiper_class = $swiper ? 'swiper-slide' : '';
-// echo '<pre>';
-// print_r($item);
-// echo '</pre>';
 
 $post_id = $item->ID;
 $term_id = $item->term_id ?? null;
@@ -35,19 +32,12 @@ $photo = get_field('photo', $post_id);
 $photo_url = $photo['sizes']['large'] ?? '';
 $photo_alt = $photo['alt'] ?: ($photo['title'] ?? '');
 
-$categories_colors = get_field('categories_labels_color', 'options');
+$category_current_color = my_category_colors($term_id);
+$label_color_text       = $category_current_color['label_color_text'];
+$label_color_background = $category_current_color['label_color_background'];
+$label_color_border     = $category_current_color['label_color_border'];
 
-// if ($term_id != ""){
-
-// }
-$category_current_color = get_category_by_id($categories_colors, $term_id);
-
-$label_color_text       = $category_current_color['label_color_text'] ?? 'white';
-$label_color_background = $category_current_color['label_color_background'] ?? 'grey';
-$label_color_border     = $category_current_color['label_color_border'] ?? 'grey';
-
-$item_label = esc_html($item->term_name ?? '');;
-
+$item_label = esc_html($item->term_name ?? 'No category');
 
 ?>
 

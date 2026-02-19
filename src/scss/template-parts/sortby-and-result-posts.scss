@@ -1,0 +1,44 @@
+@use "../variables" as *;
+@use "../mixins/media" as *;
+
+.block-filter {
+  display: flex;
+  margin-bottom: 16px;
+  padding: 12px 0;
+  flex-direction: row-reverse;
+  justify-content: space-between;
+  align-items: center;
+  color: $text-light;
+}
+
+.filter {
+  display: flex;
+  align-items: center;
+}
+
+.filter-title {
+  display: none;
+}
+
+.filter-data {
+  color: $text-dark;
+}
+
+
+
+@include min-tablet {
+  .block-filter {
+    padding: 12px 40px;
+    flex-direction: row;
+  }
+
+  .filter-title {
+    display: inline;
+  }
+}
+
+@include min-laptop {
+  .block-filter {
+    margin-bottom: 24px;
+  }
+}

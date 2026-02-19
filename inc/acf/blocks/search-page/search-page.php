@@ -10,9 +10,9 @@ $default_classes = [
     'sort-icon' => 'sort-icon',
     'content' => 'content',
     'newscards' => 'newscards',
-    
-    
-    'my-select' => 'my-select',
+
+
+    // 'my-select' => 'my-select',
 ];
 
 // $category_slug = get_query_var('news_cat');
@@ -36,6 +36,9 @@ $default_classes = [
 
 $modules_file = get_template_directory() . '/assets/css/blocks/modules.json';
 $classes = $default_classes;
+$sortby_list = get_field('sortby_list', 'options');
+$sortby_type_default = $sortby_list['default_sort'] ?? 'date';
+$sort_default = $sortby_list['sort_by_type'] ?? 'DESC';
 // $title = get_field('title');
 
 // $news_by_category = get_field('news_by_category');
@@ -54,6 +57,9 @@ if (!in_array($per_page, [12, 8, 4])) {
     $per_page = 12;
 }
 $search_term = isset($_GET['search']) ? $_GET['search'] : '';
+$sortby = isset($_GET['sortby']) ? $_GET['sortby'] : $sortby_type_default;
+$sort = isset($_GET['order']) ? $_GET['order'] : $sort_default;
+
 $title = esc_html(get_field('title')) . ' "' . $search_term . '"';
 $found = esc_html(get_field('found'));
 $sort_title = esc_html(get_field('sort_title')) . ': ';
@@ -76,83 +82,75 @@ $post_type = ['news', 'opportunity'];
 // передать post_type в META для пагинации
 update_post_meta(get_the_ID(), 'post_type', $post_type);
 
-$args = [
-    'post_type'      => $post_type, // Или свой CPT
-    's'              => $search_term,
-    // 'fields'         => 'ids', // важно!
-    // 'no_found_rows'  => false, // нужно для pagination
-    'posts_per_page' => $per_page,
-    'paged'          => $page,
-    // 'tax_query'      => [
-        // [
-            // 'taxonomy' => $category, // Или твоя кастомная taxonomy
-            // 'field'    => 'slug',
-            // 'terms'    => $category_slug,
-        // ]
-    // ]
-];
+$args_query = query_args_prepare([]);
 
-$query = new WP_Query($args);
+echo 'args_query: ' . '<br>';
+echo '<pre>';
+print_r($args_query);
+echo '</pre>';
 
-// if ($query->have_posts()) {
-//     // создаём массив для этой категории
-//     $res_by_cat[$term->term_id] = [
-//         'term_id'   => $term->term_id,
-//         'term_name' => $term->name,
-//         'posts'     => []
-//     ];
 
-//     foreach ($query->posts as $post_item) {
-//         // можно добавить данные категории внутрь поста
-//         $post_item->term_id   = $term->term_id;
-//         $post_item->term_name = $term->name;
+// $args = [
+//     'post_type'      => $post_type, // Или свой CPT
+//     's'              => $search_term,
+//     // 'fields'         => 'ids', // важно!
+//     'no_found_rows'  => false, // нужно для pagination
+//     'orderby'        => $sortby,
+//     'order'          => $sort,
+//     'posts_per_page' => $per_page,
+//     'paged'          => $page,
+//     // 'tax_query'      => [
+//     // [
+//     // 'taxonomy' => $category, // Или твоя кастомная taxonomy
+//     // 'field'    => 'slug',
+//     // 'terms'    => $category_slug,
+//     // ]
+//     // ]
+// ];
 
-//         $res_by_cat[$term->term_id]['posts'][] = $post_item;
-//     }
-// }
+$query = new WP_Query($args_query);
+
+if ($query->have_posts()) {
+    foreach  ($query->posts as $post_item) {
+        $post_id = $post_item->ID;
+        $terms = get_the_terms($post_id, my_category());
+        
+        // echo 'post_id: ' . $post_id . '<br>';
+        // echo 'terms: ';
+        // print_r($terms);
+        // echo '<br>';
+
+        if (!empty($terms) && !is_wp_error($terms)) {
+            $term_id = $terms[0]->term_id;
+            $term_name = $terms[0] ->name;
+        } else {
+            $term_id = null;
+            $term_name = null;
+        }
+        $post_item ->term_id = $term_id;
+        $post_item ->term_name = $term_name;
+        // echo '<pre>';
+        // print_r($post_item);
+        // echo '</pre>';
+    }
+}
 
 wp_reset_postdata();
 
 $total_posts = (int) $query->found_posts;
-$found_str = $found . ': ' . $total_posts;
-// echo 'total post: ' . $total_posts;
-
-$posts_list = $query;
-$posts = $posts_list->posts;
-// print_r($post_list);
-// echo '<pre>'; // Обертываем в теги для форматирования
-// echo var_dump($posts);
-// echo var_dump($query);
-// echo '</pre>';
+$posts = $query->posts;
 
 ?>
 
 <section class="section <?php echo esc_attr($classes['section']); ?> ">
     <div class="container ">
         <h1 class="h3 <?php echo esc_attr($classes['title']); ?>"><?php echo esc_html($title); ?></h1>
-        <div class="text-r <?php echo esc_attr($classes['block-filter']); ?>" >
-            <p><?php echo $found_str; ?></p>
-            <div class="<?php echo esc_attr($classes['filter']); ?>">
-                <div class="<?php echo esc_attr($classes['filter-title']); ?>"><?php echo esc_html($sort_title); ?></div>
-                <!-- <?php $sort_data = $sort_date_new; ?> -->
-                <div class="custom-select btn-text-medium <?php echo esc_attr($classes['my-select']); ?>">
-                    <select name="" id="">
-                        <option value="0">Спочатку нові</option>
-                        <option value="DESC">Спочатку нові</option>
-                        <option value="ФІС">Спочатку старі</option>
-                    </select>
-                    <svg class="<?php echo esc_attr($classes["sort-icon"]); ?>">
-                        <use href="<?php echo get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-arrow_down"></use>
-                    </svg>
-                </div>
-            </div>
+        <?php get_template_part('template-parts/sortby-and-result-posts', null, ['total_posts' => $total_posts]); ?>
 
-        </div>
         <div class="cards-list <?php echo esc_attr($classes['newscards']); ?>">
             <?php if ($posts) : ?>
                 <?php foreach ($posts as $item) : ?>
                     <?php
-                    $item->term_id = $term_id ?? "";
                     get_template_part(
                         'template-parts/new-card',
                         null,

@@ -96,7 +96,9 @@ $per_page = in_array($per_page, $allowed_per_page, true) ? $per_page : 12;
 $search_term = isset($_GET['search']) ? $_GET['search'] : '';
 
 // Получить post_type из мета, если нет, то 'news'
-$post_type = get_post_meta(get_the_ID(), 'post_type', 'news');
+$post_type = my_post_type();
+
+$arg_query = query_args_prepare([]);
 
 
 if ($category && $category_slug){
