@@ -203,6 +203,13 @@
     }
 }
 
+.launchpad-grid__container {
+    .opportunities-pagination {
+        margin-top: 12px;
+        text-align: right;
+    }
+}
+
 // Panel Content & Typography
 .panel-content {
     border-radius: 16px;
@@ -505,7 +512,7 @@
             flex-flow: column wrap;
             justify-content: space-between;
             align-items: flex-end;
-            
+
             gap: 25px;
             @container (max-width: 723px) {
                 align-items: center;

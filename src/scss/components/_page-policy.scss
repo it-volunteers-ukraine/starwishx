@@ -49,6 +49,7 @@
       text-decoration: none;
 
       .policy-pdf-icon {
+         color: $icon-color-accent;
          display: flex;
          align-items: center;
          max-width: 22px;
@@ -102,7 +103,11 @@
       }
       ul {
          list-style: disc;
+         li {
+            list-style: disc;
+         }
       }
+
       h2,
       h3 {
          margin-top: 24px;

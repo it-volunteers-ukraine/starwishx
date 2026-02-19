@@ -327,7 +327,7 @@ class OpportunitiesPanel extends AbstractPanel
                 </div>
 
                 <div class="opportunities-pagination" data-wp-bind--hidden="!<?= $this->statePath('hasMore') ?>">
-                    <button class="btn-tertiary"
+                    <button class="btn-tertiary opportunities-pagination__button"
                         data-wp-on--click="actions.opportunities.loadMore"
                         data-wp-bind--disabled="<?= $isLoadingPath ?>">
                         <?php esc_html_e('Load More', 'starwishx'); ?>
@@ -649,7 +649,7 @@ class OpportunitiesPanel extends AbstractPanel
                                             <svg width="18" height="18" aria-hidden="true" class="document-btn__icon">
                                                 <use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-clip"></use>
                                             </svg>
-                                            
+
                                             <?php echo esc_html($instructions['opportunity_document'] ?? __('Attach File', 'starwishx')); ?>
                                             <!-- < ?php esc_html_e('Attach File', 'starwishx'); ?> -->
                                         </button>
