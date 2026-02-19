@@ -1,15 +1,15 @@
 @use "../../../../src/scss/variables" as *;
 @use "../../../../src/scss/mixins/media" as *;
-@use "../../../../src/scss/mixins/label"; 
-@use "../../../../src/scss/mixins/indents"; 
+@use "../../../../src/scss/mixins/label";
+@use "../../../../src/scss/mixins/indents";
 
 %flex-col {
   display: flex;
   flex-direction: column;
 }
 %text-base {
-  font-weight: 400;
   font-style: normal;
+  font-weight: 400;
   letter-spacing: 0%;
 }
 
@@ -22,10 +22,10 @@
 .contact-container {
   @extend %flex-col;
 
-  padding: 24px;
   gap: 80px;
-  border-radius: 40px;
+  border-radius: $radius-element;
   background-color: $surface-violet;
+  padding: 24px;
 }
 
 .contact-block,
@@ -47,30 +47,29 @@
 }
 
 .contact-title-small {
-  @include label.label-dot; 
-  @include indents.label-subtitle; 
+  @include label.label-dot;
+  @include indents.label-subtitle;
 
-  background-color: $element-card-cult-fill;
-  border-color: $element-card-cult-stroke;
   align-self: flex-start;
-  
+  border-color: $element-card-cult-stroke;
+  background-color: $element-card-cult-fill;
 }
 
 .contact-title-medium {
   @extend %text-base;
 
+  color: $text-dark;
   font-size: 36px;
   line-height: 120%;
   text-transform: uppercase;
-  color: $text-dark;
 }
 
 .contact-title-big {
   @extend %text-base;
 
+  color: $text-basic;
   font-size: 16px;
   line-height: 130%;
-  color: $text-basic;
 }
 
 .contact-item {
@@ -80,18 +79,18 @@
 
   @extend %text-base;
 
+  color: $text-dark;
   font-size: 16px;
   line-height: 130%;
-  color: $text-dark;
 }
 
 .contact-item .icon {
-  width: 24px;
-  height: 24px;
-  flex-shrink: 0;
-  fill: $icon-color-accent;
   position: relative;
   left: 2px;
+  flex-shrink: 0;
+  fill: $icon-color-accent;
+  width: 24px;
+  height: 24px;
 }
 
 .contact-item .contact-value {
@@ -105,14 +104,14 @@
 }
 
 .contact-avatar-item {
-  width: 48px;
-  height: 48px;
+  position: relative;
+  z-index: 1;
   margin-left: -12px;
   border: 2px solid $icon-color-secondary;
   border-radius: 50%;
+  width: 48px;
+  height: 48px;
   overflow: hidden;
-  position: relative;
-  z-index: 1;
 }
 
 .contact-avatar-item:first-child {
@@ -134,13 +133,17 @@
 
 .contact-form input,
 .contact-form textarea {
-  width: 100%;
-  padding: 12px;
-  border: 1px solid $input-color-border-default;
-  border-radius: 12px;
   transition: border-color 0.2s ease;
+  border: 1px solid $input-color-border-default;
+  border-radius: $radius-input;
   background-color: $surface-primary;
+  padding: 12px;
+  width: 100%;
   word-break: break-all;
+}
+
+.contact-form textarea {
+  padding-bottom: 32px;
 }
 
 .contact-form-field,
@@ -182,8 +185,8 @@
 }
 
 .contact-form-textarea .textarea-wrapper {
-  position: relative;
   display: block;
+  position: relative;
 }
 
 .contact-form-textarea .contact-counter {
@@ -194,15 +197,15 @@
 
   @extend %text-base;
 
-  line-height: 120%;
-  color: $text-light;
   pointer-events: none;
+  color: $text-light;
+  line-height: 120%;
 }
 
 .contact-form input:focus,
 .contact-form textarea:focus {
-  border-color: $input-color-border-filled;
   outline: none;
+  border-color: $input-color-border-filled;
 }
 
 .contact-privacy {
@@ -210,8 +213,8 @@
 
   @extend %text-base;
 
-  line-height: 120%;
   color: $text-basic;
+  line-height: 120%;
 
   a {
     color: inherit;
@@ -220,17 +223,17 @@
 }
 
 .contact-submit {
-  padding: 12px 24px;
-  font-size: 16px;
-  font-weight: 500;
-  line-height: 120%;
-  color: $buttons-color-text-primary-default;
-  background-color: $buttons-color-background-primary-default;
-  border: none;
-  border-radius: 40px;
-  cursor: pointer;
   transition: background-color 0.3s ease;
+  cursor: pointer;
   margin-left: auto;
+  border: none;
+  border-radius: $radius-element;
+  background-color: $buttons-color-background-primary-default;
+  padding: 12px 24px;
+  color: $buttons-color-text-primary-default;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 120%;
   text-align: center;
 
   &:hover {
@@ -254,20 +257,20 @@
 
   @extend %text-base;
 
-  line-height: 120%;
-  color: $icon-color-error;
-  margin-top: 4px;
-  transition: all 0.2s ease;
   display: flex;
   align-items: center;
   gap: 8px;
+  transition: all 0.2s ease;
+  margin-top: 4px;
+  color: $icon-color-error;
+  line-height: 120%;
 }
 
 .contact-error svg {
-  width: 20px;
-  height: 20px;
   flex-shrink: 0;
   fill: currentcolor;
+  width: 20px;
+  height: 20px;
 }
 
 .contact-form input.input-error,
@@ -276,12 +279,12 @@
 }
 
 .contact-popup {
-  position: fixed;
-  inset: 0;
   display: none;
-  align-items: center;
+  position: fixed;
   justify-content: center;
+  align-items: center;
   z-index: 9999;
+  inset: 0;
   background: rgb(0 0 0 / 50%);
 }
 
@@ -290,36 +293,36 @@
 
   align-items: center;
   gap: 8px;
-  padding: 24px;
-  background: $surface-message;
-  border-radius: 24px;
   box-shadow:
     0 3px 1px 0 #0000000f,
     0 3px 8px 0 #00000026,
     0 0 0 1px #0000000a;
+  border-radius: 24px;
+  background: $surface-message;
+  padding: 24px;
 }
 
 .contact-popup-icon {
+  fill: $text-basic;
   width: 24px;
   height: 24px;
-  fill: $text-basic;
 }
 
 .contact-popup-title {
+  color: $text-basic;
   font-weight: 500;
   font-size: 28px;
   line-height: 120%;
   letter-spacing: 0%;
-  color: $text-basic;
   text-align: center;
 }
 
 .contact-popup-text {
   @extend %text-base;
 
+  color: $text-basic;
   font-size: 16px;
   line-height: 130%;
-  color: $text-basic;
   text-align: center;
 }
 
@@ -347,8 +350,8 @@ textarea::placeholder {
   }
 
   .contact-container {
-    padding: 32px;
     gap: 120px;
+    padding: 32px;
   }
 
   .contact-title-medium {
@@ -375,8 +378,6 @@ textarea::placeholder {
     flex: 1 1 100%;
   }
 
-  
-
   .contact-popup-success .contact-popup-inner {
     width: 445px;
     height: 168px;
@@ -396,8 +397,8 @@ textarea::placeholder {
   .contact-container {
     flex-direction: row;
     gap: 0;
+    border-radius: $radius-xl;
     width: 100%;
-    border-radius: 48px;
   }
 
   .contact-block {
@@ -405,11 +406,11 @@ textarea::placeholder {
   }
 
   .contact-form {
-    width: 580px;
+    flex-flow: row wrap;
+    gap: 12px;
     margin-left: auto;
     padding-top: 111px;
-    gap: 12px;
-    flex-flow: row wrap;
+    width: 580px;
   }
 
   .contact-form-field:nth-child(1),
@@ -447,8 +448,8 @@ textarea::placeholder {
   }
 
   .contact-title-medium {
-    font-size: 64px;
     font-weight: 300;
+    font-size: 64px;
   }
 
   .contact-title-big {
@@ -464,14 +465,12 @@ textarea::placeholder {
     height: 54px;
   }
 
-  
-
   .contact-form {
-    width: 690px;
+    flex-flow: row wrap;
+    gap: 12px;
     margin-left: auto;
     padding-top: 111px;
-    gap: 12px;
-    flex-flow: row wrap;
+    width: 690px;
   }
 
   .contact-form-field:nth-child(1),
@@ -484,8 +483,6 @@ textarea::placeholder {
   .contact-form-field:nth-child(5) {
     flex: 1 1 100%;
   }
-
-  
 
   input::placeholder,
   textarea::placeholder {
