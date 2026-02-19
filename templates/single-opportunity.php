@@ -19,7 +19,7 @@ $referer  = wp_get_referer();
 $back_url = $referer ?: home_url('home');
 
 // CSS category-oportunities injection using inc/theme-helpers.php function
-$css = get_taxonomy_top_level_colors_styles('category-oportunities');
+$css = sw_get_taxonomy_top_level_colors_styles('category-oportunities');
 if (!empty($css)) {
     wp_register_style('cat-oportunities-color-styles', false);
     wp_enqueue_style('cat-oportunities-color-styles', false);

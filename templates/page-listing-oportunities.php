@@ -40,7 +40,7 @@ add_action('wp_head', function () {
 <?php
 }, 1);
 
-$css = get_taxonomy_top_level_colors_styles('category-oportunities');
+$css = sw_get_taxonomy_top_level_colors_styles('category-oportunities');
 if (!empty($css)) {
     wp_register_style('cat-oportunities-color-styles', false);
     wp_enqueue_style('cat-oportunities-color-styles', false);
