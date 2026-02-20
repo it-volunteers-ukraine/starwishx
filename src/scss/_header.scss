@@ -142,7 +142,7 @@
   left: 50%;
   gap: 8px;
   transform: translateX(-29%);
-  z-index: 1;
+  z-index: 99;
   box-shadow: 4px 4px 4px 4px rgb(0 0 0 / 25%);
   border-radius: 20px;
   background: $buttons-color-background-secondary-default;
@@ -447,10 +447,7 @@
     transform: rotate(-180deg);
   }
 
-  .burger-menu
-    .mobile-menu-list
-    .menu-item-custom-grid.mobile-active
-    > a.menu-button {
+  .burger-menu .mobile-menu-list .menu-item-custom-grid.mobile-active > a.menu-button {
     color: $icon-color-accent;
   }
 
@@ -524,10 +521,7 @@
     line-height: 1.2;
   }
 
-  .burger-menu
-    .mobile-menu-list
-    .menu-item-custom-grid:not(.mobile-active)
-    > a.menu-button {
+  .burger-menu .mobile-menu-list .menu-item-custom-grid:not(.mobile-active) > a.menu-button {
     background: transparent;
     color: $icon-color-primary;
   }
@@ -570,14 +564,14 @@
 }
 
 .search-input {
-  width: 100%;
-  padding: 12px;
-  padding-right: 94px;
-  height: 47px;
+  transition: box-shadow $animations-long;
   border: none;
   border-radius: $radius-input;
   background-color: $text-white;
-  transition: box-shadow $animations-long;
+  padding: 12px;
+  padding-right: 94px;
+  width: 100%;
+  height: 47px;
 }
 
 .search-input:focus {
@@ -601,18 +595,18 @@
 }
 
 .search-submit-bth {
-  width: 47px;
-  height: 100%;
+  display: flex;
   position: absolute;
   top: 0;
   right: 0;
-  border: none;
-  background-color: $buttons-color-background-primary-default;
-  display: flex;
   justify-content: center;
   align-items: center;
-  border-radius: 0 10px 10px 0;
   transition: all $animations;
+  border: none;
+  border-radius: 0 10px 10px 0;
+  background-color: $buttons-color-background-primary-default;
+  width: 47px;
+  height: 100%;
 }
 
 .search-submit-bth:hover {
@@ -621,14 +615,14 @@
 
 .form-clear-btn {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 47px;
-  height: 100%;
   position: absolute;
   top: 0;
   right: 47px;
+  justify-content: center;
+  align-items: center;
   cursor: pointer;
+  width: 47px;
+  height: 100%;
 }
 
 .form-clear-icon {
@@ -641,7 +635,7 @@
 }
 
 .search-submit-icon {
+  border: none;
   width: 20px;
   height: 20px;
-  border: none;
 }
