@@ -266,5 +266,12 @@
             //     }
             // }
         }
+        .tag-list__more-item {
+            .tag-list__details {
+                .tag-list__summary {
+                    cursor: pointer;
+                }
+            }
+        }
     }
 }
