@@ -18,7 +18,7 @@ get_header();
                     <svg class="heading-404__logo">
                         <title>0</title>
                         <use xlink:href="/wp-content/themes/starwishx/assets/img/sprites.svg#icon-element_planet_3-circle"></use>
-                    </svg>4
+                    </svg>
                 </h1>
             </header>
             <a class="btn" href="/home"><?php esc_html_e('На головну сторінку', '_themedomain'); ?></a>

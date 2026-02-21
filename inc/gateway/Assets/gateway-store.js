@@ -27,6 +27,10 @@ const gatewayState = {
     const key = this.toCamel(this.activeView);
     return this.forms?.[key] || {};
   },
+  // Getter for the Reset Password input type
+  get resetPasswordInputType() {
+    return this.forms?.resetPassword?.isPasswordVisible ? "text" : "password";
+  },
 };
 
 // Store definition

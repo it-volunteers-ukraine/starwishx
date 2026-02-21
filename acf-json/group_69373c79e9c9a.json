@@ -4,12 +4,12 @@
     "fields": [
         {
             "key": "field_69373c7a1073c",
-            "label": "Імʼя та прізвище",
+            "label": "Імʼя та прізвище (deprecated)",
             "name": "opportunity_applicant_name",
             "aria-label": "",
             "type": "text",
             "instructions": "",
-            "required": 1,
+            "required": 0,
             "conditional_logic": 0,
             "wrapper": {
                 "width": "",
@@ -25,12 +25,12 @@
         },
         {
             "key": "field_69373dabee193",
-            "label": "Opportunity applicant mail",
+            "label": "Opportunity applicant mail  (deprecated)",
             "name": "opportunity_applicant_mail",
             "aria-label": "",
             "type": "email",
             "instructions": "",
-            "required": 1,
+            "required": 0,
             "conditional_logic": 0,
             "wrapper": {
                 "width": "",
@@ -45,12 +45,12 @@
         },
         {
             "key": "field_69373dcaee194",
-            "label": "Opportunity applicant phone",
+            "label": "Opportunity applicant phone  (deprecated)",
             "name": "opportunity_applicant_phone",
             "aria-label": "",
             "type": "text",
             "instructions": "",
-            "required": 1,
+            "required": 0,
             "conditional_logic": 0,
             "wrapper": {
                 "width": "",
@@ -372,5 +372,5 @@
     "description": "",
     "show_in_rest": 0,
     "display_title": "",
-    "modified": 1771418248
+    "modified": 1771639251
 }

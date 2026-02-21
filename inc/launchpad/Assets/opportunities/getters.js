@@ -17,16 +17,34 @@ export const opportunitiesGetters = {
   /**
    * Is the opportunities list view currently visible?
    */
-  get isOppListVisible() {
-    return (this.panels.opportunities?.currentView || "list") === "list";
+  // get isOppListVisible() {
+  //   return (this.panels.opportunities?.currentView || "list") === "list";
+  // },
+
+  // /**
+  //  * Is the opportunities form (add or edit) currently visible?
+  //  */
+  // get isOppFormVisible() {
+  //   const view = this.panels.opportunities?.currentView;
+  //   return view === "add" || view === "edit";
+  // },
+
+  // NEW: Determines if the onboarding screen should show
+  get isOppOnboardingVisible() {
+    return this.panels.opportunities?.isLocked === true;
   },
 
-  /**
-   * Is the opportunities form (add or edit) currently visible?
-   */
+  // MODIFIED: Only show list if NOT locked
+  get isOppListVisible() {
+    const p = this.panels.opportunities;
+    return !p?.isLocked && (p?.currentView || "list") === "list";
+  },
+
+  // MODIFIED: Only show form if NOT locked
   get isOppFormVisible() {
-    const view = this.panels.opportunities?.currentView;
-    return view === "add" || view === "edit";
+    const p = this.panels.opportunities;
+    const view = p?.currentView;
+    return !p?.isLocked && (view === "add" || view === "edit");
   },
 
   /**

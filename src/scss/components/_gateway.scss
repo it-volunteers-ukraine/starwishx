@@ -33,14 +33,14 @@
 }
 
 .gateway-forms {
-    max-width: 320px;
     margin: 0 auto;
+    max-width: 320px;
 }
 .gateway-form-wrapper {
+    animation: fadeIn 0.4s ease-in-out;
     &[hidden] {
         display: none !important;
     }
-    animation: fadeIn 0.4s ease-in-out;
 }
 .gateway-form {
     display: flex;
@@ -54,9 +54,9 @@
     .gateway-alert--success,
     .gateway-alert--error,
     .gateway-form__intro {
-        background-color: $surface-violet;
         border: 1px solid $input-color-border-default;
         border-radius: $radius-input;
+        background-color: $surface-violet;
         padding: 12px;
     }
     .gateway-fields__container {
@@ -154,15 +154,29 @@
             margin-top: 60px;
             margin-left: 80px;
         }
-        color: $text-light;
         display: flex;
         align-items: center;
         gap: 4px;
+        color: $text-light;
         svg {
             height: 16px;
             @include media.min-desktop {
                 height: 18px;
             }
         }
+    }
+}
+
+.gateway-password-group {
+    position: relative;
+    .btn-hide-pw {
+        position: absolute;
+        top: 12px;
+        right: 10px;
+        border: unset;
+        padding: 0;
+        width: 23px;
+        height: 23px;
+        color: $buttons-color-background-primary-default;
     }
 }

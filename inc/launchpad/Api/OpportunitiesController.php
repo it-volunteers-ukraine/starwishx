@@ -6,13 +6,14 @@ declare(strict_types=1);
 namespace Launchpad\Api;
 
 use Launchpad\Services\OpportunitiesService;
+use Launchpad\Services\ProfileService;
 use WP_REST_Request;
 use WP_REST_Response;
 use WP_Error;
 
 /**
  * REST controller for Opportunity entities.
- * 
+ *
  * Architecture:
  * - Inherits from AbstractLaunchpadController for standard Namespace/Auth.
  * - Uses OpportunitiesService for business logic (Persistence/Queries).
@@ -20,14 +21,16 @@ use WP_Error;
 class OpportunitiesController extends AbstractLaunchpadController
 {
     private OpportunitiesService $service;
+    private ProfileService $profileService;
 
     /**
      * Constructor with Dependency Injection.
      * Ensure this is injected in LaunchpadCore.php
      */
-    public function __construct(OpportunitiesService $service)
+    public function __construct(OpportunitiesService $service, ProfileService $profileService)
     {
         $this->service = $service;
+        $this->profileService = $profileService;
     }
 
     /**
@@ -36,6 +39,7 @@ class OpportunitiesController extends AbstractLaunchpadController
     public function registerRoutes(): void
     {
         // Define shared validation/sanitization arguments for Create/Update
+        // Note: applicant_name, applicant_mail, applicant_phone are auto-filled from user profile
         $saveArgs = [
             'title'  => ['required' => true, 'sanitize_callback' => 'sanitize_text_field'],
             'status' => [
@@ -45,9 +49,6 @@ class OpportunitiesController extends AbstractLaunchpadController
                     return in_array($param, ['draft', 'pending', 'publish']);
                 }
             ],
-            'applicant_name'  => ['sanitize_callback' => 'sanitize_text_field'],
-            'applicant_mail'  => ['sanitize_callback' => 'sanitize_email'],
-            'applicant_phone' => ['sanitize_callback' => 'sanitize_text_field'],
             'company'         => ['sanitize_callback' => 'sanitize_text_field'],
             'date_starts'     => ['sanitize_callback' => 'sanitize_text_field'],
             'date_ends'       => ['sanitize_callback' => 'sanitize_text_field'],
@@ -79,7 +80,7 @@ class OpportunitiesController extends AbstractLaunchpadController
             'document_id'    => [
                 'required'          => false,
                 'sanitize_callback' => 'absint',
-                'validate_callback' => function($param) {
+                'validate_callback' => function ($param) {
                     return is_numeric($param) || is_null($param);
                 }
             ],
@@ -114,7 +115,8 @@ class OpportunitiesController extends AbstractLaunchpadController
         register_rest_route($this->namespace, '/opportunities', [
             'methods'             => 'POST',
             'callback'            => [$this, 'saveOpportunity'],
-            'permission_callback' => [$this, 'checkLoggedIn'],
+            // 'permission_callback' => [$this, 'checkLoggedIn'],
+            'permission_callback' => [$this, 'checkCanPost'],
             'args'                => $saveArgs,
         ]);
 
@@ -129,7 +131,7 @@ class OpportunitiesController extends AbstractLaunchpadController
                 'methods'             => 'PUT',
                 'callback'            => [$this, 'saveOpportunity'],
                 // Inherited from Abstract
-                'permission_callback' => [$this, 'checkPostOwner'],
+                'permission_callback' => [$this, 'checkCanPost'],
                 'args'                => $saveArgs,
             ],
         ]);
@@ -138,7 +140,7 @@ class OpportunitiesController extends AbstractLaunchpadController
         register_rest_route($this->namespace, '/opportunities/(?P<id>\d+)/status', [
             'methods'             => 'POST',
             'callback'            => [$this, 'handleStatusChange'],
-            'permission_callback' => [$this, 'checkPostOwner'],
+            'permission_callback' => [$this, 'checkCanPost'],
             'args'                => [
                 'status' => [
                     'required'          => true,
@@ -273,12 +275,25 @@ class OpportunitiesController extends AbstractLaunchpadController
             // our $id variable remains NULL.
         }
 
+        $current_user_id = get_current_user_id();
+
+        // Guard: Ownership (existing logic, unchanged)
+        if ($id) {
+            $existing_post = get_post($id);
+            if (
+                !$existing_post
+                || $existing_post->post_type !== 'opportunity'
+                || (int) $existing_post->post_author !== $current_user_id
+            ) {
+                return new WP_Error('forbidden', 'You do not have permission to edit this item.');
+            }
+        }
+
+
         $params = [
             'title'           => $request->get_param('title'),
             'status'          => $request->get_param('status'),
-            'applicant_name'  => $request->get_param('applicant_name'),
-            'applicant_mail'  => $request->get_param('applicant_mail'),
-            'applicant_phone' => $request->get_param('applicant_phone'),
+            // applicant_name, applicant_mail, applicant_phone are auto-filled from user profile in Service
             'company'         => $request->get_param('company'),
             'date_starts'     => $request->get_param('date_starts'),
             'date_ends'       => $request->get_param('date_ends'),
@@ -306,5 +321,20 @@ class OpportunitiesController extends AbstractLaunchpadController
             'id'      => $result,
             'message' => $id ? __('Updated successfully', 'starwishx') : __('Created successfully', 'starwishx')
         ]);
+    }
+
+    public function checkCanPost(): bool|WP_Error
+    {
+        if (!is_user_logged_in()) return false;
+
+        if (!$this->profileService->isProfileComplete(get_current_user_id())) {
+            return new WP_Error(
+                'profile_incomplete',
+                __('Please complete your profile (name and phone) before posting opportunities.', 'starwishx'),
+                ['status' => 403]
+            );
+        }
+
+        return true;
     }
 }

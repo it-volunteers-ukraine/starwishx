@@ -11,6 +11,7 @@ declare(strict_types=1);
 
 namespace Gateway\Services;
 
+use Shared\Policy\PasswordPolicy;
 use WP_Error;
 use WP_User;
 
@@ -18,8 +19,6 @@ class PasswordResetService
 {
     private const RATE_LIMIT_MAX_ATTEMPTS = 5;
     private const RATE_LIMIT_TIMEOUT_MINUTES = 15;
-
-    private const PASSWORD_MIN_LENGTH = 12;
 
     /**
      * Phase 1: Handle the "Lost Password" request.
@@ -144,12 +143,12 @@ class PasswordResetService
     private function validatePasswordStrength(string $password, WP_User $user): bool|WP_Error
     {
         // Check minimum length (WordPress recommends 12 as of 2024+)
-        if (strlen($password) < self::PASSWORD_MIN_LENGTH) {
+        if (strlen($password) < PasswordPolicy::MIN_LENGTH) {
             return new WP_Error(
                 'password_too_short',
                 sprintf(
                     __('Password must be at least %d characters long.', 'starwishx'),
-                    self::PASSWORD_MIN_LENGTH
+                    PasswordPolicy::MIN_LENGTH
                 )
             );
         }
@@ -228,5 +227,16 @@ class PasswordResetService
         );
 
         return true;
+    }
+
+    /**
+     * Generate a strong password.
+     * 
+     * @return string
+     */
+    public function generatePassword(): string
+    {
+        // 24 characters, with standard and extra special characters
+        return wp_generate_password(24, true, true);
     }
 }

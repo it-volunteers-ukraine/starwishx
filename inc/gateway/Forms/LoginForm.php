@@ -124,7 +124,7 @@ class LoginForm extends AbstractForm
             <!-- Links -->
             <div class="gateway-links">
                 <!-- Remember Me -->
-                <label class="form-field form-field--checkbox">
+                <label class="form-field form-field--checkbox gateway-checkbox">
                     <input
                         type="checkbox"
                         name="remember"

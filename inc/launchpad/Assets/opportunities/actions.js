@@ -69,8 +69,8 @@ export const opportunitiesActions = {
   },
 
   triggerFileSelect() {
-    const input = document.getElementById('opp-doc-upload');
-    if(input) input.click();
+    const input = document.getElementById("opp-doc-upload");
+    if (input) input.click();
   },
 
   handleFileSelect(event) {
@@ -80,7 +80,8 @@ export const opportunitiesActions = {
 
     // Simple Client Validation
     if (file.size > 5 * 1024 * 1024) {
-         alert("File too large"); return;
+      alert("File too large");
+      return;
     }
 
     _pendingUploadFile = file;
@@ -88,9 +89,9 @@ export const opportunitiesActions = {
 
     // UI Preview
     p.formData.document = {
-        name: file.name,
-        size: (file.size / 1024 / 1024).toFixed(2) + ' MB',
-        isPending: true
+      name: file.name,
+      size: (file.size / 1024 / 1024).toFixed(2) + " MB",
+      isPending: true,
     };
     // We set ID to null/0 to indicate "unsaved change" or "replacement pending"
     // Actual ID comes after upload
@@ -105,8 +106,8 @@ export const opportunitiesActions = {
     p.formData.document = null;
     p.formData.document_id = 0; // 0 signals backend to delete existing
 
-    const input = document.getElementById('opp-doc-upload');
-    if(input) input.value = '';
+    const input = document.getElementById("opp-doc-upload");
+    if (input) input.value = "";
   },
 
   async openEdit(event) {
@@ -135,61 +136,61 @@ export const opportunitiesActions = {
     p.error = null;
 
     try {
-        // STEP A: Upload (if pending)
-        if (_pendingUploadFile) {
-            p.isUploading = true;
+      // STEP A: Upload (if pending)
+      if (_pendingUploadFile) {
+        p.isUploading = true;
 
-            const formData = new FormData();
-            formData.append('file', _pendingUploadFile);
+        const formData = new FormData();
+        formData.append("file", _pendingUploadFile);
 
-            // Use enhanced fetchJson
-            const mediaData = await fetchJson(
-                state,
-                `${state.launchpadSettings.restUrl}media`,
-                {
-                    method: 'POST',
-                    body: formData,
-                    panelId: "opportunities-upload"
-                }
-            );
-
-            // Update State with new ID from backend
-            p.formData.document_id = mediaData.id;
-
-            // Update UI object to reflect "Saved" state
-            p.formData.document = {
-                ...p.formData.document,
-                isPending: false
-            };
-
-            _pendingUploadFile = null;
-            p.isUploading = false;
-        }
-
-        // STEP B: Save Opportunity
-        const id = p.formData.id;
-
-        // Clone and clean payload
-        const payload = deepClone(p.formData);
-        delete payload.document; // Don't send UI object to Opportunities endpoint
-
-        await fetchJson(
-            state,
-            `${state.launchpadSettings.restUrl}opportunities${id ? "/" + id : ""}`,
-            {
-                method: id ? "PUT" : "POST",
-                body: payload,
-                panelId: "opportunities",
-            },
+        // Use enhanced fetchJson
+        const mediaData = await fetchJson(
+          state,
+          `${state.launchpadSettings.restUrl}media`,
+          {
+            method: "POST",
+            body: formData,
+            panelId: "opportunities-upload",
+          },
         );
 
-        actions.opportunities.cancel();
-        await actions.loadPanelState("opportunities");
-    } catch (error) {
-        p.error = error.message;
-    } finally {
-        p.isSaving = false;
+        // Update State with new ID from backend
+        p.formData.document_id = mediaData.id;
+
+        // Update UI object to reflect "Saved" state
+        p.formData.document = {
+          ...p.formData.document,
+          isPending: false,
+        };
+
+        _pendingUploadFile = null;
         p.isUploading = false;
+      }
+
+      // STEP B: Save Opportunity
+      const id = p.formData.id;
+
+      // Clone and clean payload
+      const payload = deepClone(p.formData);
+      delete payload.document; // Don't send UI object to Opportunities endpoint
+
+      await fetchJson(
+        state,
+        `${state.launchpadSettings.restUrl}opportunities${id ? "/" + id : ""}`,
+        {
+          method: id ? "PUT" : "POST",
+          body: payload,
+          panelId: "opportunities",
+        },
+      );
+
+      actions.opportunities.cancel();
+      await actions.loadPanelState("opportunities");
+    } catch (error) {
+      p.error = error.message;
+    } finally {
+      p.isSaving = false;
+      p.isUploading = false;
     }
   },
 
@@ -562,5 +563,13 @@ export const opportunitiesActions = {
         );
       });
     }
+  },
+  
+  /**
+   * Navigate to profile panel for onboarding
+   */
+  goToProfile() {
+    const { actions } = store("launchpad");
+    actions.setActivePanel("profile", { pushHistory: true });
   },
 };

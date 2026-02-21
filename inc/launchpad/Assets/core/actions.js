@@ -49,6 +49,26 @@ export const coreActions = {
       }
     }
 
+    // Profile routing (view=profile | view=password | default=card)
+    if (panelId === "profile") {
+      const prof = state.panels.profile;
+      const view = params.get("view");
+      const wasEditing = prof.isEditing;
+      prof.isEditing = view === "profile";
+      prof.isChangingPassword = view === "password";
+      // Capture original values when entering edit mode (for cancel restore)
+      if (prof.isEditing && !wasEditing) {
+        prof._original = {
+          firstName: prof.firstName,
+          lastName: prof.lastName,
+          email: prof.email,
+          phone: prof.phone,
+          telegram: prof.telegram,
+          organization: prof.organization,
+        };
+      }
+    }
+
     // Hydrate panel if needed
     if (!state.panels[panelId]._loaded && !state.panels[panelId].isLoading) {
       actions.loadPanelState(panelId);

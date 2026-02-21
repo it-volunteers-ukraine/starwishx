@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Launchpad\Panels;
 
 use Launchpad\Services\ProfileService;
+use Shared\Policy\PasswordPolicy;
 
 class ProfilePanel extends AbstractPanel
 {
@@ -49,9 +50,11 @@ class ProfilePanel extends AbstractPanel
         // return $this->service->getProfileData($userId);
         $data = $this->service->getProfileData($userId);
 
+        $view = isset($_GET['view']) ? sanitize_text_field($_GET['view']) : '';
+
         return array_merge($data, [
-            'isEditing'          => false,
-            'isChangingPassword' => false,
+            'isEditing'          => ($view === 'profile'),
+            'isChangingPassword' => ($view === 'password'),
             'passwordData'       => [
                 'current' => '',
                 'new'     => '',
@@ -62,9 +65,11 @@ class ProfilePanel extends AbstractPanel
 
     public function render(): string
     {
-        // We determine the initial server-side state for SSR
-        // By default, Profile is NOT in editing mode on page load
-        $isEditingInitial = false;
+        // Determine the view on the server so we can set 'hidden' attributes
+        $view = isset($_GET['view']) ? sanitize_text_field($_GET['view']) : '';
+        $isCardVisible  = ($view !== 'profile' && $view !== 'password');
+        $isProfileForm  = ($view === 'profile');
+        $isPasswordForm = ($view === 'password');
 
         $this->startBuffer();
 
@@ -73,7 +78,7 @@ class ProfilePanel extends AbstractPanel
         <div class="launchpad-panel launchpad-panel--profile">
             <hgroup>
                 <h2 class="panel-title"><?php esc_html_e('Profile Information', 'starwishx'); ?></h2>
-                <p class="panel-description"><?php esc_html_e('View/edit personal information, change password', 'starwishx'); ?></зh2>
+                <p class="panel-description"><?php esc_html_e('View/edit personal information, change password', 'starwishx'); ?></p>
             </hgroup>
 
             <div
@@ -83,9 +88,9 @@ class ProfilePanel extends AbstractPanel
 
             <!-- View Mode: Visible by default, so no 'hidden' attribute needed here -->
             <div class="profile-card placeholder-box"
-                <?php echo $isEditingInitial ? 'hidden' : ''; ?>
+                <?php echo !$isCardVisible ? 'hidden' : ''; ?>
                 data-wp-bind--hidden="!state.isProfileCardVisible">
-                
+
                 <img
                     class="profile-avatar"
                     data-wp-bind--src="<?= $this->statePath('avatarUrl') ?>"
@@ -100,11 +105,18 @@ class ProfilePanel extends AbstractPanel
                     <!-- Profile Meta -->
                     <div class="profile-meta">
                         <p class="profile-email" data-wp-text="<?= $this->statePath('email') ?>"></p>
+                        <div class="profile-role">
+                            <span class="status-badge"
+                                data-wp-text="<?= $this->statePath('role') ?>"></span>
+                        </div>
                         <div data-wp-bind--hidden="!<?= $this->statePath('phone') ?>">
                             <strong>Phone:</strong> <span data-wp-text="<?= $this->statePath('phone') ?>"></span>
                         </div>
                         <div data-wp-bind--hidden="!<?= $this->statePath('telegram') ?>">
                             <strong>Telegram:</strong> <span data-wp-text="<?= $this->statePath('telegram') ?>"></span>
+                        </div>
+                        <div data-wp-bind--hidden="!<?= $this->statePath('organization') ?>">
+                            <strong>Organization:</strong> <span data-wp-text="<?= $this->statePath('organization') ?>"></span>
                         </div>
                     </div>
                 </div>
@@ -124,7 +136,7 @@ class ProfilePanel extends AbstractPanel
             <!-- VIEW 2: EDIT PROFILE MODE -->
             <form
                 class="profile-form placeholder-box"
-                <?php echo !$isEditingInitial ? 'hidden' : ''; ?>
+                <?php echo !$isProfileForm ? 'hidden' : ''; ?>
                 data-wp-bind--hidden="!<?= $this->statePath('isEditing') ?>"
                 data-wp-on--submit="actions.profile.save">
 
@@ -144,7 +156,7 @@ class ProfilePanel extends AbstractPanel
 
                 <div class="form-field">
                     <label for="lp-email"><?php esc_html_e('Email', 'starwishx'); ?></label>
-                    <input type="email" id="lp-email" data-field="email"
+                    <input type="email" id="lp-email" required data-field="email"
                         data-wp-bind--value="<?= $this->statePath('email') ?>"
                         data-wp-on--input="actions.profile.updateField" />
                 </div>
@@ -166,6 +178,13 @@ class ProfilePanel extends AbstractPanel
                     <label for="lp-telegram"><?php esc_html_e('Telegram', 'starwishx'); ?></label>
                     <input type="text" id="lp-telegram" data-field="telegram"
                         data-wp-bind--value="<?= $this->statePath('telegram') ?>"
+                        data-wp-on--input="actions.profile.updateField" />
+                </div>
+
+                <div class="form-field">
+                    <label for="lp-organization"><?php esc_html_e('Organization', 'starwishx'); ?></label>
+                    <input type="text" id="lp-organization" data-field="organization"
+                        data-wp-bind--value="<?= $this->statePath('organization') ?>"
                         data-wp-on--input="actions.profile.updateField" />
                 </div>
 
@@ -191,8 +210,8 @@ class ProfilePanel extends AbstractPanel
                 data-wp-on--submit="actions.profile.save"> -->
             <!-- VIEW 3: CHANGE PASSWORD MODE -->
             <form class="password-form placeholder-box"
-                <?php echo !$isEditingInitial ? 'hidden' : ''; ?>
-                hidden data-wp-bind--hidden="!<?= $this->statePath('isChangingPassword') ?>"
+                <?php echo !$isPasswordForm ? 'hidden' : ''; ?>
+                data-wp-bind--hidden="!<?= $this->statePath('isChangingPassword') ?>"
                 data-wp-on--submit="actions.profile.submitPasswordChange">
 
                 <h3><?php esc_html_e('Update Security Credentials', 'starwishx'); ?></h3>
@@ -206,7 +225,7 @@ class ProfilePanel extends AbstractPanel
                 <div class="form-row">
                     <div class="form-field">
                         <label><?php esc_html_e('New Password', 'starwishx'); ?></label>
-                        <input type="password" required minlength="8" data-wp-bind--value="<?= $statePath ?>.passwordData.new"
+                        <input type="password" required minlength="<?php echo PasswordPolicy::MIN_LENGTH ?>" data-wp-bind--value="<?= $statePath ?>.passwordData.new"
                             data-wp-on--input="actions.profile.updatePasswordField" data-field="new" />
                     </div>
                     <div class="form-field">

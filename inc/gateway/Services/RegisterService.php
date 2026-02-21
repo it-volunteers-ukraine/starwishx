@@ -26,7 +26,19 @@ class RegisterService
             return new WP_Error('invalid_data', __('Please provide a valid username and email address.', 'starwishx'));
         }
 
-        // 2. Existence Checks (Standard WP behavior allows these leaks on registration for UX)
+        // 2. Username Format Validation
+        // NOTE: This regex must be a strict subset of what sanitize_user() accepts.
+        // WordPress sanitize_user() allows: alphanumeric, spaces, ., -, _, @
+        // We restrict further for security: alphanumeric, ., -, _ (no spaces, no @)
+        // See: https://developer.wordpress.org/reference/functions/sanitize_user/
+        if (!preg_match('/^[a-zA-Z0-9._-]{3,60}$/', $username)) {
+            return new WP_Error(
+                'invalid_username_format',
+                __('Username may only contain letters, numbers, dots, underscores, and hyphens (3-60 characters).', 'starwishx')
+            );
+        }
+
+        // 3. Existence Checks (Standard WP behavior allows these leaks on registration for UX)
         if (username_exists($username)) {
             return new WP_Error('username_exists', __('This username is already taken.', 'starwishx'));
         }
@@ -34,7 +46,7 @@ class RegisterService
             return new WP_Error('email_exists', __('This email is already registered.', 'starwishx'));
         }
 
-        // 3. Create User with Random Password
+        // 4. Create User with Random Password
         $user_id = wp_insert_user([
             'user_login'   => $username,
             'user_email'   => $email,
@@ -48,10 +60,10 @@ class RegisterService
 
         $user = get_user_by('id', $user_id);
 
-        // 4. Trigger standard WP registration hook for plugin compatibility
+        // 5. Trigger standard WP registration hook for plugin compatibility
         do_action('register_new_user', $user_id);
 
-        // 5. Send Activation Email
+        // 6. Send Activation Email
         return $this->sendActivationEmail($user);
     }
 
