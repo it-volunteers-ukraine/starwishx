@@ -50,32 +50,66 @@ export const resetPasswordActions = {
       state.forms.resetPassword[field] = ref.value;
     }
   },
+
+  toggleVisibility() {
+    const { state } = store("gateway");
+    if (state.forms?.resetPassword) {
+      state.forms.resetPassword.isPasswordVisible =
+        !state.forms.resetPassword.isPasswordVisible;
+    }
+  },
+
+  async generate() {
+    const { state } = store("gateway");
+    const form = state.forms?.resetPassword;
+    if (!form || form.isGenerating) return;
+
+    form.isGenerating = true;
+    form.error = null;
+
+    try {
+      const data = await fetchJson(
+        state,
+        `${state.gatewaySettings.restUrl}password/generate`,
+      );
+      if (data.success && data.password) {
+        form.newPassword = data.password;
+        // Native UX: Show the password again if they generated a new one
+        form.isPasswordVisible = true;
+      }
+    } catch (error) {
+      form.error = error.message || "Failed to generate password.";
+    } finally {
+      form.isGenerating = false;
+    }
+  },
+
   async submit(event) {
     event.preventDefault();
     const { state } = store("gateway");
     const form = state.forms?.resetPassword;
     if (!form || form.isSubmitting) return;
+
     // Client validation
     const password = form.newPassword;
     if (!validators.minLength(12)(password)) {
       form.error = "Password must be at least 12 characters long";
       return;
     }
-    // Check password match
-    if (password !== form.confirmPassword) {
-      form.error = "Passwords do not match";
-      return;
-    }
+
     // Client-side strength validation (server will validate too)
     const hasUpper = /[A-Z]/.test(password);
     const hasNumber = /[0-9]/.test(password);
     const hasSpecial = /[^A-Za-z0-9]/.test(password);
+
     if (!hasUpper || !hasNumber || !hasSpecial) {
       form.error = "Password must include uppercase, numbers, and symbols";
       return;
     }
+
     form.isSubmitting = true;
     form.error = null;
+
     try {
       const url = new URL(window.location);
       const data = await fetchJson(
@@ -90,15 +124,15 @@ export const resetPasswordActions = {
           },
         },
       );
+
       if (data.success) {
         form.success = true;
         form.successMessage =
           data.message ||
           "Password reset successfully! Redirecting to login...";
 
-        // Clear form fields
+        // Clear sensitive form fields
         form.newPassword = "";
-        form.confirmPassword = "";
 
         // Redirect after 2 seconds
         setTimeout(() => {

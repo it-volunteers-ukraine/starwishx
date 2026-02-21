@@ -135,7 +135,7 @@ final class LaunchpadCore
     public function registerDefaultPanels(PanelRegistry $registry): void
     {
         // Register Panels with injected Services
-        $registry->register('opportunities', new \Launchpad\Panels\OpportunitiesPanel($this->services['opportunities']), 10);
+        $registry->register('opportunities', new \Launchpad\Panels\OpportunitiesPanel($this->services['opportunities'], $this->services['profile']), 10);
         $registry->register('profile',       new \Launchpad\Panels\ProfilePanel($this->services['profile']), 30);
         // Security might not need a service yet
         // $registry->register('security',      new \Launchpad\Panels\SecurityPanel(), 40);
@@ -156,7 +156,7 @@ final class LaunchpadCore
             // Domain specific controllers handle their own CRUD logic
             new \Launchpad\Api\ProfileController($this->services['profile']),
             new \Launchpad\Api\FavoritesController($this->services['favorites']),
-            new \Launchpad\Api\OpportunitiesController($this->services['opportunities']),
+            new \Launchpad\Api\OpportunitiesController($this->services['opportunities'], $this->services['profile']),
             // new \Launchpad\Api\SecurityController(),
             new \Launchpad\Api\SecurityController($this->services['security']),
             new \Launchpad\Api\CommentsController($this->services['comments']),

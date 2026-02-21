@@ -21,3 +21,4 @@ production/
 *.code-workspace
 launch.json
 docs/
+.claude

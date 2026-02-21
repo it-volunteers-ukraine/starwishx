@@ -6,14 +6,17 @@ declare(strict_types=1);
 namespace Launchpad\Panels;
 
 use Launchpad\Services\OpportunitiesService;
+use Launchpad\Services\ProfileService;
 
 class OpportunitiesPanel extends AbstractPanel
 {
     private OpportunitiesService $service;
+    private ProfileService $profileService;
 
-    public function __construct(OpportunitiesService $service)
+    public function __construct(OpportunitiesService $service, ProfileService $profileService)
     {
         $this->service = $service;
+        $this->profileService = $profileService;
     }
 
     public function getId(): string
@@ -33,16 +36,22 @@ class OpportunitiesPanel extends AbstractPanel
 
     public function getInitialState(?int $userId = null): array
     {
-        // 1. Fetch Taxonomy Options for Dropdowns
-        $options = $this->service->getFormOptions();
+        // Check profile completeness regardless of role
+        $isLocked = !$userId || !$this->profileService->isProfileComplete($userId);
+
+        // Fetch Taxonomy Options for Dropdowns
+        // $options = $this->service->getFormOptions();
+
+        // 1. Determine if the user is locked (Subscriber role)
+        // $user = get_userdata($userId);
+        // $roles = $user ? $user->roles : [];
+        // $isLocked = in_array('subscriber', $roles) && !in_array('contributor', $roles) && !in_array('administrator', $roles);
 
         // 2. Define Empty Form Structure (Prevents "undefined" errors in JS)
+        // Note: applicant_name, applicant_mail, applicant_phone are auto-filled from user profile
         $emptyForm = [
             'id' => null,
             'title' => '',
-            'applicant_name' => '',
-            'applicant_mail' => '',
-            'applicant_phone' => '',
             'company' => '',
             'date_starts' => '',
             'date_ends' => '',
@@ -59,6 +68,21 @@ class OpportunitiesPanel extends AbstractPanel
             'document' => null,
             'document_id' => null,
         ];
+
+        // Early return: skip all expensive queries for locked users
+        if ($isLocked) {
+            return [
+                'isLocked'    => true,
+                'currentView' => 'list',
+                'items'       => [],
+                'total'       => 0,
+                'options'     => [],
+                'formData'    => $emptyForm,
+                'emptyForm'   => $emptyForm,
+            ];
+        }
+
+        $options = $this->service->getFormOptions();
 
         // 3. Routing Logic (List vs Edit vs Add)
         $view = isset($_GET['view']) ? sanitize_text_field($_GET['view']) : 'list';
@@ -83,6 +107,7 @@ class OpportunitiesPanel extends AbstractPanel
         $currentLayout = 'compact';
 
         return [
+            'isLocked'    => $isLocked, // Check user capabilities
             'currentView' => $view,
             'options'     => $options,     // Dropdown lists
             'formData'    => $currentFormData, // Actual form values
@@ -109,10 +134,18 @@ class OpportunitiesPanel extends AbstractPanel
 
     public function render(): string
     {
+        // 1. Calculate lock state for initial server-side render
+        // $current_user = wp_get_current_user();
+        // $roles = $current_user->roles;
+        // $isLocked = in_array('subscriber', $roles) && !in_array('contributor', $roles) && !in_array('administrator', $roles);
+
         // Determine the view on the server so we can set 'hidden' attributes
         $view = isset($_GET['view']) ? sanitize_text_field($_GET['view']) : 'list';
         $isListView = ($view === 'list');
         $isFormView = ($view === 'add' || $view === 'edit');
+        // 2. Adjust visibility logic so list and form are hidden immediately if locked
+        // $isListView = !$isLocked && ($view === 'list');
+        // $isFormView = !$isLocked && ($view === 'add' || $view === 'edit');
         $opportunity_fields = acf_get_fields('group_69373c79e9c9a');
 
         // a lookup map for labels to ensure SSOT (Single Source of Truth)
@@ -128,6 +161,10 @@ class OpportunitiesPanel extends AbstractPanel
             }
         }
 
+        // Compute lock state for SSR — prevents flash of content before hydration
+        $userId = get_current_user_id();
+        $isLocked = !$userId || !$this->profileService->isProfileComplete($userId);
+
         $this->startBuffer();
 
         // Simplify paths for cleaner template
@@ -136,10 +173,32 @@ class OpportunitiesPanel extends AbstractPanel
         $isLoadingPath = $this->statePath('isLoading');
 ?>
         <div class="launchpad-panel launchpad-panel--opportunities">
+            <!-- NEW VIEW: ONBOARDING (Locked State) -->
+            <!-- <div class="launchpad-onboarding placeholder-box"
+                data-wp-bind--hidden="!state.isOppOnboardingVisible">
+                <h2 class="panel-title">< ?php esc_html_e('Welcome to Opportunities!', 'starwishx'); ?></h2>
+                <p>< ?php esc_html_e('To start publishing opportunities, we need a little more information about you to verify your account.', 'starwishx'); ?></p>
 
+                <button class="btn button-primary"
+                    data-wp-on--click="actions.opportunities.goToProfile">
+                    < ?php esc_html_e('Complete Profile', 'starwishx'); ?>
+                </button>
+            </div> -->
+            <div class="launchpad-panel--onboarding"
+                <?php echo !$isLocked ? 'hidden' : ''; ?>
+                data-wp-bind--hidden="!state.isOppOnboardingVisible">
+                <hgroup>
+                    <h2 class="panel-title"><?php esc_html_e('Post an Opportunity', 'starwishx'); ?></h2>
+                    <p><?php esc_html_e('To publish opportunities, please complete your profile first — we need your name and phone number.', 'starwishx'); ?></p>
+                </hgroup>
+                <button class="btn"
+                    data-wp-on--click="actions.opportunities.goToProfile">
+                    <?php esc_html_e('Fill Profile', 'starwishx'); ?>
+                </button>
+            </div>
             <!-- VIEW: LIST -->
             <div class="launchpad-grid__container"
-                <?php echo !$isListView ? 'hidden' : ''; ?>
+                <?php echo (!$isListView || $isLocked) ? 'hidden' : ''; ?>
                 data-wp-bind--hidden="!state.isOppListVisible">
 
                 <div class="launchpad-header">
@@ -337,7 +396,7 @@ class OpportunitiesPanel extends AbstractPanel
 
             <!-- VIEW: FORM (Shared for Add & Edit) -->
             <div class="launchpad-form__container"
-                <?php echo !$isFormView ? 'hidden' : ''; ?>
+                <?php echo (!$isFormView || $isLocked) ? 'hidden' : ''; ?>
                 data-wp-bind--hidden="!state.isOppFormVisible"
                 data-wp-bind--data-is-loading="<?= $isLoadingPath ?>">
                 <!-- Bind loading state ☝🏻 to a data attribute for CSS targeting -->
@@ -368,35 +427,7 @@ class OpportunitiesPanel extends AbstractPanel
                     <!-- 3 Column Layout -->
                     <div class="">
 
-                        <!-- GROUP 1: Applicant -->
-                        <div class="form-group-card placeholder-box">
-                            <h3 class="group-card-title"><?php esc_html_e('Applicant Info', 'starwishx'); ?></h3>
-                            <div class="form-card-data launchpad-grid-3-col">
-                                <div class="form-field">
-                                    <label><?php echo esc_html($labels['opportunity_applicant_name'] ?? __('Name', 'starwishx')); ?></label>
-                                    <input type="text" required
-                                        placeholder="<?php echo esc_attr($placeholders['opportunity_applicant_name'] ?? ''); ?>"
-                                        data-wp-bind--value="<?= $formPath ?>.applicant_name"
-                                        data-wp-on--input="actions.opportunities.updateForm" data-field="applicant_name">
-                                </div>
-                                <div class="form-field">
-                                    <label><?php echo esc_html($labels['opportunity_applicant_mail'] ?? __('Email', 'starwishx')); ?></label>
-                                    <input type="email" required
-                                        placeholder="<?php echo esc_attr($placeholders['opportunity_applicant_mail'] ?? ''); ?>"
-                                        data-wp-bind--value="<?= $formPath ?>.applicant_mail"
-                                        data-wp-on--input="actions.opportunities.updateForm" data-field="applicant_mail">
-                                </div>
-                                <div class="form-field">
-                                    <label><?php echo esc_html($labels['opportunity_applicant_phone'] ?? __('Phone', 'starwishx')); ?></label>
-                                    <input type="text" required
-                                        placeholder="<?php echo esc_attr($placeholders['opportunity_applicant_phone'] ?? ''); ?>"
-                                        data-wp-bind--value="<?= $formPath ?>.applicant_phone"
-                                        data-wp-on--input="actions.opportunities.updateForm" data-field="applicant_phone">
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- GROUP 2: Info -->
+                        <!-- GROUP 1: Info -->
                         <div class="form-group-card placeholder-box">
                             <h3 class="group-card-title"><?php esc_html_e('Opportunity Info', 'starwishx'); ?></h3>
                             <div class="form-card-data ">

@@ -44,7 +44,12 @@ class RegisterController extends AbstractApiController
         );
 
         if (is_wp_error($result)) {
-            return $result;
+            return $this->mapServiceError($result, [
+                // Note: invalid_data is in default_map, not repeated here
+                'invalid_username_format' => 422,
+                'username_exists'        => 409,
+                'email_exists'           => 409,
+            ]);
         }
 
         return $this->success([

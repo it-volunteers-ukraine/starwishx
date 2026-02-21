@@ -28,10 +28,17 @@ class ProfileController extends AbstractLaunchpadController
             'args'                => [
                 'firstName' => ['sanitize_callback' => 'sanitize_text_field'],
                 'lastName'  => ['sanitize_callback' => 'sanitize_text_field'],
-                'email'     => ['sanitize_callback' => 'sanitize_email'],
+                'email'     => [
+                    'required'          => true,
+                    'sanitize_callback' => 'sanitize_email',
+                    'validate_callback' => function ($value) {
+                        return !empty($value) && is_email($value);
+                    },
+                ],
                 // Additional ACF Fields
-                'phone'     => ['sanitize_callback' => 'sanitize_text_field'],
-                'telegram'  => ['sanitize_callback' => 'sanitize_text_field'],
+                'phone'        => ['sanitize_callback' => 'sanitize_text_field'],
+                'telegram'     => ['sanitize_callback' => 'sanitize_text_field'],
+                'organization' => ['sanitize_callback' => 'sanitize_text_field'],
             ],
         ]);
     }

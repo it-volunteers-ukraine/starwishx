@@ -55,13 +55,34 @@ class ProfileService
             'firstName' => $user->first_name,
             'lastName'  => $user->last_name,
             'email'     => $user->user_email,
+            'role'      => $user->roles[0] ?? 'subscriber',
             'avatarUrl' => get_avatar_url($userId, ['size' => 150]),
 
             // Return flattened string for the frontend Input
             // instead of 'phone'     => get_field('phone', $acfId) ?: '',
-            'phone'     => $phoneString,
-            'telegram'  => get_field('telegram', $acfId) ?: '',
+            'phone'        => $phoneString,
+            'telegram'     => get_field('telegram', $acfId) ?: '',
+            'organization' => get_field('organization', $acfId) ?: '',
         ];
+    }
+
+    /**
+     * Check if a user has a complete profile (name + phone).
+     * Single source of truth for profile completeness gating.
+     */
+    public function isProfileComplete(int $userId): bool
+    {
+        $user = get_userdata($userId);
+        if (!$user) return false;
+
+        $acfId = 'user_' . $userId;
+        $phone = get_field('phone', $acfId);
+
+        $hasPhone = is_array($phone)
+            ? !empty($phone['e164'] ?? $phone['international'] ?? '')
+            : !empty((string) $phone);
+
+        return !empty($user->first_name) && $hasPhone;
     }
 
     /**
@@ -158,7 +179,41 @@ class ProfileService
             update_field('telegram', sanitize_text_field($data['telegram']), $acfId);
         }
 
+        if (isset($data['organization'])) {
+            update_field('organization', sanitize_text_field($data['organization']), $acfId);
+        }
+
         // Return fresh data (Service handles the Array->String conversion again here)
-        return $this->getProfileData($userId);
+        // return $this->getProfileData($userId);
+
+        // 3. Fetch fresh data to see the result of the update
+        $freshProfile = $this->getProfileData($userId);
+
+        // 4. --- ROLE UPGRADE LOGIC ---
+        $user = get_userdata($userId);
+
+        // Only attempt upgrade if the user currently has the 'subscriber' role
+        if ($user && in_array('subscriber', $user->roles, true)) {
+
+            if ($this->isProfileComplete($userId)) {
+                $user->remove_role('subscriber');
+                $user->add_role('contributor');
+                $freshProfile['_roleUpgraded'] = true;
+                $freshProfile['role'] = 'contributor';
+            }
+        }
+
+        // Mirror: degrade contributor → subscriber if profile is now incomplete
+        if ($user && in_array('contributor', $user->roles, true)) {
+            if (!$this->isProfileComplete($userId)) {
+                $user->remove_role('contributor');
+                $user->add_role('subscriber');
+                $freshProfile['_roleDegraded'] = true;
+                $freshProfile['role'] = 'subscriber';
+            }
+        }
+
+        // Returns an array (with optional flag), satisfying the return type
+        return $freshProfile;
     }
 }

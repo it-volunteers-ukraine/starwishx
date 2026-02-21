@@ -242,17 +242,13 @@ class OpportunitiesService
         ), ARRAY_A);
 
         // Map ACF fields to our simplified FormData structure
+        // Note: applicant fields are no longer returned - they're auto-filled from profile on save
         return [
             'id' => $post->ID,
             'title' => $post->post_title,
             'status' => $post->post_status,
 
-            // Group 1: Applicant
-            'applicant_name'  => get_field('opportunity_applicant_name', $postId) ?: '',
-            'applicant_mail'  => get_field('opportunity_applicant_mail', $postId) ?: '',
-            'applicant_phone' => get_field('opportunity_applicant_phone', $postId) ?: '',
-
-            // Group 2: Info
+            // Group 1: Info
             'company'         => get_field('opportunity_company', $postId) ?: '',
             'date_starts'     => $this->formatDateForInput(get_field('opportunity_date_starts', $postId)),
             'date_ends'       => $this->formatDateForInput(get_field('opportunity_date_ends', $postId)),
@@ -362,10 +358,30 @@ class OpportunitiesService
             // 2. Save ACF Fields
             // Note: update_field returns false on failure OR if the value didn't change.
             // We generally trust ACF here, but we could check specifically if needed.
-            // Group 1
-            update_field('opportunity_applicant_name', $data['applicant_name'], $id);
-            update_field('opportunity_applicant_mail', $data['applicant_mail'], $id);
-            update_field('opportunity_applicant_phone', $data['applicant_phone'], $id);
+
+            // Group 1: Applicant - Auto-fill from user profile
+            $user = get_userdata($current_user_id);
+            if ($user) {
+                $acfId = 'user_' . $current_user_id;
+                $firstName = $user->first_name;
+                $lastName = $user->last_name;
+                $fullName = trim($firstName . ' ' . $lastName);
+
+                update_field('opportunity_applicant_name', $fullName, $id);
+                update_field('opportunity_applicant_mail', $user->user_email, $id);
+
+                // Phone requires special handling (ACF phone field)
+                $phoneRaw = get_field('phone', $acfId);
+                $phoneString = '';
+                if (is_array($phoneRaw)) {
+                    $phoneString = $phoneRaw['international'] ?? $phoneRaw['e164'] ?? '';
+                } elseif (is_object($phoneRaw) && method_exists($phoneRaw, 'international')) {
+                    $phoneString = $phoneRaw->international();
+                } else {
+                    $phoneString = (string) $phoneRaw;
+                }
+                update_field('opportunity_applicant_phone', $phoneString, $id);
+            }
 
             // Group 2
             update_field('opportunity_company', $data['company'], $id);

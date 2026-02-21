@@ -38,8 +38,7 @@ class AuthService
         if ($this->isRateLimited($username)) {
             return new WP_Error(
                 'rate_limited',
-                __('Too many login attempts. Please wait 15 minutes.', 'starwishx'),
-                ['status' => 429]
+                __('Too many login attempts. Please wait 15 minutes.', 'starwishx')
             );
         }
 
@@ -52,8 +51,7 @@ class AuthService
             // Return generic error to prevent user enumeration
             return new WP_Error(
                 'auth_failed',
-                __('Invalid username or password.', 'starwishx'),
-                ['status' => 401]
+                __('Invalid username or password.', 'starwishx')
             );
         }
 
