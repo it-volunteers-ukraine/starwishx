@@ -444,7 +444,7 @@ class OpportunitiesPanel extends AbstractPanel
                                     <div class="form-field">
                                         <label><?php echo esc_html($labels['opportunity_date_starts'] ?? __('Start Date', 'starwishx')); ?></label>
                                         <div class="input-date-iconed">
-                                            <input type="date" required data-wp-bind--value="<?= $formPath ?>.date_starts" data-wp-on--input="actions.opportunities.updateForm" data-field="date_starts">
+                                            <input type="date" data-wp-bind--value="<?= $formPath ?>.date_starts" data-wp-on--input="actions.opportunities.updateForm" data-field="date_starts">
                                             <button type="button" class="input-date-iconed__btn" data-wp-on--click="actions.opportunities.openDatePicker" aria-label="<?php esc_attr_e('Open calendar', 'starwishx'); ?>">
                                                 <svg width="18" height="18" aria-hidden="true" focusable="false" viewBox="0 0 24 24">
                                                     <use href="<?php echo get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-calendar"></use>

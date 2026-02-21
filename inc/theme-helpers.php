@@ -412,7 +412,8 @@ function sw_get_opportunity_view_data(int $post_id): array
 
     return [
         // Scalar fields — get_post_meta() is cheaper than ACF for simple strings
-        'applicant_name' => (string) get_post_meta($post_id, 'opportunity_applicant_name', true),
+        // 'applicant_name' => (string) get_post_meta($post_id, 'opportunity_applicant_name', true), // deprecated
+        'opportunity_application_form' => (string) get_post_meta($post_id, 'opportunity_application_form', true),
         'company'        => (string) get_post_meta($post_id, 'opportunity_company',        true),
         'source_url'     => (string) get_post_meta($post_id, 'opportunity_sourcelink',     true),
         'description'    => (string) get_post_meta($post_id, 'opportunity_description',    true),
