@@ -87,11 +87,11 @@
         },
         {
             "key": "field_69373f3db73a4",
-            "label": "Дата старту можливості",
+            "label": "Дата старту можливості (якщо є)",
             "name": "opportunity_date_starts",
             "aria-label": "",
             "type": "date_picker",
-            "instructions": "Оберіть дату",
+            "instructions": "Оберіть початкову дату (якщо є)",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -243,6 +243,24 @@
             "placeholder": "Додайте посилання"
         },
         {
+            "key": "field_6999cd702bcfd",
+            "label": "Форма подання",
+            "name": "opportunity_application_form",
+            "aria-label": "",
+            "type": "url",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "allow_in_bindings": 0,
+            "placeholder": "Посилання на форму подання заявки"
+        },
+        {
             "key": "field_693747eaf0639",
             "label": "Для кого відкрита можливість",
             "name": "opportunity_seekers",
@@ -372,5 +390,5 @@
     "description": "",
     "show_in_rest": 0,
     "display_title": "",
-    "modified": 1771639251
+    "modified": 1771689167
 }

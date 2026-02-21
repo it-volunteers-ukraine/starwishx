@@ -195,6 +195,15 @@ get_header();
                         </a>
                     <?php endif; ?>
                 </div>
+                <?php if ($data['application_form']) : ?>
+                    <h2 class="opportunity-content__title"><?php esc_html_e('Форма заявки', $td); ?></h2>
+                    <div class="opportunity-content__text">
+                        <span><?php esc_html_e('Посилання', $td); ?>: </span>
+                        <a href="<?php echo esc_url($data['application_form']); ?>" class="btn-link" target="_blank" rel="nofollow">
+                            <?php echo esc_url($data['application_form']); ?>
+                        </a>
+                    </div>
+                <?php endif; ?>
 
                 <?php if ($data['details']) : ?>
                     <section class="opportunity-content opportunity-content--details">
