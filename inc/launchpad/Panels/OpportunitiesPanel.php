@@ -60,6 +60,7 @@ class OpportunitiesPanel extends AbstractPanel
             'locations' => [], // Must be initialized as array
             'city' => '',
             'sourcelink' => '',
+            'application_form' => '',
             'seekers' => [],
             'subcategory' => [],
             'description' => '',
@@ -484,6 +485,12 @@ class OpportunitiesPanel extends AbstractPanel
                                         <input type="url" required
                                             placeholder="<?php echo esc_attr($placeholders['opportunity_sourcelink'] ?? ''); ?>"
                                             data-wp-bind--value="<?= $formPath ?>.sourcelink" data-wp-on--input="actions.opportunities.updateForm" data-field="sourcelink">
+                                    </div>
+                                    <div class="form-field">
+                                        <label><?php echo esc_html($labels['opportunity_application_form'] ?? __('Application Form URL', 'starwishx')); ?></label>
+                                        <input type="url"
+                                            placeholder="<?php echo esc_attr($placeholders['opportunity_application_form'] ?? ''); ?>"
+                                            data-wp-bind--value="<?= $formPath ?>.application_form" data-wp-on--input="actions.opportunities.updateForm" data-field="application_form">
                                     </div>
 
                                 </div>

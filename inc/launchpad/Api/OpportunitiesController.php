@@ -84,6 +84,10 @@ class OpportunitiesController extends AbstractLaunchpadController
                     return is_numeric($param) || is_null($param);
                 }
             ],
+            'application_form' => [
+                'required'          => false,
+                'sanitize_callback' => 'esc_url_raw',
+            ],
         ];
 
         // 1. COLLECTION: GET /opportunities (List)
@@ -302,6 +306,7 @@ class OpportunitiesController extends AbstractLaunchpadController
             'locations'       => (array) $request->get_param('locations'),
             'city'            => $request->get_param('city'),
             'sourcelink'      => $request->get_param('sourcelink'),
+            'application_form' => $request->get_param('application_form'),
             'subcategory'     => (array) $request->get_param('subcategory'),
             'seekers'         => (array) $request->get_param('seekers'),
             'description'     => $request->get_param('description'),

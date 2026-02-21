@@ -413,23 +413,21 @@ function sw_get_opportunity_view_data(int $post_id): array
     return [
         // Scalar fields — get_post_meta() is cheaper than ACF for simple strings
         // 'applicant_name' => (string) get_post_meta($post_id, 'opportunity_applicant_name', true), // deprecated
-        'opportunity_application_form' => (string) get_post_meta($post_id, 'opportunity_application_form', true),
-        'company'        => (string) get_post_meta($post_id, 'opportunity_company',        true),
-        'source_url'     => (string) get_post_meta($post_id, 'opportunity_sourcelink',     true),
-        'description'    => (string) get_post_meta($post_id, 'opportunity_description',    true),
-        'requirements'   => (string) get_post_meta($post_id, 'opportunity_requirements',   true),
-        'details'        => (string) get_post_meta($post_id, 'opportunity_details',        true),
-
+        'company'          => (string) get_post_meta($post_id, 'opportunity_company',          true),
+        'source_url'       => (string) get_post_meta($post_id, 'opportunity_sourcelink',       true),
+        'application_form' => (string) get_post_meta($post_id, 'opportunity_application_form', true),
+        'description'      => (string) get_post_meta($post_id, 'opportunity_description',      true),
+        'requirements'     => (string) get_post_meta($post_id, 'opportunity_requirements',     true),
+        'details'          => (string) get_post_meta($post_id, 'opportunity_details',          true),
         // Complex / relational fields
-        'country_name'   => $country_name,
-        'seeker_terms'   => $seeker_terms,
-        'document'       => sw_prepare_document(sw_get_field('opportunity_document', $post_id)),
-
+        'country_name'     => $country_name,
+        'seeker_terms'     => $seeker_terms,
+        'document'         => sw_prepare_document(sw_get_field('opportunity_document', $post_id)),
         // Computed
-        'locations'       => $locations,
-        'root_categories' => sw_get_root_terms($post_id, 'category-oportunities'),
-        'date_start'      => $d_start,
-        'date_end'        => $d_end,
+        'locations'        => $locations,
+        'root_categories'  => sw_get_root_terms($post_id, 'category-oportunities'),
+        'date_start'       => $d_start,
+        'date_end'         => $d_end,
     ];
 }
 

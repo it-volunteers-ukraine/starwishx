@@ -235,7 +235,7 @@ class OpportunitiesService
         //  INNER JOIN wp_opportunity_locations ol ON k.code = ol.katottg_code
         //  WHERE ol.post_id = %d",
         $locations = $wpdb->get_results($wpdb->prepare(
-            "SELECT code, name_category_oblast as name, level, category 
+            "SELECT code, name_category_oblast as name, level, category
                 FROM wp_v_opportunity_search
                 WHERE post_id = %d",
             $postId
@@ -259,6 +259,7 @@ class OpportunitiesService
             // We keep 'city' just for now in case to not brake things
             'city'            => get_field('city', $postId) ?: '',
             'sourcelink'      => get_field('opportunity_sourcelink', $postId) ?: '',
+            'application_form' => get_field('opportunity_application_form', $postId) ?: '',
 
             // FIX: Ensure these are Integers for JS .includes() check
             'subcategory'     => $getIntArray('opportunity_subcategory'),
@@ -389,6 +390,7 @@ class OpportunitiesService
             update_field('opportunity_date_ends', $data['date_ends'], $id);
             update_field('city', $data['city'], $id);
             update_field('opportunity_sourcelink', $data['sourcelink'], $id);
+            update_field('opportunity_application_form', $data['application_form'], $id);
 
             // Taxonomies: Save to ACF field AND actual WP Taxonomy
             // wp_set_object_terms returns WP_Error or Term IDs
