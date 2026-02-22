@@ -53,7 +53,7 @@ class LoginForm extends AbstractForm
             <!-- Username/Email Field -->
             <div class="form-field">
                 <label for="gw-username">
-                    <?php _ex('Username or Email', 'gateway', 'starwishx'); ?>
+                    <?php _ex('Login name or Email', 'gateway', 'starwishx'); ?>
                 </label>
                 <input
                     type="text"
@@ -61,6 +61,7 @@ class LoginForm extends AbstractForm
                     name="username"
                     autocomplete="username"
                     required
+                    placeholder="<?php _ex('Latin letters, digits, . - _ @', 'gateway', 'starwishx'); ?>"
                     data-wp-bind--value="state.forms.<?php echo esc_attr($this->getJsId()); ?>.username"
                     data-wp-on--input="actions.<?php echo esc_attr($this->getJsId()); ?>.updateField"
                     data-field="username">

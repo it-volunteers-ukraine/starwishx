@@ -34,7 +34,7 @@ class RegisterService
         if (!preg_match('/^[a-zA-Z0-9._-]{3,60}$/', $username)) {
             return new WP_Error(
                 'invalid_username_format',
-                __('Username may only contain letters, numbers, dots, underscores, and hyphens (3-60 characters).', 'starwishx')
+                __('Login name may only contain latin letters, numbers, dots, underscores, and hyphens (3-60 characters).', 'starwishx')
             );
         }
 

@@ -38,12 +38,13 @@ class LostPasswordForm extends AbstractForm
         <form class="gateway-form gateway-form--lost-password"
             data-wp-on--submit="actions.<?php echo esc_attr($this->getJsId()); ?>.submit">
             <h2 class="gateway-form__title"><?php esc_html_e('Lost Password', 'starwishx'); ?></h2>
-            
+
             <div class="gateway-fields__container" data-wp-bind--hidden="state.forms.<?php echo esc_attr($this->getJsId()); ?>.success">
-                <p class="gateway-form__intro"><?php esc_html_e('Enter your username or email address to receive a reset link.', 'starwishx'); ?></p>
+                <p class="gateway-form__intro"><?php esc_html_e('Enter your login or email to receive a reset link.', 'starwishx'); ?></p>
                 <div class="form-field">
-                    <label for="gw-lost-user"><?php _ex('Username or Email', 'gateway', 'starwishx'); ?></label>
+                    <label for="gw-lost-user"><?php _ex('Login name or Email', 'gateway', 'starwishx'); ?></label>
                     <input type="text" id="gw-lost-user" name="user_login" required
+                        placeholder="<?php _ex('Latin letters, digits, . - _ @', 'gateway', 'starwishx'); ?>"
                         data-wp-bind--value="state.forms.<?php echo esc_attr($this->getJsId()); ?>.userLogin"
                         data-wp-on--input="actions.<?php echo esc_attr($this->getJsId()); ?>.updateField" data-field="userLogin">
                 </div>

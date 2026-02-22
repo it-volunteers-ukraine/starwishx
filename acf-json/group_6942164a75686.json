@@ -4,7 +4,7 @@
     "fields": [
         {
             "key": "field_6942164aad908",
-            "label": "Phone",
+            "label": "Телефон",
             "name": "phone",
             "aria-label": "",
             "type": "phone_number",
@@ -24,7 +24,7 @@
         },
         {
             "key": "field_6998f60a8e3ba",
-            "label": "Organization Name",
+            "label": "Назва організації (для акаунту юр.особи)",
             "name": "organization",
             "aria-label": "",
             "type": "text",
@@ -91,5 +91,5 @@
     "description": "",
     "show_in_rest": 0,
     "display_title": "",
-    "modified": 1771632293
+    "modified": 1771744636
 }
