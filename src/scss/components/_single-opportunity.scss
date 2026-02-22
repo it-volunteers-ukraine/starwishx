@@ -164,6 +164,22 @@
                     .opportunity-content__title {
                         margin-top: 12px;
                     }
+                    .opportunity-content__text {
+                        a {
+                            color: $text-accent;
+                        }
+                    }
+                }
+                .file-download {
+                    display: flex;
+                    flex-flow: row nowrap;
+                    gap: 8px;
+                    align-items: center;
+                    .file-download__meta {
+                        .file-name {
+                            color: $text-accent;
+                        }
+                    }
                 }
             }
         }
