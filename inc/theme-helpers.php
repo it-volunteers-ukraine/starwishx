@@ -405,7 +405,7 @@ function sw_migrate_description_to_post_content(): int
         }
 
         $acf_description = get_post_meta($post->ID, 'opportunity_description', true);
-        
+
         if (!empty($acf_description)) {
             $result = wp_update_post([
                 'ID'           => $post->ID,
@@ -417,21 +417,21 @@ function sw_migrate_description_to_post_content(): int
             }
         }
     }
-    
+
     // Mark migration as completed
     update_option('sw_description_migration_done', true, false);
-    
+
     if ($migrated > 0) {
         error_log("Opportunity description migration completed: {$migrated} posts migrated.");
     }
-    
+
     return $migrated;
 }
 
 /**
  * Auto-run migration on admin_init (once).
  */
-add_action('admin_init', function(): void {
+add_action('admin_init', function (): void {
     // Only run in admin context, and only if not already done
     if (!get_option('sw_description_migration_done', false)) {
         sw_migrate_description_to_post_content();
@@ -473,14 +473,18 @@ function sw_get_opportunity_view_data(int $post_id): array
     $seeker_terms = sw_get_prepared_terms($seeker_ids, 'category-seekers');
 
     $post = get_post($post_id);
-    
+
     return [
         // Scalar fields — get_post_meta() is cheaper than ACF for simple strings
         // 'applicant_name' => (string) get_post_meta($post_id, 'opportunity_applicant_name', true), // deprecated
         'company'          => (string) get_post_meta($post_id, 'opportunity_company',          true),
         'source_url'       => (string) get_post_meta($post_id, 'opportunity_sourcelink',       true),
         'application_form' => (string) get_post_meta($post_id, 'opportunity_application_form', true),
-        'description'      => $post ? $post->post_content : '', // Now stored in post_content
+        // Now stored in post_content
+        // 'description'      => $post ? $post->post_content : '', 
+        // 'description' => apply_filters('the_content', $post->post_content),
+        'description' => wpautop($post->post_content),
+
         'requirements'     => (string) get_post_meta($post_id, 'opportunity_requirements',     true),
         'details'          => (string) get_post_meta($post_id, 'opportunity_details',          true),
         // Complex / relational fields

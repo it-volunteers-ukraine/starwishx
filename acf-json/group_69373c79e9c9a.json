@@ -3,68 +3,6 @@
     "title": "CPT Opportunity",
     "fields": [
         {
-            "key": "field_69373c7a1073c",
-            "label": "Імʼя та прізвище (deprecated)",
-            "name": "opportunity_applicant_name",
-            "aria-label": "",
-            "type": "text",
-            "instructions": "",
-            "required": 0,
-            "conditional_logic": 0,
-            "wrapper": {
-                "width": "",
-                "class": "",
-                "id": ""
-            },
-            "default_value": "",
-            "maxlength": "",
-            "allow_in_bindings": 0,
-            "placeholder": "Вкажіть імʼя та прізвище",
-            "prepend": "",
-            "append": ""
-        },
-        {
-            "key": "field_69373dabee193",
-            "label": "Opportunity applicant mail  (deprecated)",
-            "name": "opportunity_applicant_mail",
-            "aria-label": "",
-            "type": "email",
-            "instructions": "",
-            "required": 0,
-            "conditional_logic": 0,
-            "wrapper": {
-                "width": "",
-                "class": "",
-                "id": ""
-            },
-            "default_value": "",
-            "allow_in_bindings": 0,
-            "placeholder": "",
-            "prepend": "",
-            "append": ""
-        },
-        {
-            "key": "field_69373dcaee194",
-            "label": "Opportunity applicant phone  (deprecated)",
-            "name": "opportunity_applicant_phone",
-            "aria-label": "",
-            "type": "text",
-            "instructions": "",
-            "required": 0,
-            "conditional_logic": 0,
-            "wrapper": {
-                "width": "",
-                "class": "",
-                "id": ""
-            },
-            "default_value": "",
-            "maxlength": "",
-            "allow_in_bindings": 0,
-            "placeholder": "",
-            "prepend": "",
-            "append": ""
-        },
-        {
             "key": "field_69373e88ee195",
             "label": "Назва надавача можливості",
             "name": "opportunity_company",
@@ -152,32 +90,6 @@
             "bidirectional_target": []
         },
         {
-            "key": "field_693740c49c465",
-            "label": "Opportunity subcategory (deprecated)",
-            "name": "opportunity_subcategory",
-            "aria-label": "",
-            "type": "taxonomy",
-            "instructions": "",
-            "required": 0,
-            "conditional_logic": 0,
-            "wrapper": {
-                "width": "",
-                "class": "",
-                "id": ""
-            },
-            "taxonomy": "category-oportunities",
-            "add_term": 0,
-            "save_terms": 0,
-            "load_terms": 0,
-            "return_format": "id",
-            "field_type": "multi_select",
-            "allow_null": 0,
-            "allow_in_bindings": 0,
-            "bidirectional": 0,
-            "multiple": 0,
-            "bidirectional_target": []
-        },
-        {
             "key": "field_6937425f9c466",
             "label": "Оберіть країну для можливості",
             "name": "country",
@@ -202,27 +114,6 @@
             "bidirectional": 0,
             "multiple": 0,
             "bidirectional_target": []
-        },
-        {
-            "key": "field_6937429b9c467",
-            "label": "City (deprecated)",
-            "name": "city",
-            "aria-label": "",
-            "type": "text",
-            "instructions": "",
-            "required": 0,
-            "conditional_logic": 0,
-            "wrapper": {
-                "width": "",
-                "class": "",
-                "id": ""
-            },
-            "default_value": "",
-            "maxlength": "",
-            "allow_in_bindings": 0,
-            "placeholder": "",
-            "prepend": "",
-            "append": ""
         },
         {
             "key": "field_693742e29c468",
@@ -287,27 +178,6 @@
             "bidirectional_target": []
         },
         {
-            "key": "field_69374825f063a",
-            "label": "Опишіть можливість (Deprecated)",
-            "name": "opportunity_description",
-            "aria-label": "",
-            "type": "textarea",
-            "instructions": "",
-            "required": 0,
-            "conditional_logic": 0,
-            "wrapper": {
-                "width": "",
-                "class": "",
-                "id": ""
-            },
-            "default_value": "",
-            "maxlength": 4000,
-            "allow_in_bindings": 0,
-            "rows": "",
-            "placeholder": "Додайте інформацію про можливість. Опишіть суть.",
-            "new_lines": ""
-        },
-        {
             "key": "field_6937484ff063b",
             "label": "Опишіть умови отримання можливості",
             "name": "opportunity_requirements",
@@ -322,7 +192,7 @@
                 "id": ""
             },
             "default_value": "",
-            "maxlength": 2000,
+            "maxlength": 4000,
             "allow_in_bindings": 0,
             "rows": "",
             "placeholder": "Додайте умови, наприклад, “Навчання доступно для наступних категорій населення...”",
@@ -343,7 +213,7 @@
                 "id": ""
             },
             "default_value": "",
-            "maxlength": 2000,
+            "maxlength": 3000,
             "allow_in_bindings": 0,
             "rows": "",
             "placeholder": "Опишіть деталі, які здаються для Вас важливими та ключовими",
@@ -369,6 +239,136 @@
             "max_size": "",
             "mime_types": "",
             "allow_in_bindings": 0
+        },
+        {
+            "key": "field_6937429b9c467",
+            "label": "City (deprecated)",
+            "name": "city",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "maxlength": "",
+            "allow_in_bindings": 0,
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_69373dabee193",
+            "label": "Opportunity applicant mail  (deprecated)",
+            "name": "opportunity_applicant_mail",
+            "aria-label": "",
+            "type": "email",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "allow_in_bindings": 0,
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_69373dcaee194",
+            "label": "Opportunity applicant phone  (deprecated)",
+            "name": "opportunity_applicant_phone",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "maxlength": "",
+            "allow_in_bindings": 0,
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_69374825f063a",
+            "label": "Опишіть можливість (Deprecated)",
+            "name": "opportunity_description",
+            "aria-label": "",
+            "type": "textarea",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "maxlength": 4000,
+            "allow_in_bindings": 0,
+            "rows": "",
+            "placeholder": "Додайте інформацію про можливість. Опишіть суть.",
+            "new_lines": ""
+        },
+        {
+            "key": "field_69373c7a1073c",
+            "label": "Імʼя та прізвище (deprecated)",
+            "name": "opportunity_applicant_name",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "maxlength": "",
+            "allow_in_bindings": 0,
+            "placeholder": "Вкажіть імʼя та прізвище",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_693740c49c465",
+            "label": "Opportunity subcategory (deprecated)",
+            "name": "opportunity_subcategory",
+            "aria-label": "",
+            "type": "taxonomy",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "taxonomy": "category-oportunities",
+            "add_term": 0,
+            "save_terms": 0,
+            "load_terms": 0,
+            "return_format": "id",
+            "field_type": "multi_select",
+            "allow_null": 0,
+            "allow_in_bindings": 0,
+            "bidirectional": 0,
+            "multiple": 0,
+            "bidirectional_target": []
         }
     ],
     "location": [
@@ -390,5 +390,5 @@
     "description": "",
     "show_in_rest": 0,
     "display_title": "",
-    "modified": 1771749169
+    "modified": 1771752906
 }

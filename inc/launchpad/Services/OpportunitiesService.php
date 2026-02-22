@@ -334,6 +334,9 @@ class OpportunitiesService
                 'post_type'    => 'opportunity',
                 'post_title'   => sanitize_text_field($data['title']),
                 'post_content' => sanitize_textarea_field($data['description'] ?? ''),
+                // Allows safe HTML
+                // 'post_content' => wp_kses_post($data['description']), 
+
                 'post_author'  => get_current_user_id(),
             ];
 
