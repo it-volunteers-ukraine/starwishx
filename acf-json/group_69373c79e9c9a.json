@@ -66,7 +66,7 @@
         },
         {
             "key": "field_69373e88ee195",
-            "label": "Назва організації",
+            "label": "Назва надавача можливості",
             "name": "opportunity_company",
             "aria-label": "",
             "type": "text",
@@ -87,7 +87,7 @@
         },
         {
             "key": "field_69373f3db73a4",
-            "label": "Дата старту можливості (якщо є)",
+            "label": "Дата старту можливості (за наявності)",
             "name": "opportunity_date_starts",
             "aria-label": "",
             "type": "date_picker",
@@ -184,7 +184,7 @@
             "aria-label": "",
             "type": "taxonomy",
             "instructions": "Оберіть країну",
-            "required": 1,
+            "required": 0,
             "conditional_logic": 0,
             "wrapper": {
                 "width": "",
@@ -301,7 +301,7 @@
                 "id": ""
             },
             "default_value": "",
-            "maxlength": 2000,
+            "maxlength": 4000,
             "allow_in_bindings": 0,
             "rows": "",
             "placeholder": "Додайте інформацію про можливість. Опишіть суть.",
@@ -322,7 +322,7 @@
                 "id": ""
             },
             "default_value": "",
-            "maxlength": 1000,
+            "maxlength": 2000,
             "allow_in_bindings": 0,
             "rows": "",
             "placeholder": "Додайте умови, наприклад, “Навчання доступно для наступних категорій населення...”",
@@ -343,7 +343,7 @@
                 "id": ""
             },
             "default_value": "",
-            "maxlength": 1000,
+            "maxlength": 2000,
             "allow_in_bindings": 0,
             "rows": "",
             "placeholder": "Опишіть деталі, які здаються для Вас важливими та ключовими",
@@ -390,5 +390,5 @@
     "description": "",
     "show_in_rest": 0,
     "display_title": "",
-    "modified": 1771689167
+    "modified": 1771745772
 }
