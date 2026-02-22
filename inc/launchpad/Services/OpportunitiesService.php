@@ -79,9 +79,8 @@ class OpportunitiesService
 
             // 1. Get raw data
             $raw_excerpt    = $post->post_excerpt;
-            // $raw_description = get_field('opportunity_description', $post->ID) ?: '';
-            // Should be more optimal 
-            $raw_description = get_post_meta($post->ID, 'opportunity_description', true) ?: '';
+            // Description now stored in post_content (native WordPress column)
+            $raw_description = $post->post_content ?: '';
             // 2. Logic: Priority to native excerpt, fallback to trimmed description
             $display_text = !empty($raw_excerpt) ? $raw_excerpt : $raw_description;
             // 3. Clean and Truncate (approx 20 words for a clean card look)
@@ -266,7 +265,8 @@ class OpportunitiesService
             'seekers'         => $getIntArray('opportunity_seekers'),
 
             // Group 3: Description
-            'description'     => get_field('opportunity_description', $postId) ?: '',
+            // Description now stored in post_content (native WordPress column)
+            'description'     => $post->post_content ?: '',
             'requirements'    => get_field('opportunity_requirements', $postId) ?: '',
             'details'         => get_field('opportunity_details', $postId) ?: '',
 
@@ -331,9 +331,10 @@ class OpportunitiesService
         try {
             // 1. Prepare Core Post Data
             $postData = [
-                'post_type'   => 'opportunity',
-                'post_title'  => sanitize_text_field($data['title']),
-                'post_author' => get_current_user_id(),
+                'post_type'    => 'opportunity',
+                'post_title'   => sanitize_text_field($data['title']),
+                'post_content' => sanitize_textarea_field($data['description'] ?? ''),
+                'post_author'  => get_current_user_id(),
             ];
 
             // Determine Status
@@ -409,8 +410,7 @@ class OpportunitiesService
             update_field('opportunity_seekers', $seekers, $id);
             wp_set_object_terms($id, $seekers, 'category-seekers');
 
-            // Group 3
-            update_field('opportunity_description', $data['description'], $id);
+            // Group 3 - Description is now saved to post_content via wp_insert_post/wp_update_post
             update_field('opportunity_requirements', $data['requirements'], $id);
             update_field('opportunity_details', $data['details'], $id);
 
