@@ -308,13 +308,26 @@ function sw_get_root_terms(int $post_id, string $taxonomy): array
 }
 
 /**
+ * Map a MIME type to a short, display-friendly file-type label.
+ * Returns null for unsupported types so the caller can decide what to render.
+ */
+function sw_document_type_label(string $mime): ?string
+{
+    return match ($mime) {
+        'application/pdf'                                                         => 'pdf',
+        'application/vnd.openxmlformats-officedocument.wordprocessingml.document' => 'docx',
+        default => null,
+    };
+}
+
+/**
  * Normalize an ACF file field value into a consistent document array.
  *
  * Handles all ACF return formats: array (return_format=array),
  * int (return_format=id), null, or false (ACF "no value" sentinel).
  *
  * @param  array|int|bool|null $raw  ACF file field value.
- * @return array{url: string, title: string, filesize: int}|null
+ * @return array{url: string, title: string, filesize: int, type: string|null}|null
  */
 function sw_prepare_document(mixed $raw): ?array
 {
@@ -325,9 +338,10 @@ function sw_prepare_document(mixed $raw): ?array
     // ACF return_format = array — file data already deserialized by ACF
     if (is_array($raw)) {
         return [
-            'url'      => $raw['url']      ?? '',
-            'title'    => $raw['title']    ?? '',
+            'url'      => $raw['url']             ?? '',
+            'title'    => $raw['title']           ?? '',
             'filesize' => (int) ($raw['filesize'] ?? 0),
+            'type'     => sw_document_type_label($raw['mime_type'] ?? ''),
         ];
     }
 
@@ -366,6 +380,7 @@ function sw_prepare_document(mixed $raw): ?array
             'url'      => $url,
             'title'    => get_the_title($raw),
             'filesize' => $filesize,
+            'type'     => sw_document_type_label((string) get_post_mime_type($raw)),
         ];
     }
 

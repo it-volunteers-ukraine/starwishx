@@ -219,12 +219,13 @@ get_header();
                     <div class="info-card info-card--file">
                         <h2 class="opportunity-content__title"><?php esc_html_e('Документ', $td); ?></h2>
                         <a href="<?php echo esc_url($data['document']['url']); ?>" class="file-download" download>
-                            <svg width="18" height="18" aria-hidden="true" class="icon-file">
-                                <use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-doc"></use>
+                            <svg width="28" height="28" aria-hidden="true" class="icon-file">
+                                <use href="<?php echo get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-doc"></use>
                             </svg>
                             <div class="file-download__meta">
                                 <span class="file-name"><?php echo esc_html($data['document']['title']); ?></span>
                                 <span class="file-size">(<?php echo size_format($data['document']['filesize']); ?>)</span>
+                                <span class="file-type"><?php echo esc_html($data['document']['type']); ?></span>
                             </div>
                         </a>
                     </div>
