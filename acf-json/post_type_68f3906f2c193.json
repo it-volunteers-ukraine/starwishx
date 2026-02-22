@@ -44,7 +44,7 @@
     },
     "description": "",
     "public": true,
-    "hierarchical": true,
+    "hierarchical": false,
     "exclude_from_search": false,
     "publicly_queryable": true,
     "show_ui": true,
@@ -52,7 +52,7 @@
     "admin_menu_parent": "",
     "show_in_admin_bar": true,
     "show_in_nav_menus": true,
-    "show_in_rest": true,
+    "show_in_rest": false,
     "rest_base": "",
     "rest_namespace": "wp\/v2",
     "rest_controller_class": "WP_REST_Posts_Controller",
@@ -66,6 +66,7 @@
     "plural_capability_name": "posts",
     "supports": [
         "title",
+        "author",
         "editor",
         "excerpt",
         "thumbnail",
@@ -86,5 +87,5 @@
     "delete_with_user": false,
     "register_meta_box_cb": "",
     "enter_title_here": "",
-    "modified": 1771402152
+    "modified": 1771732037
 }
