@@ -20,7 +20,8 @@ if ($raw_date_ends) {
     $date_ends = date('d.m.Y', $timestamp);
 }
 $raw_excerpt   = get_post_field('post_excerpt', $post_id, 'raw');
-$raw_description = get_post_meta($post_id, 'opportunity_description', true) ?: '';
+$post = get_post($post_id);
+$raw_description = $post ? $post->post_content : '';
 // Priority logic: Native excerpt > opportunity_description meta
 // (Explicitly checks for non-whitespace content to avoid space-only strings)
 $display_text = (! empty(trim($raw_excerpt)))

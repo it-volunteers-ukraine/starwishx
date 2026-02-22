@@ -377,6 +377,68 @@ function sw_prepare_document(mixed $raw): ?array
  *  ========================================================================= */
 
 /**
+ * One-time migration: Copy ACF opportunity_description to post_content.
+ * 
+ * Can be run via WP-CLI: wp eval 'sw_migrate_description_to_post_content();'
+ * Or runs automatically via admin_init hook (once, tracked by option).
+ * 
+ * @return int Number of posts migrated.
+ */
+function sw_migrate_description_to_post_content(): int
+{
+    // Check if migration already completed
+    if (get_option('sw_description_migration_done', false)) {
+        return 0;
+    }
+
+    $posts = get_posts([
+        'post_type'      => 'opportunity',
+        'posts_per_page' => -1,
+        'post_status'    => ['publish', 'draft', 'pending'],
+    ]);
+
+    $migrated = 0;
+    foreach ($posts as $post) {
+        // Skip if post_content already has content
+        if (!empty(trim($post->post_content))) {
+            continue;
+        }
+
+        $acf_description = get_post_meta($post->ID, 'opportunity_description', true);
+
+        if (!empty($acf_description)) {
+            $result = wp_update_post([
+                'ID'           => $post->ID,
+                'post_content' => $acf_description,
+            ], true);
+
+            if (!is_wp_error($result)) {
+                $migrated++;
+            }
+        }
+    }
+
+    // Mark migration as completed
+    update_option('sw_description_migration_done', true, false);
+
+    if ($migrated > 0) {
+        error_log("Opportunity description migration completed: {$migrated} posts migrated.");
+    }
+
+    return $migrated;
+}
+
+/**
+ * Auto-run migration on admin_init (once).
+ */
+add_action('admin_init', function (): void {
+    // Only run in admin context, and only if not already done
+    if (!get_option('sw_description_migration_done', false)) {
+        sw_migrate_description_to_post_content();
+    }
+});
+
+/**
  * Assemble view data for a single Opportunity post.
  *
  * Scalar meta fields use get_post_meta() directly — no ACF overhead for simple
@@ -410,13 +472,19 @@ function sw_get_opportunity_view_data(int $post_id): array
     $seeker_ids   = sw_get_field('opportunity_seekers', $post_id) ?? [];
     $seeker_terms = sw_get_prepared_terms($seeker_ids, 'category-seekers');
 
+    $post = get_post($post_id);
+
     return [
         // Scalar fields — get_post_meta() is cheaper than ACF for simple strings
         // 'applicant_name' => (string) get_post_meta($post_id, 'opportunity_applicant_name', true), // deprecated
         'company'          => (string) get_post_meta($post_id, 'opportunity_company',          true),
         'source_url'       => (string) get_post_meta($post_id, 'opportunity_sourcelink',       true),
         'application_form' => (string) get_post_meta($post_id, 'opportunity_application_form', true),
-        'description'      => (string) get_post_meta($post_id, 'opportunity_description',      true),
+        // Now stored in post_content
+        // 'description'      => $post ? $post->post_content : '', 
+        // 'description' => apply_filters('the_content', $post->post_content),
+        'description' => wpautop($post->post_content),
+
         'requirements'     => (string) get_post_meta($post_id, 'opportunity_requirements',     true),
         'details'          => (string) get_post_meta($post_id, 'opportunity_details',          true),
         // Complex / relational fields

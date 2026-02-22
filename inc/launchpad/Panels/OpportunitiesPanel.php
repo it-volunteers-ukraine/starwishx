@@ -648,9 +648,9 @@ class OpportunitiesPanel extends AbstractPanel
                             <h3 class="group-card-title"><?php esc_html_e('Description', 'starwishx'); ?></h3>
                             <div class="form-card-data">
                                 <div class="form-field form-field-description">
-                                    <label><?php echo esc_html($labels['opportunity_description'] ?? __('Main Description', 'starwishx')); ?></label>
+                                    <label><?php echo __('Опишіть можливість', 'starwishx'); ?></label>
                                     <textarea rows="6" required class="widefat"
-                                        placeholder="<?php echo esc_attr($placeholders['opportunity_description'] ?? ''); ?>"
+                                        placeholder="<?php echo _('Додайте інформацію про можливість. Опишіть суть.'); ?>"
                                         data-wp-bind--value="<?= $formPath ?>.description" data-wp-on--input="actions.opportunities.updateForm" data-field="description"></textarea>
                                 </div>
                                 <div class="form-field form-field-description">
