@@ -28,15 +28,24 @@ if (!empty($css)) {
 
 get_header();
 ?>
-<nav class="opportunity-breadcrumbs container" aria-label="<?php esc_attr_e('Breadcrumb', $td); ?>">
+<?php
+if (function_exists('render_block')) {
+    echo render_block([
+        'blockName'   => 'acf/breadcrumbs',
+        'attrs'       => ["class" => 'opportunity-breadcrumbs'],
+        'innerHTML'   => '',
+        'innerBlocks' => [],
+    ]);
+}
+/* <nav class="opportunity-breadcrumbs container" aria-label="<?php esc_attr_e('Breadcrumb', $td); ?>">
     <a href="<?php echo esc_url($back_url); ?>" class="btn-back">
         <svg width="13" height="16" class="icon-arrow-left">
             <use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-long_arrow_left"></use>
         </svg>
         <span><?php esc_html_e('Opportunities', $td); ?></span>
     </a>
-</nav>
-
+</nav> */
+?>
 <div class="single-opportunity__layout container">
     <main id="main" class="opportunity-main" role="main">
 
@@ -64,9 +73,7 @@ get_header();
                 <?php the_post_thumbnail('large', ['itemprop' => 'image', 'class' => 'featured-figure__image']); ?>
             <?php else : ?>
                 <div class="featured-image__placeholder">
-                    <svg width="40" height="40" class="icon-heart">
-                        <use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-opportunities"></use>
-                    </svg>
+                    <?php sw_svg_e('icon-opportunities', 50, 50); ?>
                 </div>
             <?php endif; ?>
             <figcaption class="d-none"><?php the_title(); ?></figcaption>
