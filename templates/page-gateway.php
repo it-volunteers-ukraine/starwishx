@@ -87,15 +87,11 @@ if (!$registry->has($current_view)) {
  * is injected into the HTML as a JSON object, allowing the Interactivity 
  * API to 'hydrate' the UI without requiring an initial API call.
  */
+// Section 4 - STATE HYDRATION (SSR)
 $state = $gateway->getState($current_view);
-
-// Runtime settings used by gateway-store.js
-$state['gatewaySettings'] = [
-    'nonce'   => wp_create_nonce('wp_rest'),
-    'restUrl' => rest_url('gateway/v1/'),
-];
-
-// Seed the 'gateway' namespace with our state
+// No gatewaySettings here - GatewayCore::enqueueAssets() already set them.
+// wp_interactivity_state() merges: application state + infrastructure config
+// both land in the 'gateway' namespace.
 wp_interactivity_state('gateway', $state);
 
 /**
@@ -158,11 +154,11 @@ $back_url = $referer ? $referer : home_url();
             <!-- BRANDING SECTION -->
             <header class="gateway-header">
                 <!-- <a href="< ?php echo esc_url(home_url('/')); ? >" class="gateway-logo" rel="home"> -->
-                    <?php if (has_custom_logo()) : ?>
-                        <?php the_custom_logo(); ?>
-                    <?php else : ?>
-                        <h1 class="gateway-title"><?php bloginfo('name'); ?></h1>
-                    <?php endif; ?>
+                <?php if (has_custom_logo()) : ?>
+                    <?php the_custom_logo(); ?>
+                <?php else : ?>
+                    <h1 class="gateway-title"><?php bloginfo('name'); ?></h1>
+                <?php endif; ?>
                 </a>
             </header>
 
