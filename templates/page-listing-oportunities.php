@@ -48,9 +48,17 @@ if (!empty($css)) {
 }
 
 get_header();
-
 ?>
-
+<?php
+if (function_exists('render_block')) {
+    echo render_block([
+        'blockName'   => 'acf/breadcrumbs',
+        'attrs'       => ["class" => 'opportunity-breadcrumbs'],
+        'innerHTML'   => '',
+        'innerBlocks' => [],
+    ]);
+}
+?>
 <main id="primary" class="site-main listing-app container" data-wp-interactive="listing">
 
     <header class="listing-app__header">
