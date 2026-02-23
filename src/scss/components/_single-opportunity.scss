@@ -81,6 +81,10 @@
                     align-items: center;
                     inset: 0;
                     color: $text-light;
+                    .card-image__fallback--icon {
+                        width: 64px;
+                        height: 64px;
+                    }
                 }
                 .control-favorites-wrapper {
                     position: absolute;

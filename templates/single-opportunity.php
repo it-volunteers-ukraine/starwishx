@@ -73,7 +73,8 @@ if (function_exists('render_block')) {
                 <?php the_post_thumbnail('large', ['itemprop' => 'image', 'class' => 'featured-figure__image']); ?>
             <?php else : ?>
                 <div class="featured-image__placeholder">
-                    <?php sw_svg_e('icon-opportunities', 50, 50); ?>
+                    <!-- < ?php sw_svg_e('icon-opportunities', 50, 50); ?> -->
+                    <img class="card-image__fallback--icon" src="<?php echo get_template_directory_uri(); ?>/assets/img/icon-opportunities-gradient.svg" alt="fallback image">
                 </div>
             <?php endif; ?>
             <figcaption class="d-none"><?php the_title(); ?></figcaption>
@@ -93,23 +94,25 @@ if (function_exists('render_block')) {
                 <div class="opportunity-article-meta__wrapper">
                     <dl class="opportunity-article-meta">
                         <!-- 2. Dates -->
-                        <div class="info-card info-card--dates">
-                            <dt class="info-card__title">
-                                <svg width="18" height="18" class="info-card__icon">
-                                    <use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-calendar"></use>
-                                </svg>
-                                <?php esc_html_e('Терміни', $td); ?>
-                            </dt>
-                            <div class="date-row">
-                                <time class="btn-text-medium" datetime="<?php echo esc_attr($data['date_start']['iso']); ?>">
-                                    <?php echo esc_html($data['date_start']['display']); ?>
-                                </time>
-                                —
-                                <time class="btn-text-medium" datetime="<?php echo esc_attr($data['date_end']['iso']); ?>">
-                                    <?php echo esc_html($data['date_end']['display']); ?>
-                                </time>
+                        <?php if (!empty($data['date_start']) && !empty($data['date_end'])) : ?>
+                            <div class="info-card info-card--dates">
+                                <dt class="info-card__title">
+                                    <svg width="18" height="18" class="info-card__icon">
+                                        <use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-calendar"></use>
+                                    </svg>
+                                    <?php esc_html_e('Терміни', $td); ?>
+                                </dt>
+                                <div class="date-row">
+                                    <time class="btn-text-medium" datetime="<?php echo esc_attr($data['date_start']['iso']); ?>">
+                                        <?php echo esc_html($data['date_start']['display']); ?>
+                                    </time>
+                                    —
+                                    <time class="btn-text-medium" datetime="<?php echo esc_attr($data['date_end']['iso']); ?>">
+                                        <?php echo esc_html($data['date_end']['display']); ?>
+                                    </time>
+                                </div>
                             </div>
-                        </div>
+                        <?php endif; ?>
 
                         <!-- 3. Location -->
                         <div class="info-card">
