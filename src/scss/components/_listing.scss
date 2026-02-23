@@ -362,7 +362,7 @@
                     // rgba(0, 0, 0, 0) 100%
                 }
             }
-            img {
+            .listing-card__image {
                 border-radius: $radius-image;
                 width: 100%;
                 height: 100%;
@@ -399,6 +399,10 @@
                 justify-content: center;
                 align-items: center;
                 color: $text-light;
+                .card-image__fallback--icon {
+                    width: 42px;
+                    height: 42px;
+                }
             }
         }
     }

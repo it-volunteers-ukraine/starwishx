@@ -87,9 +87,10 @@ class ResultsGrid implements RenderableInterface
                             data-wp-bind--src="context.item.thumbnail" data-wp-bind--hidden="!context.item.thumbnail" data-wp-bind--alt="context.item.title">
                         <!-- Fallback Placeholder (shown if no image) -->
                         <div class="opportunity-card__placeholder" data-wp-bind--hidden="context.item.thumbnail">
-                            <svg width="40" height="40" class="icon-heart">
-                                <use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-opportunities"></use>
-                            </svg>
+                            <!-- <svg width="40" height="40" class="icon-heart">
+                                <use xlink:href="< ?php echo get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-opportunities"></use>
+                            </svg> -->
+                            <img class="card-image__fallback--icon" src="<?php echo get_template_directory_uri(); ?>/assets/img/icon-opportunities-gradient.svg" alt="fallback image">
                         </div>
                     </a>
                     <div class="control-favorites-wrapper control-favorites-wrapper--icon-only">

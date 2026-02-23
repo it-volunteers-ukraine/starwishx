@@ -305,10 +305,10 @@ class OpportunitiesPanel extends AbstractPanel
                                                 data-wp-bind--hidden="!context.item.thumbnailUrl" />
                                             <!-- Fallback Placeholder -->
                                             <div class="opportunity-card__placeholder" data-wp-bind--hidden="context.item.thumbnailUrl">
-                                                <svg width="20" height="20" class="icon-heart">
-                                                    <use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-opportunities"></use>
-                                                </svg>
-                                                <!-- <span class="dashicons dashicons-format-image"></span> -->
+                                                <!-- <svg width="20" height="20" class="icon-opportunity">
+                                                    <use xlink:href="< ?php echo get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-opportunities"></use>
+                                                </svg> -->
+                                                <img class="card-image__fallback--icon" src="<?php echo get_template_directory_uri(); ?>/assets/img/icon-opportunities-gradient.svg" alt="fallback image">
                                             </div>
                                         </a>
                                     </figure>
