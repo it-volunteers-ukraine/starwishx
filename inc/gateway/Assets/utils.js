@@ -4,22 +4,85 @@
  */
 
 /**
- * Centralized fetch with WP nonce.
- *
- * @param {Object} state - The Interactivity API state object (containing gatewaySettings)
- * @param {string} url - The URL to fetch
- * @param {Object} options - Fetch options
+ * Typed error for REST API failures.
  */
-export async function fetchJson(state, url, options = {}) {
+export class RestApiError extends Error {
+  /**
+   * @param {string} message - Human-readable message (from WP error or HTTP status)
+   * @param {string} code    - WordPress error code e.g. 'rest_cookie_invalid_nonce'
+   * @param {number} status  - HTTP status code
+   */
+  constructor(message, code = "", status = 0) {
+    super(message);
+    this.name = "RestApiError";
+    this.code = code;
+    this.status = status;
+  }
+}
+
+/**
+ * Shared WordPress error codes.
+ * Source of truth: inc/shared/Core/AbstractApiController.php
+ */
+export const WP_ALREADY_AUTHENTICATED = "already_authenticated";
+
+/**
+ * Nonce mismatch — browser sent a stale nonce against a changed session.
+ * Defined here so action modules can react to it without magic strings.
+ */
+export const WP_NONCE_INVALID = "rest_cookie_invalid_nonce";
+
+/**
+ * Convert kebab-case or snake_case to camelCase.
+ * e.g. 'lost-password' → 'lostPassword'
+ */
+export function toCamelCase(str) {
+  return str.replace(/([-_][a-z])/g, (g) => g[1].toUpperCase());
+}
+
+/**
+ * Centralized fetch with WP nonce management.
+ *
+ * Implements the same contract as @wordpress/api-fetch nonce middleware:
+ * WordPress core registers rest_send_refreshed_nonce() on rest_post_dispatch
+ * unconditionally — X-WP-Nonce is present on every REST response including errors.
+ *
+ * Retry contract:
+ *   On rest_cookie_invalid_nonce the 403 response carries the correct nonce for
+ *   the new session in X-WP-Nonce. We pass it EXPLICITLY into the retry rather
+ *   than relying on Interactivity API Proxy mutation being visible across the
+ *   recursive async call — Proxy side-effect visibility is not guaranteed here.
+ *   State is still updated for all subsequent calls after the retry completes.
+ *
+ * @param {Object}  state      - Interactivity API state (contains gatewaySettings)
+ * @param {string}  url        - REST endpoint URL
+ * @param {Object}  [options]  - fetch options
+ * @param {boolean} [_isRetry] - internal: prevents infinite loops
+ * @param {string|null} [_retryNonce] - internal: explicit nonce for retry, bypasses Proxy read
+ * @returns {Promise<Object>}
+ * @throws {RestApiError}
+ */
+export async function fetchJson(
+  state,
+  url,
+  options = {},
+  _isRetry = false,
+  _retryNonce = null,
+) {
   const { method = "GET", body = null } = options;
-  // Access settings from the passed state, not global/this
-  const settings = state.gatewaySettings || {};
+  const settings = state?.gatewaySettings ?? {};
+
+  // Use the explicitly passed nonce on retry so we bypass Proxy mutation uncertainty.
+  // On initial calls _retryNonce is null and we read from state normally.
+  const nonce = _retryNonce ?? settings.nonce ?? "";
 
   const headers = {
-    "X-WP-Nonce": settings.nonce,
+    "X-WP-Nonce": nonce,
     "X-Requested-With": "XMLHttpRequest",
   };
-  if (body) headers["Content-Type"] = "application/json";
+  if (body) {
+    headers["Content-Type"] = "application/json";
+  }
 
   const response = await fetch(url, {
     method,
@@ -28,21 +91,55 @@ export async function fetchJson(state, url, options = {}) {
     body: body ? JSON.stringify(body) : null,
   });
 
+  // ── WordPress nonce refresh contract ──────────────────────────────────────
+  //
+  // Capture X-WP-Nonce on every response (success or failure).
+  // Best-effort state update for all future calls after this one resolves.
+  // The retry path does NOT rely on this mutation — it receives the nonce
+  // via _retryNonce instead.
+  //
+  const refreshedNonce = response.headers.get("X-WP-Nonce");
+  if (refreshedNonce && settings.nonce !== refreshedNonce) {
+    settings.nonce = refreshedNonce;
+  }
+  // ──────────────────────────────────────────────────────────────────────────
+
   if (!response.ok) {
+    let errorData = {};
     let message = `${response.status} ${response.statusText}`;
+
     try {
-      const error = await response.json();
-      if (error?.message) message = error.message;
-    } catch (_) {}
-    throw new Error(message);
+      errorData = await response.json();
+      if (errorData?.message) message = errorData.message;
+    } catch (_) {
+      // Non-JSON body — keep the HTTP status message
+    }
+
+    // ── Nonce race-condition recovery ─────────────────────────────────────
+    //
+    // Another tab logged in: browser sends new auth cookie but stale nonce.
+    // The refreshed nonce from X-WP-Nonce is passed EXPLICITLY to the retry —
+    // not read back from state — so mutation visibility is not a factor.
+    //
+    if (
+      !_isRetry &&
+      response.status === 403 &&
+      errorData?.code === WP_NONCE_INVALID
+    ) {
+      return fetchJson(state, url, options, true, refreshedNonce);
+    }
+    // ──────────────────────────────────────────────────────────────────────
+
+    throw new RestApiError(message, errorData?.code ?? "", response.status);
   }
 
   if (response.status === 204) return {};
-  return await response.json();
+
+  return response.json();
 }
 
 /**
- * Client-side validators (UX only, server re-validates).
+ * Client-side validators (UX only — server always re-validates).
  */
 export const validators = {
   required: (value) => !!value?.trim(),

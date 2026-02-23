@@ -2,8 +2,8 @@
  * Gateway Interactivity API Store
  * File: inc/gateway/Assets/gateway-store.js
  */
-
 import { store, getElement } from "@wordpress/interactivity";
+import { toCamelCase } from "./utils.js";
 
 import { loginActions } from "./auth/actions.js";
 import { registerActions } from "./register/actions.js";
@@ -15,32 +15,23 @@ import {
 const gatewayState = {
   activeView: "login",
 
-  // Helper to convert kebab to camel 'lost-password' to 'lostPassword'
-  // todo: check we still need id since have similar in backend now
-  toCamel(str) {
-    return str.replace(/([-_][a-z])/g, (group) =>
-      group.toUpperCase().replace("-", "").replace("_", ""),
-    );
+  get currentForm() {
+    return this.forms?.[toCamelCase(this.activeView)] || {};
   },
 
-  get currentForm() {
-    const key = this.toCamel(this.activeView);
-    return this.forms?.[key] || {};
-  },
-  // Getter for the Reset Password input type
   get resetPasswordInputType() {
     return this.forms?.resetPassword?.isPasswordVisible ? "text" : "password";
   },
 };
 
-// Store definition
 const { state, actions } = store("gateway", {
   state: gatewayState,
 
   actions: {
     syncStateFromUrl() {
-      const url = new URL(window.location);
+      const url = new URL(window.location.href);
       const view = url.searchParams.get("view") || "login";
+
       state.activeView = view;
 
       if (state.formMap) {
@@ -52,16 +43,15 @@ const { state, actions } = store("gateway", {
 
     /**
      * Reset a form to its initial state.
-     * Called when navigating away from a form view.
+     * Called when navigating away from a view so stale data never bleeds through.
      *
-     * @param {string} formKey - Camel-cased form key (e.g., 'lostPassword', 'register')
+     * @param {string} formKey - camelCase form key e.g. 'lostPassword'
      */
     resetFormState(formKey) {
       const form = state.forms?.[formKey];
       if (!form) return;
 
       Object.keys(form).forEach((key) => {
-        // We don't want to reset 'fieldErrors' structure, just the values
         if (key === "fieldErrors" && typeof form[key] === "object") {
           Object.keys(form[key]).forEach((errorKey) => {
             form[key][errorKey] = null;
@@ -73,39 +63,34 @@ const { state, actions } = store("gateway", {
         if (typeof value === "string") form[key] = "";
         if (typeof value === "boolean") form[key] = false;
         if (typeof value === "number") form[key] = 0;
-        // successMessage or error are usually strings, so they are caught above
       });
     },
 
     switchView(event) {
       event.preventDefault();
-      const { ref } = getElement();
-      const url = new URL(ref.href, window.location);
 
-      // Reset the current form before switching views
-      const currentView = state.activeView;
-      const currentFormKey = state.toCamel(currentView);
+      const { ref } = getElement();
+      const url = new URL(ref.href, window.location.href);
+
+      // Reset current form before leaving so stale errors/values don't persist
+      const currentFormKey = toCamelCase(state.activeView);
       if (state.forms?.[currentFormKey]) {
         actions.resetFormState(currentFormKey);
       }
 
-      // Navigate to new view
       window.history.pushState({}, "", url);
       actions.syncStateFromUrl();
     },
 
     login: loginActions,
-
-    lostPassword: lostPasswordActions,
-
-    resetPassword: resetPasswordActions,
-
     register: registerActions,
+    lostPassword: lostPasswordActions,
+    resetPassword: resetPasswordActions,
   },
 });
 
-// Init logic (popstate/DOMContentLoaded omitted for brevity)
 window.addEventListener("popstate", () => actions.syncStateFromUrl());
+
 if (document.readyState === "loading") {
   document.addEventListener("DOMContentLoaded", () =>
     actions.syncStateFromUrl(),
