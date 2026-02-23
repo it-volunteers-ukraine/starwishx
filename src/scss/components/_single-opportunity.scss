@@ -2,7 +2,9 @@
 @use "../mixins/media";
 
 .single-opportunity {
+    section.section[class*="breadcrumbs-module__"],
     .opportunity-breadcrumbs {
+        padding-top: 0;
         margin-top: 32px;
         margin-bottom: 16px;
         .btn-back {
