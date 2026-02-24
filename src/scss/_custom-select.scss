@@ -1,0 +1,105 @@
+@use "./variables" as *;
+@use "./mixins/media" as *;
+
+/* The container must be positioned relative: */
+.custom-select {
+  position: relative;
+}
+
+.custom-select select {
+  display: none; /* hide original SELECT element: */
+}
+
+.sort-icon {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 24px;
+  height: 24px;
+  pointer-events: none;
+  transition: all $animations;
+}
+
+/* .sortby-select .select-items:not(.select-hide) + .sort-icon{ */
+:has(.select-items:not(.select-hide)) .sort-icon {
+  transform: rotateX(180deg);
+}
+
+/* .sortby-select */
+.select-items .same-as-selected::before, .select-items div::before {
+  content: "";
+  display: inline-block;
+  margin-right: 10px;
+  width: 18px;
+  height: 18px;
+}
+
+
+.select-items .same-as-selected::before {
+  background-image: url("../../assets/img/icon-selected.svg");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.select-selected {
+  padding: 0 28px 0 8px;
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: none;
+}
+
+/* Point the arrow upwards when the select box is open (active): */
+.select-selected.select-arrow-active::after {
+  border-color: transparent transparent #222;
+  top: 7px;
+}
+
+.select-items div {
+  display: flex;
+  align-items: center;
+  padding: 8px 12px;
+}
+
+/* style the items (options), including the selected item: */
+.select-items div,
+.select-selected {
+  color: #292929;
+  border: 1px solid transparent;
+  cursor: pointer;
+}
+
+.select-items .same-as-selected {
+  color: $text-accent;
+}
+
+/* Style items (options): */
+.select-items {
+  position: absolute;
+  width: max-content;
+  background-color: white;
+  border-radius: 8px;
+  overflow: hidden;
+  margin-top: 8px;
+  left: 0;
+  top: 100%;
+  right: 0;
+  z-index: 10;
+  box-shadow: 0 0 0 1px rgb(0 0 0 / 4%);
+}
+
+/* Hide the items when the select box is closed: */
+.select-hide {
+  display: none;
+}
+
+.select-items div:hover {
+  background-color: #dedafa;
+}
+
+@include min-tablet {
+  .select-items {
+    right: 0;
+    left: unset;
+  }
+}

@@ -64,6 +64,19 @@ if ($term) {
     ];
 }
 
+// $blocks = parse_blocks(get_the_content());
+// foreach ($blocks as $block) {
+//     echo '<pre>';
+//     print_r($block);
+//     echo '</pre>';
+    
+//     // if ($block['blockName'] === 'acf/search-page') {
+//     // $per_page = $block['attrs']['data']['per_page'];
+//     // break;
+//     // }
+// }
+
+
 // Home page
 $home_id = get_option('page_on_front');
 $home_url = get_the_permalink($home_id);
@@ -71,6 +84,7 @@ $home_title = get_the_title($home_id);
 
 // Active item
 $active_title = get_the_title();
+
 ?>
 
 <section class="section breadcumbs-section <?php echo esc_attr($classes["section"]); ?> ">

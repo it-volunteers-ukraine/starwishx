@@ -140,6 +140,8 @@
             </radialGradient>
         </defs>
     </symbol>
+    <symbol id="icon-selected" width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M13.5 5.25L7.2 12.75L4.5 9.75" stroke="#784CDB" stroke-linecap="round" stroke-linejoin="round"/>
     <symbol id="icon-search-small" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" viewBox="0 0 15 15">
         <path stroke-linecap="round" stroke-linejoin="round" d="m11.244 11.267 2.567 2.566M13 6.75a6.25 6.25 0 1 1-12.5 0 6.25 6.25 0 0 1 12.5 0Z"/>
     </symbol>

@@ -21,39 +21,6 @@
   margin-bottom: 16px;
 }
 
-.block-filter{
-  display: flex;
-  margin-bottom: 16px;
-  padding: 12px 0;
-  flex-direction: row-reverse;
-  justify-content: space-between;
-  align-items: center;
-  color: $text-light;
-}
-
-.filter {
-  display: flex;
-  align-items: center;
-}
-
-
-
-.filter-title{
-  display: none;
-}
-
-.filter-data{
-  color: $text-dark;
-}
-
-.sort-icon{
-  position: absolute;
-  top: 0;
-  right: 0;
-  width: 24px;
-  height: 24px;
-  }
-
 .newscards {
   display: grid;
   gap: 30px;
@@ -68,17 +35,6 @@
   .section {
     padding-bottom: 40px;
   }
-
-.block-filter{
-  padding: 12px 40px; 
-  flex-direction: row;
-}
-
-.filter-title{
-  display: inline;
-}
-
-
 
   .newscards {
     grid-template-columns: repeat(2, 1fr);
@@ -96,10 +52,6 @@
   .title {
     margin-bottom: 32px;
   }
-
-.block-filter{
-  margin-bottom: 24px;; 
-}
 
   .newscards {
     grid-template-columns: repeat(4, 1fr);
@@ -144,7 +96,7 @@
   }
 }
 
-@media screen and (min-width: 1440px) {
+@include min-laptop {
   .lastnews-content {
     grid-template-columns: repeat(4, 1fr);
     gap: 20px;
@@ -175,11 +127,3 @@
   padding: 10px 0;
 }
 
-
-.my-select{
-  color: green;
-}
-
-.my-select select {
-  border: none;
-}

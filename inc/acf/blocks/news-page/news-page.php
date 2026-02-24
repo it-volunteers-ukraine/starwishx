@@ -31,9 +31,24 @@ $default_classes = [
 global $wp;
 global $post;
 $base_url = home_url($wp->request);
+// echo 'base_url=' . esc_url($base_url) . '<br>';
 $news_page = $post;
 $post_name = $post->post_name;
 // print_r($news_page);
+
+$qqq = get_query_var('news_cat');
+// echo 'paged: ' . get_query_var('paged') . '<br>';
+// echo 'get_query_var(news_cat): ';
+// print_r($qqq);
+// echo '<br>';
+// global $wp_query;
+// echo '<pre>';
+// print_r($wp_query->query_vars);
+// echo '</pre>';
+
+
+
+
 $childrens = get_children([
     'post_parent' => $news_page->ID,
     'post_type'   => 'page',

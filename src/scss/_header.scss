@@ -577,6 +577,8 @@
 .search-input:focus {
   /* outline-color: $input-color-border-pressed; */
   outline: none;
+  
+  /* 
   box-shadow: inset -7px -8px 9px -8px $buttons-color-background-primary-default;
   box-shadow:
     inset -7px -8px 9px -8px $buttons-color-background-primary-default,
@@ -590,8 +592,8 @@
   box-shadow:
     inset -7px 9px 9px -8px $buttons-color-background-primary-default,
     2px 4px 8px -3px #6c6087;
-  box-shadow: inset 2px 4px 8px -3px #6c6087;
-  box-shadow: 2px 4px 8px -3px #6c6087;
+    box-shadow: 2px 4px 8px -3px #6c6087; */
+    box-shadow: inset 2px 4px 8px -3px #6c6087;
 }
 
 .search-submit-bth {
