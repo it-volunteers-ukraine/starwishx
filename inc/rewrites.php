@@ -41,6 +41,8 @@ add_action('init', function () {
 add_filter('query_vars', function ($vars) {
     return array_merge($vars, [
         'news_cat',
+        'search_term',
+        
     ]);
 });
 

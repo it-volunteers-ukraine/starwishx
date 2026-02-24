@@ -52,16 +52,19 @@ global $post;
 
 $wp_request = $wp->request;
 $base_url = home_url($wp->request);
-$post_name = $post->post_name;
+$post_name = $post->post_name;  //еще используется в кнопе LoadMore 
 // echo 'base_url: ' . $base_url . '<br>';
-$category = 'category-oportunities';
+$category = my_category();
 $category_slug = get_query_var('news_cat');
 
+// echo 'category_slug: ' . $category_slug . '<br>';
 
-$path = trim($wp->request, '/');
-$parts = explode('/', $path);
 
-$post_type = $parts[0] ?? null;
+// $path = trim($wp->request, '/');
+// $parts = explode('/', $path);
+
+// $post_type = $parts[0] ?? null;
+$post_type = my_post_type();
 
 // -----------------------------
 // 2. Params
@@ -98,10 +101,11 @@ $search_term = isset($_GET['search']) ? $_GET['search'] : '';
 // Получить post_type из мета, если нет, то 'news'
 $post_type = my_post_type();
 
-$arg_query = query_args_prepare([]);
+$arg_query = my_query_args_prepare([]);
 
 
 if ($category && $category_slug){
+    // echo 'category_slug: ' . $category_slug . '<br>';
     $tax_query = [
         'taxonomy' => $category,
         'field'    => 'slug',
@@ -180,7 +184,7 @@ $total_pages = (int) ceil($total_posts / $per_page);
                     $current_page_class = $page == $i ? $classes['selected'] : '';
                     $is_active = $page == $i ? true : false;
                     ?>
-                    <a id='pagination-<?php echo $count; ?>' href="<?= pagination_url($base_url, $i, $per_page); ?>"
+                    <a id='pagination-<?php echo $count; ?>' href="<?= pagination_url($base_url, $i, $per_page, $search_term); ?>"
                         data-is-active="<?php echo $is_active; ?>"
                         data-link-disabled="<?php echo $link_disabled ? 1 : 0; ?>"
                         class="<?php echo esc_attr($classes['page-num']); ?>">
@@ -192,7 +196,7 @@ $total_pages = (int) ceil($total_posts / $per_page);
                 <!-- Next -->
                 <?php $next_disabled = $total_pages && $page >= $total_pages ? true : false; ?>
                 <a id='pagination-next'
-                    href="<?= pagination_url($base_url, $page + 1, $per_page); ?>"
+                    href="<?= pagination_url($base_url, $page + 1, $per_page, $search_term); ?>"
                     class="<?php echo esc_attr($classes['nav-arrow']); ?>"
                     data-link-disabled=<?php echo $next_disabled; ?>
                     rel="next">
@@ -210,12 +214,14 @@ $total_pages = (int) ceil($total_posts / $per_page);
             <button
                 id="load-more"
                 type="button"
-                data-post-type=<?php echo $post_name; ?>
+                data-post-type="<?php echo esc_attr(json_encode($post_type)); ?>"
                 data-page="<?php echo $page; ?>"
-                data-category="<?= esc_attr(get_query_var('news_cat')); ?>"
+                data-category="<?php echo $category; ?>"
+                data-category-slug="<?= esc_attr(get_query_var('news_cat')); ?>"
                 data-per-page="<?= esc_attr($per_page); ?>"
-                data-text-loadmore=<?php echo $btn_loadmore; ?>
-                data-text-loading=<?php echo $btn_loading; ?>
+                data-text-loadmore="<?php echo $btn_loadmore; ?>"
+                data-text-loading="<?php echo $btn_loading; ?>"
+                data-search="<?php echo esc_attr($search_term); ?>"
                 style="<?php echo $load_more_hidden; ?>"
                 class="btn <?php echo esc_attr($classes["load-more"]); ?>  <?php echo esc_attr($load_more_disabled); ?>">
                 <?php echo $btn_loadmore; ?>

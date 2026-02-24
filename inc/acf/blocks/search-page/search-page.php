@@ -33,6 +33,11 @@ $default_classes = [
 
 // $title = esc_html(get_field('title')) . ' "' . $term_name . '"';
 
+// $qqq = get_query_var('news_cat');
+// echo 'get_query_var(news_cat): ';
+// print_r($qqq);
+// echo '<br>';
+
 
 $modules_file = get_template_directory() . '/assets/css/blocks/modules.json';
 $classes = $default_classes;
@@ -72,22 +77,15 @@ $sort_date_old = esc_html(get_field('sort_date_old'));
 // echo 'per_page: ' . $per_page . '<br>'; 
 // echo 'category_slug: ' . $category_slug . '<br>';
 
-
-// -----------------------------
-// 3. Запрос WP_Query
-// -----------------------------
-// $post_type = ['news'];
-
-$post_type = ['news', 'opportunity'];
+// $post_type = my_post_type(); // функция для получения всех типов записей, участвующих в поиске
 // передать post_type в META для пагинации
-update_post_meta(get_the_ID(), 'post_type', $post_type);
+// update_post_meta(get_the_ID(), 'post_type', $post_type);
 
-$args_query = query_args_prepare([]);
 
-echo 'args_query: ' . '<br>';
-echo '<pre>';
-print_r($args_query);
-echo '</pre>';
+// echo 'args_query: ' . '<br>';
+// echo '<pre>';
+// print_r($args_query);
+// echo '</pre>';
 
 
 // $args = [
@@ -108,34 +106,8 @@ echo '</pre>';
 //     // ]
 // ];
 
-$query = new WP_Query($args_query);
-
-if ($query->have_posts()) {
-    foreach  ($query->posts as $post_item) {
-        $post_id = $post_item->ID;
-        $terms = get_the_terms($post_id, my_category());
-        
-        // echo 'post_id: ' . $post_id . '<br>';
-        // echo 'terms: ';
-        // print_r($terms);
-        // echo '<br>';
-
-        if (!empty($terms) && !is_wp_error($terms)) {
-            $term_id = $terms[0]->term_id;
-            $term_name = $terms[0] ->name;
-        } else {
-            $term_id = null;
-            $term_name = null;
-        }
-        $post_item ->term_id = $term_id;
-        $post_item ->term_name = $term_name;
-        // echo '<pre>';
-        // print_r($post_item);
-        // echo '</pre>';
-    }
-}
-
-wp_reset_postdata();
+$args_query = my_query_args_prepare([]);
+$query = my_query_search($args_query);
 
 $total_posts = (int) $query->found_posts;
 $posts = $query->posts;
@@ -165,6 +137,3 @@ $posts = $query->posts;
         </div>
     </div>
 </section>
-
-
-</body>

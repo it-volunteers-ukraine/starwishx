@@ -14,6 +14,28 @@ if (!function_exists('get_category_by_id')) {
     }
 }
 
+
+// возвращает название категории slug 
+if (!function_exists('my_category')) {
+    function my_category()
+    {
+        return 'category-oportunities';
+    }
+}
+
+if (!function_exists('my_category_by_slug')) {
+    function my_category_by_slug($slug)
+    {
+        $category = my_category();
+        $term = get_term_by('slug', $slug, $category);
+        if ($term && !is_wp_error($term)) {
+            return $term;
+        }
+        return null;
+    }
+}
+
+// возвращает массив с цветами для категории, если категория не найдена, возвращает дефолтные цвета
 if (!function_exists('my_category_color')) {
     function my_category_colors($category_id)
     {
@@ -32,29 +54,69 @@ if (!function_exists('my_category_color')) {
     }
 }
 
+// добавляет к URL пагинации параметры page_num и per_page
 if (!function_exists('pagination_url')) {
-    function pagination_url($base_url, $page, $per_page)
+    function pagination_url($base_url, $page, $per_page, $search='')
     {
-        return esc_url(add_query_arg([
+        $args = [
             'page_num' => $page,
             'per_page' => $per_page,
-        ], $base_url));
+        ];
+        if ($search) {
+            $args['search'] = $search;
+        }
+
+        return esc_url(add_query_arg($args, $base_url));
     }
 }
 
-if (!function_exists('query_search')) {
-    function query_search($args)
+// Функция для запроса постов 
+// нужно еще добавить обработку таксономии и категорий, если нужно
+if (!function_exists('my_query_search')) {
+    function my_query_search($args)
     {
-        return new WP_Query($args);
+        // print_r($args);
+        $query = new WP_Query($args);
+        if ($query->have_posts()) {
+            foreach ($query->posts as $post_item) {
+                $post_id = $post_item->ID;
+                $terms = get_the_terms($post_id, my_category());
+
+                // echo 'post_id: ' . $post_id . '<br>';
+                // echo 'terms: ';
+                // print_r($terms);
+                // echo '<br>';
+
+                if (!empty($terms) && !is_wp_error($terms)) {
+                    $term_id = $terms[0]->term_id;
+                    $term_name = $terms[0]->name;
+                } else {
+                    $term_id = null;
+                    $term_name = null;
+                }
+                $post_item->term_id = $term_id;
+                $post_item->term_name = $term_name;
+                // echo '<pre>';
+                // print_r($post_item);
+                // echo '</pre>';
+            }
+        }
+        wp_reset_postdata();
+        return $query;
     }
 }
 
+// получает значение query параметра из URL, если параметр не найден, возвращает null 
+// например, для URL /news/category-slug/?page_num=2&per_page=8
+// get_url_params('page_num') вернет 2, get_url_params('per_page') вернет 8, get_url_params('nonexistent') вернет null
 function get_url_params($name)
 {
     if (isset($_GET[$name])) {
         return sanitize_text_field($_GET[$name]);
     }
+    return null;
 }
+
 
 // arguments:
 // $post_type, $search_term, $sortby, $sort, $per_page, $page
@@ -65,9 +127,9 @@ function get_url_params($name)
 // 'order'          => $sort,
 // 'posts_per_page' => $per_page,
 // 'paged'          => $page,
-if (!function_exists('query_args_prepare')) {
+if (!function_exists('my_query_args_prepare')) {
 
-    function query_args_prepare($args)
+    function my_query_args_prepare($args)
     {
         // $list_args = ['post_type', 's', 'sortby', 'order', 'posts_per_page', 'paged'];
 
@@ -83,7 +145,7 @@ if (!function_exists('query_args_prepare')) {
         $args['no_found_rows'] = false; // нужно для pagination
 
         //post_type
-        $arg['spost_type'] = $args['post_type'] ?? my_post_type();
+        $new_args['post_type'] = $args['post_type'] ?? my_post_type();
 
         // search
         if (isset($args->s)) {
@@ -117,8 +179,8 @@ if (!function_exists('query_args_prepare')) {
         // per_page
         if (isset($args->per_page)) {
             $new_args['per_page'] = $args->per_page;
-        } elseif (isset($_GET['posts_per_page'])) {
-            $new_args['posts_per_page'] = (int) sanitize_text_field($_GET['posts_per_page']);
+        } elseif (isset($_GET['per_page'])) {
+            $new_args['posts_per_page'] = (int) sanitize_text_field($_GET['per_page']);
         } else {
             if (isset($block_params['default_per_page'])) {
                 $new_args['posts_per_page'] = (int) $block_params['default_per_page'];
@@ -134,6 +196,11 @@ if (!function_exists('query_args_prepare')) {
             $new_args['paged'] = 1;
         }
 
+        $tax_query = my_taxonomy();
+        if ($tax_query) {
+            $new_args['tax_query'] = [$tax_query];
+        }
+
         // echo '<pre>';
         // print_r($new_args);
         // echo '</pre>';
@@ -142,6 +209,7 @@ if (!function_exists('query_args_prepare')) {
     }
 }
 
+// получает из блоков страницы значения параметров для поиска, например sortby, order, default_per_page
 if (!function_exists('seach_params_from_blocks')) {
     function seach_params_from_blocks($blocks, $search_params = [])
     {
@@ -162,18 +230,48 @@ if (!function_exists('seach_params_from_blocks')) {
     }
 }
 
-if (!function_exists('my_category')) {
-    function my_category()
+
+
+
+
+// проверяет нужно ли вернуть taxonomy для WP_Query, 
+// например, для страницы news/news-by-category/kultura-ta-khobi/ нужно вернкуть tax_query 
+// [
+//     'taxonomy' => 'category-oportunities',
+//     'field'    => 'slug',    
+//     'terms'    => 'kultura-ta-khobi',
+// ]
+if (!function_exists('my_taxonomy')) {
+    function my_taxonomy()
     {
-        return 'category-oportunities';
+        $category = my_category();
+        $slug = get_query_var('news_cat');
+        if ($slug) {
+            return [
+                'taxonomy' => $category,
+                'field'    => 'slug',
+                'terms'    => $slug,
+            ];
+        }   
+        return null;
     }
 }
 
 
 if (!function_exists('my_post_type')) {
-    function my_post_type()
+    function my_post_type($url = null)
     {
-        $request_path =  trim($_SERVER['REQUEST_URI'], '/');
+        if ($url === null) {
+            $request_path = trim($_SERVER['REQUEST_URI'], '/');
+        }else {
+            $request_path = trim($url, '/');
+        }
+        $request_path = $request_path ? $request_path : $_GET('current_path', '');
+        
+        // echo 'request_path=' . esc_url($request_path) . '<br>';
+        // print_r($request_path);
+        // echo '<br>';
+
         $parent  = explode('/', $request_path)[0];
         if ($parent === 'news') {
             $res = ['news'];
@@ -184,6 +282,7 @@ if (!function_exists('my_post_type')) {
             $res = ['news', 'opportunity'];
         }
         return $res;
+        // return $request_path;
     }
 }
 

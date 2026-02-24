@@ -6,17 +6,28 @@ if (btn && container) {
         let page = parseInt(btn.dataset.page, 10) + 1;
         const perPage = btn.dataset.perPage;
         const category = btn.dataset.category;
+        const categorySlug = btn.dataset.categorySlug;
         const postType = btn.dataset.postType;
+        const searchTerm = btn.dataset.search || '';
+        const textLoadMore = btn.dataset.textLoadmore || 'Load more';
+        const textLoading = btn.dataset.textLoading || 'Loading...';
+        console.log('search: ', searchTerm);
 
         btn.disabled = true;
-        btn.textContent = 'Loading...';
+        btn.textContent = textLoading;
 
         const params = new URLSearchParams({
             action: 'load_news',
-            page: page,
+            page_num: page,
             per_page: perPage,
+            post_type: postType,
             category: category,
+            category_slug: categorySlug,
+            search: searchTerm,
+            current_url: window.location.href,        // 👈 добавили
+            current_path: window.location.pathname,   // 👈 можно только путь
         });
+        console.log('Request params__:', params.toString());
 
         fetch(THEME_AJAX.url + '?' + params.toString())
             .then(r => r.json())
@@ -32,7 +43,7 @@ if (btn && container) {
                 // Обновляем dataset страницы
                 btn.dataset.page = page;
                 btn.disabled = false;
-                btn.textContent = 'Load more';
+                btn.textContent = textLoadMore;
 
                 // Если достигли конца
                 if (resPage >= resTotalPage) {
@@ -82,6 +93,9 @@ if (btn && container) {
                 const url = new URL(window.location);
                 url.searchParams.set('page_num', page);
                 url.searchParams.set('per_page', perPage);
+                if (searchTerm) {
+                    url.searchParams.set('search', searchTerm);
+                }
                 history.replaceState({}, '', url);
             });
     });
