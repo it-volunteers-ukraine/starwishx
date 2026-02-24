@@ -108,7 +108,8 @@ class TermCountingService
             $children = $this->buildTreeWithCounts($terms, $counts, $term->term_id);
 
             // Calculate total count = term count + children counts
-            $termCount = $counts[$term->term_id] ?? 0;
+            // $termCount = $counts[$term->term_id] ?? 0;
+            $termCount = empty($children) ? ($counts[$term->term_id] ?? 0) : 0; // exclude mistakingly assigned Parent
             $childrenCount = array_reduce($children, fn($sum, $child) => $sum + $child['count'], 0);
             $totalCount = $termCount + $childrenCount;
 
