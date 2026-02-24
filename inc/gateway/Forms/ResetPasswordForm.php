@@ -64,13 +64,13 @@ class ResetPasswordForm extends AbstractForm
                             <span data-wp-bind--hidden="state.forms.<?php echo esc_attr($this->getJsId()); ?>.isPasswordVisible">
                                 <!-- < ?php esc_html_e('Show', 'starwishx'); ?> -->
                                 <svg width="23" height="23" class="btn-hide-pw__icon">
-                                    <use xlink:href="/wp-content/themes/starwishx/assets/img/sprites.svg#icon-eye-opened"></use>
+                                    <use href="/wp-content/themes/starwishx/assets/img/sprites.svg#icon-eye-opened"></use>
                                 </svg>
                             </span>
                             <span data-wp-bind--hidden="!state.forms.<?php echo esc_attr($this->getJsId()); ?>.isPasswordVisible">
                                 <!-- < ?php esc_html_e('Hide', 'starwishx'); ?> -->
                                 <svg width="23" height="23" class="btn-hide-pw__icon">
-                                    <use xlink:href="/wp-content/themes/starwishx/assets/img/sprites.svg#icon-eye-closed"></use>
+                                    <use href="/wp-content/themes/starwishx/assets/img/sprites.svg#icon-eye-closed"></use>
                                 </svg>
                             </span>
                         </button>
