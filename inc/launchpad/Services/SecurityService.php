@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Launchpad\Services;
 
+use Shared\Policy\PasswordPolicy;
 use WP_Error;
 
 class SecurityService
@@ -19,8 +20,14 @@ class SecurityService
             return new WP_Error('invalid_password', __('The current password you entered is incorrect.', 'starwishx'));
         }
 
-        if (strlen($newPassword) < 8) {
-            return new WP_Error('weak_password', __('Password must be at least 8 characters long.', 'starwishx'));
+        if (strlen($newPassword) < PasswordPolicy::MIN_LENGTH) {
+            return new WP_Error(
+                'weak_password',
+                sprintf(
+                    __('Password must be at least %d characters long.', 'starwishx'),
+                    PasswordPolicy::MIN_LENGTH
+                )
+            );
         }
 
         wp_set_password($newPassword, $userId);

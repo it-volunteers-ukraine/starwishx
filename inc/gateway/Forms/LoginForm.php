@@ -28,6 +28,7 @@ class LoginForm extends AbstractForm
             'username'     => '',
             'password'     => '',
             'rememberMe'   => false,
+            'isPasswordVisible' => false,
             'isSubmitting' => false,
             'error'        => null,
             'fieldErrors'  => [
@@ -53,7 +54,7 @@ class LoginForm extends AbstractForm
             <!-- Username/Email Field -->
             <div class="form-field">
                 <label for="gw-username">
-                    <?php _ex('Username or Email', 'gateway', 'starwishx'); ?>
+                    <?php _ex('Login name or Email', 'gateway', 'starwishx'); ?>
                 </label>
                 <input
                     type="text"
@@ -61,6 +62,7 @@ class LoginForm extends AbstractForm
                     name="username"
                     autocomplete="username"
                     required
+                    placeholder="<?php _ex('Latin letters, digits, . - _ @', 'gateway', 'starwishx'); ?>"
                     data-wp-bind--value="state.forms.<?php echo esc_attr($this->getJsId()); ?>.username"
                     data-wp-on--input="actions.<?php echo esc_attr($this->getJsId()); ?>.updateField"
                     data-field="username">
@@ -76,15 +78,34 @@ class LoginForm extends AbstractForm
                 <label for="gw-password">
                     <?php esc_html_e('Password', 'starwishx'); ?>
                 </label>
-                <input
-                    type="password"
-                    id="gw-password"
-                    name="password"
-                    autocomplete="current-password"
-                    required
-                    data-wp-bind--value="state.forms.<?php echo esc_attr($this->getJsId()); ?>.password"
-                    data-wp-on--input="actions.<?php echo esc_attr($this->getJsId()); ?>.updateField"
-                    data-field="password">
+                <div class="gateway-password-group">
+                    <input
+                        type="password"
+                        id="gw-password"
+                        name="password"
+                        autocomplete="current-password"
+                        required
+                        data-wp-bind--type="state.loginPasswordInputType"
+                        data-wp-bind--value="state.forms.<?php echo esc_attr($this->getJsId()); ?>.password"
+                        data-wp-on--input="actions.<?php echo esc_attr($this->getJsId()); ?>.updateField"
+                        data-field="password">
+
+                    <button type="button" class="btn-hide-pw"
+                        data-wp-on--click="actions.<?php echo esc_attr($this->getJsId()); ?>.toggleVisibility">
+                        <span data-wp-bind--hidden="state.forms.<?php echo esc_attr($this->getJsId()); ?>.isPasswordVisible">
+                            <!-- < ?php esc_html_e('Show', 'starwishx'); ?> -->
+                            <svg width="23" height="23" class="btn-hide-pw__icon">
+                                <use href="/wp-content/themes/starwishx/assets/img/sprites.svg#icon-eye-opened"></use>
+                            </svg>
+                        </span>
+                        <span data-wp-bind--hidden="!state.forms.<?php echo esc_attr($this->getJsId()); ?>.isPasswordVisible">
+                            <!-- < ?php esc_html_e('Hide', 'starwishx'); ?> -->
+                            <svg width="23" height="23" class="btn-hide-pw__icon">
+                                <use href="/wp-content/themes/starwishx/assets/img/sprites.svg#icon-eye-closed"></use>
+                            </svg>
+                        </span>
+                    </button>
+                </div>
                 <span
                     class="field-error"
                     data-wp-bind--hidden="!state.forms.<?php echo esc_attr($this->getJsId()); ?>.fieldErrors.password"
@@ -124,7 +145,7 @@ class LoginForm extends AbstractForm
             <!-- Links -->
             <div class="gateway-links">
                 <!-- Remember Me -->
-                <label class="form-field form-field--checkbox">
+                <label class="form-field form-field--checkbox gateway-checkbox">
                     <input
                         type="checkbox"
                         name="remember"

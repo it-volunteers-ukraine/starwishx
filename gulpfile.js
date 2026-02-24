@@ -68,7 +68,7 @@ export const templatesStyles = () => {
       stylelint({
         fix: true,
         reporters: [{ formatter: "string", console: true }],
-      })
+      }),
     )
     .pipe(gulpif(!PRODUCTION, sourcemaps.init()))
     .pipe(SASS().on("error", SASS.logError))
@@ -78,7 +78,6 @@ export const templatesStyles = () => {
     .pipe(dest("assets/css/template-parts"))
     .pipe(browserSync.stream());
 };
-
 
 export const blockStyles = () => {
   return src(["inc/acf/blocks/**/*.module.scss"])
@@ -262,11 +261,13 @@ export const scripts = () => {
 };
 
 export const vendorScripts = () => {
-  return src(["src/js/vendor/*.js"], { allowEmpty: true })
-    // .pipe(named())
-    // .pipe(webpack(webpackConfig(PRODUCTION)))
-    .pipe(dest("assets/js/vendor"))
-    .pipe(browserSync.stream());
+  return (
+    src(["src/js/vendor/*.js"], { allowEmpty: true })
+      // .pipe(named())
+      // .pipe(webpack(webpackConfig(PRODUCTION)))
+      .pipe(dest("assets/js/vendor"))
+      .pipe(browserSync.stream())
+  );
 };
 
 export const blockScripts = () => {
@@ -284,6 +285,8 @@ export const moduleScripts = () => {
       "inc/launchpad/Assets/*.mjs",
       "inc/gateway/Assets/*.js",
       "inc/gateway/Assets/*.mjs",
+      "inc/listing/Assets/*.js",
+      "inc/listing/Assets/*.mjs",
     ],
     {
       allowEmpty: true,
@@ -359,6 +362,7 @@ export const watchForChanges = () => {
   watch("inc/acf/blocks/**/*.js", blockScripts);
   watch("inc/launchpad/Assets/**/*.{js,mjs}", moduleScripts);
   watch("inc/gateway/Assets/**/*.{js,mjs}", moduleScripts);
+  watch("inc/listing/Assets/**/*.{js,mjs}", moduleScripts);
   watch("inc/acf/blocks/**/*.module.scss", blockStyles);
   watch("**/*.php", reload);
 };

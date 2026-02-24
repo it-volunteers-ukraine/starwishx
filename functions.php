@@ -299,6 +299,10 @@ require_once get_template_directory() . '/inc/gateway/setup.php';
 
 // init for Launchpad - user's dashboard
 require_once get_template_directory() . '/inc/launchpad/setup.php';
+
+// init for Listing - search & filter opportunities
+require_once get_template_directory() . '/inc/listing/setup.php';
+
 require_once get_template_directory() . '/inc/news-taxonomy-metabox.php';
 
 
@@ -324,3 +328,51 @@ require get_template_directory() . '/inc/ajax.php';
 require_once get_template_directory() . '/inc/helpers.php';
 
 require_once get_template_directory() . '/inc/theme-helpers.php';
+
+/**
+ * Disable default WordPress search query on SPA-style pages
+ * to prevent interference with client-side search using `?s=`.
+ *
+ * @param array $vars The array of parsed query variables.
+ * @return array The modified array of query variables.
+ */
+function sw_clear_search_flags_on_spa($vars)
+{
+  $target_slugs = ['listing', 'launchpad', 'gateway'];
+
+  if (!isset($vars['s'])) {
+    return $vars;
+  }
+
+  $request_uri = $_SERVER['REQUEST_URI'] ?? '';
+  $path = parse_url($request_uri, PHP_URL_PATH);
+
+  // Remove the script path (handling subdirectory installs)
+  // e.g., if WP is in /sub/, request is /sub/listing, we want just /listing
+  $script_name = $_SERVER['SCRIPT_NAME'] ?? '';
+  $install_dir = dirname($script_name);
+
+  if ($install_dir !== '/' && strpos($path, $install_dir) === 0) {
+    $path = substr($path, strlen($install_dir));
+  }
+
+  $path = trim($path, '/');
+  $segments = explode('/', $path);
+
+  // Check the FIRST segment (handles /listing, /listing/page/2, /listing/child)
+  // If your target pages are strictly top-level, use $segments[0].
+  $first_segment = $segments[0] ?? '';
+
+  if (in_array($first_segment, $target_slugs, true)) {
+    unset($vars['s']);
+
+    // Optional: Ensure we aren't stuck in a "search" mode 
+    // by explicitly setting the pagename if WP dropped it in favor of search.
+    if (!isset($vars['pagename'])) {
+      $vars['pagename'] = $first_segment;
+    }
+  }
+
+  return $vars;
+}
+add_filter('request', 'sw_clear_search_flags_on_spa', 10, 1);

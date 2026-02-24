@@ -116,6 +116,7 @@ get_header();
                     /** @var \Launchpad\Contracts\PanelInterface $panel */
                     $stateKey = $panel->getStateKey();
                 ?>
+
                     <button
                         class="launchpad-tab"
                         role="tab"
@@ -123,12 +124,14 @@ get_header();
                         data-panel-id="<?php echo esc_attr($id); ?>"
                         data-wp-on--click="actions.switchPanel"
                         data-wp-class--active="state.<?php echo $stateKey; ?>">
-
+                        <span class="launchpad-tab__icon">
+                            <svg width="16" height="16">
+                                <use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/img/sprites.svg#<?php echo esc_attr($panel->getIcon()); ?>"></use>
+                            </svg>
+                        </span>
                         <span class="tab-text"><?php echo esc_html($panel->getLabel()); ?></span>
                     </button>
                 <?php endforeach; ?>
-                <!-- <span class="dashicons dashicons - < ? php echo esc_attr($panel->getIcon()); ? >">< /span> -->
-
             </nav>
 
             <!-- <div class="launchpad-sidebar-footer"> -->

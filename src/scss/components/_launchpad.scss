@@ -16,9 +16,9 @@
     display: grid;
     grid-template-columns: 280px 1fr;
     gap: 0.5rem;
-
+    overflow: hidden;
     @include max-laptop {
-        grid-template-columns: 180px 1fr;
+        grid-template-columns: 220px 1fr;
     }
 
     // @include max-tablet {
@@ -47,6 +47,7 @@
         border-right: none;
         border-bottom: 1px solid $input-color-border-default;
         padding: 1rem 0;
+        overflow: hidden;
     }
 }
 
@@ -55,14 +56,14 @@
     flex-flow: column wrap;
     gap: 0.5rem;
     padding: 0 1rem;
+    overflow-x: auto;
 
     // @include max-tablet {
     @media only screen and (max-width: ($width-tablet + 290px - 0.02px)) {
         flex-direction: row;
         flex-wrap: nowrap;
-        gap: 1rem;
-        padding: 0 1rem;
-        overflow-x: auto;
+        gap: 4px;
+        padding: 0;
         // -webkit-overflow-scrolling: touch;
 
         // Hide scrollbar for cleaner mobile look
@@ -70,76 +71,93 @@
             display: none;
         }
     }
-}
 
-.launchpad-tab {
-    display: flex;
-    position: relative;
-    align-items: center;
+    .launchpad-tab {
+        display: flex;
+        position: relative;
+        align-items: center;
 
-    transition: all $animations;
-    cursor: pointer;
-    border: none;
-    border-radius: 12px;
+        transition: all $animations;
+        cursor: pointer;
+        border: none;
+        border-radius: 12px;
 
-    background: transparent;
-    padding: 1rem 1.5rem;
-    width: 100%;
+        background: transparent;
+        padding: 1rem 1.5rem;
+        width: 100%;
 
-    color: $text-basic;
-    font-weight: 400;
-    font-size: 1rem;
-    text-align: left;
-    white-space: nowrap;
+        color: $buttons-color-text-secondary-default;
+        font-weight: 400;
+        font-size: 1rem;
+        text-align: left;
+        white-space: nowrap;
 
-    // Interaction States
-    &:hover {
-        background: $buttons-color-background-secondary-hover;
-        color: $icon-color-primary;
-    }
-
-    &:focus-visible {
-        outline: 2px solid $primary-hover;
-        outline-offset: -2px;
-    }
-
-    // Active State
-    &.active {
-        background: $element-block-fill;
-        color: $element-block-text;
-        font-weight: 500;
-
-        // Active indicator strip
-        &::before {
-            position: absolute;
-            top: 50%;
-            left: 0;
-            transform: translateY(-50%);
-            border-radius: 2px;
-            background: $icon-color-fill;
-
-            width: 4px;
-            height: 60%;
-            content: "";
-
-            @include max-tablet {
-                display: none;
-            }
+        @include max-tablet {
+            flex-shrink: 0;
+            padding: 0.75rem 1rem;
+            width: auto;
         }
-    }
 
-    // Mobile adjustments
-    @include max-tablet {
-        flex-shrink: 0;
-        padding: 0.75rem 1rem;
-        width: auto;
-    }
+        .launchpad-tab__icon {
+            transition: all $animations;
+            margin-right: 0.5rem;
+            width: 18px;
+            height: 18px;
+            color: $icon-color-default-stroke;
+            font-size: 18px;
+            min-width: 18px;
+        }
 
-    // High Contrast Mode
-    @media (prefers-contrast: high) {
-        border: 2px solid transparent;
+        // Interaction States
+        &:hover {
+            background: $buttons-color-background-secondary-hover;
+            color: $icon-color-primary;
+        }
+
+        &:focus-visible {
+            outline: 2px solid $primary-hover;
+            outline-offset: -2px;
+        }
+
+        // Active State
         &.active {
-            border-color: $icon-color-fill;
+            background: $element-block-fill;
+            color: $element-block-text;
+            font-weight: 500;
+            .launchpad-tab__icon {
+                color: $icon-color-accent;
+                svg {
+                    fill: $icon-color-accent;
+                }
+            }
+
+            // @include max-tablet {
+
+            // Active indicator strip
+            // &::before {
+            //     position: absolute;
+            //     top: 50%;
+            //     left: 0;
+            //     transform: translateY(-50%);
+            //     border-radius: 2px;
+            //     background: $icon-color-fill;
+
+            //     width: 4px;
+            //     height: 60%;
+            //     content: "";
+
+            //     @include max-tablet {
+            //         display: none;
+            //     }
+            // }
+        }
+
+        // High Contrast Mode
+        @media (prefers-contrast: high) {
+            border: 2px solid transparent;
+            &.active {
+                border-color: $icon-color-fill;
+            }
         }
     }
 }
@@ -186,6 +204,13 @@
     }
 }
 
+.launchpad-grid__container {
+    .opportunities-pagination {
+        margin-top: 12px;
+        text-align: right;
+    }
+}
+
 // Panel Content & Typography
 .panel-content {
     border-radius: 16px;
@@ -211,7 +236,7 @@
     flex-wrap: wrap;
     justify-content: space-between;
     align-items: flex-start;
-    gap: 1rem;
+    // gap: 20px;
     margin-bottom: 1.5rem;
 
     // Title Group
@@ -246,9 +271,11 @@
     // Control Bar (Filters & Toggles)
     .launchpad-controls {
         display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
         align-items: center;
-        gap: 2rem;
-        margin-top: 1rem;
+        gap: 12px;
+        margin-top: 20px;
         width: 100%;
 
         @include min-laptop {
@@ -260,28 +287,74 @@
             gap: 1rem;
         }
         .launchpad-filters {
-            position: relative;
             border-radius: 8px;
-            background: $surface-violet;
+            // background: $surface-violet;
             padding: 10px 9px;
             .filter-label {
-                position: absolute;
-                top: -7px;
-                left: 12px;
-                opacity: 0.75;
                 color: $text-light;
-                font-size: 0.8rem;
+                font-weight: 600;
+                font-size: 18px;
             }
             .filter-checkboxes {
                 display: flex;
                 // margin-left: 4px;
                 align-items: center;
                 gap: 1rem;
+                margin-top: 4px;
                 color: $text-light;
                 font-size: 0.85rem;
 
                 .filter-checkbox {
                     align-items: flex-end;
+                }
+            }
+        }
+        .layout-switcher {
+            @include max-tablet {
+                display: none;
+                order: -1;
+                margin-left: auto;
+            }
+            .btn-group-toggle {
+                display: inline-flex;
+                border-radius: 8px;
+                background: $surface-violet;
+                padding: 4px;
+
+                .layout-check {
+                    position: absolute;
+                    margin: -1px;
+                    padding: 0;
+                    width: 1px;
+                    height: 1px;
+                    overflow: hidden;
+                    clip: rect(0, 0, 0, 0);
+                    border: 0;
+                    white-space: nowrap;
+
+                    // Checked State
+                    &:checked + .layout-btn {
+                        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+                        background: $surface-primary;
+                        color: $icon-color-accent;
+                    }
+                }
+
+                .layout-btn {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    transition: all 0.2s ease;
+                    cursor: pointer;
+                    border-radius: 6px;
+                    padding: 6px 12px;
+                    color: $text-light;
+                    .btn-chip__icon {
+                        color: $buttons-color-background-primary-default;
+                    }
+                    &:hover {
+                        color: $text-dark;
+                    }
                 }
             }
         }
@@ -294,185 +367,183 @@
     }
 }
 
-// Layout Switcher (Icons)
-.btn-group-toggle {
-    display: inline-flex;
-    border-radius: 8px;
-    background: $surface-violet;
-    padding: 4px;
-
-    .layout-check {
-        position: absolute;
-        margin: -1px;
-        padding: 0;
-        width: 1px;
-        height: 1px;
-        overflow: hidden;
-        clip: rect(0, 0, 0, 0);
-        border: 0;
-        white-space: nowrap;
-
-        // Checked State
-        &:checked + .layout-btn {
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            background: $surface-primary;
-            color: $icon-color-accent;
-        }
-    }
-
-    .layout-btn {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        transition: all 0.2s ease;
-        cursor: pointer;
-        border-radius: 6px;
-        padding: 6px 12px;
-        color: $text-light;
-
-        &:hover {
-            color: $text-dark;
-        }
-    }
-}
-
 /* ======================================
    5. COMPONENT: OPPORTUNITY CARD
    ====================================== */
 
 .opportunity-card {
-    display: grid;
-
-    // Default: Card Layout (Horizontal)
-    grid-template-columns: 180px 1fr;
-    gap: 1.5rem;
-    transition: all $animations;
-    border-bottom: 2px dashed $dropdown-surface-color-pressed;
+    container: opportunityCard / inline-size;
+    // display: grid;
+    // grid-template-columns: 1fr 180px;
+    // grid-template-columns: 80px 1fr auto;
+    // grid-template-columns: auto 1fr;
+    border: 1px solid $stroke-default;
     border-radius: $radius-input;
     background: $surface-primary;
-    padding: 1.5rem;
-
-    @include max-tablet {
-        grid-template-columns: 1fr;
-        gap: 1rem;
-        padding: 1rem;
-    }
-
-    &__figure {
+    .opportunity-card--inner {
         display: flex;
-        position: relative;
-        justify-content: center;
-        align-items: center;
-        border-radius: 8px;
-        background: $surface-violet;
-        aspect-ratio: 4 / 3;
-        width: 100%;
-        overflow: hidden;
-    }
-
-    &__image {
+        flex-wrap: wrap;
+        justify-content: space-between;
+        gap: 20px;
+        transition: all $animations;
+        padding: 12px;
         width: 100%;
         height: 100%;
-        object-fit: cover;
-    }
-
-    &__placeholder {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        color: $text-light;
-
-        .dashicons {
-            opacity: 0.3;
-            width: 48px;
-            height: 48px;
-            font-size: 48px;
+        min-height: 120px;
+        @container opportunityCard (min-width: 759.01px) {
+            flex-wrap: nowrap;
+            // display: grid;
+            // grid-template-columns: 1fr auto;
+            // background-color: $surface-violet;
         }
-    }
+        .opportunity-card__content-wrapper {
+            display: grid;
+            grid-template-columns: 80px auto;
+            gap: 10px;
 
-    .opportunity-content {
-        display: flex;
-        flex-direction: column;
-        min-width: 0; // Prevent flex item overflow
-    }
+            // @include max-tablet {
+            // grid-template-columns: 1fr;
+            // gap: 1rem;
+            // padding: 1rem;
+            // }
 
-    .opportunity-title {
-        margin-bottom: 0.5rem;
-        color: $text-dark;
-        font-weight: 600;
-        font-size: 1.25rem;
+            .opportunity-card__figure {
+                display: flex;
+                position: relative;
+                justify-content: center;
+                align-items: center;
+                border-radius: 8px;
+                background: $surface-violet;
+                aspect-ratio: 4 / 3;
+                width: 100%;
+                overflow: hidden;
 
-        &:hover {
-            color: $primary-hover;
+                .opportunity-card__figure--link {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    width: 100%;
+                    height: 100%;
+                    color: $text-light;
+
+                    .opportunity-card__image {
+                        width: 100%;
+                        height: 100%;
+                        object-fit: cover;
+                    }
+                    .opportunity-card__placeholder {
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        .card-image__fallback--icon {
+                            width: 32px;
+                            height: 32px;
+                        }
+                        .dashicons {
+                            opacity: 0.3;
+                            width: 48px;
+                            height: 48px;
+                            font-size: 48px;
+                        }
+                    }
+                }
+            }
+
+            .opportunity-content {
+                @container opportunityCard (max-width: 559px) {
+                    grid-row: 1;
+                    grid-column: 2;
+                }
+                display: flex;
+                flex-direction: column;
+                min-width: 0;
+                .opportunity-meta {
+                    display: flex;
+                    flex-flow: column wrap;
+                    gap: 12px;
+                    margin-bottom: 0.75rem;
+                    color: $text-light;
+                    font-size: 0.85rem;
+                    // .opportunity-meta__container-date {
+                    // }
+                    .opportunity-comments {
+                        display: inline-flex;
+                        align-items: center;
+                        gap: 4px;
+
+                        .dashicons {
+                            width: 16px;
+                            height: 16px;
+                            color: $icon-color-accent;
+                            font-size: 16px;
+                        }
+
+                        .comments-number {
+                            font-weight: 600;
+                        }
+                    }
+                }
+            }
         }
-    }
-
-    .opportunity-excerpt {
-        // Truncate text
-        display: -webkit-box;
-        margin-bottom: 1rem;
-        line-clamp: 3;
-        color: $text-light;
-        font-size: 0.95rem;
-        line-height: 1.5;
-        -webkit-line-clamp: 3;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
-    }
-
-    .opportunity-actions {
-        display: flex;
-        grid-column: 1 / -1; // Span full width if needed
-        flex-wrap: wrap;
-        gap: 12px;
-        margin-top: auto; // Push to bottom
-
-        @include max-tablet {
-            gap: 6px;
-            margin-top: 1rem;
-        }
-    }
-    .opportunity-taxonomy {
-        display: inline-block;
-        margin-bottom: 8px;
-        color: $text-accent;
-        font-weight: 700;
-        font-size: 11px;
-        // text-transform: uppercase;
-        letter-spacing: 0.05em;
-
-        &::before {
-            margin-right: 5px;
-            content: "•";
-            color: $icon-color-fill; // Gold #fac625
-        }
-    }
-}
-
-// Meta Data (Date, Status, Comments)
-.opportunity-meta {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 0.75rem;
-    color: $text-light;
-    font-size: 0.85rem;
-
-    .opportunity-comments {
-        display: inline-flex;
-        align-items: center;
-        gap: 4px;
-
-        .dashicons {
-            width: 16px;
-            height: 16px;
-            color: $icon-color-accent;
-            font-size: 16px;
-        }
-
-        .comments-number {
+        .opportunity-title {
+            margin-bottom: 0.5rem;
+            color: $text-dark;
             font-weight: 600;
+            font-size: 1.25rem;
+
+            &:hover {
+                color: $primary-hover;
+            }
+        }
+
+        .opportunity-excerpt {
+            // Truncate text
+            // display: -webkit-box;
+            // margin-bottom: 1rem;
+            // line-clamp: 3;
+            // color: $text-light;
+            // font-size: 0.95rem;
+            // line-height: 1.5;
+            // -webkit-line-clamp: 3;
+            // -webkit-box-orient: vertical;
+            // overflow: hidden;
+            display: none;
+        }
+
+        .opportunity-actions {
+            display: flex;
+            flex: 1 0 180px;
+            flex-flow: column wrap;
+            justify-content: space-between;
+            align-items: flex-end;
+
+            gap: 25px;
+            @container (max-width: 723px) {
+                align-items: center;
+                // grid-column-end: -1;
+                grid-column: 1 / -1;
+                // @include max-laptop {
+                // gap: 6px;
+                // margin-top: 140px;
+                flex-flow: row nowrap;
+                width: 100%;
+                margin-top: auto;
+            }
+        }
+        .opportunity-taxonomy {
+            display: inline-block;
+            margin-bottom: 8px;
+            color: $text-accent;
+            font-weight: 700;
+            font-size: 11px;
+            // text-transform: uppercase;
+            letter-spacing: 0.05em;
+
+            &::before {
+                margin-right: 5px;
+                content: "•";
+                color: $icon-color-fill; // Gold #fac625
+            }
         }
     }
 }
@@ -482,40 +553,43 @@
    ====================================== */
 
 .status-badge {
-    border-radius: 4px;
-
-    // Define colors using CSS variables locally or map to SCSS vars
-    // Default fallback
-    background-color: $input-color-border-default;
-    padding: 4px 8px;
+    border: 1px solid;
+    border-radius: $radius-element;
+    // background-color: $input-color-border-default;
+    padding: 6px 10px;
     color: $text-light;
-    font-weight: 500;
-    font-size: 12px;
+    font-size: 14px;
     line-height: 1;
     text-transform: capitalize;
 
     &[data-status="draft"] {
-        background-color: #f2f2f2; // Consider adding to variables: $surface-neutral
+        background-color: $dropdown-surface-color-selected;
         color: $text-light;
     }
 
     &[data-status="pending"] {
-        border: 1px solid rgba($element-card-social-text, 0.2);
+        border: 1px solid rgba($element-card-social-stroke, 0.2);
         background-color: $element-card-social-fill;
         color: $element-card-social-text;
     }
 
     &[data-status="publish"] {
-        background-color: $element-card-tech-stroke;
+        border-color: $element-card-tech-stroke;
+        background-color: $element-card-tech-fill;
         color: $element-card-tech-text;
     }
 }
 
-// Conditional Button Display based on Status
 .btn-opportunity__review {
     &[data-status="pending"],
     &[data-status="publish"] {
         display: none;
+    }
+}
+.btn-opportunity__edit {
+    &[data-status="pending"] {
+        margin-top: auto;
+        margin-left: auto;
     }
 }
 
@@ -525,28 +599,33 @@
 
 .opportunities-grid {
     display: grid;
-    gap: 1.5rem;
+    gap: 12px;
     transition: all 0.3s ease-in-out;
-
+    .opportunity-info {
+        display: none;
+    }
     // Compact Layout (List View)
     &[data-layout="compact"] {
-        grid-template-columns: 1fr;
+        // grid-template-columns: 1fr;
 
         .opportunity-card {
-            grid-template-columns: 80px 1fr auto; // Icon | Content | Actions
+            // grid-template-columns: 80px 1fr auto; // Icon | Content | Actions
             align-items: center;
             gap: 1rem;
-            padding: 0.75rem 1rem;
-
+            // padding: 12px;
+            // @include max-tablet {
+            //     .opportunity-actions {
+            //         width: 100%;
+            //     }
+            // }
             &__figure {
                 aspect-ratio: 1;
                 width: 80px;
             }
             .opportunity-content {
-                display: grid;
+                // display: grid;
                 grid-template-rows: auto;
-                // grid-template-columns: repeat(3, 1fr);
-                grid-template-columns: minmax(150px, 300px) minmax(60px, 80px) auto;
+                // grid-template-columns: minmax(150px, 300px) minmax(60px, 80px) auto;
                 column-gap: 1rem;
                 row-gap: 4px;
 
@@ -568,20 +647,21 @@
                     }
                 }
                 .opportunity-info {
-                    grid-row: span 3 / span 3;
-                    grid-row-start: 1;
-                    grid-column-start: 2;
-                    .opportunity-range {
-                        display: inline-flex;
-                        flex-flow: column wrap;
-                        gap: 4px;
-                        span {
-                            line-height: 1;
-                        }
-                        &__icon {
-                            display: none;
-                        }
-                    }
+                    display: none;
+                    // grid-row: span 3 / span 3;
+                    // grid-row-start: 1;
+                    // grid-column-start: 2;
+                    // .opportunity-range {
+                    //     display: inline-flex;
+                    //     flex-flow: column wrap;
+                    //     gap: 4px;
+                    //     span {
+                    //         line-height: 1;
+                    //     }
+                    //     &__icon {
+                    //         display: none;
+                    //     }
+                    // }
                 }
 
                 .opportunity-taxonomy {
@@ -598,63 +678,61 @@
 
             .opportunity-actions {
                 grid-column: auto;
-                margin-top: 0;
-            }
-
-            @include max-tablet {
-                grid-template-columns: 1fr;
-                .opportunity-actions {
-                    width: 100%;
-                }
+                // margin-top: 0;
             }
         }
     }
 
-    // Card Layout (Default)
-    &[data-layout="card"] {
-        // grid-template-columns: 1fr;
-        // Styles inherited from default .opportunity-card
-        .opportunity-card {
-            grid-template-rows: auto;
-            // grid-template-columns: 1fr;
-            // display: flex;
-            // grid-template-columns: repeat(2, 1fr);
-            grid-template-columns: 1fr minmax(100px, 250px);
-            .opportunity-content {
-                order: 1;
-                .opportunity-excerpt {
-                    max-width: 570px;
-                }
-            }
-            .opportunity-actions {
-                grid-row-start: 2;
-                grid-column-start: 1;
-                order: 2;
-            }
-            .opportunity-card__figure {
-                grid-row: span 2 / span 2;
-                grid-row-start: 1;
-                grid-column-start: 2;
-                order: 3;
-            }
+    &[data-layout="grid"] {
+        @include min-tabland {
+            grid-template-columns: repeat(3, 1fr);
         }
+        @include max-tabland {
+            grid-template-columns: repeat(2, 1fr);
+        }
+        @include max-tablet {
+            grid-template-columns: auto;
+        }
+        // .opportunity-card {
+        //     grid-template-rows: auto;
+        //     grid-template-columns: 1fr minmax(100px, 250px);
+        //     .opportunity-content {
+        //         order: 1;
+        //         .opportunity-excerpt {
+        //             max-width: 570px;
+        //         }
+        //     }
+        //     .opportunity-actions {
+        //         grid-row-start: 2;
+        //         grid-column-start: 1;
+        //         order: 2;
+        //     }
+        //     .opportunity-card__figure {
+        //         grid-row: span 2 / span 2;
+        //         grid-row-start: 1;
+        //         grid-column-start: 2;
+        //         order: 3;
+        //     }
+        // }
     }
 
     // Grid Layout (Columns)
-    &[data-layout="grid"] {
-        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-
-        .opportunity-card {
-            grid-template-columns: 1fr; // Stack vertically
-
-            &__figure {
-                aspect-ratio: 16 / 9;
-            }
-
-            .opportunity-actions {
-                margin-top: 1rem;
-            }
+    &[data-layout="card"] {
+        @include min-tabland {
+            grid-template-columns: repeat(2, 1fr);
         }
+        // grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        // .opportunity-card {
+        //     grid-template-columns: 1fr;
+
+        //     &__figure {
+        //         aspect-ratio: 16 / 9;
+        //     }
+
+        //     .opportunity-actions {
+        //         margin-top: 1rem;
+        //     }
+        // }
     }
 }
 
@@ -714,6 +792,9 @@
         div {
             margin-top: 4px;
         }
+        .profile-role {
+            margin-bottom: 8px;
+        }
     }
 
     &__controls {
@@ -736,6 +817,7 @@
 .profile-form,
 .security-form,
 .password-form {
+    padding-left: 2px;
     // Shared Inputs
     input[type="text"],
     input[type="email"],
@@ -848,6 +930,14 @@
             padding: 24px;
         }
     }
+    .form-actions {
+        flex-wrap: wrap;
+        button:last-child {
+            margin-left: auto;
+        }
+        @include max-tablet {
+        }
+    }
 }
 .password-form,
 .profile-form {
@@ -856,11 +946,13 @@
 
 .launchpad-grid-3-col {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: 1fr;
     gap: 1rem;
-
-    @include max-laptop {
-        grid-template-columns: 1fr;
+    @include min-tablet {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    @include min-laptop {
+        grid-template-columns: repeat(3, 1fr);
     }
 }
 
@@ -892,9 +984,8 @@
     gap: 1rem;
 }
 
-// Placeholder Box style (used in forms and lists)
 .placeholder-box {
-    margin: 2rem 0;
+    margin: 20px 0 0 0;
 
     @include max-tablet {
         margin: 1.5rem 0;
@@ -1021,7 +1112,7 @@
 /* ======================================
    CUSTOM CHECKBOX STYLES
    ====================================== */
-
+.gateway-checkbox,
 .filter-checkbox,
 .launchpad-form__checkbox {
     display: inline-flex;
@@ -1226,6 +1317,10 @@
         justify-content: center;
         align-items: center;
         color: $text-light;
+        .card-image__fallback--icon {
+            width: 32px;
+            height: 32px;
+        }
         .dashicons {
             opacity: 0.3;
             width: 32px;
@@ -1344,4 +1439,233 @@
     display: flex;
     justify-content: center;
     margin-top: 2rem;
+}
+
+.locations-selected-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.locations-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin-bottom: 12px;
+    border: 1px dashed $primary-hover;
+    border-radius: $radius-input;
+    padding: 10px;
+    min-height: 40px;
+}
+.btn-chip {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    transition: $animations;
+    cursor: pointer;
+    border: 1px solid $buttons-color-border-secondary-default;
+    border-radius: $radius-xl;
+    background-color: $buttons-color-background-secondary-default;
+    // padding: 12.5px 20px;
+    padding: 6px 14px;
+    width: fit-content;
+    color: $text-dark;
+    // font-weight: 500;
+    font-size: 14px;
+    // font-size: 0.9rem;
+
+    &:hover {
+        background-color: $buttons-color-background-secondary-hover;
+        color: $text-accent;
+    }
+
+    &:active,
+    &:active:hover {
+        background-color: $buttons-color-background-secondary-selected;
+    }
+
+    @include min-desktop {
+        font-size: 1rem;
+    }
+    .btn-chip__icon {
+        margin-left: 6px;
+        border: none;
+        font-size: 14px;
+        svg {
+            transform: rotate(45deg);
+            width: 14px;
+            height: 14px;
+            color: $icon-color-primary;
+        }
+    }
+}
+.location-chip {
+    // display: inline-flex;
+    // align-items: center;
+    // background: $surface-violet; // Use your variables
+    // border: 1px solid $input-color-border-filled;
+    // border-radius: 16px;
+    // padding: 4px 12px;
+    // font-size: 0.9rem;
+
+    .location-remove-btn {
+        cursor: pointer;
+        margin-left: 6px;
+        border: none;
+        background: transparent;
+        color: $text-light;
+        font-weight: bold;
+        &:hover {
+            color: $icon-color-error;
+        }
+    }
+}
+
+.document-btn {
+    svg {
+        width: 24px;
+        height: 24px;
+        color: $icon-color-accent;
+    }
+    .document-btn__icon {
+        color: $icon-color-accent;
+
+        fill: $icon-color-accent;
+    }
+}
+
+.btn-chip--document {
+    gap: 8px;
+    .btn-chip--document__content {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        overflow: hidden;
+    }
+}
+
+.documents-chips {
+    .btn-chip {
+        border: 1px dashed $input-color-border-default;
+        border-radius: 12px;
+        padding: 14px 25px;
+    }
+}
+
+.location-search-wrapper {
+    position: relative;
+    padding-right: 12px;
+    .location-dropdown {
+        position: absolute;
+        top: 100%;
+        right: 0;
+        left: 0;
+        z-index: 100;
+        margin: 4px 0 0;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        border: 1px solid $input-color-border-default;
+        border-radius: $radius-input;
+        background: $surface-primary;
+        padding: 8px;
+        padding-right: 12px;
+        max-height: 200px;
+        overflow-y: auto;
+        list-style: none;
+
+        &::-webkit-scrollbar {
+            display: block;
+            width: 6px;
+        }
+        &::-webkit-scrollbar-track {
+            background: $surface-violet;
+            // margin-bottom: 60px;
+        }
+
+        &::-webkit-scrollbar-thumb {
+            border-right: none;
+            border-left: none;
+            border-radius: 4px;
+            background-color: $buttons-color-background-primary-disabled;
+        }
+
+        .location-result-item {
+            display: flex;
+            justify-content: space-between;
+            transition: $animations;
+            cursor: pointer;
+            // border: 1px solid $input-color-border-default;
+            border-radius: $radius-input;
+            background-color: $surface-primary;
+            padding: 4px 10px;
+            &:hover {
+                background: $dropdown-surface-color-selected;
+            }
+            &:active,
+            &:active:hover {
+                background-color: $dropdown-surface-color-pressed;
+            }
+            .loc-meta {
+                opacity: 0.6;
+                font-size: 0.75em;
+            }
+        }
+    }
+}
+.input-iconed {
+    display: inline-block; /* or width:100% if you want full width */
+    position: relative;
+    width: 100%;
+    input[type="text"] {
+        padding-left: 36px;
+    }
+    svg {
+        position: absolute;
+        top: 50%;
+        left: 12px; /* distance from input left edge */
+        transform: translateY(-50%);
+        fill: currentColor; /* inherit text color — set color on wrapper/input if needed */
+        width: 16px;
+        height: 16px;
+        pointer-events: none; /* let clicks go to the input */
+        color: #666;
+    }
+}
+.input-date-iconed {
+    position: relative;
+    color: $icon-color-accent;
+    input[type="date"] {
+        padding-right: 44px;
+        -webkit-appearance: none;
+        appearance: none;
+        &::-webkit-calendar-picker-indicator,
+        &::-webkit-clear-button,
+        &::-webkit-inner-spin-button {
+            display: none;
+        }
+    }
+    .input-date-iconed__btn {
+        display: inline-flex;
+        position: absolute;
+        top: 50%;
+        right: 8px; /* distance from right edge */
+        justify-content: center;
+        align-items: center;
+        transform: translateY(-50%);
+        cursor: pointer;
+        border: none;
+        background: transparent;
+        padding: 0;
+        width: 28px;
+        height: 28px;
+    }
+}
+
+// .location-input-wrapper {
+//     .location-results {
+//     }
+// }
+
+.opportunity-card__title {
+    color: $text-basic;
 }

@@ -18,27 +18,24 @@ export const profileActions = {
    * Enter edit mode for profile
    */
   startEdit() {
-    const { state } = store("launchpad");
-    const p = ensurePanel(state, "profile");
-    p.isEditing = true;
-    // Store original values for cancel
-    p._original = {
-      firstName: p.firstName,
-      lastName: p.lastName,
-      email: p.email,
-      phone: p.phone,
-      telegram: p.telegram,
-    };
+    const { actions } = store("launchpad");
+    const url = new URL(window.location);
+    url.searchParams.set("view", "profile");
+    window.history.pushState({}, "", url);
+    actions.syncStateFromUrl();
   },
 
   /**
    * Cancel edit mode, restore original values
    */
   cancelEdit() {
-    const { state } = store("launchpad");
+    const { state, actions } = store("launchpad");
     const p = ensurePanel(state, "profile");
     if (p._original) Object.assign(p, p._original);
-    p.isEditing = false;
+    const url = new URL(window.location);
+    url.searchParams.delete("view");
+    window.history.pushState({}, "", url);
+    actions.syncStateFromUrl();
   },
 
   /**
@@ -56,7 +53,7 @@ export const profileActions = {
    * Save profile changes to server
    */
   async save(event) {
-    const { state } = store("launchpad");
+    const { state, actions } = store("launchpad");
     event.preventDefault();
     const p = ensurePanel(state, "profile");
     p.isSaving = true;
@@ -73,11 +70,30 @@ export const profileActions = {
             email: p.email,
             phone: p.phone,
             telegram: p.telegram,
+            organization: p.organization,
           },
-        }
+        },
       );
-      if (data) Object.assign(p, data);
-      p.isEditing = false;
+      if (data) {
+        Object.assign(p, data);
+        // If profile was completed (role upgraded), invalidate opportunities panel
+        // so it re-fetches on next visit and clears the onboarding lock screen
+        if (data._roleUpgraded) {
+          const opp = ensurePanel(state, "opportunities");
+          opp._loaded = false;
+          opp.isLocked = false;
+        }
+        if (data._roleDegraded) {
+          const opp = ensurePanel(state, "opportunities");
+          opp._loaded = false;
+          opp.isLocked = true;
+        }
+      }
+      // Return to card view via URL
+      const url = new URL(window.location);
+      url.searchParams.delete("view");
+      window.history.replaceState({}, "", url);
+      actions.syncStateFromUrl();
     } catch (error) {
       p.error = error.message;
     } finally {
@@ -89,20 +105,25 @@ export const profileActions = {
    * Enter password change mode
    */
   startChangePassword() {
-    const { state } = store("launchpad");
-    const p = ensurePanel(state, "profile");
-    p.isChangingPassword = true;
-    p.error = null;
+    const { state, actions } = store("launchpad");
+    ensurePanel(state, "profile").error = null;
+    const url = new URL(window.location);
+    url.searchParams.set("view", "password");
+    window.history.pushState({}, "", url);
+    actions.syncStateFromUrl();
   },
 
   /**
    * Cancel password change mode
    */
   cancelPasswordChange() {
-    const { state } = store("launchpad");
+    const { state, actions } = store("launchpad");
     const p = ensurePanel(state, "profile");
-    p.isChangingPassword = false;
     p.passwordData = { current: "", new: "", confirm: "" };
+    const url = new URL(window.location);
+    url.searchParams.delete("view");
+    window.history.pushState({}, "", url);
+    actions.syncStateFromUrl();
   },
 
   /**
@@ -139,7 +160,7 @@ export const profileActions = {
             currentPassword: p.passwordData.current,
             newPassword: p.passwordData.new,
           },
-        }
+        },
       );
 
       alert("Password changed successfully. Please log in again.");

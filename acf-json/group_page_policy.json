@@ -44,13 +44,13 @@
         },
         {
             "key": "field_policy_date",
-            "label": "Effective date",
+            "label": "Дата набуття чинності",
             "name": "policy_date",
             "aria-label": "",
             "type": "date_picker",
             "instructions": "",
-            "required": false,
-            "conditional_logic": false,
+            "required": 0,
+            "conditional_logic": 0,
             "wrapper": {
                 "width": "",
                 "class": "",
@@ -59,7 +59,8 @@
             "display_format": "d\/m\/Y",
             "return_format": "Y-m-d",
             "first_day": 1,
-            "default_to_current_date": 0
+            "default_to_current_date": 0,
+            "allow_in_bindings": 1
         },
         {
             "key": "field_policy_intro",
@@ -87,7 +88,7 @@
             {
                 "param": "page_template",
                 "operator": "==",
-                "value": "page-policy.php"
+                "value": "templates\/page-policy.php"
             }
         ]
     ],
@@ -100,5 +101,6 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1763214355
+    "display_title": "",
+    "modified": 1771486004
 }

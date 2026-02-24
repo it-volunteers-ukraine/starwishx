@@ -8,9 +8,10 @@ get_header();
         <div class="container">
             <div class="info-404">
                 <p class="h4"><?php esc_html_e('Схоже сторінка, яку Ви шукаєте, не існує.', '_themedomain'); ?></p>
-                <svg class="icon-satellite">
+                <!-- <svg class="icon-satellite">
                     <use xlink:href="/wp-content/themes/starwishx/assets/img/sprites.svg#icon-satellite-blue"></use>
-                </svg>
+                </svg> -->
+                <?php sw_svg_e('icon-satellite-blue', class: "icon-satellite"); ?>
             </div>
             <header class="page-header">
                 <h1 class="heading-404" aria-label="404">4

@@ -4,7 +4,7 @@
     "fields": [
         {
             "key": "field_6942164aad908",
-            "label": "Phone",
+            "label": "Телефон",
             "name": "phone",
             "aria-label": "",
             "type": "phone_number",
@@ -21,6 +21,27 @@
             "return_format": "object",
             "allow_in_bindings": 0,
             "country": "us"
+        },
+        {
+            "key": "field_6998f60a8e3ba",
+            "label": "Назва організації (для акаунту юр.особи)",
+            "name": "organization",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "maxlength": "",
+            "allow_in_bindings": 0,
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
         },
         {
             "key": "field_694216f3d6610",
@@ -51,6 +72,13 @@
                 "operator": "==",
                 "value": "contributor"
             }
+        ],
+        [
+            {
+                "param": "user_role",
+                "operator": "==",
+                "value": "subscriber"
+            }
         ]
     ],
     "menu_order": 0,
@@ -62,5 +90,6 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1766634066
+    "display_title": "",
+    "modified": 1771744636
 }

@@ -2,7 +2,7 @@
 
 /**
  * Launchpad user admin panel app
- * Version: 0.4.1
+ * Version: 0.5.1
  * Author: DevFrappe
  * Email: dev.frappe@proton.me
  * 
@@ -22,6 +22,7 @@ use Launchpad\Services\ProfileService;
 use Launchpad\Services\StatsService;
 use Launchpad\Services\SecurityService;
 use Launchpad\Services\CommentsService;
+use Launchpad\Services\MediaService;
 use Launchpad\Data\Repositories\FavoritesRepository;
 
 final class LaunchpadCore
@@ -93,6 +94,7 @@ final class LaunchpadCore
         // Stats depends on Favorites - we pass the shared instance here
         $this->services['stats']         = new StatsService($this->services['favorites']);
         $this->services['comments']      = new CommentsService();
+        $this->services['media']         = new MediaService();
     }
 
     private function bootstrap(): void
@@ -119,6 +121,12 @@ final class LaunchpadCore
         // Data cleanup hooks
         add_action('delete_post', [$this, 'cleanupPostFavorites']);
         add_action('delete_user', [$this, 'cleanupUserFavorites']);
+
+        // Cron job for orphan cleanup
+        add_action('launchpad_daily_cleanup', [$this->services['media'], 'cleanupOrphans']);
+        if (!wp_next_scheduled('launchpad_daily_cleanup')) {
+            wp_schedule_event(time(), 'daily', 'launchpad_daily_cleanup');
+        }
     }
 
     /**
@@ -127,7 +135,7 @@ final class LaunchpadCore
     public function registerDefaultPanels(PanelRegistry $registry): void
     {
         // Register Panels with injected Services
-        $registry->register('opportunities', new \Launchpad\Panels\OpportunitiesPanel($this->services['opportunities']), 10);
+        $registry->register('opportunities', new \Launchpad\Panels\OpportunitiesPanel($this->services['opportunities'], $this->services['profile']), 10);
         $registry->register('profile',       new \Launchpad\Panels\ProfilePanel($this->services['profile']), 30);
         // Security might not need a service yet
         // $registry->register('security',      new \Launchpad\Panels\SecurityPanel(), 40);
@@ -148,10 +156,11 @@ final class LaunchpadCore
             // Domain specific controllers handle their own CRUD logic
             new \Launchpad\Api\ProfileController($this->services['profile']),
             new \Launchpad\Api\FavoritesController($this->services['favorites']),
-            new \Launchpad\Api\OpportunitiesController($this->services['opportunities']),
+            new \Launchpad\Api\OpportunitiesController($this->services['opportunities'], $this->services['profile']),
             // new \Launchpad\Api\SecurityController(),
             new \Launchpad\Api\SecurityController($this->services['security']),
             new \Launchpad\Api\CommentsController($this->services['comments']),
+            new \Launchpad\Api\MediaController($this->services['media']),
         ];
 
         // Register routes for each controller
@@ -250,7 +259,8 @@ final class LaunchpadCore
         if (function_exists('wp_register_script_module')) {
             wp_register_script_module(
                 '@starwishx/launchpad-comments',
-                get_template_directory_uri() . '/inc/launchpad/Assets/comments-store.js',
+                // get_template_directory_uri() . '/inc/launchpad/Assets/comments-store.js',
+                get_template_directory_uri() . '/assets/js/comments-store.module.js',
                 array_merge(['@wordpress/interactivity'], $asset['dependencies']),
                 $asset['version']
             );
@@ -289,7 +299,8 @@ final class LaunchpadCore
         if (function_exists('wp_register_script_module')) {
             wp_register_script_module(
                 '@starwishx/launchpad-favorites',
-                get_template_directory_uri() . '/inc/launchpad/Assets/favorites-store.js',
+                // get_template_directory_uri() . '/inc/launchpad/Assets/favorites-store.js',
+                get_template_directory_uri() . '/assets/js/favorites-store.module.js',
                 array_merge(['@wordpress/interactivity'], $asset['dependencies']),
                 $asset['version']
             );

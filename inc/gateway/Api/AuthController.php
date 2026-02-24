@@ -67,7 +67,11 @@ class AuthController extends AbstractApiController
         );
 
         if (is_wp_error($result)) {
-            return $result;
+            return $this->mapServiceError($result, [
+                // AuthService wraps WP errors and returns these codes:
+                'auth_failed' => 401,  // Invalid credentials (AuthService.php:54)
+                // Note: rate_limited is in default_map, not repeated here
+            ]);
         }
 
         return $this->success([

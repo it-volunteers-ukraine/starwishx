@@ -52,14 +52,14 @@
     "admin_menu_parent": "",
     "show_in_admin_bar": true,
     "show_in_nav_menus": true,
-    "show_in_rest": true,
+    "show_in_rest": false,
     "rest_base": "",
     "rest_namespace": "wp\/v2",
     "rest_controller_class": "WP_REST_Posts_Controller",
-    "menu_position": "",
+    "menu_position": 24,
     "menu_icon": {
         "type": "dashicons",
-        "value": "dashicons-awards"
+        "value": "dashicons-star-filled"
     },
     "rename_capabilities": false,
     "singular_capability_name": "post",
@@ -67,7 +67,6 @@
     "supports": [
         "title",
         "author",
-        "comments",
         "editor",
         "excerpt",
         "thumbnail",
@@ -88,5 +87,5 @@
     "delete_with_user": false,
     "register_meta_box_cb": "",
     "enter_title_here": "",
-    "modified": 1766133061
+    "modified": 1771732037
 }

@@ -2,7 +2,7 @@
 
 /**
  * Gateway - user auth app
- * Version: 0.4.1
+ * Version: 0.5.1
  * Author: DevFrappe
  * Email: dev.frappe@proton.me
  * License: GPL v2 or later
@@ -124,34 +124,35 @@ final class GatewayCore
             return;
         }
 
-        // Load asset manifest
         $asset_path = get_template_directory() . '/inc/gateway/Assets/gateway-store.asset.php';
         $asset = file_exists($asset_path)
             ? include $asset_path
             : ['dependencies' => [], 'version' => '1.0.0'];
 
-        // Register ES module
         if (function_exists('wp_register_script_module')) {
             wp_register_script_module(
                 '@starwishx/gateway',
-                // get_template_directory_uri() . '/assets/js/gateway-store.module.js',
-                get_template_directory_uri() . '/inc/gateway/Assets/gateway-store.js',
+                get_template_directory_uri() . '/assets/js/gateway-store.module.js',
                 array_merge(['@wordpress/interactivity'], $asset['dependencies']),
                 $asset['version']
             );
             wp_enqueue_script_module('@starwishx/gateway');
         }
 
-        // Inject settings for JS
-        wp_add_inline_script(
-            'wp-interactivity',
-            sprintf('window.gatewaySettings = %s;', wp_json_encode([
+        // Infrastructure config — static per request, no routing knowledge needed.
+        // wp_interactivity_state() merges on repeated calls: the template will add
+        // application state (active form, form fields) on top of this in a second call.
+        //
+        // wp_add_inline_script('wp-interactivity', ...) is intentionally removed:
+        // it targets the classic script pipeline and has no ordering guarantee
+        // relative to @wordpress/interactivity module execution.
+        wp_interactivity_state('gateway', [
+            'gatewaySettings' => [
                 'nonce'   => wp_create_nonce('wp_rest'),
                 'restUrl' => rest_url('gateway/v1/'),
-                'baseUrl' => home_url('/gateway/'), // NEW: Supports subdirectory installations
-            ])),
-            'before'
-        );
+                'baseUrl' => home_url('/gateway/'),
+            ],
+        ]);
     }
 
     /**

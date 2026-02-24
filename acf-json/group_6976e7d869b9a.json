@@ -4,8 +4,8 @@
     "fields": [
         {
             "key": "field_6976e7d834f58",
-            "label": "Cat. Oportunity Image",
-            "name": "cat_oportunity_image",
+            "label": "Cat. Opportunity Image",
+            "name": "cat_opportunity_image",
             "aria-label": "",
             "type": "image",
             "instructions": "",
@@ -27,6 +27,75 @@
             "mime_types": "",
             "allow_in_bindings": 0,
             "preview_size": "medium"
+        },
+        {
+            "key": "field_698ad5b225d4e",
+            "label": "Cat. Opportunity Color Background",
+            "name": "cat_opportunity_color_background",
+            "aria-label": "",
+            "type": "color_picker",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "enable_opacity": 0,
+            "return_format": "string",
+            "allow_in_bindings": 0,
+            "show_custom_palette": 0,
+            "show_color_wheel": 1,
+            "custom_palette_source": "",
+            "palette_colors": ""
+        },
+        {
+            "key": "field_698ad5dc25d4f",
+            "label": "Cat. Opportunity Color Text",
+            "name": "cat_opportunity_color_text",
+            "aria-label": "",
+            "type": "color_picker",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "enable_opacity": 0,
+            "return_format": "string",
+            "allow_in_bindings": 0,
+            "show_custom_palette": 0,
+            "show_color_wheel": 1,
+            "custom_palette_source": "",
+            "palette_colors": ""
+        },
+        {
+            "key": "field_698ad6d4c9d22",
+            "label": "Cat. Opportunity Color Border",
+            "name": "cat_opportunity_color_border",
+            "aria-label": "",
+            "type": "color_picker",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "enable_opacity": 0,
+            "return_format": "string",
+            "allow_in_bindings": 0,
+            "show_custom_palette": 0,
+            "show_color_wheel": 1,
+            "custom_palette_source": "",
+            "palette_colors": ""
         }
     ],
     "location": [
@@ -47,5 +116,6 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1769400623
+    "display_title": "",
+    "modified": 1770706681
 }

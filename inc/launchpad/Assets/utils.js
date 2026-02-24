@@ -33,11 +33,30 @@ export function deepClone(obj) {
 const DEFAULT_PANEL_STATE = {
   isLoading: false,
   isSaving: false,
+  isUploading: false,
   error: null,
   _loaded: false,
   items: [],
   currentView: "list",
-  formData: { seekers: [], subcategory: [] },
+  formData: {
+    seekers: [],
+    subcategory: [],
+    // Shared list of selected chips
+    locations: [],
+
+    // --- SPLIT SEARCH STATES ---
+    // 1. Oblast
+    searchOblast: "",
+    resultsOblast: [],
+
+    // 2. Raion
+    searchRaion: "",
+    resultsRaion: [],
+
+    // 3. City/Settlement
+    searchCity: "",
+    resultsCity: [],
+  },
   layout: "compact",
   isLayoutCompact: true,
   isLayoutCard: false,
@@ -80,7 +99,7 @@ export function ensurePanel(state, panelId) {
 export async function fetchJson(
   state,
   url,
-  { method = "GET", body = null, panelId = null } = {}
+  { method = "GET", body = null, panelId = null } = {},
 ) {
   // Cancel any previous request for this panel
   if (panelId) {
@@ -96,14 +115,24 @@ export async function fetchJson(
       "X-WP-Nonce": state.launchpadSettings.nonce,
       "X-Requested-With": "XMLHttpRequest",
     };
-    if (body) headers["Content-Type"] = "application/json";
+
+    let payload = body;
+
+    // DETECT FORM DATA
+    if (body instanceof FormData) {
+        // Do NOT set Content-Type; browser sets it with boundary
+        // payload remains FormData
+    } else if (body) {
+        headers["Content-Type"] = "application/json";
+        payload = JSON.stringify(body);
+    }
 
     const response = await fetch(url, {
       method,
       credentials: "same-origin",
       signal: controller.signal,
       headers,
-      body: body ? JSON.stringify(body) : null,
+      body: payload, // Use processed payload
     });
 
     if (!response.ok) {

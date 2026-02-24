@@ -6,3 +6,13 @@
     display: inline-flex;
     align-items: center;
 }
+
+.control-favorites-wrapper--icon-only {
+    gap: 0;
+    justify-content: center;
+    align-items: center;
+
+    .heart-label__text {
+        display: none;
+    }
+}

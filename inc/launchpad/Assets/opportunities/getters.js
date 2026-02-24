@@ -17,16 +17,34 @@ export const opportunitiesGetters = {
   /**
    * Is the opportunities list view currently visible?
    */
-  get isOppListVisible() {
-    return (this.panels.opportunities?.currentView || "list") === "list";
+  // get isOppListVisible() {
+  //   return (this.panels.opportunities?.currentView || "list") === "list";
+  // },
+
+  // /**
+  //  * Is the opportunities form (add or edit) currently visible?
+  //  */
+  // get isOppFormVisible() {
+  //   const view = this.panels.opportunities?.currentView;
+  //   return view === "add" || view === "edit";
+  // },
+
+  // NEW: Determines if the onboarding screen should show
+  get isOppOnboardingVisible() {
+    return this.panels.opportunities?.isLocked === true;
   },
 
-  /**
-   * Is the opportunities form (add or edit) currently visible?
-   */
+  // MODIFIED: Only show list if NOT locked
+  get isOppListVisible() {
+    const p = this.panels.opportunities;
+    return !p?.isLocked && (p?.currentView || "list") === "list";
+  },
+
+  // MODIFIED: Only show form if NOT locked
   get isOppFormVisible() {
-    const view = this.panels.opportunities?.currentView;
-    return view === "add" || view === "edit";
+    const p = this.panels.opportunities;
+    const view = p?.currentView;
+    return !p?.isLocked && (view === "add" || view === "edit");
   },
 
   /**
@@ -157,5 +175,29 @@ export const opportunitiesGetters = {
     const item = getContext()?.item;
     if (!item?.isExpired) return "";
     return "Outdated"; // Or use a translation from state.settings if available
+  },
+
+  /**
+   * Check if selected country is Ukraine.
+   * We scan the 'options.countries' list to find the ID for "Ukraine".
+   */
+  get isUkraineSelected() {
+    const p = this.panels.opportunities;
+    if (!p || !p.formData || !p.formData.country) return false;
+
+    const selectedId = parseInt(p.formData.country);
+
+    // Find the country object in options to check name
+    // Assuming options.countries is loaded
+    if (p.options && p.options.countries) {
+      const country = p.options.countries.find((c) => c.id === selectedId);
+      // Check against localized name or slug if available.
+      // For stability, checking "Ukraine" string or specific ID is common.
+      // Adjust "Ukraine" string based on your exact term name in DB.
+      return (
+        country && (country.name === "Ukraine" || country.name === "Україна")
+      );
+    }
+    return false;
   },
 };

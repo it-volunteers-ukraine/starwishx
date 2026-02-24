@@ -79,9 +79,8 @@ class OpportunitiesService
 
             // 1. Get raw data
             $raw_excerpt    = $post->post_excerpt;
-            // $raw_description = get_field('opportunity_description', $post->ID) ?: '';
-            // Should be more optimal 
-            $raw_description = get_post_meta($post->ID, 'opportunity_description', true) ?: '';
+            // Description now stored in post_content (native WordPress column)
+            $raw_description = $post->post_content ?: '';
             // 2. Logic: Priority to native excerpt, fallback to trimmed description
             $display_text = !empty($raw_excerpt) ? $raw_excerpt : $raw_description;
             // 3. Clean and Truncate (approx 20 words for a clean card look)
@@ -226,35 +225,86 @@ class OpportunitiesService
         // Helper to safely get array of ints
         $getIntArray = fn($field) => array_map('intval', get_field($field, $postId) ?: []);
 
+        // Fetch Locations
+        global $wpdb;
+
+        // Join pivot table (wp_opportunity_locations) with dictionary (wp_katottg)
+        // "SELECT k.code, k.name, k.level, k.category
+        //  FROM wp_katottg k
+        //  INNER JOIN wp_opportunity_locations ol ON k.code = ol.katottg_code
+        //  WHERE ol.post_id = %d",
+        $locations = $wpdb->get_results($wpdb->prepare(
+            "SELECT code, name_category_oblast as name, level, category
+                FROM wp_v_opportunity_search
+                WHERE post_id = %d",
+            $postId
+        ), ARRAY_A);
+
         // Map ACF fields to our simplified FormData structure
+        // Note: applicant fields are no longer returned - they're auto-filled from profile on save
         return [
             'id' => $post->ID,
             'title' => $post->post_title,
             'status' => $post->post_status,
 
-            // Group 1: Applicant
-            'applicant_name'  => get_field('opportunity_applicant_name', $postId) ?: '',
-            'applicant_mail'  => get_field('opportunity_applicant_mail', $postId) ?: '',
-            'applicant_phone' => get_field('opportunity_applicant_phone', $postId) ?: '',
-
-            // Group 2: Info
+            // Group 1: Info
             'company'         => get_field('opportunity_company', $postId) ?: '',
             'date_starts'     => $this->formatDateForInput(get_field('opportunity_date_starts', $postId)),
             'date_ends'       => $this->formatDateForInput(get_field('opportunity_date_ends', $postId)),
             'category'        => $getIntArray('opportunity_category'), // Now an array
+
             'country'         => get_field('country', $postId) ?: '',
+            'locations'       => $locations,
+            // We keep 'city' just for now in case to not brake things
             'city'            => get_field('city', $postId) ?: '',
             'sourcelink'      => get_field('opportunity_sourcelink', $postId) ?: '',
+            'application_form' => get_field('opportunity_application_form', $postId) ?: '',
 
             // FIX: Ensure these are Integers for JS .includes() check
             'subcategory'     => $getIntArray('opportunity_subcategory'),
             'seekers'         => $getIntArray('opportunity_seekers'),
 
             // Group 3: Description
-            'description'     => get_field('opportunity_description', $postId) ?: '',
+            // Description now stored in post_content (native WordPress column)
+            'description'     => $post->post_content ?: '',
             'requirements'    => get_field('opportunity_requirements', $postId) ?: '',
             'details'         => get_field('opportunity_details', $postId) ?: '',
+
+            // Document handling
+            'document'        => $this->getDocumentData($postId),
         ];
+    }
+
+    /**
+     * Get document data for an opportunity.
+     */
+    private function getDocumentData(int $postId): ?array
+    {
+        $doc_field = get_field('opportunity_document', $postId);
+        $doc_id = 0;
+        $doc_data = null;
+
+        if (is_array($doc_field) && isset($doc_field['ID'])) {
+            $doc_id = (int) $doc_field['ID'];
+        } elseif (is_numeric($doc_field)) {
+            $doc_id = (int) $doc_field;
+        }
+
+        if ($doc_id) {
+            $url = wp_get_attachment_url($doc_id);
+            $path = get_attached_file($doc_id);
+            if ($url && file_exists($path)) {
+                $doc_data = [
+                    'id'        => $doc_id,
+                    'name'      => basename($path),
+                    'url'       => $url,
+                    'size'      => size_format(filesize($path), 2),
+                    'isPending' => false
+                ];
+            }
+        }
+
+        return $doc_data;
     }
 
     /**
@@ -281,9 +331,13 @@ class OpportunitiesService
         try {
             // 1. Prepare Core Post Data
             $postData = [
-                'post_type'   => 'opportunity',
-                'post_title'  => sanitize_text_field($data['title']),
-                'post_author' => get_current_user_id(),
+                'post_type'    => 'opportunity',
+                'post_title'   => sanitize_text_field($data['title']),
+                'post_content' => sanitize_textarea_field($data['description'] ?? ''),
+                // Allows safe HTML
+                // 'post_content' => wp_kses_post($data['description']), 
+
+                'post_author'  => get_current_user_id(),
             ];
 
             // Determine Status
@@ -309,10 +363,30 @@ class OpportunitiesService
             // 2. Save ACF Fields
             // Note: update_field returns false on failure OR if the value didn't change.
             // We generally trust ACF here, but we could check specifically if needed.
-            // Group 1
-            update_field('opportunity_applicant_name', $data['applicant_name'], $id);
-            update_field('opportunity_applicant_mail', $data['applicant_mail'], $id);
-            update_field('opportunity_applicant_phone', $data['applicant_phone'], $id);
+
+            // Group 1: Applicant - Auto-fill from user profile
+            $user = get_userdata($current_user_id);
+            if ($user) {
+                $acfId = 'user_' . $current_user_id;
+                $firstName = $user->first_name;
+                $lastName = $user->last_name;
+                $fullName = trim($firstName . ' ' . $lastName);
+
+                update_field('opportunity_applicant_name', $fullName, $id);
+                update_field('opportunity_applicant_mail', $user->user_email, $id);
+
+                // Phone requires special handling (ACF phone field)
+                $phoneRaw = get_field('phone', $acfId);
+                $phoneString = '';
+                if (is_array($phoneRaw)) {
+                    $phoneString = $phoneRaw['international'] ?? $phoneRaw['e164'] ?? '';
+                } elseif (is_object($phoneRaw) && method_exists($phoneRaw, 'international')) {
+                    $phoneString = $phoneRaw->international();
+                } else {
+                    $phoneString = (string) $phoneRaw;
+                }
+                update_field('opportunity_applicant_phone', $phoneString, $id);
+            }
 
             // Group 2
             update_field('opportunity_company', $data['company'], $id);
@@ -320,6 +394,7 @@ class OpportunitiesService
             update_field('opportunity_date_ends', $data['date_ends'], $id);
             update_field('city', $data['city'], $id);
             update_field('opportunity_sourcelink', $data['sourcelink'], $id);
+            update_field('opportunity_application_form', $data['application_form'], $id);
 
             // Taxonomies: Save to ACF field AND actual WP Taxonomy
             // wp_set_object_terms returns WP_Error or Term IDs
@@ -338,16 +413,86 @@ class OpportunitiesService
             update_field('opportunity_seekers', $seekers, $id);
             wp_set_object_terms($id, $seekers, 'category-seekers');
 
-            // Group 3
-            update_field('opportunity_description', $data['description'], $id);
+            // Group 3 - Description is now saved to post_content via wp_insert_post/wp_update_post
             update_field('opportunity_requirements', $data['requirements'], $id);
             update_field('opportunity_details', $data['details'], $id);
+
+            // Handle Document Upload/Removal
+            if (isset($data['document_id'])) {
+                $new_doc_id = (int)$data['document_id'];
+                $old_doc_field = get_field('opportunity_document', $id);
+                $old_doc_id = is_array($old_doc_field) ? (int)$old_doc_field['ID'] : (int)$old_doc_field;
+
+                // A. User Removed Document
+                if ($new_doc_id === 0 && $old_doc_id > 0) {
+                    update_field('opportunity_document', '', $id);
+                    wp_delete_attachment($old_doc_id, true);
+                }
+                // B. User Added/Changed Document
+                elseif ($new_doc_id > 0 && $new_doc_id !== $old_doc_id) {
+                    // SECURITY: Verify Ownership
+                    $is_owned_by_user = (int)get_post_field('post_author', $new_doc_id) === get_current_user_id();
+                    $is_temp_file = get_post_meta($new_doc_id, '_launchpad_temp_upload', true);
+
+                    if ($is_owned_by_user && $is_temp_file) {
+                        // 1. Link logic
+                        update_field('opportunity_document', $new_doc_id, $id);
+                        wp_update_post([
+                            'ID'          => $new_doc_id,
+                            'post_parent' => $id
+                        ]);
+
+                        // 2. Remove Flags (Claim the file)
+                        delete_post_meta($new_doc_id, '_launchpad_temp_upload');
+
+                        // 3. Garbage collect old file
+                        if ($old_doc_id > 0) {
+                            wp_delete_attachment($old_doc_id, true);
+                        }
+                    }
+                }
+            }
+
+            // Save Locations (Pivot Table)
+            if (isset($data['locations']) && is_array($data['locations'])) {
+                // A. Clear existing locations for this post
+                $wpdb->delete('wp_opportunity_locations', ['post_id' => $id]);
+
+                // B. Extract just the codes from the frontend objects
+                $codes = array_column($data['locations'], 'code');
+
+                if (!empty($codes)) {
+                    // C. SECURITY: Verify codes exist in database to prevent bad data
+                    // Create placeholders like: "%s, %s, %s"
+                    $placeholders = implode(',', array_fill(0, count($codes), '%s'));
+
+                    // Select only codes that actually exist in dictionary
+                    $validCodes = $wpdb->get_col($wpdb->prepare(
+                        "SELECT code FROM wp_katottg WHERE code IN ($placeholders)",
+                        ...$codes
+                    ));
+
+                    // D. Bulk Insert
+                    if (!empty($validCodes)) {
+                        $values = [];
+                        $queryPlaceholders = [];
+                        foreach ($validCodes as $code) {
+                            array_push($values, $id, $code);
+                            $queryPlaceholders[] = "(%d, %s)";
+                        }
+
+                        $sql = "INSERT INTO wp_opportunity_locations (post_id, katottg_code) VALUES " . implode(', ', $queryPlaceholders);
+                        $wpdb->query($wpdb->prepare($sql, $values));
+                    }
+                    // error_log($sql);
+                }
+            }
 
             $wpdb->query('COMMIT');
             return $id;
         } catch (\Throwable $e) {
             $wpdb->query('ROLLBACK');
-            // Log the actual error for the developer
+            // Log the actual error
             error_log('OpportunitiesService Save Failure: ' . $e->getMessage());
 
             return new WP_Error('db_transaction_failed', $e->getMessage());
@@ -418,5 +563,47 @@ class OpportunitiesService
         }
 
         return $date ? $date->format($format) : $dateStr;
+    }
+
+    /** 
+     * Autocomplete Location Search 
+     * Uses the View for pre-formatted names.
+     * 
+     * @param string $search User input
+     * @param array $levels Optional array of levels (1=Oblast, 2=Raion, 3=Hromada, 4=Settlement)
+     */
+    public function searchKatottg(string $search, array $levels = []): array
+    {
+        global $wpdb;
+
+        // Optimization: Search start of string first for index utilization, then fuzzy?
+        // For UX "Kyiv", "Vinnytsia" usually match start. Let's use standard fuzzy for coverage.
+        // $like = '%' . $wpdb->esc_like($search) . '%';
+        $like = $wpdb->esc_like($search) . '%';
+
+        // Base Query against the VIEW
+        $sql = "SELECT code, name_category_oblast as name, level, category_short as category 
+                FROM wp_v_katottg_search
+                WHERE name LIKE %s";
+
+        $params = [$like];
+
+        // Apply Level Filter if provided
+        if (!empty($levels)) {
+            // Securely build placeholders: %d, %d, %d
+            $placeholders = implode(',', array_fill(0, count($levels), '%d'));
+
+            $sql .= " AND level IN ($placeholders)";
+
+            // Append integers to params
+            foreach ($levels as $lvl) {
+                $params[] = (int) $lvl;
+            }
+        }
+
+        // Limit results for performance
+        $sql .= " ORDER BY level ASC, name ASC LIMIT 10";
+
+        return $wpdb->get_results($wpdb->prepare($sql, $params), ARRAY_A);
     }
 }

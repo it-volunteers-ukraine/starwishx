@@ -1,5 +1,5 @@
 <?php
-
+// file inc/launchpad/Panels/AbstractPanel.php
 declare(strict_types=1);
 
 namespace Launchpad\Panels;
@@ -31,6 +31,6 @@ abstract class AbstractPanel implements PanelInterface
 
     public function getIcon(): string
     {
-        return 'admin-generic';
+        return 'icon-settings';
     }
 }
