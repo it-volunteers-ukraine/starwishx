@@ -1,28 +1,27 @@
 <?php
-// file: inc\listing\Core\QueryBuilder.php
+// file: inc/listing/Core/QueryBuilder.php
 declare(strict_types=1);
 
 namespace Listing\Core;
 
-use Listing\Enums\Taxonomy;
-
 /**
  * Translates iAPI query state into WP_Query arguments.
+ *
+ * Receives a FilterRegistry reference at construction time. Because PHP passes
+ * objects by reference, the registry may still be empty at that point — filters
+ * are registered via the 'listing_register_filters' action later in the 'init'
+ * lifecycle. By the time build() is actually called (REST request or SSR
+ * hydration), the registry is fully populated. No setter is needed.
  */
 class QueryBuilder
 {
     public const ITEMS_PER_PAGE = 10;
 
-    private ?FilterRegistry $filterRegistry = null;
+    private FilterRegistry $filterRegistry;
 
-    public function __construct(?FilterRegistry $filterRegistry = null)
+    public function __construct(FilterRegistry $filterRegistry)
     {
         $this->filterRegistry = $filterRegistry;
-    }
-
-    public function setFilterRegistry(FilterRegistry $registry): void
-    {
-        $this->filterRegistry = $registry;
     }
 
     public function build(array $filters, int $perPage = self::ITEMS_PER_PAGE): array
@@ -45,72 +44,14 @@ class QueryBuilder
             $args['s'] = sanitize_text_field($filters['s']);
         }
 
-        // 2. Filters from Registry (handles taxonomies + location + future filters)
-        if ($this->filterRegistry) {
-            foreach ($this->filterRegistry->getAll() as $filter) {
-                $filterId = $filter->getId();
-                if (method_exists($filter, 'applyQuery') && isset($filters[$filterId]) && !empty($filters[$filterId])) {
-                    $args = $filter->applyQuery($args, $filters[$filterId]);
-                }
-            }
-        }
+        // 2. Registered Filters (taxonomies, location, and any future additions).
+        // FilterInterface::applyQuery() is enforced by FilterRegistry, so no
+        // method_exists() guard is needed here.
+        foreach ($this->filterRegistry->getAll() as $filter) {
+            $filterId = $filter->getId();
 
-        // foreach ($taxonomies as $stateKey => $taxName) {
-        //     if (!empty($filters[$stateKey])) {
-        //         $args['tax_query'][] = [
-        //             'taxonomy' => $taxName,
-        //             'field'    => 'term_id',
-        //             'terms'    => (array) $filters[$stateKey],
-        //             'operator' => 'IN',
-        //         ];
-        //     }
-        // }
-
-        // 3. Meta Filters (City, Company)
-        // if (!empty($filters['city'])) {
-        //     $args['meta_query'][] = [
-        //         'key'     => 'city',
-        //         'value'   => sanitize_text_field($filters['city']),
-        //         'compare' => '=',
-        //     ];
-        // }
-
-        //todo check opportunity_date_ends format in database
-        // 4. Date Logic: Hide Expired Opportunities
-        // ACF Date Picker stores Ymd (e.g., 20240131)
-        // $args['meta_query'][] = [
-        //     'key'     => 'opportunity_date_ends',
-        //     'value'   => current_time('Ymd'),
-        //     'compare' => '>=',
-        //     'type'    => 'NUMERIC',
-        // ];
-        // 4. Date Logic: Hide Expired Opportunities (if end date is set)
-        // Shows posts without end date, with empty end date, or with future end date
-        // $args['meta_query'][] = [
-        //     'relation' => 'OR',
-        //     [
-        //         'key'     => 'opportunity_date_ends',
-        //         'compare' => 'NOT EXISTS',
-        //     ],
-        //     [
-        //         'key'     => 'opportunity_date_ends',
-        //         'value'   => '',
-        //         'compare' => '=',
-        //     ],
-        //     [
-        //         'key'     => 'opportunity_date_ends',
-        //         'value'   => current_time('Ymd'),
-        //         'compare' => '>=',
-        //         'type'    => 'NUMERIC',
-        //     ],
-        // ];
-
-        if ($this->filterRegistry) {
-            foreach ($this->filterRegistry->getAll() as $filter) {
-                $filterId = $filter->getId();
-                if (method_exists($filter, 'applyQuery') && isset($filters[$filterId]) && !empty($filters[$filterId])) {
-                    $args = $filter->applyQuery($args, $filters[$filterId]);
-                }
+            if (isset($filters[$filterId]) && !empty($filters[$filterId])) {
+                $args = $filter->applyQuery($args, $filters[$filterId]);
             }
         }
 

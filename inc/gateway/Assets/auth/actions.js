@@ -35,6 +35,14 @@ export const loginActions = {
     }
   },
 
+  toggleVisibility() {
+    const { state } = store("gateway");
+    if (state.forms?.login) {
+      state.forms.login.isPasswordVisible =
+        !state.forms.login.isPasswordVisible;
+    }
+  },
+  
   async submit(event) {
     event.preventDefault();
 

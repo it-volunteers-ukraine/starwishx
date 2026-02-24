@@ -7,7 +7,7 @@
  * Author: DevFrappe
  * Email: dev.frappe@proton.me
  * License: GPL v2 or later
- * 
+ *
  * File: inc/listing/Core/ListingCore.php
  */
 
@@ -23,6 +23,8 @@ use Listing\Filters\LocationsFilterSimple;
 use Listing\Filters\SeekersFilter;
 use Listing\Services\TermCountingService;
 use Launchpad\Data\Repositories\FavoritesRepository;
+use Launchpad\Services\FavoritesService;
+use Shared\Http\QueryStringParser;
 
 /**
  * Main Listing singleton.
@@ -36,7 +38,6 @@ final class ListingCore
     private ListingService $service;
     private StateAggregator $stateAggregator;
     private ResultsGrid $grid;
-    private QueryBuilder $queryBuilder;
     private TermCountingService $termCounter;
     private FavoritesRepository $favoritesRepo;
 
@@ -47,8 +48,18 @@ final class ListingCore
     {
         self::$instance = null;
     }
+
     /**
      * Get singleton instance with optional DI for testing.
+     *
+     * Construction order matters here:
+     *   1. FilterRegistry is created first (empty at this point).
+     *   2. QueryBuilder receives the registry reference. Because PHP passes
+     *      objects by reference, QueryBuilder::build() will see the fully
+     *      populated registry by the time it is called — filters are registered
+     *      later via the 'listing_register_filters' / 'init' action chain.
+     *   3. Services and aggregators are wired with their dependencies.
+     *   4. No setFilterRegistry() call is needed.
      */
     public static function instance(
         ?FilterRegistry $registry = null,
@@ -60,26 +71,24 @@ final class ListingCore
         ?FavoritesRepository $favoritesRepo = null
     ): self {
         if (!self::$instance) {
-            // All dependencies created externally and injected
-            // Ensure DI chain is respected
-            $queryBuilder = $queryBuilder ?? new QueryBuilder();
-            $termCounter = $termCounter ?? new TermCountingService($queryBuilder);
-            $registry = $registry ?? new FilterRegistry();
-            $queryBuilder->setFilterRegistry($registry);
-            $service = $service ?? new ListingService($queryBuilder, $termCounter);
-            $stateAggregator = $stateAggregator ?? new StateAggregator($service, $queryBuilder);
-            $favoritesRepo = $favoritesRepo ?? new FavoritesRepository();
+            $registry         = $registry        ?? new FilterRegistry();
+            $queryBuilder     = $queryBuilder    ?? new QueryBuilder($registry);
+            $termCounter      = $termCounter     ?? new TermCountingService($queryBuilder);
+            $favoritesRepo    = $favoritesRepo   ?? new FavoritesRepository();
+            $favoritesService = new FavoritesService($favoritesRepo);
+            $service          = $service         ?? new ListingService($queryBuilder, $termCounter, $favoritesService);
+            $stateAggregator  = $stateAggregator ?? new StateAggregator($service);
 
-            self::$instance = new self(
+            self::$instance   = new self(
                 $registry,
                 $service,
                 $stateAggregator,
                 $grid ?? new ResultsGrid(),
-                $queryBuilder,
                 $termCounter,
                 $favoritesRepo
             );
         }
+
         return self::$instance;
     }
 
@@ -88,17 +97,15 @@ final class ListingCore
         ListingService $service,
         StateAggregator $stateAggregator,
         ResultsGrid $grid,
-        QueryBuilder $queryBuilder,
         TermCountingService $termCounter,
         FavoritesRepository $favoritesRepo
     ) {
-        $this->registry = $registry;
-        $this->service = $service;
+        $this->registry        = $registry;
+        $this->service         = $service;
         $this->stateAggregator = $stateAggregator;
-        $this->grid = $grid;
-        $this->queryBuilder = $queryBuilder;
-        $this->termCounter = $termCounter;
-        $this->favoritesRepo = $favoritesRepo;
+        $this->grid            = $grid;
+        $this->termCounter     = $termCounter;
+        $this->favoritesRepo   = $favoritesRepo;
 
         $this->bootstrap();
     }
@@ -109,7 +116,7 @@ final class ListingCore
     private function bootstrap(): void
     {
         add_action('wp_enqueue_scripts', [$this, 'enqueueAssets']);
-        add_action('rest_api_init', [$this, 'registerRestRoutes']);
+        add_action('rest_api_init',      [$this, 'registerRestRoutes']);
         add_action('init', fn() => do_action('listing_register_filters', $this->registry), 20);
         add_action('listing_register_filters', [$this, 'registerDefaultFilters'], 5);
     }
@@ -121,10 +128,11 @@ final class ListingCore
     {
         $categoryFilter = new CategoryFilter();
         $categoryFilter->setTermCounter($this->termCounter);
-        $registry->register('category', $categoryFilter, 10);
-        $registry->register('country',  new CountryFilter(), 20);
-        $registry->register('location', new LocationsFilterSimple(), 30);
-        $registry->register('seekers',  new SeekersFilter(), 40);
+
+        $registry->register('category', $categoryFilter,              10);
+        $registry->register('country',  new CountryFilter(),          20);
+        $registry->register('location', new LocationsFilterSimple(),  30);
+        $registry->register('seekers',  new SeekersFilter(),          40);
     }
 
     /**
@@ -135,7 +143,7 @@ final class ListingCore
         if (!is_page('listing')) {
             return;
         }
-        
+
         $asset_path = get_template_directory() . '/inc/listing/Assets/listing-store.asset.php';
         $asset = file_exists($asset_path)
             ? include $asset_path
@@ -156,18 +164,14 @@ final class ListingCore
                 'config'        => [
                     'nonce'   => wp_create_nonce('wp_rest'),
                     'restUrl' => rest_url('launchpad/v1/'),
-                ]
+                ],
             ]);
 
             if (function_exists('wp_register_script_module')) {
                 wp_register_script_module(
                     '@starwishx/listing',
-                    // get_template_directory_uri() . '/inc/listing/Assets/listing-store.js',
                     get_template_directory_uri() . '/assets/js/listing-store.module.js',
-                    array_merge([
-                        '@wordpress/interactivity',
-                        'launchpad-favorites'
-                    ], $asset['dependencies']),
+                    array_merge(['@wordpress/interactivity', 'launchpad-favorites'], $asset['dependencies']),
                     $asset['version']
                 );
                 wp_enqueue_script_module('@starwishx/listing');
@@ -176,12 +180,8 @@ final class ListingCore
             if (function_exists('wp_register_script_module')) {
                 wp_register_script_module(
                     '@starwishx/listing',
-                    // get_template_directory_uri() . '/inc/listing/Assets/listing-store.js',
                     get_template_directory_uri() . '/assets/js/listing-store.module.js',
-                    array_merge([
-                        '@wordpress/interactivity',
-                        // 'launchpad-favorites'
-                    ], $asset['dependencies']),
+                    array_merge(['@wordpress/interactivity'], $asset['dependencies']),
                     $asset['version']
                 );
                 wp_enqueue_script_module('@starwishx/listing');
@@ -192,7 +192,7 @@ final class ListingCore
             'config' => [
                 'nonce'   => wp_create_nonce('wp_rest'),
                 'restUrl' => rest_url('listing/v1/'),
-            ]
+            ],
         ]);
     }
 
@@ -201,19 +201,21 @@ final class ListingCore
      */
     public function registerRestRoutes(): void
     {
-        // Pass the already instantiated service to the controller
-        // (new MainController($this->service))->registerRoutes();
-        $controller = new MainController($this->service);
-        $controller->registerRoutes();
+        (new MainController($this->service))->registerRoutes();
     }
 
     /**
      * Get aggregated state for SSR hydration.
-     * Called from page-listing-opportunities.php
+     * Called from page-listing-opportunities.php.
+     *
+     * QueryStringParser::fromServer() is used here rather than in StateAggregator
+     * so the aggregator stays free of superglobal access and remains testable.
      */
     public function getState(): array
     {
-        return $this->stateAggregator->aggregate($this->registry);
+        $rawFilters = QueryStringParser::fromServer();
+
+        return $this->stateAggregator->aggregate($this->registry, $rawFilters);
     }
 
     /**
