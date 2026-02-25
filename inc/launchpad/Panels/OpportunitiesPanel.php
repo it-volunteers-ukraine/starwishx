@@ -648,9 +648,9 @@ class OpportunitiesPanel extends AbstractPanel
                             <h3 class="group-card-title"><?php esc_html_e('Description', 'starwishx'); ?></h3>
                             <div class="form-card-data">
                                 <div class="form-field form-field-description">
-                                    <label><?php echo __('Опишіть можливість', 'starwishx'); ?></label>
+                                    <label><?php esc_html_e('Describe the opportunity', 'starwishx'); ?></label>
                                     <textarea rows="6" required class="widefat"
-                                        placeholder="<?php echo _('Додайте інформацію про можливість. Опишіть суть.'); ?>"
+                                        placeholder="<?php esc_html_e('Add information about the opportunity. Describe the essence.', 'starwishx'); ?>"
                                         data-wp-bind--value="<?= $formPath ?>.description" data-wp-on--input="actions.opportunities.updateForm" data-field="description"></textarea>
                                 </div>
                                 <div class="form-field form-field-description">
@@ -736,7 +736,7 @@ class OpportunitiesPanel extends AbstractPanel
                                         </span>
                                     </div>
                                     <label>
-                                        <?php esc_html_e('Формат (PDF, DOCX) Максимальний розмір 5Mb.', 'starwishx'); ?>
+                                        <?php esc_html_e('Format (PDF, DOCX). Max size 5Mb.', 'starwishx'); ?>
                                     </label>
                                 </div>
                             </div>
@@ -750,7 +750,7 @@ class OpportunitiesPanel extends AbstractPanel
                         <button type="submit" class="btn__small"
                             data-wp-bind--disabled="state.panels.opportunities.isSaving"
                             data-wp-bind--hidden="!state.canEdit">
-                            <?php esc_html_e('Зберегти чернетку', 'starwishx'); ?>
+                            <?php esc_html_e('Save Draft', 'starwishx'); ?>
                         </button>
 
                         <!-- WORKFLOW ACTION: Submit for Review -->
@@ -762,7 +762,7 @@ class OpportunitiesPanel extends AbstractPanel
                             data-wp-on--click="actions.opportunities.submitForReview"
                             data-wp-bind--disabled="state.panels.opportunities.isSaving"
                             data-wp-bind--hidden="!state.canEdit">
-                            <?php esc_html_e('Відправити на модерацію', 'starwishx'); ?>
+                            <?php esc_html_e('Submit for Review', 'starwishx'); ?>
                         </button>
                         <!-- Back to list -->
                         <button class="btn-secondary__small" type="button" data-wp-on--click="actions.opportunities.cancel">

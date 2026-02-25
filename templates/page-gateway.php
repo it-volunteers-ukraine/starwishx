@@ -131,8 +131,7 @@ add_action('wp_head', function () {
 // get_header('gateway');
 locate_template('templates/header-gateway.php', true, true);
 
-$td = '_themedomain';
-$back_label = __('Назад', $td);
+$back_label = __('Назад', 'starwishx');
 $referer = wp_get_referer();
 $back_url = $referer ? $referer : home_url();
 ?>

@@ -2,9 +2,11 @@
 
 function _themeprefix_theme_setup()
 {
-
-  load_theme_textdomain(wp_get_theme()->get('TextDomain'), get_template_directory() . '/languages');
-
+  /**
+   * ! does not need for WP 6.7+
+   * see https://make.wordpress.org/core/2024/10/21/i18n-improvements-6-7/
+   **/
+  // load_theme_textdomain(wp_get_theme()->get('TextDomain'), get_template_directory() . '/languages');
 
   add_theme_support('automatic-feed-links');
   add_theme_support('title-tag');

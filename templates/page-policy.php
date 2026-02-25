@@ -96,7 +96,7 @@ if (function_exists('render_block')) {
                 // uploaded. Screen readers silently skip unresolved references.
                 // Replaced with a static aria-label that is always present.
                 ?>
-                aria-label="<?php esc_attr_e('Policy document download', '_themedomain'); ?>">
+                aria-label="<?php esc_attr_e('Policy document download', 'starwishx'); ?>">
                 <?php if ($doc) : ?>
 
                     <a
@@ -123,12 +123,12 @@ if (function_exists('render_block')) {
                                 if ($doc['filesize']) {
                                     /* translators: 1: file type label (e.g. PDF), 2: file size (e.g. 1.2 MB) */
                                     echo esc_html(sprintf(
-                                        __('%1$s, %2$s', '_themedomain'),
+                                        __('%1$s, %2$s', 'starwishx'),
                                         'PDF',
                                         size_format($doc['filesize'])
                                     ));
                                 } else {
-                                    echo esc_html__('PDF', '_themedomain');
+                                    echo esc_html__('PDF', 'starwishx');
                                 }
                                 ?>
                             </span>
@@ -137,7 +137,7 @@ if (function_exists('render_block')) {
 
                 <?php else : ?>
                     <div class="policy-pdf-empty">
-                        <?php esc_html_e('No PDF uploaded', '_themedomain'); ?>
+                        <?php esc_html_e('No PDF uploaded', 'starwishx'); ?>
                     </div>
                 <?php endif; ?>
             </aside>
@@ -151,7 +151,7 @@ if (function_exists('render_block')) {
                         // string through esc_html__() then substituted raw <time> HTML via
                         // printf() — the escaping had already run, HTML passed straight through.
                         // sw_time_tag() guarantees esc_attr on datetime, esc_html on content.
-                        echo esc_html__('Дата набуття чинності:', '_themedomain');
+                        echo esc_html__('Дата набуття чинності:', 'starwishx');
                         echo ' ';
                         echo sw_time_tag($date['iso'], $date['display']);
                         ?>
