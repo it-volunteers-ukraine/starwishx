@@ -35,13 +35,13 @@ if (! $show_label) {
             class="heart-label"
             data-wp-class--is-active="state.isFavorite">
             <span class="heart-label__text">
-                <span class="heart-label__text--inactive"><?php esc_html_e('Додати до обраних', 'starwishx'); ?></span>
-                <span class="heart-label__text--active"><?php esc_html_e('Обране', 'starwishx'); ?></span>
+                <span class="heart-label__text--inactive"><?php esc_html_e('Add to favorites', 'starwishx'); ?></span>
+                <span class="heart-label__text--active"><?php esc_html_e('Favorites', 'starwishx'); ?></span>
             </span>
         </label>
     <?php endif; ?>
 
-    <div class="heart" title="<?php esc_attr_e('Обране', 'starwishx'); ?>">
+    <div class="heart" title="<?php esc_attr_e('Favorites', 'starwishx'); ?>">
         <input
             type="checkbox"
             class="heart__checkbox"

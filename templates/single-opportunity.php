@@ -9,7 +9,6 @@
 
 declare(strict_types=1);
 
-$td = '_themedomain';
 $post_id = get_the_ID();
 
 // Used inc/theme-helpers.php function
@@ -37,12 +36,12 @@ if (function_exists('render_block')) {
         'innerBlocks' => [],
     ]);
 }
-/* <nav class="opportunity-breadcrumbs container" aria-label="<?php esc_attr_e('Breadcrumb', $td); ?>">
+/* <nav class="opportunity-breadcrumbs container" aria-label="<?php esc_attr_e('Breadcrumb', 'starwishx'); ?>">
     <a href="<?php echo esc_url($back_url); ?>" class="btn-back">
         <svg width="13" height="16" class="icon-arrow-left">
             <use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-long_arrow_left"></use>
         </svg>
-        <span><?php esc_html_e('Opportunities', $td); ?></span>
+        <span><?php esc_html_e('Opportunities', 'starwishx'); ?></span>
     </a>
 </nav> */
 ?>
@@ -54,7 +53,7 @@ if (function_exists('render_block')) {
             <?php if (!empty($data['root_categories'])) : ?>
                 <div class="info-card info-card__categories">
                     <dt class="info-card__title d-none" aria-hidden="true">
-                        <?php esc_html_e('Категорія', $td); ?>
+                        <?php esc_html_e('Category', 'starwishx'); ?>
                     </dt>
                     <dd class="tag-cloud tag-cloud__category">
                         <?php
@@ -100,7 +99,7 @@ if (function_exists('render_block')) {
                                     <svg width="18" height="18" class="info-card__icon">
                                         <use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-calendar"></use>
                                     </svg>
-                                    <?php esc_html_e('Терміни', $td); ?>
+                                    <?php esc_html_e('Dates', 'starwishx'); ?>
                                 </dt>
                                 <div class="date-row">
                                     <time class="btn-text-medium" datetime="<?php echo esc_attr($data['date_start']['iso']); ?>">
@@ -120,7 +119,7 @@ if (function_exists('render_block')) {
                                 <svg width="16" height="21" class="info-card__icon">
                                     <use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-location-bold"></use>
                                 </svg>
-                                <?php esc_html_e('Локація', $td); ?>
+                                <?php esc_html_e('Location', 'starwishx'); ?>
                             </dt>
                             <?php if (!empty($data['locations'])) : ?>
                                 <dd class="tag-cloud tag-cloud__locations">
@@ -148,7 +147,7 @@ if (function_exists('render_block')) {
                                     <svg width="24" height="24" class="info-card__icon">
                                         <use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-person"></use>
                                     </svg>
-                                    <?php esc_html_e('Для кого', $td); ?>
+                                    <?php esc_html_e('Receivers', 'starwishx'); ?>
                                 </dt>
                                 <!-- <dd class="tag-cloud tag-cloud__seekers">
                                     <ul class="tag-list">
@@ -166,7 +165,7 @@ if (function_exists('render_block')) {
 
                     <div class="opportunity-social">
                         <div class="opportunity-social__share">
-                            <span>Social share</span>
+                            <span><?php esc_html_e('Social share', 'starwishx') ?></span>
                             <svg width="18" height="20" class="icon-share">
                                 <use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-share"></use>
                             </svg>
@@ -188,27 +187,27 @@ if (function_exists('render_block')) {
                 <?php endif; ?>
 
                 <?php if ($data['requirements']) : ?>
-                    <h2 class="opportunity-content__title"><?php esc_html_e('Вимоги', $td); ?></h2>
+                    <h2 class="opportunity-content__title"><?php esc_html_e('Requirements', 'starwishx'); ?></h2>
                     <div class="opportunity-content__text">
                         <?php echo wp_kses_post(nl2br($data['requirements'])); ?>
                     </div>
                 <?php endif; ?>
 
-                <h2 class="opportunity-content__title"><?php esc_html_e('Першоджерело', $td); ?></h2>
+                <h2 class="opportunity-content__title"><?php esc_html_e('Source', 'starwishx'); ?></h2>
                 <div class="opportunity-content__text">
                     <strong><?php echo esc_html($data['company']); ?>, </strong>
 
                     <?php if ($data['source_url']) : ?>
-                        <span><?php esc_html_e('Посилання', $td); ?>: </span>
+                        <span><?php esc_html_e('Link', 'starwishx'); ?>: </span>
                         <a href="<?php echo esc_url($data['source_url']); ?>" class="btn-link" target="_blank" rel="nofollow">
                             <?php echo esc_url($data['source_url']); ?>
                         </a>
                     <?php endif; ?>
                 </div>
                 <?php if ($data['application_form']) : ?>
-                    <h2 class="opportunity-content__title"><?php esc_html_e('Форма заявки', $td); ?></h2>
+                    <h2 class="opportunity-content__title"><?php esc_html_e('Application form', 'starwishx'); ?></h2>
                     <div class="opportunity-content__text">
-                        <span><?php esc_html_e('Посилання', $td); ?>: </span>
+                        <span><?php esc_html_e('Link', 'starwishx'); ?>: </span>
                         <a href="<?php echo esc_url($data['application_form']); ?>" class="btn-link" target="_blank" rel="nofollow">
                             <?php echo esc_url($data['application_form']); ?>
                         </a>
@@ -217,7 +216,7 @@ if (function_exists('render_block')) {
 
                 <?php if ($data['details']) : ?>
                     <section class="opportunity-content opportunity-content--details">
-                        <h2 class="opportunity-content__title"><?php esc_html_e('Додаткова інформація', $td); ?></h2>
+                        <h2 class="opportunity-content__title"><?php esc_html_e('Additional information', 'starwishx'); ?></h2>
                         <div class="opportunity-content__text">
                             <?php echo wp_kses_post(nl2br($data['details'])); ?>
                         </div>
@@ -227,7 +226,7 @@ if (function_exists('render_block')) {
                 <!-- Document -->
                 <?php if ($data['document']) : ?>
                     <div class="info-card info-card--file">
-                        <h2 class="opportunity-content__title"><?php esc_html_e('Документ', $td); ?></h2>
+                        <h2 class="opportunity-content__title"><?php esc_html_e('Document', 'starwishx'); ?></h2>
                         <a href="<?php echo esc_url($data['document']['url']); ?>" class="file-download" download>
                             <svg width="28" height="28" aria-hidden="true" class="icon-file">
                                 <use href="<?php echo get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-doc"></use>
@@ -248,7 +247,7 @@ if (function_exists('render_block')) {
     <aside class="opportunity-aside">
         <div class="news-container">
             <?php get_template_part('template-parts/last-news', 'aside', [
-                'title' => __('Новини', '_themedomain'),
+                'title' => __('News', 'starwishx'),
                 'title_class' => 'h5',
                 'count_news' => 7,
                 'line_clamp' => 3

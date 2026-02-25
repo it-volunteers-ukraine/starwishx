@@ -1,197 +1,1057 @@
-# Copyright (C) 2026 _themedomain
-# This file is distributed under the same license as the _themedomain package.
+# Copyright (C) 2026 it-volunteers
+# This file is distributed under the GNU General Public License v2 or later.
 msgid ""
 msgstr ""
-"Project-Id-Version: _themedomain\n"
+"Project-Id-Version: StarWishX 1.0.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/theme/starwishx\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-01-21 01:59+0000\n"
-"X-Poedit-Basepath: ..\n"
-"X-Poedit-KeywordsList: __;_e;_ex:1,2c;_n:1,2;_n_noop:1,2;_nx:1,2,4c;_nx_noop:1,2,3c;_x:1,2c;esc_attr__;esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c\n"
-"X-Poedit-SearchPath-0: .\n"
-"X-Poedit-SearchPathExcluded-0: *.js\n"
-"X-Poedit-SourceCharset: UTF-8\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"POT-Creation-Date: 2026-02-25T17:02:53+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.12.0\n"
+"X-Domain: starwishx\n"
 
-#: 404.php:10
-msgid "Схоже сторінка, яку Ви шукаєте, не існує."
+#. Theme Name of the theme
+#: style.css
+msgid "StarWishX"
 msgstr ""
 
-#: 404.php:23
-msgid "На головну сторінку"
+#. Theme URI of the theme
+#: style.css
+msgid "_themeuri"
 msgstr ""
 
-#: functions.php:15
-msgid "Primary"
+#. Description of the theme
+#: style.css
+msgid "starwishx - A modern and responsive WordPress theme designed for bloggers and creatives who want to showcase their content with style and elegance."
 msgstr ""
 
-#: functions.php:16
-msgid "Header"
+#. Author of the theme
+#: style.css
+msgid "it-volunteers"
 msgstr ""
 
-#: functions.php:17
-msgid "Footer"
+#. Author URI of the theme
+#: style.css
+msgid "https://it-volunteers.com/"
 msgstr ""
 
-#: functions.php:242
-msgid "Пошук"
+#: inc/gateway/Api/PasswordController.php:70
+msgid "If an account exists, a reset link has been sent."
 msgstr ""
 
-#: functions.php:258
-msgid "Мова"
+#: inc/gateway/Api/PasswordController.php:94
+msgid "Password reset successfully!"
 msgstr ""
 
-#: inc/acf/blocks/accordion-one-photo/register.php:4
-msgid "Block accordion one photo"
+#: inc/gateway/Api/RegisterController.php:57
+msgid "Registration successful! Please check your email to set your password."
 msgstr ""
 
-#: inc/acf/blocks/accordion-one-photo/register.php:5
-msgid "Block accordion with one photo"
+#: inc/gateway/Forms/LoginForm.php:22
+msgctxt "gateway"
+msgid "Login"
 msgstr ""
 
-#: inc/acf/blocks/accordion-two-photo-compact/register.php:4
-msgid "Block accordion two photo compact"
+#: inc/gateway/Forms/LoginForm.php:51
+msgid "Welcome Back"
 msgstr ""
 
-#: inc/acf/blocks/accordion-two-photo-compact/register.php:5
-msgid "Block accordion with two photo compact"
+#: inc/gateway/Forms/LoginForm.php:57
+#: inc/gateway/Forms/LostPasswordForm.php:45
+msgctxt "gateway"
+msgid "Login name or Email"
 msgstr ""
 
-#: inc/acf/blocks/accordion-two-photo/register.php:4
-msgid "Block accordion two photo"
+#: inc/gateway/Forms/LoginForm.php:65
+#: inc/gateway/Forms/LostPasswordForm.php:47
+msgctxt "gateway"
+msgid "Latin letters, digits, . - _ @"
 msgstr ""
 
-#: inc/acf/blocks/accordion-two-photo/register.php:5
-msgid "Block accordion with two photo"
+#: inc/gateway/Forms/LoginForm.php:79
+msgid "Password"
 msgstr ""
 
-#: inc/acf/blocks/animated-text/register.php:4
-msgid "Animated Text"
+#: inc/gateway/Forms/LoginForm.php:130
+msgid "Log In"
 msgstr ""
 
-#: inc/acf/blocks/animated-text/register.php:5
-msgid "Block for displaying animated text on the homepage"
+#: inc/gateway/Forms/LoginForm.php:133
+msgid "Logging in..."
 msgstr ""
 
-#: inc/acf/blocks/blocks-init.php:11
-msgid "Custom Blocks"
+#: inc/gateway/Forms/LoginForm.php:141
+msgid "Create account"
 msgstr ""
 
-#: inc/acf/blocks/blocks-init.php:19
-msgid "CCC Blocks"
+#: inc/gateway/Forms/LoginForm.php:154
+msgid "Remember me"
 msgstr ""
 
-#: inc/acf/blocks/breadcrumbs/register.php:4
-msgid "Breadcrumbs"
+#: inc/gateway/Forms/LoginForm.php:162
+msgid "Forgot password?"
 msgstr ""
 
-#: inc/acf/blocks/breadcrumbs/register.php:5
-msgid "Block breadcrumbs"
+#: inc/gateway/Forms/LostPasswordForm.php:21
+msgctxt "gateway"
+msgid "Lost Password"
 msgstr ""
 
-#: inc/acf/blocks/christmas-tree/register.php:4, inc/acf/blocks/christmas-tree/register.php:5
-msgid "ChristmasTree"
+#: inc/gateway/Forms/LostPasswordForm.php:40
+msgid "Lost Password"
 msgstr ""
 
-#: inc/acf/blocks/contact_form/register.php:5
-msgid "Contact Form"
+#: inc/gateway/Forms/LostPasswordForm.php:43
+msgid "Enter your login or email to receive a reset link."
 msgstr ""
 
-#: inc/acf/blocks/contact_form/register.php:6
-msgid "Контактний блок з формою і контактною інформацією"
+#: inc/gateway/Forms/LostPasswordForm.php:55
+msgctxt "gateway"
+msgid "Get New Password"
 msgstr ""
 
-#: inc/acf/blocks/contact_page/register.php:5
-msgid "Contact Promo Card"
+#: inc/gateway/Forms/LostPasswordForm.php:58
+msgid "Processing..."
 msgstr ""
 
-#: inc/acf/blocks/contact_page/register.php:6
-msgid "Картка з фото, текстом та контактами"
+#: inc/gateway/Forms/LostPasswordForm.php:65
+msgctxt "gateway"
+msgid "Check your email for the confirmation link."
 msgstr ""
 
-#: inc/acf/blocks/faq/register.php:4
-msgid "FAQ Block"
+#: inc/gateway/Forms/LostPasswordForm.php:70
+msgctxt "gateway"
+msgid "Back to Login"
 msgstr ""
 
-#: inc/acf/blocks/faq/register.php:5
-msgid "Frequently Asked Questions Block"
+#: inc/gateway/Forms/RegisterForm.php:21
+msgctxt "gateway"
+msgid "Register"
 msgstr ""
 
-#: inc/acf/blocks/hero/register.php:4
-msgid "Hero"
+#: inc/gateway/Forms/RegisterForm.php:42
+msgid "Create Account"
 msgstr ""
 
-#: inc/acf/blocks/hero/register.php:5
-msgid "Block Hero"
+#: inc/gateway/Forms/RegisterForm.php:45
+msgid "Enter your details to receive an activation link."
 msgstr ""
 
-#: inc/acf/blocks/news-page/register.php:4, inc/acf/blocks/news-page/register.php:5
-msgid "Block News Page"
+#: inc/gateway/Forms/RegisterForm.php:48
+msgctxt "gateway"
+msgid "Login name"
 msgstr ""
 
-#: inc/acf/blocks/news/register.php:4, inc/acf/blocks/news/register.php:5
-msgid "Block News"
+#: inc/gateway/Forms/RegisterForm.php:50
+msgctxt "gateway"
+msgid "Latin letters, digits, . - _"
 msgstr ""
 
-#: inc/acf/blocks/photo-text/register.php:4
-msgid "Block1 Photo & Text & Contacts"
+#: inc/gateway/Forms/RegisterForm.php:56
+msgctxt "gateway"
+msgid "Email"
 msgstr ""
 
-#: inc/acf/blocks/photo-text/register.php:5
-msgid "Block with title, photo, text and contact"
+#: inc/gateway/Forms/RegisterForm.php:63
+msgid "Register"
 msgstr ""
 
-#: inc/acf/blocks/projects/register.php:4
-msgid "Projects Banner (Static)"
+#: inc/gateway/Forms/RegisterForm.php:68
+msgid "Registration successful! Please check your email for the activation link."
 msgstr ""
 
-#: inc/acf/blocks/projects/register.php:5
-msgid "Static banner with 4 manually filled project cards"
+#: inc/gateway/Forms/RegisterForm.php:74
+#: inc/gateway/Forms/ResetPasswordForm.php:121
+msgid "Back to Login"
 msgstr ""
 
-#. translators: %s: search query.
-#: search.php:13
-msgid "Search Results for: %s"
+#: inc/gateway/Forms/ResetPasswordForm.php:20
+msgctxt "gateway"
+msgid "Reset Password"
 msgstr ""
 
-#: template-parts/content-none.php:4
-msgid "Nothing Found"
+#: inc/gateway/Forms/ResetPasswordForm.php:41
+msgid "Set New Password"
 msgstr ""
 
-#: template-parts/content-none.php:34
-msgid "It seems we can&rsquo;t find what you&rsquo;re looking for. Perhaps searching can help."
+#: inc/gateway/Forms/ResetPasswordForm.php:43
+msgid "Your new password has been pre-generated. You can modify it or generate a new one."
 msgstr ""
 
-#: template-parts/content-none.php:27
-msgid "Sorry, but nothing matched your search terms. Please try again with some different keywords."
+#: inc/gateway/Forms/ResetPasswordForm.php:48
+#: inc/launchpad/Panels/ProfilePanel.php:227
+#: inc/launchpad/Panels/SecurityPanel.php:70
+msgid "New Password"
 msgstr ""
 
-#. translators: %s: Name of current post. Only visible to screen readers
-#: template-parts/content.php:18
-msgid "Continue reading<span class=\"screen-reader-text\"> \"%s\"</span>"
+#: inc/gateway/Forms/ResetPasswordForm.php:92
+msgid "Generate New Password"
 msgstr ""
 
-#: templates/main-page.php:3
+#: inc/gateway/Forms/ResetPasswordForm.php:95
+msgid "Generating..."
+msgstr ""
+
+#: inc/gateway/Forms/ResetPasswordForm.php:103
+msgid "Save Password"
+msgstr ""
+
+#: inc/gateway/Forms/ResetPasswordForm.php:106
+#: inc/launchpad/Panels/ProfilePanel.php:198
+msgid "Saving..."
+msgstr ""
+
+#: inc/gateway/Forms/ResetPasswordForm.php:115
+msgid "Password Reset Successful!"
+msgstr ""
+
+#: inc/gateway/Services/AuthService.php:41
+msgid "Too many login attempts. Please wait 15 minutes."
+msgstr ""
+
+#: inc/gateway/Services/AuthService.php:54
+msgid "Invalid username or password."
+msgstr ""
+
+#: inc/gateway/Services/PasswordResetService.php:33
+msgid "Please enter a username or email."
+msgstr ""
+
+#: inc/gateway/Services/PasswordResetService.php:73
+msgid "Someone has requested a password reset for the following account:"
+msgstr ""
+
+#: inc/gateway/Services/PasswordResetService.php:74
+#, php-format
+msgid "Site Name: %s"
+msgstr ""
+
+#: inc/gateway/Services/PasswordResetService.php:75
+#, php-format
+msgid "Username: %s"
+msgstr ""
+
+#: inc/gateway/Services/PasswordResetService.php:76
+msgid "If this was a mistake, ignore this email and nothing will happen."
+msgstr ""
+
+#: inc/gateway/Services/PasswordResetService.php:77
+msgid "To reset your password, visit the following address:"
+msgstr ""
+
+#: inc/gateway/Services/PasswordResetService.php:80
+#, php-format
+msgid "[%s] Password Reset"
+msgstr ""
+
+#: inc/gateway/Services/PasswordResetService.php:107
+msgid "This link is invalid or expired. Please request a new one."
+msgstr ""
+
+#: inc/gateway/Services/PasswordResetService.php:150
+#: inc/launchpad/Services/SecurityService.php:27
+#, php-format
+msgid "Password must be at least %d characters long."
+msgstr ""
+
+#: inc/gateway/Services/PasswordResetService.php:164
+msgid "Please use a mix of uppercase letters, numbers, and symbols."
+msgstr ""
+
+#: inc/gateway/Services/PasswordResetService.php:180
+msgid "Password cannot contain your username, email, or name."
+msgstr ""
+
+#: inc/gateway/Services/PasswordResetService.php:216
+#, php-format
+msgid "Too many password reset attempts. Please try again in %d minutes."
+msgstr ""
+
+#: inc/gateway/Services/RegisterService.php:26
+msgid "Please provide a valid username and email address."
+msgstr ""
+
+#: inc/gateway/Services/RegisterService.php:37
+msgid "Login name may only contain latin letters, numbers, dots, underscores, and hyphens (3-60 characters)."
+msgstr ""
+
+#: inc/gateway/Services/RegisterService.php:43
+msgid "This username is already taken."
+msgstr ""
+
+#: inc/gateway/Services/RegisterService.php:46
+msgid "This email is already registered."
+msgstr ""
+
+#: inc/gateway/Services/RegisterService.php:85
+#, php-format
+msgid "[%s] Activate Your Account"
+msgstr ""
+
+#: inc/gateway/Services/RegisterService.php:87
+#, php-format
+msgid "Welcome, %s!"
+msgstr ""
+
+#: inc/gateway/Services/RegisterService.php:88
+msgid "To complete your registration and set your password, click the link below:"
+msgstr ""
+
+#: inc/gateway/Services/RegisterService.php:90
+msgid "If you did not request this, please ignore this email."
+msgstr ""
+
+#: inc/gateway/setup.php:48
+msgid "Gateway"
+msgstr ""
+
+#: inc/gateway/setup.php:67
+msgid "The Gateway page cannot be deleted."
+msgstr ""
+
+#: inc/gateway/setup.php:74
+msgid "The Gateway page cannot be trashed."
+msgstr ""
+
+#: inc/launchpad/Api/MainController.php:47
+msgid "Panel not found."
+msgstr ""
+
+#: inc/launchpad/Api/MediaController.php:35
+msgid "No file provided"
+msgstr ""
+
+#: inc/launchpad/Api/OpportunitiesController.php:212
+msgid "Status updated."
+msgstr ""
+
+#: inc/launchpad/Api/OpportunitiesController.php:255
+msgid "Opportunity not found."
+msgstr ""
+
+#: inc/launchpad/Api/OpportunitiesController.php:327
+msgid "Updated successfully"
+msgstr ""
+
+#: inc/launchpad/Api/OpportunitiesController.php:327
+msgid "Created successfully"
+msgstr ""
+
+#: inc/launchpad/Api/OpportunitiesController.php:338
+msgid "Please complete your profile (name and phone) before posting opportunities."
+msgstr ""
+
+#: inc/launchpad/Api/ProfileController.php:65
+msgid "Profile updated."
+msgstr ""
+
+#: inc/launchpad/Api/SecurityController.php:35
+msgid "Current password is incorrect."
+msgstr ""
+
+#: inc/launchpad/Api/SecurityController.php:45
+msgid "Password changed. Please log in again."
+msgstr ""
+
+#: inc/launchpad/Panels/FavoritesPanel.php:28
+#: inc/launchpad/Panels/StatsPanel.php:61
+#: template-parts/control-favorites.php:39
+#: template-parts/control-favorites.php:44
+msgid "Favorites"
+msgstr ""
+
+#: inc/launchpad/Panels/FavoritesPanel.php:57
+msgid "My Favorites"
+msgstr ""
+
+#: inc/launchpad/Panels/FavoritesPanel.php:66
+#: inc/launchpad/Panels/OpportunitiesPanel.php:282
+#: template-parts/comments-interactive.php:386
+msgid "Loading..."
+msgstr ""
+
+#: inc/launchpad/Panels/FavoritesPanel.php:72
+msgid "No favorites yet."
+msgstr ""
+
+#: inc/launchpad/Panels/FavoritesPanel.php:102
+msgid "Opportunity"
+msgstr ""
+
+#: inc/launchpad/Panels/FavoritesPanel.php:111
+msgid "View"
+msgstr ""
+
+#: inc/launchpad/Panels/FavoritesPanel.php:119
+msgid "Remove"
+msgstr ""
+
+#: inc/launchpad/Panels/FavoritesPanel.php:132
+#: inc/launchpad/Panels/OpportunitiesPanel.php:393
+#: inc/listing/Core/ResultsGrid.php:65
+msgid "Load More"
+msgstr ""
+
+#: inc/launchpad/Panels/OpportunitiesPanel.php:29
+msgid "Opportunities"
+msgstr ""
+
+#: inc/launchpad/Panels/OpportunitiesPanel.php:100
+msgid "Opportunity not found or access denied."
+msgstr ""
+
+#: inc/launchpad/Panels/OpportunitiesPanel.php:126
+msgid "New Opportunity"
+msgstr ""
+
+#: inc/launchpad/Panels/OpportunitiesPanel.php:127
+msgid "Edit Opportunity"
+msgstr ""
+
+#: inc/launchpad/Panels/OpportunitiesPanel.php:192
+msgid "Post an Opportunity"
+msgstr ""
+
+#: inc/launchpad/Panels/OpportunitiesPanel.php:193
+msgid "To publish opportunities, please complete your profile first — we need your name and phone number."
+msgstr ""
+
+#: inc/launchpad/Panels/OpportunitiesPanel.php:197
+msgid "Fill Profile"
+msgstr ""
+
+#: inc/launchpad/Panels/OpportunitiesPanel.php:207
+msgid "Opportunities List"
+msgstr ""
+
+#: inc/launchpad/Panels/OpportunitiesPanel.php:208
+msgid "You can add new opportunities, edit existing ones, and submit them for review. All opportunity data is reviewed and moderated by the site administration team before being approved for publication or rejected. Please contact the site staff if you have any questions."
+msgstr ""
+
+#: inc/launchpad/Panels/OpportunitiesPanel.php:214
+msgid "Filter by status:"
+msgstr ""
+
+#: inc/launchpad/Panels/OpportunitiesPanel.php:218
+msgid "Drafts"
+msgstr ""
+
+#: inc/launchpad/Panels/OpportunitiesPanel.php:219
+msgid "Pending"
+msgstr ""
+
+#: inc/launchpad/Panels/OpportunitiesPanel.php:220
+msgid "Published"
+msgstr ""
+
+#: inc/launchpad/Panels/OpportunitiesPanel.php:272
+msgid "Add New"
+msgstr ""
+
+#: inc/launchpad/Panels/OpportunitiesPanel.php:287
+msgid "No opportunities yet."
+msgstr ""
+
+#: inc/launchpad/Panels/OpportunitiesPanel.php:327
+msgid "Finished"
+msgstr ""
+
+#: inc/launchpad/Panels/OpportunitiesPanel.php:373
+#: inc/launchpad/Panels/OpportunitiesPanel.php:765
+msgid "Submit for Review"
+msgstr ""
+
+#: inc/launchpad/Panels/OpportunitiesPanel.php:381
+#: template-parts/comments-interactive.php:201
+#: template-parts/comments-interactive.php:293
+msgid "Edit"
+msgstr ""
+
+#: inc/launchpad/Panels/OpportunitiesPanel.php:411
+msgid "Back to list"
+msgstr ""
+
+#: inc/launchpad/Panels/OpportunitiesPanel.php:419
+msgid "Opportunity Title"
+msgstr ""
+
+#: inc/launchpad/Panels/OpportunitiesPanel.php:433
+msgid "Opportunity Info"
+msgstr ""
+
+#: inc/launchpad/Panels/OpportunitiesPanel.php:438
+msgid "Company"
+msgstr ""
+
+#: inc/launchpad/Panels/OpportunitiesPanel.php:446
+msgid "Start Date"
+msgstr ""
+
+#: inc/launchpad/Panels/OpportunitiesPanel.php:449
+#: inc/launchpad/Panels/OpportunitiesPanel.php:460
+msgid "Open calendar"
+msgstr ""
+
+#: inc/launchpad/Panels/OpportunitiesPanel.php:457
+msgid "End Date"
+msgstr ""
+
+#: inc/launchpad/Panels/OpportunitiesPanel.php:472
+#: inc/listing/Core/ResultsGrid.php:190
+#: inc/listing/Enums/Taxonomy.php:30
+#: inc/listing/Filters/CountryFilter.php:21
+msgid "Country"
+msgstr ""
+
+#: inc/launchpad/Panels/OpportunitiesPanel.php:477
+msgid "Select Country"
+msgstr ""
+
+#: inc/launchpad/Panels/OpportunitiesPanel.php:484
+#: templates/single-opportunity.php:201
+#: templates/single-opportunity.php:210
+msgid "Link"
+msgstr ""
+
+#: inc/launchpad/Panels/OpportunitiesPanel.php:490
+msgid "Application Form URL"
+msgstr ""
+
+#: inc/launchpad/Panels/OpportunitiesPanel.php:500
+msgid "Locations (KATOTTG)"
+msgstr ""
+
+#: inc/launchpad/Panels/OpportunitiesPanel.php:501
+msgid "Filter by administrative level"
+msgstr ""
+
+#: inc/launchpad/Panels/OpportunitiesPanel.php:530
+msgid "Kyivska, Lvivska..."
+msgstr ""
+
+#: inc/launchpad/Panels/OpportunitiesPanel.php:555
+msgid "Buchanskyi, Stryiskyi..."
+msgstr ""
+
+#: inc/launchpad/Panels/OpportunitiesPanel.php:580
+msgid "Bucha, Irpin, Kyiv..."
+msgstr ""
+
+#: inc/launchpad/Panels/OpportunitiesPanel.php:603
+msgid "Opportunity Category"
+msgstr ""
+
+#: inc/launchpad/Panels/OpportunitiesPanel.php:630
+#: inc/listing/Enums/Taxonomy.php:31
+msgid "Seekers"
+msgstr ""
+
+#: inc/launchpad/Panels/OpportunitiesPanel.php:648
+msgid "Description"
+msgstr ""
+
+#: inc/launchpad/Panels/OpportunitiesPanel.php:651
+msgid "Describe the opportunity"
+msgstr ""
+
+#: inc/launchpad/Panels/OpportunitiesPanel.php:653
+msgid "Add information about the opportunity. Describe the essence."
+msgstr ""
+
+#: inc/launchpad/Panels/OpportunitiesPanel.php:657
+#: templates/single-opportunity.php:190
+msgid "Requirements"
+msgstr ""
+
+#: inc/launchpad/Panels/OpportunitiesPanel.php:663
+msgid "Details"
+msgstr ""
+
+#: inc/launchpad/Panels/OpportunitiesPanel.php:673
+#: templates/single-opportunity.php:229
+msgid "Document"
+msgstr ""
+
+#: inc/launchpad/Panels/OpportunitiesPanel.php:691
+msgid "Attach File"
+msgstr ""
+
+#: inc/launchpad/Panels/OpportunitiesPanel.php:720
+msgid "Pending Save"
+msgstr ""
+
+#: inc/launchpad/Panels/OpportunitiesPanel.php:739
+msgid "Format (PDF, DOCX). Max size 5Mb."
+msgstr ""
+
+#: inc/launchpad/Panels/OpportunitiesPanel.php:753
+msgid "Save Draft"
+msgstr ""
+
+#: inc/launchpad/Panels/OpportunitiesPanel.php:772
+msgid "Назад до списку"
+msgstr ""
+
+#: inc/launchpad/Panels/ProfilePanel.php:26
+msgid "Profile"
+msgstr ""
+
+#: inc/launchpad/Panels/ProfilePanel.php:80
+msgid "Profile Information"
+msgstr ""
+
+#: inc/launchpad/Panels/ProfilePanel.php:81
+msgid "View/edit personal information, change password"
+msgstr ""
+
+#: inc/launchpad/Panels/ProfilePanel.php:127
+msgid "Edit Profile"
+msgstr ""
+
+#: inc/launchpad/Panels/ProfilePanel.php:131
+#: inc/launchpad/Panels/SecurityPanel.php:56
+#: inc/launchpad/Panels/SecurityPanel.php:97
+msgid "Change Password"
+msgstr ""
+
+#: inc/launchpad/Panels/ProfilePanel.php:144
+msgid "First Name"
+msgstr ""
+
+#: inc/launchpad/Panels/ProfilePanel.php:151
+msgid "Last Name"
+msgstr ""
+
+#: inc/launchpad/Panels/ProfilePanel.php:158
+msgid "Email"
+msgstr ""
+
+#: inc/launchpad/Panels/ProfilePanel.php:167
+msgid "Phone"
+msgstr ""
+
+#: inc/launchpad/Panels/ProfilePanel.php:178
+msgid "Telegram"
+msgstr ""
+
+#: inc/launchpad/Panels/ProfilePanel.php:185
+msgid "Organization"
+msgstr ""
+
+#: inc/launchpad/Panels/ProfilePanel.php:195
+#: template-parts/comments-interactive.php:250
+#: template-parts/comments-interactive.php:324
+msgid "Save"
+msgstr ""
+
+#: inc/launchpad/Panels/ProfilePanel.php:203
+#: inc/launchpad/Panels/ProfilePanel.php:243
+#: template-parts/comments-interactive.php:134
+#: template-parts/comments-interactive.php:246
+#: template-parts/comments-interactive.php:320
+#: template-parts/comments-interactive.php:358
+msgid "Cancel"
+msgstr ""
+
+#: inc/launchpad/Panels/ProfilePanel.php:217
+msgid "Update Security Credentials"
+msgstr ""
+
+#: inc/launchpad/Panels/ProfilePanel.php:220
+#: inc/launchpad/Panels/SecurityPanel.php:59
+msgid "Current Password"
+msgstr ""
+
+#: inc/launchpad/Panels/ProfilePanel.php:232
+msgid "Confirm New Password"
+msgstr ""
+
+#: inc/launchpad/Panels/ProfilePanel.php:240
+msgid "Update Password"
+msgstr ""
+
+#: inc/launchpad/Panels/SecurityPanel.php:17
+msgid "Security"
+msgstr ""
+
+#: inc/launchpad/Panels/SecurityPanel.php:40
+msgid "Security Settings"
+msgstr ""
+
+#: inc/launchpad/Panels/SecurityPanel.php:50
+msgid "Password changed successfully."
+msgstr ""
+
+#: inc/launchpad/Panels/SecurityPanel.php:82
+msgid "Confirm Password"
+msgstr ""
+
+#: inc/launchpad/Panels/StatsPanel.php:27
+msgid "Stats"
+msgstr ""
+
+#: inc/launchpad/Panels/StatsPanel.php:50
+msgid "Your Statistics"
+msgstr ""
+
+#: inc/launchpad/Panels/StatsPanel.php:56
+msgid "Views"
+msgstr ""
+
+#: inc/launchpad/Panels/StatsPanel.php:66
+msgid "Comments"
+msgstr ""
+
+#: inc/launchpad/Panels/StatsPanel.php:71
+msgid "Recent Activity"
+msgstr ""
+
+#: inc/launchpad/Services/CommentsService.php:155
+msgid "User not found."
+msgstr ""
+
+#: inc/launchpad/Services/CommentsService.php:162
+msgid "Parent comment not found."
+msgstr ""
+
+#: inc/launchpad/Services/CommentsService.php:175
+msgid "You cannot reply to this thread."
+msgstr ""
+
+#: inc/launchpad/Services/CommentsService.php:191
+msgid "Failed to post comment."
+msgstr ""
+
+#: inc/launchpad/Services/CommentsService.php:223
+msgid "Comment not found."
+msgstr ""
+
+#: inc/launchpad/Services/CommentsService.php:226
+msgid "You cannot edit this comment."
+msgstr ""
+
+#: inc/launchpad/Services/CommentsService.php:234
+msgid "Edit time limit expired (15 min)."
+msgstr ""
+
+#: inc/launchpad/Services/MediaService.php:26
+msgid "File is too large. Max 5MB."
+msgstr ""
+
+#: inc/launchpad/Services/MediaService.php:35
+msgid "Invalid file type. Only PDF and DOC/DOCX allowed."
+msgstr ""
+
+#: inc/launchpad/Services/OpportunitiesService.php:511
+msgid "Access denied."
+msgstr ""
+
+#: inc/launchpad/Services/OpportunitiesService.php:517
+msgid "Only drafts can be submitted for review."
+msgstr ""
+
+#: inc/launchpad/Services/SecurityService.php:20
+msgid "The current password you entered is incorrect."
+msgstr ""
+
+#: inc/launchpad/setup.php:48
+msgid "Launchpad"
+msgstr ""
+
+#: inc/launchpad/setup.php:82
+msgid "The Launchpad page cannot be deleted."
+msgstr ""
+
+#: inc/launchpad/setup.php:89
+msgid "The Launchpad page cannot be trashed."
+msgstr ""
+
+#: inc/listing/Core/ResultsGrid.php:43
+msgid "Nothing found matching your criteria"
+msgstr ""
+
+#: inc/listing/Core/ResultsGrid.php:45
+msgid "Clear all filters"
+msgstr ""
+
+#: inc/listing/Core/ResultsGrid.php:105
+#: template-parts/control-favorites.php:38
+msgid "Add to favorites"
+msgstr ""
+
+#: inc/listing/Core/ResultsGrid.php:108
+msgid "In favorites"
+msgstr ""
+
+#: inc/listing/Core/ResultsGrid.php:118
+#: template-parts/control-favorites.php:52
+msgid "Toggle Favorite"
+msgstr ""
+
+#: inc/listing/Core/ResultsGrid.php:177
+msgid "From:"
+msgstr ""
+
+#: inc/listing/Core/ResultsGrid.php:181
+msgid "To:"
+msgstr ""
+
+#: inc/listing/Core/ResultsGrid.php:186
+msgid "Donator"
+msgstr ""
+
+#: inc/listing/Core/ResultsGrid.php:195
+#: inc/listing/Filters/SeekersFilter.php:23
+msgid "Recievers"
+msgstr ""
+
+#: inc/listing/Enums/Taxonomy.php:29
+#: inc/listing/Filters/CategoryFilter.php:31
+#: templates/single-opportunity.php:56
+msgid "Category"
+msgstr ""
+
+#: inc/listing/Filters/CityFilter.php:18
+msgid "City"
+msgstr ""
+
+#: inc/listing/Filters/CityFilter.php:78
+msgid "Find city..."
+msgstr ""
+
+#: inc/listing/Filters/CityFilter.php:111
+msgid "Clear selection"
+msgstr ""
+
+#: inc/listing/Filters/LocationsFilter.php:28
+#: inc/listing/Filters/LocationsFilterSimple.php:34
+#: templates/single-opportunity.php:122
+msgid "Location"
+msgstr ""
+
+#: inc/listing/Filters/LocationsFilter.php:101
+#: inc/listing/Filters/LocationsFilterSimple.php:132
+msgid "Find location..."
+msgstr ""
+
+#: inc/listing/Filters/LocationsFilter.php:111
+msgid "Clear"
+msgstr ""
+
+#: inc/listing/Services/ListingService.php:252
+#, php-format
+msgid "Filter \"%s\" is not supported."
+msgstr ""
+
+#: inc/listing/Services/ListingService.php:278
+msgid "Failed to fetch location options."
+msgstr ""
+
+#: inc/listing/setup.php:47
+msgid "Listing Oportunities"
+msgstr ""
+
+#: inc/listing/setup.php:75
+msgid "The Listing page cannot be deleted."
+msgstr ""
+
+#: inc/listing/setup.php:82
+msgid "The Listing page cannot be trashed."
+msgstr ""
+
+#: inc/shared/Core/AbstractApiController.php:39
+msgid "You must be logged in to access this resource."
+msgstr ""
+
+#: inc/shared/Core/AbstractApiController.php:64
+msgid "You are already logged in."
+msgstr ""
+
+#: inc/theme-helpers.php:485
+msgid "Worldwide"
+msgstr ""
+
+#: inc/theme-helpers.php:830
+msgid "Show 1 more"
+msgstr ""
+
+#: inc/theme-helpers.php:831
+#, php-format
+msgid "Show %d more"
+msgid_plural "Show %d more"
+msgstr[0] ""
+msgstr[1] ""
+
+#: template-parts/comments-interactive.php:60
+msgid "Reviews"
+msgstr ""
+
+#: template-parts/comments-interactive.php:83
+msgid "Add review"
+msgstr ""
+
+#: template-parts/comments-interactive.php:87
+msgid "Enter to comment"
+msgstr ""
+
+#: template-parts/comments-interactive.php:108
+msgid "Your Rating:"
+msgstr ""
+
+#: template-parts/comments-interactive.php:127
+msgid "Write your review here..."
+msgstr ""
+
+#: template-parts/comments-interactive.php:137
+msgid "Send"
+msgstr ""
+
+#: template-parts/comments-interactive.php:138
+#: template-parts/comments-interactive.php:368
+msgid "Sending..."
+msgstr ""
+
+#: template-parts/comments-interactive.php:146
+msgid "Publishing..."
+msgstr ""
+
+#: template-parts/comments-interactive.php:162
+msgid "No comments yet."
+msgstr ""
+
+#: template-parts/comments-interactive.php:175
+#: template-parts/comments-interactive.php:278
+msgid "Author"
+msgstr ""
+
+#: template-parts/comments-interactive.php:207
+#: template-parts/comments-interactive.php:298
+#: template-parts/comments-interactive.php:361
+msgid "Reply"
+msgstr ""
+
+#: template-parts/comments-interactive.php:258
+msgid "Updating..."
+msgstr ""
+
+#: template-parts/comments-interactive.php:352
+msgid "Write a reply..."
+msgstr ""
+
+#: template-parts/comments-interactive.php:385
+msgid "Show more"
+msgstr ""
+
+#: template-parts/control-header-auth.php:37
+msgid "Login"
+msgstr ""
+
+#: template-parts/control-header-auth.php:42
+#: template-parts/control-header-auth.php:63
+msgid "Logout"
+msgstr ""
+
+#: template-parts/control-header-auth.php:58
+msgid "Cabinet"
+msgstr ""
+
+#. Template Name of the theme
 msgid "main template"
 msgstr ""
 
-#: templates/only-header.php:3
+#. Template Name of the theme
 msgid "Only Header"
 msgstr ""
 
-#: templates/page-gateway.php:3
+#. Template Name of the theme
+msgid "Category Oportunities Index"
+msgstr ""
+
+#. Template Name of the theme
 msgid "Gateway Page"
 msgstr ""
 
-#: templates/page-launchpad.php:3
+#: templates/page-gateway.php:134
+msgid "Назад"
+msgstr ""
+
+#. Template Name of the theme
 msgid "Launchpad Page"
 msgstr ""
 
-#: templates/page-policy.php:3
+#. Template Name of the theme
+msgid "Listing Page"
+msgstr ""
+
+#: templates/page-listing-oportunities.php:72
+msgid "Refine Search"
+msgstr ""
+
+#: templates/page-listing-oportunities.php:86
+msgid "Keyword search"
+msgstr ""
+
+#: templates/page-listing-oportunities.php:99
+msgid "Search by keyword..."
+msgstr ""
+
+#. Template Name of the theme
 msgid "Policy Page"
 msgstr ""
 
-#: templates/single-opportunity.php:3
+#: templates/page-policy.php:99
+msgid "Policy document download"
+msgstr ""
+
+#: templates/page-policy.php:126
+#, php-format
+msgid "%1$s, %2$s"
+msgstr ""
+
+#: templates/page-policy.php:131
+msgid "PDF"
+msgstr ""
+
+#: templates/page-policy.php:140
+msgid "No PDF uploaded"
+msgstr ""
+
+#: templates/page-policy.php:154
+msgid "Дата набуття чинності:"
+msgstr ""
+
+#. Template Name of the theme
 msgid "Single Opportunity View"
+msgstr ""
+
+#: templates/single-opportunity.php:102
+msgid "Dates"
+msgstr ""
+
+#: templates/single-opportunity.php:150
+msgid "Receivers"
+msgstr ""
+
+#: templates/single-opportunity.php:168
+msgid "Social share"
+msgstr ""
+
+#: templates/single-opportunity.php:196
+msgid "Source"
+msgstr ""
+
+#: templates/single-opportunity.php:208
+msgid "Application form"
+msgstr ""
+
+#: templates/single-opportunity.php:219
+msgid "Additional information"
+msgstr ""
+
+#: templates/single-opportunity.php:250
+msgid "News"
 msgstr ""
