@@ -59,10 +59,32 @@ class ListingService
 
     /**
      * Batch-loads all per-post data needed by formatOpportunityCard() in as few
-     * queries as possible, then indexes the results by post ID.
+     * queries as possible.
      *
-     * Without this, formatOpportunityCard() would fire 5–10 queries per post,
-     * leading to 100–200+ queries on a standard result page.
+     * Term loading strategy — why update_object_term_cache() instead of wp_get_object_terms():
+     *
+     * wp_get_object_terms() with multiple object IDs returns each unique term only
+     * once, even when it is associated with several posts. The object_id property
+     * on the returned WP_Term reflects only one of the matching posts, making
+     * reliable post-keyed indexing impossible.
+     *
+     * update_object_term_cache() issues one query per taxonomy to prime WordPress's
+     * internal per-request object cache for every post in the set. Subsequent
+     * get_the_terms() calls in formatOpportunityCard() then hit the cache at zero
+     * DB cost, giving correct per-post results without any custom indexing logic.
+     * With a persistent cache (Redis / Memcached), the taxonomy queries are also
+     * skipped on warm requests.
+     *
+     * The full category term map (needed for parent-climbing) is stored in a WP
+     * transient so it survives across requests without a persistent cache driver.
+     * It is invalidated on the 'saved_term' hook — see ListingCore::bootstrap().
+     *
+     * Queries per request for a page of N posts:
+     *   - 1 × location view      (all posts in one IN clause, always)
+     *   - 3 × taxonomy cache     (update_object_term_cache, one per taxonomy, always)
+     *   - 1 × get_terms          (category map, only on transient cache miss)
+     *   - N × isFavorite         (logged-in users only; batch optimisation possible
+     *                              via FavoritesService::getFavoriteIds())
      *
      * @param int[] $postIds
      */
@@ -77,8 +99,8 @@ class ListingService
             // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
             $wpdb->prepare(
                 "SELECT post_id, code, name_category_oblast AS name, level, category
-                 FROM {$wpdb->prefix}v_opportunity_search
-                 WHERE post_id IN ($placeholders)",
+             FROM {$wpdb->prefix}v_opportunity_search
+             WHERE post_id IN ($placeholders)",
                 ...$postIds
             ),
             ARRAY_A
@@ -91,24 +113,28 @@ class ListingService
             $locationsByPost[$pid][] = $row;
         }
 
-        // --- Taxonomy terms (batch across all posts) ------------------------
-        $countryTerms  = wp_get_object_terms($postIds, 'country');
-        $categoryTerms = wp_get_object_terms($postIds, 'category-oportunities');
-        $seekerTerms   = wp_get_object_terms($postIds, 'category-seekers');
-
-        $countryByPost  = $this->indexTermsByPost($countryTerms);
-        $categoryByPost = $this->indexTermsByPost($categoryTerms);
-        $seekersByPost  = $this->indexTermsByPost($seekerTerms);
+        // --- Taxonomy terms — prime the WP object cache in bulk -------------
+        // One query per taxonomy (3 total). All subsequent get_the_terms() calls
+        // in formatOpportunityCard() resolve from cache, not the database.
+        update_object_term_cache($postIds, ['country', 'category-oportunities', 'category-seekers']);
 
         // --- Full category term map for parent-climbing ---------------------
-        // Fetched once here so resolveTopLevelCategories() needs no DB calls.
-        $allCategoryTerms = get_terms(['taxonomy' => 'category-oportunities', 'hide_empty' => false]);
-        $categoryTermMap  = [];
+        // Cached via transient so the get_terms() query is only paid once per hour
+        // (or until a term is saved). Invalidated in ListingCore::bootstrap() via
+        // the 'saved_term' action on the 'category-oportunities' taxonomy.
+        $categoryTermMap = get_transient('listing_category_term_map');
 
-        if (! is_wp_error($allCategoryTerms)) {
-            foreach ($allCategoryTerms as $term) {
-                $categoryTermMap[$term->term_id] = $term;
+        if ($categoryTermMap === false) {
+            $allCategoryTerms = get_terms(['taxonomy' => 'category-oportunities', 'hide_empty' => false]);
+            $categoryTermMap  = [];
+
+            if (! is_wp_error($allCategoryTerms)) {
+                foreach ($allCategoryTerms as $term) {
+                    $categoryTermMap[$term->term_id] = $term;
+                }
             }
+
+            set_transient('listing_category_term_map', $categoryTermMap, HOUR_IN_SECONDS);
         }
 
         // --- Favorites (current user only) ----------------------------------
@@ -125,41 +151,17 @@ class ListingService
 
         return [
             'locations'       => $locationsByPost,
-            'countries'       => $countryByPost,
-            'categories'      => $categoryByPost,
-            'seekers'         => $seekersByPost,
             'categoryTermMap' => $categoryTermMap,
             'favoriteIds'     => $favoriteIds,
         ];
     }
 
     /**
-     * Groups a flat array of WP_Term objects by their object_id (post ID).
-     *
-     * @param  \WP_Term[]|\WP_Error $terms
-     * @return array<int, \WP_Term[]>
-     */
-    private function indexTermsByPost($terms): array
-    {
-        if (is_wp_error($terms)) {
-            return [];
-        }
-
-        $index = [];
-
-        foreach ($terms as $term) {
-            $index[(int) $term->object_id][] = $term;
-        }
-
-        return $index;
-    }
-
-    /**
      * Climbs the category term tree using a pre-built term map and returns
      * the unique set of top-level ancestors for a post's assigned terms.
      *
-     * @param  \WP_Term[] $terms       Terms assigned to the post.
-     * @param  array      $termMap     All category terms keyed by term_id.
+     * @param  \WP_Term[] $terms    Terms assigned to the post.
+     * @param  array      $termMap  All category terms keyed by term_id.
      * @return array<int, array{name: string, slug: string}>
      */
     private function resolveTopLevelCategories(array $terms, array $termMap): array
@@ -168,7 +170,7 @@ class ListingService
         $seenSlugs  = [];
 
         foreach ($terms as $term) {
-            // Climb to the root ancestor
+            // Climb to the root ancestor using the pre-loaded map (no DB calls)
             $current = $term;
 
             while ($current->parent !== 0 && isset($termMap[$current->parent])) {
@@ -281,29 +283,38 @@ class ListingService
 
     /**
      * Formats the CPT into a lean object for the iAPI Results Grid.
-     * Relies on data pre-loaded by preloadPostData() to avoid per-post queries.
+     * Relies on data pre-loaded by preloadPostData() to avoid N+1 queries.
      *
-     * @param array $preloaded Indexed arrays produced by preloadPostData().
+     * Term data (country, categories, seekers) is read via get_the_terms(), which
+     * resolves from the object cache primed by update_object_term_cache() — zero
+     * additional DB queries per post.
+     *
+     * @param array $preloaded Indexed data produced by preloadPostData().
      */
     private function formatOpportunityCard(\WP_Post $post, array $preloaded): array
     {
         $postId = $post->ID;
 
-        $locations  = $preloaded['locations'][$postId]  ?? [];
+        $locations = $preloaded['locations'][$postId] ?? [];
 
         // Country — first term only (one per post by convention)
-        $countryTerms = $preloaded['countries'][$postId] ?? [];
-        $country      = ! empty($countryTerms) ? $countryTerms[0]->name : '';
+        $countryTerms = get_the_terms($postId, 'country');
+        $country      = (! empty($countryTerms) && ! is_wp_error($countryTerms))
+            ? $countryTerms[0]->name
+            : '';
 
         // Categories — resolved to unique top-level ancestors
-        $categories = $this->resolveTopLevelCategories(
-            $preloaded['categories'][$postId] ?? [],
+        $rawCategories = get_the_terms($postId, 'category-oportunities');
+        $categories    = $this->resolveTopLevelCategories(
+            (! empty($rawCategories) && ! is_wp_error($rawCategories)) ? $rawCategories : [],
             $preloaded['categoryTermMap']
         );
 
         // Seekers
-        $seekerTerms = $preloaded['seekers'][$postId] ?? [];
-        $seekers     = array_map(fn($t) => ['name' => $t->name], $seekerTerms);
+        $seekerTerms = get_the_terms($postId, 'category-seekers');
+        $seekers     = (! empty($seekerTerms) && ! is_wp_error($seekerTerms))
+            ? array_map(fn($t) => ['name' => $t->name], $seekerTerms)
+            : [];
 
         $isFavorite = isset($preloaded['favoriteIds'][$postId]);
 
