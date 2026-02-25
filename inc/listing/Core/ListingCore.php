@@ -119,6 +119,13 @@ final class ListingCore
         add_action('rest_api_init',      [$this, 'registerRestRoutes']);
         add_action('init', fn() => do_action('listing_register_filters', $this->registry), 20);
         add_action('listing_register_filters', [$this, 'registerDefaultFilters'], 5);
+        // Invalidate the category term map transient whenever a term is saved.
+        // 'saved_term' fires for both new and updated terms, after the DB write.
+        add_action('saved_term', function (int $termId, int $ttId, string $taxonomy): void {
+            if ($taxonomy === 'category-oportunities') {
+                delete_transient('listing_category_term_map');
+            }
+        }, 10, 3);
     }
 
     /**
