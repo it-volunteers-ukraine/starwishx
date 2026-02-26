@@ -102,10 +102,10 @@
             transition: all $animations;
             margin-right: 0.5rem;
             width: 18px;
+            min-width: 18px;
             height: 18px;
             color: $icon-color-default-stroke;
             font-size: 18px;
-            min-width: 18px;
         }
 
         // Interaction States
@@ -519,15 +519,15 @@
 
             gap: 25px;
             @container (max-width: 723px) {
-                align-items: center;
                 // grid-column-end: -1;
                 grid-column: 1 / -1;
                 // @include max-laptop {
                 // gap: 6px;
                 // margin-top: 140px;
                 flex-flow: row nowrap;
-                width: 100%;
+                align-items: center;
                 margin-top: auto;
+                width: 100%;
             }
         }
         .opportunity-taxonomy {
@@ -554,9 +554,11 @@
 
 .status-badge {
     border: 1px solid;
-    border-radius: $radius-element;
+    // border-radius: $radius-element;
+    border-radius: $radius-badge;
     // background-color: $input-color-border-default;
-    padding: 6px 10px;
+    // padding: 6px 10px;
+    padding: 1px 4px;
     color: $text-light;
     font-size: 14px;
     line-height: 1;
@@ -877,6 +879,26 @@
             // font-weight: 500;
             font-size: 0.85rem;
         }
+        .label-required::after {
+            margin-left: 3px;
+            content: "*";
+            color: $icon-color-error;
+            font-weight: bold;
+        }
+        .label-info {
+            // border: 1px dashed $input-color-border-hover;
+            border-radius: $radius-badge;
+            // background: $input-color-surface-default;
+            background-color: rgba(122, 90, 228, 0.1);
+            padding: 4px;
+        }
+    }
+
+    .form-field-locations {
+        border: 1px dashed $input-color-border-filled;
+        border-radius: $radius-input;
+        padding: 4px;
+        // background: $input-color-surface-default;
     }
 
     .form-row {
@@ -908,6 +930,14 @@
         justify-content: space-between;
         align-items: center;
         margin-bottom: 20px;
+        @include max-mobile {
+            flex-wrap: wrap;
+            gap: 20px;
+            .btn-secondary__small {
+                // order: -1;
+                margin-left: auto;
+            }
+        }
     }
     &__container {
         transition: background 0.4s ease-in-out;
@@ -916,6 +946,7 @@
         padding: 32px;
         .btn-secondary__small {
             background: $surface-primary;
+            min-width: 112px;
             &:hover {
                 background-color: $buttons-color-background-secondary-selected;
             }
@@ -926,8 +957,8 @@
                 color: $buttons-color-text-secondary-disabled;
             }
         }
-        @include max-mobile {
-            padding: 24px;
+        @include max-tablet {
+            padding: 32px 6px;
         }
     }
     .form-actions {
@@ -1492,6 +1523,8 @@
         margin-left: 6px;
         border: none;
         font-size: 14px;
+        min-width: 14px;
+        min-height: 14px;
         svg {
             transform: rotate(45deg);
             width: 14px;
@@ -1529,19 +1562,32 @@
         color: $icon-color-accent;
     }
     .document-btn__icon {
-        color: $icon-color-accent;
-
         fill: $icon-color-accent;
+        color: $icon-color-accent;
     }
 }
 
 .btn-chip--document {
     gap: 8px;
+    @include max-tablet {
+        border-radius: $radius-input;
+    }
+    .btn-chip--document__icon {
+        color: $icon-color-accent;
+        min-width: 18px;
+    }
     .btn-chip--document__content {
         display: flex;
         align-items: center;
         gap: 8px;
         overflow: hidden;
+        @include max-tablet {
+            flex-wrap: wrap;
+        }
+    }
+    .btn-chip--document__link {
+        text-decoration: none;
+        color: inherit;
     }
 }
 
@@ -1555,7 +1601,7 @@
 
 .location-search-wrapper {
     position: relative;
-    padding-right: 12px;
+    // padding-right: 12px;
     .location-dropdown {
         position: absolute;
         top: 100%;
@@ -1668,4 +1714,18 @@
 
 .opportunity-card__title {
     color: $text-basic;
+}
+
+.exclamation-circle::before {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    // margin-right: 4px;
+    border: 1px solid $text-accent;
+    border-radius: 50%;
+    width: 18px;
+    height: 18px;
+    content: "!";
+    color: $text-accent;
+    font-weight: 500;
 }
