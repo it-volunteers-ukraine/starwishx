@@ -8,7 +8,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2026-02-25 10:47+0000\n"
-"PO-Revision-Date: 2026-02-26 10:08+0000\n"
+"PO-Revision-Date: 2026-02-26 10:01+0000\n"
 "Language: uk\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
@@ -1078,20 +1078,18 @@ msgid ""
 "Not necessary. Only if you want to point that your opportunity is available "
 "for particular locations: City, District, Hromada, etc."
 msgstr ""
-"Необов’язково. Тільки якщо ви хочете зазначити, що ваша можливість доступна "
-"для певних локацій: області, міста, району, громади тощо."
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:566
 msgid "if for Raion, District, Hromada"
-msgstr "якщо для Району, Громади"
+msgstr ""
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:569
 msgid "Buchanskyi r-n, Dolynska tg.."
-msgstr "Бучанський р-н, Долинська тг"
+msgstr ""
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:591
 msgid "if for City, Settlement, City district"
-msgstr "якщо для Міста, Селища, району міста"
+msgstr ""
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:594
 msgid "Bucha c., Vesele v., Obolon..."
@@ -1105,7 +1103,3 @@ msgid ""
 "if the opportunity concerns a city or village select the required City or "
 "Village from (3)."
 msgstr ""
-"За бажанням, ви можете вибрати потрібний адміністративний рівень. Якщо "
-"можливість надається по всій Області – виберіть (1) Область, якщо можливість "
-"стосується району або громади – виберіть (2) Район, якщо можливість "
-"стосується міста або села, виберіть потрібне місто або село з (3)."

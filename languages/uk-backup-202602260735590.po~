@@ -8,12 +8,13 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2026-02-25 10:47+0000\n"
-"PO-Revision-Date: 2026-02-25 16:58+0000\n"
+"PO-Revision-Date: 2026-02-26 07:35+0000\n"
 "Language: uk\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
 "X-Generator: Loco https://localise.biz/\n"
 "X-Domain: starwishx\n"
-"X-Loco-Version: 2.8.1; wp-6.9.1; php-8.3.29\n"
+"X-Loco-Version: 2.8.1; wp-6.9.1; php-8.3.29"
 
 #: templates/page-policy.php:126
 #, php-format
@@ -36,14 +37,13 @@ msgstr "Доступ заборонено."
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:272
 msgid "Add New"
-msgstr "Додати новий"
+msgstr "Додати"
 
 #: template-parts/comments-interactive.php:83
 msgid "Add review"
 msgstr "Додати відгук"
 
-#: inc/listing/Core/ResultsGrid.php:105
-#: template-parts/control-favorites.php:38
+#: inc/listing/Core/ResultsGrid.php:105 template-parts/control-favorites.php:38
 msgid "Add to favorites"
 msgstr "Додати в обране"
 
@@ -59,7 +59,7 @@ msgstr "Форма заявки"
 msgid "Application Form URL"
 msgstr "URL форми заявки"
 
-#: inc/launchpad/Panels/OpportunitiesPanel.php:691
+#: inc/launchpad/Panels/OpportunitiesPanel.php:693
 msgid "Attach File"
 msgstr "Додати файл"
 
@@ -67,10 +67,6 @@ msgstr "Додати файл"
 #: template-parts/comments-interactive.php:278
 msgid "Author"
 msgstr "Автор"
-
-#: inc/launchpad/Panels/OpportunitiesPanel.php:411
-msgid "Back to list"
-msgstr "Повернутися до списку"
 
 #: inc/gateway/Forms/RegisterForm.php:74
 #: inc/gateway/Forms/ResetPasswordForm.php:121
@@ -98,8 +94,7 @@ msgstr "Кабінет"
 msgid "Cancel"
 msgstr "Скасувати"
 
-#: inc/listing/Enums/Taxonomy.php:29
-#: inc/listing/Filters/CategoryFilter.php:31
+#: inc/listing/Enums/Taxonomy.php:29 inc/listing/Filters/CategoryFilter.php:31
 #: templates/single-opportunity.php:56
 msgid "Category"
 msgstr "Категорія"
@@ -151,8 +146,7 @@ msgid "Confirm Password"
 msgstr "Підтвердьте пароль"
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:472
-#: inc/listing/Core/ResultsGrid.php:190
-#: inc/listing/Enums/Taxonomy.php:30
+#: inc/listing/Core/ResultsGrid.php:190 inc/listing/Enums/Taxonomy.php:30
 #: inc/listing/Filters/CountryFilter.php:21
 msgid "Country"
 msgstr "Країна"
@@ -182,15 +176,15 @@ msgstr "Поточний пароль невірний."
 msgid "Dates"
 msgstr "Дати"
 
-#: inc/launchpad/Panels/OpportunitiesPanel.php:648
+#: inc/launchpad/Panels/OpportunitiesPanel.php:650
 msgid "Description"
 msgstr "Опис"
 
-#: inc/launchpad/Panels/OpportunitiesPanel.php:663
+#: inc/launchpad/Panels/OpportunitiesPanel.php:665
 msgid "Details"
 msgstr "Деталі"
 
-#: inc/launchpad/Panels/OpportunitiesPanel.php:673
+#: inc/launchpad/Panels/OpportunitiesPanel.php:675
 #: templates/single-opportunity.php:229
 msgid "Document"
 msgstr "Документ"
@@ -235,7 +229,9 @@ msgstr "Введіть свої дані, щоб отримати посилан
 
 #: inc/gateway/Forms/LostPasswordForm.php:43
 msgid "Enter your login or email to receive a reset link."
-msgstr "Введіть свій логін або електронну пошту, щоб отримати посилання для скидання пароля."
+msgstr ""
+"Введіть свій логін або електронну пошту, щоб отримати посилання для скидання "
+"пароля."
 
 #: inc/listing/Services/ListingService.php:278
 msgid "Failed to fetch location options."
@@ -265,10 +261,6 @@ msgstr "Заповніть профіль"
 msgid "Filter \"%s\" is not supported."
 msgstr "Фільтр \"%s\" не підтримується."
 
-#: inc/launchpad/Panels/OpportunitiesPanel.php:501
-msgid "Filter by administrative level"
-msgstr "Фільтрувати за адміністративним рівнем"
-
 #: inc/launchpad/Panels/OpportunitiesPanel.php:214
 msgid "Filter by status:"
 msgstr "Фільтрувати за статусом:"
@@ -294,7 +286,7 @@ msgstr "Ім'я"
 msgid "Forgot password?"
 msgstr "Забули пароль?"
 
-#: inc/launchpad/Panels/OpportunitiesPanel.php:739
+#: inc/launchpad/Panels/OpportunitiesPanel.php:741
 msgid "Format (PDF, DOCX). Max size 5Mb."
 msgstr "Формат (PDF, DOCX). Макс. розмір 5 МБ."
 
@@ -331,8 +323,7 @@ msgctxt "gateway"
 msgid "Latin letters, digits, . - _"
 msgstr "Латинські літери, цифри, . - _"
 
-#: inc/gateway/Forms/LoginForm.php:65
-#: inc/gateway/Forms/LostPasswordForm.php:47
+#: inc/gateway/Forms/LoginForm.php:65 inc/gateway/Forms/LostPasswordForm.php:47
 msgctxt "gateway"
 msgid "Latin letters, digits, . - _ @"
 msgstr "Латинські літери, цифри, . - _ @"
@@ -347,8 +338,7 @@ msgctxt "gateway"
 msgid "Login name"
 msgstr "Ім'я для входу"
 
-#: inc/gateway/Forms/LoginForm.php:57
-#: inc/gateway/Forms/LostPasswordForm.php:45
+#: inc/gateway/Forms/LoginForm.php:57 inc/gateway/Forms/LostPasswordForm.php:45
 msgctxt "gateway"
 msgid "Login name or Email"
 msgstr "Логін або електронна пошта"
@@ -435,8 +425,7 @@ msgid "Launchpad Page"
 msgstr "Сторінка Launchpad"
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:484
-#: templates/single-opportunity.php:201
-#: templates/single-opportunity.php:210
+#: templates/single-opportunity.php:201 templates/single-opportunity.php:210
 msgid "Link"
 msgstr "Посилання"
 
@@ -466,10 +455,6 @@ msgstr "Завантаження..."
 msgid "Location"
 msgstr "Локація"
 
-#: inc/launchpad/Panels/OpportunitiesPanel.php:500
-msgid "Locations (KATOTTG)"
-msgstr "Локації (KATOTTG)"
-
 #: inc/gateway/Forms/LoginForm.php:130
 msgid "Log In"
 msgstr "Увійти"
@@ -483,8 +468,12 @@ msgid "Login"
 msgstr "Логін"
 
 #: inc/gateway/Services/RegisterService.php:37
-msgid "Login name may only contain latin letters, numbers, dots, underscores, and hyphens (3-60 characters)."
-msgstr "Ім'я для входу може містити лише латинські літери, цифри, крапки, підкреслення і дефіси (3–60 символів)."
+msgid ""
+"Login name may only contain latin letters, numbers, dots, underscores, and "
+"hyphens (3-60 characters)."
+msgstr ""
+"Ім'я для входу може містити лише латинські літери, цифри, крапки, "
+"підкреслення і дефіси (3–60 символів)."
 
 #: template-parts/control-header-auth.php:42
 #: template-parts/control-header-auth.php:63
@@ -566,7 +555,7 @@ msgstr "Список можливостей"
 msgid "Opportunity"
 msgstr "Можливість"
 
-#: inc/launchpad/Panels/OpportunitiesPanel.php:603
+#: inc/launchpad/Panels/OpportunitiesPanel.php:605
 msgid "Opportunity Category"
 msgstr "Категорія можливості"
 
@@ -636,7 +625,7 @@ msgstr "PDF"
 msgid "Pending"
 msgstr "В очікуванні"
 
-#: inc/launchpad/Panels/OpportunitiesPanel.php:720
+#: inc/launchpad/Panels/OpportunitiesPanel.php:722
 msgid "Pending Save"
 msgstr "Очікує збереження"
 
@@ -645,8 +634,11 @@ msgid "Phone"
 msgstr "Телефон"
 
 #: inc/launchpad/Api/OpportunitiesController.php:338
-msgid "Please complete your profile (name and phone) before posting opportunities."
-msgstr "Будь ласка, заповніть свій профіль (ім'я та телефон) перед публікацією можливостей."
+msgid ""
+"Please complete your profile (name and phone) before posting opportunities."
+msgstr ""
+"Будь ласка, заповніть свій профіль (ім'я та телефон) перед публікацією "
+"можливостей."
 
 #: inc/gateway/Services/PasswordResetService.php:33
 msgid "Please enter a username or email."
@@ -718,12 +710,17 @@ msgid "Register"
 msgstr "Реєстрація"
 
 #: inc/gateway/Forms/RegisterForm.php:68
-msgid "Registration successful! Please check your email for the activation link."
-msgstr "Реєстрація успішна! Будь ласка, перевірте електронну пошту для посилання активації."
+msgid ""
+"Registration successful! Please check your email for the activation link."
+msgstr ""
+"Реєстрація успішна! Будь ласка, перевірте електронну пошту для посилання "
+"активації."
 
 #: inc/gateway/Api/RegisterController.php:57
 msgid "Registration successful! Please check your email to set your password."
-msgstr "Реєстрація успішна! Будь ласка, перевірте електронну пошту, щоб встановити пароль."
+msgstr ""
+"Реєстрація успішна! Будь ласка, перевірте електронну пошту, щоб встановити "
+"пароль."
 
 #: inc/gateway/Forms/LoginForm.php:154
 msgid "Remember me"
@@ -739,7 +736,7 @@ msgstr "Видалити"
 msgid "Reply"
 msgstr "Відповісти"
 
-#: inc/launchpad/Panels/OpportunitiesPanel.php:657
+#: inc/launchpad/Panels/OpportunitiesPanel.php:659
 #: templates/single-opportunity.php:190
 msgid "Requirements"
 msgstr "Вимоги"
@@ -754,7 +751,7 @@ msgstr "Відгуки"
 msgid "Save"
 msgstr "Зберегти"
 
-#: inc/launchpad/Panels/OpportunitiesPanel.php:753
+#: inc/launchpad/Panels/OpportunitiesPanel.php:755
 msgid "Save Draft"
 msgstr "Зберегти чернетку"
 
@@ -779,7 +776,7 @@ msgstr "Безпека"
 msgid "Security Settings"
 msgstr "Налаштування безпеки"
 
-#: inc/launchpad/Panels/OpportunitiesPanel.php:630
+#: inc/launchpad/Panels/OpportunitiesPanel.php:632
 #: inc/listing/Enums/Taxonomy.php:31
 msgid "Seekers"
 msgstr "Шукачі"
@@ -845,8 +842,12 @@ msgstr "StarWishX"
 
 #. Description of the theme
 #: style.css
-msgid "starwishx - A modern and responsive WordPress theme designed for bloggers and creatives who want to showcase their content with style and elegance."
-msgstr "starwishx — сучасна та адаптивна тема WordPress, розроблена для блогерів і творчих людей, які хочуть стильно й елегантно демонструвати свій контент."
+msgid ""
+"starwishx - A modern and responsive WordPress theme designed for bloggers "
+"and creatives who want to showcase their content with style and elegance."
+msgstr ""
+"starwishx — сучасна та адаптивна тема WordPress, розроблена для блогерів і "
+"творчих людей, які хочуть стильно й елегантно демонструвати свій контент."
 
 #: inc/launchpad/Panels/StatsPanel.php:27
 msgid "Stats"
@@ -857,7 +858,7 @@ msgid "Status updated."
 msgstr "Статус оновлено."
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:373
-#: inc/launchpad/Panels/OpportunitiesPanel.php:765
+#: inc/launchpad/Panels/OpportunitiesPanel.php:767
 msgid "Submit for Review"
 msgstr "Відправити на перевірку"
 
@@ -906,12 +907,18 @@ msgid "This username is already taken."
 msgstr "Це ім'я користувача вже зайняте."
 
 #: inc/gateway/Services/RegisterService.php:88
-msgid "To complete your registration and set your password, click the link below:"
-msgstr "Щоб завершити реєстрацію та встановити пароль, натисніть посилання нижче:"
+msgid ""
+"To complete your registration and set your password, click the link below:"
+msgstr ""
+"Щоб завершити реєстрацію та встановити пароль, натисніть посилання нижче:"
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:193
-msgid "To publish opportunities, please complete your profile first — we need your name and phone number."
-msgstr "Щоб публікувати можливості, будь ласка, спочатку заповніть профіль — нам потрібні ваше ім'я та телефон."
+msgid ""
+"To publish opportunities, please complete your profile first — we need your "
+"name and phone number."
+msgstr ""
+"Щоб публікувати можливості, будь ласка, спочатку заповніть профіль — нам "
+"потрібні ваше ім'я та телефон."
 
 #: inc/gateway/Services/PasswordResetService.php:77
 msgid "To reset your password, visit the following address:"
@@ -921,8 +928,7 @@ msgstr "Щоб скинути пароль, перейдіть за наступ
 msgid "To:"
 msgstr "Кому:"
 
-#: inc/listing/Core/ResultsGrid.php:118
-#: template-parts/control-favorites.php:52
+#: inc/listing/Core/ResultsGrid.php:118 template-parts/control-favorites.php:52
 msgid "Toggle Favorite"
 msgstr "Додати/видалити з обраного"
 
@@ -998,8 +1004,16 @@ msgid "You are already logged in."
 msgstr "Ви вже увійшли в систему."
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:208
-msgid "You can add new opportunities, edit existing ones, and submit them for review. All opportunity data is reviewed and moderated by the site administration team before being approved for publication or rejected. Please contact the site staff if you have any questions."
-msgstr "Ви можете додавати нові можливості, редагувати існуючі та відправляти їх на перевірку. Усі дані про можливості переглядаються та модерується команда адміністраторів сайту перед затвердженням для публікації або відхиленням. Будь ласка, зверніться до персоналу сайту, якщо у вас є питання."
+msgid ""
+"You can add new opportunities, edit existing ones, and submit them for "
+"review. All opportunity data is reviewed and moderated by the site "
+"administration team before being approved for publication or rejected. "
+"Please contact the site staff if you have any questions."
+msgstr ""
+"Ви можете додавати нові можливості, редагувати існуючі та відправляти їх на "
+"перевірку. Усі дані про можливості переглядаються та модерується командою "
+"адміністраторів сайту перед затвердженням для публікації або відхиленням. "
+"Будь ласка, зверніться до адміністрації сайту, якщо у вас виникли питання."
 
 #: inc/launchpad/Services/CommentsService.php:226
 msgid "You cannot edit this comment."
@@ -1014,8 +1028,12 @@ msgid "You must be logged in to access this resource."
 msgstr "Ви повинні увійти, щоб отримати доступ до цього ресурсу."
 
 #: inc/gateway/Forms/ResetPasswordForm.php:43
-msgid "Your new password has been pre-generated. You can modify it or generate a new one."
-msgstr "Ваш новий пароль попередньо згенеровано. Ви можете змінити його або згенерувати новий."
+msgid ""
+"Your new password has been pre-generated. You can modify it or generate a "
+"new one."
+msgstr ""
+"Ваш новий пароль попередньо згенеровано. Ви можете змінити його або "
+"згенерувати новий."
 
 #: template-parts/comments-interactive.php:108
 msgid "Your Rating:"
@@ -1033,10 +1051,6 @@ msgstr "Дата набуття чинності:"
 msgid "Назад"
 msgstr "Назад"
 
-#: inc/launchpad/Panels/OpportunitiesPanel.php:772
-msgid "Назад до списку"
-msgstr "Назад до списку"
-
 #. Theme URI of the theme
 #: style.css
 msgid "_themeuri"
@@ -1046,14 +1060,53 @@ msgstr ""
 msgid "Donator"
 msgstr "Надавач"
 
-#: inc/launchpad/Panels/OpportunitiesPanel.php:651
+#: inc/launchpad/Panels/OpportunitiesPanel.php:653
 msgid "Describe the opportunity"
 msgstr "Опишіть можливість."
 
-#: inc/launchpad/Panels/OpportunitiesPanel.php:653
+#: inc/launchpad/Panels/OpportunitiesPanel.php:655
 msgid "Add information about the opportunity. Describe the essence."
 msgstr "Додайте інформацію про можливість. Опишіть суть."
 
 #: templates/single-opportunity.php:168
 msgid "Social share"
+msgstr "Поділитися"
+
+#: inc/launchpad/Panels/OpportunitiesPanel.php:411
+#: inc/launchpad/Panels/OpportunitiesPanel.php:774
+msgid "Back"
+msgstr "Назад"
+
+#: inc/launchpad/Panels/OpportunitiesPanel.php:500
+msgid "Locations."
+msgstr "Локації."
+
+#: inc/launchpad/Panels/OpportunitiesPanel.php:527
+msgid "if opportynity for Oblast"
+msgstr "якщо можливість для Області"
+
+#: inc/launchpad/Panels/OpportunitiesPanel.php:552
+msgid "if for Raion / District / Hromada"
+msgstr "якщо для району, округу, громади"
+
+#: inc/launchpad/Panels/OpportunitiesPanel.php:577
+msgid "if for City / Settlement / City district"
+msgstr "якщо для міста, селища, району міста"
+
+#: inc/launchpad/Panels/OpportunitiesPanel.php:601
+msgid ""
+"Select the required administrative level. If the opportunity is provided "
+"throughout the Oblast - select from (1) Oblast, if the opportunity is for a "
+"district or community - select from (2) District, if the opportunity "
+"concerns a city or village select the required City or Village from (3)."
 msgstr ""
+"Виберіть потрібний адміністративний рівень. Якщо можливість надається по "
+"всій області – оберіть з (1) Область, якщо можливість для району або громади "
+"– оберіть з (2) район або громаду, якщо можливість стосується міста або села "
+"– оберіть потрібне з (3) місто або село."
+
+#: inc/launchpad/Panels/OpportunitiesPanel.php:501
+msgid "Choose one or more locations if opportunity is for several locations"
+msgstr ""
+"Виберіть одну або декілька локацій, якщо можливість стосується декількох "
+"локацій"
