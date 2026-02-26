@@ -11,6 +11,7 @@ import { filterActions } from "./filters/actions.js";
 import { gridActions } from "./grid/actions.js";
 import { gridGetters } from "./grid/getters.js";
 import { syncUrlToState, highlightTerms } from "./utils.js";
+import "./popup-store.js";
 
 /**
  * Base State Definition
@@ -67,22 +68,17 @@ store("listing", {
      * When user clicks the checkbox OR the label text.
      */
     async toggleFavorite(event) {
-      // 1. Prevent Browser Defaults (optional based on your HTML)
-      if (event && event.type === "click") {
-        // event.preventDefault(); // Uncomment if using <a> tag
-      }
-      const ctx = getContext();
-      const item = ctx?.item;
-      if (item && item.id) {
-        // 2. OPTIMISTIC UPDATE (Local Context)
-        // We MUST flip this boolean so the Fallback logic in the getter
-        // stays in sync with the user's intent.
-        item.isFavorite = !item.isFavorite;
+      if (event?.type === "click") event.preventDefault?.();
+      const item = getContext()?.item;
+      if (!item?.id) return;
 
-        // 3. Call Global Store
-        // This updates the Global Array, which triggers the getter again.
-        await store("launchpad/favorites").actions.toggle(item.id);
+      if (!store("listing").state.isUserLoggedIn) {
+        store("popup").actions.open();
+        return;
       }
+
+      item.isFavorite = !item.isFavorite;
+      await store("launchpad/favorites").actions.toggle(item.id);
     },
   },
   callbacks: {

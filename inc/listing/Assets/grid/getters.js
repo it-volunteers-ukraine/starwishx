@@ -6,7 +6,7 @@
  *
  * File: inc/listing/Assets/grid/getters.js
  */
-import { getContext } from "@wordpress/interactivity";
+import { getContext, store } from "@wordpress/interactivity";
 
 export const gridGetters = {
   /**
@@ -139,8 +139,12 @@ export const gridGetters = {
     // 1. Safety Check: If we are not in a valid context, stop.
     if (!item || !item.id) return false;
 
-    // 2. Access Global Store
-    // We use try/catch to safely handle if the other store isn't registered yet
+    // 2. Guests never have the favorites store loaded — skip it entirely.
+    if (!store("listing").state.isUserLoggedIn) {
+      return !!item.isFavorite;
+    }
+
+    // 3. Access Global Store (logged-in only)
     let globalIds = [];
     try {
       const favState = store("launchpad/favorites").state;
@@ -148,7 +152,7 @@ export const gridGetters = {
         globalIds = favState.myFavoriteIds;
       }
     } catch (e) {
-      console.warn("Favorites store not ready");
+      // Store not yet registered; SSR fallback below
     }
 
     // 3. LOGIC: If we have GLOBAL data, we trust it 100%.

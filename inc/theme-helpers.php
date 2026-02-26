@@ -445,13 +445,16 @@ function sw_migrate_description_to_post_content(): int
 
 /**
  * Auto-run migration on admin_init (once).
+ * Already done.
  */
+/*
 add_action('admin_init', function (): void {
     // Only run in admin context, and only if not already done
     if (!get_option('sw_description_migration_done', false)) {
         sw_migrate_description_to_post_content();
     }
 });
+*/
 
 /**
  * Assemble view data for a single Opportunity post.
