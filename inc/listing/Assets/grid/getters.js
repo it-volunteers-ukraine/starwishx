@@ -129,43 +129,18 @@ export const gridGetters = {
   },
 
   /**
-   * THE BRIDGE:
-   * Robustly checks Global Store vs Local SSR Context
+   * Per-card favorite state.
+   *
+   * Uses ONLY the local context property (item.isFavorite) — no cross-store
+   * reactive dependencies. The toggleFavorite action flips this property
+   * optimistically, and the global myFavoriteIds array is updated in the
+   * background for server persistence. This keeps each card an independent
+   * reactive island within the data-wp-each loop.
    */
   get isFavorited() {
     const ctx = getContext();
     const item = ctx?.item;
-
-    // 1. Safety Check: If we are not in a valid context, stop.
     if (!item || !item.id) return false;
-
-    // 2. Guests never have the favorites store loaded — skip it entirely.
-    if (!store("listing").state.isUserLoggedIn) {
-      return !!item.isFavorite;
-    }
-
-    // 3. Access Global Store (logged-in only)
-    let globalIds = [];
-    try {
-      const favState = store("launchpad/favorites").state;
-      if (favState && Array.isArray(favState.myFavoriteIds)) {
-        globalIds = favState.myFavoriteIds;
-      }
-    } catch (e) {
-      // Store not yet registered; SSR fallback below
-    }
-
-    // 3. LOGIC: If we have GLOBAL data, we trust it 100%.
-    // We check length > 0 to distinguish "Active List" from "Initial Empty State".
-    if (globalIds.length > 0) {
-      return globalIds.map(Number).includes(Number(item.id));
-    }
-
-    // 4. FALLBACK (SSR Data):
-    // If global list is empty, we fall back to the SSR/Local state.
-    // This prevents the "Flicker to Empty" on page load.
-    // Also handles the case where the user genuinely has 0 favorites
-    // (item.isFavorite will be false from SSR).
     return !!item.isFavorite;
   },
 };
