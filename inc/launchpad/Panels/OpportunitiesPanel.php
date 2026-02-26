@@ -463,7 +463,7 @@ class OpportunitiesPanel extends AbstractPanel
                                         <div class="input-date-iconed">
                                             <input type="date"
                                                 <?php echo $required['opportunity_date_ends'] ? 'required' : ''; ?>
-                                                required data-wp-bind--value="<?= $formPath ?>.date_ends" data-wp-on--input="actions.opportunities.updateForm" data-field="date_ends">
+                                                data-wp-bind--value="<?= $formPath ?>.date_ends" data-wp-on--input="actions.opportunities.updateForm" data-field="date_ends">
                                             <button type="button" class="input-date-iconed__btn" data-wp-on--click="actions.opportunities.openDatePicker" aria-label="<?php esc_attr_e('Open calendar', 'starwishx'); ?>">
                                                 <svg width="18" height="18" aria-hidden="true" focusable="false" viewBox="0 0 24 24">
                                                     <use href="<?php echo get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-calendar"></use>

@@ -8,7 +8,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2026-02-25 10:47+0000\n"
-"PO-Revision-Date: 2026-02-26 10:08+0000\n"
+"PO-Revision-Date: 2026-02-26 12:15+0000\n"
 "Language: uk\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
@@ -284,7 +284,7 @@ msgstr "Формат (PDF, DOCX). Макс. розмір 5 МБ."
 
 #: inc/listing/Core/ResultsGrid.php:177
 msgid "From:"
-msgstr "Від:"
+msgstr "З:"
 
 #: inc/gateway/setup.php:48
 msgid "Gateway"
@@ -918,7 +918,7 @@ msgstr "Щоб скинути пароль, перейдіть за наступ
 
 #: inc/listing/Core/ResultsGrid.php:181
 msgid "To:"
-msgstr "Кому:"
+msgstr "По:"
 
 #: inc/listing/Core/ResultsGrid.php:118 template-parts/control-favorites.php:52
 msgid "Toggle Favorite"
