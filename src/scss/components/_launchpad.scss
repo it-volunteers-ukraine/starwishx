@@ -512,7 +512,7 @@
 
         .opportunity-actions {
             display: flex;
-            flex: 1 0 180px;
+            flex: 1 0 240px;
             flex-flow: column wrap;
             justify-content: space-between;
             align-items: flex-end;
@@ -528,6 +528,10 @@
                 align-items: center;
                 margin-top: auto;
                 width: 100%;
+                gap: 4px;
+                .btn-secondary__small {
+                    padding: 4px 6px;
+                }
             }
         }
         .opportunity-taxonomy {

@@ -36,12 +36,12 @@ if (function_exists('render_block')) {
         'innerBlocks' => [],
     ]);
 }
-/* <nav class="opportunity-breadcrumbs container" aria-label="<?php esc_attr_e('Breadcrumb', 'starwishx'); ?>">
-    <a href="<?php echo esc_url($back_url); ?>" class="btn-back">
+/* <nav class="opportunity-breadcrumbs container" aria-label="< ?php esc_attr_e('Breadcrumb', 'starwishx'); ?>">
+    <a href="< ?php echo esc_url($back_url); ?>" class="btn-back">
         <svg width="13" height="16" class="icon-arrow-left">
-            <use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-long_arrow_left"></use>
+            <use xlink:href="< ?php echo get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-long_arrow_left"></use>
         </svg>
-        <span><?php esc_html_e('Opportunities', 'starwishx'); ?></span>
+        <span>< ?php esc_html_e('Opportunities', 'starwishx'); ?></span>
     </a>
 </nav> */
 ?>
@@ -93,7 +93,10 @@ if (function_exists('render_block')) {
                 <div class="opportunity-article-meta__wrapper">
                     <dl class="opportunity-article-meta">
                         <!-- 2. Dates -->
-                        <?php if (!empty($data['date_start']) && !empty($data['date_end'])) : ?>
+                        <?php if (
+                            ($data['date_start']['iso'] ?? '') !== '' &&
+                            ($data['date_end']['iso'] ?? '') !== ''
+                        ) : ?>
                             <div class="info-card info-card--dates">
                                 <dt class="info-card__title">
                                     <svg width="18" height="18" class="info-card__icon">
