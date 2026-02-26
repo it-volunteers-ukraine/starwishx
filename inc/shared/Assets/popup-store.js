@@ -4,7 +4,7 @@
  * Minimal store for a reusable popup/modal.
  * Any other store can open it via: store("popup").actions.open()
  *
- * File: inc/listing/Assets/popup-store.js
+ * File: inc/shared/Assets/popup-store.js
  */
 
 import { store } from "@wordpress/interactivity";

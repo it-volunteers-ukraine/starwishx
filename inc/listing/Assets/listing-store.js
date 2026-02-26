@@ -11,7 +11,7 @@ import { filterActions } from "./filters/actions.js";
 import { gridActions } from "./grid/actions.js";
 import { gridGetters } from "./grid/getters.js";
 import { syncUrlToState, highlightTerms } from "./utils.js";
-import "./popup-store.js";
+import "../../shared/Assets/popup-store.js";
 
 /**
  * Base State Definition
