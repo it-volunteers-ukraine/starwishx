@@ -25,7 +25,7 @@
         },
         {
             "key": "field_69373f3db73a4",
-            "label": "Дата старту можливості (за наявності)",
+            "label": "Дата початку",
             "name": "opportunity_date_starts",
             "aria-label": "",
             "type": "date_picker",
@@ -45,7 +45,7 @@
         },
         {
             "key": "field_69373f67b73a5",
-            "label": "Дата завершення можливості",
+            "label": "Дата завершення",
             "name": "opportunity_date_ends",
             "aria-label": "",
             "type": "date_picker",
@@ -91,7 +91,7 @@
         },
         {
             "key": "field_6937425f9c466",
-            "label": "Оберіть країну для можливості",
+            "label": "Країна",
             "name": "country",
             "aria-label": "",
             "type": "taxonomy",
@@ -121,7 +121,7 @@
             "name": "opportunity_sourcelink",
             "aria-label": "",
             "type": "url",
-            "instructions": "",
+            "instructions": "Надайте посилання на першоджерело для верифікації можливості",
             "required": 1,
             "conditional_logic": 0,
             "wrapper": {
@@ -131,11 +131,11 @@
             },
             "default_value": "",
             "allow_in_bindings": 0,
-            "placeholder": "Додайте посилання"
+            "placeholder": "посилання на першоджерело"
         },
         {
             "key": "field_6999cd702bcfd",
-            "label": "Форма подання",
+            "label": "Посилання на форму",
             "name": "opportunity_application_form",
             "aria-label": "",
             "type": "url",
@@ -149,7 +149,7 @@
             },
             "default_value": "",
             "allow_in_bindings": 0,
-            "placeholder": "Посилання на форму подання заявки"
+            "placeholder": "google form, asana і т.ін."
         },
         {
             "key": "field_693747eaf0639",
@@ -390,5 +390,5 @@
     "description": "",
     "show_in_rest": 0,
     "display_title": "",
-    "modified": 1771752906
+    "modified": 1772101609
 }

@@ -474,20 +474,6 @@ class OpportunitiesPanel extends AbstractPanel
                                 </div>
 
                                 <div class="launchpad-grid-auto">
-                                    <!-- Country Select -->
-                                    <div class="form-field">
-                                        <label class="<?php echo $required['country'] ? 'label-required' : ''; ?>"><?php echo esc_html($labels['country'] ?? __('Country', 'starwishx')); ?></label>
-                                        <select
-                                            <?php echo $required['country'] ? 'required' : ''; ?>
-                                            data-wp-bind--value="<?= $formPath ?>.country"
-                                            data-wp-on--change="actions.opportunities.updateForm"
-                                            data-field="country">
-                                            <option value=""><?php esc_html_e('Select Country', 'starwishx'); ?></option>
-                                            <template data-wp-each="<?= $optPath ?>.countries">
-                                                <option data-wp-bind--value="context.item.id" data-wp-text="context.item.name"></option>
-                                            </template>
-                                        </select>
-                                    </div>
                                     <div class="form-field">
                                         <label class="<?php echo $required['opportunity_sourcelink'] ? 'label-required' : ''; ?>"><?php echo esc_html($labels['opportunity_sourcelink'] ?? __('Link', 'starwishx')); ?></label>
                                         <input type="url"
@@ -502,7 +488,20 @@ class OpportunitiesPanel extends AbstractPanel
                                             placeholder="<?php echo esc_attr($placeholders['opportunity_application_form'] ?? ''); ?>"
                                             data-wp-bind--value="<?= $formPath ?>.application_form" data-wp-on--input="actions.opportunities.updateForm" data-field="application_form">
                                     </div>
-
+                                    <!-- Country Select -->
+                                    <div class="form-field">
+                                        <label class="<?php echo $required['country'] ? 'label-required' : ''; ?>"><?php echo esc_html($labels['country'] ?? __('Country', 'starwishx')); ?></label>
+                                        <select
+                                            <?php echo $required['country'] ? 'required' : ''; ?>
+                                            data-wp-bind--value="<?= $formPath ?>.country"
+                                            data-wp-on--change="actions.opportunities.updateForm"
+                                            data-field="country">
+                                            <option value=""><?php esc_html_e('Select Country', 'starwishx'); ?></option>
+                                            <template data-wp-each="<?= $optPath ?>.countries">
+                                                <option data-wp-bind--value="context.item.id" data-wp-text="context.item.name"></option>
+                                            </template>
+                                        </select>
+                                    </div>
                                 </div>
 
                                 <div class="form-field form-field-locations" data-wp-bind--hidden="!state.isUkraineSelected">
