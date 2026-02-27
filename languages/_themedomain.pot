@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-02-26T23:56:13+00:00\n"
+"POT-Creation-Date: 2026-02-27T12:09:24+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: starwishx\n"
@@ -143,7 +143,7 @@ msgstr ""
 
 #: inc/gateway/Forms/RegisterForm.php:48
 msgctxt "gateway"
-msgid "Login name"
+msgid "Login (latin letters unique username for login)"
 msgstr ""
 
 #: inc/gateway/Forms/RegisterForm.php:50
@@ -151,21 +151,26 @@ msgctxt "gateway"
 msgid "Latin letters, digits, . - _"
 msgstr ""
 
-#: inc/gateway/Forms/RegisterForm.php:56
+#: inc/gateway/Forms/RegisterForm.php:53
+msgctxt "gateway"
+msgid "f.ex.: Oleg12, kat33, grew.panda"
+msgstr ""
+
+#: inc/gateway/Forms/RegisterForm.php:57
 msgctxt "gateway"
 msgid "Email"
 msgstr ""
 
-#: inc/gateway/Forms/RegisterForm.php:63
+#: inc/gateway/Forms/RegisterForm.php:64
 #: template-parts/element-popup.php:62
 msgid "Register"
 msgstr ""
 
-#: inc/gateway/Forms/RegisterForm.php:68
+#: inc/gateway/Forms/RegisterForm.php:69
 msgid "Registration successful! Please check your email for the activation link."
 msgstr ""
 
-#: inc/gateway/Forms/RegisterForm.php:74
+#: inc/gateway/Forms/RegisterForm.php:75
 #: inc/gateway/Forms/ResetPasswordForm.php:121
 msgid "Back to Login"
 msgstr ""

@@ -45,11 +45,12 @@ class RegisterForm extends AbstractForm
                 <p class="gateway-form__intro"><?php esc_html_e('Enter your details to receive an activation link.', 'starwishx'); ?></p>
 
                 <div class="form-field">
-                    <label><?php _ex('Login name', 'gateway', 'starwishx'); ?></label>
+                    <label><?php _ex('Login (latin letters unique username for login)', 'gateway', 'starwishx'); ?></label>
                     <input type="text" required data-field="username"
-                        placeholder="<?php _ex('Latin letters, digits, . - _', 'gateway', 'starwishx'); ?>"
-                        data-wp-bind--value="state.forms.<?php echo $jsId; ?>.username"
-                        data-wp-on--input="actions.<?php echo $jsId; ?>.updateField">
+                    placeholder="<?php _ex('Latin letters, digits, . - _', 'gateway', 'starwishx'); ?>"
+                    data-wp-bind--value="state.forms.<?php echo $jsId; ?>.username"
+                    data-wp-on--input="actions.<?php echo $jsId; ?>.updateField">
+                    <span class="label-info exclamation-circle"><?php _ex('f.ex.: Oleg12, kat33, grew.panda', 'gateway', 'starwishx'); ?></span>
                 </div>
 
                 <div class="form-field">

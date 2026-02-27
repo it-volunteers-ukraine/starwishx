@@ -31,6 +31,7 @@ const { state } = store("starwishx/opportunities", {
       // Guest guard: prevent checkbox visual flip, show auth popup
       if (!state.isUserLoggedIn) {
         if (event) event.preventDefault();
+        // state.statusMap[id] = false;
         store("popup").actions.open();
         return;
       }
