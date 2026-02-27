@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-02-26T17:49:54+00:00\n"
+"POT-Creation-Date: 2026-02-26T23:56:13+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: starwishx\n"
@@ -503,8 +503,8 @@ msgid "End Date"
 msgstr ""
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:478
-#: templates/single-opportunity.php:204
-#: templates/single-opportunity.php:213
+#: templates/single-opportunity.php:205
+#: templates/single-opportunity.php:214
 msgid "Link"
 msgstr ""
 
@@ -577,7 +577,7 @@ msgid "Add information about the opportunity. Describe the essence."
 msgstr ""
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:672
-#: templates/single-opportunity.php:193
+#: templates/single-opportunity.php:194
 msgid "Requirements"
 msgstr ""
 
@@ -586,7 +586,7 @@ msgid "Details"
 msgstr ""
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:690
-#: templates/single-opportunity.php:232
+#: templates/single-opportunity.php:233
 msgid "Document"
 msgstr ""
 
@@ -821,7 +821,7 @@ msgstr ""
 
 #: inc/listing/Enums/Taxonomy.php:29
 #: inc/listing/Filters/CategoryFilter.php:31
-#: templates/single-opportunity.php:56
+#: templates/single-opportunity.php:57
 msgid "Category"
 msgstr ""
 
@@ -839,7 +839,7 @@ msgstr ""
 
 #: inc/listing/Filters/LocationsFilter.php:28
 #: inc/listing/Filters/LocationsFilterSimple.php:34
-#: templates/single-opportunity.php:125
+#: templates/single-opportunity.php:126
 msgid "Location"
 msgstr ""
 
@@ -881,15 +881,15 @@ msgstr ""
 msgid "You are already logged in."
 msgstr ""
 
-#: inc/theme-helpers.php:485
+#: inc/theme-helpers.php:488
 msgid "Worldwide"
 msgstr ""
 
-#: inc/theme-helpers.php:830
+#: inc/theme-helpers.php:833
 msgid "Show 1 more"
 msgstr ""
 
-#: inc/theme-helpers.php:831
+#: inc/theme-helpers.php:834
 #, php-format
 msgid "Show %d more"
 msgid_plural "Show %d more"
@@ -1015,10 +1015,12 @@ msgid "Search by keyword..."
 msgstr ""
 
 #: templates/page-listing-oportunities.php:129
+#: templates/single-opportunity.php:265
 msgid "Hi!"
 msgstr ""
 
 #: templates/page-listing-oportunities.php:130
+#: templates/single-opportunity.php:266
 msgid "Add to favorites is only available for registered users."
 msgstr ""
 
@@ -1051,30 +1053,30 @@ msgstr ""
 msgid "Single Opportunity View"
 msgstr ""
 
-#: templates/single-opportunity.php:105
+#: templates/single-opportunity.php:106
 msgid "Dates"
 msgstr ""
 
-#: templates/single-opportunity.php:153
+#: templates/single-opportunity.php:154
 msgid "Receivers"
 msgstr ""
 
-#: templates/single-opportunity.php:171
+#: templates/single-opportunity.php:172
 msgid "Social share"
 msgstr ""
 
-#: templates/single-opportunity.php:199
+#: templates/single-opportunity.php:200
 msgid "Source"
 msgstr ""
 
-#: templates/single-opportunity.php:211
+#: templates/single-opportunity.php:212
 msgid "Application form"
 msgstr ""
 
-#: templates/single-opportunity.php:222
+#: templates/single-opportunity.php:223
 msgid "Additional information"
 msgstr ""
 
-#: templates/single-opportunity.php:253
+#: templates/single-opportunity.php:254
 msgid "News"
 msgstr ""

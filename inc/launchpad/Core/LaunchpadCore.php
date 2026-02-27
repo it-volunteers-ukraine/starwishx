@@ -248,6 +248,9 @@ final class LaunchpadCore
         if (is_singular('opportunity') && is_user_logged_in()) {
             $this->enqueueCommentsAssets();
             $this->enqueueFrontendStore($userId);
+        } elseif (is_singular('opportunity')) {
+            // Guest: load store without favorites data so the popup guard works
+            $this->enqueueFrontendStore(0);
         }
     }
 
@@ -343,7 +346,8 @@ final class LaunchpadCore
         if (function_exists('wp_register_script_module')) {
             wp_register_script_module(
                 '@starwishx/frontend-opportunities',
-                get_template_directory_uri() . '/inc/launchpad/Assets/single-opportunity-store.js',
+                // get_template_directory_uri() . '/inc/launchpad/Assets/single-opportunity-store.js',
+                get_template_directory_uri() . '/assets/js/single-opportunity-store.module.js',
                 array_merge(['@wordpress/interactivity'], $asset['dependencies']),
                 $asset['version']
             );
@@ -352,29 +356,36 @@ final class LaunchpadCore
 
         // 2. Prepare Data (Map Structure)
         $statusMap = [];
-        $repo = $this->favoritesRepo; // Reuse instance
 
-        if (is_singular('opportunity')) {
-            // SINGLE PAGE: 1 DB Query, 1 Result.
+        if ($userId > 0 && is_singular('opportunity')) {
+            // SINGLE PAGE: 1 DB Query, 1 Result. Guests skip this.
+            $repo = $this->favoritesRepo;
             $post_id = get_the_ID();
             $is_fav = $repo->isFavorite($userId, $post_id);
             $statusMap[$post_id] = $is_fav;
         }
-        /* 
+        /*
         // Future Archive Logic:
         elseif (is_post_type_archive('opportunity')) {
              // Logic to fetch IDs for current loop query only
-        } 
+        }
         */
 
         // 3. Hydrate
-        wp_interactivity_state('starwishx/opportunities', [
-            'statusMap' => $statusMap, // { 624: true }
-            'config'    => [
+        $stateData = [
+            'statusMap'      => $statusMap,
+            'isUserLoggedIn' => $userId > 0,
+        ];
+
+        // Guests don't need API config
+        if ($userId > 0) {
+            $stateData['config'] = [
                 'nonce'   => wp_create_nonce('wp_rest'),
-                'restUrl' => rest_url('launchpad/v1/')
-            ]
-        ]);
+                'restUrl' => rest_url('launchpad/v1/'),
+            ];
+        }
+
+        wp_interactivity_state('starwishx/opportunities', $stateData);
     }
 
     public function cleanupPostFavorites(int $postId): void

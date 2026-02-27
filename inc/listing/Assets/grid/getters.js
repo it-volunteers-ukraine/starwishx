@@ -7,6 +7,7 @@
  * File: inc/listing/Assets/grid/getters.js
  */
 import { getContext, store } from "@wordpress/interactivity";
+import { __, _n, sprintf } from "@wordpress/i18n";
 
 export const gridGetters = {
   /**
@@ -35,7 +36,16 @@ export const gridGetters = {
    */
   get resultsFoundLabel() {
     if (this.isLoading && this.results.length === 0) return "";
-    return `${this.totalFound} opportunities found`;
+    // return `${this.totalFound} opportunities found`;
+    return sprintf(
+      _n(
+        "%d opportunity found",
+        "%d opportunities found",
+        this.totalFound,
+        "launchpad",
+      ),
+      this.totalFound,
+    );
   },
 
   /**

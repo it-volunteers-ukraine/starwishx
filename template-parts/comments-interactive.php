@@ -153,7 +153,7 @@ wp_interactivity_state('launchpadComments', [
             </form>
         </div>
     <?php else: ?>
-        <p>Please <a href="<?php echo wp_login_url(get_permalink()); ?>">login</a> to comment.</p>
+        <!-- <p>Please <a href="< ?php echo wp_login_url(get_permalink()); ? >">login</a> to comment.</p> -->
     <?php endif; ?>
 
     <!-- COMMENTS LIST -->
