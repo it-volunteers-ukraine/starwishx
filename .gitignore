@@ -22,3 +22,4 @@ production/
 launch.json
 docs/
 .claude
+/languages/*.po~

@@ -36,6 +36,7 @@ add_action('wp_head', function () {
         .listing-grid[hidden] {
             display: none !important;
         }
+        .popup[hidden] { display: none !important; }
     </style>
 <?php
 }, 1);
@@ -124,5 +125,10 @@ if (function_exists('render_block')) {
 </main>
 
 <?php
+get_template_part('template-parts/element-popup', null, [
+    'title' => __('Hi!', 'starwishx'),
+    'text'  => __('Add to favorites is only available for registered users.', 'starwishx'),
+    'id'    => 'listing-auth-popup',
+]);
 
 get_footer();

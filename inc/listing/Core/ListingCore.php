@@ -201,6 +201,10 @@ final class ListingCore
                 'restUrl' => rest_url('listing/v1/'),
             ],
         ]);
+
+        wp_interactivity_state('listing', [
+            'isUserLoggedIn' => is_user_logged_in(),
+        ]);
     }
 
     /**

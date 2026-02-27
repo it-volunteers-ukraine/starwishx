@@ -3,6 +3,7 @@
  * Namespace: starwishx/opportunities
  */
 import { store, getContext } from "@wordpress/interactivity";
+import "../../shared/Assets/popup-store.js";
 
 const { state } = store("starwishx/opportunities", {
   state: {
@@ -23,11 +24,18 @@ const { state } = store("starwishx/opportunities", {
 
   actions: {
     async toggle(event) {
-      if (event) event.preventDefault();
-
       const context = getContext();
       const id = context?.id;
       if (!id) return;
+
+      // Guest guard: prevent checkbox visual flip, show auth popup
+      if (!state.isUserLoggedIn) {
+        if (event) event.preventDefault();
+        store("popup").actions.open();
+        return;
+      }
+
+      if (event) event.preventDefault();
 
       // 1. Optimistic Update (Boolean flip)
       const wasFav = !!state.statusMap[id];

@@ -11,6 +11,7 @@ import { filterActions } from "./filters/actions.js";
 import { gridActions } from "./grid/actions.js";
 import { gridGetters } from "./grid/getters.js";
 import { syncUrlToState, highlightTerms } from "./utils.js";
+import "../../shared/Assets/popup-store.js";
 
 /**
  * Base State Definition
@@ -74,6 +75,12 @@ store("listing", {
       const ctx = getContext();
       const item = ctx?.item;
       if (item && item.id) {
+        // Guest guard: show auth popup instead of toggling
+        if (!store("listing").state.isUserLoggedIn) {
+          store("popup").actions.open();
+          return;
+        }
+
         // 2. OPTIMISTIC UPDATE (Local Context)
         // We MUST flip this boolean so the Fallback logic in the getter
         // stays in sync with the user's intent.

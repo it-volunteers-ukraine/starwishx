@@ -1,0 +1,147 @@
+@use "../variables" as *;
+@use "../mixins/media" as *;
+
+.popup {
+    display: flex;
+    position: fixed;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    inset: 0;
+
+    &[hidden] {
+        display: none !important;
+    }
+}
+
+.popup__backdrop {
+    position: absolute;
+    cursor: pointer;
+    inset: 0;
+    background: rgb(53 53 53 / 80%);
+}
+
+.popup__dialog {
+    display: flex;
+    position: relative;
+    flex-direction: column;
+    gap: 16px;
+    z-index: 1;
+    border-radius: $radius-m;
+    background: $surface-violet;
+    padding: 32px 24px 24px;
+    width: min(360px, calc(100vw - 32px));
+    min-width: 534px;
+    @include max-tablet {
+        min-width: unset;
+    }
+}
+
+.popup__close {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    transition: all $animations;
+    cursor: pointer;
+    border: none;
+    background: none;
+    padding: 4px;
+    color: $text-dark;
+    line-height: 0;
+    &:hover {
+        transform: rotate(180deg);
+        color: $text-accent;
+    }
+}
+
+.popup__close-icon {
+    width: 20px;
+    height: 20px;
+}
+
+.popup__body {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-top: 8px;
+    text-align: center;
+}
+
+.popup__title {
+    font-weight: 600;
+    font-size: 32px;
+}
+
+.popup__text {
+}
+
+.popup__footer {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    @include max-tablet {
+        grid-template-columns: 1fr;
+    }
+    &--button {
+        width: 100%;
+    }
+}
+
+/* --- animations --- */
+
+.popup__backdrop {
+    will-change: opacity;
+}
+
+.popup:not([hidden]) .popup__backdrop {
+    animation: backdrop-fade 400ms linear both;
+}
+
+.popup__dialog {
+    transform-origin: center center;
+    will-change: transform, opacity;
+}
+
+.popup:not([hidden]) .popup__dialog {
+    animation: popup-pop 460ms cubic-bezier(0.2, 1.1, 0.3, 1) both;
+}
+
+@keyframes popup-pop {
+    0% {
+        transform: scale(0);
+        opacity: 0;
+    }
+    60% {
+        transform: scale(1.05);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+@keyframes backdrop-fade {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .popup__dialog,
+    .popup__backdrop {
+        animation: none !important;
+        transition: none !important;
+    }
+
+    .popup:not([hidden]) .popup__dialog {
+        opacity: 1;
+        transform: none;
+    }
+    .popup:not([hidden]) .popup__backdrop {
+        opacity: 1;
+    }
+}

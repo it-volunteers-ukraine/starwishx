@@ -6,7 +6,8 @@
  *
  * File: inc/listing/Assets/grid/getters.js
  */
-import { getContext } from "@wordpress/interactivity";
+import { getContext, store } from "@wordpress/interactivity";
+import { __, _n, sprintf } from "@wordpress/i18n";
 
 export const gridGetters = {
   /**
@@ -35,7 +36,16 @@ export const gridGetters = {
    */
   get resultsFoundLabel() {
     if (this.isLoading && this.results.length === 0) return "";
-    return `${this.totalFound} opportunities found`;
+    // return `${this.totalFound} opportunities found`;
+    return sprintf(
+      _n(
+        "%d opportunity found",
+        "%d opportunities found",
+        this.totalFound,
+        "launchpad",
+      ),
+      this.totalFound,
+    );
   },
 
   /**
@@ -129,39 +139,18 @@ export const gridGetters = {
   },
 
   /**
-   * THE BRIDGE:
-   * Robustly checks Global Store vs Local SSR Context
+   * Per-card favorite state.
+   *
+   * Uses ONLY the local context property (item.isFavorite) — no cross-store
+   * reactive dependencies. The toggleFavorite action flips this property
+   * optimistically, and the global myFavoriteIds array is updated in the
+   * background for server persistence. This keeps each card an independent
+   * reactive island within the data-wp-each loop.
    */
   get isFavorited() {
     const ctx = getContext();
     const item = ctx?.item;
-
-    // 1. Safety Check: If we are not in a valid context, stop.
     if (!item || !item.id) return false;
-
-    // 2. Access Global Store
-    // We use try/catch to safely handle if the other store isn't registered yet
-    let globalIds = [];
-    try {
-      const favState = store("launchpad/favorites").state;
-      if (favState && Array.isArray(favState.myFavoriteIds)) {
-        globalIds = favState.myFavoriteIds;
-      }
-    } catch (e) {
-      console.warn("Favorites store not ready");
-    }
-
-    // 3. LOGIC: If we have GLOBAL data, we trust it 100%.
-    // We check length > 0 to distinguish "Active List" from "Initial Empty State".
-    if (globalIds.length > 0) {
-      return globalIds.map(Number).includes(Number(item.id));
-    }
-
-    // 4. FALLBACK (SSR Data):
-    // If global list is empty, we fall back to the SSR/Local state.
-    // This prevents the "Flicker to Empty" on page load.
-    // Also handles the case where the user genuinely has 0 favorites
-    // (item.isFavorite will be false from SSR).
     return !!item.isFavorite;
   },
 };

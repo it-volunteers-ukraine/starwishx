@@ -5,6 +5,7 @@
  * Template Post Type: opportunity
  *
  * This template displays the full details of a Single Opportunity CPT.
+ * File: templates/single-opportunity.php
  */
 
 declare(strict_types=1);
@@ -259,4 +260,12 @@ if (function_exists('render_block')) {
     </aside>
 </div>
 
-<?php get_footer(); ?>
+<?php
+get_template_part('template-parts/element-popup', null, [
+    'title' => __('Hi!', 'starwishx'),
+    'text'  => __('Add to favorites is only available for registered users.', 'starwishx'),
+    'id'    => 'listing-auth-popup',
+]);
+
+get_footer();
+?>
