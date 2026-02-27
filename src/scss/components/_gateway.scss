@@ -144,6 +144,20 @@
     .gateway-link__password {
         white-space: nowrap;
     }
+    .label-info {
+        border-radius: $radius-badge;
+        font-size: 14px;
+        background-color: rgba(122, 90, 228, 0.1);
+        padding: 4px;
+        color: $text-light;
+        display: flex;
+        flex-flow: row nowrap;
+        align-items: center;
+        gap: 4px
+    }
+    .label-info .exclamation-circle {
+        padding-right: 12px;
+    }
 }
 
 .gateway-breadcrumbs {
