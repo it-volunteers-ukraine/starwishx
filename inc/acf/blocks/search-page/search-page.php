@@ -110,9 +110,9 @@ $args_query = my_query_args_prepare([]);
 $query = my_query_search($args_query);
 $total_posts = (int) $query->found_posts;
 $posts = $query->posts;
-echo '<pre>';
-print_r($query);
-echo '</pre>';
+// echo '<pre>';
+// print_r($query);
+// echo '</pre>';
 
 ?>
 
