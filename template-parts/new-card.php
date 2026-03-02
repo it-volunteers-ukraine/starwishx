@@ -5,6 +5,7 @@
  *
  * @var array $args
  */
+$err_no_field = "No field";
 
 $item   = $args['item'];
 $classes = $args['classes'] ?? [];
@@ -20,7 +21,6 @@ if ($is_card_lg) {
 $card_lg_class = $is_card_lg ? ' newcard-lg ' : '';
 
 $swiper_class = $swiper ? 'swiper-slide' : '';
-
 $post_id = $item->ID;
 $term_id = $item->term_id ?? null;
 
@@ -29,8 +29,21 @@ $item_title = get_field('title', $post_id);
 $item_desc  = $no_desc ? false : get_field('description', $post_id);
 
 $photo = get_field('photo', $post_id);
-$photo_url = $photo['sizes']['large'] ?? '';
-$photo_alt = $photo['alt'] ?: ($photo['title'] ?? '');
+
+if (!$item_title) {
+    $item_title = get_the_title($post_id) ?: $err_no_field;
+}   
+
+if ($photo){
+    $photo_url = $photo['sizes']['large'] ?? '';
+    $photo_alt = $photo['title'] ?: ($photo['title'] ?? '');
+} elseif (has_post_thumbnail($post_id)){
+    $photo_url = get_the_post_thumbnail_url($post_id, 'medium');
+    $photo_alt = get_the_post_thumbnail_caption($post_id) ?: get_the_title($post_id);
+} else {
+    $photo_url =  get_template_directory_uri() . '/assets/img/card-placeholder.png';
+    $photo_alt = $item_title;
+}
 
 $category_current_color = my_category_colors($term_id);
 $label_color_text       = $category_current_color['label_color_text'];
