@@ -1,6 +1,6 @@
 {
     "key": "group_68ec4c68b7606",
-    "title": "home_faq",
+    "title": "Block FAQ",
     "fields": [
         {
             "key": "field_68ec4cd45c19d",
@@ -131,5 +131,6 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1760320006
+    "display_title": "",
+    "modified": 1772452302
 }

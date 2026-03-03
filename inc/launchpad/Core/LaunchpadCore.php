@@ -2,7 +2,7 @@
 
 /**
  * Launchpad user admin panel app
- * Version: 0.5.1
+ * Version: 0.5.5
  * Author: DevFrappe
  * Email: dev.frappe@proton.me
  * 
@@ -245,10 +245,10 @@ final class LaunchpadCore
         }
 
         // Single Opportunity post Interactive Comments App
-        if (is_singular('opportunity') && is_user_logged_in()) {
+        if ((is_singular('opportunity') || is_singular('project')) && is_user_logged_in()) {
             $this->enqueueCommentsAssets();
             $this->enqueueFrontendStore($userId);
-        } elseif (is_singular('opportunity')) {
+        } elseif (is_singular('opportunity') || is_singular('project')) {
             // Guest: load store without favorites data so the popup guard works
             $this->enqueueFrontendStore(0);
         }
@@ -357,7 +357,7 @@ final class LaunchpadCore
         // 2. Prepare Data (Map Structure)
         $statusMap = [];
 
-        if ($userId > 0 && is_singular('opportunity')) {
+        if ($userId > 0 && (is_singular('opportunity') || is_singular('project'))) {
             // SINGLE PAGE: 1 DB Query, 1 Result. Guests skip this.
             $repo = $this->favoritesRepo;
             $post_id = get_the_ID();

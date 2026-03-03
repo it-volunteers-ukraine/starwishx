@@ -3,6 +3,27 @@
     "title": "CPT Projects",
     "fields": [
         {
+            "key": "field_69a4bd150aed4",
+            "label": "Opportunities Info",
+            "name": "opportunities_info",
+            "aria-label": "",
+            "type": "textarea",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "maxlength": "",
+            "allow_in_bindings": 0,
+            "rows": "",
+            "placeholder": "",
+            "new_lines": ""
+        },
+        {
             "key": "field_698f610d07ba4",
             "label": "Opportunities",
             "name": "opportunities",
@@ -34,6 +55,27 @@
             "elements": "",
             "bidirectional": 0,
             "bidirectional_target": []
+        },
+        {
+            "key": "field_69a4bd6fed121",
+            "label": "NGO Info",
+            "name": "ngo_info",
+            "aria-label": "",
+            "type": "textarea",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "maxlength": "",
+            "allow_in_bindings": 0,
+            "rows": "",
+            "placeholder": "",
+            "new_lines": ""
         },
         {
             "key": "field_698fce2d3da95",
@@ -87,5 +129,5 @@
     "description": "",
     "show_in_rest": 0,
     "display_title": "",
-    "modified": 1771401886
+    "modified": 1772404155
 }

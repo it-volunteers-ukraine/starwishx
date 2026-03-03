@@ -74,12 +74,13 @@ wp_interactivity_state('launchpadComments', [
         </div>
 
         <?php if (is_user_logged_in()) : ?>
-            <button class="btn__small comments-header__button"
+            <button class="btn comments-header__button"
                 data-wp-on--click="actions.toggleForm"
                 data-wp-bind--hidden="state.showForm">
-                <svg class="icon-edit" width="16" height="16">
+                <?php sw_svg_e('icon-write') ?>
+                <!-- <svg class="icon-edit" width="16" height="16">
                     <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175-.106.377-.192.757-.366 1.467 1.467-.366.757-.192.377-.106-1.937-1.937z" />
-                </svg>
+                </svg> -->
                 <?php esc_html_e('Add review', 'starwishx'); ?>
             </button>
         <?php else: ?>
