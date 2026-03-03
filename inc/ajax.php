@@ -4,6 +4,7 @@ add_action('wp_ajax_load_news', 'ajax_load_news');
 add_action('wp_ajax_nopriv_load_news', 'ajax_load_news');
 
 
+
 function ajax_load_news()
 {
     // 💥 убираем ВСЁ, что вывелось до нас
@@ -76,6 +77,7 @@ function ajax_load_news()
 
     $query = new WP_Query($args);
 
+    $query = my_iter_posts_add_category($query);
 
     // if ($query->have_posts()) {
     //     // создаём массив для этой категории
@@ -110,8 +112,6 @@ function ajax_load_news()
 
     foreach ($posts as $item) {
         $count++;
-        $item->term_id = $term_id;
-
         get_template_part(
             'template-parts/new-card',
             null,

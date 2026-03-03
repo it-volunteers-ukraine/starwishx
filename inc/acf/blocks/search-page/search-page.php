@@ -113,7 +113,6 @@ $posts = $query->posts;
 // echo '<pre>';
 // print_r($query);
 // echo '</pre>';
-
 ?>
 
 <section class="section <?php echo esc_attr($classes['section']); ?> ">
