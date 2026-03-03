@@ -35,11 +35,30 @@ if (!function_exists('my_category_by_slug')) {
     }
 }
 
+function my_parent_category($term_id)
+{
+    $term = get_term($term_id);
+    if ($term && !is_wp_error($term)) {
+        // echo 'term_id: ' . $term_id . '<br>';
+        if ($term->parent == 0) {
+            return $term_id;
+        } else {
+            return my_parent_category($term->parent);
+        }
+    }
+    return null;
+}
+
 // возвращает массив с цветами для категории, если категория не найдена, возвращает дефолтные цвета
 if (!function_exists('my_category_color')) {
     function my_category_colors($category_id)
     {
         $categories_colors = get_field('categories_labels_color', 'options');
+        $category_id = my_parent_category($category_id);
+        // echo 'category_id: ' . $category_id . '<br>';
+        // echo '<pre>';
+        // print_r($new_args);
+        // echo '</pre>';
         foreach ($categories_colors as $cat_item) {
             if ((int)$cat_item['category'] === $category_id) {
                 return $cat_item;
@@ -59,6 +78,9 @@ function my_add_category_post($post_item)
     $category = my_category();
     $post_id = $post_item->ID;
     $terms = get_the_terms($post_id, $category);
+    // echo '<pre>';
+    // print_r($terms);
+    // echo '</pre>';
 
     if (!empty($terms) && !is_wp_error($terms)) {
         $term_id = $terms[0]->term_id;
