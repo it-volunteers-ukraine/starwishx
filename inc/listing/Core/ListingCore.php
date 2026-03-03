@@ -3,7 +3,7 @@
 /**
  * Listing - Public Opportunities Discovery App
  * Architecture: Singleton with Dependency Injection
- * Version: 0.5.1
+ * Version: 0.5.5
  * Author: DevFrappe
  * Email: dev.frappe@proton.me
  * License: GPL v2 or later
