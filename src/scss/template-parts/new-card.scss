@@ -39,11 +39,22 @@
   left: 8px;
 }
 
-.newcard-date {
+.newcard-info{
+  display: flex;
   margin-bottom: 12px;
-  color: $text-light;
-  text-align: right;
+  justify-content: space-between;
+  align-items: center;
 }
+
+.newcard-info .comment-rating {
+  margin-top: 0;
+}
+
+.newcard-date {
+  color: $text-light;
+  margin-left: auto;
+}
+
 
 .newcard-lg .newcard-date{
   text-align: left;

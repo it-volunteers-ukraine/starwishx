@@ -35,11 +35,30 @@ if (!function_exists('my_category_by_slug')) {
     }
 }
 
+function my_parent_category($term_id)
+{
+    $term = get_term($term_id);
+    if ($term && !is_wp_error($term)) {
+        // echo 'term_id: ' . $term_id . '<br>';
+        if ($term->parent == 0) {
+            return $term_id;
+        } else {
+            return my_parent_category($term->parent);
+        }
+    }
+    return null;
+}
+
 // возвращает массив с цветами для категории, если категория не найдена, возвращает дефолтные цвета
 if (!function_exists('my_category_color')) {
     function my_category_colors($category_id)
     {
         $categories_colors = get_field('categories_labels_color', 'options');
+        $category_id = my_parent_category($category_id);
+        // echo 'category_id: ' . $category_id . '<br>';
+        // echo '<pre>';
+        // print_r($new_args);
+        // echo '</pre>';
         foreach ($categories_colors as $cat_item) {
             if ((int)$cat_item['category'] === $category_id) {
                 return $cat_item;
@@ -54,9 +73,46 @@ if (!function_exists('my_category_color')) {
     }
 }
 
+function my_add_category_post($post_item)
+{
+    $category = my_category();
+    $post_id = $post_item->ID;
+    $terms = get_the_terms($post_id, $category);
+    // echo '<pre>';
+    // print_r($terms);
+    // echo '</pre>';
+
+    if (!empty($terms) && !is_wp_error($terms)) {
+        $term_id = $terms[0]->term_id;
+        $term_name = $terms[0]->name;
+    } else {
+        $term_id = null;
+        $term_name = null;
+    }
+    $post_item->term_id = $term_id;
+    $post_item->term_name = $term_name;
+
+    return $post_item;
+}
+
+function my_iter_posts_add_category($query)
+{
+    $result  = [];
+    if (isset($query->posts)) {
+        // echo 'have posts: ' . count($query->posts) . '<br>';
+        foreach ($query->posts as $post_item) {
+
+            $new_post = my_add_category_post($post_item);
+            array_push($result, $new_post);
+        }
+        $query->posts = $result;
+    }
+    return $query;
+}
+
 // добавляет к URL пагинации параметры page_num и per_page
 if (!function_exists('pagination_url')) {
-    function pagination_url($base_url, $page, $per_page, $search='')
+    function pagination_url($base_url, $page, $per_page, $search = '')
     {
         $args = [
             'page_num' => $page,
@@ -77,30 +133,8 @@ if (!function_exists('my_query_search')) {
     {
         // print_r($args);
         $query = new WP_Query($args);
-        if ($query->have_posts()) {
-            foreach ($query->posts as $post_item) {
-                $post_id = $post_item->ID;
-                $terms = get_the_terms($post_id, my_category());
 
-                // echo 'post_id: ' . $post_id . '<br>';
-                // echo 'terms: ';
-                // print_r($terms);
-                // echo '<br>';
-
-                if (!empty($terms) && !is_wp_error($terms)) {
-                    $term_id = $terms[0]->term_id;
-                    $term_name = $terms[0]->name;
-                } else {
-                    $term_id = null;
-                    $term_name = null;
-                }
-                $post_item->term_id = $term_id;
-                $post_item->term_name = $term_name;
-                // echo '<pre>';
-                // print_r($post_item);
-                // echo '</pre>';
-            }
-        }
+        $query = my_iter_posts_add_category($query);
         wp_reset_postdata();
         return $query;
     }
@@ -252,7 +286,7 @@ if (!function_exists('my_taxonomy')) {
                 'field'    => 'slug',
                 'terms'    => $slug,
             ];
-        }   
+        }
         return null;
     }
 }
@@ -263,11 +297,11 @@ if (!function_exists('my_post_type')) {
     {
         if ($url === null) {
             $request_path = trim($_SERVER['REQUEST_URI'], '/');
-        }else {
+        } else {
             $request_path = trim($url, '/');
         }
         $request_path = $request_path ? $request_path : $_GET('current_path', '');
-        
+
         // echo 'request_path=' . esc_url($request_path) . '<br>';
         // print_r($request_path);
         // echo '<br>';
