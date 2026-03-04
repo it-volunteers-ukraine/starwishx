@@ -1,0 +1,395 @@
+@use "../variables" as *;
+@use "../mixins/media";
+
+.single-project {
+    section.section[class*="breadcrumbs-module__"],
+    .project-breadcrumbs {
+        margin-top: 32px;
+        margin-bottom: 16px;
+        padding-top: 0;
+    }
+
+    &__layout {
+        display: flex;
+        flex-flow: column wrap;
+        @include media.min-tablet {
+            flex-flow: row nowrap;
+        }
+
+        .project-main {
+            display: flex;
+            flex: 1 1 auto;
+            flex-flow: column wrap;
+            gap: 24px;
+            @include media.min-laptop {
+                flex-flow: row nowrap;
+            }
+
+            .project-sidebar {
+                display: flex;
+                flex-direction: column;
+                gap: 16px;
+                @include media.min-tabland {
+                    flex: 0 0 325px;
+                }
+                @include media.min-laptop {
+                    flex: 0 0 425px;
+                }
+
+                &__figure {
+                    position: relative;
+                    border-radius: $radius-image;
+                    background-color: $buttons-color-background-secondary-hover;
+                    aspect-ratio: 4 / 3;
+                    overflow: hidden;
+
+                    .project-sidebar__image {
+                        position: absolute;
+                        inset: 0;
+                        width: 100%;
+                        height: 100%;
+                        object-fit: cover;
+                    }
+                    .control-favorites-wrapper {
+                        position: absolute;
+                        right: 0;
+                        bottom: 0;
+                        z-index: 3;
+                        margin: 16px;
+                    }
+                }
+
+                &__placeholder {
+                    display: flex;
+                    position: absolute;
+                    justify-content: center;
+                    align-items: center;
+                    inset: 0;
+                    color: $text-light;
+                    .project-sidebar__fallback-icon {
+                        width: 64px;
+                        height: 64px;
+                    }
+                }
+            }
+
+            .project-tabs {
+                display: flex;
+                flex-direction: column;
+                gap: 6px;
+                width: 100%;
+                text-align: center;
+
+                &__btn {
+                    display: flex;
+                    align-items: center;
+                    gap: 8px;
+                    transition:
+                        background-color 0.2s,
+                        border-color 0.2s,
+                        color 0.2s;
+                    cursor: pointer;
+                    border: 1px solid $buttons-color-border-secondary-default;
+                    border-radius: $btn-radius;
+                    background: $buttons-color-background-secondary-default;
+                    padding: 10px 20px;
+                    max-width: 325px;
+                    color: $buttons-color-text-secondary-default;
+                    font-size: 0.938rem;
+
+                    &:hover {
+                        border-color: $buttons-color-border-secondary-hover;
+                        background-color: $buttons-color-background-secondary-hover;
+                    }
+
+                    &.is-active {
+                        border-color: $buttons-color-background-primary-default;
+                        background-color: $buttons-color-background-primary-default;
+                        color: $buttons-color-text-primary-default;
+                    }
+                }
+
+                &__count {
+                    opacity: 0.8;
+                    font-size: 0.813rem;
+                }
+            }
+
+            .project-article {
+                width: 100%;
+
+                .project-header {
+                    display: flex;
+                    flex-flow: column wrap;
+                    gap: 12px;
+                    margin-bottom: 24px;
+                    @include media.min-tabland {
+                        flex-flow: row nowrap;
+                        justify-content: space-between;
+                        align-items: flex-start;
+                    }
+
+                    .project-title {
+                        margin-bottom: 0;
+                    }
+                }
+
+                .project-social {
+                    flex: 0 0 auto;
+                    display: flex;
+                    flex-direction: row;
+                    justify-content: space-between;
+                    &__share {
+                        display: inline-flex;
+                        column-gap: 9px;
+                        align-items: center;
+                        .icon-share {
+                            width: 18px;
+                            height: 18px;
+                            color: $icon-color-accent;
+                        }
+                    }
+                }
+
+                .project-panel {
+                    animation: fadeIn 0.4s ease-in-out;
+                    &[hidden] {
+                        display: none;
+                    }
+                    .opportunities-info,
+                    .ngo-info {
+                        margin-bottom: 20px;
+                    }
+                }
+
+                .project-content {
+                    a {
+                        color: $text-accent;
+                    }
+                    h2 {
+                        color: $text-accent;
+                        font-weight: 600;
+                        font-size: 18px;
+                        line-height: 1.2;
+
+                        @include media.min-desktop {
+                            font-size: 20px;
+                        }
+                    }
+                    p {
+                        margin-top: 16px;
+                    }
+                    ul,
+                    ol {
+                        margin-top: 16px;
+                        margin-bottom: 12px;
+                        margin-left: 1.5rem;
+                    }
+                    ul {
+                        list-style: disc;
+                        li {
+                            list-style: disc;
+                        }
+                    }
+
+                    h2,
+                    h3 {
+                        margin-top: 24px;
+                        @include media.min-laptop {
+                            margin-top: 32px;
+                        }
+                    }
+                    .wp-block-embed {
+                        margin-top: 16px;
+                        // border-radius: $radius-image;
+                        overflow: hidden;
+                        iframe {
+                            border-radius: $radius-image;
+                            // height: 100%;
+                            width: 100%;
+                            min-height: 400px;
+                            @include media.max-mobile {
+                                height: 281px;
+                            }
+                        }
+                    }
+                    .wp-block-gallery {
+                        margin-top: 16px;
+                        figure {
+                            border-radius: $radius-image;
+                            overflow: hidden;
+                        }
+                    }
+                    .section {
+                        padding: 0;
+                        .container {
+                            padding: 0;
+                        }
+                    }
+                }
+            }
+        }
+
+        .project-cards-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+            @include media.min-tabland {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        .project-cards-grid--opportunities,
+        .project-cards-grid--ngo {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+
+        .project-card {
+            transition: border-color 0.2s;
+            border: 1px solid $stroke-default;
+            border-radius: $radius-image;
+            overflow: hidden;
+
+            &:hover {
+                border-color: $stroke-hover;
+            }
+
+            &__link {
+                display: flex;
+                flex-direction: column;
+                height: 100%;
+                color: inherit;
+                text-decoration: none;
+            }
+            &--ngo,
+            &--opportunity {
+                .project-card__link {
+                    display: flex;
+                    flex-flow: row nowrap;
+                    gap: 12px;
+                    height: 100%;
+                    color: inherit;
+                    text-decoration: none;
+                    .project-card__image-wrapper {
+                        flex: 0 0 100px;
+                        @include media.min-tabland {
+                            flex: 0 0 180px;
+                        }
+                        &::before {
+                            position: absolute;
+                            z-index: 1;
+                            inset: 0;
+                            background: linear-gradient(
+                                0deg,
+                                rgb(0 0 0 / 50%) 0%,
+                                rgb(0 0 0 / 25%) 10%,
+                                rgb(0 0 0 / 15%) 15%,
+                                rgb(0 0 0 / 7%) 25%,
+                                rgb(0 0 0 / 0.01%) 35%,
+                                rgba(0, 0, 0, 0) 100%
+                            );
+                            content: "";
+                        }
+                    }
+                }
+            }
+            &__image-wrapper {
+                position: relative;
+                background-color: $buttons-color-background-secondary-hover;
+                aspect-ratio: 16 / 9;
+                overflow: hidden;
+                .control-favorites-wrapper {
+                    position: absolute;
+                    right: 0;
+                    bottom: 0;
+                    z-index: 3;
+                    margin: 16px;
+                }
+            }
+
+            &__image {
+                position: absolute;
+                inset: 0;
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
+
+            &__image-placeholder {
+                display: flex;
+                position: absolute;
+                justify-content: center;
+                align-items: center;
+                inset: 0;
+            }
+
+            &__fallback-icon {
+                width: 48px;
+                height: 48px;
+            }
+
+            &__body {
+                display: flex;
+                flex: 1;
+                flex-direction: column;
+                gap: 6px;
+                padding: 14px 16px;
+            }
+
+            &__date {
+                color: $text-light;
+                font-size: 0.813rem;
+            }
+
+            &__title {
+                margin: 0;
+                font-weight: 600;
+                font-size: 1rem;
+                line-height: 1.4;
+            }
+
+            &__excerpt {
+                display: -webkit-box;
+                margin: 0;
+                overflow: hidden;
+                -webkit-box-orient: vertical;
+                color: $text-light;
+                font-size: 0.875rem;
+                line-height: 1.5;
+                -webkit-line-clamp: 3;
+            }
+        }
+
+        .project-aside {
+            margin-left: 12px;
+            padding-left: 20px;
+            max-height: 754px;
+            .news-container {
+                direction: ltr;
+            }
+            @include media.min-tabland {
+                flex: 0 0 215px;
+            }
+            @include media.min-tablet {
+                flex: 0 0 325px;
+            }
+            @include media.min-laptop {
+                flex: 0 0 425px;
+            }
+            .lnew-main_title {
+                margin-bottom: 24px;
+            }
+            .lnew-item {
+                &:not(:last-child) {
+                    margin-bottom: 18px;
+                }
+                .lnew-date {
+                    margin-bottom: 2px;
+                    color: $text-light;
+                    font-size: 14px;
+                }
+            }
+        }
+    }
+}

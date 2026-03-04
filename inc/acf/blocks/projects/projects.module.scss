@@ -1,194 +1,209 @@
 @use "../../../../src/scss/variables" as *;
+@use "../../../../src/scss/mixins/media" as *;
 
 .projects-section {
-  max-width: 1920px;
-  width: 100%;
-  margin: 0 auto;
-  padding: 200px 0 120px;
-  display: flex;
-  flex-direction: column;
-  gap: 32px;
-  box-sizing: border-box;
-  position: relative;
-}
+    display: flex;
+    position: relative;
+    flex-direction: column;
+    gap: 32px;
+    box-sizing: border-box;
+    margin: 0 auto;
+    padding: 200px 0 120px;
+    width: 100%;
+    max-width: $width-desktop;
 
-.header-block {
-  display: flex;
-  flex-direction: column;
-  gap: clamp(16px, 1vw, 20px);
-  padding: 0 clamp(40px, 4vw, 90px);
-  position: relative;
-}
+    .header-block {
+        display: flex;
+        position: relative;
+        flex-direction: column;
+        gap: clamp(16px, 1vw, 20px);
+        padding: 0 clamp(40px, 4vw, 90px);
 
-.sub-title {
-  color: $element-block-text;
-  display: flex;
-  align-items: center;
-  gap: clamp(4px, 0.42vw, 8px);
-  font-size: clamp(14px, 0.833vw, 16px);
-  width: clamp(185px, 12vw, 213px);
-  height: clamp(29px, 1.82vw, 35px);
-  justify-content: center;
-  border-radius: 40px;
-  padding: clamp(6px, 0.42vw, 8px) clamp(10px, 0.63vw, 12px);
-  background-color: $element-block-fill;
-}
+        @media (max-width: 420px) {
+            padding: 0 10px;
+        }
 
-.sub-title::before {
-  content: "";
-  width: 4px;
-  height: 4px;
-  background: $element-block-text;
-  border-radius: 50%;
-}
+        .suptitle {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: clamp(4px, 0.42vw, 8px);
+            border-radius: 40px;
+            background-color: $element-block-fill;
+            padding: clamp(6px, 0.42vw, 8px) clamp(10px, 0.63vw, 12px);
+            width: clamp(185px, 12vw, 213px);
+            height: clamp(29px, 1.82vw, 35px);
+            color: $element-block-text;
+            font-size: clamp(14px, 0.833vw, 16px);
 
-.main-title {
-  font-size: clamp(48px, 3.33vw, 64px);
-  line-height: 120%;
-  color: $text-dark;
-  font-weight: 300;
+            &::before {
+                border-radius: 50%;
+                background: $element-block-text;
+                width: 4px;
+                height: 4px;
+                content: "";
+            }
+        }
+
+        .title {
+            color: $text-dark;
+            font-weight: 300;
+            font-size: clamp(48px, 3.33vw, 64px);
+            line-height: 120%;
+
+            @include max-laptop {
+                font-weight: 400;
+            }
+
+            @media (max-width: 420px) {
+                font-size: 36px;
+            }
+        }
+
+        .arrows {
+            display: flex;
+            position: absolute;
+            right: 40px;
+            bottom: 2px;
+            gap: 15px;
+
+            @media (max-width: 420px) {
+                display: none;
+            }
+
+            /* stylelint-disable selector-pseudo-class-no-unknown */
+            .arrow-left,
+            .arrow-right {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+
+                /* Reset native <button> chrome */
+                appearance: none;
+                opacity: 1;
+                transition: opacity 0.2s;
+                cursor: pointer;
+                stroke: $text-dark;
+                margin: 0;
+                border: none;
+                background: transparent;
+                padding: 0;
+                width: 44px;
+                height: 44px;
+
+                /* Explicit pointer-events on the button — prevents any parent
+                   `pointer-events: none` from silently breaking click targets. */
+                pointer-events: auto;
+
+                /* Prevent the inner <use> shadow element from intercepting clicks
+                   before they reach the <button> — particularly unreliable on WebKit. */
+                svg use {
+                    pointer-events: none;
+                }
+
+                &:hover {
+                    opacity: 0.7;
+                }
+
+                &:disabled,
+                &.swiper-button-disabled {
+                    opacity: 0.3;
+                    cursor: not-allowed;
+
+                    svg use {
+                        stroke: $icon-color-selected-stroke;
+                    }
+                }
+            }
+            /* stylelint-enable selector-pseudo-class-no-unknown */
+        }
+    }
 }
 
 .projects-wrapper {
-  overflow-x: hidden;
-}
+    overflow: hidden;
+    padding: 0 clamp(40px, 4vw, 0px);
 
-.projects-grid {
-  display: flex;
-  flex-wrap: nowrap;
-  justify-content: center;
-  gap: 20px;
-  transition: transform 0.3s ease;
-  padding: 0 clamp(40px, 4vw, 0px);
-}
+    @media (max-width: 420px) {
+        padding: 0 10px;
+    }
 
-.project-card {
-  padding: 12px;
-  background: $surface-violet;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  text-decoration: none;
-  color: $text-basic;
-  border-radius: 12px;
-  flex-shrink: 0;
-  width: clamp(325px, 22.13vw, 425px);
-  box-sizing: border-box;
-  height: clamp(418px, 28.1vw, 540px);
-}
+    .projects-swiper {
+        overflow: visible;
+        
+        .swiper-wrapper {
+            display: flex;
+        }
 
-.img-wrapper {
-  position: relative;
-  width: 100%;
-  aspect-ratio: 401 / 373;
-  border-radius: 12px;
-  overflow: hidden;
-}
+        .swiper-slide {
+            height: auto;
 
-.project-image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
+            /* Ensure slides have proper width based on breakpoints */
+            width: 100%;
+            
+            @media (min-width: 420px) {
+                width: calc(50% - 10px);
+            }
+            
+            @media (min-width: 1024px) {
+                width: calc(33.333% - 14px);
+            }
+            
+            @media (min-width: 1350px) {
+                width: calc(25% - 15px);
+            }
+        }
+    }
 
-.project-category {
-  position: absolute;
-  top: 8px;
-  left: 8px;
-  border-radius: 40px;
-  padding: 6px 12px;
-  font-size: 14px;
-  line-height: 1;
-}
+    .project-card {
+        display: flex;
+        flex-shrink: 0;
+        flex-direction: column;
+        gap: 20px;
+        box-sizing: border-box;
+        border-radius: 12px;
+        background: $surface-violet;
+        padding: 12px;
+        width: 100%;
+        height: 100%;
+        color: $text-basic;
+        text-decoration: none;
 
-.project-date {
-  font-size: 14px;
-  color: $text-light;
-}
+        .img-wrapper {
+            position: relative;
+            border-radius: 12px;
+            aspect-ratio: 401 / 373;
+            width: 100%;
+            overflow: hidden;
 
-.project-heading {
-  font-weight: 500;
-  font-size: 16px;
-  line-height: 120%;
-  min-height: 2.4em;
-}
+            .project-image {
+                display: block;
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
 
-.arrows {
-  position: absolute;
-  right: 40px;
-  bottom: 2px;
-  display: none;
-  gap: 15px;
-}
+            .project-category {
+                position: absolute;
+                top: 8px;
+                left: 8px;
+                border-radius: 40px;
+                padding: 6px 12px;
+                font-size: 14px;
+                line-height: 1;
+            }
+        }
 
-.arrow-left,
-.arrow-right {
-  width: 44px;
-  height: 44px;
-  opacity: 1;
-  transition: opacity 0.2s;
-  cursor: pointer;
-  stroke: $text-dark;
-}
+        .project-date {
+            color: $text-light;
+            font-size: 14px;
+        }
 
-/* stylelint-disable selector-pseudo-class-no-unknown */
-.arrow-left:global(.disabled),
-.arrow-right:global(.disabled) {
-  opacity: 0.3;
-}
-
-.arrow-left:global(.disabled) use,
-.arrow-right:global(.disabled) use {
-  stroke: $icon-color-selected-stroke;
-}
-
-/* stylelint-enable selector-pseudo-class-no-unknown */
-
-@media (max-width: 1440px) {
-  .projects-wrapper {
-    overflow: auto hidden;
-    -webkit-overflow-scrolling: touch;
-    scroll-behavior: smooth;
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-  }
-
-  .main-title {
-    font-weight: 400;
-  }
-
-  .projects-wrapper::-webkit-scrollbar {
-    display: none;
-  }
-
-  .projects-grid {
-    flex-wrap: nowrap;
-    justify-content: flex-start;
-    width: max-content;
-  }
-}
-
-@media (max-width: 1350px) {
-  .arrows {
-    display: flex;
-  }
-}
-
-@media (max-width: 420px) {
-  .projects-grid {
-    padding: 0 10px;
-  }
-
-  .header-block {
-    padding: 0 10px;
-  }
-
-  .main-title {
-    font-size: 36px;
-  }
-
-  .arrows {
-    display: none;
-  }
+        .project-heading {
+            min-height: 2.4em;
+            font-weight: 500;
+            font-size: 16px;
+            line-height: 120%;
+        }
+    }
 }

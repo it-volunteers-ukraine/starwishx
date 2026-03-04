@@ -24,10 +24,10 @@
     <symbol id="icon-arrow" viewBox="0 0 18 18" fill="none">
         <path d="M6.5 4L11.5 9L6.5 14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/>
     </symbol>
-    <symbol id="icon-arrow_left" width="44" height="44" viewBox="0 0 44 44" fill="none">
+    <symbol id="icon-arrow_left" viewBox="0 0 44 44" fill="none">
         <path d="M26.5 12L17.5 22L26.5 32" stroke="currentColor" stroke-linecap="round"/>
     </symbol>
-    <symbol id="icon-arrow_right" width="44" height="44" viewBox="0 0 44 44" fill="none">
+    <symbol id="icon-arrow_right" viewBox="0 0 44 44" fill="none">
         <path d="M17.5 12L26.5 22L17.5 32" stroke="currentColor" stroke-linecap="round"/>
     </symbol>
     <symbol id="icon-arrow_down" viewBox="0 0 24 24" fill="none">

@@ -46,7 +46,7 @@
     "stylelint": "^16.26.1",
     "stylelint-config-standard": "^39.0.1",
     "stylelint-config-standard-scss": "^16.0.0",
-    "ttf2woff2": "^8.0.0",
+    "ttf2woff2": "^8.0.1",
     "vinyl-named": "^1.1.0",
     "webpack-stream": "^7.0.0",
     "yargs": "^18.0.0"

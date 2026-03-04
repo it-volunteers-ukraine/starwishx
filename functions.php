@@ -305,6 +305,9 @@ require_once get_template_directory() . '/inc/launchpad/setup.php';
 // init for Listing - search & filter opportunities
 require_once get_template_directory() . '/inc/listing/setup.php';
 
+// init for Projects - single project page
+require_once get_template_directory() . '/inc/projects/setup.php';
+
 require_once get_template_directory() . '/inc/news-taxonomy-metabox.php';
 
 
@@ -314,6 +317,19 @@ require_once get_template_directory() . '/inc/news-taxonomy-metabox.php';
 add_filter('single_template', function ($template) {
   if (is_singular('opportunity')) {
     $alt = locate_template('templates/single-opportunity.php');
+    if ($alt) {
+      return $alt;
+    }
+  }
+  return $template;
+});
+
+/**
+ * Place CPT Project Single Template
+ */
+add_filter('single_template', function ($template) {
+  if (is_singular('project')) {
+    $alt = locate_template('templates/single-project.php');
     if ($alt) {
       return $alt;
     }

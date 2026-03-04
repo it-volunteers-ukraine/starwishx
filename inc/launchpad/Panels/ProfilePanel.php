@@ -155,7 +155,7 @@ class ProfilePanel extends AbstractPanel
                 </div>
 
                 <div class="form-field">
-                    <label for="lp-email"><?php esc_html_e('Email', 'starwishx'); ?></label>
+                    <label class="label-required" for="lp-email"><?php esc_html_e('Email', 'starwishx'); ?></label>
                     <input type="email" id="lp-email" required data-field="email"
                         data-wp-bind--value="<?= $this->statePath('email') ?>"
                         data-wp-on--input="actions.profile.updateField" />
@@ -165,7 +165,7 @@ class ProfilePanel extends AbstractPanel
                 <div class="form-field">
                     <label for="lp-phone">
                         <?php esc_html_e('Phone', 'starwishx'); ?>
-                        <span class="description" style="color:#666; font-size:0.85em; font-weight:normal;">
+                        <span class="description label-required" style="color:#666; font-size:0.85em; font-weight:normal;">
                             (e.g., +38 044 555 5555)
                         </span>
                     </label>

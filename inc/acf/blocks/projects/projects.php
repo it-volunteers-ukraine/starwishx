@@ -2,10 +2,11 @@
 $default_classes = [
   'projects-section' => 'projects-section',
   'header-block' => 'header-block',
-  'sub-title' => 'sub-title',
-  'main-title' => 'main-title',
+  'suptitle' => 'suptitle',
+  'title' => 'title',
   'projects-wrapper' => 'projects-wrapper',
-  'projects-grid' => 'projects-grid',
+  'projects-swiper' => 'projects-swiper',
+  'projects-swiper-wrapper' => 'projects-swiper-wrapper',
   'project-card' => 'project-card',
   'img-wrapper' => 'img-wrapper',
   'project-image' => 'project-image',
@@ -23,69 +24,111 @@ $classes = $default_classes;
 
 if (file_exists($modules_file)) {
   $modules = json_decode(file_get_contents($modules_file), true);
-  $classes = array_merge($default_classes, $modules['projects'] ?? []);
+  // apply escaping same time:
+  $classes = array_map('esc_attr', array_merge($default_classes, $modules['projects'] ?? []));
 }
 
-$cards = get_field('project_cards');
+$title = wp_kses_post(get_field('title'));
+$suptitle = wp_kses_post(get_field('suptitle'));
+$slides_count = esc_attr(get_field('slides_count')) ?? 8;
+
+$query_args = apply_filters('projects_block_query_args', [
+  'post_type'      => 'project',
+  'posts_per_page' => $slides_count,
+  'post_status'    => 'publish',
+  'orderby'        => 'date',
+  'order'          => 'DESC',
+]);
+$query = new WP_Query($query_args);
+
 ?>
 
-
-
-<section class="<?= esc_attr($classes['projects-section']) ?>">
-  <div class="<?= esc_attr($classes['header-block']) ?>">
-    <span class="<?= esc_attr($classes['sub-title']) ?>">ВІД СЕРЦЯ ДО СЕРЦЯ</span>
-    <h3 class="<?= esc_attr($classes['main-title']) ?>">ПРОЄКТИ</h3>
-    <div class="<?= esc_attr($classes['arrows']) ?>">
-  <svg class="<?= esc_attr($classes['arrow']) ?> <?= esc_attr($classes['arrow-left']) ?>" data-arrow="left">
-    <use href="<?= get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-arrow_left"></use>
-  </svg>
-  <svg class="<?= esc_attr($classes['arrow']) ?> <?= esc_attr($classes['arrow-right']) ?>" data-arrow="right">
-    <use href="<?= get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-arrow_right"></use>
-  </svg>
-</div>
+<section class="<?= $classes['projects-section'] ?>">
+  <div class="<?= $classes['header-block'] ?>">
+    <span class="<?= $classes['suptitle'] ?>"><?php echo $suptitle ?></span>
+    <h3 class="<?= $classes['title'] ?>"><?php echo $title ?></h3>
+    <div class="<?= $classes['arrows'] ?>">
+      <!-- Swiper navigation buttons -->
+      <button type="button" class="arrow-left <?= $classes['arrow'] ?> <?= $classes['arrow-left'] ?>" aria-label="Previous projects">
+        <svg width="40" height="40" focusable="false" tabindex="-1" aria-hidden="true">
+          <use href="<?= get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-arrow_left"></use>
+        </svg>
+      </button>
+      <button type="button" class="arrow-right <?= $classes['arrow'] ?> <?= $classes['arrow-right'] ?>" aria-label="Next projects">
+        <svg width="40" height="40" focusable="false" tabindex="-1" aria-hidden="true">
+          <use href="<?= get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-arrow_right"></use>
+        </svg>
+      </button>
+    </div>
   </div>
 
-  <div class="<?= esc_attr($classes['projects-wrapper']) ?>">
-    <?php if ($cards) : ?>
-      <div class="<?= esc_attr($classes['projects-grid']) ?>">
-        <?php foreach ($cards as $card) :
-          $category = $card['category'] ?? '';
-          $image_id = $card['image'] ?? false;
-          $date = $card['date'] ?? '';
-          $link = $card['link'] ?? '#';
-          $heading = $card['heading'] ?? '';
-          $bg_color = $card['category_bg_color'] ?? '';
-          $text_color = $card['category_text_color'] ?? '';
-        ?>
-          <a href="<?= esc_url($link) ?>" class="<?= esc_attr($classes['project-card']) ?>">
-            <?php if ($image_id) : ?>
-  <div class="<?= esc_attr($classes['img-wrapper']) ?>">
-    <?php
-    // Используем категорию как alt, или fallback к пустой строке
-    $alt_text = !empty($category) ? esc_attr($category) : '';
-    echo wp_get_attachment_image($image_id, 'large', false, [
-      'class' => $classes['project-image'],
-      'alt'   => $alt_text,
-    ]);
-    ?>
-    <?php if ($category) : ?>
-      <span class="<?= esc_attr($classes['project-category']) ?>" style="background-color: <?= esc_attr($bg_color) ?>; color: <?= esc_attr($text_color) ?>;">
-        <?= esc_html($category) ?>
-      </span>
-    <?php endif; ?>
-  </div>
-<?php endif; ?>
-            <?php if ($date) : ?>
-              <time class="<?= esc_attr($classes['project-date']) ?>"><?= esc_html($date) ?></time>
-            <?php endif; ?>
-            <?php if ($heading) : ?>
-              <h4 class="<?= esc_attr($classes['project-heading']) ?>"><?= esc_html($heading) ?></h4>
-            <?php endif; ?>
-          </a>
-        <?php endforeach; ?>
+  <div class="<?= $classes['projects-wrapper'] ?>">
+    <?php if ($query->have_posts()) : ?>
+      <!-- Swiper -->
+      <div class="swiper projects-swiper <?= $classes['projects-swiper'] ?>">
+        <div class="swiper-wrapper projects-swiper-wrapper <?= $classes['projects-swiper-wrapper'] ?>">
+          <?php while ($query->have_posts()) : $query->the_post();
+
+            $post_id = get_the_ID();
+            $image_id = get_post_thumbnail_id($post_id);
+            $date_display = get_the_date('d.m.Y', $post_id);
+            $permalink = get_permalink($post_id);
+            $title_post = get_the_title($post_id);
+            $category = get_field('category', $post_id);
+          ?>
+
+            <div class="swiper-slide">
+              <a href="<?php echo esc_url($permalink); ?>" class="<?= $classes['project-card'] ?>">
+
+                <?php if ($image_id) : ?>
+                  <div class="<?= $classes['img-wrapper'] ?>">
+                    <?php
+                    echo wp_get_attachment_image(
+                      $image_id,
+                      'large',
+                      false,
+                      ['class' => $classes['project-image']]
+                    );
+                    ?>
+
+                    <?php if ($category) : ?>
+                      <span class="<?= $classes['project-category'] ?>"
+                        style="background-color: <?php echo esc_attr($bg_color); ?>;
+                               color: <?php echo esc_attr($text_color); ?>;">
+                        <?php echo esc_html($category); ?>
+                      </span>
+                    <?php endif; ?>
+                  </div>
+                <?php endif; ?>
+
+                <time class="<?= $classes['project-date'] ?>">
+                  <?php echo esc_html($date_display); ?>
+                </time>
+
+                <h4 class="<?= $classes['project-heading'] ?>">
+                  <?php echo esc_html($title_post); ?>
+                </h4>
+
+              </a>
+            </div>
+
+          <?php endwhile; ?>
+        </div>
       </div>
     <?php endif; ?>
-  </div>
 
-  <script src="<?= get_template_directory_uri(); ?>/assets/js/projects.js"></script>
+  </div>
 </section>
+
+<?php wp_reset_postdata(); ?>
+
+<?php
+wp_enqueue_script('swiper-js');
+wp_enqueue_script(
+  'projects-block-script',
+  get_template_directory_uri() . '/assets/js/projects.js',
+  ['swiper-js'],
+  '1.0',
+  true
+);
+?>

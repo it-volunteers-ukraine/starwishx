@@ -287,6 +287,8 @@ export const moduleScripts = () => {
       "inc/gateway/Assets/*.mjs",
       "inc/listing/Assets/*.js",
       "inc/listing/Assets/*.mjs",
+      "inc/projects/Assets/*.js",
+      "inc/projects/Assets/*.mjs",
     ],
     {
       allowEmpty: true,
