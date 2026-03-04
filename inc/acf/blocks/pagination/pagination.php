@@ -57,7 +57,7 @@ $post_name = $post->post_name;  //еще используется в кнопе 
 $category = my_category();
 $category_slug = get_query_var('news_cat');
 
-// echo 'category_slug: ' . $category_slug . '<br>';
+echo 'category_slug: ' . $category_slug . '<br>';
 
 
 // $path = trim($wp->request, '/');
@@ -97,6 +97,14 @@ $allowed_per_page = !$default_per_page_array_is_empty
 $per_page = isset($_GET['per_page']) ? (int) $_GET['per_page'] : 12;
 $per_page = in_array($per_page, $allowed_per_page, true) ? $per_page : 12;
 $search_term = isset($_GET['search']) ? $_GET['search'] : '';
+$no_desc = false;
+$card_version = 1;
+// $no_desc = isset($_GET['nodesc']) ? filter_var($_GET['nodesc'], FILTER_VALIDATE_BOOLEAN) : false;
+
+if ($wp->request == 'search'){
+    $no_desc = true;
+    $card_version = 2;
+}
 
 // Получить post_type из мета, если нет, то 'news'
 $post_type = my_post_type();
@@ -209,7 +217,8 @@ $total_pages = (int) ceil($total_posts / $per_page);
             <?php
             $load_next_page = $page < $total_pages ? $page + 1 : $total_pages;
             $load_more_disabled = $total_pages && $page >= $total_pages ? $classes['link-disabled'] : '';
-            $load_more_hidden = $total_pages && $page >= $total_pages ? "display: none" : 0;;
+            $load_more_hidden = $total_pages && $page >= $total_pages ? "display: none" : "";
+
             ?>
             <button
                 id="load-more"
@@ -222,6 +231,8 @@ $total_pages = (int) ceil($total_posts / $per_page);
                 data-text-loadmore="<?php echo $btn_loadmore; ?>"
                 data-text-loading="<?php echo $btn_loading; ?>"
                 data-search="<?php echo esc_attr($search_term); ?>"
+                data-nodesc="<?php echo esc_attr($no_desc); ?>"
+                data-card-version="<?php echo esc_attr($card_version); ?>"
                 style="<?php echo $load_more_hidden; ?>"
                 class="btn <?php echo esc_attr($classes["load-more"]); ?>  <?php echo esc_attr($load_more_disabled); ?>">
                 <?php echo $btn_loadmore; ?>

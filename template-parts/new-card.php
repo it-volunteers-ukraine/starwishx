@@ -40,6 +40,10 @@ if ($is_card_lg) {
     $no_photo = $args['no_photo'] ?? false;
 }
 $card_lg_class = $is_card_lg ? ' newcard-lg ' : '';
+//card version img size, title size
+$card_version = $args['card_version'] ?? 1;
+$class_card_version = 'card-version-' . $card_version;
+$class_title = $card_version == 2 ? 'big-text-semibold' : 'subtitle-text-m';
 
 $swiper_class = $swiper ? 'swiper-slide' : '';
 $post_id = $item->ID;
@@ -88,7 +92,9 @@ $item_label = esc_html($item->term_name ?? 'No category');
 
 ?>
 
-<div class="<?php echo $swiper_class; ?> newcard-content <?php echo $card_lg_class; ?>" data-post-id="<?php echo esc_attr($post_id); ?>" data-term-id="<?php echo esc_attr($term_id); ?>">
+<div class="<?php echo $swiper_class; ?> newcard-content <?php echo $card_lg_class . ' ' . $class_card_version; ?> "
+    data-post-id="<?php echo esc_attr($post_id); ?>"
+    data-term-id="<?php echo esc_attr($term_id); ?>">
     <?php if (!$no_photo) : ?>
         <div class="newcard-img-wrap ">
             <img
@@ -131,7 +137,7 @@ $item_label = esc_html($item->term_name ?? 'No category');
         </div>
     </div>
 
-    <div class="subtitle-text-m newcard-title">
+    <div class="<?php echo $class_title; ?> newcard-title">
         <?php echo esc_html($item_title); ?>
     </div>
 
