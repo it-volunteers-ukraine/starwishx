@@ -57,7 +57,7 @@ $post_name = $post->post_name;  //еще используется в кнопе 
 $category = my_category();
 $category_slug = get_query_var('news_cat');
 
-echo 'category_slug: ' . $category_slug . '<br>';
+// echo 'category_slug: ' . $category_slug . '<br>';
 
 
 // $path = trim($wp->request, '/');
