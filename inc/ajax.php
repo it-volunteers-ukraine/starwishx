@@ -33,6 +33,8 @@ function ajax_load_news()
     $category_slug = sanitize_text_field($_GET['category_slug'] ?? '');
 
     $search = sanitize_text_field($_GET['search'] ?? '');
+    $nodesc = isset($_GET['nodesc']) ? filter_var($_GET['nodesc'], FILTER_VALIDATE_BOOLEAN) : false;
+    $card_version = isset($_GET['card_version']) ? sanitize_text_field($_GET['card_version']) : '1';
 
     $term = get_term_by('slug', $category_slug, $category);
     if ($term && !is_wp_error($term)) {
@@ -117,6 +119,8 @@ function ajax_load_news()
             null,
             [
                 'item' => $item,
+                'no_desc' => $nodesc,
+                'card_version' => $card_version,
             ]
         );
     }

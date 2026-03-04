@@ -11,7 +11,10 @@ if (btn && container) {
         const searchTerm = btn.dataset.search || '';
         const textLoadMore = btn.dataset.textLoadmore || 'Load more';
         const textLoading = btn.dataset.textLoading || 'Loading...';
+        const noDesc = Boolean(btn.dataset.nodesc) || false;
+        const cardVersion = btn.dataset.cardVersion || '1';
         console.log('search: ', searchTerm);
+        console.log('noDesc: ', noDesc);
 
         btn.disabled = true;
         btn.textContent = textLoading;
@@ -24,6 +27,7 @@ if (btn && container) {
             category: category,
             category_slug: categorySlug,
             search: searchTerm,
+            nodesc: noDesc,  //в карточках может не быть описания
             current_url: window.location.href,        // 👈 добавили
             current_path: window.location.pathname,   // 👈 можно только путь
         });
@@ -74,7 +78,7 @@ if (btn && container) {
                     const pageLink = document.getElementById(`pagination-${i}`);
                     if (!pageLink) continue;
 
-                    const newPageNum = startNum + i -1;
+                    const newPageNum = startNum + i - 1;
 
                     pageLink.innerText = newPageNum;
                     pageLink.href = updateQueryString(pageLink.href, 'page_num', newPageNum);
