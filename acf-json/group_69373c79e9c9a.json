@@ -192,7 +192,7 @@
                 "id": ""
             },
             "default_value": "",
-            "maxlength": 4000,
+            "maxlength": 3000,
             "allow_in_bindings": 0,
             "rows": "",
             "placeholder": "Додайте умови, наприклад, “Навчання доступно для наступних категорій населення...”",
@@ -213,7 +213,7 @@
                 "id": ""
             },
             "default_value": "",
-            "maxlength": 3000,
+            "maxlength": 2000,
             "allow_in_bindings": 0,
             "rows": "",
             "placeholder": "Опишіть деталі, які здаються для Вас важливими та ключовими",
@@ -389,7 +389,6 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1772619602
     "display_title": "",
-    "modified": 1772563410
+    "modified": 1772735294
 }
