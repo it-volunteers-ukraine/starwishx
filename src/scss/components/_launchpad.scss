@@ -204,6 +204,12 @@
     }
 }
 
+.launchpad-panel--profile {
+    .launchpad-alert--error {
+        width: fit-content;
+    }
+}
+
 .launchpad-grid__container {
     .opportunities-pagination {
         margin-top: 12px;
@@ -1736,4 +1742,3 @@
 .opportunity-card__title {
     color: $text-basic;
 }
-

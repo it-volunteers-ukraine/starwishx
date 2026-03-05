@@ -96,6 +96,9 @@ export const profileActions = {
       actions.syncStateFromUrl();
     } catch (error) {
       p.error = error.message;
+      setTimeout(() => {
+        p.error = null;
+      }, 5000);
     } finally {
       p.isSaving = false;
     }
@@ -172,9 +175,17 @@ export const profileActions = {
       }
     } catch (error) {
       p.error = error.message;
+      setTimeout(() => {
+        p.error = null;
+      }, 5000);
     } finally {
       p.isGenerating = false;
     }
+  },
+
+  confirmPasswordSuccess() {
+    const { state } = store("launchpad");
+    window.location.href = state.launchpadSettings.loginUrl;
   },
 
   /**
@@ -199,11 +210,14 @@ export const profileActions = {
         },
       );
 
-      alert("Password changed successfully. Please log in again.");
-      window.location.href = state.launchpadSettings.loginUrl;
+      p.isSaving = false;
+      p.passwordSuccessPopup = { isOpen: true };
     } catch (error) {
       p.error = error.message;
       p.isSaving = false;
+      setTimeout(() => {
+        p.error = null;
+      }, 5000);
     }
   },
 };

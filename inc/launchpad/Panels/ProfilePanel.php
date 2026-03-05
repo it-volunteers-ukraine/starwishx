@@ -62,6 +62,7 @@ class ProfilePanel extends AbstractPanel
             'isCurrentPasswordVisible' => false,
             'isNewPasswordVisible'     => false,
             'isGenerating'             => false,
+            'passwordSuccessPopup'     => ['isOpen' => false],
         ]);
     }
 
@@ -84,10 +85,9 @@ class ProfilePanel extends AbstractPanel
             </hgroup>
 
             <div
-                class="launchpad-alert launchpad-alert--error"
+                class="launchpad-alert launchpad-alert--error label-info exclamation-circle__error"
                 data-wp-bind--hidden="!<?= $this->statePath('error') ?>"
                 data-wp-text="<?= $this->statePath('error') ?>"></div>
-
             <!-- View Mode: Visible by default, so no 'hidden' attribute needed here -->
             <div class="profile-card placeholder-box"
                 <?php echo !$isCardVisible ? 'hidden' : ''; ?>
@@ -286,6 +286,32 @@ class ProfilePanel extends AbstractPanel
                     </button>
                 </div>
             </form>
+
+            <!-- Password Changed Success Popup -->
+            <div class="popup"
+                hidden
+                data-wp-bind--hidden="!<?= $statePath ?>.passwordSuccessPopup.isOpen">
+
+                <div class="popup__backdrop"></div>
+
+                <div class="popup__dialog" role="dialog" aria-modal="true" aria-labelledby="password-success-title">
+                    <div class="popup__body">
+                        <h2 id="password-success-title" class="popup__title">
+                            <?php esc_html_e('Password Changed', 'starwishx'); ?>
+                        </h2>
+                        <p class="popup__text">
+                            <?php esc_html_e('Your password has been changed successfully. You will need to log in again with your new password.', 'starwishx'); ?>
+                        </p>
+                    </div>
+
+                    <div class="popup__footer">
+                        <button type="button" class="btn popup__footer--button"
+                            data-wp-on--click="actions.profile.confirmPasswordSuccess">
+                            <?php esc_html_e('Log In', 'starwishx'); ?>
+                        </button>
+                    </div>
+                </div>
+            </div>
 
         </div>
 <?php

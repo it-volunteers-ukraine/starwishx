@@ -82,6 +82,11 @@
     @include max-tablet {
         grid-template-columns: 1fr;
     }
+    & > :only-child {
+        grid-column: 1 / -1;
+        justify-self: center;
+        max-width: 320px;
+    }
     &--button {
         width: 100%;
     }
@@ -138,8 +143,8 @@
     }
 
     .popup:not([hidden]) .popup__dialog {
-        opacity: 1;
         transform: none;
+        opacity: 1;
     }
     .popup:not([hidden]) .popup__backdrop {
         opacity: 1;
