@@ -10,6 +10,13 @@ class OpportunitiesService
 {
     public const ITEMS_PER_PAGE = 4;
 
+    public const TITLE_MIN_LENGTH = 30;
+    public const TITLE_MAX_LENGTH = 108;
+
+    public const DESCRIPTION_MAX_LENGTH  = 4000;
+    public const REQUIREMENTS_MAX_LENGTH = 3000;
+    public const DETAILS_MAX_LENGTH      = 2000;
+
     /**
      * Get list of opportunities with flexible filtering.
      * 
@@ -488,6 +495,15 @@ class OpportunitiesService
                 }
             }
 
+            // Validate content completeness before allowing pending status
+            if (($data['status'] ?? '') === 'pending') {
+                $valid = $this->validateForSubmission($id);
+                if (is_wp_error($valid)) {
+                    $wpdb->query('ROLLBACK');
+                    return $valid;
+                }
+            }
+
             $wpdb->query('COMMIT');
             return $id;
         } catch (\Throwable $e) {
@@ -517,11 +533,86 @@ class OpportunitiesService
             return new WP_Error('invalid_transition', __('Only drafts can be submitted for review.', 'starwishx'));
         }
 
-        // 3. Atomic Update
+        // 3. Content completeness gate — prevent submitting incomplete opportunities
+        if ($newStatus === 'pending') {
+            $valid = $this->validateForSubmission($postId);
+            if (is_wp_error($valid)) {
+                return $valid;
+            }
+        }
+
+        // 4. Atomic Update
         return wp_update_post([
             'ID'          => $postId,
             'post_status' => $newStatus,
         ], true);
+    }
+
+    /**
+     * Validate that an opportunity has all required fields before submission.
+     * Reads from DB to validate actual saved state, not just user input.
+     */
+    private function validateForSubmission(int $postId): true|WP_Error
+    {
+        $post = get_post($postId);
+        $errors = [];
+
+        // Core fields
+        $titleLen = mb_strlen(trim($post->post_title));
+        if ($titleLen === 0) {
+            $errors['title'] = __('Title is required.', 'starwishx');
+        } elseif ($titleLen < self::TITLE_MIN_LENGTH) {
+            $errors['title'] = sprintf(
+                __('Title must be at least %d characters.', 'starwishx'),
+                self::TITLE_MIN_LENGTH
+            );
+        } elseif ($titleLen > self::TITLE_MAX_LENGTH) {
+            $errors['title'] = sprintf(
+                __('Title must not exceed %d characters.', 'starwishx'),
+                self::TITLE_MAX_LENGTH
+            );
+        }
+        if (empty(trim($post->post_content))) {
+            $errors['description'] = __('Description is required.', 'starwishx');
+        }
+
+        // ACF fields
+        if (!get_field('opportunity_company', $postId)) {
+            $errors['company'] = __('Company is required.', 'starwishx');
+        }
+        if (!get_field('opportunity_sourcelink', $postId)) {
+            $errors['sourcelink'] = __('Source link is required.', 'starwishx');
+        }
+
+        // Taxonomy: at least one category-oportunities term
+        $terms = wp_get_object_terms($postId, 'category-oportunities', ['fields' => 'ids']);
+        if (empty($terms) || is_wp_error($terms)) {
+            $errors['category'] = __('At least one category is required.', 'starwishx');
+        }
+
+        // Taxonomy: at least one seeker
+        $seekers = wp_get_object_terms($postId, 'category-seekers', ['fields' => 'ids']);
+        if (empty($seekers) || is_wp_error($seekers)) {
+            $errors['seekers'] = __('At least one seeker type is required.', 'starwishx');
+        }
+
+        // Dates — commented out, uncomment for testing
+        // if (!get_field('opportunity_date_starts', $postId)) {
+        //     $errors['date_starts'] = __('Start date is required.', 'starwishx');
+        // }
+        // if (!get_field('opportunity_date_ends', $postId)) {
+        //     $errors['date_ends'] = __('End date is required.', 'starwishx');
+        // }
+
+        if (!empty($errors)) {
+            return new WP_Error(
+                'incomplete_opportunity',
+                __('Please fill in all required fields before submitting for review.', 'starwishx'),
+                ['status' => 422, 'field_errors' => $errors]
+            );
+        }
+
+        return true;
     }
 
     /**

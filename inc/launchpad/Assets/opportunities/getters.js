@@ -200,4 +200,68 @@ export const opportunitiesGetters = {
     }
     return false;
   },
+
+  /**
+   * Title character counter text: "N / max"
+   */
+  get titleCounterText() {
+    const p = this.panels.opportunities;
+    const len = p?.formData?.title?.length || 0;
+    const max = p?.titleLimits?.max || 108;
+    return `${len} / ${max}`;
+  },
+
+  /**
+   * Is the title shorter than the minimum required length?
+   */
+  get isTitleTooShort() {
+    const p = this.panels.opportunities;
+    const len = p?.formData?.title?.length || 0;
+    const min = p?.titleLimits?.min || 30;
+    return len > 0 && len < min;
+  },
+
+  // --- Textarea character counters ---
+
+  get descriptionCounterText() {
+    const p = this.panels.opportunities;
+    const len = p?.formData?.description?.length || 0;
+    const max = p?.textareaLimits?.description || 4000;
+    return `${len} / ${max}`;
+  },
+
+  get isDescriptionNearLimit() {
+    const p = this.panels.opportunities;
+    const len = p?.formData?.description?.length || 0;
+    const max = p?.textareaLimits?.description || 4000;
+    return len >= max * 0.9;
+  },
+
+  get requirementsCounterText() {
+    const p = this.panels.opportunities;
+    const len = p?.formData?.requirements?.length || 0;
+    const max = p?.textareaLimits?.requirements || 3000;
+    return `${len} / ${max}`;
+  },
+
+  get isRequirementsNearLimit() {
+    const p = this.panels.opportunities;
+    const len = p?.formData?.requirements?.length || 0;
+    const max = p?.textareaLimits?.requirements || 3000;
+    return len >= max * 0.9;
+  },
+
+  get detailsCounterText() {
+    const p = this.panels.opportunities;
+    const len = p?.formData?.details?.length || 0;
+    const max = p?.textareaLimits?.details || 2000;
+    return `${len} / ${max}`;
+  },
+
+  get isDetailsNearLimit() {
+    const p = this.panels.opportunities;
+    const len = p?.formData?.details?.length || 0;
+    const max = p?.textareaLimits?.details || 2000;
+    return len >= max * 0.9;
+  },
 };
