@@ -638,3 +638,42 @@ img {
 .single-opportunity {
   overflow-wrap: anywhere;
 }
+
+.label-info {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  gap: 4px;
+  border-radius: $radius-badge;
+  background-color: rgb(122 90 228 / 10%);
+  padding: 4px;
+  color: $text-light;
+  font-size: 14px;
+}
+
+.exclamation-circle__error,
+.exclamation-circle {
+  &::before {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 2px;
+    border: 1px solid $text-accent;
+    border-radius: 50%;
+    width: 18px;
+    height: 18px;
+    min-width: 18px;
+    min-height: 18px;
+    content: "!";
+    color: $text-accent;
+    font-weight: 500;
+  }
+}
+
+.exclamation-circle__error {
+  &::before {
+    color: $icon-color-secondary;
+    background-color: $icon-color-error;
+    border: 1px solid $icon-color-error;
+  }
+}

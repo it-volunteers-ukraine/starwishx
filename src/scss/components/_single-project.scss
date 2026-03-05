@@ -357,6 +357,7 @@
                 color: $text-light;
                 font-size: 0.875rem;
                 line-height: 1.5;
+                line-clamp: 3;
                 -webkit-line-clamp: 3;
             }
         }

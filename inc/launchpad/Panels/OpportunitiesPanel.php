@@ -119,6 +119,33 @@ class OpportunitiesPanel extends AbstractPanel
             'totalPages'  => ceil($total / OpportunitiesService::ITEMS_PER_PAGE),
             'hasMore'     => $total > OpportunitiesService::ITEMS_PER_PAGE,
             'error'       => $error,
+            'fieldErrors' => (object) [],
+            'titleLimits' => [
+                'min' => OpportunitiesService::TITLE_MIN_LENGTH,
+                'max' => OpportunitiesService::TITLE_MAX_LENGTH,
+            ],
+            'textareaLimits' => [
+                'description'  => OpportunitiesService::DESCRIPTION_MAX_LENGTH,
+                'requirements' => OpportunitiesService::REQUIREMENTS_MAX_LENGTH,
+                'details'      => OpportunitiesService::DETAILS_MAX_LENGTH,
+            ],
+            'validationMessages' => [
+                'title'          => __('Title is required.', 'starwishx'),
+                'titleMinLength' => sprintf(
+                    __('Title must be at least %d characters.', 'starwishx'),
+                    OpportunitiesService::TITLE_MIN_LENGTH
+                ),
+                'company'     => __('Company is required.', 'starwishx'),
+                'sourcelink'  => __('Source link is required.', 'starwishx'),
+                'description' => __('Description is required.', 'starwishx'),
+                'category'    => __('At least one category is required.', 'starwishx'),
+                'seekers'     => __('At least one seeker type is required.', 'starwishx'),
+            ],
+            'confirmPopup' => [
+                'isOpen'  => false,
+                'itemId'  => null,
+                'source'  => null, // 'form' or 'list'
+            ],
             'isLoading'   => false,
             'isSaving'    => false,
             '_loaded'     => true,
@@ -173,6 +200,7 @@ class OpportunitiesPanel extends AbstractPanel
         // Simplify paths for cleaner template
         $formPath = "state.panels.opportunities.formData";
         $optPath  = "state.panels.opportunities.options";
+        $errPath  = "state.panels.opportunities.fieldErrors";
         $isLoadingPath = $this->statePath('isLoading');
 ?>
         <div class="launchpad-panel launchpad-panel--opportunities">
@@ -275,7 +303,7 @@ class OpportunitiesPanel extends AbstractPanel
                     </button>
                 </div>
 
-                <div class="launchpad-alert launchpad-alert--error"
+                <div id="launchpad-alert" class="launchpad-alert launchpad-alert--error label-info exclamation-circle__error"
                     data-wp-bind--hidden="!<?= $this->statePath('error') ?>"
                     data-wp-text="<?= $this->statePath('error') ?>"></div>
 
@@ -418,13 +446,22 @@ class OpportunitiesPanel extends AbstractPanel
 
                     <!-- Main Title -->
                     <div class="form-field form-field__title">
-                        <label class="label-required"><?php echo esc_html($labels['title'] ?? __('Opportunity Title', 'starwishx')); ?></label>
-                        <input type="text" required class="large-text"
+                        <label for="opportunity-title" class="label-required"><?php echo esc_html($labels['title'] ?? __('Opportunity Title', 'starwishx')); ?></label>
+                        <input id="opportunity-title" type="text" required class="large-text"
+                            maxlength="<?= OpportunitiesService::TITLE_MAX_LENGTH ?>"
                             placeholder="<?php echo esc_attr($placeholders['title'] ?? ''); ?>"
                             data-wp-bind--value="<?= $formPath ?>.title"
                             data-wp-on--input="actions.opportunities.updateForm"
                             data-wp-bind--disabled="<?= $isLoadingPath ?>"
                             data-field="title">
+                        <div class="form-field__footer">
+                            <label class="exclamation-circle__error" hidden
+                                data-wp-bind--hidden="!<?= $errPath ?>.title"
+                                data-wp-text="<?= $errPath ?>.title"></label>
+                            <span class="char-counter"
+                                data-wp-class--char-counter--warn="state.isTitleTooShort"
+                                data-wp-text="state.titleCounterText"></span>
+                        </div>
                     </div>
 
                     <!-- 3 Column Layout -->
@@ -436,12 +473,14 @@ class OpportunitiesPanel extends AbstractPanel
                             <div class="form-card-data ">
                                 <div class="launchpad-grid-auto">
                                     <div class="form-field">
-                                        <!-- <label>< ?php acf_label( 'my_field_name' ); ? ></label> -->
-                                        <label class="<?php echo $required['opportunity_company'] ? 'label-required' : ''; ?>"><?php echo esc_html($labels['opportunity_company'] ?? __('Company', 'starwishx')); ?></label>
-                                        <input type="text"
+                                        <label for="opportunity-company" class="<?php echo $required['opportunity_company'] ? 'label-required' : ''; ?>"><?php echo esc_html($labels['opportunity_company'] ?? __('Company', 'starwishx')); ?></label>
+                                        <input id="opportunity-company" type="text"
                                             <?php echo $required['opportunity_company'] ? 'required' : ''; ?>
                                             placeholder="<?php echo esc_attr($placeholders['opportunity_company'] ?? ''); ?>"
                                             data-wp-bind--value="<?= $formPath ?>.company" data-wp-on--input="actions.opportunities.updateForm" data-field="company">
+                                        <label class="exclamation-circle__error" hidden
+                                            data-wp-bind--hidden="!<?= $errPath ?>.company"
+                                            data-wp-text="<?= $errPath ?>.company"></label>
                                     </div>
 
                                     <!-- <div class="form-row"> -->
@@ -475,11 +514,14 @@ class OpportunitiesPanel extends AbstractPanel
 
                                 <div class="launchpad-grid-auto">
                                     <div class="form-field">
-                                        <label class="<?php echo $required['opportunity_sourcelink'] ? 'label-required' : ''; ?>"><?php echo esc_html($labels['opportunity_sourcelink'] ?? __('Link', 'starwishx')); ?></label>
-                                        <input type="url"
+                                        <label for="opportunity-sourcelink" class="<?php echo $required['opportunity_sourcelink'] ? 'label-required' : ''; ?>"><?php echo esc_html($labels['opportunity_sourcelink'] ?? __('Link', 'starwishx')); ?></label>
+                                        <input id="opportunity-sourcelink" type="url"
                                             <?php echo $required['opportunity_sourcelink'] ? 'required' : ''; ?>
                                             placeholder="<?php echo esc_attr($placeholders['opportunity_sourcelink'] ?? ''); ?>"
                                             data-wp-bind--value="<?= $formPath ?>.sourcelink" data-wp-on--input="actions.opportunities.updateForm" data-field="sourcelink">
+                                        <label class="exclamation-circle__error" hidden
+                                            data-wp-bind--hidden="!<?= $errPath ?>.sourcelink"
+                                            data-wp-text="<?= $errPath ?>.sourcelink"></label>
                                     </div>
                                     <div class="form-field">
                                         <label class="<?php echo $required['opportunity_application_form'] ? 'label-required' : ''; ?>"><?php echo esc_html($labels['opportunity_application_form'] ?? __('Application Form URL', 'starwishx')); ?></label>
@@ -639,6 +681,9 @@ class OpportunitiesPanel extends AbstractPanel
                                             </div>
                                         </template>
                                     </div>
+                                    <label class="exclamation-circle__error" hidden
+                                        data-wp-bind--hidden="!<?= $errPath ?>.category"
+                                        data-wp-text="<?= $errPath ?>.category"></label>
                                 </div>
 
                                 <div class="form-field">
@@ -654,6 +699,9 @@ class OpportunitiesPanel extends AbstractPanel
                                             </label>
                                         </template>
                                     </div>
+                                    <label class="exclamation-circle__error" hidden
+                                        data-wp-bind--hidden="!<?= $errPath ?>.seekers"
+                                        data-wp-text="<?= $errPath ?>.seekers"></label>
                                 </div>
                             </div>
                         </div>
@@ -662,25 +710,46 @@ class OpportunitiesPanel extends AbstractPanel
                         <div class="form-group-card placeholder-box">
                             <h3 class="group-card-title"><?php esc_html_e('Description', 'starwishx'); ?></h3>
                             <div class="form-card-data">
-                                <div class="form-field form-field-description">
+                                <div for="opportunity-description" class="form-field form-field-description">
                                     <label class="label-required"><?php esc_html_e('Describe the opportunity', 'starwishx'); ?></label>
-                                    <textarea rows="6" required class="widefat"
+                                    <textarea id="opportunity-description" rows="6" required class="widefat"
+                                        maxlength="<?= OpportunitiesService::DESCRIPTION_MAX_LENGTH ?>"
                                         placeholder="<?php esc_html_e('Add information about the opportunity. Describe the essence.', 'starwishx'); ?>"
                                         data-wp-bind--value="<?= $formPath ?>.description" data-wp-on--input="actions.opportunities.updateForm" data-field="description"></textarea>
+                                    <div class="form-field__footer">
+                                        <label class="exclamation-circle__error" hidden
+                                            data-wp-bind--hidden="!<?= $errPath ?>.description"
+                                            data-wp-text="<?= $errPath ?>.description"></label>
+                                        <span class="char-counter"
+                                            data-wp-class--char-counter--warn="state.isDescriptionNearLimit"
+                                            data-wp-text="state.descriptionCounterText"></span>
+                                    </div>
                                 </div>
                                 <div class="form-field form-field-description">
                                     <label class="<?php echo $required['opportunity_requirements'] ? 'label-required' : ''; ?>"><?php echo esc_html($labels['opportunity_requirements'] ?? __('Requirements', 'starwishx')); ?></label>
                                     <textarea rows="6" class="widefat"
+                                        maxlength="<?= OpportunitiesService::REQUIREMENTS_MAX_LENGTH ?>"
                                         <?php echo $required['opportunity_requirements'] ? 'required' : ''; ?>
                                         placeholder="<?php echo esc_attr($placeholders['opportunity_requirements'] ?? ''); ?>"
                                         data-wp-bind--value="<?= $formPath ?>.requirements" data-wp-on--input="actions.opportunities.updateForm" data-field="requirements"></textarea>
+                                    <div class="form-field__footer">
+                                        <span class="char-counter"
+                                            data-wp-class--char-counter--warn="state.isRequirementsNearLimit"
+                                            data-wp-text="state.requirementsCounterText"></span>
+                                    </div>
                                 </div>
                                 <div class="form-field form-field-description">
                                     <label class="<?php echo $required['opportunity_details'] ? 'label-required' : ''; ?>"><?php echo esc_html($labels['opportunity_details'] ?? __('Details', 'starwishx')); ?></label>
                                     <textarea rows="4" class="widefat"
+                                        maxlength="<?= OpportunitiesService::DETAILS_MAX_LENGTH ?>"
                                         <?php echo $required['opportunity_details'] ? 'required' : ''; ?>
                                         placeholder="<?php echo esc_attr($placeholders['opportunity_details'] ?? ''); ?>"
                                         data-wp-bind--value="<?= $formPath ?>.details" data-wp-on--input="actions.opportunities.updateForm" data-field="details"></textarea>
+                                    <div class="form-field__footer">
+                                        <span class="char-counter"
+                                            data-wp-class--char-counter--warn="state.isDetailsNearLimit"
+                                            data-wp-text="state.detailsCounterText"></span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -766,22 +835,23 @@ class OpportunitiesPanel extends AbstractPanel
 
                     <div class="form-actions">
                         <!-- data-wp-bind--disabled="< ?= $this->statePath('isSaving') ?>" -->
+                        <!-- data-wp-bind--hidden="!state.canEdit" -->
                         <!-- Save Draft -->
                         <button type="submit" class="btn__small"
-                            data-wp-bind--disabled="state.panels.opportunities.isSaving"
-                            data-wp-bind--hidden="!state.canEdit">
+                            data-wp-on--click="actions.opportunities.validateRequired"
+                            data-wp-bind--disabled="state.panels.opportunities.isSaving">
                             <?php esc_html_e('Save Draft', 'starwishx'); ?>
                         </button>
 
                         <!-- WORKFLOW ACTION: Submit for Review -->
                         <!-- Only show if status is not already 'pending' or 'publish' -->
                         <!-- data-wp-bind--disabled="< ?= $this->statePath('isSaving') ?>" -->
+                        <!-- data-wp-bind--hidden="!state.canEdit" -->
                         <button
                             type="button"
                             class="btn-secondary__small launchpad-form__btn--review"
                             data-wp-on--click="actions.opportunities.submitForReview"
-                            data-wp-bind--disabled="state.panels.opportunities.isSaving"
-                            data-wp-bind--hidden="!state.canEdit">
+                            data-wp-bind--disabled="state.panels.opportunities.isSaving">
                             <?php esc_html_e('Submit for Review', 'starwishx'); ?>
                         </button>
                         <!-- Back to list -->
@@ -798,6 +868,45 @@ class OpportunitiesPanel extends AbstractPanel
                         </div> -->
                     </div>
                 </form>
+            </div>
+
+            <!-- Confirm Submit Popup -->
+            <div class="popup"
+                hidden
+                data-wp-bind--hidden="!<?= $this->statePath('confirmPopup') ?>.isOpen">
+
+                <div class="popup__backdrop" data-wp-on--click="actions.opportunities.closeConfirm"></div>
+
+                <div class="popup__dialog" role="dialog" aria-modal="true" aria-labelledby="confirm-submit-title">
+                    <button type="button" class="popup__close"
+                        data-wp-on--click="actions.opportunities.closeConfirm"
+                        aria-label="<?php esc_attr_e('Close', 'starwishx'); ?>">
+                        <svg class="popup__close-icon" width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                            <path d="M15 5L5 15M5 5l10 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+                        </svg>
+                    </button>
+
+                    <div class="popup__body">
+                        <h2 id="confirm-submit-title" class="popup__title">
+                            <?php esc_html_e('Submit for Review', 'starwishx'); ?>
+                        </h2>
+                        <p class="popup__text">
+                            <?php esc_html_e('Submit your changes and request a review from the moderation team?', 'starwishx'); ?>
+                        </p>
+                    </div>
+
+                    <div class="popup__footer">
+                        <button type="button" class="btn popup__footer--button"
+                            data-wp-on--click="actions.opportunities.confirmSubmit"
+                            data-wp-bind--disabled="<?= $this->statePath('isSaving') ?>">
+                            <?php esc_html_e('Submit', 'starwishx'); ?>
+                        </button>
+                        <button type="button" class="btn-secondary popup__footer--button"
+                            data-wp-on--click="actions.opportunities.closeConfirm">
+                            <?php esc_html_e('Cancel', 'starwishx'); ?>
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
 <?php

@@ -27,6 +27,8 @@ export const opportunitiesActions = {
     p.formData = p.emptyForm
       ? deepClone(p.emptyForm)
       : { id: null, title: "", seekers: [], subcategory: [], category: [] };
+    p.error = null;
+    p.fieldErrors = {};
   },
 
   async loadSingle(id) {
@@ -134,6 +136,21 @@ export const opportunitiesActions = {
 
     p.isSaving = true;
     p.error = null;
+    p.fieldErrors = {};
+
+    // Client-side required field check (messages from PHP state)
+    const vm = p.validationMessages || {};
+    const titleLen = p.formData.title?.trim().length || 0;
+    if (titleLen > 0 && titleLen < (p.titleLimits?.min || 30)) {
+      p.fieldErrors.title = vm.titleMinLength;
+    }
+    if (!p.formData.description?.trim()) p.fieldErrors.description = vm.description;
+    if (!p.formData.category?.length) p.fieldErrors.category = vm.category;
+    if (!p.formData.seekers?.length) p.fieldErrors.seekers = vm.seekers;
+    if (Object.keys(p.fieldErrors).length) {
+      p.isSaving = false;
+      return;
+    }
 
     try {
       // STEP A: Upload (if pending)
@@ -188,43 +205,69 @@ export const opportunitiesActions = {
       await actions.loadPanelState("opportunities");
     } catch (error) {
       p.error = error.message;
+      p.fieldErrors = error.fieldErrors || {};
     } finally {
       p.isSaving = false;
       p.isUploading = false;
     }
   },
 
-  async submitForReview() {
-    const { actions } = store("launchpad");
-    if (confirm("Submit changes and request review?")) {
-      await actions.opportunities.save(null, "pending");
-    }
+  submitForReview() {
+    const { state } = store("launchpad");
+    const p = state.panels.opportunities;
+    p.confirmPopup = { isOpen: true, itemId: null, source: "form" };
   },
 
-  async quickSubmit() {
-    const { state, actions } = store("launchpad");
+  quickSubmit() {
+    const { state } = store("launchpad");
     const { item } = getContext();
     if (!item?.id) return;
-    if (!confirm("Submit this opportunity for review?")) return;
-
     const p = state.panels.opportunities;
-    p.isSaving = true;
+    p.confirmPopup = { isOpen: true, itemId: item.id, source: "list" };
+  },
 
-    try {
-      await fetchJson(
-        state,
-        `${state.launchpadSettings.restUrl}opportunities/${item.id}/status`,
-        {
-          method: "POST",
-          body: { status: "pending" },
-          panelId: "opportunities",
-        },
-      );
-      await actions.loadPanelState("opportunities");
-    } catch (error) {
-      p.error = error.message;
-    } finally {
-      p.isSaving = false;
+  closeConfirm() {
+    const { state } = store("launchpad");
+    state.panels.opportunities.confirmPopup = {
+      isOpen: false,
+      itemId: null,
+      source: null,
+    };
+  },
+
+  async confirmSubmit() {
+    const { state, actions } = store("launchpad");
+    const p = state.panels.opportunities;
+    const { source, itemId } = p.confirmPopup;
+
+    // Close popup immediately
+    p.confirmPopup = { isOpen: false, itemId: null, source: null };
+
+    if (source === "form") {
+      // From the edit/add form — save with pending status
+      await actions.opportunities.save(null, "pending");
+    } else if (source === "list" && itemId) {
+      // From the list card — quick status change
+      p.isSaving = true;
+      try {
+        await fetchJson(
+          state,
+          `${state.launchpadSettings.restUrl}opportunities/${itemId}/status`,
+          {
+            method: "POST",
+            body: { status: "pending" },
+            panelId: "opportunities",
+          },
+        );
+        await actions.loadPanelState("opportunities");
+      } catch (error) {
+        p.error = error.message;
+        setTimeout(() => {
+          p.error = null;
+        }, 5000);
+      } finally {
+        p.isSaving = false;
+      }
     }
   },
 
@@ -564,7 +607,44 @@ export const opportunitiesActions = {
       });
     }
   },
-  
+
+  /**
+   * Show field error labels alongside native HTML5 validation.
+   * Runs on click (before browser blocks submit for invalid fields).
+   */
+  validateRequired(event) {
+    const { state } = store("launchpad");
+    const p = state.panels.opportunities;
+    const form = event.target.closest("form");
+
+    p.fieldErrors = {};
+
+    if (!form) return;
+
+    form.querySelectorAll("[required]").forEach((el) => {
+      if (!el.validity.valid) {
+        const field = el.dataset.field;
+        if (field && p.validationMessages?.[field]) {
+          p.fieldErrors[field] = p.validationMessages[field];
+        }
+      }
+    });
+
+    // Title min length (maxlength is enforced by HTML attribute)
+    const titleLen = p.formData.title?.trim().length || 0;
+    if (titleLen > 0 && titleLen < (p.titleLimits?.min || 30)) {
+      p.fieldErrors.title = p.validationMessages?.titleMinLength;
+    }
+
+    // Checkbox groups (no HTML required attribute to query)
+    if (!p.formData.category?.length) {
+      p.fieldErrors.category = p.validationMessages?.category;
+    }
+    if (!p.formData.seekers?.length) {
+      p.fieldErrors.seekers = p.validationMessages?.seekers;
+    }
+  },
+
   /**
    * Navigate to profile panel for onboarding
    */

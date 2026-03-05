@@ -35,6 +35,7 @@ const DEFAULT_PANEL_STATE = {
   isSaving: false,
   isUploading: false,
   error: null,
+  fieldErrors: {},
   _loaded: false,
   items: [],
   currentView: "list",
@@ -137,12 +138,15 @@ export async function fetchJson(
 
     if (!response.ok) {
       let message = `${response.status} ${response.statusText}`;
+      let fieldErrors = null;
       try {
         const error = await response.json();
         if (error?.message) message = error.message;
+        if (error?.data?.field_errors) fieldErrors = error.data.field_errors;
       } catch (_) {}
       const err = new Error(message);
       err.status = response.status;
+      err.fieldErrors = fieldErrors;
       throw err;
     }
 

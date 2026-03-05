@@ -41,7 +41,13 @@ class OpportunitiesController extends AbstractLaunchpadController
         // Define shared validation/sanitization arguments for Create/Update
         // Note: applicant_name, applicant_mail, applicant_phone are auto-filled from user profile
         $saveArgs = [
-            'title'  => ['required' => true, 'sanitize_callback' => 'sanitize_text_field'],
+            'title'  => [
+                'required'          => true,
+                'sanitize_callback' => 'sanitize_text_field',
+                'validate_callback' => function ($param) {
+                    return mb_strlen(trim($param)) <= OpportunitiesService::TITLE_MAX_LENGTH;
+                },
+            ],
             'status' => [
                 'required' => false,
                 'sanitize_callback' => 'sanitize_key',
@@ -74,9 +80,26 @@ class OpportunitiesController extends AbstractLaunchpadController
             'city'            => ['sanitize_callback' => 'sanitize_text_field'],
             'sourcelink'      => ['sanitize_callback' => 'esc_url_raw'],
             'seekers'         => ['type' => 'array', 'items' => ['type' => 'integer']],
-            'description'     => ['sanitize_callback' => 'sanitize_textarea_field'],
-            'requirements'    => ['sanitize_callback' => 'sanitize_textarea_field'],
-            'details'         => ['sanitize_callback' => 'sanitize_textarea_field'],
+            'description'     => [
+                'required'          => true,
+                'sanitize_callback' => 'sanitize_textarea_field',
+                'validate_callback' => function ($param) {
+                    return is_string($param) && trim($param) !== ''
+                        && mb_strlen($param) <= OpportunitiesService::DESCRIPTION_MAX_LENGTH;
+                },
+            ],
+            'requirements'    => [
+                'sanitize_callback' => 'sanitize_textarea_field',
+                'validate_callback' => function ($param) {
+                    return !is_string($param) || mb_strlen($param) <= OpportunitiesService::REQUIREMENTS_MAX_LENGTH;
+                },
+            ],
+            'details'         => [
+                'sanitize_callback' => 'sanitize_textarea_field',
+                'validate_callback' => function ($param) {
+                    return !is_string($param) || mb_strlen($param) <= OpportunitiesService::DETAILS_MAX_LENGTH;
+                },
+            ],
             'document_id'    => [
                 'required'          => false,
                 'sanitize_callback' => 'absint',
@@ -204,7 +227,7 @@ class OpportunitiesController extends AbstractLaunchpadController
         $result = $this->service->updateStatus(get_current_user_id(), $id, $status);
 
         if (is_wp_error($result)) {
-            return $this->error($result->get_error_message());
+            return $result;
         }
 
         return $this->success([
@@ -319,7 +342,7 @@ class OpportunitiesController extends AbstractLaunchpadController
         $result = $this->service->saveOpportunity($params, $id);
 
         if (is_wp_error($result)) {
-            return $this->error($result->get_error_message(), 400);
+            return $result;
         }
 
         return $this->success([
