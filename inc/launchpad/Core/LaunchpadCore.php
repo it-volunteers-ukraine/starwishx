@@ -235,6 +235,7 @@ final class LaunchpadCore
                     'restUrl'  => rest_url('launchpad/v1/'),
                     'userId'   => get_current_user_id(),
                     'loginUrl' => wp_login_url(home_url('/launchpad/')),
+                    'generatePasswordUrl' => rest_url('gateway/v1/password/generate'),
                 ])),
                 'before'
             );

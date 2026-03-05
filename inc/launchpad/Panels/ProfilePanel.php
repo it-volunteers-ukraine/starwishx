@@ -58,8 +58,10 @@ class ProfilePanel extends AbstractPanel
             'passwordData'       => [
                 'current' => '',
                 'new'     => '',
-                'confirm' => '',
-            ]
+            ],
+            'isCurrentPasswordVisible' => false,
+            'isNewPasswordVisible'     => false,
+            'isGenerating'             => false,
         ]);
     }
 
@@ -218,21 +220,61 @@ class ProfilePanel extends AbstractPanel
 
                 <div class="form-field">
                     <label><?php esc_html_e('Current Password', 'starwishx'); ?></label>
-                    <input type="password" required data-wp-bind--value="<?= $statePath ?>.passwordData.current"
-                        data-wp-on--input="actions.profile.updatePasswordField" data-field="current" />
+                    <div class="gateway-password-group">
+                        <input type="password" required
+                            data-wp-bind--type="state.currentPasswordInputType"
+                            data-wp-bind--value="<?= $statePath ?>.passwordData.current"
+                            data-wp-on--input="actions.profile.updatePasswordField" data-field="current" />
+                        <button type="button" class="btn-hide-pw"
+                            data-wp-on--click="actions.profile.toggleCurrentPasswordVisibility"
+                            aria-label="<?php esc_attr_e('Toggle password visibility', 'starwishx'); ?>">
+                            <span data-wp-bind--hidden="<?= $statePath ?>.isCurrentPasswordVisible">
+                                <svg width="23" height="23" class="btn-hide-pw__icon">
+                                    <use href="<?php echo get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-eye-opened"></use>
+                                </svg>
+                            </span>
+                            <span data-wp-bind--hidden="!<?= $statePath ?>.isCurrentPasswordVisible">
+                                <svg width="23" height="23" class="btn-hide-pw__icon">
+                                    <use href="<?php echo get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-eye-closed"></use>
+                                </svg>
+                            </span>
+                        </button>
+                    </div>
                 </div>
 
-                <div class="form-row">
-                    <div class="form-field">
-                        <label><?php esc_html_e('New Password', 'starwishx'); ?></label>
-                        <input type="password" required minlength="<?php echo PasswordPolicy::MIN_LENGTH ?>" data-wp-bind--value="<?= $statePath ?>.passwordData.new"
+                <div class="form-field">
+                    <label><?php esc_html_e('New Password', 'starwishx'); ?></label>
+                    <div class="gateway-password-group">
+                        <input type="password" required
+                            minlength="<?php echo PasswordPolicy::MIN_LENGTH ?>"
+                            data-wp-bind--type="state.newPasswordInputType"
+                            data-wp-bind--value="<?= $statePath ?>.passwordData.new"
                             data-wp-on--input="actions.profile.updatePasswordField" data-field="new" />
+                        <button type="button" class="btn-hide-pw"
+                            data-wp-on--click="actions.profile.toggleNewPasswordVisibility"
+                            aria-label="<?php esc_attr_e('Toggle password visibility', 'starwishx'); ?>">
+                            <span data-wp-bind--hidden="<?= $statePath ?>.isNewPasswordVisible">
+                                <svg width="23" height="23" class="btn-hide-pw__icon">
+                                    <use href="<?php echo get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-eye-opened"></use>
+                                </svg>
+                            </span>
+                            <span data-wp-bind--hidden="!<?= $statePath ?>.isNewPasswordVisible">
+                                <svg width="23" height="23" class="btn-hide-pw__icon">
+                                    <use href="<?php echo get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-eye-closed"></use>
+                                </svg>
+                            </span>
+                        </button>
                     </div>
-                    <div class="form-field">
-                        <label><?php esc_html_e('Confirm New Password', 'starwishx'); ?></label>
-                        <input type="password" required data-wp-bind--value="<?= $statePath ?>.passwordData.confirm"
-                            data-wp-on--input="actions.profile.updatePasswordField" data-field="confirm" />
-                    </div>
+                    <button type="button" class="btn-secondary__small"
+                        data-wp-on--click="actions.profile.generatePassword"
+                        data-wp-bind--disabled="<?= $statePath ?>.isGenerating">
+                        <span data-wp-bind--hidden="<?= $statePath ?>.isGenerating">
+                            <?php esc_html_e('Generate Strong Password', 'starwishx'); ?>
+                        </span>
+                        <span data-wp-bind--hidden="!<?= $statePath ?>.isGenerating">
+                            <?php esc_html_e('Generating...', 'starwishx'); ?>
+                        </span>
+                    </button>
                 </div>
 
                 <div class="form-actions">
