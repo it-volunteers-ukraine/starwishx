@@ -1457,13 +1457,22 @@
         font-size: 0.85rem;
         .favorite-type {
             display: inline-block;
-            border-radius: 4px;
-            background-color: $element-card-tech-stroke;
+            border: 1px dotted;
+            border-radius: $radius-badge;
             padding: 2px 6px;
-            color: $element-card-tech-text;
             font-weight: 500;
             font-size: 11px;
             text-transform: uppercase;
+            &[data-post-type="opportunity"] {
+                border-color: rgba($element-card-tech-text, 0.3);
+                background-color: $element-card-tech-stroke;
+                color: $element-card-tech-text;
+            }
+            &[data-post-type="project"] {
+                border-color: rgba($element-card-social-text, 0.3);
+                background-color: $element-card-social-fill;
+                color: $element-card-social-text;
+            }
         }
     }
     .favorite-excerpt {

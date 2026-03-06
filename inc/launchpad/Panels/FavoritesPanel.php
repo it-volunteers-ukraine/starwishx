@@ -99,7 +99,9 @@ class FavoritesPanel extends AbstractPanel
                             </a>
                             <!-- Meta (could include date added, etc.) -->
                             <div class="favorite-meta">
-                                <span class="favorite-type"><?php esc_html_e('Opportunity', 'starwishx'); ?></span>
+                                <span class="favorite-type"
+                                    data-wp-bind--data-post-type="context.item.postType"
+                                    data-wp-text="context.item.postTypeLabel"></span>
                             </div>
                             <!-- Excerpt -->
                             <p class="favorite-excerpt"

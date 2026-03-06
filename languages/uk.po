@@ -8,7 +8,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2026-02-25 10:47+0000\n"
-"PO-Revision-Date: 2026-03-06 00:59+0000\n"
+"PO-Revision-Date: 2026-03-06 02:17+0000\n"
 "Language: uk\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
@@ -425,7 +425,7 @@ msgstr "Список можливостей"
 msgid "Listing Page"
 msgstr "Сторінка списку"
 
-#: inc/launchpad/Panels/FavoritesPanel.php:132
+#: inc/launchpad/Panels/FavoritesPanel.php:134
 #: inc/launchpad/Panels/OpportunitiesPanel.php:425
 #: inc/listing/Core/ResultsGrid.php:65
 msgid "Load More"
@@ -542,7 +542,7 @@ msgstr "Можливості"
 msgid "Opportunities List"
 msgstr "Список можливостей"
 
-#: inc/launchpad/Panels/FavoritesPanel.php:102
+#: inc/launchpad/Services/FavoritesService.php:17
 msgid "Opportunity"
 msgstr "Можливість"
 
@@ -718,7 +718,7 @@ msgstr ""
 msgid "Remember me"
 msgstr "Запам'ятати мене"
 
-#: inc/launchpad/Panels/FavoritesPanel.php:119
+#: inc/launchpad/Panels/FavoritesPanel.php:121
 msgid "Remove"
 msgstr "Видалити"
 
@@ -960,7 +960,7 @@ msgstr "Користувача не знайдено."
 msgid "Username: %s"
 msgstr "Ім'я користувача: %s"
 
-#: inc/launchpad/Panels/FavoritesPanel.php:111
+#: inc/launchpad/Panels/FavoritesPanel.php:113
 msgid "View"
 msgstr "Переглянути"
 
@@ -1277,3 +1277,15 @@ msgstr "Очікує розгляду"
 #, php-format
 msgid "Add title min %1$d, max %2$d characters"
 msgstr "Заголовок: мінімум %1$d, максимум %2$d символів"
+
+#: inc/launchpad/Services/FavoritesService.php:18
+msgid "Project"
+msgstr "Проект"
+
+#: inc/launchpad/Services/FavoritesService.php:19
+msgid "Post"
+msgstr "Допис"
+
+#: inc/launchpad/Services/FavoritesService.php:20
+msgid "Page"
+msgstr "Сторінка"
