@@ -293,9 +293,14 @@
             gap: 1rem;
         }
         .launchpad-filters {
-            border-radius: 8px;
+            // border-radius: 8px;
             // background: $surface-violet;
             padding: 10px 9px;
+            @include max-tablet {
+                margin-bottom: 20px;
+                padding: 0;
+            }
+
             .filter-label {
                 color: $text-light;
                 font-weight: 600;
@@ -305,13 +310,21 @@
                 display: flex;
                 // margin-left: 4px;
                 align-items: center;
-                gap: 1rem;
+                gap: 15px;
                 margin-top: 4px;
                 color: $text-light;
                 font-size: 0.85rem;
-
+                @include max-mobile {
+                    display: inline-flex;
+                    justify-content: space-between;
+                    gap: 6px;
+                    width: 100%;
+                }
                 .filter-checkbox {
                     align-items: flex-end;
+                    @include max-tablet {
+                        gap: 3px;
+                    }
                 }
             }
         }
@@ -370,6 +383,9 @@
     .btn-opportunity__add {
         flex-shrink: 0;
         margin-top: 0.5rem;
+        // @include max-tablet {
+        //     margin-left: auto;
+        // }
     }
 }
 
@@ -406,6 +422,7 @@
             display: grid;
             grid-template-columns: 80px auto;
             gap: 10px;
+            width: 100%;
 
             // @include max-tablet {
             // grid-template-columns: 1fr;
@@ -478,12 +495,12 @@
                         gap: 4px;
 
                         &--label {
-                            padding: 1px 4px;
-                            font-size: 14px;
-                            line-height: 1;
                             border-color: $buttons-color-text-secondary-hover;
                             background-color: $dropdown-surface-color-selected;
+                            padding: 1px 4px;
                             color: $text-light;
+                            font-size: 14px;
+                            line-height: 1;
 
                             .comments-number {
                                 font-weight: 600;
@@ -565,7 +582,7 @@
    ====================================== */
 
 .status-badge {
-    border: 1px solid;
+    border: 1px dotted;
     // border-radius: $radius-element;
     border-radius: $radius-badge;
     // background-color: $input-color-border-default;
@@ -574,9 +591,10 @@
     color: $text-light;
     font-size: 14px;
     line-height: 1;
-    text-transform: capitalize;
+    // text-transform: capitalize;
 
     &[data-status="draft"] {
+        border: rgba($text-light, 0.4);
         background-color: $dropdown-surface-color-selected;
         color: $text-light;
     }
@@ -588,8 +606,9 @@
     }
 
     &[data-status="publish"] {
-        border-color: $element-card-tech-stroke;
-        background-color: $element-card-tech-fill;
+        border-color: $element-card-tech-fill;
+        // background-color: $element-card-tech-fill;
+        background-color: $element-card-tech-stroke;
         color: $element-card-tech-text;
     }
 }
@@ -925,9 +944,9 @@
     }
 
     .char-counter {
-        font-size: 0.75rem;
-        color: $text-light;
         margin-left: auto;
+        color: $text-light;
+        font-size: 0.75rem;
 
         &--warn {
             color: $icon-color-error;
