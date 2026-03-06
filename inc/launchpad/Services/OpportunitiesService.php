@@ -13,6 +13,20 @@ class OpportunitiesService
     public const TITLE_MIN_LENGTH = 30;
     public const TITLE_MAX_LENGTH = 108;
 
+    /**
+     * Translatable status labels for opportunity cards.
+     */
+    public static function getStatusLabel(string $slug): string
+    {
+        $labels = [
+            'draft'   => __('Draft', 'starwishx'),
+            'pending' => __('Pending Review', 'starwishx'),
+            'publish' => __('Published', 'starwishx'),
+        ];
+
+        return $labels[$slug] ?? ucfirst($slug);
+    }
+
     public const DESCRIPTION_MAX_LENGTH  = 4000;
     public const REQUIREMENTS_MAX_LENGTH = 3000;
     public const DETAILS_MAX_LENGTH      = 2000;
@@ -115,6 +129,7 @@ class OpportunitiesService
                 'thumbnailUrl'  => $thumbnail_url,
                 'date'          => get_the_date('d.m.y', $post->ID),
                 'status'        => $post->post_status,
+                'statusLabel'   => self::getStatusLabel($post->post_status),
                 'dateStarts'    => $this->formatDateForUI($raw_date_starts),
                 'dateEnds'      => $this->formatDateForUI($raw_date_ends),
                 'isExpired'     => $is_expired,

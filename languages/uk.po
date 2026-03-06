@@ -8,7 +8,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2026-02-25 10:47+0000\n"
-"PO-Revision-Date: 2026-03-06 00:11+0000\n"
+"PO-Revision-Date: 2026-03-06 00:26+0000\n"
 "Language: uk\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
@@ -31,7 +31,7 @@ msgstr "[%s] Активуйте свій обліковий запис"
 msgid "[%s] Password Reset"
 msgstr "[%s] Скидання пароля"
 
-#: inc/launchpad/Services/OpportunitiesService.php:527
+#: inc/launchpad/Services/OpportunitiesService.php:542
 msgid "Access denied."
 msgstr "Доступ заборонено."
 
@@ -519,7 +519,7 @@ msgstr "PDF не завантажено"
 msgid "Nothing found matching your criteria"
 msgstr "Нічого не знайдено за вашими критеріями"
 
-#: inc/launchpad/Services/OpportunitiesService.php:533
+#: inc/launchpad/Services/OpportunitiesService.php:548
 msgid "Only drafts can be submitted for review."
 msgstr "Лише чернетки можуть бути відправлені на перевірку."
 
@@ -671,6 +671,7 @@ msgid "Profile updated."
 msgstr "Профіль оновлено."
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:250
+#: inc/launchpad/Services/OpportunitiesService.php:24
 msgid "Published"
 msgstr "Опубліковано"
 
@@ -1172,32 +1173,32 @@ msgid "This feature is only available for registered users."
 msgstr "Ця функція доступна лише для зареєстрованих користувачів."
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:133
-#: inc/launchpad/Services/OpportunitiesService.php:563
+#: inc/launchpad/Services/OpportunitiesService.php:578
 msgid "Title is required."
 msgstr "Посада обов'язкова."
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:138
-#: inc/launchpad/Services/OpportunitiesService.php:581
+#: inc/launchpad/Services/OpportunitiesService.php:596
 msgid "Company is required."
 msgstr "Організація обов'язкова."
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:139
-#: inc/launchpad/Services/OpportunitiesService.php:584
+#: inc/launchpad/Services/OpportunitiesService.php:599
 msgid "Source link is required."
 msgstr "Посилання на джерело обов'язкове."
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:140
-#: inc/launchpad/Services/OpportunitiesService.php:576
+#: inc/launchpad/Services/OpportunitiesService.php:591
 msgid "Description is required."
 msgstr "Опис обов'язковий."
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:141
-#: inc/launchpad/Services/OpportunitiesService.php:590
+#: inc/launchpad/Services/OpportunitiesService.php:605
 msgid "At least one category is required."
 msgstr "Треба обрати хоча б одну категорію."
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:142
-#: inc/launchpad/Services/OpportunitiesService.php:596
+#: inc/launchpad/Services/OpportunitiesService.php:611
 msgid "At least one seeker type is required."
 msgstr "Треба обрати хоча б одного отримувача"
 
@@ -1210,18 +1211,18 @@ msgstr ""
 msgid "Submit"
 msgstr "Надіслати"
 
-#: inc/launchpad/Services/OpportunitiesService.php:610
+#: inc/launchpad/Services/OpportunitiesService.php:625
 msgid "Please fill in all required fields before submitting for review."
 msgstr ""
 "Будь ласка, заповніть усі обов'язкові поля, перш ніж надсилати на розгляд."
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:135
-#: inc/launchpad/Services/OpportunitiesService.php:566
+#: inc/launchpad/Services/OpportunitiesService.php:581
 #, php-format
 msgid "Title must be at least %d characters."
 msgstr "Назва має містити щонайменше %d символів."
 
-#: inc/launchpad/Services/OpportunitiesService.php:571
+#: inc/launchpad/Services/OpportunitiesService.php:586
 #, php-format
 msgid "Title must not exceed %d characters."
 msgstr "Назва не повинна перевищувати %d символів."
@@ -1262,3 +1263,11 @@ msgstr "Редактор"
 #: inc/launchpad/Services/ProfileService.php:21
 msgid "Administrator"
 msgstr "Адміністратор"
+
+#: inc/launchpad/Services/OpportunitiesService.php:22
+msgid "Draft"
+msgstr "Чернетка"
+
+#: inc/launchpad/Services/OpportunitiesService.php:23
+msgid "Pending Review"
+msgstr "Очікує розгляду"

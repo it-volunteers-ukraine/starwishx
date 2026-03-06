@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-03-06T00:08:30+00:00\n"
+"POT-Creation-Date: 2026-03-06T00:25:22+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: starwishx\n"
@@ -431,38 +431,38 @@ msgid "Opportunity not found or access denied."
 msgstr ""
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:133
-#: inc/launchpad/Services/OpportunitiesService.php:563
+#: inc/launchpad/Services/OpportunitiesService.php:578
 msgid "Title is required."
 msgstr ""
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:135
-#: inc/launchpad/Services/OpportunitiesService.php:566
+#: inc/launchpad/Services/OpportunitiesService.php:581
 #, php-format
 msgid "Title must be at least %d characters."
 msgstr ""
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:138
-#: inc/launchpad/Services/OpportunitiesService.php:581
+#: inc/launchpad/Services/OpportunitiesService.php:596
 msgid "Company is required."
 msgstr ""
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:139
-#: inc/launchpad/Services/OpportunitiesService.php:584
+#: inc/launchpad/Services/OpportunitiesService.php:599
 msgid "Source link is required."
 msgstr ""
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:140
-#: inc/launchpad/Services/OpportunitiesService.php:576
+#: inc/launchpad/Services/OpportunitiesService.php:591
 msgid "Description is required."
 msgstr ""
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:141
-#: inc/launchpad/Services/OpportunitiesService.php:590
+#: inc/launchpad/Services/OpportunitiesService.php:605
 msgid "At least one category is required."
 msgstr ""
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:142
-#: inc/launchpad/Services/OpportunitiesService.php:596
+#: inc/launchpad/Services/OpportunitiesService.php:611
 msgid "At least one seeker type is required."
 msgstr ""
 
@@ -507,6 +507,7 @@ msgid "Pending"
 msgstr ""
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:250
+#: inc/launchpad/Services/OpportunitiesService.php:24
 msgid "Published"
 msgstr ""
 
@@ -845,20 +846,28 @@ msgstr ""
 msgid "Invalid file type. Only PDF and DOC/DOCX allowed."
 msgstr ""
 
-#: inc/launchpad/Services/OpportunitiesService.php:527
+#: inc/launchpad/Services/OpportunitiesService.php:22
+msgid "Draft"
+msgstr ""
+
+#: inc/launchpad/Services/OpportunitiesService.php:23
+msgid "Pending Review"
+msgstr ""
+
+#: inc/launchpad/Services/OpportunitiesService.php:542
 msgid "Access denied."
 msgstr ""
 
-#: inc/launchpad/Services/OpportunitiesService.php:533
+#: inc/launchpad/Services/OpportunitiesService.php:548
 msgid "Only drafts can be submitted for review."
 msgstr ""
 
-#: inc/launchpad/Services/OpportunitiesService.php:571
+#: inc/launchpad/Services/OpportunitiesService.php:586
 #, php-format
 msgid "Title must not exceed %d characters."
 msgstr ""
 
-#: inc/launchpad/Services/OpportunitiesService.php:610
+#: inc/launchpad/Services/OpportunitiesService.php:625
 msgid "Please fill in all required fields before submitting for review."
 msgstr ""
 

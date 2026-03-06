@@ -368,7 +368,7 @@ class OpportunitiesPanel extends AbstractPanel
                                                 <span
                                                     class="status-badge"
                                                     data-wp-bind--data-status="context.item.status"
-                                                    data-wp-text="context.item.status">
+                                                    data-wp-text="context.item.statusLabel">
                                                 </span>
                                             </div>
                                         </div>
