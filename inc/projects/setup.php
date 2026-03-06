@@ -3,7 +3,7 @@
 /**
  * Setup for
  * Projects - Single Project Page
- * Version: 0.1.0
+ * Version: 0.6.1
  * Author: DevFrappe
  * Email: dev.frappe@proton.me
  *

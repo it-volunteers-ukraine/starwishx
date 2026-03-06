@@ -5,7 +5,12 @@
  *
  * Independent module for managing user favorites across the application.
  * Consumed by: Launchpad, Listing, Projects.
- *
+ * 
+ * Version: 0.6.1
+ * Author: DevFrappe
+ * Email: dev.frappe@proton.me
+ * License: GPL v2 or later
+ * 
  * Include from functions.php:
  * require_once get_template_directory() . '/inc/favorites/setup.php';
  */

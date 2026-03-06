@@ -5,9 +5,13 @@
  *
  * Manages the favorites feature lifecycle: REST API, state hydration,
  * cleanup hooks, and asset enqueueing.
- *
  * Consumed by: Launchpad (dashboard panel), Listing (grid), Projects (cards),
  *              single-opportunity & single-project templates.
+ * 
+ * Version: 0.6.1
+ * Author: DevFrappe
+ * Email: dev.frappe@proton.me
+ * License: GPL v2 or later
  *
  * File: inc/favorites/Core/FavoritesCore.php
  */
