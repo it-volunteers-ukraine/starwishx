@@ -1,11 +1,11 @@
 /**
- * Launchpad Favorites Domain Store
- * Namespace: launchpad/favorites
+ * Favorites Domain Store
+ * Namespace: favorites
  *
  * Lightweight store for managing user favorites.
- * Can be loaded on Frontend (single/archive) AND Backend (dashboard).
+ * Loaded on: Dashboard, Listing, Single Opportunity, Single Project.
  *
- * File: inc/launchpad/Assets/favorites-store.js
+ * File: inc/favorites/Assets/favorites-store.js
  */
 import { store, getContext, getElement } from "@wordpress/interactivity";
 
@@ -22,7 +22,7 @@ const resolveId = () => {
   return null;
 };
 
-const { state } = store("launchpad/favorites", {
+const { state } = store("favorites", {
   state: {
     myFavoriteIds: [],
 
@@ -34,13 +34,8 @@ const { state } = store("launchpad/favorites", {
     get isFavorite() {
       const id = resolveId();
 
-      // DEBUG: Uncomment to see exactly what JS sees
-      // console.log('Checking ID:', id, 'In List:', JSON.parse(JSON.stringify(this.myFavoriteIds)));
-
       if (!id) return false;
 
-      // FIX: Use 'this' instead of 'state'
-      // 'this' refers to the reactive state proxy containing the hydrated data
       const list = this.myFavoriteIds;
 
       if (!Array.isArray(list)) return false;
@@ -50,7 +45,6 @@ const { state } = store("launchpad/favorites", {
     },
 
     get count() {
-      // FIX: Use 'this'
       return Array.isArray(this.myFavoriteIds) ? this.myFavoriteIds.length : 0;
     },
   },
@@ -72,11 +66,7 @@ const { state } = store("launchpad/favorites", {
 
       if (!id) return;
 
-      // Access state via 'state' variable is fine in actions (async),
-      // but for consistency/safety we can use store lookup or 'state' closure.
-      // The getter fix above is the critical part for the initial render.
-
-      const isFav = state.myFavoriteIds.includes(id); // Closure 'state' is safe in async actions
+      const isFav = state.myFavoriteIds.includes(id);
 
       // 1. Optimistic Update
       if (isFav) {
@@ -89,9 +79,6 @@ const { state } = store("launchpad/favorites", {
 
       // 2. Background API call
       try {
-        // Robust Config Lookup
-        // 1. Try hydrated state
-        // 2. Try global fallback (footer script)
         let config = state.config;
         if (!config || !config.nonce) {
           config = window.launchpadGlobal || window.launchpadSettings || {};

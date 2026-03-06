@@ -299,6 +299,9 @@ require_once get_template_directory() . '/inc/shared/setup.php';
 // init for Gateway - auth module
 require_once get_template_directory() . '/inc/gateway/setup.php';
 
+// init for Favorites - shared favorites module
+require_once get_template_directory() . '/inc/favorites/setup.php';
+
 // init for Launchpad - user's dashboard
 require_once get_template_directory() . '/inc/launchpad/setup.php';
 

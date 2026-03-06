@@ -5,6 +5,8 @@ declare(strict_types=1);
 
 namespace Launchpad\Services;
 
+use Favorites\Services\FavoritesService;
+
 class StatsService
 {
     private FavoritesService $favoritesService;

@@ -1,24 +1,26 @@
 /**
  * Single Opportunity Frontend Store
  * Namespace: starwishx/opportunities
+ *
+ * Handles auth guard + delegates favorites to the independent favorites store.
  */
 import { store, getContext } from "@wordpress/interactivity";
 import "../../shared/Assets/popup-store.js";
 
 const { state } = store("starwishx/opportunities", {
   state: {
-    // Map of ID -> Boolean
-    // Example: { 624: true }
-    statusMap: {},
-    config: {},
-
     get isFavorite() {
       const context = getContext();
-      // Standard Int Api context access
       const id = context?.id;
       if (!id) return false;
 
-      return !!state.statusMap[id];
+      // Delegate to the independent favorites store
+      const favState = store("favorites").state;
+      if (!favState || !Array.isArray(favState.myFavoriteIds)) return false;
+
+      return Array.from(favState.myFavoriteIds)
+        .map(Number)
+        .includes(Number(id));
     },
   },
 
@@ -37,30 +39,14 @@ const { state } = store("starwishx/opportunities", {
       // Guest guard: prevent checkbox visual flip, show auth popup
       if (!state.isUserLoggedIn) {
         if (event) event.preventDefault();
-        // state.statusMap[id] = false;
         store("popup").actions.open();
         return;
       }
 
       if (event) event.preventDefault();
 
-      // 1. Optimistic Update (Boolean flip)
-      const wasFav = !!state.statusMap[id];
-      state.statusMap[id] = !wasFav;
-
-      // 2. API Request
-      try {
-        const { nonce, restUrl } = state.config;
-
-        await fetch(`${restUrl}favorites/toggle/${id}`, {
-          method: "POST",
-          headers: { "X-WP-Nonce": nonce, "Content-Type": "application/json" },
-        });
-      } catch (e) {
-        console.error("Toggle error", e);
-        // Revert
-        state.statusMap[id] = wasFav;
-      }
+      // Delegate to the independent favorites store
+      await store("favorites").actions.toggle(id);
     },
   },
 });

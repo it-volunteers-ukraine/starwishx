@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Listing\Services;
 
-use Launchpad\Services\FavoritesService;
+use Favorites\Services\FavoritesService;
 use Listing\Core\QueryBuilder;
 use Listing\Enums\Taxonomy;
 use WP_Query;

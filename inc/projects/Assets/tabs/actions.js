@@ -36,6 +36,6 @@ export const tabActions = {
     item.isFavorite = !item.isFavorite;
 
     // Delegate to favorites domain store
-    await store("launchpad/favorites").actions.toggle(item.id);
+    await store("favorites").actions.toggle(item.id);
   },
 };
