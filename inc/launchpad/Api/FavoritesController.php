@@ -102,8 +102,14 @@ class FavoritesController extends AbstractLaunchpadController
         $userId = get_current_user_id();
 
         // Validate post exists
-        if (!get_post($postId)) {
+        $post = get_post($postId);
+        if (!$post) {
             return $this->error('Post not found', 404);
+        }
+
+        // Only allow favorites on published posts
+        if ($post->post_status !== 'publish') {
+            return $this->error(__('Favorites are only allowed on published posts.', 'starwishx'), 403);
         }
 
         $result = $this->service->toggleFavorite($userId, $postId);

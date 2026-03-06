@@ -79,10 +79,12 @@ if (function_exists('render_block')) {
             <?php endif; ?>
             <figcaption class="d-none"><?php the_title(); ?></figcaption>
 
-            <?php get_template_part('template-parts/control-favorites', null, [
-                'post_id' => $post_id,
-                'show_label' => false
-            ]); ?>
+            <?php if (get_post_status() === 'publish') {
+                get_template_part('template-parts/control-favorites', null, [
+                    'post_id' => $post_id,
+                    'show_label' => false
+                ]);
+            } ?>
         </figure>
 
         <article class="opportunity-article" itemscope itemtype="https://schema.org/Article">
@@ -175,7 +177,7 @@ if (function_exists('render_block')) {
                             </svg>
                         </div>
                         <div class="opportunity-badges">
-                            <?php if (is_user_logged_in()) {
+                            <?php if (is_user_logged_in() && get_post_status() === 'publish') {
                                 get_template_part('template-parts/control-favorites', null, ['post_id' => $post_id]);
                             } ?>
                         </div>

@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-03-06T02:16:22+00:00\n"
+"POT-Creation-Date: 2026-03-06T03:24:31+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: starwishx\n"
@@ -341,6 +341,10 @@ msgstr ""
 msgid "The Gateway page cannot be trashed."
 msgstr ""
 
+#: inc/launchpad/Api/FavoritesController.php:112
+msgid "Favorites are only allowed on published posts."
+msgstr ""
+
 #: inc/launchpad/Api/MainController.php:47
 msgid "Panel not found."
 msgstr ""
@@ -395,7 +399,7 @@ msgstr ""
 
 #: inc/launchpad/Panels/FavoritesPanel.php:66
 #: inc/launchpad/Panels/OpportunitiesPanel.php:312
-#: template-parts/comments-interactive.php:387
+#: template-parts/comments-interactive.php:389
 msgid "Loading..."
 msgstr ""
 
@@ -418,7 +422,7 @@ msgid "Load More"
 msgstr ""
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:29
-#: templates/single-project.php:78
+#: templates/single-project.php:80
 msgid "Opportunities"
 msgstr ""
 
@@ -531,8 +535,8 @@ msgid "Submit for Review"
 msgstr ""
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:413
-#: template-parts/comments-interactive.php:202
-#: template-parts/comments-interactive.php:294
+#: template-parts/comments-interactive.php:204
+#: template-parts/comments-interactive.php:296
 msgid "Edit"
 msgstr ""
 
@@ -572,8 +576,8 @@ msgid "End Date"
 msgstr ""
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:519
-#: templates/single-opportunity.php:205
-#: templates/single-opportunity.php:214
+#: templates/single-opportunity.php:207
+#: templates/single-opportunity.php:216
 msgid "Link"
 msgstr ""
 
@@ -646,7 +650,7 @@ msgid "Add information about the opportunity. Describe the essence."
 msgstr ""
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:731
-#: templates/single-opportunity.php:194
+#: templates/single-opportunity.php:196
 msgid "Requirements"
 msgstr ""
 
@@ -655,7 +659,7 @@ msgid "Details"
 msgstr ""
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:761
-#: templates/single-opportunity.php:233
+#: templates/single-opportunity.php:235
 msgid "Document"
 msgstr ""
 
@@ -691,10 +695,10 @@ msgstr ""
 #: inc/launchpad/Panels/OpportunitiesPanel.php:908
 #: inc/launchpad/Panels/ProfilePanel.php:206
 #: inc/launchpad/Panels/ProfilePanel.php:286
-#: template-parts/comments-interactive.php:135
-#: template-parts/comments-interactive.php:247
-#: template-parts/comments-interactive.php:321
-#: template-parts/comments-interactive.php:359
+#: template-parts/comments-interactive.php:137
+#: template-parts/comments-interactive.php:249
+#: template-parts/comments-interactive.php:323
+#: template-parts/comments-interactive.php:361
 msgid "Cancel"
 msgstr ""
 
@@ -745,8 +749,8 @@ msgid "Organization"
 msgstr ""
 
 #: inc/launchpad/Panels/ProfilePanel.php:198
-#: template-parts/comments-interactive.php:251
-#: template-parts/comments-interactive.php:325
+#: template-parts/comments-interactive.php:253
+#: template-parts/comments-interactive.php:327
 msgid "Save"
 msgstr ""
 
@@ -816,27 +820,31 @@ msgstr ""
 msgid "User not found."
 msgstr ""
 
-#: inc/launchpad/Services/CommentsService.php:162
+#: inc/launchpad/Services/CommentsService.php:161
+msgid "Comments are only allowed on published posts."
+msgstr ""
+
+#: inc/launchpad/Services/CommentsService.php:168
 msgid "Parent comment not found."
 msgstr ""
 
-#: inc/launchpad/Services/CommentsService.php:175
+#: inc/launchpad/Services/CommentsService.php:181
 msgid "You cannot reply to this thread."
 msgstr ""
 
-#: inc/launchpad/Services/CommentsService.php:191
+#: inc/launchpad/Services/CommentsService.php:197
 msgid "Failed to post comment."
 msgstr ""
 
-#: inc/launchpad/Services/CommentsService.php:223
+#: inc/launchpad/Services/CommentsService.php:229
 msgid "Comment not found."
 msgstr ""
 
-#: inc/launchpad/Services/CommentsService.php:226
+#: inc/launchpad/Services/CommentsService.php:232
 msgid "You cannot edit this comment."
 msgstr ""
 
-#: inc/launchpad/Services/CommentsService.php:234
+#: inc/launchpad/Services/CommentsService.php:240
 msgid "Edit time limit expired (15 min)."
 msgstr ""
 
@@ -898,8 +906,8 @@ msgid "Contributor"
 msgstr ""
 
 #: inc/launchpad/Services/ProfileService.php:19
-#: template-parts/comments-interactive.php:176
-#: template-parts/comments-interactive.php:279
+#: template-parts/comments-interactive.php:178
+#: template-parts/comments-interactive.php:281
 msgid "Author"
 msgstr ""
 
@@ -987,7 +995,7 @@ msgstr ""
 
 #: inc/listing/Filters/LocationsFilter.php:28
 #: inc/listing/Filters/LocationsFilterSimple.php:34
-#: templates/single-opportunity.php:126
+#: templates/single-opportunity.php:128
 msgid "Location"
 msgstr ""
 
@@ -1044,58 +1052,58 @@ msgid_plural "Show %d more"
 msgstr[0] ""
 msgstr[1] ""
 
-#: template-parts/comments-interactive.php:60
+#: template-parts/comments-interactive.php:62
 msgid "Reviews"
 msgstr ""
 
-#: template-parts/comments-interactive.php:84
+#: template-parts/comments-interactive.php:86
 msgid "Add review"
 msgstr ""
 
-#: template-parts/comments-interactive.php:88
+#: template-parts/comments-interactive.php:90
 msgid "Enter to comment"
 msgstr ""
 
-#: template-parts/comments-interactive.php:109
+#: template-parts/comments-interactive.php:111
 msgid "Your Rating:"
 msgstr ""
 
-#: template-parts/comments-interactive.php:128
+#: template-parts/comments-interactive.php:130
 msgid "Write your review here..."
 msgstr ""
 
-#: template-parts/comments-interactive.php:138
+#: template-parts/comments-interactive.php:140
 msgid "Send"
 msgstr ""
 
-#: template-parts/comments-interactive.php:139
-#: template-parts/comments-interactive.php:369
+#: template-parts/comments-interactive.php:141
+#: template-parts/comments-interactive.php:371
 msgid "Sending..."
 msgstr ""
 
-#: template-parts/comments-interactive.php:147
+#: template-parts/comments-interactive.php:149
 msgid "Publishing..."
 msgstr ""
 
-#: template-parts/comments-interactive.php:163
+#: template-parts/comments-interactive.php:165
 msgid "No comments yet."
 msgstr ""
 
-#: template-parts/comments-interactive.php:208
-#: template-parts/comments-interactive.php:299
-#: template-parts/comments-interactive.php:362
+#: template-parts/comments-interactive.php:210
+#: template-parts/comments-interactive.php:301
+#: template-parts/comments-interactive.php:364
 msgid "Reply"
 msgstr ""
 
-#: template-parts/comments-interactive.php:259
+#: template-parts/comments-interactive.php:261
 msgid "Updating..."
 msgstr ""
 
-#: template-parts/comments-interactive.php:353
+#: template-parts/comments-interactive.php:355
 msgid "Write a reply..."
 msgstr ""
 
-#: template-parts/comments-interactive.php:386
+#: template-parts/comments-interactive.php:388
 msgid "Show more"
 msgstr ""
 
@@ -1154,13 +1162,13 @@ msgid "Search by keyword..."
 msgstr ""
 
 #: templates/page-listing-oportunities.php:129
-#: templates/single-opportunity.php:265
-#: templates/single-project.php:169
+#: templates/single-opportunity.php:267
+#: templates/single-project.php:171
 msgid "Hi!"
 msgstr ""
 
 #: templates/page-listing-oportunities.php:130
-#: templates/single-opportunity.php:266
+#: templates/single-opportunity.php:268
 msgid "Add to favorites is only available for registered users."
 msgstr ""
 
@@ -1193,33 +1201,33 @@ msgstr ""
 msgid "Single Opportunity View"
 msgstr ""
 
-#: templates/single-opportunity.php:106
+#: templates/single-opportunity.php:108
 msgid "Dates"
 msgstr ""
 
-#: templates/single-opportunity.php:154
+#: templates/single-opportunity.php:156
 msgid "Receivers"
 msgstr ""
 
-#: templates/single-opportunity.php:172
-#: templates/single-project.php:107
+#: templates/single-opportunity.php:174
+#: templates/single-project.php:109
 msgid "Social share"
 msgstr ""
 
-#: templates/single-opportunity.php:200
+#: templates/single-opportunity.php:202
 msgid "Source"
 msgstr ""
 
-#: templates/single-opportunity.php:212
+#: templates/single-opportunity.php:214
 msgid "Application form"
 msgstr ""
 
-#: templates/single-opportunity.php:223
+#: templates/single-opportunity.php:225
 msgid "Additional information"
 msgstr ""
 
-#: templates/single-opportunity.php:254
-#: templates/single-project.php:158
+#: templates/single-opportunity.php:256
+#: templates/single-project.php:160
 msgid "News"
 msgstr ""
 
@@ -1227,18 +1235,18 @@ msgstr ""
 msgid "Single Project View"
 msgstr ""
 
-#: templates/single-project.php:63
+#: templates/single-project.php:65
 msgid "Project sections"
 msgstr ""
 
-#: templates/single-project.php:69
+#: templates/single-project.php:71
 msgid "About project"
 msgstr ""
 
-#: templates/single-project.php:90
+#: templates/single-project.php:92
 msgid "NGOs"
 msgstr ""
 
-#: templates/single-project.php:170
+#: templates/single-project.php:172
 msgid "This feature is only available for registered users."
 msgstr ""

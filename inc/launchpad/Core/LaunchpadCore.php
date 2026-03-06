@@ -376,6 +376,7 @@ final class LaunchpadCore
         $stateData = [
             'statusMap'      => $statusMap,
             'isUserLoggedIn' => $userId > 0,
+            'canFavorite'    => get_post_status() === 'publish',
         ];
 
         // Guests don't need API config
