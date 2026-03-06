@@ -11,7 +11,7 @@ declare(strict_types=1);
 
 namespace Projects\Services;
 
-use Launchpad\Data\Repositories\FavoritesRepository;
+use Favorites\Data\FavoritesRepository;
 
 class ProjectsService
 {

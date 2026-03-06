@@ -133,7 +133,7 @@ export const gridGetters = {
     const id = ctx.item.id;
 
     // Read directly from the OTHER store
-    const userFavorites = store("launchpad/favorites").state.myFavoriteIds;
+    const userFavorites = store("favorites").state.myFavoriteIds;
 
     return userFavorites.includes(id);
   },

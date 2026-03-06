@@ -3,7 +3,7 @@
 /**
  * Listing - Public Opportunities Discovery App
  * Architecture: Singleton with Dependency Injection
- * Version: 0.5.5
+ * Version: 0.6.1
  * Author: DevFrappe
  * Email: dev.frappe@proton.me
  * License: GPL v2 or later
@@ -22,8 +22,7 @@ use Listing\Filters\CountryFilter;
 use Listing\Filters\LocationsFilterSimple;
 use Listing\Filters\SeekersFilter;
 use Listing\Services\TermCountingService;
-use Launchpad\Data\Repositories\FavoritesRepository;
-use Launchpad\Services\FavoritesService;
+use Favorites\Services\FavoritesService;
 use Shared\Http\QueryStringParser;
 
 /**
@@ -39,7 +38,6 @@ final class ListingCore
     private StateAggregator $stateAggregator;
     private ResultsGrid $grid;
     private TermCountingService $termCounter;
-    private FavoritesRepository $favoritesRepo;
 
     /**
      * Reset singleton (for testing only).
@@ -67,15 +65,14 @@ final class ListingCore
         ?StateAggregator $stateAggregator = null,
         ?ResultsGrid $grid = null,
         ?QueryBuilder $queryBuilder = null,
-        ?TermCountingService $termCounter = null,
-        ?FavoritesRepository $favoritesRepo = null
+        ?TermCountingService $termCounter = null
     ): self {
         if (!self::$instance) {
             $registry         = $registry        ?? new FilterRegistry();
             $queryBuilder     = $queryBuilder    ?? new QueryBuilder($registry);
             $termCounter      = $termCounter     ?? new TermCountingService($queryBuilder);
-            $favoritesRepo    = $favoritesRepo   ?? new FavoritesRepository();
-            $favoritesService = new FavoritesService($favoritesRepo);
+            // Reuse service from the shared Favorites module
+            $favoritesService = \favorites()->service();
             $service          = $service         ?? new ListingService($queryBuilder, $termCounter, $favoritesService);
             $stateAggregator  = $stateAggregator ?? new StateAggregator($service);
 
@@ -84,8 +81,7 @@ final class ListingCore
                 $service,
                 $stateAggregator,
                 $grid ?? new ResultsGrid(),
-                $termCounter,
-                $favoritesRepo
+                $termCounter
             );
         }
 
@@ -97,15 +93,13 @@ final class ListingCore
         ListingService $service,
         StateAggregator $stateAggregator,
         ResultsGrid $grid,
-        TermCountingService $termCounter,
-        FavoritesRepository $favoritesRepo
+        TermCountingService $termCounter
     ) {
         $this->registry        = $registry;
         $this->service         = $service;
         $this->stateAggregator = $stateAggregator;
         $this->grid            = $grid;
         $this->termCounter     = $termCounter;
-        $this->favoritesRepo   = $favoritesRepo;
 
         $this->bootstrap();
     }
@@ -156,43 +150,20 @@ final class ListingCore
             ? include $asset_path
             : ['dependencies' => [], 'version' => '1.0.0'];
 
+        // Favorites store is enqueued by the independent FavoritesCore module
+        $listingDeps = ['@wordpress/interactivity'];
         if (is_user_logged_in()) {
-            $userId = get_current_user_id();
+            $listingDeps[] = '@starwishx/favorites';
+        }
 
-            wp_enqueue_script_module(
-                'launchpad-favorites',
-                get_template_directory_uri() . '/assets/js/favorites-store.module.js',
-                ['@wordpress/interactivity']
+        if (function_exists('wp_register_script_module')) {
+            wp_register_script_module(
+                '@starwishx/listing',
+                get_template_directory_uri() . '/assets/js/listing-store.module.js',
+                array_merge($listingDeps, $asset['dependencies']),
+                $asset['version']
             );
-
-            $ids = $this->favoritesRepo->getFavoriteIds($userId, 'post', 9999, 0);
-            wp_interactivity_state('launchpad/favorites', [
-                'myFavoriteIds' => $ids,
-                'config'        => [
-                    'nonce'   => wp_create_nonce('wp_rest'),
-                    'restUrl' => rest_url('launchpad/v1/'),
-                ],
-            ]);
-
-            if (function_exists('wp_register_script_module')) {
-                wp_register_script_module(
-                    '@starwishx/listing',
-                    get_template_directory_uri() . '/assets/js/listing-store.module.js',
-                    array_merge(['@wordpress/interactivity', 'launchpad-favorites'], $asset['dependencies']),
-                    $asset['version']
-                );
-                wp_enqueue_script_module('@starwishx/listing');
-            }
-        } else {
-            if (function_exists('wp_register_script_module')) {
-                wp_register_script_module(
-                    '@starwishx/listing',
-                    get_template_directory_uri() . '/assets/js/listing-store.module.js',
-                    array_merge(['@wordpress/interactivity'], $asset['dependencies']),
-                    $asset['version']
-                );
-                wp_enqueue_script_module('@starwishx/listing');
-            }
+            wp_enqueue_script_module('@starwishx/listing');
         }
 
         wp_interactivity_state('listingSettings', [

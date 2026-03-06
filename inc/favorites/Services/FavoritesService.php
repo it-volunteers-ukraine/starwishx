@@ -1,10 +1,10 @@
 <?php
-//File: inc/launchpad/Services/FavoritesService.php
+// File: inc/favorites/Services/FavoritesService.php
 declare(strict_types=1);
 
-namespace Launchpad\Services;
+namespace Favorites\Services;
 
-use Launchpad\Data\Repositories\FavoritesRepository;
+use Favorites\Data\FavoritesRepository;
 
 class FavoritesService
 {
@@ -28,6 +28,11 @@ class FavoritesService
     public function __construct(?FavoritesRepository $repository = null)
     {
         $this->repository = $repository ?? new FavoritesRepository();
+    }
+
+    public function getRepository(): FavoritesRepository
+    {
+        return $this->repository;
     }
 
     public function getUserFavorites(int $userId, int $limit = 20, int $offset = 0): array

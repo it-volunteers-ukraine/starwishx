@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Launchpad\Panels;
 
-use Launchpad\Services\FavoritesService;
+use Favorites\Services\FavoritesService;
 
 class FavoritesPanel extends AbstractPanel
 {
@@ -112,12 +112,12 @@ class FavoritesPanel extends AbstractPanel
                             <a class="btn-secondary__small" data-wp-bind--href="context.item.url" target="_blank">
                                 <?php esc_html_e('View', 'starwishx'); ?>
                             </a>
-                            <!-- No wrapper div changing namespace. Passed ID via data-id attribute (bridge across namespaces). Used 'launchpad/favorites::' syntax. -->
+                            <!-- Delegates to the independent favorites store via cross-namespace syntax. -->
                             <button
                                 class="btn-secondary__small button-link-delete"
                                 data-wp-bind--data-id="context.item.id"
                                 data-wp-class--is-active="state.isCurrentItemFavorite"
-                                data-wp-on--click="launchpad/favorites::actions.toggle">
+                                data-wp-on--click="favorites::actions.toggle">
                                 <?php esc_html_e('Remove', 'starwishx'); ?>
                             </button>
                         </div>

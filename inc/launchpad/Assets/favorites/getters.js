@@ -12,7 +12,7 @@ export const favoritesPanelGetters = {
     if (!id) return false;
 
     // 1. Access the separate store state
-    const favState = store("launchpad/favorites").state;
+    const favState = store("favorites").state;
 
     // 2. Safety Check
     if (!favState || !favState.myFavoriteIds) return false;

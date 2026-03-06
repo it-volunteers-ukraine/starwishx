@@ -1,22 +1,24 @@
 <?php
-// File: inc/launchpad/Api/FavoritesController.php
+// File: inc/favorites/Api/FavoritesController.php
 
 declare(strict_types=1);
 
-namespace Launchpad\Api;
+namespace Favorites\Api;
 
-use Launchpad\Services\FavoritesService;
+use Favorites\Services\FavoritesService;
+use Shared\Core\AbstractApiController;
 use WP_REST_Request;
 use WP_REST_Response;
 use WP_Error;
 
-class FavoritesController extends AbstractLaunchpadController
+class FavoritesController extends AbstractApiController
 {
+    protected $namespace = 'favorites/v1';
+
     private FavoritesService $service;
 
     public function __construct(?FavoritesService $service = null)
     {
-        // Dependency Injection allows for mocking in tests
         $this->service = $service;
     }
 

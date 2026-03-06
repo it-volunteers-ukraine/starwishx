@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Launchpad\Data\Repositories;
+namespace Favorites\Data;
 
 class FavoritesRepository
 {

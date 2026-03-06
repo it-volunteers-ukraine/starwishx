@@ -21,9 +21,10 @@ export const favoritesActions = {
     p.isLoading = true;
     try {
       const nextPage = (p.page || 1) + 1;
+      const favConfig = store("favorites").state.config;
       const data = await fetchJson(
         state,
-        `${state.launchpadSettings.restUrl}favorites?page=${nextPage}&per_page=20`,
+        `${favConfig.restUrl}favorites?page=${nextPage}&per_page=20`,
       );
       if (data?.items) {
         p.items = [...(p.items || []), ...data.items];

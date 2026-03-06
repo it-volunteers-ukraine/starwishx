@@ -18,6 +18,10 @@ if (!defined('ABSPATH')) exit;
 $post_id    = isset($args['post_id']) ? (int) $args['post_id'] : get_the_ID();
 $show_label = isset($args['show_label']) ? (bool) $args['show_label'] : true;
 
+// SSR: Determine initial favorite state so the server renders the correct HTML.
+// The JS getter (state.isFavorite) takes over for reactivity on the client.
+$is_favorite = function_exists('favorites') && \favorites()->isUserFavorite($post_id);
+
 // Dynamic modifier class so CSS can adjust margins/gaps when the label is missing
 $wrapper_classes = ['control-favorites-wrapper'];
 if (! $show_label) {
@@ -32,7 +36,7 @@ if (! $show_label) {
     <?php if ($show_label) : ?>
         <label
             for="favorite-<?= esc_attr($post_id) ?>"
-            class="heart-label"
+            class="heart-label<?php if ($is_favorite) echo ' is-active'; ?>"
             data-wp-class--is-active="state.isFavorite">
             <span class="heart-label__text">
                 <span class="heart-label__text--inactive"><?php esc_html_e('Add to favorites', 'starwishx'); ?></span>
@@ -47,7 +51,7 @@ if (! $show_label) {
             class="heart__checkbox"
             id="favorite-<?= esc_attr($post_id) ?>"
             data-id="<?= esc_attr($post_id) ?>"
-            data-wp-bind--checked="state.isFavorite"
+            <?php if ($is_favorite) echo 'checked '; ?>data-wp-bind--checked="state.isFavorite"
             data-wp-on--change="actions.toggle"
             aria-label="<?php esc_attr_e('Toggle Favorite', 'starwishx'); ?>">
         <div class="heart__icon"></div>

@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-03-06T03:24:31+00:00\n"
+"POT-Creation-Date: 2026-03-06T10:03:56+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: starwishx\n"
@@ -53,6 +53,26 @@ msgstr ""
 
 #: inc/acf/blocks/projects/register.php:5
 msgid "Carousel of project cards"
+msgstr ""
+
+#: inc/favorites/Api/FavoritesController.php:114
+msgid "Favorites are only allowed on published posts."
+msgstr ""
+
+#: inc/favorites/Services/FavoritesService.php:17
+msgid "Opportunity"
+msgstr ""
+
+#: inc/favorites/Services/FavoritesService.php:18
+msgid "Project"
+msgstr ""
+
+#: inc/favorites/Services/FavoritesService.php:19
+msgid "Post"
+msgstr ""
+
+#: inc/favorites/Services/FavoritesService.php:20
+msgid "Page"
 msgstr ""
 
 #: inc/gateway/Api/PasswordController.php:70
@@ -341,10 +361,6 @@ msgstr ""
 msgid "The Gateway page cannot be trashed."
 msgstr ""
 
-#: inc/launchpad/Api/FavoritesController.php:112
-msgid "Favorites are only allowed on published posts."
-msgstr ""
-
 #: inc/launchpad/Api/MainController.php:47
 msgid "Panel not found."
 msgstr ""
@@ -387,8 +403,8 @@ msgstr ""
 
 #: inc/launchpad/Panels/FavoritesPanel.php:28
 #: inc/launchpad/Panels/StatsPanel.php:61
-#: template-parts/control-favorites.php:39
-#: template-parts/control-favorites.php:44
+#: template-parts/control-favorites.php:43
+#: template-parts/control-favorites.php:48
 #: template-parts/project-card-opportunity.php:26
 msgid "Favorites"
 msgstr ""
@@ -848,22 +864,6 @@ msgstr ""
 msgid "Edit time limit expired (15 min)."
 msgstr ""
 
-#: inc/launchpad/Services/FavoritesService.php:17
-msgid "Opportunity"
-msgstr ""
-
-#: inc/launchpad/Services/FavoritesService.php:18
-msgid "Project"
-msgstr ""
-
-#: inc/launchpad/Services/FavoritesService.php:19
-msgid "Post"
-msgstr ""
-
-#: inc/launchpad/Services/FavoritesService.php:20
-msgid "Page"
-msgstr ""
-
 #: inc/launchpad/Services/MediaService.php:26
 msgid "File is too large. Max 5MB."
 msgstr ""
@@ -944,7 +944,7 @@ msgid "Clear all filters"
 msgstr ""
 
 #: inc/listing/Core/ResultsGrid.php:105
-#: template-parts/control-favorites.php:38
+#: template-parts/control-favorites.php:42
 msgid "Add to favorites"
 msgstr ""
 
@@ -953,7 +953,7 @@ msgid "In favorites"
 msgstr ""
 
 #: inc/listing/Core/ResultsGrid.php:118
-#: template-parts/control-favorites.php:52
+#: template-parts/control-favorites.php:56
 #: template-parts/project-card-opportunity.php:32
 msgid "Toggle Favorite"
 msgstr ""

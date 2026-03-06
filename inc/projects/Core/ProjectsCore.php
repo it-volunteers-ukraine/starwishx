@@ -4,7 +4,7 @@
  * Projects - Core Singleton
  * Orchestrates the single project page functionality.
  * 
- * Version: 0.5.5
+ * Version: 0.6.1
  * Author: DevFrappe
  * Email: dev.frappe@proton.me
  * License: GPL v2 or later
@@ -17,7 +17,6 @@ declare(strict_types=1);
 namespace Projects\Core;
 
 use Projects\Services\ProjectsService;
-use Launchpad\Data\Repositories\FavoritesRepository;
 
 final class ProjectsCore
 {
@@ -25,7 +24,6 @@ final class ProjectsCore
 
     private ProjectsService $service;
     private StateAggregator $stateAggregator;
-    private FavoritesRepository $favoritesRepo;
 
     /**
      * Reset singleton (for testing only).
@@ -40,15 +38,15 @@ final class ProjectsCore
      */
     public static function instance(
         ?ProjectsService $service = null,
-        ?StateAggregator $stateAggregator = null,
-        ?FavoritesRepository $favoritesRepo = null
+        ?StateAggregator $stateAggregator = null
     ): self {
         if (!self::$instance) {
-            $favoritesRepo   = $favoritesRepo   ?? new FavoritesRepository();
+            // Reuse repository from the shared Favorites module
+            $favoritesRepo   = \favorites()->repository();
             $service         = $service         ?? new ProjectsService($favoritesRepo);
             $stateAggregator = $stateAggregator ?? new StateAggregator($service);
 
-            self::$instance = new self($service, $stateAggregator, $favoritesRepo);
+            self::$instance = new self($service, $stateAggregator);
         }
 
         return self::$instance;
@@ -56,12 +54,10 @@ final class ProjectsCore
 
     private function __construct(
         ProjectsService $service,
-        StateAggregator $stateAggregator,
-        FavoritesRepository $favoritesRepo
+        StateAggregator $stateAggregator
     ) {
         $this->service         = $service;
         $this->stateAggregator = $stateAggregator;
-        $this->favoritesRepo   = $favoritesRepo;
 
         $this->bootstrap();
     }
@@ -91,9 +87,8 @@ final class ProjectsCore
         $deps = ['@wordpress/interactivity'];
 
         if (is_user_logged_in()) {
-            // Load favorites domain store (same pattern as LaunchpadCore)
-            $this->enqueueFavoritesStore(get_current_user_id());
-            $deps[] = '@starwishx/launchpad-favorites';
+            // Favorites store is enqueued by the independent FavoritesCore module
+            $deps[] = '@starwishx/favorites';
         }
 
         if (function_exists('wp_register_script_module')) {
@@ -105,31 +100,6 @@ final class ProjectsCore
             );
             wp_enqueue_script_module('@starwishx/projects');
         }
-    }
-
-    /**
-     * Enqueue the Favorites Domain Store and hydrate its state.
-     */
-    private function enqueueFavoritesStore(int $userId): void
-    {
-        if (function_exists('wp_register_script_module')) {
-            wp_register_script_module(
-                '@starwishx/launchpad-favorites',
-                get_template_directory_uri() . '/assets/js/favorites-store.module.js',
-                ['@wordpress/interactivity']
-            );
-            wp_enqueue_script_module('@starwishx/launchpad-favorites');
-        }
-
-        $ids = $this->favoritesRepo->getFavoriteIds($userId, 'post', 9999, 0);
-
-        wp_interactivity_state('launchpad/favorites', [
-            'myFavoriteIds' => $ids,
-            'config'        => [
-                'nonce'   => wp_create_nonce('wp_rest'),
-                'restUrl' => rest_url('launchpad/v1/'),
-            ],
-        ]);
     }
 
     /**

@@ -29,18 +29,18 @@ export const opportunitiesGetters = {
   //   return view === "add" || view === "edit";
   // },
 
-  // NEW: Determines if the onboarding screen should show
+  // Determines if the onboarding screen should show
   get isOppOnboardingVisible() {
     return this.panels.opportunities?.isLocked === true;
   },
 
-  // MODIFIED: Only show list if NOT locked
+  // Only show list if NOT locked
   get isOppListVisible() {
     const p = this.panels.opportunities;
     return !p?.isLocked && (p?.currentView || "list") === "list";
   },
 
-  // MODIFIED: Only show form if NOT locked
+  // Only show form if NOT locked
   get isOppFormVisible() {
     const p = this.panels.opportunities;
     const view = p?.currentView;

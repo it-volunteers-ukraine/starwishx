@@ -88,7 +88,7 @@ store("listing", {
 
         // 3. Call Global Store
         // This updates the Global Array, which triggers the getter again.
-        await store("launchpad/favorites").actions.toggle(item.id);
+        await store("favorites").actions.toggle(item.id);
       }
     },
   },
@@ -122,12 +122,8 @@ store("listing", {
       const item = ctx?.item;
       if (!item) return;
 
-      // Delegate to the Launchpad store
-      // We manually construct a context or pass the ID if the store supports it
-      // Assuming launchpad/favorites store reads context.item.id or dataset
-
-      // Trick: We access the other store's actions directly
-      await store("launchpad/favorites").actions.toggle({
+      // Delegate to the independent favorites store
+      await store("favorites").actions.toggle({
         preventDefault: () => {}, // mock event
         target: { dataset: { id: item.id } }, // mock ref/target
       });
