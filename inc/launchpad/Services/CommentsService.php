@@ -154,6 +154,12 @@ class CommentsService
         if (!$user) {
             return new WP_Error('invalid_user', __('User not found.', 'starwishx'));
         }
+
+        // Only allow comments on published posts
+        $post = get_post($postId);
+        if (!$post || $post->post_status !== 'publish') {
+            return new WP_Error('not_published', __('Comments are only allowed on published posts.', 'starwishx'), ['status' => 403]);
+        }
         $author_name = !empty($user->first_name) ? $user->first_name : $user->user_login;
 
         // Validation

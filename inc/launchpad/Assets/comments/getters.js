@@ -22,4 +22,11 @@ export const commentsGetters = {
   get hasRatings() {
     return this.aggregates && this.aggregates.count > 0;
   },
+
+  /**
+   * "Add review" button visible only on published posts and when form is closed.
+   */
+  get isAddReviewVisible() {
+    return this.canComment && !this.showForm;
+  },
 };
