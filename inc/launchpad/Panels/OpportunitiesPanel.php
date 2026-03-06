@@ -451,7 +451,7 @@ class OpportunitiesPanel extends AbstractPanel
                         <label for="opportunity-title" class="label-required"><?php echo esc_html($labels['title'] ?? __('Opportunity Title', 'starwishx')); ?></label>
                         <input id="opportunity-title" type="text" required class="large-text"
                             maxlength="<?= OpportunitiesService::TITLE_MAX_LENGTH ?>"
-                            placeholder="<?php echo esc_attr($placeholders['title'] ?? ''); ?>"
+                            placeholder="<?= esc_attr( sprintf( __( 'Add title min %1$d, max %2$d characters', 'starwishx' ), OpportunitiesService::TITLE_MIN_LENGTH, OpportunitiesService::TITLE_MAX_LENGTH ) ); ?>"
                             data-wp-bind--value="<?= $formPath ?>.title"
                             data-wp-on--input="actions.opportunities.updateForm"
                             data-wp-bind--disabled="<?= $isLoadingPath ?>"
