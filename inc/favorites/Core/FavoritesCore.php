@@ -27,6 +27,9 @@ final class FavoritesCore
     private FavoritesRepository $repository;
     private FavoritesService $service;
 
+    /** @var int[]|null Cached favorite IDs for the current user (populated during enqueueAssets) */
+    private ?array $cachedIds = null;
+
     public static function instance(
         ?FavoritesRepository $repository = null,
         ?FavoritesService $service = null
@@ -106,6 +109,7 @@ final class FavoritesCore
 
         if ($userId > 0) {
             $ids = $this->repository->getFavoriteIds($userId, 'post', 9999, 0);
+            $this->cachedIds = $ids;
 
             wp_interactivity_state('favorites', [
                 'myFavoriteIds' => $ids,
@@ -127,6 +131,24 @@ final class FavoritesCore
     public function service(): FavoritesService
     {
         return $this->service;
+    }
+
+    /**
+     * Check if the current user has favorited a post.
+     * Uses the cached IDs from enqueueAssets() to avoid extra DB queries.
+     */
+    public function isUserFavorite(int $postId): bool
+    {
+        if ($this->cachedIds !== null) {
+            return in_array($postId, $this->cachedIds, true);
+        }
+
+        $userId = get_current_user_id();
+        if ($userId <= 0) {
+            return false;
+        }
+
+        return $this->repository->isFavorite($userId, $postId);
     }
 
     // --- Cleanup ---

@@ -8,21 +8,9 @@ import { store, getContext } from "@wordpress/interactivity";
 import "../../shared/Assets/popup-store.js";
 
 const { state } = store("starwishx/opportunities", {
-  state: {
-    get isFavorite() {
-      const context = getContext();
-      const id = context?.id;
-      if (!id) return false;
-
-      // Delegate to the independent favorites store
-      const favState = store("favorites").state;
-      if (!favState || !Array.isArray(favState.myFavoriteIds)) return false;
-
-      return Array.from(favState.myFavoriteIds)
-        .map(Number)
-        .includes(Number(id));
-    },
-  },
+  // No state defaults here — isFavorite, isUserLoggedIn, canFavorite are
+  // hydrated by the server via wp_interactivity_state(). Defining them
+  // would overwrite the server values with empty defaults.
 
   actions: {
     async toggle(event) {
@@ -45,7 +33,10 @@ const { state } = store("starwishx/opportunities", {
 
       if (event) event.preventDefault();
 
-      // Delegate to the independent favorites store
+      // Optimistic local update (both control instances read the same state)
+      state.isFavorite = !state.isFavorite;
+
+      // Sync with favorites store (API call + global myFavoriteIds)
       await store("favorites").actions.toggle(id);
     },
   },

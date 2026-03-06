@@ -295,9 +295,11 @@ final class LaunchpadCore
         }
 
         // 2. Hydrate (favorites state is now handled by FavoritesCore)
+        $postId = (int) get_the_ID();
         wp_interactivity_state('starwishx/opportunities', [
             'isUserLoggedIn' => $userId > 0,
             'canFavorite'    => get_post_status() === 'publish',
+            'isFavorite'     => $userId > 0 && function_exists('favorites') && \favorites()->isUserFavorite($postId),
         ]);
     }
 }
