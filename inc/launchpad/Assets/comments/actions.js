@@ -23,6 +23,7 @@ export const commentsActions = {
    */
   toggleForm() {
     const { state } = store("launchpadComments");
+    if (!state.canComment) return;
     state.showForm = !state.showForm;
     if (!state.showForm) state.error = null; // Clear error on close
     if (state.showForm) {

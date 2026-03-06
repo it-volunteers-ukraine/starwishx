@@ -28,6 +28,12 @@ const { state } = store("starwishx/opportunities", {
       const id = context?.id;
       if (!id) return;
 
+      // Published-only guard
+      if (!state.canFavorite) {
+        if (event) event.preventDefault();
+        return;
+      }
+
       // Guest guard: prevent checkbox visual flip, show auth popup
       if (!state.isUserLoggedIn) {
         if (event) event.preventDefault();

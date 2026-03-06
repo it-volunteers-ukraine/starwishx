@@ -54,10 +54,12 @@ if (function_exists('render_block')) {
                     </div>
                 <?php endif; ?>
 
-                <?php get_template_part('template-parts/control-favorites', null, [
-                    'post_id'    => $post_id,
-                    'show_label' => false,
-                ]); ?>
+                <?php if (get_post_status() === 'publish') {
+                    get_template_part('template-parts/control-favorites', null, [
+                        'post_id'    => $post_id,
+                        'show_label' => false,
+                    ]);
+                } ?>
             </figure>
 
             <nav class="project-tabs" aria-label="<?php esc_attr_e('Project sections', 'starwishx'); ?>">
