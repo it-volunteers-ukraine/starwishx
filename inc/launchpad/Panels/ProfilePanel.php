@@ -109,7 +109,8 @@ class ProfilePanel extends AbstractPanel
                         <p class="profile-email" data-wp-text="<?= $this->statePath('email') ?>"></p>
                         <div class="profile-role">
                             <span class="status-badge"
-                                data-wp-text="<?= $this->statePath('role') ?>"></span>
+                                data-wp-bind--data-role="<?= $this->statePath('role') ?>"
+                                data-wp-text="<?= $this->statePath('roleLabel') ?>"></span>
                         </div>
                         <div data-wp-bind--hidden="!<?= $this->statePath('phone') ?>">
                             <strong>Phone:</strong> <span data-wp-text="<?= $this->statePath('phone') ?>"></span>

@@ -806,6 +806,18 @@
         }
         .profile-role {
             margin-bottom: 8px;
+            .status-badge {
+                &[data-role="subscriber"] {
+                    border-color: $buttons-color-text-secondary-hover;
+                    background-color: $dropdown-surface-color-selected;
+                    color: $text-light;
+                }
+                &[data-role="contributor"] {
+                    border-color: $element-card-tech-stroke;
+                    background-color: $element-card-tech-fill;
+                    color: $element-card-tech-text;
+                }
+            }
         }
     }
 
