@@ -19,4 +19,12 @@ export const profileGetters = {
     const p = this.panels.profile;
     return !p?.isEditing && !p?.isChangingPassword;
   },
+
+  get currentPasswordInputType() {
+    return this.panels.profile?.isCurrentPasswordVisible ? "text" : "password";
+  },
+
+  get newPasswordInputType() {
+    return this.panels.profile?.isNewPasswordVisible ? "text" : "password";
+  },
 };

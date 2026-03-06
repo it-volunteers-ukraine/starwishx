@@ -58,8 +58,11 @@ class ProfilePanel extends AbstractPanel
             'passwordData'       => [
                 'current' => '',
                 'new'     => '',
-                'confirm' => '',
-            ]
+            ],
+            'isCurrentPasswordVisible' => false,
+            'isNewPasswordVisible'     => false,
+            'isGenerating'             => false,
+            'passwordSuccessPopup'     => ['isOpen' => false],
         ]);
     }
 
@@ -82,10 +85,9 @@ class ProfilePanel extends AbstractPanel
             </hgroup>
 
             <div
-                class="launchpad-alert launchpad-alert--error"
+                class="launchpad-alert launchpad-alert--error label-info exclamation-circle__error"
                 data-wp-bind--hidden="!<?= $this->statePath('error') ?>"
                 data-wp-text="<?= $this->statePath('error') ?>"></div>
-
             <!-- View Mode: Visible by default, so no 'hidden' attribute needed here -->
             <div class="profile-card placeholder-box"
                 <?php echo !$isCardVisible ? 'hidden' : ''; ?>
@@ -107,7 +109,8 @@ class ProfilePanel extends AbstractPanel
                         <p class="profile-email" data-wp-text="<?= $this->statePath('email') ?>"></p>
                         <div class="profile-role">
                             <span class="status-badge"
-                                data-wp-text="<?= $this->statePath('role') ?>"></span>
+                                data-wp-bind--data-role="<?= $this->statePath('role') ?>"
+                                data-wp-text="<?= $this->statePath('roleLabel') ?>"></span>
                         </div>
                         <div data-wp-bind--hidden="!<?= $this->statePath('phone') ?>">
                             <strong>Phone:</strong> <span data-wp-text="<?= $this->statePath('phone') ?>"></span>
@@ -218,21 +221,61 @@ class ProfilePanel extends AbstractPanel
 
                 <div class="form-field">
                     <label><?php esc_html_e('Current Password', 'starwishx'); ?></label>
-                    <input type="password" required data-wp-bind--value="<?= $statePath ?>.passwordData.current"
-                        data-wp-on--input="actions.profile.updatePasswordField" data-field="current" />
+                    <div class="gateway-password-group">
+                        <input type="password" required
+                            data-wp-bind--type="state.currentPasswordInputType"
+                            data-wp-bind--value="<?= $statePath ?>.passwordData.current"
+                            data-wp-on--input="actions.profile.updatePasswordField" data-field="current" />
+                        <button type="button" class="btn-hide-pw"
+                            data-wp-on--click="actions.profile.toggleCurrentPasswordVisibility"
+                            aria-label="<?php esc_attr_e('Toggle password visibility', 'starwishx'); ?>">
+                            <span data-wp-bind--hidden="<?= $statePath ?>.isCurrentPasswordVisible">
+                                <svg width="23" height="23" class="btn-hide-pw__icon">
+                                    <use href="<?php echo get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-eye-opened"></use>
+                                </svg>
+                            </span>
+                            <span data-wp-bind--hidden="!<?= $statePath ?>.isCurrentPasswordVisible">
+                                <svg width="23" height="23" class="btn-hide-pw__icon">
+                                    <use href="<?php echo get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-eye-closed"></use>
+                                </svg>
+                            </span>
+                        </button>
+                    </div>
                 </div>
 
-                <div class="form-row">
-                    <div class="form-field">
-                        <label><?php esc_html_e('New Password', 'starwishx'); ?></label>
-                        <input type="password" required minlength="<?php echo PasswordPolicy::MIN_LENGTH ?>" data-wp-bind--value="<?= $statePath ?>.passwordData.new"
+                <div class="form-field">
+                    <label><?php esc_html_e('New Password', 'starwishx'); ?></label>
+                    <div class="gateway-password-group">
+                        <input type="password" required
+                            minlength="<?php echo PasswordPolicy::MIN_LENGTH ?>"
+                            data-wp-bind--type="state.newPasswordInputType"
+                            data-wp-bind--value="<?= $statePath ?>.passwordData.new"
                             data-wp-on--input="actions.profile.updatePasswordField" data-field="new" />
+                        <button type="button" class="btn-hide-pw"
+                            data-wp-on--click="actions.profile.toggleNewPasswordVisibility"
+                            aria-label="<?php esc_attr_e('Toggle password visibility', 'starwishx'); ?>">
+                            <span data-wp-bind--hidden="<?= $statePath ?>.isNewPasswordVisible">
+                                <svg width="23" height="23" class="btn-hide-pw__icon">
+                                    <use href="<?php echo get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-eye-opened"></use>
+                                </svg>
+                            </span>
+                            <span data-wp-bind--hidden="!<?= $statePath ?>.isNewPasswordVisible">
+                                <svg width="23" height="23" class="btn-hide-pw__icon">
+                                    <use href="<?php echo get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-eye-closed"></use>
+                                </svg>
+                            </span>
+                        </button>
                     </div>
-                    <div class="form-field">
-                        <label><?php esc_html_e('Confirm New Password', 'starwishx'); ?></label>
-                        <input type="password" required data-wp-bind--value="<?= $statePath ?>.passwordData.confirm"
-                            data-wp-on--input="actions.profile.updatePasswordField" data-field="confirm" />
-                    </div>
+                    <button type="button" class="btn-secondary__small"
+                        data-wp-on--click="actions.profile.generatePassword"
+                        data-wp-bind--disabled="<?= $statePath ?>.isGenerating">
+                        <span data-wp-bind--hidden="<?= $statePath ?>.isGenerating">
+                            <?php esc_html_e('Generate Strong Password', 'starwishx'); ?>
+                        </span>
+                        <span data-wp-bind--hidden="!<?= $statePath ?>.isGenerating">
+                            <?php esc_html_e('Generating...', 'starwishx'); ?>
+                        </span>
+                    </button>
                 </div>
 
                 <div class="form-actions">
@@ -244,6 +287,32 @@ class ProfilePanel extends AbstractPanel
                     </button>
                 </div>
             </form>
+
+            <!-- Password Changed Success Popup -->
+            <div class="popup"
+                hidden
+                data-wp-bind--hidden="!<?= $statePath ?>.passwordSuccessPopup.isOpen">
+
+                <div class="popup__backdrop"></div>
+
+                <div class="popup__dialog" role="dialog" aria-modal="true" aria-labelledby="password-success-title">
+                    <div class="popup__body">
+                        <h2 id="password-success-title" class="popup__title">
+                            <?php esc_html_e('Password Changed', 'starwishx'); ?>
+                        </h2>
+                        <p class="popup__text">
+                            <?php esc_html_e('Your password has been changed successfully. You will need to log in again with your new password.', 'starwishx'); ?>
+                        </p>
+                    </div>
+
+                    <div class="popup__footer">
+                        <button type="button" class="btn popup__footer--button"
+                            data-wp-on--click="actions.profile.confirmPasswordSuccess">
+                            <?php esc_html_e('Log In', 'starwishx'); ?>
+                        </button>
+                    </div>
+                </div>
+            </div>
 
         </div>
 <?php

@@ -359,8 +359,10 @@ class OpportunitiesPanel extends AbstractPanel
                                                 <!-- Comments Count Label -->
                                                 <div class="opportunity-comments"
                                                     data-wp-bind--hidden="!context.item.commentsCount">
-                                                    <span class="dashicons1 dashicons-admin-comments1">Comments:</span>
-                                                    <span class="comments-number" data-wp-text="context.item.commentsCount"></span>
+                                                    <span class="opportunity-comments--label">
+                                                        <?= __("Comments", 'starwishx') ?>:
+                                                        <span class="comments-number" data-wp-text="context.item.commentsCount"></span>
+                                                    </span>
                                                 </div>
                                             </div>
                                             <div class="opportunity-meta__container-statuses">
@@ -368,7 +370,7 @@ class OpportunitiesPanel extends AbstractPanel
                                                 <span
                                                     class="status-badge"
                                                     data-wp-bind--data-status="context.item.status"
-                                                    data-wp-text="context.item.status">
+                                                    data-wp-text="context.item.statusLabel">
                                                 </span>
                                             </div>
                                         </div>
@@ -449,7 +451,7 @@ class OpportunitiesPanel extends AbstractPanel
                         <label for="opportunity-title" class="label-required"><?php echo esc_html($labels['title'] ?? __('Opportunity Title', 'starwishx')); ?></label>
                         <input id="opportunity-title" type="text" required class="large-text"
                             maxlength="<?= OpportunitiesService::TITLE_MAX_LENGTH ?>"
-                            placeholder="<?php echo esc_attr($placeholders['title'] ?? ''); ?>"
+                            placeholder="<?= esc_attr( sprintf( __( 'Add title min %1$d, max %2$d characters', 'starwishx' ), OpportunitiesService::TITLE_MIN_LENGTH, OpportunitiesService::TITLE_MAX_LENGTH ) ); ?>"
                             data-wp-bind--value="<?= $formPath ?>.title"
                             data-wp-on--input="actions.opportunities.updateForm"
                             data-wp-bind--disabled="<?= $isLoadingPath ?>"

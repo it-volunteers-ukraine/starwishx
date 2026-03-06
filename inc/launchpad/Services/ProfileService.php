@@ -9,6 +9,22 @@ use WP_Error;
 class ProfileService
 {
     /**
+     * Translatable role labels for Launchpad users.
+     */
+    public static function getRoleLabel(string $slug): string
+    {
+        $labels = [
+            'subscriber'    => __('Subscriber', 'starwishx'),
+            'contributor'   => __('Contributor', 'starwishx'),
+            'author'        => __('Author', 'starwishx'),
+            'editor'        => __('Editor', 'starwishx'),
+            'administrator' => __('Administrator', 'starwishx'),
+        ];
+
+        return $labels[$slug] ?? ucfirst($slug);
+    }
+
+    /**
      * Get standardized profile data (Core + ACF).
      */
     public function getProfileData(int $userId): array
@@ -56,6 +72,7 @@ class ProfileService
             'lastName'  => $user->last_name,
             'email'     => $user->user_email,
             'role'      => $user->roles[0] ?? 'subscriber',
+            'roleLabel' => self::getRoleLabel($user->roles[0] ?? 'subscriber'),
             'avatarUrl' => get_avatar_url($userId, ['size' => 150]),
 
             // Return flattened string for the frontend Input
@@ -200,6 +217,7 @@ class ProfileService
                 $user->add_role('contributor');
                 $freshProfile['_roleUpgraded'] = true;
                 $freshProfile['role'] = 'contributor';
+                $freshProfile['roleLabel'] = self::getRoleLabel('contributor');
             }
         }
 
@@ -210,6 +228,7 @@ class ProfileService
                 $user->add_role('subscriber');
                 $freshProfile['_roleDegraded'] = true;
                 $freshProfile['role'] = 'subscriber';
+                $freshProfile['roleLabel'] = self::getRoleLabel('subscriber');
             }
         }
 

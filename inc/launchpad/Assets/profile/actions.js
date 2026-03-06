@@ -96,6 +96,9 @@ export const profileActions = {
       actions.syncStateFromUrl();
     } catch (error) {
       p.error = error.message;
+      setTimeout(() => {
+        p.error = null;
+      }, 5000);
     } finally {
       p.isSaving = false;
     }
@@ -119,7 +122,10 @@ export const profileActions = {
   cancelPasswordChange() {
     const { state, actions } = store("launchpad");
     const p = ensurePanel(state, "profile");
-    p.passwordData = { current: "", new: "", confirm: "" };
+    p.passwordData = { current: "", new: "" };
+    p.isCurrentPasswordVisible = false;
+    p.isNewPasswordVisible = false;
+    p.error = null;
     const url = new URL(window.location);
     url.searchParams.delete("view");
     window.history.pushState({}, "", url);
@@ -136,6 +142,52 @@ export const profileActions = {
     p.passwordData[ref.dataset.field] = ref.value;
   },
 
+  toggleCurrentPasswordVisibility() {
+    const { state } = store("launchpad");
+    const p = ensurePanel(state, "profile");
+    p.isCurrentPasswordVisible = !p.isCurrentPasswordVisible;
+  },
+
+  toggleNewPasswordVisibility() {
+    const { state } = store("launchpad");
+    const p = ensurePanel(state, "profile");
+    p.isNewPasswordVisible = !p.isNewPasswordVisible;
+  },
+
+  async generatePassword() {
+    const { state } = store("launchpad");
+    const p = ensurePanel(state, "profile");
+
+    if (p.isGenerating) return;
+
+    p.isGenerating = true;
+    p.error = null;
+
+    try {
+      const data = await fetchJson(
+        state,
+        state.launchpadSettings.generatePasswordUrl,
+      );
+
+      if (data.success && data.password) {
+        p.passwordData.new = data.password;
+        p.isNewPasswordVisible = true;
+      }
+    } catch (error) {
+      p.error = error.message;
+      setTimeout(() => {
+        p.error = null;
+      }, 5000);
+    } finally {
+      p.isGenerating = false;
+    }
+  },
+
+  confirmPasswordSuccess() {
+    const { state } = store("launchpad");
+    window.location.href = state.launchpadSettings.loginUrl;
+  },
+
   /**
    * Submit password change to server
    */
@@ -143,11 +195,6 @@ export const profileActions = {
     const { state } = store("launchpad");
     event.preventDefault();
     const p = ensurePanel(state, "profile");
-
-    if (p.passwordData.new !== p.passwordData.confirm) {
-      p.error = "New passwords do not match.";
-      return;
-    }
 
     p.isSaving = true;
     try {
@@ -163,11 +210,14 @@ export const profileActions = {
         },
       );
 
-      alert("Password changed successfully. Please log in again.");
-      window.location.href = state.launchpadSettings.loginUrl;
+      p.isSaving = false;
+      p.passwordSuccessPopup = { isOpen: true };
     } catch (error) {
       p.error = error.message;
       p.isSaving = false;
+      setTimeout(() => {
+        p.error = null;
+      }, 5000);
     }
   },
 };

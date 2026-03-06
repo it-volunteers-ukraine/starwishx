@@ -140,6 +140,9 @@
         @include media.max-tablet {
             margin-bottom: 20px;
         }
+        a {
+            color: $text-accent;
+        }
     }
     .gateway-link__password {
         white-space: nowrap;

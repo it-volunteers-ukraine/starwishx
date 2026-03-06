@@ -8,6 +8,21 @@ use Launchpad\Data\Repositories\FavoritesRepository;
 
 class FavoritesService
 {
+    /**
+     * Translatable post type labels for favorites cards.
+     */
+    public static function getPostTypeLabel(string $slug): string
+    {
+        $labels = [
+            'opportunity' => __('Opportunity', 'starwishx'),
+            'project'     => __('Project', 'starwishx'),
+            'post'        => __('Post', 'starwishx'),
+            'page'        => __('Page', 'starwishx'),
+        ];
+
+        return $labels[$slug] ?? ucfirst($slug);
+    }
+
     private FavoritesRepository $repository;
 
     public function __construct(?FavoritesRepository $repository = null)
@@ -21,11 +36,13 @@ class FavoritesService
 
         return array_map(function ($post) {
             return [
-                'id'        => $post->ID,
-                'title'     => get_the_title($post),
-                'excerpt'   => get_the_excerpt($post) ?: wp_trim_words($post->post_content, 20),
-                'url'       => get_permalink($post),
-                'thumbnail' => get_the_post_thumbnail_url($post, 'medium') ?: '',
+                'id'            => $post->ID,
+                'title'         => get_the_title($post),
+                'excerpt'       => get_the_excerpt($post) ?: wp_trim_words($post->post_content, 20),
+                'url'           => get_permalink($post),
+                'thumbnail'     => get_the_post_thumbnail_url($post, 'medium') ?: '',
+                'postType'      => $post->post_type,
+                'postTypeLabel' => self::getPostTypeLabel($post->post_type),
             ];
         }, $posts);
     }

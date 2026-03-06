@@ -241,27 +241,6 @@
             "allow_in_bindings": 0
         },
         {
-            "key": "field_6937429b9c467",
-            "label": "City (deprecated)",
-            "name": "city",
-            "aria-label": "",
-            "type": "text",
-            "instructions": "",
-            "required": 0,
-            "conditional_logic": 0,
-            "wrapper": {
-                "width": "",
-                "class": "",
-                "id": ""
-            },
-            "default_value": "",
-            "maxlength": "",
-            "allow_in_bindings": 0,
-            "placeholder": "",
-            "prepend": "",
-            "append": ""
-        },
-        {
             "key": "field_69373dabee193",
             "label": "Opportunity applicant mail  (deprecated)",
             "name": "opportunity_applicant_mail",
@@ -303,27 +282,6 @@
             "append": ""
         },
         {
-            "key": "field_69374825f063a",
-            "label": "Опишіть можливість (Deprecated)",
-            "name": "opportunity_description",
-            "aria-label": "",
-            "type": "textarea",
-            "instructions": "",
-            "required": 0,
-            "conditional_logic": 0,
-            "wrapper": {
-                "width": "",
-                "class": "",
-                "id": ""
-            },
-            "default_value": "",
-            "maxlength": 4000,
-            "allow_in_bindings": 0,
-            "rows": "",
-            "placeholder": "Додайте інформацію про можливість. Опишіть суть.",
-            "new_lines": ""
-        },
-        {
             "key": "field_69373c7a1073c",
             "label": "Імʼя та прізвище (deprecated)",
             "name": "opportunity_applicant_name",
@@ -343,32 +301,6 @@
             "placeholder": "Вкажіть імʼя та прізвище",
             "prepend": "",
             "append": ""
-        },
-        {
-            "key": "field_693740c49c465",
-            "label": "Opportunity subcategory (deprecated)",
-            "name": "opportunity_subcategory",
-            "aria-label": "",
-            "type": "taxonomy",
-            "instructions": "",
-            "required": 0,
-            "conditional_logic": 0,
-            "wrapper": {
-                "width": "",
-                "class": "",
-                "id": ""
-            },
-            "taxonomy": "category-oportunities",
-            "add_term": 0,
-            "save_terms": 0,
-            "load_terms": 0,
-            "return_format": "id",
-            "field_type": "multi_select",
-            "allow_null": 0,
-            "allow_in_bindings": 0,
-            "bidirectional": 0,
-            "multiple": 0,
-            "bidirectional_target": []
         }
     ],
     "location": [
@@ -390,5 +322,5 @@
     "description": "",
     "show_in_rest": 0,
     "display_title": "",
-    "modified": 1772735294
+    "modified": 1772758043
 }
