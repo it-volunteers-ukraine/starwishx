@@ -477,15 +477,17 @@
                         align-items: center;
                         gap: 4px;
 
-                        .dashicons {
-                            width: 16px;
-                            height: 16px;
-                            color: $icon-color-accent;
-                            font-size: 16px;
-                        }
+                        &--label {
+                            padding: 1px 4px;
+                            font-size: 14px;
+                            line-height: 1;
+                            border-color: $buttons-color-text-secondary-hover;
+                            background-color: $dropdown-surface-color-selected;
+                            color: $text-light;
 
-                        .comments-number {
-                            font-weight: 600;
+                            .comments-number {
+                                font-weight: 600;
+                            }
                         }
                     }
                 }

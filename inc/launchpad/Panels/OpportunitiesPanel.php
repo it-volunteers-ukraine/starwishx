@@ -359,8 +359,10 @@ class OpportunitiesPanel extends AbstractPanel
                                                 <!-- Comments Count Label -->
                                                 <div class="opportunity-comments"
                                                     data-wp-bind--hidden="!context.item.commentsCount">
-                                                    <span class="dashicons1 dashicons-admin-comments1">Comments:</span>
-                                                    <span class="comments-number" data-wp-text="context.item.commentsCount"></span>
+                                                    <span class="opportunity-comments--label">
+                                                        <?= __("Comments", 'starwishx') ?>:
+                                                        <span class="comments-number" data-wp-text="context.item.commentsCount"></span>
+                                                    </span>
                                                 </div>
                                             </div>
                                             <div class="opportunity-meta__container-statuses">
