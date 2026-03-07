@@ -14,10 +14,10 @@ $transition-ease: ease;
 .heart {
     position: relative;
     --size: 11px;
-    width: var(--size);
-    height: var(--size);
     cursor: pointer;
     margin-right: 4px;
+    width: var(--size);
+    height: var(--size);
 
     &__lines {
         position: absolute;
@@ -29,13 +29,13 @@ $transition-ease: ease;
         position: absolute;
         top: 15%;
         left: 50%;
-        width: calc(var(--size) * 1.5);
-        height: calc(var(--size) * 0.2);
-        background: $heart-on;
-        border-radius: 50%;
-        opacity: 0;
         transform: translate(-50%, -50%) rotate(var(--angle, 0deg)) scale(0);
         transform-origin: center;
+        opacity: 0;
+        border-radius: 50%;
+        background: $heart-on;
+        width: calc(var(--size) * 1.5);
+        height: calc(var(--size) * 0.2);
     }
 
     &__line:nth-child(1) {
@@ -58,14 +58,14 @@ $transition-ease: ease;
     }
 
     &__checkbox {
-        appearance: none;
         position: absolute;
         top: calc(var(--size) * -0.4);
         left: calc(var(--size) * -0.2);
-        width: calc(var(--size) * 1.5);
-        height: calc(var(--size) * 1.5);
+        appearance: none;
         z-index: 2;
         cursor: pointer;
+        width: calc(var(--size) * 1.5);
+        height: calc(var(--size) * 1.5);
         @include transform;
 
         &:focus {
@@ -86,9 +86,9 @@ $transition-ease: ease;
     }
 
     &__icon {
+        background: $heart-off;
         width: var(--size);
         height: var(--size);
-        background: $heart-off;
         @include transform;
         position: absolute;
         top: 0;
@@ -97,13 +97,13 @@ $transition-ease: ease;
 
         &::before,
         &::after {
-            content: "";
             display: block;
+            position: absolute;
+            border-radius: 50%;
             background: inherit;
             width: var(--size);
             height: var(--size);
-            border-radius: 50%;
-            position: absolute;
+            content: "";
         }
 
         &::before {
@@ -112,8 +112,8 @@ $transition-ease: ease;
         }
 
         &::after {
-            left: 0;
             top: -50%;
+            left: 0;
         }
     }
 }
@@ -152,8 +152,8 @@ $transition-ease: ease;
 /* make the two spans overlap but the container size equals the larger text */
 .heart-label__text {
     display: inline-grid; // container sized to the largest child
-    align-items: center;
     position: relative;
+    align-items: center;
     white-space: nowrap;
 }
 
@@ -170,24 +170,24 @@ $transition-ease: ease;
 
 /* default (not favorite) */
 .heart-label__text--inactive {
-    opacity: 1;
     transform: translateY(0);
     visibility: visible;
+    opacity: 1;
 }
 
 .heart-label__text--active {
-    opacity: 0;
     transform: translateY(0.15em); /* small offset for a subtle slide in/out */
     visibility: hidden;
+    opacity: 0;
 }
 
 /* when .is-active is present, swap roles */
 .heart-label.is-active {
     /* inactive fades out and becomes hidden after the fade */
     .heart-label__text--inactive {
-        opacity: 0;
         transform: translateY(-0.15em);
         visibility: hidden; /* delayed by transition rule on the element */
+        opacity: 0;
         transition:
             opacity $transition-duration $transition-ease,
             transform $transition-duration $transition-ease,
@@ -196,9 +196,9 @@ $transition-ease: ease;
 
     /* active fades in immediately */
     .heart-label__text--active {
-        opacity: 1;
         transform: translateY(0);
         visibility: visible; /* made visible immediately when class toggles */
+        opacity: 1;
         transition:
             opacity $transition-duration $transition-ease,
             transform $transition-duration $transition-ease,
@@ -208,15 +208,15 @@ $transition-ease: ease;
 
 @keyframes heartLines {
     0% {
-        opacity: 0;
         transform: translate(-50%, -50%) rotate(var(--angle, 0deg)) scale(0);
+        opacity: 0;
     }
     40% {
-        opacity: 1;
         transform: translate(-50%, -50%) rotate(var(--angle, 0deg)) scale(1);
+        opacity: 1;
     }
     100% {
-        opacity: 0;
         transform: translate(-50%, -50%) rotate(var(--angle, 0deg)) scale(2);
+        opacity: 0;
     }
 }
