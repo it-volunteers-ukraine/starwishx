@@ -7,8 +7,8 @@
 }
 
 :where(html) {
-    color-scheme: light dark;
     hanging-punctuation: first allow-end last;
+    color-scheme: light dark;
     interpolate-size: allow-keywords;
     scroll-behavior: smooth;
     scrollbar-gutter: stable;
@@ -29,27 +29,27 @@
 }
 
 :where(body) {
-    min-block-size: 100svb;
     min-inline-size: 300px;
+    min-block-size: 100svb;
 }
 
 :where(canvas, img, picture, svg, video) {
-    block-size: auto;
-    border: none;
     display: block;
+    border: none;
     max-inline-size: 100%;
+    block-size: auto;
 }
 
 :where(button, input, progress, select, textarea) {
     appearance: none;
     background: transparent;
+    // text-align: start;
+    touch-action: manipulation;
+    hanging-punctuation: none;
     // border: none;
     color: inherit;
     font: inherit;
-    hanging-punctuation: none;
     line-height: inherit;
-    // text-align: start;
-    touch-action: manipulation;
 }
 
 :where(button) {
@@ -70,8 +70,8 @@
 }
 
 :where(p, li, h1, h2, h3, h4, h5, h6) {
-    overflow-wrap: break-word;
     text-wrap: pretty;
+    overflow-wrap: break-word;
 }
 
 :where(abbr[title]) {
@@ -92,13 +92,13 @@
 }
 
 :where(dialog, [popover]) {
+    position: fixed;
+    margin: auto;
     // background: transparent;
     border: none;
-    color: inherit;
-    margin: auto;
-    max-block-size: none;
     max-inline-size: none;
-    position: fixed;
+    max-block-size: none;
+    color: inherit;
 }
 
 :where([popover]) {

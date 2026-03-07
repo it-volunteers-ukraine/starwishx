@@ -11,10 +11,10 @@
 }
 
 .policy-breadcrumbs-back {
-   color: $text-light;
    display: flex;
    align-items: center;
    gap: 4px;
+   color: $text-light;
    svg {
       height: 16px;
       @include media.min-desktop {
@@ -32,8 +32,8 @@
 .policy-layout {
    display: grid;
    grid-template-columns: clamp(325px, 6.625rem + 15.208vw, 398px) 1fr;
-   gap: 20px;
    align-items: start;
+   gap: 20px;
 
    @include media.max-tablet {
       grid-template-columns: 1fr;
@@ -44,15 +44,15 @@
 .policy-left {
    .policy-pdf-link {
       display: flex;
-      gap: 12px;
       align-items: center;
+      gap: 12px;
       text-decoration: none;
 
       .policy-pdf-icon {
-         color: $icon-color-accent;
          display: flex;
          align-items: center;
          max-width: 22px;
+         color: $icon-color-accent;
       }
 
       .policy-pdf-info {
@@ -68,8 +68,8 @@
    }
 
    .policy-pdf-empty {
-      font-style: italic;
       color: $icon-color-accent;
+      font-style: italic;
    }
 }
 
@@ -84,10 +84,10 @@
    .policy-content {
       // content typography
       h2 {
+         color: $text-accent;
          font-weight: 600;
          font-size: 18px;
          line-height: 1.2;
-         color: $text-accent;
 
          @include media.min-desktop {
             font-size: 20px;
@@ -98,8 +98,8 @@
       }
       ul,
       ol {
-         margin-left: 1.5rem;
          margin-bottom: 12px;
+         margin-left: 1.5rem;
       }
       ul {
          list-style: disc;

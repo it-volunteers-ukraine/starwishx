@@ -1,10 +1,6 @@
 @use "../variables" as *;
 @use "../mixins/media";
 
-/* ======================================
-   COMMENTS / REVIEWS SECTION
-   ====================================== */
-
 .comments-area {
     margin: 80px 0;
     padding: 0;
@@ -14,13 +10,12 @@
     //     margin-top: 60px;
     // }
     fieldset {
+        margin: 0;
         border: none;
         padding: 0;
-        margin: 0;
     }
 }
 
-/* --- Header --- */
 .comments-header {
     display: flex;
     flex-wrap: wrap;
@@ -43,9 +38,6 @@
 
         .h5 {
             margin: 0;
-            // color: $text-dark;
-            // Match h3 mixin/class sizes roughly
-            // font-weight: 600;
         }
 
         .rating-badge {
@@ -75,7 +67,6 @@
     }
 }
 
-/* --- Form --- */
 .comments-form-wrapper {
     animation: fadeIn 0.3s ease-in-out;
     margin-bottom: 40px;
@@ -86,7 +77,7 @@
     flex-direction: column;
     gap: 16px;
     border-radius: $radius-input;
-    background-color: $surface-violet; // Light background for form area
+    background-color: $surface-violet;
     padding: 24px;
 
     .form-control {
@@ -155,17 +146,15 @@
 
             // Active state (via data-wp-class--active)
             &.active {
-                color: $icon-color-fill; // Gold
+                color: $icon-color-fill;
             }
         }
     }
 }
 
-/* --- List Items --- */
 .comments-list {
     display: flex;
     flex-direction: column;
-    // gap: 24px;
 }
 
 .comment-item {
@@ -178,7 +167,6 @@
         padding-top: 0;
     }
 
-    // Last item border removal
     &:last-child {
         border-bottom: none;
     }
@@ -204,19 +192,18 @@
         }
 
         .author-name {
-            color: $text-light; // Sample shows lighter text for name
-            font-weight: 400; // Not bold in the sample
+            color: $text-light;
+            font-weight: 400;
             font-size: 16px;
         }
     }
 
     .comment-date {
-        color: $input-color-text-default; // Light grey
+        color: $input-color-text-default;
         font-size: 14px;
     }
 }
 
-/* Item Body */
 .comment-body {
     margin-bottom: 12px;
     color: $text-dark;
@@ -228,18 +215,17 @@
     }
 }
 
-/* Item Rating (Stars) */
 .comment-rating {
     margin-top: 8px;
     .stars {
-        color: $icon-color-fill; // Yellow/Gold
+        color: $icon-color-fill;
         font-size: 14px;
         letter-spacing: 2px;
     }
     .stars-display {
         display: flex;
         gap: 2px;
-        color: $stroke-default; // Base color (grey)
+        color: $stroke-default;
 
         svg {
             fill: currentColor;
@@ -277,7 +263,7 @@
     border: none;
     background: none;
     padding: 0;
-    color: $input-color-text-default; // Grey
+    color: $input-color-text-default;
     font-size: 13px;
     text-decoration: underline;
 
@@ -289,7 +275,7 @@
 .comment-edit-mode {
     animation: fadeIn 0.2s;
     border-radius: 12px;
-    background: $surface-violet; // Distinct background for editing
+    background: $surface-violet;
     padding: 16px;
 }
 
@@ -304,9 +290,9 @@
     display: inline-flex;
     align-items: center;
     border-radius: 4px;
-    background-color: $element-card-tech-fill; // Light green background
+    background-color: $element-card-tech-fill;
     padding: 2px 8px;
-    color: $element-card-tech-text; // Darker green text
+    color: $element-card-tech-text;
     // font-weight: 500;
     font-size: 12px;
     line-height: 1;
@@ -315,8 +301,8 @@
 
 .comment-replies {
     margin-top: 16px;
-    margin-left: 20px; // Indent
-    border-left: 2px solid $input-color-border-default; // Visual thread line
+    margin-left: 20px;
+    border-left: 2px solid $input-color-border-default;
     padding-left: 16px;
 }
 
@@ -349,14 +335,14 @@
             }
 
             .author-name {
-                color: $text-light; // Sample shows lighter text for name
-                font-weight: 400; // Not bold in the sample
+                color: $text-light;
+                font-weight: 400;
                 font-size: 16px;
             }
         }
 
         .comment-date {
-            color: $input-color-text-default; // Light grey
+            color: $input-color-text-default;
             font-size: 14px;
         }
     }
@@ -374,11 +360,10 @@
 }
 
 .btn-link-reply {
-    @extend .btn-link-edit; // Reuse edit link styles
+    @extend .btn-link-edit;
     color: $primary-hover;
 }
 
-/* --- Utilities --- */
 .no-comments {
     border-radius: $radius-input;
     background: $surface-violet;
@@ -396,7 +381,6 @@
     font-size: 14px;
 }
 
-/* Animation */
 @keyframes fadeIn {
     from {
         transform: translateY(-10px);
@@ -437,31 +421,29 @@
 /* When the fieldset is disabled (during network request), fade it out */
 fieldset[disabled] {
     opacity: 0.6;
-    pointer-events: none; /* Prevent clicks */
     transition: opacity 0.2s ease;
-    border: none; /* Remove default fieldset border */
-    padding: 0;
     margin: 0;
+    border: none;
+    padding: 0;
+    pointer-events: none;
 }
 
-/* Status Badges */
-// .form-status-area {
-// margin-bottom: 1rem;
-// margin-top: 10px;
-// font-size: 1rem;
-// min-height: 20px; /* Prevent layout jump */
-// }
-
-.status-message {
-    color: $icon-color-done;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-}
-.error-message {
-    color: $icon-color-error;
-}
-.sending-message {
-    color: $text-accent;
-    font-style: italic;
+.form-status-area {
+    // margin-bottom: 1rem;
+    // margin-top: 10px;
+    // font-size: 1rem;
+    // min-height: 20px;
+    .status-message {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        color: $icon-color-done;
+    }
+    .error-message {
+        color: $icon-color-error;
+    }
+    .sending-message {
+        color: $text-accent;
+        font-style: italic;
+    }
 }

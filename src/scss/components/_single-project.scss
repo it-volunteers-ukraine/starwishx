@@ -69,25 +69,6 @@
                             height: 40px;
                         }
                     }
-                    // .control-favorites-wrapper--icon-only {
-                    //     position: absolute;
-                    //     right: 0;
-                    //     bottom: 0;
-                    //     z-index: 2;
-                    //     width: 40px;
-                    //     height: 40px;
-                    //     .heart-label {
-                    //         display: block;
-                    //         position: absolute;
-                    //         top: auto;
-                    //         z-index: 3;
-                    //         cursor: pointer;
-                    //         inset: 0;
-                    //         background: transparent;
-                    //         width: 40px;
-                    //         height: 40px;
-                    //     }
-                    // }
                 }
 
                 &__placeholder {
@@ -166,8 +147,8 @@
                 }
 
                 .project-social {
-                    flex: 0 0 auto;
                     display: flex;
+                    flex: 0 0 auto;
                     flex-direction: row;
                     justify-content: space-between;
                     &__share {
@@ -287,8 +268,8 @@
             }
 
             &__link {
-                text-decoration: none;
                 display: flex;
+                text-decoration: none;
                 @include media.max-tabland {
                     display: none !important;
                 }
@@ -405,17 +386,17 @@
                 margin: 0;
                 overflow: hidden;
                 -webkit-box-orient: vertical;
+                line-clamp: 5;
                 color: $text-light;
                 font-size: 0.875rem;
                 line-height: 1.5;
-                line-clamp: 5;
                 -webkit-line-clamp: 5;
             }
             &__meta {
                 display: flex;
                 flex-flow: row nowrap;
-                align-items: center;
                 justify-content: space-between;
+                align-items: center;
                 font-size: 0.813rem;
                 .control-favorites-wrapper {
                     @include media.min-tabland {

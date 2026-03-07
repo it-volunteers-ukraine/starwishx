@@ -319,11 +319,11 @@
         }
         .listing-card__figure {
             position: relative;
-            width: 100%;
-            overflow: hidden;
+            border-radius: $radius-image;
             // background-color: $buttons-color-background-secondary-hover;
             background-color: $dropdown-surface-color-hover;
-            border-radius: $radius-image;
+            width: 100%;
+            overflow: hidden;
             .listing-card__figure--link {
                 position: absolute;
                 // z-index: 1;
@@ -335,17 +335,6 @@
                     position: absolute;
                     inset: 0;
                     border-radius: $radius-image;
-                    // background: linear-gradient(
-                    //     0deg,
-                    //     rgb(0 0 0 / 50%) 0%,
-                    //     rgb(0 0 0 / 25%) 10%,
-                    //     rgb(0 0 0 / 15%) 15%,
-                    //     rgb(0 0 0 / 7%) 25%,
-                    //     rgb(0 0 0 / 0.01%) 35%,
-                    //     rgba(0, 0, 0, 0) 100%
-                    // );
-                    pointer-events: none;
-                    content: "";
                     background: linear-gradient(
                         180deg,
                         rgb(0 0 0 / 50%) 0%,
@@ -359,6 +348,17 @@
                         rgb(0 0 0 / 25%) 90%,
                         rgb(0 0 0 / 50%) 100%
                     );
+                    // background: linear-gradient(
+                    //     0deg,
+                    //     rgb(0 0 0 / 50%) 0%,
+                    //     rgb(0 0 0 / 25%) 10%,
+                    //     rgb(0 0 0 / 15%) 15%,
+                    //     rgb(0 0 0 / 7%) 25%,
+                    //     rgb(0 0 0 / 0.01%) 35%,
+                    //     rgba(0, 0, 0, 0) 100%
+                    // );
+                    pointer-events: none;
+                    content: "";
                     // rgba(0, 0, 0, 0) 100%
                 }
             }
@@ -393,11 +393,11 @@
                 // }
             }
             .opportunity-card__placeholder {
-                position: absolute;
-                inset: 0;
                 display: flex;
+                position: absolute;
                 justify-content: center;
                 align-items: center;
+                inset: 0;
                 color: $text-light;
                 .card-image__fallback--icon {
                     width: 42px;
