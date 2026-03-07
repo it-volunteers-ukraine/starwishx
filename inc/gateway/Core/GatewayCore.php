@@ -101,6 +101,10 @@ final class GatewayCore
 
         // Register default forms at priority 5 (before third-party)
         add_action('gateway_register_forms', [$this, 'registerDefaultForms'], 5);
+
+        // prevent WP sending registration emails to new users 
+        // we do it manually with sendActivationEmail()
+        add_filter('wp_send_new_user_notification_to_user', '__return_false');
     }
 
     /**
