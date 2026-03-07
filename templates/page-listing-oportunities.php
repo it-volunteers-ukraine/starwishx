@@ -36,7 +36,10 @@ add_action('wp_head', function () {
         .listing-grid[hidden] {
             display: none !important;
         }
-        .popup[hidden] { display: none !important; }
+
+        .popup[hidden] {
+            display: none !important;
+        }
     </style>
 <?php
 }, 1);

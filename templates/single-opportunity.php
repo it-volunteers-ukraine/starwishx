@@ -177,7 +177,7 @@ if (function_exists('render_block')) {
                             </svg>
                         </div>
                         <div class="opportunity-badges">
-                            <?php if (is_user_logged_in() && get_post_status() === 'publish') {
+                            <?php if (get_post_status() === 'publish') {
                                 get_template_part('template-parts/control-favorites', null, ['post_id' => $post_id]);
                             } ?>
                         </div>

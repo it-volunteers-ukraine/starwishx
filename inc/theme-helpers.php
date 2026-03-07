@@ -457,6 +457,125 @@ add_action('admin_init', function (): void {
 */
 
 /**
+ * One-time migration: Copy ACF fields to native WordPress fields for the News CPT.
+ *
+ * Migrations performed:
+ *  - ACF `description`  → post_content (as Gutenberg paragraph blocks)
+ *  - ACF `photo`        → post featured image (post thumbnail)
+ *
+ * Can be run via WP-CLI: wp eval 'sw_migrate_news_fields();'
+ * Or uncomment the admin_init hook at the bottom to run automatically (once).
+ *
+ * @return array{ description: int, photo: int } Counts of migrated posts per field.
+ */
+function sw_migrate_news_fields(): array
+{
+    if (get_option('sw_news_migration_done', false)) {
+        return ['description' => 0, 'photo' => 0];
+    }
+
+    $posts = get_posts([
+        'post_type'      => 'news',
+        'posts_per_page' => 500,
+        'post_status'    => ['publish', 'draft', 'pending', 'future', 'private'],
+    ]);
+
+    $migrated_description = 0;
+    $migrated_photo       = 0;
+
+    foreach ($posts as $post) {
+
+        // ── 1. description → post_content (Gutenberg paragraph blocks) ───────
+        if (empty(trim($post->post_content))) {
+            $acf_description = get_post_meta($post->ID, 'description', true);
+
+            if (!empty($acf_description)) {
+                // Treat as plain text: normalise line endings, split on blank
+                // lines into paragraphs, convert single newlines to <br>.
+                // wp_kses_post() sanitises before storage; serialize_block()
+                // wraps each paragraph in proper Gutenberg block markup.
+                $text       = str_replace("\r\n", "\n", trim($acf_description));
+                $paragraphs = preg_split('/\n\s*\n/', $text, -1, PREG_SPLIT_NO_EMPTY);
+
+                $blocks = array_map(static function (string $p): string {
+                    $html = '<p>' . nl2br(wp_kses_post(trim($p)), false) . '</p>';
+                    return serialize_block([
+                        'blockName'    => 'core/paragraph',
+                        'attrs'        => [],
+                        'innerBlocks'  => [],
+                        'innerHTML'    => $html,
+                        'innerContent' => [$html],
+                    ]);
+                }, $paragraphs);
+
+                $post_content = implode("\n\n", $blocks);
+
+                if (!empty($post_content)) {
+                    $result = wp_update_post([
+                        'ID'           => $post->ID,
+                        'post_content' => $post_content,
+                    ], true);
+
+                    if (!is_wp_error($result)) {
+                        $migrated_description++;
+                    }
+                }
+            }
+        }
+
+        // ── 2. photo → featured image (thumbnail) ────────────────────────────
+        if (!has_post_thumbnail($post->ID)) {
+            $acf_photo = get_post_meta($post->ID, 'photo', true);
+
+            $attachment_id = 0;
+
+            if (is_array($acf_photo) && !empty($acf_photo['ID'])) {
+                // ACF stored the full image array (return_format: array)
+                $attachment_id = (int) $acf_photo['ID'];
+            } elseif (is_numeric($acf_photo) && (int) $acf_photo > 0) {
+                // ACF stored the raw attachment ID
+                $attachment_id = (int) $acf_photo;
+            }
+
+            if ($attachment_id > 0 && get_post($attachment_id)) {
+                if (set_post_thumbnail($post->ID, $attachment_id)) {
+                    $migrated_photo++;
+                }
+            }
+        }
+    }
+
+    // Mark migration as completed only when no posts are left to process.
+    // Re-run the script if output shows posts were migrated (batch of 500).
+    if ($migrated_description === 0 && $migrated_photo === 0) {
+        update_option('sw_news_migration_done', true, false);
+    }
+
+    error_log(
+        "News migration batch: " .
+            "{$migrated_description} descriptions migrated, " .
+            "{$migrated_photo} featured images migrated."
+    );
+
+    return [
+        'description' => $migrated_description,
+        'photo'       => $migrated_photo,
+    ];
+}
+
+/**
+ * Auto-run migration on admin_init (once).
+ * Uncomment when ready to deploy.
+ */
+/*
+add_action('admin_init', function (): void {
+    if (!get_option('sw_news_migration_done', false)) {
+        sw_migrate_news_fields();
+    }
+});
+*/
+
+/**
  * Assemble view data for a single Opportunity post.
  *
  * Scalar meta fields use get_post_meta() directly — no ACF overhead for simple
