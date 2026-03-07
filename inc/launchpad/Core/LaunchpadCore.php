@@ -212,20 +212,20 @@ final class LaunchpadCore
                 wp_enqueue_script_module('@starwishx/launchpad');
             }
             // Settings for JS - Added loginUrl here
-            wp_add_inline_script(
-                'wp-interactivity',
-                sprintf('window.launchpadSettings = %s;', wp_json_encode([
-                    'nonce'    => wp_create_nonce('wp_rest'),
-                    'restUrl'  => rest_url('launchpad/v1/'),
-                    'userId'   => get_current_user_id(),
-                    'loginUrl' => wp_login_url(home_url('/launchpad/')),
-                    'generatePasswordUrl' => rest_url('gateway/v1/password/generate'),
-                    'passwordPolicy' => PasswordPolicy::getClientRules(),
-                ])),
-                'before'
-            );
+            // wp_add_inline_script(
+            //     'wp-interactivity',
+            //     sprintf('window.launchpadSettings = %s;', wp_json_encode([
+            //         'nonce'    => wp_create_nonce('wp_rest'),
+            //         'restUrl'  => rest_url('launchpad/v1/'),
+            //         'userId'   => get_current_user_id(),
+            //         'loginUrl' => wp_login_url(home_url('/launchpad/')),
+            //         'generatePasswordUrl' => rest_url('gateway/v1/password/generate'),
+            //         'passwordPolicy' => PasswordPolicy::getClientRules(),
+            //     ])),
+            //     'before'
+            // );
 
-            wp_enqueue_style('dashicons');
+            // wp_enqueue_style('dashicons');
         }
 
         // Single Opportunity post Interactive Comments App

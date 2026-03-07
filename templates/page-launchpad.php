@@ -62,7 +62,7 @@ $state['launchpadSettings'] = [
     'userId'              => $user_id,
     'loginUrl'            => wp_login_url(home_url('/launchpad/')),
     'generatePasswordUrl' => rest_url('gateway/v1/password/generate'),
-    'passwordPolicy' => PasswordPolicy::getClientRules(),
+    'passwordPolicy'      => PasswordPolicy::getClientRules(),
 ];
 
 // Initialize Interactivity API state for the 'launchpad' namespace
