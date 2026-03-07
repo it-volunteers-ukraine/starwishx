@@ -86,12 +86,31 @@
                         height: 64px;
                     }
                 }
-                .control-favorites-wrapper {
+                // .control-favorites-wrapper {
+                //     position: absolute;
+                //     right: 0;
+                //     bottom: 0;
+                //     z-index: 3;
+                //     margin: 16px;
+                // }
+                .control-favorites-wrapper--icon-only {
                     position: absolute;
                     right: 0;
                     bottom: 0;
-                    z-index: 3;
-                    margin: 16px;
+                    z-index: 2;
+                    width: 40px;
+                    height: 40px;
+                    .heart-label {
+                        display: block;
+                        position: absolute;
+                        top: auto;
+                        z-index: 3;
+                        cursor: pointer;
+                        inset: 0;
+                        background: transparent;
+                        width: 40px;
+                        height: 40px;
+                    }
                 }
             }
             .opportunity-article {

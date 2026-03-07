@@ -26,6 +26,7 @@ $is_favorite = function_exists('favorites') && \favorites()->isUserFavorite($pos
 $wrapper_classes = ['control-favorites-wrapper'];
 if (! $show_label) {
     $wrapper_classes[] = 'control-favorites-wrapper--icon-only';
+    $nolabel_attr = "-nolabel"; // in case 2 different kind controls of same id same time
 }
 ?>
 
@@ -33,23 +34,21 @@ if (! $show_label) {
     class="<?php esc_attr_e(implode(' ', $wrapper_classes)) ?>"
     data-wp-interactive="starwishx/opportunities"
     data-wp-context='{ "id": <?= (int)$post_id ?> }'>
-    <?php if ($show_label) : ?>
-        <label
-            for="favorite-<?= esc_attr($post_id) ?>"
-            class="heart-label<?php if ($is_favorite) echo ' is-active'; ?>"
-            data-wp-class--is-active="state.isFavorite">
-            <span class="heart-label__text">
-                <span class="heart-label__text--inactive"><?php esc_html_e('Add to favorites', 'starwishx'); ?></span>
-                <span class="heart-label__text--active"><?php esc_html_e('Favorites', 'starwishx'); ?></span>
-            </span>
-        </label>
-    <?php endif; ?>
+    <label
+        for="favorite-<?= esc_attr($post_id) . $nolabel_attr ?>"
+        class="heart-label<?php if ($is_favorite) echo ' is-active'; ?>"
+        data-wp-class--is-active="state.isFavorite">
+        <span class="heart-label__text">
+            <span class="heart-label__text--inactive"><?php esc_html_e('Add to favorites', 'starwishx'); ?></span>
+            <span class="heart-label__text--active"><?php esc_html_e('Favorites', 'starwishx'); ?></span>
+        </span>
+    </label>
 
     <div class="heart" title="<?php esc_attr_e('Favorites', 'starwishx'); ?>">
         <input
             type="checkbox"
             class="heart__checkbox"
-            id="favorite-<?= esc_attr($post_id) ?>"
+            id="favorite-<?= esc_attr($post_id) . $nolabel_attr ?>"
             data-id="<?= esc_attr($post_id) ?>"
             <?php if ($is_favorite) echo 'checked '; ?>data-wp-bind--checked="state.isFavorite"
             data-wp-on--change="actions.toggle"
