@@ -19,7 +19,7 @@ import { opportunitiesActions } from "./opportunities/actions.js";
 import { opportunitiesGetters } from "./opportunities/getters.js";
 import { favoritesActions } from "./favorites/actions.js";
 import { favoritesPanelGetters } from "./favorites/getters.js";
-import { securityActions } from "./security/actions.js";
+// security actions & getters now in profile
 import { profileActions } from "./profile/actions.js";
 import { profileGetters } from "./profile/getters.js";
 
@@ -65,8 +65,6 @@ const { actions } = store("launchpad", {
     // Favorites domain
     favorites: favoritesActions,
 
-    // Security domain
-    security: securityActions,
   },
 });
 

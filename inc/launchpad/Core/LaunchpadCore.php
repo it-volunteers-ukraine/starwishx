@@ -123,10 +123,8 @@ final class LaunchpadCore
         // Register Panels with injected Services
         $registry->register('opportunities', new \Launchpad\Panels\OpportunitiesPanel($this->services['opportunities'], $this->services['profile']), 10);
         $registry->register('profile',       new \Launchpad\Panels\ProfilePanel($this->services['profile']), 30);
-        // Security might not need a service yet
-        // $registry->register('security',      new \Launchpad\Panels\SecurityPanel(), 40);
-        // $registry->register('stats',         new \Launchpad\Panels\StatsPanel($this->services['stats']), 40);
         $registry->register('favorites',     new \Launchpad\Panels\FavoritesPanel($this->services['favorites']), 20);
+        // $registry->register('stats',         new \Launchpad\Panels\StatsPanel($this->services['stats']), 40);
     }
 
     /**
@@ -143,7 +141,6 @@ final class LaunchpadCore
             new \Launchpad\Api\ProfileController($this->services['profile']),
             // FavoritesController is now registered by the independent Favorites module
             new \Launchpad\Api\OpportunitiesController($this->services['opportunities'], $this->services['profile']),
-            // new \Launchpad\Api\SecurityController(),
             new \Launchpad\Api\SecurityController($this->services['security']),
             new \Launchpad\Api\CommentsController($this->services['comments']),
             new \Launchpad\Api\MediaController($this->services['media']),
