@@ -22,33 +22,23 @@ $total_count       = $service->countPostComments($post_id);
 $aggregates        = $service->getAggregates($post_id);
 // $has_comments      = !empty($initial_comments);
 
-// Seed State
+// Application state — post-specific data. Infrastructure config (settings, nonce, restUrl)
+// is already hydrated by LaunchpadCore::enqueueCommentsAssets() — wp_interactivity_state() merges.
 $post_status = get_post_status($post_id);
 wp_interactivity_state('launchpadComments', [
     'canComment'     => $post_status === 'publish',
     'list'           => $initial_comments,
-    'hasComments'    => $total_count > 0,
-    // 'aggregates'   => [
-    //     'avg'      => $aggregates['avg'],
-    //     'count'    => $aggregates['count']
-    // ],
-    'aggregates'     => $aggregates, // Ensure this array keys match getters
+    'aggregates'     => $aggregates,
     'page'           => 1,
-    'hasMore'        => $total_count > $limit, // Calculate based on total vs per_page
-    // 'hasComments'  => $has_comments,
+    'hasMore'        => $total_count > $limit,
     'hasComments'    => $total_count > 0,
-    // Form States
     'newContent'     => '',
     'newRating'      => 5,
     'error'          => null,
-    'successMessage' => null, // To hold Info massages
+    'successMessage' => null,
     'isSubmitting'   => false,
-    'isLoading'      => false, // For pagination spinner
+    'isLoading'      => false,
     'showForm'       => false,
-    'settings'       => [
-        'nonce'      => wp_create_nonce('wp_rest'),
-        'restUrl'    => rest_url('launchpad/v1/'),
-    ],
 ]);
 ?>
 
@@ -331,7 +321,7 @@ wp_interactivity_state('launchpadComments', [
                                         </fieldset>
                                         <!-- Shared Status Area (reuses global flags, effectively scoped by viewing one form at a time) -->
                                         <div class="form-status-area">
-                                            <div class="sending-message" data-wp-bind--hidden="!state.isUpdating">Updating...</div>
+                                            <div class="sending-message" data-wp-bind--hidden="!state.isUpdating"><?php esc_html_e('Updating...', 'starwishx'); ?></div>
                                             <div class="status-message" data-wp-bind--hidden="!state.successMessage" data-wp-text="state.successMessage"></div>
                                             <div class="error-message" data-wp-bind--hidden="!state.error" data-wp-text="state.error"></div>
                                         </div>

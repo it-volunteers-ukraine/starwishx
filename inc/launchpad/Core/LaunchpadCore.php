@@ -253,15 +253,20 @@ final class LaunchpadCore
             wp_enqueue_script_module('@starwishx/launchpad-comments');
         }
 
-        // Inject lightweight settings specifically for comments
-        // wp_add_inline_script(
-        //     'wp-interactivity',
-        //     sprintf('window.launchpadCommentsSettings = %s;', wp_json_encode([
-        //         'nonce'   => wp_create_nonce('wp_rest'),
-        //         'restUrl' => rest_url('launchpad/v1/'),
-        //     ])),
-        //     'before'
-        // );
+        // Infrastructure config — static per request, no post-specific knowledge needed.
+        // wp_interactivity_state() merges: the template part (comments-interactive.php)
+        // adds application state (comments list, aggregates, form fields) on top.
+        wp_interactivity_state('launchpadComments', [
+            'settings' => [
+                'nonce'    => wp_create_nonce('wp_rest'),
+                'restUrl'  => rest_url('launchpad/v1/'),
+                'messages' => [
+                    'reviewPosted'  => __('Review posted successfully!', 'starwishx'),
+                    'updateSaved'   => __('Update saved.', 'starwishx'),
+                    'submitError'   => __('An error occurred while posting.', 'starwishx'),
+                ],
+            ],
+        ]);
     }
 
     /**

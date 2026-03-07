@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-03-07T22:28:22+00:00\n"
+"POT-Creation-Date: 2026-03-07T23:39:19+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: starwishx\n"
@@ -383,6 +383,18 @@ msgstr ""
 msgid "Password changed. Please log in again."
 msgstr ""
 
+#: inc/launchpad/Core/LaunchpadCore.php:264
+msgid "Review posted successfully!"
+msgstr ""
+
+#: inc/launchpad/Core/LaunchpadCore.php:265
+msgid "Update saved."
+msgstr ""
+
+#: inc/launchpad/Core/LaunchpadCore.php:266
+msgid "An error occurred while posting."
+msgstr ""
+
 #: inc/launchpad/Panels/FavoritesPanel.php:28
 #: inc/launchpad/Panels/StatsPanel.php:61
 #: template-parts/control-favorites.php:43
@@ -398,7 +410,7 @@ msgstr ""
 
 #: inc/launchpad/Panels/FavoritesPanel.php:66
 #: inc/launchpad/Panels/OpportunitiesPanel.php:312
-#: template-parts/comments-interactive.php:389
+#: template-parts/comments-interactive.php:379
 msgid "Loading..."
 msgstr ""
 
@@ -534,8 +546,8 @@ msgid "Submit for Review"
 msgstr ""
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:413
-#: template-parts/comments-interactive.php:204
-#: template-parts/comments-interactive.php:296
+#: template-parts/comments-interactive.php:194
+#: template-parts/comments-interactive.php:286
 msgid "Edit"
 msgstr ""
 
@@ -694,10 +706,10 @@ msgstr ""
 #: inc/launchpad/Panels/OpportunitiesPanel.php:908
 #: inc/launchpad/Panels/ProfilePanel.php:198
 #: inc/launchpad/Panels/ProfilePanel.php:278
-#: template-parts/comments-interactive.php:137
-#: template-parts/comments-interactive.php:249
-#: template-parts/comments-interactive.php:323
-#: template-parts/comments-interactive.php:361
+#: template-parts/comments-interactive.php:127
+#: template-parts/comments-interactive.php:239
+#: template-parts/comments-interactive.php:313
+#: template-parts/comments-interactive.php:351
 msgid "Cancel"
 msgstr ""
 
@@ -748,8 +760,8 @@ msgid "Organization"
 msgstr ""
 
 #: inc/launchpad/Panels/ProfilePanel.php:190
-#: template-parts/comments-interactive.php:253
-#: template-parts/comments-interactive.php:327
+#: template-parts/comments-interactive.php:243
+#: template-parts/comments-interactive.php:317
 msgid "Save"
 msgstr ""
 
@@ -889,8 +901,8 @@ msgid "Contributor"
 msgstr ""
 
 #: inc/launchpad/Services/ProfileService.php:19
-#: template-parts/comments-interactive.php:178
-#: template-parts/comments-interactive.php:281
+#: template-parts/comments-interactive.php:168
+#: template-parts/comments-interactive.php:271
 msgid "Author"
 msgstr ""
 
@@ -1081,58 +1093,58 @@ msgid_plural "Show %d more"
 msgstr[0] ""
 msgstr[1] ""
 
-#: template-parts/comments-interactive.php:62
+#: template-parts/comments-interactive.php:52
 msgid "Reviews"
 msgstr ""
 
-#: template-parts/comments-interactive.php:86
+#: template-parts/comments-interactive.php:76
 msgid "Add review"
 msgstr ""
 
-#: template-parts/comments-interactive.php:90
+#: template-parts/comments-interactive.php:80
 msgid "Enter to comment"
 msgstr ""
 
-#: template-parts/comments-interactive.php:111
+#: template-parts/comments-interactive.php:101
 msgid "Your Rating:"
 msgstr ""
 
-#: template-parts/comments-interactive.php:130
+#: template-parts/comments-interactive.php:120
 msgid "Write your review here..."
 msgstr ""
 
-#: template-parts/comments-interactive.php:140
+#: template-parts/comments-interactive.php:130
 msgid "Send"
 msgstr ""
 
-#: template-parts/comments-interactive.php:141
-#: template-parts/comments-interactive.php:371
+#: template-parts/comments-interactive.php:131
+#: template-parts/comments-interactive.php:361
 msgid "Sending..."
 msgstr ""
 
-#: template-parts/comments-interactive.php:149
+#: template-parts/comments-interactive.php:139
 msgid "Publishing..."
 msgstr ""
 
-#: template-parts/comments-interactive.php:165
+#: template-parts/comments-interactive.php:155
 msgid "No comments yet."
 msgstr ""
 
-#: template-parts/comments-interactive.php:210
-#: template-parts/comments-interactive.php:301
-#: template-parts/comments-interactive.php:364
+#: template-parts/comments-interactive.php:200
+#: template-parts/comments-interactive.php:291
+#: template-parts/comments-interactive.php:354
 msgid "Reply"
 msgstr ""
 
-#: template-parts/comments-interactive.php:261
+#: template-parts/comments-interactive.php:251
 msgid "Updating..."
 msgstr ""
 
-#: template-parts/comments-interactive.php:355
+#: template-parts/comments-interactive.php:345
 msgid "Write a reply..."
 msgstr ""
 
-#: template-parts/comments-interactive.php:388
+#: template-parts/comments-interactive.php:378
 msgid "Show more"
 msgstr ""
 
