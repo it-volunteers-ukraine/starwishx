@@ -4,9 +4,9 @@
 .single-opportunity {
     section.section[class*="breadcrumbs-module__"],
     .opportunity-breadcrumbs {
-        padding-top: 0;
         margin-top: 32px;
         margin-bottom: 16px;
+        padding-top: 0;
         .btn-back {
             display: inline-flex;
             column-gap: 4px;
@@ -59,9 +59,9 @@
                 .featured-figure__image {
                     position: absolute;
                     inset: 0;
-                    object-fit: cover;
                     width: 100%;
                     height: 100%;
+                    object-fit: cover;
                 }
                 @include media.min-tabland {
                     flex: 0 0 325px;
@@ -201,8 +201,8 @@
                 .file-download {
                     display: flex;
                     flex-flow: row nowrap;
-                    gap: 8px;
                     align-items: center;
+                    gap: 8px;
                     .file-download__meta {
                         .file-name {
                             color: $text-accent;
@@ -212,9 +212,10 @@
             }
         }
         .opportunity-aside {
-            margin-left: 12px;
-            padding-left: 20px;
-            max-height: 754px;
+            @include media.max-tablet {
+                margin-bottom: 80px;
+            }
+            // max-height: 754px;
             /*overflow-y: scroll;
             direction: rtl;
             &::-webkit-scrollbar {
@@ -239,6 +240,11 @@
             // }
             .news-container {
                 direction: ltr;
+                @include media.min-tablet {
+                    margin-left: 12px;
+                    padding-left: 20px;
+                    border-left: 4px solid $surface-violet;
+                }
             }
             @include media.min-tabland {
                 flex: 0 0 215px;
