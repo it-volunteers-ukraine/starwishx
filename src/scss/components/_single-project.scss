@@ -40,8 +40,26 @@
                     position: relative;
                     border-radius: $radius-image;
                     background-color: $buttons-color-background-secondary-hover;
-                    aspect-ratio: 4 / 3;
+                    height: 320px;
                     overflow: hidden;
+                    @include media.min-tablet {
+                        aspect-ratio: 4 / 3;
+                    }
+                    &::before {
+                        position: absolute;
+                        z-index: 1;
+                        inset: 0;
+                        background: linear-gradient(
+                            0deg,
+                            rgb(0 0 0 / 50%) 0%,
+                            rgb(0 0 0 / 25%) 10%,
+                            rgb(0 0 0 / 15%) 15%,
+                            rgb(0 0 0 / 7%) 25%,
+                            rgb(0 0 0 / 0.01%) 35%,
+                            rgba(0, 0, 0, 0) 100%
+                        );
+                        content: "";
+                    }
 
                     .project-sidebar__image {
                         position: absolute;
@@ -238,6 +256,13 @@
                             padding: 0;
                         }
                     }
+                    .faq-inner {
+                        @include media.max-tabland {
+                            .accordion {
+                                margin-left: 0;
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -413,11 +438,16 @@
         }
 
         .project-aside {
-            margin-left: 12px;
-            padding-left: 20px;
-            max-height: 754px;
+            @include media.max-tablet {
+                margin-bottom: 80px;
+            }
             .news-container {
                 direction: ltr;
+                @include media.min-tablet {
+                    margin-left: 12px;
+                    border-left: 4px solid $surface-violet;
+                    padding-left: 20px;
+                }
             }
             @include media.min-tabland {
                 flex: 0 0 215px;
