@@ -211,21 +211,20 @@ final class LaunchpadCore
                 );
                 wp_enqueue_script_module('@starwishx/launchpad');
             }
-            // Settings for JS - Added loginUrl here
-            // wp_add_inline_script(
-            //     'wp-interactivity',
-            //     sprintf('window.launchpadSettings = %s;', wp_json_encode([
-            //         'nonce'    => wp_create_nonce('wp_rest'),
-            //         'restUrl'  => rest_url('launchpad/v1/'),
-            //         'userId'   => get_current_user_id(),
-            //         'loginUrl' => wp_login_url(home_url('/launchpad/')),
-            //         'generatePasswordUrl' => rest_url('gateway/v1/password/generate'),
-            //         'passwordPolicy' => PasswordPolicy::getClientRules(),
-            //     ])),
-            //     'before'
-            // );
 
-            // wp_enqueue_style('dashicons');
+            // Infrastructure config — static per request, no routing knowledge needed.
+            // wp_interactivity_state() merges on repeated calls: the template will add
+            // application state (panels, active panel) on top of this in a second call.
+            wp_interactivity_state('launchpad', [
+                'launchpadSettings' => [
+                    'nonce'               => wp_create_nonce('wp_rest'),
+                    'restUrl'             => rest_url('launchpad/v1/'),
+                    'userId'              => get_current_user_id(),
+                    'loginUrl'            => wp_login_url(home_url('/launchpad/')),
+                    'generatePasswordUrl' => rest_url('gateway/v1/password/generate'),
+                    'passwordPolicy'      => PasswordPolicy::getClientRules(),
+                ],
+            ]);
         }
 
         // Single Opportunity post Interactive Comments App
