@@ -52,11 +52,12 @@ export const loginActions = {
     if (!form || form.isSubmitting) return;
 
     // ── Client-side validation (UX guard only) ──────────────────────────────
+    const strings = state.validationStrings ?? {};
     const errors = {};
     if (!validators.required(form.username))
-      errors.username = "Username is required";
+      errors.username = strings.usernameRequired ?? "";
     if (!validators.required(form.password))
-      errors.password = "Password is required";
+      errors.password = strings.passwordRequired ?? "";
 
     if (Object.keys(errors).length > 0) {
       form.fieldErrors = errors;

@@ -18,6 +18,7 @@ namespace Gateway\Core;
 use Gateway\Api\AuthController;
 use Gateway\Api\RegisterController;
 use Gateway\Api\PasswordController;
+use Shared\Policy\PasswordPolicy;
 
 /**
  * Main Gateway singleton.
@@ -156,6 +157,8 @@ final class GatewayCore
                 'restUrl' => rest_url('gateway/v1/'),
                 'baseUrl' => home_url('/gateway/'),
             ],
+            'passwordPolicy'    => PasswordPolicy::getClientRules(),
+            'validationStrings' => PasswordPolicy::getClientValidationStrings(),
         ]);
     }
 

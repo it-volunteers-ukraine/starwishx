@@ -22,6 +22,7 @@ use Launchpad\Services\StatsService;
 use Launchpad\Services\SecurityService;
 use Launchpad\Services\CommentsService;
 use Launchpad\Services\MediaService;
+use Shared\Policy\PasswordPolicy;
 
 final class LaunchpadCore
 {
@@ -219,6 +220,7 @@ final class LaunchpadCore
                     'userId'   => get_current_user_id(),
                     'loginUrl' => wp_login_url(home_url('/launchpad/')),
                     'generatePasswordUrl' => rest_url('gateway/v1/password/generate'),
+                    'passwordPolicy' => PasswordPolicy::getClientRules(),
                 ])),
                 'before'
             );

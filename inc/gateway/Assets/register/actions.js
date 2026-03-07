@@ -35,18 +35,19 @@ export const registerActions = {
     if (!form || form.isSubmitting) return;
 
     // ── Client-side validation (UX guard only) ──────────────────────────────
+    const strings = state.validationStrings ?? {};
     const errors = {};
 
     if (!validators.required(form.username)) {
-      errors.username = "Username is required";
+      errors.username = strings.usernameRequired ?? "";
     } else if (!validators.minLength(3)(form.username)) {
-      errors.username = "Username must be at least 3 characters";
+      errors.username = strings.usernameTooShort ?? "";
     }
 
     if (!validators.required(form.email)) {
-      errors.email = "Email is required";
+      errors.email = strings.emailRequired ?? "";
     } else if (!validators.email(form.email)) {
-      errors.email = "Please enter a valid email address";
+      errors.email = strings.emailInvalid ?? "";
     }
 
     if (Object.keys(errors).length > 0) {

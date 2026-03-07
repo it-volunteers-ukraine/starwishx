@@ -5,12 +5,20 @@ declare(strict_types=1);
 
 namespace Launchpad\Api;
 
+use Launchpad\Services\SecurityService;
 use WP_REST_Request;
 use WP_REST_Response;
 use WP_Error;
 
 class SecurityController extends AbstractLaunchpadController
 {
+    private SecurityService $service;
+
+    public function __construct(SecurityService $service)
+    {
+        $this->service = $service;
+    }
+
     public function registerRoutes(): void
     {
         register_rest_route($this->namespace, '/security/password', [
@@ -26,17 +34,15 @@ class SecurityController extends AbstractLaunchpadController
 
     public function changePassword(WP_REST_Request $request): WP_REST_Response|WP_Error
     {
-        $user = wp_get_current_user();
-        $current = $request->get_param('currentPassword');
-        $newPass = $request->get_param('newPassword');
+        $result = $this->service->changePassword(
+            get_current_user_id(),
+            $request->get_param('currentPassword'),
+            $request->get_param('newPassword')
+        );
 
-        // Verify current password
-        if (!wp_check_password($current, $user->user_pass, $user->ID)) {
-            return $this->error(__('Current password is incorrect.', 'starwishx'), 400, 'invalid_password');
+        if (is_wp_error($result)) {
+            return $this->error($result->get_error_message(), 400, $result->get_error_code());
         }
-
-        // Update password
-        wp_set_password($newPass, $user->ID);
 
         // Note: wp_set_password invalidates auth cookies.
         // The frontend launchpad-store.js must handle the redirect to login immediately.

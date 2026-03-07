@@ -16,6 +16,8 @@ declare(strict_types=1);
 
 defined('ABSPATH') || exit;
 
+use Shared\Policy\PasswordPolicy;
+
 // 1. ENVIRONMENT CHECK
 if (!function_exists('launchpad')) {
     require_once get_template_directory() . '/inc/launchpad/helpers.php';
@@ -60,6 +62,7 @@ $state['launchpadSettings'] = [
     'userId'              => $user_id,
     'loginUrl'            => wp_login_url(home_url('/launchpad/')),
     'generatePasswordUrl' => rest_url('gateway/v1/password/generate'),
+    'passwordPolicy' => PasswordPolicy::getClientRules(),
 ];
 
 // Initialize Interactivity API state for the 'launchpad' namespace
