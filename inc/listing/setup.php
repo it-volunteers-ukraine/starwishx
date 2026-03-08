@@ -3,7 +3,7 @@
 /**
  * Setup for
  * Listing - Public Opportunities Discovery App
- * Version: 0.6.1
+ * Version: 0.7.1
  * Author: DevFrappe
  * Email: dev.frappe@proton.me
  * 

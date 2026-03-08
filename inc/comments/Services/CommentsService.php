@@ -1,8 +1,8 @@
 <?php
-// inc/launchpad/Services/CommentsService.php
+// File: inc/comments/Services/CommentsService.php
 declare(strict_types=1);
 
-namespace Launchpad\Services;
+namespace Comments\Services;
 
 use WP_Error;
 use WP_Comment;
@@ -84,7 +84,7 @@ class CommentsService
     /**
      * New Helper: Formats a single WP_Comment object into an array.
      * Purely data mapping, NO database queries here.
-     * 
+     *
      * @param WP_Comment $comment The comment object
      * @param int $currentUserId ID of currently logged in user
      * @param int $postAuthorId ID of the author of the generic POST (Opportunity)
@@ -262,8 +262,8 @@ class CommentsService
         $postAuthorId            = (int) $post->post_author;
         $currentUserIsPostAuthor = ($userId === $postAuthorId);
 
-        // Note: When updating, we just return the item data. 
-        // We preserve existing 'replies' in the store via JS, so we return empty array here 
+        // Note: When updating, we just return the item data.
+        // We preserve existing 'replies' in the store via JS, so we return empty array here
         // or the Frontend needs to be smart enough not to overwrite replies with empty array.
         // For safety, this service just returns the node data.
         $formatted = $this->formatSingleComment($updatedComment, $userId, $postAuthorId, $currentUserIsPostAuthor);
@@ -281,11 +281,11 @@ class CommentsService
     {
         global $wpdb;
 
-        $sql = "SELECT count(meta_value) as cnt, avg(meta_value) as avg 
-                FROM {$wpdb->commentmeta} 
-                WHERE meta_key = '_star_rating' 
+        $sql = "SELECT count(meta_value) as cnt, avg(meta_value) as avg
+                FROM {$wpdb->commentmeta}
+                WHERE meta_key = '_star_rating'
                 AND comment_id IN (
-                    SELECT comment_ID FROM {$wpdb->comments} 
+                    SELECT comment_ID FROM {$wpdb->comments}
                     WHERE comment_post_ID = %d AND comment_approved = '1'
                 )";
 

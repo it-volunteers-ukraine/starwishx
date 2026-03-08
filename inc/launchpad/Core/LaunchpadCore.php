@@ -2,7 +2,7 @@
 
 /**
  * Launchpad user admin panel app
- * Version: 0.6.1
+ * Version: 0.7.1
  * Author: DevFrappe
  * Email: dev.frappe@proton.me
  * 
@@ -20,7 +20,6 @@ use Launchpad\Services\OpportunitiesService;
 use Launchpad\Services\ProfileService;
 use Launchpad\Services\StatsService;
 use Launchpad\Services\SecurityService;
-use Launchpad\Services\CommentsService;
 use Launchpad\Services\MediaService;
 use Shared\Policy\PasswordPolicy;
 
@@ -84,7 +83,6 @@ final class LaunchpadCore
         $this->services['security']      = new SecurityService();
         // Stats depends on Favorites - we pass the shared instance here
         $this->services['stats']         = new StatsService($this->services['favorites']);
-        $this->services['comments']      = new CommentsService();
         $this->services['media']         = new MediaService();
     }
 
@@ -143,7 +141,7 @@ final class LaunchpadCore
             // FavoritesController is now registered by the independent Favorites module
             new \Launchpad\Api\OpportunitiesController($this->services['opportunities'], $this->services['profile']),
             new \Launchpad\Api\SecurityController($this->services['security']),
-            new \Launchpad\Api\CommentsController($this->services['comments']),
+            // CommentsController is now registered by the independent Comments module
             new \Launchpad\Api\MediaController($this->services['media']),
         ];
 
@@ -227,46 +225,14 @@ final class LaunchpadCore
             ]);
         }
 
-        // Single Opportunity post Interactive Comments App
+        // Single Opportunity/Project post — Frontend Store
+        // Comments assets are now enqueued by the independent Comments module
         if ((is_singular('opportunity') || is_singular('project')) && is_user_logged_in()) {
-            $this->enqueueCommentsAssets();
             $this->enqueueFrontendStore($userId);
         } elseif (is_singular('opportunity') || is_singular('project')) {
             // Guest: load store without favorites data so the popup guard works
             $this->enqueueFrontendStore(0);
         }
-    }
-
-    private function enqueueCommentsAssets(): void
-    {
-        $asset_path = get_template_directory() . '/inc/launchpad/Assets/store.asset.php';
-        $asset = file_exists($asset_path) ? include $asset_path : ['dependencies' => [], 'version' => '1.0.0'];
-
-        if (function_exists('wp_register_script_module')) {
-            wp_register_script_module(
-                '@starwishx/launchpad-comments',
-                // get_template_directory_uri() . '/inc/launchpad/Assets/comments-store.js',
-                get_template_directory_uri() . '/assets/js/comments-store.module.js',
-                array_merge(['@wordpress/interactivity'], $asset['dependencies']),
-                $asset['version']
-            );
-            wp_enqueue_script_module('@starwishx/launchpad-comments');
-        }
-
-        // Infrastructure config — static per request, no post-specific knowledge needed.
-        // wp_interactivity_state() merges: the template part (comments-interactive.php)
-        // adds application state (comments list, aggregates, form fields) on top.
-        wp_interactivity_state('launchpadComments', [
-            'settings' => [
-                'nonce'    => wp_create_nonce('wp_rest'),
-                'restUrl'  => rest_url('launchpad/v1/'),
-                'messages' => [
-                    'reviewPosted'  => __('Review posted successfully!', 'starwishx'),
-                    'updateSaved'   => __('Update saved.', 'starwishx'),
-                    'submitError'   => __('An error occurred while posting.', 'starwishx'),
-                ],
-            ],
-        ]);
     }
 
     /**

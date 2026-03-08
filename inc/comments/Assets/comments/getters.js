@@ -1,12 +1,10 @@
 /**
- * Launchpad Comments — Getters
- * File: inc/launchpad/Assets/comments/getters.js
+ * Comments — Getters
+ * File: inc/comments/Assets/comments/getters.js
  *
  * Computed state logic.
  * 'this' refers to the State Proxy after being mixed in via extendState.
  */
-
-import { getContext } from "@wordpress/interactivity";
 
 export const commentsGetters = {
   /**

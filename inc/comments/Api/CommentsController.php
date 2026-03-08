@@ -1,16 +1,19 @@
 <?php
-// inc/launchpad/Api/CommentsController.php
+// File: inc/comments/Api/CommentsController.php
 declare(strict_types=1);
 
-namespace Launchpad\Api;
+namespace Comments\Api;
 
-use Launchpad\Services\CommentsService;
+use Comments\Services\CommentsService;
+use Shared\Core\AbstractApiController;
 use WP_REST_Request;
 use WP_REST_Response;
 use WP_Error;
 
-class CommentsController extends AbstractLaunchpadController
+class CommentsController extends AbstractApiController
 {
+    protected $namespace = 'comments/v1';
+
     private CommentsService $service;
 
     public function __construct(CommentsService $service)
@@ -21,7 +24,7 @@ class CommentsController extends AbstractLaunchpadController
     public function registerRoutes(): void
     {
         // 1. Get List with Pagination
-        // GET /launchpad/v1/comments
+        // GET /comments/v1/comments
         register_rest_route($this->namespace, '/comments', [
             'methods'             => 'GET',
             'callback'            => [$this, 'getComments'],
@@ -50,9 +53,8 @@ class CommentsController extends AbstractLaunchpadController
             'args'                => [
                 'post_id'   => ['required' => true, 'sanitize_callback' => 'absint'],
                 'content'   => ['required' => true, 'sanitize_callback' => 'sanitize_textarea_field'],
-                // Check if child then rating 0 
-                'rating'    => ['type' => 'integer', 'minimum' => 0, 'maximum' => 5], 
-                'parent_id' => ['type' => 'integer', 'default' => 0], // <--- NEW ARG
+                'rating'    => ['type' => 'integer', 'minimum' => 0, 'maximum' => 5],
+                'parent_id' => ['type' => 'integer', 'default' => 0],
             ],
         ]);
 
@@ -64,7 +66,6 @@ class CommentsController extends AbstractLaunchpadController
             'args'                => [
                 'id'      => ['required' => true, 'sanitize_callback' => 'absint'],
                 'content' => ['required' => true, 'sanitize_callback' => 'sanitize_textarea_field'],
-                // Chech if child then rating 0 also???
                 'rating'  => ['type' => 'integer', 'minimum' => 0, 'maximum' => 5],
             ],
         ]);
@@ -89,12 +90,12 @@ class CommentsController extends AbstractLaunchpadController
         ]);
     }
 
-    public function createComment(WP_REST_Request $request): WP_REST_Response|\WP_Error
+    public function createComment(WP_REST_Request $request): WP_REST_Response|WP_Error
     {
         $postId   = (int) $request->get_param('post_id');
         $content  = $request->get_param('content');
         $rating   = (int) $request->get_param('rating');
-        $parentId = (int) $request->get_param('parent_id'); // <--- Fetch
+        $parentId = (int) $request->get_param('parent_id');
         $userId   = get_current_user_id();
 
         $result = $this->service->addComment($userId, $postId, $content, $rating, $parentId);
@@ -106,7 +107,7 @@ class CommentsController extends AbstractLaunchpadController
         return $this->success($result);
     }
 
-    public function updateComment(WP_REST_Request $request): WP_REST_Response|\WP_Error
+    public function updateComment(WP_REST_Request $request): WP_REST_Response|WP_Error
     {
         $commentId = (int) $request->get_param('id');
         $content   = $request->get_param('content');
