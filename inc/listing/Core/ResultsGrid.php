@@ -109,23 +109,36 @@ class ResultsGrid implements RenderableInterface
                                 </span>
                             </span>
                         </div>
-                        <div class="heart">
-                            <input
-                                type="checkbox"
-                                class="heart__checkbox"
-                                data-wp-bind--checked="state.isFavorited"
-                                data-wp-on--change="actions.toggleFavorite"
-                                aria-label="<?php esc_attr_e('Toggle Favorite', 'starwishx'); ?>">
-                            <div class="heart__icon"></div>
-                            <div class="heart__lines" aria-hidden="true">
-                                <span class="heart__line"></span>
-                                <span class="heart__line"></span>
-                                <span class="heart__line"></span>
-                                <span class="heart__line"></span>
-                                <span class="heart__line"></span>
-                                <span class="heart__line"></span>
+
+                        <? if (is_user_logged_in()) : ?>
+                            <div class="heart">
+                                <input
+                                    type="checkbox"
+                                    class="heart__checkbox"
+                                    data-wp-bind--checked="state.isFavorited"
+                                    data-wp-on--change="actions.toggleFavorite"
+                                    aria-label="<?php esc_attr_e('Toggle Favorite', 'starwishx'); ?>">
+                                <div class="heart__icon"></div>
+                                <div class="heart__lines" aria-hidden="true">
+                                    <span class="heart__line"></span>
+                                    <span class="heart__line"></span>
+                                    <span class="heart__line"></span>
+                                    <span class="heart__line"></span>
+                                    <span class="heart__line"></span>
+                                    <span class="heart__line"></span>
+                                </div>
                             </div>
-                        </div>
+                        <? else: ?>
+                            <div class="heart--img">
+                                <input
+                                    type="checkbox"
+                                    class="heart__checkbox--img"
+                                    data-wp-bind--checked="state.isFavorited"
+                                    data-wp-on--change="actions.toggleFavorite"
+                                    aria-label="<?php esc_attr_e('Toggle Favorite', 'starwishx'); ?>">
+                                <img class="heart__image" src="<?php echo get_template_directory_uri(); ?>/assets/img/icon-heart-gradient.svg" alt="heart icon">
+                            </div>
+                        <? endif; ?>
                     </div>
 
                 </figure>

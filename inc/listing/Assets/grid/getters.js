@@ -37,15 +37,16 @@ export const gridGetters = {
   get resultsFoundLabel() {
     if (this.isLoading && this.results.length === 0) return "";
     // return `${this.totalFound} opportunities found`;
-    return sprintf(
-      _n(
-        "%d opportunity found",
-        "%d opportunities found",
-        this.totalFound,
-        "launchpad",
-      ),
-      this.totalFound,
-    );
+    // return sprintf(
+    //   _n(
+    //     "%d opportunity found",
+    //     "%d opportunities found",
+    //     this.totalFound,
+    //     "launchpad",
+    //   ),
+    //   this.totalFound,
+    // );
+    return this.totalFound;
   },
 
   /**
