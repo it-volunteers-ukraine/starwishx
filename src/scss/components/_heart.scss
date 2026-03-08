@@ -18,6 +18,14 @@ $transition-ease: ease;
     margin-right: 4px;
     width: var(--size);
     height: var(--size);
+    &--img {
+        --size-img: 24px;
+        position: relative;
+        cursor: pointer;
+        margin-right: 4px;
+        width: var(--size-img);
+        height: var(--size-img);
+    }
 
     &__lines {
         position: absolute;
@@ -67,7 +75,16 @@ $transition-ease: ease;
         width: calc(var(--size) * 1.5);
         height: calc(var(--size) * 1.5);
         @include transform;
-
+        &--img {
+            position: absolute;
+            top: calc(var(--size-img) * -1.2);
+            left: calc(var(--size-img) * -1);
+            appearance: none;
+            z-index: 2;
+            cursor: pointer;
+            width: calc(var(--size-img) * 2.5);
+            height: calc(var(--size-img) * 2.5);
+        }
         &:focus {
             outline: none;
         }
@@ -84,7 +101,13 @@ $transition-ease: ease;
             animation: heartLines 800ms ease-out forwards;
         }
     }
-
+    &__image {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 24px;
+        height: 24px;
+    }
     &__icon {
         background: $heart-off;
         width: var(--size);

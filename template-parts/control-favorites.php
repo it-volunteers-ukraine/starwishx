@@ -29,7 +29,6 @@ if (! $show_label) {
     $nolabel_attr = "-nolabel"; // in case 2 different kind controls of same id same time
 }
 ?>
-
 <div
     class="<?php esc_attr_e(implode(' ', $wrapper_classes)) ?>"
     data-wp-interactive="starwishx/opportunities"
@@ -44,23 +43,38 @@ if (! $show_label) {
         </span>
     </label>
 
-    <div class="heart" title="<?php esc_attr_e('Favorites', 'starwishx'); ?>">
-        <input
-            type="checkbox"
-            class="heart__checkbox"
-            id="favorite-<?= esc_attr($post_id) . $nolabel_attr ?>"
-            data-id="<?= esc_attr($post_id) ?>"
-            <?php if ($is_favorite) echo 'checked '; ?>data-wp-bind--checked="state.isFavorite"
-            data-wp-on--change="actions.toggle"
-            aria-label="<?php esc_attr_e('Toggle Favorite', 'starwishx'); ?>">
-        <div class="heart__icon"></div>
-        <div class="heart__lines" aria-hidden="true">
-            <span class="heart__line"></span>
-            <span class="heart__line"></span>
-            <span class="heart__line"></span>
-            <span class="heart__line"></span>
-            <span class="heart__line"></span>
-            <span class="heart__line"></span>
+    <? if (is_user_logged_in()) : ?>
+        <div class="heart" title="<?php esc_attr_e('Favorites', 'starwishx'); ?>">
+            <input
+                type="checkbox"
+                class="heart__checkbox"
+                id="favorite-<?= esc_attr($post_id) . $nolabel_attr ?>"
+                data-id="<?= esc_attr($post_id) ?>"
+                <?php if ($is_favorite) echo 'checked '; ?>data-wp-bind--checked="state.isFavorite"
+                data-wp-on--change="actions.toggle"
+                aria-label="<?php esc_attr_e('Toggle Favorite', 'starwishx'); ?>">
+            <div class="heart__icon"></div>
+            <div class="heart__lines" aria-hidden="true">
+                <span class="heart__line"></span>
+                <span class="heart__line"></span>
+                <span class="heart__line"></span>
+                <span class="heart__line"></span>
+                <span class="heart__line"></span>
+                <span class="heart__line"></span>
+            </div>
         </div>
-    </div>
+    <? else : ?>
+        <div class="heart--img" title="<?php esc_attr_e('Favorites', 'starwishx'); ?>">
+            <input
+                type="checkbox"
+                class="heart__checkbox--img"
+                id="favorite-<?= esc_attr($post_id) . $nolabel_attr ?>"
+                data-id="<?= esc_attr($post_id) ?>"
+                <?php if ($is_favorite) echo 'checked '; ?>data-wp-bind--checked="state.isFavorite"
+                data-wp-on--change="actions.toggle"
+                aria-label="<?php esc_attr_e('Toggle Favorite', 'starwishx'); ?>">
+            <img class="heart__image" src="<?php echo get_template_directory_uri(); ?>/assets/img/icon-heart-gradient.svg" alt="heart icon">
+        </div>
+    <? endif ?>
+
 </div>

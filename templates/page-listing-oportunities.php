@@ -75,6 +75,7 @@ if (function_exists('render_block')) {
         <aside class="listing-sidebar">
             <h2 class="sidebar-title"><?php esc_html_e('Refine Search', 'starwishx'); ?></h2>
             <div class="listing-status-info">
+                <?php esc_html_e('Found', 'starwishx'); ?>:
                 <span data-wp-text="state.resultsFoundLabel"></span>
             </div>
             <details

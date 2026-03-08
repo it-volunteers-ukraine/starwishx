@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-03-08T09:07:53+00:00\n"
+"POT-Creation-Date: 2026-03-08T14:24:24+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: starwishx\n"
@@ -429,10 +429,13 @@ msgstr ""
 
 #: inc/launchpad/Panels/FavoritesPanel.php:28
 #: inc/launchpad/Panels/StatsPanel.php:61
-#: template-parts/control-favorites.php:43
+#: template-parts/control-favorites.php:42
 #: template-parts/control-favorites.php:47
-#: template-parts/project-card-opportunity.php:41
-#: template-parts/project-card-opportunity.php:85
+#: template-parts/control-favorites.php:67
+#: template-parts/project-card-opportunity.php:42
+#: template-parts/project-card-opportunity.php:60
+#: template-parts/project-card-opportunity.php:98
+#: template-parts/project-card-opportunity.php:118
 msgid "Favorites"
 msgstr ""
 
@@ -619,8 +622,8 @@ msgid "End Date"
 msgstr ""
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:519
-#: templates/single-opportunity.php:207
-#: templates/single-opportunity.php:216
+#: templates/single-opportunity.php:208
+#: templates/single-opportunity.php:217
 msgid "Link"
 msgstr ""
 
@@ -629,7 +632,7 @@ msgid "Application Form URL"
 msgstr ""
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:537
-#: inc/listing/Core/ResultsGrid.php:190
+#: inc/listing/Core/ResultsGrid.php:203
 #: inc/listing/Enums/Taxonomy.php:30
 #: inc/listing/Filters/CountryFilter.php:21
 msgid "Country"
@@ -693,7 +696,7 @@ msgid "Add information about the opportunity. Describe the essence."
 msgstr ""
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:731
-#: templates/single-opportunity.php:196
+#: templates/single-opportunity.php:197
 msgid "Requirements"
 msgstr ""
 
@@ -702,7 +705,7 @@ msgid "Details"
 msgstr ""
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:761
-#: templates/single-opportunity.php:235
+#: templates/single-opportunity.php:236
 msgid "Document"
 msgstr ""
 
@@ -939,38 +942,42 @@ msgid "Clear all filters"
 msgstr ""
 
 #: inc/listing/Core/ResultsGrid.php:105
-#: template-parts/control-favorites.php:42
+#: template-parts/control-favorites.php:41
 #: template-parts/project-card-opportunity.php:33
-#: template-parts/project-card-opportunity.php:77
+#: template-parts/project-card-opportunity.php:89
 msgid "Add to favorites"
 msgstr ""
 
 #: inc/listing/Core/ResultsGrid.php:108
 #: template-parts/project-card-opportunity.php:36
-#: template-parts/project-card-opportunity.php:80
+#: template-parts/project-card-opportunity.php:92
 msgid "In favorites"
 msgstr ""
 
-#: inc/listing/Core/ResultsGrid.php:118
+#: inc/listing/Core/ResultsGrid.php:120
+#: inc/listing/Core/ResultsGrid.php:138
 #: template-parts/control-favorites.php:55
-#: template-parts/project-card-opportunity.php:47
-#: template-parts/project-card-opportunity.php:92
+#: template-parts/control-favorites.php:75
+#: template-parts/project-card-opportunity.php:48
+#: template-parts/project-card-opportunity.php:66
+#: template-parts/project-card-opportunity.php:105
+#: template-parts/project-card-opportunity.php:125
 msgid "Toggle Favorite"
 msgstr ""
 
-#: inc/listing/Core/ResultsGrid.php:177
+#: inc/listing/Core/ResultsGrid.php:190
 msgid "From:"
 msgstr ""
 
-#: inc/listing/Core/ResultsGrid.php:181
+#: inc/listing/Core/ResultsGrid.php:194
 msgid "To:"
 msgstr ""
 
-#: inc/listing/Core/ResultsGrid.php:186
+#: inc/listing/Core/ResultsGrid.php:199
 msgid "Donator"
 msgstr ""
 
-#: inc/listing/Core/ResultsGrid.php:195
+#: inc/listing/Core/ResultsGrid.php:208
 #: inc/listing/Filters/SeekersFilter.php:23
 msgid "Recievers"
 msgstr ""
@@ -995,7 +1002,7 @@ msgstr ""
 
 #: inc/listing/Filters/LocationsFilter.php:28
 #: inc/listing/Filters/LocationsFilterSimple.php:34
-#: templates/single-opportunity.php:128
+#: templates/single-opportunity.php:129
 msgid "Location"
 msgstr ""
 
@@ -1195,22 +1202,26 @@ msgstr ""
 msgid "Refine Search"
 msgstr ""
 
-#: templates/page-listing-oportunities.php:90
+#: templates/page-listing-oportunities.php:78
+msgid "Found"
+msgstr ""
+
+#: templates/page-listing-oportunities.php:91
 msgid "Keyword search"
 msgstr ""
 
-#: templates/page-listing-oportunities.php:103
+#: templates/page-listing-oportunities.php:104
 msgid "Search by keyword..."
-msgstr ""
-
-#: templates/page-listing-oportunities.php:132
-#: templates/single-opportunity.php:267
-#: templates/single-project.php:171
-msgid "Hi!"
 msgstr ""
 
 #: templates/page-listing-oportunities.php:133
 #: templates/single-opportunity.php:268
+#: templates/single-project.php:171
+msgid "Hi!"
+msgstr ""
+
+#: templates/page-listing-oportunities.php:134
+#: templates/single-opportunity.php:269
 msgid "Add to favorites is only available for registered users."
 msgstr ""
 
@@ -1243,32 +1254,32 @@ msgstr ""
 msgid "Single Opportunity View"
 msgstr ""
 
-#: templates/single-opportunity.php:108
+#: templates/single-opportunity.php:109
 msgid "Dates"
 msgstr ""
 
-#: templates/single-opportunity.php:156
+#: templates/single-opportunity.php:157
 msgid "Receivers"
 msgstr ""
 
-#: templates/single-opportunity.php:174
+#: templates/single-opportunity.php:175
 #: templates/single-project.php:109
 msgid "Social share"
 msgstr ""
 
-#: templates/single-opportunity.php:202
+#: templates/single-opportunity.php:203
 msgid "Source"
 msgstr ""
 
-#: templates/single-opportunity.php:214
+#: templates/single-opportunity.php:215
 msgid "Application form"
 msgstr ""
 
-#: templates/single-opportunity.php:225
+#: templates/single-opportunity.php:226
 msgid "Additional information"
 msgstr ""
 
-#: templates/single-opportunity.php:256
+#: templates/single-opportunity.php:257
 #: templates/single-project.php:160
 msgid "News"
 msgstr ""
