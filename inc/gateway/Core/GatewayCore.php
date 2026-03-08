@@ -18,6 +18,7 @@ namespace Gateway\Core;
 use Gateway\Api\AuthController;
 use Gateway\Api\RegisterController;
 use Gateway\Api\PasswordController;
+use Shared\Policy\PasswordPolicy;
 
 /**
  * Main Gateway singleton.
@@ -101,6 +102,10 @@ final class GatewayCore
 
         // Register default forms at priority 5 (before third-party)
         add_action('gateway_register_forms', [$this, 'registerDefaultForms'], 5);
+
+        // prevent WP sending registration emails to new users 
+        // we do it manually with sendActivationEmail()
+        add_filter('wp_send_new_user_notification_to_user', '__return_false');
     }
 
     /**
@@ -152,6 +157,8 @@ final class GatewayCore
                 'restUrl' => rest_url('gateway/v1/'),
                 'baseUrl' => home_url('/gateway/'),
             ],
+            'passwordPolicy'    => PasswordPolicy::getClientRules(),
+            'validationStrings' => PasswordPolicy::getClientValidationStrings(),
         ]);
     }
 

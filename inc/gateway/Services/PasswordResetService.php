@@ -121,8 +121,8 @@ class PasswordResetService
             return $user;
         }
 
-        // Use enhanced password validation
-        $validation = $this->validatePasswordStrength($new_password, $user);
+        // Validate using the shared password policy
+        $validation = PasswordPolicy::validate($new_password, $user);
         if (is_wp_error($validation)) {
             return $validation;
         }
@@ -133,57 +133,6 @@ class PasswordResetService
         return true;
     }
 
-    /**
-     * Validate password strength using WordPress standards.
-     *
-     * @param string $password Password to validate
-     * @param WP_User $user User object for checking against user data
-     * @return true|WP_Error
-     */
-    private function validatePasswordStrength(string $password, WP_User $user): bool|WP_Error
-    {
-        // Check minimum length (WordPress recommends 12 as of 2024+)
-        if (strlen($password) < PasswordPolicy::MIN_LENGTH) {
-            return new WP_Error(
-                'password_too_short',
-                sprintf(
-                    __('Password must be at least %d characters long.', 'starwishx'),
-                    PasswordPolicy::MIN_LENGTH
-                )
-            );
-        }
-
-        // Check for required character types
-        $has_uppercase = preg_match('/[A-Z]/', $password);
-        $has_number = preg_match('/[0-9]/', $password);
-        $has_special = preg_match('/[^A-Za-z0-9]/', $password); // Special characters
-
-        if (!$has_uppercase || !$has_number || !$has_special) {
-            return new WP_Error(
-                'password_too_weak',
-                __('Please use a mix of uppercase letters, numbers, and symbols.', 'starwishx')
-            );
-        }
-
-        // Prevent password from containing user data
-        $check_data = array_filter([
-            $user->user_login,
-            $user->user_email,
-            $user->display_name,
-        ]);
-
-        foreach ($check_data as $check) {
-            // Case-insensitive check for user data in password
-            if (stripos($password, $check) !== false) {
-                return new WP_Error(
-                    'password_contains_userdata',
-                    __('Password cannot contain your username, email, or name.', 'starwishx')
-                );
-            }
-        }
-
-        return true;
-    }
     /**
      * Check rate limiting for password reset requests.
      * Uses combination of user_login + IP to prevent global user lockout.

@@ -33,13 +33,6 @@ class ProfilePanel extends AbstractPanel
 
     public function getInitialState(?int $userId = null): array
     {
-        // $service = new ProfileService();
-        // $data = $service->getProfileData($userId);
-        // // Merge service data with UI state
-        // return array_merge($data, [
-        //     'isEditing' => false,
-        //     // 'error' handled by defaults
-        // ]);
 
         // Safety check: Launchpad panels should always have a user, 
         // but we must handle the nullable parameter to satisfy PHP.
@@ -47,7 +40,6 @@ class ProfilePanel extends AbstractPanel
             return [];
         }
 
-        // return $this->service->getProfileData($userId);
         $data = $this->service->getProfileData($userId);
 
         $view = isset($_GET['view']) ? sanitize_text_field($_GET['view']) : '';

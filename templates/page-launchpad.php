@@ -53,16 +53,8 @@ $user_id = get_current_user_id();
  */
 $state = $launchpad->getState($user_id, $current_panel_id);
 
-// Inject runtime settings required by store.js
-$state['launchpadSettings'] = [
-    'nonce'               => wp_create_nonce('wp_rest'),
-    'restUrl'             => rest_url('launchpad/v1/'),
-    'userId'              => $user_id,
-    'loginUrl'            => wp_login_url(home_url('/launchpad/')),
-    'generatePasswordUrl' => rest_url('gateway/v1/password/generate'),
-];
-
-// Initialize Interactivity API state for the 'launchpad' namespace
+// Application state (panels, routing). Infrastructure config (launchpadSettings)
+// is already hydrated by LaunchpadCore::enqueueAssets() — wp_interactivity_state() merges.
 wp_interactivity_state('launchpad', $state);
 
 // 5. HEAD INJECTION (FOUC SHIELD)

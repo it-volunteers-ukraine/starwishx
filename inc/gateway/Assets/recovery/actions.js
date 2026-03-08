@@ -37,7 +37,8 @@ export const lostPasswordActions = {
 
     // ── Client-side validation ──────────────────────────────────────────────
     if (!validators.required(form.userLogin)) {
-      form.fieldErrors = { userLogin: "Please enter your username or email" };
+      const strings = state.validationStrings ?? {};
+      form.fieldErrors = { userLogin: strings.userLoginRequired ?? "" };
       return;
     }
     // ──────────────────────────────────────────────────────────────────────
@@ -125,18 +126,16 @@ export const resetPasswordActions = {
 
     // ── Client-side validation (UX guard only — server re-validates) ────────
     const password = form.newPassword;
-    const hasLength = validators.minLength(12)(password);
-    const hasUpper = /[A-Z]/.test(password);
-    const hasNumber = /[0-9]/.test(password);
-    const hasSpecial = /[^A-Za-z0-9]/.test(password);
+    const policy = state.passwordPolicy ?? {};
+    const messages = policy.messages ?? {};
+    const minLen = policy.minLength ?? 12;
 
-    if (!hasLength) {
-      form.error = "Password must be at least 12 characters long";
+    if (!validators.minLength(minLen)(password)) {
+      form.error = messages.tooShort ?? "";
       return;
     }
-    if (!hasUpper || !hasNumber || !hasSpecial) {
-      form.error =
-        "Password must include uppercase letters, numbers, and symbols";
+    if (!/[A-Z]/.test(password) || !/[0-9]/.test(password) || !/[^A-Za-z0-9]/.test(password)) {
+      form.error = messages.tooWeak ?? "";
       return;
     }
     // ──────────────────────────────────────────────────────────────────────
@@ -161,9 +160,7 @@ export const resetPasswordActions = {
 
       if (data.success) {
         form.success = true;
-        form.successMessage =
-          data.message ||
-          "Password reset successfully! Redirecting to login...";
+        form.successMessage = data.message || "";
         form.newPassword = ""; // clear sensitive field immediately
 
         // baseUrl is always set via wp_interactivity_state() in GatewayCore.

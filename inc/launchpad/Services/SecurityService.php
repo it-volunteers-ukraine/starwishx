@@ -20,14 +20,10 @@ class SecurityService
             return new WP_Error('invalid_password', __('The current password you entered is incorrect.', 'starwishx'));
         }
 
-        if (strlen($newPassword) < PasswordPolicy::MIN_LENGTH) {
-            return new WP_Error(
-                'weak_password',
-                sprintf(
-                    __('Password must be at least %d characters long.', 'starwishx'),
-                    PasswordPolicy::MIN_LENGTH
-                )
-            );
+        // Full policy validation (same rules as Gateway)
+        $validation = PasswordPolicy::validate($newPassword, $user);
+        if (is_wp_error($validation)) {
+            return $validation;
         }
 
         wp_set_password($newPassword, $userId);

@@ -89,8 +89,7 @@ export const commentsActions = {
     // 2. Validate
     if (!state.newContent || !state.newContent.trim()) return;
 
-    // 3. Get Settings (Injected via wp_add_inline_script in LaunchpadCore)
-    // const settings = window.launchpadCommentsSettings || {};
+    // 3. Get Settings (hydrated via wp_interactivity_state in LaunchpadCore)
     const settings = state.settings || {};
 
     // 4. Set Loading State
@@ -120,7 +119,7 @@ export const commentsActions = {
       // unshift to show at top
       state.list.unshift(response.comment);
 
-      state.successMessage = "Review posted successfully!";
+      state.successMessage = settings.messages?.reviewPosted ?? "";
 
       // 2. UX UPDATE: Update the header aggregates immediately
       if (response.aggregates) {
@@ -136,7 +135,7 @@ export const commentsActions = {
         state.showForm = false;
       }, 2000);
     } catch (e) {
-      state.error = e.message || "An error occurred while posting.";
+      state.error = e.message || (settings.messages?.submitError ?? "");
     } finally {
       state.isSubmitting = false;
     }
@@ -251,7 +250,7 @@ export const commentsActions = {
       // context.isEditing = false;
       // state.editingId = null;
       state.editDraft = "";
-      state.successMessage = "Update saved.";
+      state.successMessage = settings.messages?.updateSaved ?? "";
       // UX Choice: Close immediately, or show success then close?
       // Let's show success for 1 second, then close.
       setTimeout(() => {

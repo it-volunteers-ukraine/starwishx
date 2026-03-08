@@ -196,6 +196,24 @@ export const profileActions = {
     event.preventDefault();
     const p = ensurePanel(state, "profile");
 
+    // ── Client-side validation (UX guard — server re-validates) ──────────
+    const policy = state.launchpadSettings?.passwordPolicy ?? {};
+    const messages = policy.messages ?? {};
+    const minLen = policy.minLength ?? 12;
+    const password = p.passwordData.new;
+
+    if (!password || password.length < minLen) {
+      p.error = messages.tooShort ?? "";
+      setTimeout(() => { p.error = null; }, 5000);
+      return;
+    }
+    if (!/[A-Z]/.test(password) || !/[0-9]/.test(password) || !/[^A-Za-z0-9]/.test(password)) {
+      p.error = messages.tooWeak ?? "";
+      setTimeout(() => { p.error = null; }, 5000);
+      return;
+    }
+    // ──────────────────────────────────────────────────────────────────────
+
     p.isSaving = true;
     try {
       await fetchJson(

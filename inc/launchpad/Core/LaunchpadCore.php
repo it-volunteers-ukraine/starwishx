@@ -22,6 +22,7 @@ use Launchpad\Services\StatsService;
 use Launchpad\Services\SecurityService;
 use Launchpad\Services\CommentsService;
 use Launchpad\Services\MediaService;
+use Shared\Policy\PasswordPolicy;
 
 final class LaunchpadCore
 {
@@ -123,10 +124,8 @@ final class LaunchpadCore
         // Register Panels with injected Services
         $registry->register('opportunities', new \Launchpad\Panels\OpportunitiesPanel($this->services['opportunities'], $this->services['profile']), 10);
         $registry->register('profile',       new \Launchpad\Panels\ProfilePanel($this->services['profile']), 30);
-        // Security might not need a service yet
-        // $registry->register('security',      new \Launchpad\Panels\SecurityPanel(), 40);
-        // $registry->register('stats',         new \Launchpad\Panels\StatsPanel($this->services['stats']), 40);
         $registry->register('favorites',     new \Launchpad\Panels\FavoritesPanel($this->services['favorites']), 20);
+        // $registry->register('stats',         new \Launchpad\Panels\StatsPanel($this->services['stats']), 40);
     }
 
     /**
@@ -143,7 +142,6 @@ final class LaunchpadCore
             new \Launchpad\Api\ProfileController($this->services['profile']),
             // FavoritesController is now registered by the independent Favorites module
             new \Launchpad\Api\OpportunitiesController($this->services['opportunities'], $this->services['profile']),
-            // new \Launchpad\Api\SecurityController(),
             new \Launchpad\Api\SecurityController($this->services['security']),
             new \Launchpad\Api\CommentsController($this->services['comments']),
             new \Launchpad\Api\MediaController($this->services['media']),
@@ -213,20 +211,20 @@ final class LaunchpadCore
                 );
                 wp_enqueue_script_module('@starwishx/launchpad');
             }
-            // Settings for JS - Added loginUrl here
-            wp_add_inline_script(
-                'wp-interactivity',
-                sprintf('window.launchpadSettings = %s;', wp_json_encode([
-                    'nonce'    => wp_create_nonce('wp_rest'),
-                    'restUrl'  => rest_url('launchpad/v1/'),
-                    'userId'   => get_current_user_id(),
-                    'loginUrl' => wp_login_url(home_url('/launchpad/')),
-                    'generatePasswordUrl' => rest_url('gateway/v1/password/generate'),
-                ])),
-                'before'
-            );
 
-            wp_enqueue_style('dashicons');
+            // Infrastructure config — static per request, no routing knowledge needed.
+            // wp_interactivity_state() merges on repeated calls: the template will add
+            // application state (panels, active panel) on top of this in a second call.
+            wp_interactivity_state('launchpad', [
+                'launchpadSettings' => [
+                    'nonce'               => wp_create_nonce('wp_rest'),
+                    'restUrl'             => rest_url('launchpad/v1/'),
+                    'userId'              => get_current_user_id(),
+                    'loginUrl'            => wp_login_url(home_url('/launchpad/')),
+                    'generatePasswordUrl' => rest_url('gateway/v1/password/generate'),
+                    'passwordPolicy'      => PasswordPolicy::getClientRules(),
+                ],
+            ]);
         }
 
         // Single Opportunity post Interactive Comments App
@@ -255,15 +253,20 @@ final class LaunchpadCore
             wp_enqueue_script_module('@starwishx/launchpad-comments');
         }
 
-        // Inject lightweight settings specifically for comments
-        // wp_add_inline_script(
-        //     'wp-interactivity',
-        //     sprintf('window.launchpadCommentsSettings = %s;', wp_json_encode([
-        //         'nonce'   => wp_create_nonce('wp_rest'),
-        //         'restUrl' => rest_url('launchpad/v1/'),
-        //     ])),
-        //     'before'
-        // );
+        // Infrastructure config — static per request, no post-specific knowledge needed.
+        // wp_interactivity_state() merges: the template part (comments-interactive.php)
+        // adds application state (comments list, aggregates, form fields) on top.
+        wp_interactivity_state('launchpadComments', [
+            'settings' => [
+                'nonce'    => wp_create_nonce('wp_rest'),
+                'restUrl'  => rest_url('launchpad/v1/'),
+                'messages' => [
+                    'reviewPosted'  => __('Review posted successfully!', 'starwishx'),
+                    'updateSaved'   => __('Update saved.', 'starwishx'),
+                    'submitError'   => __('An error occurred while posting.', 'starwishx'),
+                ],
+            ],
+        ]);
     }
 
     /**
