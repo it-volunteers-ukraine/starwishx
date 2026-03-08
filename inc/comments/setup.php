@@ -1,26 +1,28 @@
 <?php
 
 /**
- * Setup for
- * Projects - Single Project Page
+ * Setup for Comments module
+ *
+ * Independent module for interactive comments/reviews on any post type.
+ * Consumed by: single-opportunity, single-project templates.
+ *
  * Version: 0.7.1
  * Author: DevFrappe
  * Email: dev.frappe@proton.me
- *
  * License: GPL v2 or later
  *
  * Include from functions.php:
- * require_once get_template_directory() . '/inc/projects/setup.php';
+ * require_once get_template_directory() . '/inc/comments/setup.php';
  */
 
-namespace Projects;
+namespace Comments;
 
 // Load helper functions first
 require_once __DIR__ . '/helpers.php';
 
 // Autoloader
 spl_autoload_register(function ($class) {
-    $prefix = 'Projects\\';
+    $prefix = 'Comments\\';
     $base_dir = __DIR__ . '/';
 
     $len = strlen($prefix);
@@ -36,7 +38,7 @@ spl_autoload_register(function ($class) {
     }
 });
 
-// Initialize Projects
+// Initialize Comments (before Launchpad, same priority as Favorites)
 add_action('after_setup_theme', function () {
-    \projects();
-}, 20);
+    \comments();
+}, 15);

@@ -1,14 +1,14 @@
 /**
- * Launchpad Comments — Main Store
- * File: inc/launchpad/Assets/comments-store.js
+ * Comments — Main Store
+ * File: inc/comments/Assets/comments-store.js
  *
- * Registers the 'launchpadComments' namespace.
- * Designed to interact with the 'single-opportunity.php' template.
+ * Registers the 'comments' namespace.
+ * Used by single-opportunity.php and single-project.php templates.
  */
 
 import { store } from "@wordpress/interactivity";
 
-// Import shared utilities
+// Import own utilities
 import { extendState } from "./utils.js";
 
 // Import Domain Modules
@@ -46,7 +46,7 @@ extendState(commentsState, commentsGetters);
 /**
  * Store Registration
  */
-store("launchpadComments", {
+store("comments", {
   state: commentsState,
   actions: commentsActions,
 });

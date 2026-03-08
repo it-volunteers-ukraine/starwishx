@@ -1,19 +1,19 @@
 /**
- * Launchpad Comments — Actions
- * File: inc/launchpad/Assets/comments/actions.js
+ * Comments — Actions
+ * File: inc/comments/Assets/comments/actions.js
  *
  * Handles form updates and API submissions.
  */
 
 import { getElement, getContext, store } from "@wordpress/interactivity";
-import { fetchJson } from "../utils.js"; // Adjust path to shared utils
+import { fetchJson } from "../utils.js";
 
 export const commentsActions = {
   /**
    * Update the comment textarea state on input.
    */
   updateContent() {
-    const { state } = store("launchpadComments");
+    const { state } = store("comments");
     const { ref } = getElement();
     state.newContent = ref.value;
   },
@@ -22,7 +22,7 @@ export const commentsActions = {
    * Toggles comment form visibility
    */
   toggleForm() {
-    const { state } = store("launchpadComments");
+    const { state } = store("comments");
     if (!state.canComment) return;
     state.showForm = !state.showForm;
     if (!state.showForm) state.error = null; // Clear error on close
@@ -35,7 +35,7 @@ export const commentsActions = {
    * Set the star rating in the form
    */
   setRating() {
-    const { state } = store("launchpadComments");
+    const { state } = store("comments");
     const { ref } = getElement();
     // Assuming button has data-value="1" etc
     const val = parseInt(ref.dataset.value, 10);
@@ -46,9 +46,9 @@ export const commentsActions = {
    * Pagination: Load next page of comments
    */
   async loadMore() {
-    const { state } = store("launchpadComments");
+    const { state } = store("comments");
     const context = getContext();
-    const settings = state.settings || {};
+    const config = state.config || {};
 
     if (state.isLoading) return;
 
@@ -58,8 +58,8 @@ export const commentsActions = {
       const nextPage = state.page + 1;
 
       const data = await fetchJson(
-        { launchpadSettings: settings },
-        `${settings.restUrl}comments?post_id=${context.postId}&page=${nextPage}`,
+        state,
+        `${config.restUrl}comments?post_id=${context.postId}&page=${nextPage}`,
         { method: "GET" },
       );
 
@@ -83,14 +83,14 @@ export const commentsActions = {
     event.preventDefault();
 
     // 1. Locate Store and Context
-    const { state } = store("launchpadComments");
+    const { state } = store("comments");
     const context = getContext();
 
     // 2. Validate
     if (!state.newContent || !state.newContent.trim()) return;
 
-    // 3. Get Settings (hydrated via wp_interactivity_state in LaunchpadCore)
-    const settings = state.settings || {};
+    // 3. Get Config (hydrated via wp_interactivity_state in CommentsCore)
+    const config = state.config || {};
 
     // 4. Set Loading State
     state.isSubmitting = true;
@@ -101,8 +101,8 @@ export const commentsActions = {
       // 5. API Call
       // API call returns { comment: {...}, aggregates: {...} }
       const response = await fetchJson(
-        { launchpadSettings: settings },
-        `${settings.restUrl}comments`,
+        state,
+        `${config.restUrl}comments`,
         {
           method: "POST",
           body: {
@@ -115,11 +115,10 @@ export const commentsActions = {
 
       // 1. Add comment to list
       if (!Array.isArray(state.list)) state.list = [];
-      // state.list.push(response.comment);
       // unshift to show at top
       state.list.unshift(response.comment);
 
-      state.successMessage = settings.messages?.reviewPosted ?? "";
+      state.successMessage = config.messages?.reviewPosted ?? "";
 
       // 2. UX UPDATE: Update the header aggregates immediately
       if (response.aggregates) {
@@ -128,14 +127,13 @@ export const commentsActions = {
       // 7. Cleanup & Close
       state.newContent = "";
       state.newRating = 5;
-      // state.showForm = false;
       // Close form automatically after 2 seconds
       setTimeout(() => {
         state.successMessage = null;
         state.showForm = false;
       }, 2000);
     } catch (e) {
-      state.error = e.message || (settings.messages?.submitError ?? "");
+      state.error = e.message || (config.messages?.submitError ?? "");
     } finally {
       state.isSubmitting = false;
     }
@@ -146,7 +144,7 @@ export const commentsActions = {
    * Sets the local context.isEditing flag.
    */
   startEdit() {
-    const { state } = store("launchpadComments");
+    const { state } = store("comments");
     const context = getContext();
 
     // Set per-item editing flag
@@ -164,7 +162,7 @@ export const commentsActions = {
    * Clears the local context.isEditing flag.
    */
   cancelEdit() {
-    const { state } = store("launchpadComments");
+    const { state } = store("comments");
     const context = getContext();
 
     // Clear per-item editing flag
@@ -180,7 +178,7 @@ export const commentsActions = {
    * Update draft text
    */
   updateEditDraft() {
-    const { state } = store("launchpadComments");
+    const { state } = store("comments");
     const { ref } = getElement();
     state.editDraft = ref.value;
   },
@@ -189,7 +187,7 @@ export const commentsActions = {
    * Update draft rating
    */
   setEditRating() {
-    const { state } = store("launchpadComments");
+    const { state } = store("comments");
     const { ref } = getElement();
     const val = parseInt(ref.dataset.value, 10);
     if (val) state.editRating = val;
@@ -200,9 +198,9 @@ export const commentsActions = {
    */
   async saveEdit(event) {
     event.preventDefault();
-    const { state } = store("launchpadComments");
+    const { state } = store("comments");
     const context = getContext();
-    const settings = state.settings || {};
+    const config = state.config || {};
 
     if (!state.editDraft.trim()) return;
 
@@ -212,8 +210,8 @@ export const commentsActions = {
 
     try {
       const response = await fetchJson(
-        { launchpadSettings: settings },
-        `${settings.restUrl}comments/${context.item.id}`,
+        state,
+        `${config.restUrl}comments/${context.item.id}`,
         {
           method: "PUT",
           body: {
@@ -246,13 +244,9 @@ export const commentsActions = {
       if (response.aggregates) {
         state.aggregates = response.aggregates;
       }
-      // Close Edit Mode via context
-      // context.isEditing = false;
-      // state.editingId = null;
       state.editDraft = "";
-      state.successMessage = settings.messages?.updateSaved ?? "";
-      // UX Choice: Close immediately, or show success then close?
-      // Let's show success for 1 second, then close.
+      state.successMessage = config.messages?.updateSaved ?? "";
+      // UX Choice: Show success for 1 second, then close.
       setTimeout(() => {
         context.isEditing = false;
         state.editingId = null;
@@ -267,7 +261,7 @@ export const commentsActions = {
 
   // --- REPLY ACTIONS ---
   startReply() {
-    const { state } = store("launchpadComments");
+    const { state } = store("comments");
     const context = getContext();
     // Set per-item flag
     context.isReplying = true;
@@ -277,7 +271,7 @@ export const commentsActions = {
   },
 
   cancelReply() {
-    const { state } = store("launchpadComments");
+    const { state } = store("comments");
     const context = getContext();
 
     context.isReplying = false;
@@ -286,7 +280,7 @@ export const commentsActions = {
   },
 
   updateReplyDraft() {
-    const { state } = store("launchpadComments");
+    const { state } = store("comments");
     const { ref } = getElement();
     state.replyDraft = ref.value;
   },
@@ -296,7 +290,7 @@ export const commentsActions = {
    * Uses 'context.reply' instead of 'context.item'
    */
   startReplyEdit() {
-    const { state } = store("launchpadComments");
+    const { state } = store("comments");
     const context = getContext(); // Local context of the reply-item
 
     context.isEditing = true;
@@ -313,7 +307,7 @@ export const commentsActions = {
    * REPLIES EDITING: Cancel
    */
   cancelReplyEdit() {
-    const { state } = store("launchpadComments");
+    const { state } = store("comments");
     const context = getContext();
     context.isEditing = false;
 
@@ -328,9 +322,9 @@ export const commentsActions = {
    */
   async saveReplyEdit(event) {
     event.preventDefault();
-    const { state } = store("launchpadComments");
+    const { state } = store("comments");
     const context = getContext(); // Contains 'reply' (target) AND 'item' (parent)
-    const settings = state.settings || {};
+    const config = state.config || {};
 
     if (!state.editDraft.trim()) return;
 
@@ -338,8 +332,8 @@ export const commentsActions = {
 
     try {
       const response = await fetchJson(
-        { launchpadSettings: settings },
-        `${settings.restUrl}comments/${context.reply.id}`,
+        state,
+        `${config.restUrl}comments/${context.reply.id}`,
         {
           method: "PUT",
           body: {
@@ -352,7 +346,9 @@ export const commentsActions = {
       // ARCHITECTURAL MAGIC:
       // We need to update a specific item inside a nested array.
       // 1. Find the Parent
-      const parentIndex = state.list.findIndex((c) => c.id === context.item.id);
+      const parentIndex = state.list.findIndex(
+        (c) => c.id === context.item.id,
+      );
 
       if (parentIndex !== -1) {
         const parent = state.list[parentIndex];
@@ -390,10 +386,10 @@ export const commentsActions = {
 
   async submitReply(event) {
     event.preventDefault();
-    const { state } = store("launchpadComments");
+    const { state } = store("comments");
     const context = getContext(); // Cache full context
     const { item } = getContext(); // 'item' is the Parent Comment here
-    const settings = state.settings || {};
+    const config = state.config || {};
 
     if (!state.replyDraft.trim()) return;
 
@@ -402,12 +398,11 @@ export const commentsActions = {
 
     try {
       const response = await fetchJson(
-        { launchpadSettings: settings },
-        `${settings.restUrl}comments`,
+        state,
+        `${config.restUrl}comments`,
         {
           method: "POST",
           body: {
-            // post_id: getContext().postId, // or passed via other means, assuming context root has it
             post_id: context.postId, // Use cached context
             parent_id: item.id,
             content: state.replyDraft,
@@ -439,7 +434,6 @@ export const commentsActions = {
       state.replyingId = null;
       state.replyDraft = "";
     } catch (e) {
-      // alert(e.message);
       state.error = e.message; // state.error instead of alert()
     } finally {
       state.isReplying = false;

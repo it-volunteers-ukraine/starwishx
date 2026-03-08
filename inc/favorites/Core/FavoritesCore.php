@@ -8,7 +8,7 @@
  * Consumed by: Launchpad (dashboard panel), Listing (grid), Projects (cards),
  *              single-opportunity & single-project templates.
  * 
- * Version: 0.6.1
+ * Version: 0.7.1
  * Author: DevFrappe
  * Email: dev.frappe@proton.me
  * License: GPL v2 or later

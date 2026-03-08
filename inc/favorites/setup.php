@@ -6,7 +6,7 @@
  * Independent module for managing user favorites across the application.
  * Consumed by: Launchpad, Listing, Projects.
  * 
- * Version: 0.6.1
+ * Version: 0.7.1
  * Author: DevFrappe
  * Email: dev.frappe@proton.me
  * License: GPL v2 or later

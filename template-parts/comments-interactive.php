@@ -12,20 +12,19 @@ defined('ABSPATH') || exit;
 
 $post_id = get_the_ID();
 
-/** @var \Launchpad\Services\CommentsService $service */
-$service = \launchpad()->getService('comments');
+/** @var \Comments\Services\CommentsService $service */
+$service = \comments()->service();
 
-if (!$service) return;
-$limit = \Launchpad\Services\CommentsService::ITEMS_PER_PAGE;
+$limit = \Comments\Services\CommentsService::ITEMS_PER_PAGE;
 $initial_comments  = $service->getPostComments($post_id, $limit, 0);
 $total_count       = $service->countPostComments($post_id);
 $aggregates        = $service->getAggregates($post_id);
 // $has_comments      = !empty($initial_comments);
 
-// Application state — post-specific data. Infrastructure config (settings, nonce, restUrl)
-// is already hydrated by LaunchpadCore::enqueueCommentsAssets() — wp_interactivity_state() merges.
+// Application state — post-specific data. Infrastructure config (config, nonce, restUrl)
+// is already hydrated by CommentsCore::enqueueAssets() — wp_interactivity_state() merges.
 $post_status = get_post_status($post_id);
-wp_interactivity_state('launchpadComments', [
+wp_interactivity_state('comments', [
     'canComment'     => $post_status === 'publish',
     'list'           => $initial_comments,
     'aggregates'     => $aggregates,
@@ -43,7 +42,7 @@ wp_interactivity_state('launchpadComments', [
 ?>
 
 <footer id="comments" class="comments-area"
-    data-wp-interactive="launchpadComments"
+    data-wp-interactive="comments"
     data-wp-context='{ "postId": <?php echo $post_id; ?> }'>
 
     <!-- HEADER SECTION -->

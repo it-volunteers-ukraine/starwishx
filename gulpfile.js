@@ -283,6 +283,8 @@ export const moduleScripts = () => {
     [
       "inc/favorites/Assets/*.js",
       "inc/favorites/Assets/*.mjs",
+      "inc/comments/Assets/*.js",
+      "inc/comments/Assets/*.mjs",
       "inc/launchpad/Assets/*.js",
       "inc/launchpad/Assets/*.mjs",
       "inc/gateway/Assets/*.js",
@@ -365,6 +367,7 @@ export const watchForChanges = () => {
   watch("src/js/vendor/*.js", vendorScripts);
   watch("inc/acf/blocks/**/*.js", blockScripts);
   watch("inc/favorites/Assets/**/*.{js,mjs}", moduleScripts);
+  watch("inc/comments/Assets/**/*.{js,mjs}", moduleScripts);
   watch("inc/launchpad/Assets/**/*.{js,mjs}", moduleScripts);
   watch("inc/gateway/Assets/**/*.{js,mjs}", moduleScripts);
   watch("inc/listing/Assets/**/*.{js,mjs}", moduleScripts);
