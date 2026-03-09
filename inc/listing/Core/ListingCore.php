@@ -161,8 +161,10 @@ final class ListingCore
      */
     public function enqueueAssets(): void
     {
+        // Depends on where to place Listing App: page or archive
         // if (!is_page('listing')) {
-        if (!is_page('opportunities')) {
+        // if (!is_page('opportunities')) {
+        if (!is_archive('opportunities')) {
             return;
         }
 

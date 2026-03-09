@@ -73,8 +73,8 @@
         "custom-fields"
     ],
     "taxonomies": "",
-    "has_archive": false,
-    "has_archive_slug": "",
+    "has_archive": true,
+    "has_archive_slug": "opportunities",
     "rewrite": {
         "permalink_rewrite": "custom_permalink",
         "slug": "opportunities",
@@ -82,11 +82,11 @@
         "feeds": "0",
         "pages": "1"
     },
-    "query_var": "post_type_key",
+    "query_var": "none",
     "query_var_name": "",
     "can_export": true,
     "delete_with_user": false,
     "register_meta_box_cb": "",
     "enter_title_here": "",
-    "modified": 1772400235
+    "modified": 1773054493
 }
