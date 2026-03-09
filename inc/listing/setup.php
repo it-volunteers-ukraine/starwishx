@@ -41,7 +41,8 @@ spl_autoload_register(function ($class) {
 add_action('after_switch_theme', function () {
 
     // Also create the Listing page
-    $listing_page = get_page_by_path('listing');
+    // $listing_page = get_page_by_path('listing');
+    $listing_page = get_page_by_path('opportunities');
     if (!$listing_page) {
         $page_id = wp_insert_post([
             'post_title'   => __('Listing Oportunities', 'starwishx'),

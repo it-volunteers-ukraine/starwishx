@@ -120,6 +120,26 @@ final class ListingCore
                 delete_transient('listing_category_term_map');
             }
         }, 10, 3);
+
+        if (function_exists("rank_math_the_breadcrumbs")) {
+            add_filter('rank_math/frontend/breadcrumb/items', [$this, 'add_opportunity_breadcrumb_base'], 10, 2);
+        }
+    }
+
+    /**
+     * Replace rank_math breadcrumbs URL base in case of non-existent archive for CPT
+     */
+    public function add_opportunity_breadcrumb_base($crumbs, $class)
+    {
+        if (is_singular('opportunity')) {
+            $custom_base = [
+                __('Opportunities', 'starwishx'),
+                '/opportunities/',
+                'hide_in_url' => false,
+            ];
+            array_splice($crumbs, 1, 0, [$custom_base]);
+        }
+        return $crumbs;
     }
 
     /**
@@ -141,7 +161,10 @@ final class ListingCore
      */
     public function enqueueAssets(): void
     {
-        if (!is_page('listing')) {
+        // Depends on where to place Listing App: page or archive
+        // if (!is_page('listing')) {
+        // if (!is_page('opportunities')) {
+        if (!is_archive('opportunities')) {
             return;
         }
 

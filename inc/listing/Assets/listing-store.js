@@ -15,24 +15,19 @@ import "../../shared/Assets/popup-store.js";
 
 /**
  * Base State Definition
- * Properties defined here are the "Schema" of the app.
+ *
+ * CRITICAL ARCHITECTURE NOTE:
+ * Do NOT define properties here that are hydrated from the server via
+ * wp_interactivity_state() in PHP (results, facets, totalFound, totalPages, query).
+ * Defining them here would cause the Client Store to overwrite the Server Data
+ * with default values (e.g., empty arrays), breaking SSR hydration.
+ *
+ * Only define client-only state (UI flags, spinners) and computed getters.
  */
 const listingState = {
-  query: {
-    s: "",
-    category: [],
-    country: [],
-    location: "",
-    seekers: [],
-    page: 1,
-  },
-  facets: {},
-  results: [],
-  totalFound: 0,
-  totalPages: 0,
+  // Client-only UI state
   isLoading: false,
   isSidebarOpen: true,
-  layout: "grid",
   ui: {
     isLoadingLocation: false, // Loading state for location autocomplete
   },
@@ -56,9 +51,12 @@ store("listing", {
 
     init() {
       const { state, actions } = store("listing");
-      syncUrlToState(state.query);
-      // Optional: Initial fetch if results are empty (non-SSR fallback)
-      if (state.results.length === 0) {
+
+      // If URL has query params, sync them into state and fetch.
+      // On a clean URL (/opportunities/ or /listing/), SSR has already hydrated the state —
+      // no sync or fetch needed.
+      if (window.location.search) {
+        syncUrlToState(state.query);
         actions.updateResults();
       }
     },

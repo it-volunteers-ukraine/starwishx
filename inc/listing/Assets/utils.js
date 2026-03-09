@@ -105,6 +105,9 @@ export function syncStateToUrl(query) {
       return;
     }
 
+    //! avoid write default page=1 to URL — it's the implicit default
+    if (key === "page" && value === 1) return;
+
     if (Array.isArray(value)) {
       // Clean URL: ?category=46&country=75 (no brackets)
       value.forEach((val) => params.append(key, val));
@@ -178,8 +181,8 @@ export function getRestUrl() {
   return state.config?.restUrl || rest_url("listing/v1/");
 }
 
-// Highlight part 
- 
+// Highlight part
+
 export function escapeHtml(str = "") {
   return String(str)
     .replace(/&/g, "&amp;")
