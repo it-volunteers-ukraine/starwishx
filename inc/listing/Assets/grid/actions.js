@@ -23,6 +23,8 @@ async function fetchResults({ append = false } = {}) {
   const params = new URLSearchParams();
   Object.entries(state.query).forEach(([key, value]) => {
     if (!value || (Array.isArray(value) && value.length === 0)) return;
+    //! Skip page=1 — it's the server default
+    if (key === "page" && value === 1) return;
     if (Array.isArray(value)) {
       value.forEach((val) => params.append(key, val));
     } else {
