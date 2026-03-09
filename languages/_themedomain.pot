@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-03-08T14:24:24+00:00\n"
+"POT-Creation-Date: 2026-03-09T00:32:54+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: starwishx\n"
@@ -468,6 +468,7 @@ msgid "Load More"
 msgstr ""
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:29
+#: inc/listing/Core/ListingCore.php:133
 #: templates/single-project.php:80
 msgid "Opportunities"
 msgstr ""
@@ -984,7 +985,7 @@ msgstr ""
 
 #: inc/listing/Enums/Taxonomy.php:29
 #: inc/listing/Filters/CategoryFilter.php:31
-#: templates/single-opportunity.php:57
+#: templates/single-opportunity.php:58
 msgid "Category"
 msgstr ""
 
@@ -1024,15 +1025,15 @@ msgstr ""
 msgid "Failed to fetch location options."
 msgstr ""
 
-#: inc/listing/setup.php:47
+#: inc/listing/setup.php:48
 msgid "Listing Oportunities"
 msgstr ""
 
-#: inc/listing/setup.php:75
+#: inc/listing/setup.php:76
 msgid "The Listing page cannot be deleted."
 msgstr ""
 
-#: inc/listing/setup.php:82
+#: inc/listing/setup.php:83
 msgid "The Listing page cannot be trashed."
 msgstr ""
 

@@ -90,7 +90,8 @@ final class FavoritesCore
     public function enqueueAssets(): void
     {
         $needsFavorites = is_page('launchpad')
-            || is_page('listing')
+            // || is_page('listing')
+            || is_page('opportunities')
             || is_singular('opportunity')
             || is_singular('project');
 
