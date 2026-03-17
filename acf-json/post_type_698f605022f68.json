@@ -1,6 +1,6 @@
 {
     "key": "post_type_698f605022f68",
-    "title": "Projects",
+    "title": "Проекти",
     "menu_order": 0,
     "active": true,
     "post_type": "project",
@@ -8,8 +8,8 @@
     "import_source": "",
     "import_date": "",
     "labels": {
-        "name": "Projects",
-        "singular_name": "Project",
+        "name": "Проекти",
+        "singular_name": "Проект",
         "menu_name": "Projects",
         "all_items": "All Projects",
         "edit_item": "Edit Project",
@@ -72,7 +72,7 @@
         "custom-fields"
     ],
     "taxonomies": "",
-    "has_archive": false,
+    "has_archive": true,
     "has_archive_slug": "",
     "rewrite": {
         "permalink_rewrite": "custom_permalink",
@@ -87,5 +87,5 @@
     "delete_with_user": false,
     "register_meta_box_cb": "",
     "enter_title_here": "",
-    "modified": 1772406523
+    "modified": 1773276839
 }

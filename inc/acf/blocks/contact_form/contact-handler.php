@@ -62,8 +62,15 @@ function theme_send_contact_form()
         wp_send_json_error(['message' => 'Коректно заповніть поле Email'], 422);
     }
 
-    // Optional for phone. "+" is processed Ok. Keep sanitize_text_field() instead in other case
-    $phone   = sw_sanitize_text_field($raw_phone);
+    // Phone: sanitize then validate via PhonePolicy (libphonenumber when available)
+    $phone = sw_sanitize_text_field($raw_phone);
+
+    if (!empty($phone)) {
+        $validation = \Shared\Policy\PhonePolicy::validate($phone);
+        if (is_wp_error($validation)) {
+            wp_send_json_error(['message' => $validation->get_error_message()], 422);
+        }
+    }
 
     if (empty($name) || empty($message)) {
         wp_send_json_error(['message' => 'Заповніть необхідні поля'], 422);

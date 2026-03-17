@@ -32,18 +32,24 @@ get_header();
 if (function_exists('render_block')) {
     echo render_block([
         'blockName'   => 'acf/breadcrumbs',
-        'attrs'       => ["class" => 'opportunity-breadcrumbs'],
+        'attrs'       => [
+            'data'        => [
+                'show_last_item' => false,
+                'nowrap'         => true,
+                'nav_class'      => 'container',
+            ],
+        ],
         'innerHTML'   => '',
         'innerBlocks' => [],
     ]);
 }
 /* <nav class="opportunity-breadcrumbs container" aria-label="< ?php esc_attr_e('Breadcrumb', 'starwishx'); ?>">
-    <a href="< ?php echo esc_url($back_url); ?>" class="btn-back">
-        <svg width="13" height="16" class="icon-arrow-left">
-            <use xlink:href="< ?php echo get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-long_arrow_left"></use>
-        </svg>
-        <span>< ?php esc_html_e('Opportunities', 'starwishx'); ?></span>
-    </a>
+<a href="< ?php echo esc_url($back_url); ?>" class="btn-back">
+<svg width="13" height="16" class="icon-arrow-left">
+<use xlink:href="< ?php echo get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-long_arrow_left"></use>
+</svg>
+<span>< ?php esc_html_e('Opportunities', 'starwishx'); ?></span>
+</a>
 </nav> */
 ?>
 <div class="single-opportunity__layout container">
@@ -252,11 +258,11 @@ if (function_exists('render_block')) {
     </main>
     <aside class="opportunity-aside">
         <div class="news-container">
-            <?php get_template_part('template-parts/last-news', 'aside', [
-                'title' => __('News', 'starwishx'),
+            <?php get_template_part('template-parts/news-aside', null, [
+                'title'       => __('News', 'starwishx'),
                 'title_class' => 'h5',
-                'count_news' => 7,
-                'line_clamp' => 3
+                'count_news'  => 7,
+                'line_clamp'  => 3,
             ]); ?>
         </div>
     </aside>

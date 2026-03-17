@@ -27,7 +27,7 @@ import "../../shared/Assets/popup-store.js";
 const listingState = {
   // Client-only UI state
   isLoading: false,
-  isSidebarOpen: true,
+  isSidebarOpen: false,
   ui: {
     isLoadingLocation: false, // Loading state for location autocomplete
   },
@@ -49,6 +49,18 @@ store("listing", {
     ...gridActions,
     filters: filterActions,
 
+    toggleSidebar() {
+      const { state } = store("listing");
+      state.isSidebarOpen = !state.isSidebarOpen;
+      document.body.classList.toggle("sidebar-open", state.isSidebarOpen);
+    },
+
+    closeSidebar() {
+      const { state } = store("listing");
+      state.isSidebarOpen = false;
+      document.body.classList.remove("sidebar-open");
+    },
+
     init() {
       const { state, actions } = store("listing");
 
@@ -59,6 +71,13 @@ store("listing", {
         syncUrlToState(state.query);
         actions.updateResults();
       }
+
+      // Close offcanvas sidebar on Escape key
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape" && state.isSidebarOpen) {
+          actions.closeSidebar();
+        }
+      });
     },
 
     /**

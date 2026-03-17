@@ -272,6 +272,8 @@ export const blockScripts = () => {
 export const moduleScripts = () => {
   return src(
     [
+      "inc/menu/Assets/*.js",
+      "inc/menu/Assets/*.mjs",
       "inc/launchpad/Assets/*.js",
       "inc/launchpad/Assets/*.mjs",
       "inc/gateway/Assets/*.js",
@@ -356,6 +358,7 @@ export const watchForChanges = () => {
   watch("src/js/**/*.js", scripts);
   watch("src/js/vendor/*.js", vendorScripts);
   watch("inc/acf/blocks/**/*.js", blockScripts);
+  watch("inc/menu/Assets/**/*.{js,mjs}", moduleScripts);
   watch("inc/launchpad/Assets/**/*.{js,mjs}", moduleScripts);
   watch("inc/gateway/Assets/**/*.{js,mjs}", moduleScripts);
   watch("inc/listing/Assets/**/*.{js,mjs}", moduleScripts);

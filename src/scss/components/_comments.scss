@@ -20,7 +20,7 @@
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
-    align-items: center;
+    align-items: flex-start;
     gap: 16px;
     margin-bottom: 32px;
     padding-bottom: 24px;
@@ -33,7 +33,7 @@
     }
     &__info {
         display: flex;
-        align-items: center;
+        flex-flow: column wrap;
         gap: 12px;
 
         .h5 {
@@ -41,21 +41,15 @@
         }
 
         .rating-badge {
-            display: flex;
-            align-items: center;
             gap: 4px;
-            border-radius: 12px;
-            background: $element-card-social-fill;
-            padding: 4px 8px;
-            color: $text-light;
-            color: $text-dark;
-            font-weight: 600;
-            font-size: 1rem;
+            // border-radius: 12px;
+            // padding: 4px 8px;
+            color: $text-accent;
 
             .count {
-                margin-left: 4px;
+                // margin-left: 4px;
                 color: $text-light;
-                font-weight: 400;
+                // font-weight: 400;
             }
 
             .icon-star {
@@ -214,9 +208,10 @@
         margin: 0;
     }
 }
-
+.rating-badge,
 .comment-rating {
-    margin-top: 8px;
+    display: flex;
+    align-items: center;
     .stars {
         color: $icon-color-fill;
         font-size: 14px;
@@ -255,7 +250,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-top: 8px;
+    margin-top: 16px;
 }
 
 .btn-link-edit {

@@ -21,6 +21,17 @@ export const commentsGetters = {
     return this.aggregates && this.aggregates.count > 0;
   },
 
+  get roundedAvg() {
+    return this.aggregates ? Math.round(this.aggregates.avg) : 0;
+  },
+
+  get ratingBadgeLabel() {
+    if (!this.aggregates) return "";
+    return (this.config?.messages?.ratingBadgeLabel || "")
+      .replace("%avg%", this.aggregates.avg)
+      .replace("%count%", this.aggregates.count);
+  },
+
   /**
    * "Add review" button visible only on published posts and when form is closed.
    */

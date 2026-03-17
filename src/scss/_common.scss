@@ -6,13 +6,6 @@
   color-scheme: light;
 }
 
-// * {
-//   box-sizing: border-box;
-//   margin: 0;
-//   padding: 0;
-//   -webkit-tap-highlight-color: transparent;
-// }
-
 h1,
 h2,
 h3,
@@ -47,7 +40,7 @@ body {
   display: none !important;
 }
 
-/* Базовые стили (мобильные, до 768px) */
+/* Basic styles (mobile, up to 768px) */
 .h1 {
   font-weight: 300;
   font-size: 54px;
@@ -456,7 +449,78 @@ body {
   // }
 }
 
-/* Базовые стили для ссылок */
+.btn-chip {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  transition: $animations;
+  border-radius: $radius-xl;
+  padding: 6px 12px;
+  width: fit-content;
+  font-size: 14px;
+
+  // Default colors only for chips without a category slug.
+  // Category chips get their colors from generated [data-slug] rules.
+  &:not([data-slug]) {
+    color: $text-dark;
+    background-color: $buttons-color-background-secondary-default;
+    border: 1px solid $buttons-color-border-secondary-default;
+  }
+
+  &[data-child="true"] {
+    border-color: currentcolor;
+    background-color: $buttons-color-background-secondary-default;
+  }
+
+  &:hover {
+    background-color: $buttons-color-background-secondary-hover;
+    color: $text-accent;
+  }
+
+  &:active,
+  &:active:hover {
+    background-color: $buttons-color-background-secondary-selected;
+  }
+
+  @include media.min-desktop {
+    font-size: 0.9rem;
+  }
+
+  .btn-chip__icon {
+    display: inline-flex;
+    position: relative;
+    justify-content: center;
+    align-items: center;
+    margin-left: 6px;
+    border: none;
+    border: 0;
+    background: transparent;
+    padding: 0;
+    min-width: 14px;
+    min-height: 14px;
+    font-size: 14px;
+
+    &::before {
+      position: absolute;
+      inset: -10px;
+      content: "";
+    }
+
+    &:focus-visible {
+      outline: 2px solid Highlight;
+      outline-offset: 2px;
+      border-radius: 50%;
+    }
+
+    svg {
+      transform: rotate(45deg);
+      width: 14px;
+      height: 14px;
+    }
+  }
+}
+
+/* Basic styles for links */
 .link-bc {
   position: relative;
   color: $text-light;
@@ -571,7 +635,7 @@ img {
 
 /* ************************************************************** */
 
-/* Свайпер */
+/* Swiper */
 .swiper-paginations {
   margin-top: 16px;
   line-height: 0;
@@ -586,7 +650,7 @@ img {
   height: 4px;
 }
 
-/* Активный буллет */
+/* active bullet */
 .swiper-pagination-bullet-active {
   background-color: $icon-color-fill;
 
@@ -595,21 +659,20 @@ img {
 
 /* Modal */
 .modal {
-  /* display: none; */
-  position: fixed; /* Stay in place */
+  position: fixed;
   top: 0;
   left: 0;
   visibility: hidden;
   opacity: 0;
-  z-index: 1; /* Sit on top */
+  z-index: 1;
   transition: 0.3s;
-  background-color: $background-modal; /* Black w/ opacity */
+  background-color: $background-modal;
   padding-top: 100px; /* Location of the box */
   padding-right: 16px;
   padding-left: 16px;
-  width: 100%; /* Full width */
-  height: 100%; /* Full height */
-  overflow: auto; /* Enable scroll if needed */
+  width: 100%;
+  height: 100%;
+  overflow: auto;
 }
 
 .modal.active {
@@ -661,8 +724,8 @@ img {
     border: 1px solid $text-accent;
     border-radius: 50%;
     width: 18px;
-    height: 18px;
     min-width: 18px;
+    height: 18px;
     min-height: 18px;
     content: "!";
     color: $text-accent;
@@ -672,8 +735,8 @@ img {
 
 .exclamation-circle__error {
   &::before {
-    color: $icon-color-secondary;
-    background-color: $icon-color-error;
     border: 1px solid $icon-color-error;
+    background-color: $icon-color-error;
+    color: $icon-color-secondary;
   }
 }

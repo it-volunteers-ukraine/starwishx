@@ -6,7 +6,7 @@
  * Independent module for interactive comments/reviews on any post type.
  * Consumed by: single-opportunity, single-project templates.
  *
- * Version: 0.7.1
+ * Version: 0.7.5
  * Author: DevFrappe
  * Email: dev.frappe@proton.me
  * License: GPL v2 or later

@@ -360,6 +360,7 @@ class OpportunitiesPanel extends AbstractPanel
                                                 <div class="opportunity-comments"
                                                     data-wp-bind--hidden="!context.item.commentsCount">
                                                     <span class="opportunity-comments--label">
+                                                        <?= sw_svg('icon-write', 14);?>
                                                         <?= __("Comments", 'starwishx') ?>:
                                                         <span class="comments-number" data-wp-text="context.item.commentsCount"></span>
                                                     </span>

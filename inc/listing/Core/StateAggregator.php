@@ -62,11 +62,58 @@ class StateAggregator
     {
         return [
             's'        => sanitize_text_field($raw['s'] ?? ''),
-            'category' => array_map('absint', (array) ($raw['category'] ?? [])),
+            'category' => $this->resolveCategoryValues((array) ($raw['category'] ?? [])),
             'country'  => array_map('absint', (array) ($raw['country']  ?? [])),
             'location' => sanitize_text_field($raw['location'] ?? ''),
             'seekers'  => array_map('absint', (array) ($raw['seekers']  ?? [])),
             'page'     => absint($raw['paged'] ?? $raw['page'] ?? 1),
         ];
+    }
+
+    /**
+     * Resolve category values that may be numeric IDs or term slugs.
+     *
+     * When a parent slug is provided, it is expanded to the parent term ID
+     * plus all its direct children IDs — mirroring the client-side
+     * toggleParent() behaviour so that a shared URL like
+     * ?category=profesiinyi-rozvytok produces the same state as clicking
+     * the parent checkbox.
+     *
+     * Numeric IDs are passed through with absint() for backward compatibility.
+     *
+     * @param  array $values  Raw category values from the query string.
+     * @return int[]          Deduplicated array of term IDs.
+     */
+    private function resolveCategoryValues(array $values): array
+    {
+        $ids = [];
+
+        foreach ($values as $value) {
+            if (is_numeric($value)) {
+                $ids[] = absint($value);
+                continue;
+            }
+
+            // Slug → resolve parent + expand children
+            $term = get_term_by('slug', sanitize_text_field($value), 'category-oportunities');
+            if (!$term) {
+                continue;
+            }
+
+            $ids[] = $term->term_id;
+
+            $children = get_terms([
+                'taxonomy'   => 'category-oportunities',
+                'parent'     => $term->term_id,
+                'fields'     => 'ids',
+                'hide_empty' => false,
+            ]);
+
+            if (!is_wp_error($children)) {
+                $ids = array_merge($ids, array_map('absint', $children));
+            }
+        }
+
+        return array_values(array_unique($ids));
     }
 }

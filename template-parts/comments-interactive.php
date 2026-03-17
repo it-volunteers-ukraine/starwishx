@@ -23,7 +23,10 @@ $aggregates        = $service->getAggregates($post_id);
 
 // Application state — post-specific data. Infrastructure config (config, nonce, restUrl)
 // is already hydrated by CommentsCore::enqueueAssets() — wp_interactivity_state() merges.
-$post_status = get_post_status($post_id);
+$post_status  = get_post_status($post_id);
+$has_ratings  = $aggregates['count'] > 0;
+$rounded_avg  = (int) round((float) $aggregates['avg']);
+
 wp_interactivity_state('comments', [
     'canComment'     => $post_status === 'publish',
     'list'           => $initial_comments,
@@ -38,26 +41,38 @@ wp_interactivity_state('comments', [
     'isSubmitting'   => false,
     'isLoading'      => false,
     'showForm'       => false,
+    // SSR mirrors of JS getters — enables server-side directive processing.
+    // JS getters with same names override these for client-side reactivity.
+    'hasRatings'     => $has_ratings,
+    'roundedAvg'     => $rounded_avg,
 ]);
 ?>
 
 <footer id="comments" class="comments-area"
+    aria-labelledby="reviews-heading"
     data-wp-interactive="comments"
     data-wp-context='{ "postId": <?php echo $post_id; ?> }'>
 
     <!-- HEADER SECTION -->
-    <div class="comments-header" aria-labelledby="reviews-heading">
+    <div class="comments-header">
         <div class="comments-header__info">
             <h5 id="reviews-heading" class="h5"><?php esc_html_e('Reviews', 'starwishx'); ?></h5>
-
-            <!-- LOGIC MOVED TO GETTER: hasRatings -->
-            <span class="rating-badge" data-wp-bind--hidden="!state.hasRatings">
-                <svg class="icon-star">
-                    <use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-star"></use>
-                </svg>
-                <strong data-wp-text="state.aggregates.avg">
+            <span class="rating-badge"
+                <?php if (!$has_ratings) echo 'hidden'; ?>
+                data-wp-bind--hidden="!state.hasRatings"
+                role="group" data-wp-bind--aria-label="state.ratingBadgeLabel">
+                <span class="stars-display" data-wp-bind--data-rating="state.roundedAvg"
+                    data-rating="<?php echo round((float) $aggregates['avg']); ?>"
+                    aria-hidden="true">
+                    <?php for ($s = 1; $s <= 5; $s++): ?>
+                        <svg class="icon-star star-<?php echo $s; ?>" width="16" height="16" aria-hidden="true">
+                            <use href="<?php echo get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-star"></use>
+                        </svg>
+                    <?php endfor; ?>
+                </span>
+                <span data-wp-text="state.aggregates.avg">
                     <?php echo esc_html($aggregates['avg']); ?>
-                </strong>
+                </span>
                 <span class="count">
                     (<span data-wp-text="state.aggregates.count"><?php echo esc_html($aggregates['count']); ?></span>)
                 </span>
@@ -69,9 +84,6 @@ wp_interactivity_state('comments', [
                 data-wp-on--click="actions.toggleForm"
                 data-wp-bind--hidden="!state.isAddReviewVisible">
                 <?php sw_svg_e('icon-write') ?>
-                <!-- <svg class="icon-edit" width="16" height="16">
-                    <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175-.106.377-.192.757-.366 1.467 1.467-.366.757-.192.377-.106-1.937-1.937z" />
-                </svg> -->
                 <?php esc_html_e('Add review', 'starwishx'); ?>
             </button>
         <?php else: ?>
@@ -104,9 +116,7 @@ wp_interactivity_state('comments', [
                                     class="star-btn"
                                     data-value="<?php echo $i; ?>"
                                     data-wp-on--click="actions.setRating">
-                                    <svg class="icon-star" width=16 height=16>
-                                        <use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-star"></use>
-                                    </svg>
+                                    <?= sw_svg('icon-star', 16); ?>
                                 </button>
                             <?php endforeach; ?>
                         </div>
@@ -150,7 +160,8 @@ wp_interactivity_state('comments', [
 
     <!-- COMMENTS LIST -->
     <div class="comments-list">
-        <div data-wp-bind--hidden="state.hasComments">
+        <div <?php if ($total_count > 0) echo 'hidden'; ?>
+            data-wp-bind--hidden="state.hasComments">
             <p><?php esc_html_e('No comments yet.', 'starwishx'); ?></p>
         </div>
 
@@ -161,13 +172,14 @@ wp_interactivity_state('comments', [
                 <div class="comment-view" data-wp-bind--hidden="context.isEditing">
                     <div class="comment-header">
                         <div class="comment-author">
-                            <img data-wp-bind--src="context.item.avatar" class="avatar" alt="Avatar">
+                            <img data-wp-bind--src="context.item.avatar" data-wp-bind--alt="context.item.author" class="avatar" alt="">
                             <strong class="author-name" data-wp-text="context.item.author"></strong>
                             <span class="badge-author" data-wp-bind--hidden="!context.item.isPostAuthor">
                                 <?php esc_html_e('Author', 'starwishx'); ?>
                             </span>
                         </div>
-                        <time class="comment-date" data-wp-text="context.item.date"></time>
+                        <time class="comment-date" data-wp-text="context.item.date"
+                            data-wp-bind--datetime="context.item.dateIso"></time>
                     </div>
 
                     <div class="comment-body">
@@ -177,10 +189,11 @@ wp_interactivity_state('comments', [
                     <div class="comment-footer">
                         <div class="comment-rating" data-wp-bind--hidden="!context.item.rating">
                             <!-- CSS Driven Display stars -->
-                            <div class="stars-display" data-wp-bind--data-rating="context.item.rating">
+                            <div class="stars-display" data-wp-bind--data-rating="context.item.rating"
+                                role="img" data-wp-bind--aria-label="context.item.ratingLabel">
                                 <?php for ($s = 1; $s <= 5; $s++): ?>
-                                    <svg class="icon-star star-<?php echo $s; ?>">
-                                        <use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-star"></use>
+                                    <svg class="icon-star star-<?php echo $s; ?>" aria-hidden="true">
+                                        <use href="<?php echo get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-star"></use>
                                     </svg>
                                 <?php endfor; ?>
                             </div>
@@ -215,9 +228,7 @@ wp_interactivity_state('comments', [
                                             class="star-btn"
                                             data-value="<?php echo $i; ?>"
                                             data-wp-on--click="actions.setEditRating">
-                                            <svg class="icon-star">
-                                                <use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-star"></use>
-                                            </svg>
+                                            <?= sw_svg('icon-star', 16); ?>
                                         </button>
                                     <?php endforeach; ?>
                                 </div>
@@ -264,16 +275,19 @@ wp_interactivity_state('comments', [
                                 <div class="reply-view" data-wp-bind--hidden="context.isEditing">
                                     <div class="reply-header">
                                         <div class="comment-author">
-                                            <img data-wp-bind--src="context.reply.avatar" class="avatar-small">
+                                            <img data-wp-bind--src="context.reply.avatar" data-wp-bind--alt="context.reply.author" class="avatar-small" alt="">
                                             <strong class="author-name" data-wp-text="context.reply.author"></strong>
                                             <span class="badge-author" data-wp-bind--hidden="!context.reply.isPostAuthor">
                                                 <?php esc_html_e('Author', 'starwishx'); ?>
                                             </span>
                                         </div>
-                                        <time class="comment-date" data-wp-text="context.reply.date"></time>
+                                        <time class="comment-date" data-wp-text="context.reply.date"
+                                            data-wp-bind--datetime="context.reply.dateIso"></time>
                                     </div>
 
-                                    <div class="reply-body" data-wp-text="context.reply.content"></div>
+                                    <div class="reply-body">
+                                        <p data-wp-text="context.reply.content"></p>
+                                    </div>
 
                                     <div class="reply-footer">
                                         <div class="comment-actions">

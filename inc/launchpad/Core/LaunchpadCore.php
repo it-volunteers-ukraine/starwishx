@@ -2,7 +2,7 @@
 
 /**
  * Launchpad user admin panel app
- * Version: 0.7.1
+ * Version: 0.7.5
  * Author: DevFrappe
  * Email: dev.frappe@proton.me
  * 
@@ -196,6 +196,21 @@ final class LaunchpadCore
         // Main Dashboard App
         if (is_page('launchpad') && is_user_logged_in()) {
 
+            // intlTelInput CDN — phone field widget (CSS + all-in-one JS with utils)
+            wp_enqueue_style(
+                'intl-tel-input',
+                'https://cdn.jsdelivr.net/npm/intl-tel-input@26.8.1/build/css/intlTelInput.css',
+                [],
+                '26.8.1'
+            );
+            wp_enqueue_script(
+                'intl-tel-input',
+                'https://cdn.jsdelivr.net/npm/intl-tel-input@26.8.1/build/js/intlTelInputWithUtils.min.js',
+                [],
+                '26.8.1',
+                true
+            );
+
             $asset_path = get_template_directory() . '/inc/launchpad/Assets/store.asset.php';
             $asset = file_exists($asset_path) ? include $asset_path : ['dependencies' => [], 'version' => '1.0.0'];
 
@@ -221,6 +236,14 @@ final class LaunchpadCore
                     'loginUrl'            => wp_login_url(home_url('/launchpad/')),
                     'generatePasswordUrl' => rest_url('gateway/v1/password/generate'),
                     'passwordPolicy'      => PasswordPolicy::getClientRules(),
+                    'phoneConfig'         => [
+                        'initialCountry'   => 'ua',
+                        'countryOrder'     => ['ua', 'pl', 'de', 'us', 'gb'],
+                        'excludeCountries' => ['ru'],
+                    ],
+                    'messages'            => [
+                        'invalidPhone' => __('Please enter a valid phone number.', 'starwishx'),
+                    ],
                 ],
             ]);
         }

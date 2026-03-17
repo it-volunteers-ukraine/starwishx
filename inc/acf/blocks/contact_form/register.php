@@ -30,20 +30,18 @@ acf_register_block_type([
                 : '1.0.0'
         );
 
-        // CSS: Intl-tel-input
+        // intlTelInput v26 CDN — same handles as LaunchpadCore (deduplicated by WP)
         wp_enqueue_style(
-            'intl-tel-input-css',
-            'https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.19/css/intlTelInput.css',
+            'intl-tel-input',
+            'https://cdn.jsdelivr.net/npm/intl-tel-input@26.8.1/build/css/intlTelInput.css',
             [],
-            '17.0.19'
+            '26.8.1'
         );
-
-        // JS: Intl-tel-input Base
         wp_enqueue_script(
-            'intl-tel-input-js',
-            'https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.19/js/intlTelInput.min.js',
+            'intl-tel-input',
+            'https://cdn.jsdelivr.net/npm/intl-tel-input@26.8.1/build/js/intlTelInputWithUtils.min.js',
             [],
-            '17.0.19',
+            '26.8.1',
             true
         );
 
@@ -52,7 +50,7 @@ acf_register_block_type([
         wp_enqueue_script(
             'contact-form-js',
             get_template_directory_uri() . '/inc/acf/blocks/contact_form/contact.js',
-            ['intl-tel-input-js'], // Ensures this loads AFTER the library
+            ['intl-tel-input'],
             file_exists($js_path) ? filemtime($js_path) : '1.0.0',
             true
         );

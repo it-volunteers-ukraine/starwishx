@@ -460,18 +460,19 @@ add_action('admin_init', function (): void {
  * One-time migration: Copy ACF fields to native WordPress fields for the News CPT.
  *
  * Migrations performed:
+ *  - ACF `title`        → post_title
  *  - ACF `description`  → post_content (as Gutenberg paragraph blocks)
  *  - ACF `photo`        → post featured image (post thumbnail)
  *
  * Can be run via WP-CLI: wp eval 'sw_migrate_news_fields();'
  * Or uncomment the admin_init hook at the bottom to run automatically (once).
  *
- * @return array{ description: int, photo: int } Counts of migrated posts per field.
+ * @return array{ title: int, description: int, photo: int } Counts of migrated posts per field.
  */
 function sw_migrate_news_fields(): array
 {
     if (get_option('sw_news_migration_done', false)) {
-        return ['description' => 0, 'photo' => 0];
+        return ['title' => 0, 'description' => 0, 'photo' => 0];
     }
 
     $posts = get_posts([
@@ -480,12 +481,29 @@ function sw_migrate_news_fields(): array
         'post_status'    => ['publish', 'draft', 'pending', 'future', 'private'],
     ]);
 
+    $migrated_title       = 0;
     $migrated_description = 0;
     $migrated_photo       = 0;
 
     foreach ($posts as $post) {
 
-        // ── 1. description → post_content (Gutenberg paragraph blocks) ───────
+        // ── 1. title → post_title ─────────────────────────────────────────────
+        // if (empty(trim($post->post_title))) {
+        $acf_title = get_post_meta($post->ID, 'title', true);
+
+        if (!empty($acf_title)) {
+            $result = wp_update_post([
+                'ID'         => $post->ID,
+                'post_title' => sanitize_text_field($acf_title),
+            ], true);
+
+            if (!is_wp_error($result)) {
+                $migrated_title++;
+            }
+        }
+        // }
+
+        // ── 2. description → post_content (Gutenberg paragraph blocks) ───────
         if (empty(trim($post->post_content))) {
             $acf_description = get_post_meta($post->ID, 'description', true);
 
@@ -523,7 +541,7 @@ function sw_migrate_news_fields(): array
             }
         }
 
-        // ── 2. photo → featured image (thumbnail) ────────────────────────────
+        // ── 3. photo → featured image (thumbnail) ────────────────────────────
         if (!has_post_thumbnail($post->ID)) {
             $acf_photo = get_post_meta($post->ID, 'photo', true);
 
@@ -547,17 +565,19 @@ function sw_migrate_news_fields(): array
 
     // Mark migration as completed only when no posts are left to process.
     // Re-run the script if output shows posts were migrated (batch of 500).
-    if ($migrated_description === 0 && $migrated_photo === 0) {
+    if ($migrated_title === 0 && $migrated_description === 0 && $migrated_photo === 0) {
         update_option('sw_news_migration_done', true, false);
     }
 
     error_log(
         "News migration batch: " .
+            "{$migrated_title} titles migrated, " .
             "{$migrated_description} descriptions migrated, " .
             "{$migrated_photo} featured images migrated."
     );
 
     return [
+        'title'       => $migrated_title,
         'description' => $migrated_description,
         'photo'       => $migrated_photo,
     ];
@@ -752,9 +772,10 @@ function sw_get_taxonomy_top_level_colors_styles(string $taxonomy = 'category-op
         $declarations = [];
         if ($bg)     $declarations[] = "background-color: {$bg}";
         if ($text)   $declarations[] = "color: {$text}";
-        if ($border) $declarations[] = "border-color: {$border}";
+        // if ($border) $declarations[] = "border-color: {$border}";
+        if ($border) $declarations[] = "border: 1px solid {$border}";
 
-        $rules[] = ".{$class} { " . implode('; ', $declarations) . '; }';
+        $rules[] = ".{$class}, [data-slug=\"{$class}\"] { " . implode('; ', $declarations) . '; }';
     }
 
     $css = implode("\n", $rules);

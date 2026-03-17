@@ -113,6 +113,41 @@ export const filterActions = {
   },
 
   /**
+   * Remove a single filter chip.
+   * Reads field + value from the data-wp-each context item.
+   */
+  removeChip() {
+    const { state } = store("listing");
+    const ctx = getContext();
+    const chip = ctx?.item;
+    if (!chip) return;
+
+    const { field, value } = chip;
+
+    if (field === "location") {
+      state.query.location = "";
+    } else if (field === "category") {
+      // If removing a parent, also remove all its children
+      const tree = state.facets["category-oportunities"] || [];
+      const parent = tree.find((n) => n.id === value);
+      if (parent && parent.children) {
+        const childIds = parent.children.map((c) => c.id);
+        state.query.category = state.query.category.filter(
+          (id) => id !== value && !childIds.includes(id),
+        );
+      } else {
+        state.query.category = state.query.category.filter(
+          (id) => id !== value,
+        );
+      }
+    } else if (Array.isArray(state.query[field])) {
+      state.query[field] = state.query[field].filter((id) => id != value);
+    }
+
+    refreshResults();
+  },
+
+  /**
    * Reset all filters to initial state.
    */
   clearAll() {

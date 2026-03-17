@@ -4,22 +4,47 @@
 .section {
   /* top: -109px; */
   display: flex;
+
+  /* ensure parallax bg sits in the section */
+  position: relative;
+  will-change: background-position;
   margin-top: -88px;
+  background-image: var(--hero-bg);
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+
+  /* CSS parallax */
+  background-attachment: fixed;
   padding-top: 1px;
   padding-bottom: 24px;
   height: 100vh;
-  background-image: var(--hero-bg);
-  background-size: cover;
-  background-position: center;
+
+  &::before {
+    position: absolute;
+    z-index: 0;
+    inset: 0;
+    background: linear-gradient(
+      0deg,
+      rgb(0 0 0 / 55%) 0%,
+      rgb(0 0 0 / 40%) 40%,
+      rgb(0 0 0 / 8%) 70%,
+      transparent 100%
+    ); 
+
+    /* background: radial-gradient(ellipse at center, rgb(0 0 0 / 20%) 0%, rgb(0 0 0 / 45%) 70%); */
+    pointer-events: none;
+    content: "";
+  }
 }
 
 .image-wrap {
   position: absolute;
   top: 0;
+  z-index: -1;
   width: 100%;
   height: 1100px;
   height: 100vh;
-  z-index: -1;
 }
 
 .image {
@@ -30,6 +55,7 @@
 
 .hero {
   display: flex;
+  position: relative;
   flex-direction: column;
   align-items: center;
   width: 100%;
@@ -39,8 +65,8 @@
 }
 
 .title {
-  margin-bottom: 0;
   margin-top: 19.55vh;
+  margin-bottom: 0;
   overflow-wrap: anywhere;
 }
 
@@ -56,8 +82,8 @@
 
 .wrap-link {
   display: flex;
-  margin-top: auto;
   flex-direction: column;
+  margin-top: auto;
   white-space: nowrap;
 }
 
@@ -94,7 +120,7 @@
     margin-top: 10.33vh;
   }
 
-  .title{
+  .title {
     max-width: calc(30.95vw + 274.29px);
   }
 
@@ -109,10 +135,10 @@
   }
 
   .wrap-link {
-    width: 100%;
     flex-direction: row;
     justify-content: space-around;
     align-items: center;
+    width: 100%;
   }
 
   .text-bottom {
@@ -124,13 +150,13 @@
   }
 }
 
-@include min-laptop{
+@include min-laptop {
   .section {
     margin-top: -109px;
     padding-bottom: 36px;
   }
 
-  .title{
+  .title {
     margin-top: 29.11vh;
     max-width: calc(92.5vw - 612px);
   }
@@ -139,26 +165,26 @@
     max-width: calc(25.83vw + 170px);
   }
 
-    .wrap-link{
+  .wrap-link {
     justify-content: space-between;
     padding: 0 117px;
   }
 }
 
-@include min-desktop{
+@include min-desktop {
   .section {
     padding-bottom: 64px;
   }
 
-  .title{
+  .title {
     margin-top: 28.8181vh;
   }
 
   .text-bottom {
-    margin-top: 13.9090vh;
+    margin-top: 13.909vh;
   }
 
-  .wrap-link{
+  .wrap-link {
     justify-content: space-between;
     padding: 0 52px;
   }

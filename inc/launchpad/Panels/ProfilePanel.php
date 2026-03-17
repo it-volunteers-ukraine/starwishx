@@ -133,7 +133,8 @@ class ProfilePanel extends AbstractPanel
                 class="profile-form placeholder-box"
                 <?php echo !$isProfileForm ? 'hidden' : ''; ?>
                 data-wp-bind--hidden="!<?= $this->statePath('isEditing') ?>"
-                data-wp-on--submit="actions.profile.save">
+                data-wp-on--submit="actions.profile.save"
+                data-wp-init="actions.profile.initPhoneWidget">
 
                 <div class="form-field">
                     <label for="lp-first-name"><?php esc_html_e('First Name', 'starwishx'); ?></label>
@@ -156,17 +157,12 @@ class ProfilePanel extends AbstractPanel
                         data-wp-on--input="actions.profile.updateField" />
                 </div>
 
-                <!-- Additional ACF fields -->
-                <div class="form-field">
-                    <label for="lp-phone">
+                <!-- Phone field: intlTelInput widget owns this input -->
+                <div class="form-field form-field--phone">
+                    <label for="lp-phone" class="label-required">
                         <?php esc_html_e('Phone', 'starwishx'); ?>
-                        <span class="description label-required" style="color:#666; font-size:0.85em; font-weight:normal;">
-                            (e.g., +38 044 555 5555)
-                        </span>
                     </label>
-                    <input type="text" id="lp-phone" data-field="phone"
-                        data-wp-bind--value="<?= $this->statePath('phone') ?>"
-                        data-wp-on--input="actions.profile.updateField" />
+                    <input type="tel" id="lp-phone" />
                 </div>
 
                 <div class="form-field">

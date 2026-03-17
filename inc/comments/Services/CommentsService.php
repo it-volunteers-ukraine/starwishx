@@ -136,8 +136,11 @@ class CommentsService
             'author'       => $display_author,
             'content'      => $comment->comment_content,
             'date'         => get_comment_date('d.m.y H:i', $comment),
+            'dateIso'      => get_comment_date('c', $comment),
             'avatar'       => get_avatar_url($comment, ['size' => 96]),
             'rating'       => $rating > 0 ? $rating : null,
+            /* translators: %d: star rating number 1-5 */
+            'ratingLabel'  => $rating > 0 ? sprintf(__('Rating: %d out of 5 stars', 'starwishx'), $rating) : '',
             'isMine'       => $commentUserId === $currentUserId,
             'isPostAuthor' => $isCommentByPostAuthor,
             'canReply'     => $canReply,

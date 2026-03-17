@@ -94,7 +94,22 @@ add_action('wp_head', function () {
 
 get_header();
 ?>
-
+<?php
+if (function_exists('render_block')) {
+    echo render_block([
+        'blockName'   => 'acf/breadcrumbs',
+        'attrs'       => [
+            'data'        => [
+                'show_last_item' => true,
+                'nowrap'         => true,
+                'nav_class'      => 'container',
+            ],
+        ],
+        'innerHTML'   => '',
+        'innerBlocks' => [],
+    ]);
+}
+?>
 <main
     id="primary"
     class="site-main launchpad-container"

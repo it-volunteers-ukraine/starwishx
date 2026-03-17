@@ -37,6 +37,7 @@ class ProfileController extends AbstractLaunchpadController
                 ],
                 // Additional ACF Fields
                 'phone'        => ['sanitize_callback' => 'sanitize_text_field'],
+                'phoneCountry' => ['sanitize_callback' => 'sanitize_text_field'],
                 'telegram'     => ['sanitize_callback' => 'sanitize_text_field'],
                 'organization' => ['sanitize_callback' => 'sanitize_text_field'],
             ],
@@ -47,11 +48,6 @@ class ProfileController extends AbstractLaunchpadController
     {
         // Get all params (sanitized by registerRoutes args)
         $params = $request->get_params();
-        error_log('REST updateProfile params: ' . print_r($params, true));
-
-        // Also log raw body for extra confidence
-        $raw_body = $request->get_body();
-        error_log('REST raw body: ' . $raw_body);
 
         // Pass to Service
         $result = $this->service->updateProfile(get_current_user_id(), $params);

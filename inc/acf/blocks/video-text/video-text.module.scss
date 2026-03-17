@@ -1,0 +1,126 @@
+@use "../../../../src/scss/variables" as *;
+@use "../../../../src/scss/mixins/media" as *;
+
+.container {
+  @include min-laptop {
+    max-width: $width-laptop;
+  }
+}
+
+.title {
+  color: $text-dark;
+  text-align: center;
+  margin-bottom: 40px;
+
+  @include min-tablet {
+    font-size: 40px;
+    margin-bottom: 28px;
+  }
+
+  @include min-desktop {
+    font-size: 54px;
+    margin-bottom: 28px;
+  }
+}
+
+.content {
+  display: flex;
+  gap: 16px;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: center;
+
+  @include min-tablet {
+    flex-direction: row;
+
+    > * {
+      flex: 1;
+    }
+  }
+
+  @include min-laptop {
+    gap: 26px;
+  }
+
+  @include min-desktop {
+    gap: 20px;
+  }
+
+  .content-video {
+    align-self: center;
+    width: 100%;
+
+    iframe,
+    video {
+      width: 100%;
+      height: 100%;
+      border-radius: 12px;
+      display: block;
+      aspect-ratio: 16 / 9;
+    }
+
+    @include min-tablet {
+      margin-bottom: 0;
+    }
+  }
+
+  .content-text {
+    position: relative;
+    min-height: 448px;
+    padding-bottom: 96px;
+    color: $text-dark;
+
+    @include min-tablet {
+      min-height: unset;
+    }
+
+    .text {
+      font-size: 24px;
+      font-weight: 500;
+
+      @include min-desktop {
+        font-size: 36px;
+      }
+    }
+
+    .figure-icon {
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      width: 80px;
+      height: 80px;
+
+      @include min-desktop {
+        width: 96px;
+        height: 96px;
+      }
+
+      .icon-bg,
+      .icon-mask {
+        width: 100%;
+        height: 100%;
+      }
+
+      .icon-mask {
+        position: absolute;
+      }
+
+      .icon-bg {
+        position: absolute;
+        animation: spin 4s linear infinite;
+        border: 2px solid $icon-color-secondary;
+        border-radius: 50%;
+      }
+    }
+  }
+}
+
+@keyframes spin {
+  0% {
+    rotate: 0deg;
+  }
+
+  100% {
+    rotate: 360deg;
+  }
+}

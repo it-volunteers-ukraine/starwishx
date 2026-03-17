@@ -1,4 +1,5 @@
 <?php
+
 /**
  * contact.php
  */
@@ -31,9 +32,9 @@ $default_classes = [
     'contact-form-field'     => 'contact-form-field',
     'contact-form-textarea'  => 'contact-form-textarea',
     'contact-counter'        => 'contact-counter',
-    
+
     // ДОБАВЛЕНО: класс для контейнера ошибки
-    'contact-error'          => 'contact-error', 
+    'contact-error'          => 'contact-error',
     'input-error'            => 'input-error',
 
     'label-text'             => 'label-text',
@@ -50,7 +51,7 @@ $default_classes = [
     'contact-popup-title'    => 'contact-popup-title',
     'contact-popup-text'     => 'contact-popup-text',
     'contact-popup-success' => 'contact-popup-success',
-'contact-popup-error'   => 'contact-popup-error',
+    'contact-popup-error'   => 'contact-popup-error',
 
 
 ];
@@ -95,7 +96,7 @@ if ($char_limit < 1) $char_limit = 500;
 
 
 
- $err_required = get_field('required_field_text') ?: 'Заполните это поле';
+$err_required = get_field('required_field_text') ?: 'Заполните это поле';
 $error_msg_safe = esc_attr($err_required);
 $err_email = get_field('invalid_email_text') ?: 'Некорректный Email';
 $err_phone = get_field('invalid_phone_text') ?: 'Некоректний номер телефону';
@@ -123,29 +124,30 @@ $linkedin_name  = get_field('linkedin_name', 'option');
 $avatars        = get_field('avatars', 'option');
 
 /* Clean telegram / linkedin */
-$telegram_full_url = '';
-$clean_telegram = '';
+$telegram_full_url  = '';
+$clean_telegram     = '';
 if ($telegram_link) {
     $clean_telegram = trim($telegram_link);
     $clean_telegram = str_replace('https://t.me/', '', $clean_telegram);
     $clean_telegram = ltrim($clean_telegram, '@');
-    $telegram_full_url = 'https://t.me/'. $clean_telegram;
+    $telegram_full_url = 'https://t.me/' . $clean_telegram;
 }
 
-$linkedin_full_url = '';
-$clean_linkedin = '';
+$linkedin_full_url  = '';
+$clean_linkedin     = '';
 if ($linkedin_link) {
     $clean_linkedin = trim($linkedin_link);
     if (strpos($clean_linkedin, 'http') === 0) {
         $linkedin_full_url = $clean_linkedin;
     } else {
-        $linkedin_full_url = 'https://linkedin.com/in/'. $clean_linkedin;
+        $linkedin_full_url = 'https://linkedin.com/in/' . $clean_linkedin;
     }
 }
 
 /* Helper: render label with optional required star */
-function contact_field_label_html($text, $required, $classes) {
-    $text_safe = esc_html($text);
+function contact_field_label_html($text, $required, $classes)
+{
+    $text_safe       = esc_html($text);
     $label_text_html = '<span class="' . esc_attr($classes['label-text']) . '">' . $text_safe . '</span>';
     if ($required) {
         $label_text_html .= '<span class="' . esc_attr($classes['label-required']) . '">*</span>';
@@ -154,194 +156,199 @@ function contact_field_label_html($text, $required, $classes) {
 }
 
 /* Helper: render svg use tag with full sprite path */
-function contact_icon_use($icon_id, $classes = []) {
-    $sprite = get_template_directory_uri() . '/assets/img/sprites.svg';
+function contact_icon_use($icon_id, $classes = [])
+{
+    $sprite     = get_template_directory_uri() . '/assets/img/sprites.svg';
     $icon_class = $classes['icon'] ?? 'icon';
     return '<svg class="' . esc_attr($icon_class) . '" aria-hidden="true"><use xlink:href="' . esc_attr($sprite . '#' . $icon_id) . '"></use></svg>';
 }
 ?>
 
 <section class="<?= esc_attr($classes['contact-section']) ?>">
-  <div class="container <?= esc_attr($classes['contact-container']) ?>">
+    <div class="container <?= esc_attr($classes['contact-container']) ?>">
 
-    <div class="<?= esc_attr($classes['contact-block']) ?>">
-      <!-- Titles -->
-      <div class="<?= esc_attr($classes['contact-titles']) ?>">
-        <?php if ($small): ?><div class="<?= esc_attr($classes['contact-title-small']) ?>"><?= esc_html($small) ?></div><?php endif; ?>
-        <?php if ($medium): ?><div class="<?= esc_attr($classes['contact-title-medium']) ?>"><?= esc_html($medium) ?></div><?php endif; ?>
-        <?php if ($subtitle): ?><div class="<?= esc_attr($classes['contact-subtitle']) ?>"><?= esc_html($subtitle); ?></div><?php endif; ?>
-      </div>
-
-      <!-- Contacts -->
-      <div class="<?= esc_attr($classes['contact-list']) ?>">
-        <!-- С проверкой -->
-        <?php if ($big): ?><p class="<?= esc_attr($classes['contact-title-big']); ?>"><?php echo $big; ?></p><?php endif; ?>
-
-        <div class="<?= esc_attr($classes['contact-group']) ?>">
-          <?php if ($email_link): ?>
-          <div class="<?= esc_attr($classes['contact-item']) ?>">
-            <?php echo contact_icon_use('icon-email', $classes); ?>
-            <span class="<?= esc_attr($classes['contact-label']) ?>">Email:</span>
-            <a href="mailto:<?= esc_attr($email_link) ?>" class="<?= esc_attr($classes['contact-value']) ?>"><?= esc_html($email_name ?: $email_link) ?></a>
-          </div>
-          <?php endif; ?>
-
-          <?php if ($telegram_link): ?>
-          <div class="<?= esc_attr($classes['contact-item']) ?>">
-            <?php echo contact_icon_use('icon-telegram', $classes); ?>
-            <span class="<?= esc_attr($classes['contact-label']) ?>">Telegram:</span>
-            <a href="<?= esc_url($telegram_full_url) ?>" target="_blank" class="<?= esc_attr($classes['contact-value']) ?>">@<?= esc_html($telegram_name ?: $clean_telegram) ?></a>
-          </div>
-          <?php endif; ?>
-
-          <?php if ($linkedin_link): ?>
-          <div class="<?= esc_attr($classes['contact-item']) ?>">
-            <?php echo contact_icon_use('icon-linkedin', $classes); ?>
-            <span class="<?= esc_attr($classes['contact-label']) ?>">LinkedIn:</span>
-            <a href="<?= esc_url($linkedin_full_url) ?>" target="_blank" class="<?= esc_attr($classes['contact-value']) ?>"><?= esc_html($linkedin_name ?: $clean_linkedin) ?></a>
-          </div>
-          <?php endif; ?>
-        </div>
-
-        <!-- Avatars -->
-        <?php if (!empty($avatars) && is_array($avatars)): ?>
-        <div class="<?= esc_attr($classes['contact-avatars']) ?>">
-          <?php foreach ($avatars as $avatar):
-              $img_id = $avatar['avatar_image']['ID'] ?? $avatar['avatar_image'] ?? false;
-              if (!$img_id) continue;
-          ?>
-            <div class="<?= esc_attr($classes['contact-avatar-item']) ?>">
-              <?= wp_get_attachment_image($img_id, [48,48], false, ['alt' => 'avatar']) ?>
+        <div class="<?= esc_attr($classes['contact-block']) ?>">
+            <!-- Titles -->
+            <div class="<?= esc_attr($classes['contact-titles']) ?>">
+                <?php if ($small): ?><div class="<?= esc_attr($classes['contact-title-small']) ?>"><?= esc_html($small) ?></div><?php endif; ?>
+                <?php if ($medium): ?><div class="<?= esc_attr($classes['contact-title-medium']) ?>"><?= esc_html($medium) ?></div><?php endif; ?>
+                <?php if ($subtitle): ?><div class="<?= esc_attr($classes['contact-subtitle']) ?>"><?= esc_html($subtitle); ?></div><?php endif; ?>
             </div>
-          <?php endforeach; ?>
-        </div>
-        <?php endif; ?>
-      </div>
-    </div>
 
-    <!-- Form -->
+            <!-- Contacts -->
+            <div class="<?= esc_attr($classes['contact-list']) ?>">
+                <!-- С проверкой -->
+                <?php if ($big): ?>
+                    <div class="<?= esc_attr($classes['contact-title-big']); ?>">
+                        <?php echo $big; ?>
+                    </div>
+                <?php endif; ?>
 
-<form class="<?= esc_attr($classes['contact-form']) ?>" novalidate> 
-      <label class="<?= esc_attr($classes['contact-form-field']) ?>">
-        <div class="<?= esc_attr($classes['label-wrapper']) ?>">
-          <?= contact_field_label_html($form_name_label, $req_name, $classes) ?>
-        </div>
-        <input type="text" 
-               name="name" 
-               <?= $req_name ? 'required' : '' ?> 
-               data-msg="<?= $error_msg_safe ?>"
-               placeholder="<?= esc_attr($form_name_placeholder) ?>">
-        <div class="<?= esc_attr($classes['contact-error']) ?>"></div>
-      </label>
+                <div class="<?= esc_attr($classes['contact-group']) ?>">
+                    <?php if ($email_link): ?>
+                        <div class="<?= esc_attr($classes['contact-item']) ?>">
+                            <?php echo contact_icon_use('icon-email', $classes); ?>
+                            <span class="<?= esc_attr($classes['contact-label']) ?>">Email:</span>
+                            <a href="mailto:<?= esc_attr($email_link) ?>" class="<?= esc_attr($classes['contact-value']) ?>"><?= esc_html($email_name ?: $email_link) ?></a>
+                        </div>
+                    <?php endif; ?>
 
-      <label class="<?= esc_attr($classes['contact-form-field']) ?>">
-        <div class="<?= esc_attr($classes['label-wrapper']) ?>">
-           <?= contact_field_label_html($form_phone_label, $req_phone, $classes) ?>
-        </div>
-        <input type="tel"
-               class="contact-phone-input"
-               name="phone"
-               <?= $req_phone ? 'required' : '' ?>
-               data-msg="<?= $error_msg_safe ?>"
-               placeholder="<?= esc_attr($form_phone_placeholder) ?>">
-         <div class="<?= esc_attr($classes['contact-error']) ?>"></div>
-      </label>
+                    <?php if ($telegram_link): ?>
+                        <div class="<?= esc_attr($classes['contact-item']) ?>">
+                            <?php echo contact_icon_use('icon-telegram', $classes); ?>
+                            <span class="<?= esc_attr($classes['contact-label']) ?>">Telegram:</span>
+                            <a href="<?= esc_url($telegram_full_url) ?>" target="_blank" class="<?= esc_attr($classes['contact-value']) ?>">@<?= esc_html($telegram_name ?: $clean_telegram) ?></a>
+                        </div>
+                    <?php endif; ?>
 
-      <label class="<?= esc_attr($classes['contact-form-field']) ?>">
-        <div class="<?= esc_attr($classes['label-wrapper']) ?>">
-          <?= contact_field_label_html($form_email_label, $req_email, $classes) ?>
-        </div>
-        <input type="email" 
-               name="email" 
-               <?= $req_email ? 'required' : '' ?> 
-               data-msg="<?= $error_msg_safe ?>"
-               placeholder="<?= esc_attr($form_email_placeholder) ?>">
-        <div class="<?= esc_attr($classes['contact-error']) ?>"></div>
-      </label>
+                    <?php if ($linkedin_link): ?>
+                        <div class="<?= esc_attr($classes['contact-item']) ?>">
+                            <?php echo contact_icon_use('icon-linkedin', $classes); ?>
+                            <span class="<?= esc_attr($classes['contact-label']) ?>">LinkedIn:</span>
+                            <a href="<?= esc_url($linkedin_full_url) ?>" target="_blank" class="<?= esc_attr($classes['contact-value']) ?>"><?= esc_html($linkedin_name ?: $clean_linkedin) ?></a>
+                        </div>
+                    <?php endif; ?>
+                </div>
 
-      <label class="<?= esc_attr($classes['contact-form-textarea']) ?>">
-        <div class="<?= esc_attr($classes['label-wrapper']) ?>">
-          <?= contact_field_label_html($form_message_label, $req_message, $classes) ?>
+                <!-- Avatars -->
+                <?php if (!empty($avatars) && is_array($avatars)): ?>
+                    <div class="<?= esc_attr($classes['contact-avatars']) ?>">
+                        <?php foreach ($avatars as $avatar):
+                            $img_id = $avatar['avatar_image']['ID'] ?? $avatar['avatar_image'] ?? false;
+                            if (!$img_id) continue;
+                        ?>
+                            <div class="<?= esc_attr($classes['contact-avatar-item']) ?>">
+                                <?= wp_get_attachment_image($img_id, [48, 48], false, ['alt' => 'avatar']) ?>
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
+                <?php endif; ?>
+            </div>
         </div>
-        
-        <div class="<?= esc_attr($classes['textarea-wrapper']) ?>">
-          <textarea name="message" 
-                    maxlength="<?= esc_attr($char_limit) ?>" 
-                    <?= $req_message ? 'required' : '' ?> 
+
+        <!-- Form -->
+
+        <form class="<?= esc_attr($classes['contact-form']) ?>" novalidate>
+            <label class="<?= esc_attr($classes['contact-form-field']) ?>">
+                <span class="<?= esc_attr($classes['label-wrapper']) ?>">
+                    <?= contact_field_label_html($form_name_label, $req_name, $classes) ?>
+                </span>
+                <input type="text"
+                    name="name"
+                    <?= $req_name ? 'required' : '' ?>
                     data-msg="<?= $error_msg_safe ?>"
-                    placeholder="<?= esc_attr($form_message_placeholder) ?>"></textarea>
-          <span class="<?= esc_attr($classes['contact-counter']) ?>">0/<?= esc_html($char_limit) ?></span>
+                    placeholder="<?= esc_attr($form_name_placeholder) ?>">
+                <span class="<?= esc_attr($classes['contact-error']) ?>"></span>
+            </label>
+
+            <label class="<?= esc_attr($classes['contact-form-field']) ?>">
+                <span class="<?= esc_attr($classes['label-wrapper']) ?>">
+                    <?= contact_field_label_html($form_phone_label, $req_phone, $classes) ?>
+                </span>
+                <input type="tel"
+                    class="contact-phone-input"
+                    name="phone"
+                    <?= $req_phone ? 'required' : '' ?>
+                    data-msg="<?= $error_msg_safe ?>"
+                    placeholder="<?= esc_attr($form_phone_placeholder) ?>">
+                <span class="<?= esc_attr($classes['contact-error']) ?>"></span>
+            </label>
+
+            <label class="<?= esc_attr($classes['contact-form-field']) ?>">
+                <span class="<?= esc_attr($classes['label-wrapper']) ?>">
+                    <?= contact_field_label_html($form_email_label, $req_email, $classes) ?>
+                </span>
+                <input type="email"
+                    name="email"
+                    <?= $req_email ? 'required' : '' ?>
+                    data-msg="<?= $error_msg_safe ?>"
+                    placeholder="<?= esc_attr($form_email_placeholder) ?>">
+                <span class="<?= esc_attr($classes['contact-error']) ?>"></span>
+            </label>
+
+            <label class="<?= esc_attr($classes['contact-form-textarea']) ?>">
+                <span class="<?= esc_attr($classes['label-wrapper']) ?>">
+                    <?= contact_field_label_html($form_message_label, $req_message, $classes) ?>
+                </span>
+
+                <span class="<?= esc_attr($classes['textarea-wrapper']) ?>">
+                    <textarea name="message"
+                        maxlength="<?= esc_attr($char_limit) ?>"
+                        <?= $req_message ? 'required' : '' ?>
+                        data-msg="<?= $error_msg_safe ?>"
+                        placeholder="<?= esc_attr($form_message_placeholder) ?>"></textarea>
+                    <span class="<?= esc_attr($classes['contact-counter']) ?>">0/<?= esc_html($char_limit) ?></span>
+                </span>
+
+                <span class="<?= esc_attr($classes['contact-error']) ?>"></span>
+            </label>
+            <!-- Без проверки -->
+            <div class="<?= esc_attr($classes['contact-privacy']) ?>">
+                <?= wp_kses($form_privacy, [
+                    'a' => [
+                        'href' => true,
+                        'title' => true,
+                        'target' => true,
+                        'rel' => true
+                    ]
+                ]) ?>
+            </div>
+
+            <div style="display:none !important;">
+                <input type="text" name="honeypot" tabindex="-1" autocomplete="off">
+            </div>
+
+            <button type="submit" class="<?= esc_attr($classes['contact-submit']) ?>"><?= esc_html($form_submit_text) ?></button>
+        </form>
+
+    </div>
+
+    <!-- POPUP SUCCESS -->
+    <div id="contact-popup-success"
+        class="<?= esc_attr($classes['contact-popup']) . ' ' . esc_attr($classes['contact-popup-success']) ?>"
+        style="display:none;">
+        <div class="<?= esc_attr($classes['contact-popup-inner']) ?>">
+            <svg class="<?= esc_attr($classes['contact-popup-icon']) ?>" aria-hidden="true">
+                <use xlink:href="<?= esc_url(get_template_directory_uri() . '/assets/img/sprites.svg#icon-success'); ?>"></use>
+            </svg>
+
+            <?php if ($popup_success_title): ?>
+                <div class="<?= esc_attr($classes['contact-popup-title']) ?>">
+                    <?= esc_html($popup_success_title) ?>
+                </div>
+            <?php endif; ?>
+
+            <?php if ($popup_success_text): ?>
+                <div class="<?= esc_attr($classes['contact-popup-text']) ?>">
+                    <?= esc_html($popup_success_text) ?>
+                </div>
+            <?php endif; ?>
         </div>
-        
-        <div class="<?= esc_attr($classes['contact-error']) ?>"></div>
-      </label>
-<!-- Без проверки -->
-      <p class="<?= esc_attr($classes['contact-privacy']) ?>">
-    <?= wp_kses($form_privacy, [
-        'a' => [
-            'href' => true,
-            'title' => true,
-            'target' => true,
-            'rel' => true
-        ]
-    ]) ?>
-</p>
-        
-       <div style="display:none !important;">
-           <input type="text" name="honeypot" tabindex="-1" autocomplete="off">
-       </div>
-
-      <button type="submit" class="<?= esc_attr($classes['contact-submit']) ?>"><?= esc_html($form_submit_text) ?></button>
-      </form>
-
-  </div>
-
-<!-- POPUP SUCCESS -->
-<div id="contact-popup-success"
-     class="<?= esc_attr($classes['contact-popup']) . ' ' . esc_attr($classes['contact-popup-success']) ?>"
-     style="display:none;">
-    <div class="<?= esc_attr($classes['contact-popup-inner']) ?>">
-        <svg class="<?= esc_attr($classes['contact-popup-icon']) ?>" aria-hidden="true">
-            <use xlink:href="<?= esc_url(get_template_directory_uri() . '/assets/img/sprites.svg#icon-success'); ?>"></use>
-        </svg>
-
-        <?php if ($popup_success_title): ?>
-            <div class="<?= esc_attr($classes['contact-popup-title']) ?>">
-                <?= esc_html($popup_success_title) ?>
-            </div>
-        <?php endif; ?>
-
-        <?php if ($popup_success_text): ?>
-            <div class="<?= esc_attr($classes['contact-popup-text']) ?>">
-                <?= esc_html($popup_success_text) ?>
-            </div>
-        <?php endif; ?>
     </div>
-</div>
 
 
-<!-- POPUP ERROR -->
-<div id="contact-popup-error"
-     class="<?= esc_attr($classes['contact-popup']) . ' ' . esc_attr($classes['contact-popup-error']) ?>"
-     style="display:none;">
-    <div class="<?= esc_attr($classes['contact-popup-inner']) ?>">
-        <svg class="<?= esc_attr($classes['contact-popup-icon']) ?>" aria-hidden="true">
-            <use xlink:href="<?= esc_url(get_template_directory_uri() . '/assets/img/sprites.svg#icon-error'); ?>"></use>
-        </svg>
+    <!-- POPUP ERROR -->
+    <div id="contact-popup-error"
+        class="<?= esc_attr($classes['contact-popup']) . ' ' . esc_attr($classes['contact-popup-error']) ?>"
+        style="display:none;">
+        <div class="<?= esc_attr($classes['contact-popup-inner']) ?>">
+            <svg class="<?= esc_attr($classes['contact-popup-icon']) ?>" aria-hidden="true">
+                <use xlink:href="<?= esc_url(get_template_directory_uri() . '/assets/img/sprites.svg#icon-error'); ?>"></use>
+            </svg>
 
-        <?php if ($popup_error_title): ?>
-            <div class="<?= esc_attr($classes['contact-popup-title']) ?>">
-                <?= esc_html($popup_error_title) ?>
-            </div>
-        <?php endif; ?>
+            <?php if ($popup_error_title): ?>
+                <div class="<?= esc_attr($classes['contact-popup-title']) ?>">
+                    <?= esc_html($popup_error_title) ?>
+                </div>
+            <?php endif; ?>
 
-        <?php if ($popup_error_text): ?>
-            <div class="<?= esc_attr($classes['contact-popup-text']) ?>">
-                <?= esc_html($popup_error_text) ?>
-            </div>
-        <?php endif; ?>
+            <?php if ($popup_error_text): ?>
+                <div class="<?= esc_attr($classes['contact-popup-text']) ?>">
+                    <?= esc_html($popup_error_text) ?>
+                </div>
+            <?php endif; ?>
+        </div>
     </div>
-</div>
 
 
 
@@ -351,19 +358,18 @@ function contact_icon_use($icon_id, $classes = []) {
 </section>
 
 <script>
-window.contactFormConfig = {
-    classes: {
-        form: "<?= esc_js($classes['contact-form']) ?>",
-        counter: "<?= esc_js($classes['contact-counter']) ?>",
-        inputError: "<?= esc_js($classes['input-error']) ?>",
-        error: "<?= esc_js($classes['contact-error']) ?>"
-    },
-    messages: {
-        required: "<?= esc_js($err_required) ?>",
-        email: "<?= esc_js($err_email) ?>",
-        phone: "<?= esc_js($err_phone) ?>"
-    },
-    spritePath: "<?= esc_url(get_template_directory_uri() . '/assets/img/sprites.svg') ?>"
-};
+    window.contactFormConfig = {
+        classes: {
+            form: "<?= esc_js($classes['contact-form']) ?>",
+            counter: "<?= esc_js($classes['contact-counter']) ?>",
+            inputError: "<?= esc_js($classes['input-error']) ?>",
+            error: "<?= esc_js($classes['contact-error']) ?>"
+        },
+        messages: {
+            required: "<?= esc_js($err_required) ?>",
+            email: "<?= esc_js($err_email) ?>",
+            phone: "<?= esc_js($err_phone) ?>"
+        },
+        spritePath: "<?= esc_url(get_template_directory_uri() . '/assets/img/sprites.svg') ?>"
+    };
 </script>
-
