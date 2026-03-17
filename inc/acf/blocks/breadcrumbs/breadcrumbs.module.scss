@@ -2,63 +2,60 @@
 @use "../../../../src/scss/mixins/media" as *;
 
 .section {
-  padding-top: 16px;
-  padding-bottom: 0;
+    padding-top: 16px;
+    padding-bottom: 0;
+
+    @include min-laptop {
+        padding-top: 32px;
+    }
 }
 
 .home-icon {
-  width: 24px;
-  height: 24px;
-  fill: $icon-color-default-stroke;
+    fill: $icon-color-default-stroke;
+    width: 24px;
+    height: 24px;
 }
 
 .arrow-icon {
-  width: 18px;
-  height: 18px;
-  fill: $text-accent;
-  margin-right: 4px;
+    fill: $text-accent;
+    margin-right: 4px;
+    width: 18px;
+    height: 18px;
 }
 
 .list {
-  display: inline-flex;
-  gap: 4px;
-  align-items: center;
-  height: 100%;
+    display: inline-flex;
+    flex-flow: row wrap;
+    align-items: center;
+    gap: 4px;
+    height: 100%;
 }
 
 .item {
-  display: flex;
-  align-items: center;
-  align-self: stretch;
-}
+    display: flex;
+    align-items: center;
+    align-self: stretch;
 
-.item a {
-  display: flex;
-  align-items: center;
-  line-height: 1;
-  height: 100%;
-  border-bottom: 1px solid transparent;
+    a {
+        display: flex;
+        align-items: center;
+        border-bottom: 1px solid transparent;
+        height: 100%;
+        line-height: 1;
 
-}
+        &:hover {
+            border-bottom: 1px solid $buttons-color-background-primary-pressed;
+            color: $buttons-color-background-primary-pressed;
 
-.item:last-child a {
-  color: $stroke-hover;
-  border-bottom: 1px solid $stroke-hover;
-  border-top: 1px solid transparent;
-}
+            & svg {
+                fill: $input-color-border-pressed;
+            }
+        }
+    }
 
-.item a:hover {
-  color: $buttons-color-background-primary-pressed;
-  border-bottom: 1px solid $buttons-color-background-primary-pressed;
-
-
-  & svg {
-    fill: $input-color-border-pressed;
-  }
-}
-
-@include min-laptop {
-  .section {
-    padding-top: 32px;
-  }
+    &:last-child a {
+        border-top: 1px solid transparent;
+        border-bottom: 1px solid $stroke-hover;
+        color: $stroke-hover;
+    }
 }

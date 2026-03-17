@@ -9,6 +9,38 @@ import { getElement, store } from "@wordpress/interactivity";
 import { fetchJson, syncStateToUrl } from "../utils.js";
 
 /**
+ * Persist facet labels (and slugs for categories) into state._labelCache
+ * before facets are replaced. Ensures orphaned filter chips still display
+ * a human-readable label and correct category slug for CSS targeting.
+ */
+function cacheFacetLabels(state) {
+  if (!state._labelCache) state._labelCache = {};
+  const facets = state.facets;
+  if (!facets) return;
+
+  for (const [key, items] of Object.entries(facets)) {
+    if (!Array.isArray(items)) continue;
+    for (const item of items) {
+      if (item.id && item.label) {
+        state._labelCache[`${key}:${item.id}`] = item.label;
+        if (item.slug) state._labelCache[`${key}:${item.id}:slug`] = item.slug;
+      }
+      if (Array.isArray(item.children)) {
+        for (const child of item.children) {
+          if (child.id && child.label) {
+            state._labelCache[`${key}:${child.id}`] = child.label;
+            state._labelCache[`${key}:${child.id}:child`] = true;
+            // Children inherit parent slug for CSS color targeting
+            if (item.slug)
+              state._labelCache[`${key}:${child.id}:slug`] = item.slug;
+          }
+        }
+      }
+    }
+  }
+}
+
+/**
  * Internal orchestration to fetch data from the REST API.
  *
  * @param {Object} options
@@ -51,6 +83,7 @@ async function fetchResults({ append = false } = {}) {
       state.totalFound = data.total;
       state.totalPages = data.total_pages;
       if (data.facets) {
+        cacheFacetLabels(state);
         state.facets = data.facets;
       }
       syncStateToUrl(state.query);

@@ -64,7 +64,7 @@ class LocationsFilterSimple extends AbstractFilter
         if (empty($this->searchTerm)) {
             return $clauses;
         }
-        
+
         // Just additional guard
         // Only inject for opportunity queries (prevent pollution of unrelated queries)
         if ($query->get('post_type') !== 'opportunity') {
@@ -129,13 +129,14 @@ class LocationsFilterSimple extends AbstractFilter
             <input
                 type="search"
                 class="filter-search-input"
-                placeholder="<?php esc_attr_e('Find location...', 'starwishx'); ?>"
+                placeholder="<?php esc_attr_e('City, Raion, Oblast...', 'starwishx'); ?>"
                 data-filter-id="<?php echo esc_attr($this->getId()); ?>"
                 data-wp-bind--value="state.query.location"
                 data-wp-on--input="actions.filters.updateLocationSearch">
             <span
                 class="spinner is-active"
-                data-wp-bind--hidden="!state.listing.ui.isLoadingLocation"></span>
+                data-wp-bind--hidden="!state.listing.ui.isLoadingLocation">
+            </span>
         </div>
 
         <!-- "Clear" button visible only when a location is selected -->

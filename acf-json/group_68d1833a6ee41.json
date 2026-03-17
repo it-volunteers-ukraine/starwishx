@@ -1,6 +1,6 @@
 {
     "key": "group_68d1833a6ee41",
-    "title": "Menu Images",
+    "title": "Menu Images & auth gate",
     "fields": [
         {
             "key": "field_68d1833ac02b1",
@@ -27,6 +27,27 @@
             "mime_types": "",
             "allow_in_bindings": 1,
             "preview_size": "medium"
+        },
+        {
+            "key": "field_69b4a80ccefa3",
+            "label": "menu auth gate",
+            "name": "menu_auth_gate",
+            "aria-label": "",
+            "type": "true_false",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "message": "",
+            "default_value": 0,
+            "allow_in_bindings": 0,
+            "ui": 0,
+            "ui_on_text": "",
+            "ui_off_text": ""
         }
     ],
     "location": [
@@ -47,5 +68,6 @@
     "active": true,
     "description": "",
     "show_in_rest": 1,
-    "modified": 1759652930
+    "display_title": "",
+    "modified": 1773448160
 }

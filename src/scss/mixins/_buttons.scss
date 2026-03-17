@@ -1,0 +1,54 @@
+@use "../variables" as *;
+@use "./media";
+
+.button {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: $animations;
+    cursor: pointer;
+    border: none;
+    border-radius: $radius-element;
+    background: $buttons-color-background-primary-default;
+    padding: 12.5px 24px;
+    width: fit-content;
+    color: $buttons-color-text-primary-default;
+    font-weight: 500;
+    font-size: 16px;
+    overflow: hidden;
+
+    &::before {
+        content: "";
+        width: 0;
+        height: 100%;
+        position: absolute;
+        bottom: 0;
+        left: 100%;
+
+        // z-index: -1;
+        transition: all 0.3s ease;
+        background: $buttons-color-background-primary-hover;
+
+        // border-radius: $radius-element;
+    }
+
+    &:hover {
+        // background-color: $buttons-color-background-primary-hover;
+
+        &::before {
+            width: 100%;
+            left: 0;
+            transition: width 0.3s ease;
+        }
+    }
+
+    &:active,
+    &:active:hover {
+        background-color: $buttons-color-background-primary-pressed;
+    }
+
+    @include media.min-desktop {
+        font-size: 18px;
+    }
+}

@@ -2,6 +2,9 @@
 
 /**
  * Template Name: Listing Page
+ * 
+ * ! DEPRECATED - moved to the archive-opportunity.php
+ * 
  * File: templates/page-listing-oportunities.php
  */
 

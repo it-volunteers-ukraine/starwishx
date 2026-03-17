@@ -1,118 +1,87 @@
 function detectMouse() {
-    return window.matchMedia("(pointer: fine)").matches;
+  return window.matchMedia("(pointer: fine)").matches;
 }
 
+const slider = document.getElementById("slider-one-photo");
+if (!slider) throw new Error("slider-one-photo not found");
 
 const noMouse = !detectMouse();
-const isClickModeForTouch = document.getElementById("slider-one-photo").dataset.clickMode == 'true' ? true : false;
-// console.log("clickMode: ", document.getElementById("slider-one-photo").dataset.clickMode);
-// console.log("noMouse: ", noMouse);
-// console.log("isClickModeForTouch: ", isClickModeForTouch, typeof isClickModeForTouch);
+const isClickModeForTouch = slider.dataset.clickMode === "true";
+const items = slider.children;
 
-// const sliderss = document.querySelectorAll("#slider-one-photo"); // лучше использовать класс
-const items = document.getElementById("slider-one-photo").children; // лучше использовать класс
-// console.log('items: ', items)
-const screenHeight = window.innerHeight;
+function setHeight(item) {
+  const itemContent = item.children[1];
+  if (!itemContent) return;
+  const itemContentText = itemContent.children[0];
+  if (!itemContentText) return;
 
-function setHeight(item, index = 'undef') {
-    // console.log('call setHeight!')
-    const itemContent = item.children[1];
-    const itemContentText = itemContent.children[0];
+  let curTextHeight = itemContentText.style.minHeight;
+  itemContentText.style.minHeight = 0;
+  const textHeight = itemContentText.scrollHeight + "px";
 
-    let curTextHeight = itemContentText.style.minHeight
-    itemContentText.style.minHeight = 0;
-    const textHeight = itemContentText.scrollHeight + "px";
-
-    if (curTextHeight !== textHeight) {
-        // console.log("Set new height!");
-        // console.log("index: ", index, "textHeight: ", textHeight);
-        itemContent.style.maxHeight = textHeight;
-        itemContentText.style.minHeight = textHeight;
-    } else {
-        itemContentText.style.minHeight = curTextHeight;
-    }
-
+  if (curTextHeight !== textHeight) {
+    itemContent.style.maxHeight = textHeight;
+    itemContentText.style.minHeight = textHeight;
+  } else {
+    itemContentText.style.minHeight = curTextHeight;
+  }
 }
 
 requestAnimationFrame(() => {
-    Array.from(items).forEach((item, index, array) => {
+  const itemsArray = Array.from(items);
 
-        setHeight(item, index);
+  itemsArray.forEach((item) => {
+    setHeight(item);
+  });
 
-        if (!isClickModeForTouch && noMouse) {
-            // console.log('no mouse detected, using scroll effect');
+  // Single scroll listener for touch devices (scroll-activated accordion)
+  if (!isClickModeForTouch && noMouse) {
+    window.addEventListener("scroll", () => {
+      const screenHeight = window.innerHeight;
 
-            const itemChildren = item.children[1]//.children[0];
-            // console.log("itemChildren", itemChildren);
+      itemsArray.forEach((item) => {
+        const rect = item.getBoundingClientRect();
 
-            // const elemScrollHeight = itemChildren.scrollHeight;
-            // console.log('index:', index, 'elemScrollHeight: ', elemScrollHeight);
-            // const elemOffsetHeight = itemChildren.offsetHeight;
-            // console.log('index:', index, 'elemOffsetHeight: ', elemOffsetHeight);
-            // const elemClientHeight = itemChildren.clientHeight;
-            // console.log('index:', index, 'elemClientHeight: ', elemClientHeight);
-            // const elemComputedStyle = getComputedStyle(itemChildren).height;
-            // console.log('index:', index, 'elemComputedStyle: ', elemComputedStyle);
-
-
-            // отслеживаем скролл всей страницы
-            window.addEventListener('scroll', () => {
-                // console.log('scroll detected');
-                const rect = item.getBoundingClientRect();
-                const itemTop = rect.top;
-                const itemScrolY = rect.top + window.scrollY;
-                const itemBottom = rect.bottom;
-                const itemHeight = rect.height;
-
-                // проверяем, находится ли элемент в центре экрана, и центр экрана внутри элемента
-                if (itemTop < screenHeight / 2 && itemBottom > screenHeight / 2) {
-                    // элемент в центре экрана
-
-                    if (!item.hasAttribute('data-active')) {
-                        setHeight(item, index);
-                        item.setAttribute('data-active', 'true');
-                    }
-                } else {
-                    // элемент не в центре экрана
-                    if (item.hasAttribute('data-active')) {
-                        const heightContent = item.children[1].scrollHeight;
-                        const offsettop = itemScrolY - window.innerHeight / 2 + heightContent / 2;
-                        // console.log('index:', index, 'heightContent:', heightContent, "offsettop:", offsettop);
-
-                        item.removeAttribute('data-active');
-                        setTimeout(() => {
-                        }, 300);
-                    }
-                }
-            });
+        if (rect.top < screenHeight / 2 && rect.bottom > screenHeight / 2) {
+          if (!item.hasAttribute("data-active")) {
+            setHeight(item);
+            item.setAttribute("data-active", "true");
+          }
+        } else {
+          if (item.hasAttribute("data-active")) {
+            item.removeAttribute("data-active");
+          }
         }
-
-        // Для ховера проверяет высоту
-        if (!noMouse) {
-            // console.log("!nomouse")
-            item.addEventListener('mouseenter', () => {
-                setHeight(item);
-            })
-        }
-
-        // Если включено Click mode
-        if (isClickModeForTouch && noMouse) {
-            item.children[0].addEventListener("click", () => {
-                const curClick = item.children[0];
-                // console.log("index: ", index)
-                array.forEach((el, elIndex) => { 
-                    setHeight(el, elIndex);
-                    if (index != elIndex){
-                        el.removeAttribute("data-active") 
-                    }else {
-                        if (el.hasAttribute('data-active')) {
-                            el.removeAttribute("data-active");
-                        } else {
-                            el.setAttribute("data-active", "true");
-                        }
-                    }
-                });
-            })
-        }
+      });
     });
+  }
+
+  // Hover: recalculate height on mouseenter
+  if (!noMouse) {
+    itemsArray.forEach((item) => {
+      item.addEventListener("mouseenter", () => {
+        setHeight(item);
+      });
+    });
+  }
+
+  // Click mode for touch devices
+  if (isClickModeForTouch && noMouse) {
+    itemsArray.forEach((item, index) => {
+      item.children[0].addEventListener("click", () => {
+        itemsArray.forEach((el, elIndex) => {
+          setHeight(el);
+          if (index !== elIndex) {
+            el.removeAttribute("data-active");
+          } else {
+            if (el.hasAttribute("data-active")) {
+              el.removeAttribute("data-active");
+            } else {
+              el.setAttribute("data-active", "true");
+            }
+          }
+        });
+      });
+    });
+  }
 });

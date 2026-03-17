@@ -18,7 +18,7 @@ $linkedin_link = esc_html(get_field('linkedin_link', 'options'));
 
 ?>
 
-<footer class="footer">
+<footer class="footer site-footer">
     <div class="container">
         <h2 class="footer-title"><?php echo $footer_title; ?></h2>
         <div class="footer-inner">

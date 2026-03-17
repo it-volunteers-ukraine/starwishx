@@ -92,16 +92,18 @@ document.addEventListener('DOMContentLoaded', () => {
     if (phoneInput && window.intlTelInput) {
         iti = window.intlTelInput(phoneInput, {
             initialCountry: 'auto',
-            geoIpLookup: function (callback) {
+            geoIpLookup: (success, failure) => {
                 fetch('https://ipapi.co/json/')
                     .then((res) => res.json())
-                    .then((data) => callback(data.country_code))
-                    .catch(() => callback('UA'));
+                    .then((data) => success(data.country_code))
+                    .catch(() => failure());
             },
-            utilsScript: 'https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.19/js/utils.js',
-            separateDialCode: false,
-            nationalMode: false,
-            preferredCountries: ['ua', 'pl', 'us', 'gb'],
+            countryOrder: ['ua', 'pl', 'de', 'us', 'gb'],
+            excludeCountries: ['ru'],
+            nationalMode: true,
+            formatAsYouType: true,
+            strictMode: true,
+            countrySearch: true,
         });
 
         phoneInput.addEventListener('blur', () => {
@@ -219,7 +221,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (data.success) {
                     showPopup(popupSuccess);
                     formEl.reset();
-                    
+                    if (iti) iti.setNumber('');
+
                     if (textarea && counter) {
                         counter.textContent = `0/${parseInt(textarea.getAttribute('maxlength')) || 500}`;
                     }

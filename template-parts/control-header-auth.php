@@ -28,7 +28,8 @@ $is_launchpad = is_page_template('templates/page-launchpad.php');
 $btn = [
     'text' => '',
     'url'  => '',
-    'slug' => '' // used for class modifiers
+    'slug' => '', // used for class modifiers
+    'icon' => '',
 ];
 
 
@@ -37,11 +38,13 @@ if (!$is_logged_in) {
     $btn['text'] = __('Login', 'starwishx');
     $btn['url']  = home_url('/gateway/');
     $btn['slug'] = 'login';
+    $btn['icon'] = 'icon-arrow-right-to-arc';
 } elseif ($is_launchpad) {
     // STATE: LOGGED IN & CURRENTLY IN CABINET
     $btn['text'] = __('Logout', 'starwishx');
     $btn['url']  = wp_logout_url(home_url());
     $btn['slug'] = 'logout';
+    $btn['icon'] = 'icon-arrow-left-from-arc';
 } else {
     // STATE: LOGGED IN & ON WEBSITE
     $can_use_lp = false;
@@ -58,11 +61,13 @@ if (!$is_logged_in) {
         $btn['text'] = __('Cabinet', 'starwishx');
         $btn['url']  = home_url('/launchpad/');
         $btn['slug'] = 'cabinet';
+        $btn['icon'] = 'icon-person';
     } else {
         // Fallback for Admins/Editors: They don't use Launchpad, so show Logout
         $btn['text'] = __('Logout', 'starwishx');
         $btn['url']  = wp_logout_url(home_url());
         $btn['slug'] = 'logout';
+        $btn['icon'] = 'icon-arrow-right-to-arc';
     }
 }
 
@@ -78,8 +83,9 @@ $final_class = sprintf('%1$s %1$s--%2$s', $base_class, $btn['slug']);
  * RENDER
  */
 ?>
-<a href="<?php echo esc_url($btn['url']); ?>"
-    class="<?php echo esc_attr($final_class); ?>"
-    <?php echo ($btn['slug'] === 'logout') ? 'role="button"' : ''; ?>>
-    <span><?php echo esc_html($btn['text']); ?></span>
+<a href="<?= esc_url($btn['url']); ?>"
+    class="<?= esc_attr($final_class); ?>"
+    <?= ($btn['slug'] === 'logout') ? 'role="button"' : ''; ?>>
+    <?= sw_svg($btn['icon']) ?>&nbsp;
+    <span><?= esc_html($btn['text']); ?></span>
 </a>

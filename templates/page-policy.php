@@ -54,21 +54,22 @@ $pdf_title = $pdf_title_override ? $pdf_title_override : $doc['title'];
 
 get_header();
 ?>
-
-<!-- Render Breadcrumbs ACF block -->
 <?php
-// Kept as render_block() intentionally — alternative rendering methods
-// (do_action hook, shortcode) strip the block styles on this theme.
 if (function_exists('render_block')) {
     echo render_block([
         'blockName'   => 'acf/breadcrumbs',
-        'attrs'       => [],
+        'attrs'       => [
+            'data'        => [
+                'show_last_item' => true,
+                'nowrap'         => true,
+                'nav_class'      => 'container',
+            ],
+        ],
         'innerHTML'   => '',
         'innerBlocks' => [],
     ]);
 }
 ?>
-
 <main id="main" class="site-main">
     <div class="container policy-page">
 

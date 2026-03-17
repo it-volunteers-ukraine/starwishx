@@ -18,6 +18,7 @@ class FavoritesService
             'project'     => __('Project', 'starwishx'),
             'post'        => __('Post', 'starwishx'),
             'page'        => __('Page', 'starwishx'),
+            'news'        => __('News', 'starwishx'),
         ];
 
         return $labels[$slug] ?? ucfirst($slug);

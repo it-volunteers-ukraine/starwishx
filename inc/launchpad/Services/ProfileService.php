@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Launchpad\Services;
 
+use Shared\Policy\PhonePolicy;
 use WP_Error;
 
 class ProfileService
@@ -38,10 +39,9 @@ class ProfileService
         // ACF for Users requires 'user_{id}' format
         $acfId = 'user_' . $userId;
 
-        // --- PHONE NUMBER HANDLING ---
+        // Phone field: ACF Phone Number plugin returns object/array, flatten to E.164 string
         $phoneRaw = get_field('phone', $acfId);
         $phoneString = '';
-        // error_log('phone field raw: ' . print_r($phoneRaw, true));
 
         if (is_array($phoneRaw)) {
             // If ACF returned an array, try the international or e164 keys
@@ -134,62 +134,24 @@ class ProfileService
         // 2. Update ACF Fields
         $acfId = 'user_' . $userId;
 
-        // --- Replace the existing phone update block with this ---
         if (isset($data['phone'])) {
-            $rawPhone = (string) $data['phone'];
+            $e164 = preg_replace('/[^\d\+]/', '', (string) $data['phone']);
+            $country = !empty($data['phoneCountry'])
+                ? sanitize_text_field($data['phoneCountry'])
+                : 'ua';
 
-            // Normalize whitespace and remove control characters
-            $normalized = preg_replace('/\s+/u', ' ', trim($rawPhone));
-
-            // Pretty (readable) and strict E.164 forms
-            $savePretty = preg_replace('/[^\d\+\s]/u', '', $normalized); // +380 44 123 1231
-            $saveE164   = preg_replace('/[^\d\+]/', '', $savePretty);     // +380441231231
-
-            // Get field object and key (safer than using the name)
-            $fieldObj = get_field_object('phone', $acfId);
-            $acfFieldKey = is_array($fieldObj) && !empty($fieldObj['key']) ? $fieldObj['key'] : 'phone';
-
-            // Resolve default country from field settings, fallback to 'us'
-            $defaultCountry = 'us';
-            if (is_array($fieldObj)) {
-                if (!empty($fieldObj['default_country'])) {
-                    $defaultCountry = $fieldObj['default_country'];
-                } elseif (!empty($fieldObj['value']['country'])) {
-                    $defaultCountry = $fieldObj['value']['country'];
+            // Server-side validation (libphonenumber when available, E.164 regex fallback)
+            if ($e164 !== '') {
+                $validation = PhonePolicy::validate($e164, $country);
+                if (is_wp_error($validation)) {
+                    return $validation;
                 }
             }
 
-            // Try: save as array { number, country } (pretty first)
-            error_log('ProfileService.save: trying to save pretty phone array: ' . $savePretty . ' country: ' . $defaultCountry);
-            $valueArr = ['number' => $savePretty, 'country' => $defaultCountry];
-            $updated = update_field($acfFieldKey, $valueArr, $acfId);
-            $after = get_field('phone', $acfId);
-            error_log('ProfileService.save: after save (pretty) -> ' . print_r($after, true) . '; update_field returned: ' . var_export($updated, true));
+            $fieldObj = get_field_object('phone', $acfId);
+            $key = is_array($fieldObj) && !empty($fieldObj['key']) ? $fieldObj['key'] : 'phone';
 
-            // Fallback: try E.164 numeric (no spaces)
-            if (empty($after)) {
-                error_log('ProfileService.save: pretty save produced no usable value, trying E164: ' . $saveE164);
-                $valueArr2 = ['number' => $saveE164, 'country' => $defaultCountry];
-                $updated2 = update_field($acfFieldKey, $valueArr2, $acfId);
-                $after2 = get_field('phone', $acfId);
-                error_log('ProfileService.save: after save (e164) -> ' . print_r($after2, true) . '; update_field returned: ' . var_export($updated2, true));
-                $finalPhoneRaw = $after2;
-            } else {
-                $finalPhoneRaw = $after;
-            }
-
-            // Flatten for response: if object -> use international/e164; if array -> use keys
-            $phoneStringForResponse = '';
-            if (is_object($finalPhoneRaw) && method_exists($finalPhoneRaw, 'international')) {
-                $phoneStringForResponse = $finalPhoneRaw->international();
-            } elseif (is_array($finalPhoneRaw)) {
-                $phoneStringForResponse = $finalPhoneRaw['international'] ?? $finalPhoneRaw['e164'] ?? $finalPhoneRaw['number'] ?? '';
-            } else {
-                $phoneStringForResponse = (string) $finalPhoneRaw;
-            }
-
-            $data['phone'] = $phoneStringForResponse;
-            error_log('ProfileService.save: phone final string for response: ' . $phoneStringForResponse);
+            update_field($key, ['number' => $e164, 'country' => $country], $acfId);
         }
 
         if (isset($data['telegram'])) {
@@ -199,9 +161,6 @@ class ProfileService
         if (isset($data['organization'])) {
             update_field('organization', sanitize_text_field($data['organization']), $acfId);
         }
-
-        // Return fresh data (Service handles the Array->String conversion again here)
-        // return $this->getProfileData($userId);
 
         // 3. Fetch fresh data to see the result of the update
         $freshProfile = $this->getProfileData($userId);

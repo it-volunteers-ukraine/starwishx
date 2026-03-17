@@ -2,11 +2,12 @@
 @use "../mixins/media";
 
 .single-project {
-    section.section[class*="breadcrumbs-module__"],
-    .project-breadcrumbs {
-        margin-top: 32px;
+    .breadcumbs-nav {
+        margin-top: 16px;
         margin-bottom: 16px;
-        padding-top: 0;
+        @include media.min-laptop {
+            margin-top: 32px;
+        }
     }
 
     &__layout {

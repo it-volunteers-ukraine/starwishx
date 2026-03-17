@@ -2,17 +2,25 @@
 @use "../mixins/media";
 
 .single-opportunity {
-    section.section[class*="breadcrumbs-module__"],
-    .opportunity-breadcrumbs {
-        margin-top: 32px;
+    .breadcumbs-nav {
+        margin-top: 16px;
         margin-bottom: 16px;
-        padding-top: 0;
-        .btn-back {
-            display: inline-flex;
-            column-gap: 4px;
-            align-items: center;
+        @include media.min-laptop {
+            margin-top: 32px;
         }
     }
+
+    // section.section[class*="breadcrumbs-module__"],
+    // .opportunity-breadcrumbs {
+    //     margin-top: 32px;
+    //     margin-bottom: 16px;
+    //     padding-top: 0;
+    //     .btn-back {
+    //         display: inline-flex;
+    //         column-gap: 4px;
+    //         align-items: center;
+    //     }
+    // }
     &__layout {
         display: flex;
         flex-flow: column wrap;
@@ -283,7 +291,6 @@
             flex-wrap: wrap;
             gap: 4px;
             .tag-category {
-                border: 1px solid;
                 border-radius: $radius-element;
                 padding: 4px 8px;
                 font-size: 14px;

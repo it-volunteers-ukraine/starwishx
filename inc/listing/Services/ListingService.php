@@ -316,22 +316,31 @@ class ListingService
             ? array_map(fn($t) => ['name' => $t->name], $seekerTerms)
             : [];
 
-        $isFavorite = isset($preloaded['favoriteIds'][$postId]);
+        $isFavorite   = isset($preloaded['favoriteIds'][$postId]);
+        // Rating & comment engagement data (post meta cache already primed by WP_Query)
+        $ratingAvg    = (float) get_post_meta($postId, '_opportunity_rating_avg', true);
+        $ratingCount  = (int) get_post_meta($postId, '_opportunity_rating_count', true);
+        $commentCount = (int) $post->comment_count;
 
         return [
-            'id'          => $postId,
-            'title'       => get_the_title($post),
-            'excerpt'     => wp_trim_words($post->post_content, 38, ' …'),
-            'thumbnail'   => get_the_post_thumbnail_url($post, 'medium') ?: null,
-            'company'     => get_post_meta($postId, 'opportunity_company', true),
-            'locations'   => $locations,
-            'country'     => $country,
-            'categories'  => $categories,
-            'seekers'     => $seekers,
-            'date_starts' => $this->formatDateForUI(get_post_meta($postId, 'opportunity_date_starts', true)),
-            'date_ends'   => $this->formatDateForUI(get_post_meta($postId, 'opportunity_date_ends', true)),
-            'url'         => get_permalink($post),
-            'isFavorite'  => $isFavorite,
+            'id'            => $postId,
+            'title'         => get_the_title($post),
+            'excerpt'       => wp_trim_words($post->post_content, 38, ' …'),
+            'thumbnail'     => get_the_post_thumbnail_url($post, 'medium') ?: null,
+            'company'       => get_post_meta($postId, 'opportunity_company', true),
+            'locations'     => $locations,
+            'country'       => $country,
+            'categories'    => $categories,
+            'seekers'       => $seekers,
+            'date_starts'   => $this->formatDateForUI(get_post_meta($postId, 'opportunity_date_starts', true)),
+            'date_ends'     => $this->formatDateForUI(get_post_meta($postId, 'opportunity_date_ends', true)),
+            'url'           => get_permalink($post),
+            'isFavorite'    => $isFavorite,
+            'ratingAvg'     => $ratingCount > 0 ? $ratingAvg : 0,
+            'ratingRounded' => $ratingCount > 0 ? (int) round($ratingAvg) : 0,
+            'ratingCount'   => $ratingCount,
+            'commentCount'  => $commentCount,
+            'commentsUrl'   => get_permalink($post) . '#comments',
         ];
     }
 

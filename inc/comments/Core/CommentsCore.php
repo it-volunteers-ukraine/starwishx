@@ -7,7 +7,7 @@
  * state hydration, and asset enqueueing.
  * Consumed by: single-opportunity & single-project templates.
  *
- * Version: 0.7.1
+ * Version: 0.7.5
  * Author: DevFrappe
  * Email: dev.frappe@proton.me
  * License: GPL v2 or later
@@ -73,9 +73,10 @@ final class CommentsCore
     public function enqueueAssets(): void
     {
         $needsComments = is_singular('opportunity')
-            || is_singular('project');
+            || is_singular('project')
+            || is_singular('news');
 
-        if (!$needsComments || !is_user_logged_in()) {
+        if (!$needsComments) {
             return;
         }
 
@@ -97,9 +98,11 @@ final class CommentsCore
                 'nonce'    => wp_create_nonce('wp_rest'),
                 'restUrl'  => rest_url('comments/v1/'),
                 'messages' => [
-                    'reviewPosted'  => __('Review posted successfully!', 'starwishx'),
-                    'updateSaved'   => __('Update saved.', 'starwishx'),
-                    'submitError'   => __('An error occurred while posting.', 'starwishx'),
+                    'reviewPosted'    => __('Review posted successfully!', 'starwishx'),
+                    'updateSaved'     => __('Update saved.', 'starwishx'),
+                    'submitError'     => __('An error occurred while posting.', 'starwishx'),
+                    /* translators: %avg% = average rating, %count% = number of reviews */
+                    'ratingBadgeLabel' => __('Average rating: %avg% out of 5 based on %count% reviews', 'starwishx'),
                 ],
             ],
         ]);

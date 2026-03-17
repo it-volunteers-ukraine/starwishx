@@ -3,7 +3,7 @@
 /**
  * Listing - Public Opportunities Discovery App
  * Architecture: Singleton with Dependency Injection
- * Version: 0.7.1
+ * Version: 0.7.5
  * Author: DevFrappe
  * Email: dev.frappe@proton.me
  * License: GPL v2 or later
@@ -149,11 +149,10 @@ final class ListingCore
     {
         $categoryFilter = new CategoryFilter();
         $categoryFilter->setTermCounter($this->termCounter);
-
         $registry->register('category', $categoryFilter,              10);
-        $registry->register('country',  new CountryFilter(),          20);
-        $registry->register('location', new LocationsFilterSimple(),  30);
-        $registry->register('seekers',  new SeekersFilter(),          40);
+        $registry->register('location', new LocationsFilterSimple(),  20);
+        $registry->register('seekers',  new SeekersFilter(),          30);
+        $registry->register('country',  new CountryFilter(),          40);
     }
 
     /**

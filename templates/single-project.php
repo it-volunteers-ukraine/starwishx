@@ -26,7 +26,13 @@ get_header();
 if (function_exists('render_block')) {
     echo render_block([
         'blockName'   => 'acf/breadcrumbs',
-        'attrs'       => ['class' => 'project-breadcrumbs'],
+        'attrs'       => [
+            'data'        => [
+                'show_last_item' => true,
+                'nowrap'         => true,
+                'nav_class'      => 'container',
+            ],
+        ],
         'innerHTML'   => '',
         'innerBlocks' => [],
     ]);
@@ -156,7 +162,7 @@ if (function_exists('render_block')) {
 
     <aside class="project-aside">
         <div class="news-container">
-            <?php get_template_part('template-parts/last-news', 'aside', [
+            <?php get_template_part('template-parts/news-aside', null, [
                 'title'       => __('News', 'starwishx'),
                 'title_class' => 'h5',
                 'count_news'  => 4,

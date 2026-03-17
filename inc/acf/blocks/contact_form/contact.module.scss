@@ -140,6 +140,10 @@
   padding: 12px;
   width: 100%;
   word-break: break-all;
+
+  &[type="search"] {
+    padding-left: 30px;
+  }
 }
 
 .contact-form textarea {
@@ -507,4 +511,8 @@ textarea::placeholder {
   .contact-popup-title {
     font-size: 44px;
   }
+}
+
+input.iti__search-input {
+  padding-left: 30px;
 }

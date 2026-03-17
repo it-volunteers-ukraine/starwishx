@@ -20,7 +20,8 @@ $show_label = isset($args['show_label']) ? (bool) $args['show_label'] : true;
 
 // SSR: Determine initial favorite state so the server renders the correct HTML.
 // The JS getter (state.isFavorite) takes over for reactivity on the client.
-$is_favorite = function_exists('favorites') && \favorites()->isUserFavorite($post_id);
+$is_favorite  = function_exists('favorites') && \favorites()->isUserFavorite($post_id);
+$nolabel_attr = "";
 
 // Dynamic modifier class so CSS can adjust margins/gaps when the label is missing
 $wrapper_classes = ['control-favorites-wrapper'];

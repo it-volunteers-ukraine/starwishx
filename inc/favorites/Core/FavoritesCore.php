@@ -8,7 +8,7 @@
  * Consumed by: Launchpad (dashboard panel), Listing (grid), Projects (cards),
  *              single-opportunity & single-project templates.
  * 
- * Version: 0.7.1
+ * Version: 0.7.5
  * Author: DevFrappe
  * Email: dev.frappe@proton.me
  * License: GPL v2 or later
@@ -94,6 +94,7 @@ final class FavoritesCore
             // || is_page('opportunities') // if listing in page Opportunities
             || is_archive('opportunities') // if listing is archive Opportunities
             || is_singular('opportunity')
+            // || is_singular('news')
             || is_singular('project');
 
         if (!$needsFavorites) {
@@ -118,7 +119,7 @@ final class FavoritesCore
             $this->cachedIds = $ids;
 
             wp_interactivity_state('favorites', [
-                'myFavoriteIds' => $ids,
+                '       ' => $ids,
                 'config'        => [
                     'nonce'   => wp_create_nonce('wp_rest'),
                     'restUrl' => rest_url('favorites/v1/'),

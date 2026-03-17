@@ -99,6 +99,10 @@ export function syncStateToUrl(query) {
   const url = new URL(window.location);
   const params = new URLSearchParams();
 
+  // Category facets tree for slug serialization
+  const { state } = store("listing");
+  const categoryTree = state.facets?.["category-oportunities"] || [];
+
   Object.entries(query).forEach(([key, value]) => {
     if (!value || (Array.isArray(value) && value.length === 0)) {
       params.delete(key);
@@ -108,8 +112,22 @@ export function syncStateToUrl(query) {
     //! avoid write default page=1 to URL — it's the implicit default
     if (key === "page" && value === 1) return;
 
-    if (Array.isArray(value)) {
-      // Clean URL: ?category=46&country=75 (no brackets)
+    // Smart category: parent selected → slug, children only → numeric IDs
+    if (key === "category" && Array.isArray(value) && categoryTree.length > 0) {
+      for (const node of categoryTree) {
+        if (value.includes(node.id)) {
+          // Parent fully selected → write slug, skip children
+          params.append(key, node.slug);
+        } else if (node.children?.length) {
+          for (const child of node.children) {
+            if (value.includes(child.id)) {
+              params.append(key, child.id);
+            }
+          }
+        }
+      }
+    } else if (Array.isArray(value)) {
+      // Clean URL: ?country=75 (no brackets)
       value.forEach((val) => params.append(key, val));
     } else {
       params.set(key, value);
@@ -132,6 +150,10 @@ export function syncStateToUrl(query) {
 export function syncUrlToState(queryState) {
   const params = new URLSearchParams(window.location.search);
 
+  // Category facets tree for slug resolution
+  const { state } = store("listing");
+  const categoryTree = state.facets?.["category-oportunities"] || [];
+
   // Reset existing state keys to default before filling from URL
   Object.keys(queryState).forEach((key) => {
     if (Array.isArray(queryState[key])) {
@@ -141,8 +163,32 @@ export function syncUrlToState(queryState) {
     }
   });
 
+  // Resolve category first: slugs → parent + children IDs, numeric → as-is
+  const categoryRaw = params.getAll("category");
+  if (categoryRaw.length > 0) {
+    const ids = [];
+    for (const val of categoryRaw) {
+      if (isNaN(val)) {
+        // Slug → find parent in tree, expand to parent + all children
+        const parent = categoryTree.find((n) => n.slug === val);
+        if (parent) {
+          ids.push(parent.id);
+          if (parent.children) {
+            ids.push(...parent.children.map((c) => c.id));
+          }
+        }
+      } else {
+        ids.push(Number(val));
+      }
+    }
+    queryState.category = [...new Set(ids)];
+  }
+
+  // Handle remaining params (skip category — already resolved)
   for (const [key, value] of params.entries()) {
     const cleanKey = key.replace("[]", "");
+
+    if (cleanKey === "category") continue;
 
     if (Array.isArray(queryState[cleanKey])) {
       // It's a taxonomy array

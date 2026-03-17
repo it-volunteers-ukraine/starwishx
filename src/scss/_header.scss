@@ -39,6 +39,9 @@
 }
 
 .header {
+  position: relative;
+  z-index: 1000;
+
   .header-desktop-btn,
   .header-logout-btn,
   .header-cabinet-btn,
@@ -47,9 +50,12 @@
     justify-content: center;
     align-items: center;
     transition: background-color 0.2s ease;
-    border-radius: 22px;
+    border-radius: $radius-element;
     background: $buttons-color-background-primary-default;
-    width: 105px;
+    padding-right: 18px;
+    padding-left: 18px;
+
+    // width: 105px;
     height: 44px;
     color: $buttons-color-text-primary-default;
     font-size: 18px;
@@ -443,21 +449,23 @@
     margin-left: 8px;
   }
 
-  .menu-item-custom-grid.active .arrow-icon {
-    transform: rotate(-180deg);
-  }
-
-  .burger-menu .mobile-menu-list .menu-item-custom-grid.mobile-active > a.menu-button {
+  .menu-item-custom-grid > .menu-button {
     color: $icon-color-accent;
   }
 
-  .mobile-submenu {
-    display: none;
-    margin: 10px 0;
+  .menu-item-custom-grid .arrow-icon {
+    transform: rotate(-180deg);
   }
 
-  .mobile-submenu.active {
+  .menu-item-custom-grid {
+    .icon-menu-custom {
+      margin-left: 4px;
+    }
+  }
+
+  .mobile-submenu {
     display: block;
+    margin: 10px 0;
   }
 
   .mobile-submenu-row {
@@ -494,14 +502,6 @@
       font-size: 14px;
       line-height: 120%;
     }
-
-    &.active {
-      background-color: $icon-color-accent;
-
-      .submenu-image {
-        opacity: 0;
-      }
-    }
   }
 
   .header-mobile-btn,
@@ -521,9 +521,8 @@
     line-height: 1.2;
   }
 
-  .burger-menu .mobile-menu-list .menu-item-custom-grid:not(.mobile-active) > a.menu-button {
+  .burger-menu .mobile-menu-list .menu-item-custom-grid > a.menu-button {
     background: transparent;
-    color: $icon-color-primary;
   }
 }
 
@@ -577,7 +576,7 @@
 .search-input:focus {
   /* outline-color: $input-color-border-pressed; */
   outline: none;
-  
+
   /* 
   box-shadow: inset -7px -8px 9px -8px $buttons-color-background-primary-default;
   box-shadow:
@@ -593,7 +592,7 @@
     inset -7px 9px 9px -8px $buttons-color-background-primary-default,
     2px 4px 8px -3px #6c6087;
     box-shadow: 2px 4px 8px -3px #6c6087; */
-    box-shadow: inset 2px 4px 8px -3px #6c6087;
+  box-shadow: inset 2px 4px 8px -3px #6c6087;
 }
 
 .search-submit-bth {

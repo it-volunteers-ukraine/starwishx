@@ -59,11 +59,43 @@ export const gridGetters = {
 
     Object.entries(this.query).forEach(([key, value]) => {
       if (skipKeys.includes(key)) return;
-      if (Array.isArray(value)) count += value.length;
-      else if (value) count += 1;
+
+      // Smart count for hierarchical category: parent = 1, ignore its children
+      if (key === "category" && Array.isArray(value) && value.length > 0) {
+        const tree = this.facets["category-oportunities"] || [];
+        for (const node of tree) {
+          if (value.includes(node.id)) {
+            count++;
+            continue;
+          }
+          if (node.children && node.children.length > 0) {
+            count += node.children.filter((c) => value.includes(c.id)).length;
+          }
+        }
+      } else if (Array.isArray(value)) {
+        count += value.length;
+      } else if (value) {
+        count += 1;
+      }
     });
 
     return count;
+  },
+
+  /**
+   * Boolean: are any filters active?
+   */
+  get hasActiveFilters() {
+    return this.activeFiltersCount > 0;
+  },
+
+  /**
+   * Formatted label for the filter count badge on mobile button.
+   * Returns "(3)" or empty string.
+   */
+  get activeFiltersCountLabel() {
+    const count = this.activeFiltersCount;
+    return count > 0 ? `(${count})` : "";
   },
 
   /**
@@ -153,5 +185,131 @@ export const gridGetters = {
     const item = ctx?.item;
     if (!item || !item.id) return false;
     return !!item.isFavorite;
+  },
+
+  /**
+   * When exactly one parent category is selected, return its label.
+   * Returns empty string otherwise.
+   */
+  get selectedCategoryName() {
+    const selected = this.query.category;
+    if (!Array.isArray(selected) || selected.length === 0) return "";
+
+    const tree = this.facets["category-oportunities"] || [];
+    const selectedParents = tree.filter((node) => selected.includes(node.id));
+
+    return selectedParents.length === 1 ? selectedParents[0].label : "";
+  },
+
+  /**
+   * Boolean: is exactly one parent category selected?
+   */
+  get hasSelectedCategory() {
+    return this.selectedCategoryName !== "";
+  },
+
+  /**
+   * Builds an array of chip objects for all active filters.
+   * Each chip: { key, field, value, label }
+   * Label is truncated to 33 characters.
+   *
+   * Smart category handling:
+   *  - parent selected → single chip with parent label (children hidden)
+   *  - only children selected → individual chips per child
+   */
+  get activeFilterChips() {
+    const chips = [];
+    const MAX = 33;
+    const tr = (s) => (s.length > MAX ? s.slice(0, MAX) + "\u2026" : s);
+    const cache = this._labelCache || {};
+
+    // --- Category (hierarchical) ---
+    const catIds = this.query.category;
+    if (Array.isArray(catIds) && catIds.length > 0) {
+      const tree = this.facets["category-oportunities"] || [];
+      const handled = new Set();
+
+      for (const node of tree) {
+        if (catIds.includes(node.id)) {
+          chips.push({
+            key: `category-${node.id}`,
+            field: "category",
+            value: node.id,
+            label: tr(node.label),
+            slug: node.slug || "",
+            isChild: false,
+          });
+          handled.add(node.id);
+          // Children are visually contained under the parent chip
+          if (node.children) node.children.forEach((c) => handled.add(c.id));
+          continue;
+        }
+        if (node.children) {
+          for (const child of node.children) {
+            if (catIds.includes(child.id)) {
+              chips.push({
+                key: `category-${child.id}`,
+                field: "category",
+                value: child.id,
+                label: tr(child.label),
+                slug: node.slug || "",
+                isChild: true,
+              });
+              handled.add(child.id);
+            }
+          }
+        }
+      }
+
+      // Orphaned: selected but disappeared from facets after cross-filter refinement
+      for (const id of catIds) {
+        if (handled.has(id)) continue;
+        const label = cache[`category-oportunities:${id}`];
+        if (label) {
+          chips.push({
+            key: `category-${id}`,
+            field: "category",
+            value: id,
+            label: tr(label),
+            slug: cache[`category-oportunities:${id}:slug`] || "",
+            isChild: !!cache[`category-oportunities:${id}:child`],
+          });
+        }
+      }
+    }
+
+    // --- Flat arrays: country, seekers ---
+    const flat = [
+      { field: "country", facetKey: "country" },
+      { field: "seekers", facetKey: "category-seekers" },
+    ];
+    for (const { field, facetKey } of flat) {
+      const ids = this.query[field];
+      if (!Array.isArray(ids) || ids.length === 0) continue;
+      const list = this.facets[facetKey] || [];
+      for (const id of ids) {
+        const f = list.find((item) => item.id == id);
+        const label = f ? f.label : cache[`${facetKey}:${id}`];
+        if (!label) continue;
+        chips.push({
+          key: `${field}-${id}`,
+          field,
+          value: id,
+          label: tr(label),
+        });
+      }
+    }
+
+    // --- Location (string value) ---
+    if (this.query.location) {
+      chips.push({
+        key: "location",
+        field: "location",
+        value: this.query.location,
+        label: tr(this.query.location),
+      });
+    }
+
+    return chips;
   },
 };

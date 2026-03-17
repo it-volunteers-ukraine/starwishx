@@ -81,8 +81,10 @@
   display: box;
   min-height: calc(1.2em * 3);
   -webkit-box-orient: vertical;
-  -webkit-line-clamp: 3; /* максимум 3 строки */
+  line-clamp: 3;
+  -webkit-line-clamp: 3;
   overflow: hidden;
+  color: $text-basic;
 }
 
 @media screen and (min-width: 576px) {
@@ -171,7 +173,8 @@
 
   .item-title {
     min-height: calc(1.2em * 4);
-    -webkit-line-clamp: 4; /* максимум 3 строки */
+    line-clamp: 4;
+    -webkit-line-clamp: 4;
   }
 
   .photo-wrap {

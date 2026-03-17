@@ -1,4 +1,5 @@
 <?php
+
 $default_classes = [
     'section' => 'section',
     'container' => 'container',
@@ -17,119 +18,130 @@ $default_classes = [
     'text' => 'text',
     'icon' => 'icon',
     'btn1' => 'btn1',
-    'btn2' => 'btn2'
-
+    'btn2' => 'btn2',
 ];
 
-$category = 'category-oportunities';
+$taxonomy     = 'category-oportunities';
 $modules_file = get_template_directory() . '/assets/css/blocks/modules.json';
-$classes = $default_classes;
-$title = get_field('title');
+$classes      = $default_classes;
+
+// Block configuration fields (ACF — block-level settings, not post data)
+$title      = get_field('title');
 $label_text = get_field('label_text');
-$btn_text = get_field('btn_text');
-$btn_url = get_field('btn_page');
-$categories_colors = get_field('categories_labels_color', 'options');
-
-$is_mode_click_for_touch = get_field('mode_click_for_touch');
-
-$terms = get_terms([
-    'taxonomy' => $category,
-    'hide_empty' => false
-]);
-
-$results = [];
-
-// Получение с каждой категории по последнему посту
-foreach ($terms as $term) {
-    $query = new WP_Query([
-        'post_type' => 'news',
-        'posts_per_page' => 1,
-        'tax_query' => [
-            [
-                'taxonomy' => $category,
-                'field' => 'term_id',
-                'terms' => $term->term_id
-            ]
-        ],
-        'orderby' => 'date',
-        'order' => 'DESC'
-    ]);
-
-    if ($query->have_posts()) {
-        $post_item = $query->posts[0];
-
-        // добавляем категорию внутрь объекта
-        $term_post = get_the_terms($post_item->ID, $category);
-        $post_item->term_id = $term_post ? $term_post[0]->term_id : null;
-        $post_item->term_name = $term_post ? $term_post[0]->name : null;
-
-        // $post_item->category_term = get_the_terms($post_item->ID, 'categories-news')[0]['term_id    '] ?? null;
-
-        $results[] = $post_item;
-    }
-
-    wp_reset_postdata();
-};
-
-$items = $results;
-// print_r($items);
+$btn_text   = get_field('btn_text');
+$btn_url    = get_field('btn_page');
 
 if (file_exists($modules_file)) {
     $modules = json_decode(file_get_contents($modules_file), true);
     $classes = array_merge($default_classes, $modules['news'] ?? []);
 }
+
+// ── Category color CSS (classes keyed by term slug) ─────────────────────────
+$css = sw_get_taxonomy_top_level_colors_styles($taxonomy);
+if (!empty($css)) {
+    wp_register_style('cat-oportunities-color-styles', false);
+    wp_enqueue_style('cat-oportunities-color-styles');
+    wp_add_inline_style('cat-oportunities-color-styles', $css);
+}
+
+// ── Data layer ──────────────────────────────────────────────────────────────
+
+// Only top-level categories with posts
+$terms = get_terms([
+    'taxonomy'   => $taxonomy,
+    'parent'     => 0,
+    'hide_empty' => true,
+]);
+
+if (is_wp_error($terms)) {
+    $terms = [];
+}
+
+// Latest post per category
+$items = [];
+foreach ($terms as $term) {
+    $query = new WP_Query([
+        'post_type'      => 'news',
+        'posts_per_page' => 1,
+        'no_found_rows'  => true,
+        'orderby'        => 'date',
+        'order'          => 'DESC',
+        'tax_query'      => [[
+            'taxonomy' => $taxonomy,
+            'field'    => 'term_id',
+            'terms'    => $term->term_id,
+        ]],
+    ]);
+
+    if ($query->have_posts()) {
+        $p = $query->posts[0];
+        $p->term_name = $term->name;
+        $p->term_slug = $term->slug;
+        $items[] = $p;
+    }
+
+    wp_reset_postdata();
+}
 ?>
 
-<section class="section <?php echo esc_attr($classes['section']); ?> ">
-    <div class="container ">
+<section aria-labelledby="topnews-title" class="section <?= esc_attr($classes['section']); ?>">
+    <div class="container">
         <?php if ($items) : ?>
-            <div class="<?php echo esc_attr($classes['subtitle']); ?>"><?php echo esc_html($label_text); ?></div>
-            <div class="<?php echo esc_attr($classes['title-wrap']); ?>">
-                <h2 class="h2-big <?php echo esc_attr($classes['title']); ?>"><?php echo esc_html($title); ?></h2>
-                <a href="<?php echo esc_url($btn_url); ?>" class="btn <?php echo esc_attr($classes['btn1']); ?>"><?php echo esc_html($btn_text); ?></a>
-            </div>
+            <header>
+                <div class="<?= esc_attr($classes['subtitle']); ?>"><?= esc_html($label_text); ?></div>
+                <div class="<?= esc_attr($classes['title-wrap']); ?>">
+                    <h2 id="topnews-title" class="h2-big <?= esc_attr($classes['title']); ?>"><?= esc_html($title); ?></h2>
+                    <a href="<?= esc_url($btn_url); ?>" class="btn <?= esc_attr($classes['btn1']); ?>"><?= esc_html($btn_text); ?></a>
+                </div>
+            </header>
 
-            <div class="<?php echo esc_attr($classes['list']); ?>">
+            <div class="<?= esc_attr($classes['list']); ?>" role="list">
                 <?php foreach ($items as $item) : ?>
                     <?php
-                    $post_id = $item->ID;
-                    $term_id = $item->term_id;
-                    $term_full = get_term($term_id);
-                    $item_taxonomy = $term_full->taxonomy;
-                    $category_current_color = get_category_by_id($categories_colors, $term_id);
-                    $label_color_text = $category_current_color['label_color_text'] ?? 'white';
-                    $label_color_background = $category_current_color['label_color_background'] ?? 'grey';
-                    $label_color_border = $category_current_color['label_color_border'] ?? 'grey';
-                    $term_name = $item->term_name;
-                    $item_date = date('d.m.Y', strtotime($item->post_date));
-                    $item_title = get_field('title', $post_id);
+                    $post_id    = $item->ID;
+                    $permalink  = get_permalink($post_id);
+                    $item_title = get_the_title($post_id);
+                    $item_date  = get_the_date('d.m.Y', $item);
+                    $item_iso   = get_the_date('Y-m-d', $item);
+                    $item_label = $item->term_name;
+                    $term_slug  = $item->term_slug;
 
-                    $item_label = esc_html($term_name);
-                    $photo = get_field('photo', $post_id);
-                    $photo_url = $photo["sizes"]['large'];
-                    $photo_alt = $photo['alt'] ?: $photo['title'];
-
+                    if (has_post_thumbnail($post_id)) {
+                        $photo_url = get_the_post_thumbnail_url($post_id, 'large');
+                        $photo_alt = get_the_post_thumbnail_caption($post_id) ?: $item_title;
+                    } else {
+                        $photo_url = get_template_directory_uri() . '/assets/img/card-placeholder.png';
+                        $photo_alt = $item_title;
+                    }
                     ?>
-                    <div class="<?php echo esc_attr($classes['item']); ?>">
-                        <div class="<?php echo esc_attr($classes['content']); ?>">
-                            <div class="<?php echo esc_attr($classes['photo-wrap']); ?>">
-                                <img src="<?php echo esc_url($photo_url); ?>" class="<?php echo  esc_attr($classes['photo-img']); ?>" alt="<?php echo $photo_alt; ?>">
-                                <div class="<?php echo esc_attr($classes['item-label']); ?>" style="--label-color: <?php echo $label_color_text; ?>; --label-bg: <?php echo $label_color_background; ?>; --label-border: <?php echo $label_color_border; ?>; "><?php echo $item_label; ?></div>
-
-                            </div>
-                            <div class="text-small <?php echo esc_attr($classes['item-date']); ?>"><?php echo $item_date; ?></div>
+                    <article class="<?= esc_attr($classes['item']); ?>">
+                        <a href="<?= esc_url($permalink); ?>" class="<?= esc_attr($classes['content']); ?>"
+                            aria-label="<?= esc_attr($item_title); ?>" rel="bookmark">
+                            <figure class="<?= esc_attr($classes['photo-wrap']); ?>">
+                                <img src="<?= esc_url($photo_url); ?>"
+                                    class="<?= esc_attr($classes['photo-img']); ?>"
+                                    alt="<?= esc_attr($photo_alt); ?>"
+                                    loading="lazy">
+                                <figcaption class="<?= esc_attr($classes['item-label']); ?> <?= esc_attr($term_slug); ?>">
+                                    <?= esc_html($item_label); ?>
+                                </figcaption>
+                            </figure>
+                            <time class="text-small <?= esc_attr($classes['item-date']); ?>"
+                                datetime="<?= esc_attr($item_iso); ?>">
+                                <?= esc_html($item_date); ?>
+                            </time>
                             <?php if ($item_title) : ?>
-                                <div class="btn-text-medium <?php echo esc_attr($classes['item-title']); ?>">
-                                    <?php echo $item_title; ?>
-                                </div>
+                                <header>
+                                    <h3 class="btn-text-medium <?= esc_attr($classes['item-title']); ?>">
+                                        <?= esc_html($item_title); ?>
+                                    </h3>
+                                </header>
                             <?php endif; ?>
-                        </div>
-                    </div>
+                        </a>
+                    </article>
                 <?php endforeach; ?>
             </div>
-            <a href="<?php echo esc_url($btn_url); ?>" class="btn <?php echo esc_attr($classes['btn2']); ?>"><?php echo esc_html($btn_text); ?></a>
+            <a href="<?= esc_url($btn_url); ?>" class="btn <?= esc_attr($classes['btn2']); ?>"><?= esc_html($btn_text); ?></a>
         <?php endif; ?>
     </div>
 </section>
-<?php
-?>

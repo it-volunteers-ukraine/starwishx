@@ -10,19 +10,57 @@
 import { getElement, store } from "@wordpress/interactivity";
 import { ensurePanel, fetchJson } from "../utils.js";
 
+/** intlTelInput instance — survives across action calls */
+let itiInstance = null;
+
 /**
  * Profile actions - plain object using Store Locator pattern.
  */
 export const profileActions = {
   /**
+   * Initialise the intlTelInput widget on the phone field.
+   * Called via data-wp-init on the profile form.
+   */
+  initPhoneWidget() {
+    if (!window.intlTelInput || itiInstance) return;
+
+    const { state } = store("launchpad");
+    const input = document.getElementById("lp-phone");
+    if (!input) return;
+
+    const cfg = state.launchpadSettings.phoneConfig ?? {};
+
+    itiInstance = window.intlTelInput(input, {
+      initialCountry: cfg.initialCountry || "ua",
+      countryOrder: cfg.countryOrder || ["ua"],
+      excludeCountries: cfg.excludeCountries || [],
+      nationalMode: true,
+      formatAsYouType: true,
+      strictMode: true,
+      separateDialCode: true,
+      countrySearch: true,
+    });
+
+    const p = ensurePanel(state, "profile");
+    if (p.phone) {
+      itiInstance.setNumber(p.phone);
+    }
+  },
+
+  /**
    * Enter edit mode for profile
    */
   startEdit() {
-    const { actions } = store("launchpad");
+    const { state, actions } = store("launchpad");
     const url = new URL(window.location);
     url.searchParams.set("view", "profile");
     window.history.pushState({}, "", url);
     actions.syncStateFromUrl();
+
+    const p = ensurePanel(state, "profile");
+    if (itiInstance && p.phone) {
+      itiInstance.setNumber(p.phone);
+    }
   },
 
   /**
@@ -32,6 +70,11 @@ export const profileActions = {
     const { state, actions } = store("launchpad");
     const p = ensurePanel(state, "profile");
     if (p._original) Object.assign(p, p._original);
+
+    if (itiInstance) {
+      itiInstance.setNumber(p._original?.phone || "");
+    }
+
     const url = new URL(window.location);
     url.searchParams.delete("view");
     window.history.pushState({}, "", url);
@@ -56,6 +99,25 @@ export const profileActions = {
     const { state, actions } = store("launchpad");
     event.preventDefault();
     const p = ensurePanel(state, "profile");
+
+    // Read phone from intlTelInput widget (or fallback to state)
+    const phone = itiInstance ? itiInstance.getNumber() : p.phone;
+    const phoneCountry = itiInstance
+      ? itiInstance.getSelectedCountryData().iso2
+      : "";
+
+    // Client-side phone validation via intlTelInput
+    if (itiInstance && phone && !itiInstance.isValidNumber()) {
+      const msg =
+        state.launchpadSettings.messages?.invalidPhone ??
+        "Invalid phone number";
+      p.error = msg;
+      setTimeout(() => {
+        p.error = null;
+      }, 5000);
+      return;
+    }
+
     p.isSaving = true;
 
     try {
@@ -68,7 +130,8 @@ export const profileActions = {
             firstName: p.firstName,
             lastName: p.lastName,
             email: p.email,
-            phone: p.phone,
+            phone,
+            phoneCountry,
             telegram: p.telegram,
             organization: p.organization,
           },
@@ -76,6 +139,10 @@ export const profileActions = {
       );
       if (data) {
         Object.assign(p, data);
+        // Sync widget with server-returned value
+        if (itiInstance && data.phone) {
+          itiInstance.setNumber(data.phone);
+        }
         // If profile was completed (role upgraded), invalidate opportunities panel
         // so it re-fetches on next visit and clears the onboarding lock screen
         if (data._roleUpgraded) {
@@ -204,12 +271,20 @@ export const profileActions = {
 
     if (!password || password.length < minLen) {
       p.error = messages.tooShort ?? "";
-      setTimeout(() => { p.error = null; }, 5000);
+      setTimeout(() => {
+        p.error = null;
+      }, 5000);
       return;
     }
-    if (!/[A-Z]/.test(password) || !/[0-9]/.test(password) || !/[^A-Za-z0-9]/.test(password)) {
+    if (
+      !/[A-Z]/.test(password) ||
+      !/[0-9]/.test(password) ||
+      !/[^A-Za-z0-9]/.test(password)
+    ) {
       p.error = messages.tooWeak ?? "";
-      setTimeout(() => { p.error = null; }, 5000);
+      setTimeout(() => {
+        p.error = null;
+      }, 5000);
       return;
     }
     // ──────────────────────────────────────────────────────────────────────

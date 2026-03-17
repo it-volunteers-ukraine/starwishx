@@ -39,20 +39,19 @@ $text_bottom = esc_html(get_field('text_bottom'));
 $image = get_field('image');
 ?>
 
-<section class="section <?php echo esc_attr($classes["section"]); ?>" style="--hero-bg: url('<?php echo esc_url($image['url']); ?>');">
-    <!-- <div class="<?php echo esc_attr($classes['image-wrap']); ?>">
-        <img class="<?php echo esc_attr($classes['image']); ?>" src="<?php echo esc_url($image['url']); ?>" alt="Hero Image">
+<section class="section <?= esc_attr($classes["section"]); ?>" style="--hero-bg: url('<?= esc_url($image['url']); ?>');">
+    <!-- <div class="< ?php echo esc_attr($classes['image-wrap']); ?>">
+        <img class="< ?php echo esc_attr($classes['image']); ?>" src="< ?php echo esc_url($image['url']); ?>" alt="Hero Image">
     </div> -->
-
-    <div class="container <?php echo esc_attr($classes['container']); ?>">
-        <div class="<?php echo esc_attr($classes['hero']); ?>">
-            <h1 class="h1 <?php echo esc_attr($classes['title']); ?>"><?php echo $title; ?></h1>
-            <p class="subtitle-text-r <?php echo esc_attr($classes['subtitle']); ?>"><?php echo $subtitle; ?></p>
-            <div class="<?php echo esc_attr($classes['wrap-link']); ?>">
-                <a class="h4" href="#"><?php echo $give; ?></a>
-                <a class="h4" href="#"><?php echo $get; ?></a>
+    <div class="container <?= esc_attr($classes['container']); ?>">
+        <div class="<?= esc_attr($classes['hero']); ?>">
+            <h1 class="h1 <?= esc_attr($classes['title']); ?>"><?= $title; ?></h1>
+            <p class="subtitle-text-r <?= esc_attr($classes['subtitle']); ?>"><?= $subtitle; ?></p>
+            <div class="<?= esc_attr($classes['wrap-link']); ?>">
+                <a class="h4" href="/opportunities/"><?= $give; ?></a>
+                <a class="h4" href="/launchpad/?panel=opportunities&view=add"><?= $get; ?></a>
             </div>
-            <p class="text-r <?php echo esc_attr($classes['text-bottom']); ?>"><?php echo $text_bottom; ?></p>
+            <p class="text-r <?= esc_attr($classes['text-bottom']); ?>"><?= $text_bottom; ?></p>
         </div>
     </div>
 </section>

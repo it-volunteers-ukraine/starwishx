@@ -130,7 +130,7 @@
 
     .projects-swiper {
         overflow: visible;
-        
+
         .swiper-wrapper {
             display: flex;
         }
@@ -140,15 +140,15 @@
 
             /* Ensure slides have proper width based on breakpoints */
             width: 100%;
-            
+
             @media (min-width: 420px) {
                 width: calc(50% - 10px);
             }
-            
+
             @media (min-width: 1024px) {
                 width: calc(33.333% - 14px);
             }
-            
+
             @media (min-width: 1350px) {
                 width: calc(25% - 15px);
             }

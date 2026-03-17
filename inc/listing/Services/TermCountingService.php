@@ -117,6 +117,7 @@ class TermCountingService
             if ($totalCount > 0 || !empty($children)) {
                 $branch[] = [
                     'id'          => $term->term_id,
+                    'slug'        => $term->slug,
                     'label'       => $term->name,
                     'count'       => $totalCount,
                     'children'    => $children,
