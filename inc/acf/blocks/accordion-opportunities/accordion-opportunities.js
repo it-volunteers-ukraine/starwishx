@@ -2,8 +2,8 @@ function detectMouse() {
   return window.matchMedia("(pointer: fine)").matches;
 }
 
-const slider = document.getElementById("slider-one-photo");
-if (!slider) throw new Error("slider-one-photo not found");
+const slider = document.getElementById("accordion-opportunities");
+if (!slider) throw new Error("accordion-opportunities not found");
 
 const noMouse = !detectMouse();
 const isClickModeForTouch = slider.dataset.clickMode === "true";
@@ -49,7 +49,7 @@ requestAnimationFrame(() => {
           }
         });
       },
-      { rootMargin: "-50% 0px -50% 0px" }
+      { rootMargin: "-15% 0px -25% 0px" },
     );
 
     itemsArray.forEach((item) => observer.observe(item));

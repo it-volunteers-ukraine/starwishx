@@ -1,6 +1,6 @@
 {
     "key": "post_type_698f605022f68",
-    "title": "Проекти",
+    "title": "Проєкти",
     "menu_order": 0,
     "active": true,
     "post_type": "project",
@@ -8,8 +8,8 @@
     "import_source": "",
     "import_date": "",
     "labels": {
-        "name": "Проекти",
-        "singular_name": "Проект",
+        "name": "Проєкти",
+        "singular_name": "Проєкт",
         "menu_name": "Projects",
         "all_items": "All Projects",
         "edit_item": "Edit Project",
@@ -87,5 +87,5 @@
     "delete_with_user": false,
     "register_meta_box_cb": "",
     "enter_title_here": "",
-    "modified": 1773276839
+    "modified": 1773783391
 }

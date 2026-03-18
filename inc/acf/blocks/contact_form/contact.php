@@ -50,8 +50,8 @@ $default_classes = [
     'contact-popup-icon'     => 'contact-popup-icon',
     'contact-popup-title'    => 'contact-popup-title',
     'contact-popup-text'     => 'contact-popup-text',
-    'contact-popup-success' => 'contact-popup-success',
-    'contact-popup-error'   => 'contact-popup-error',
+    'contact-popup-success'  => 'contact-popup-success',
+    'contact-popup-error'    => 'contact-popup-error',
 
 
 ];
@@ -67,19 +67,17 @@ if (file_exists($modules_file)) {
 /* ===========================
    ACF block fields
    =========================== */
-$small     = get_field('title_small');
-$medium    = get_field('title_medium');
-$big       = get_field('title_big');
-$subtitle  = get_field('subtitle');
-
-$form_name_label        = get_field('form_name_label');
-$form_phone_label       = get_field('form_phone_label');
-$form_email_label       = get_field('form_email_label');
-$form_message_label     = get_field('form_message_label');
-
-$form_name_placeholder  = get_field('form_name_placeholder');
-$form_phone_placeholder = get_field('form_phone_placeholder');
-$form_email_placeholder = get_field('form_email_placeholder');
+$small                    = get_field('title_small');
+$medium                   = get_field('title_medium');
+$big                      = get_field('title_big');
+$subtitle                 = get_field('subtitle');
+$form_name_label          = get_field('form_name_label');
+$form_phone_label         = get_field('form_phone_label');
+$form_email_label         = get_field('form_email_label');
+$form_message_label       = get_field('form_message_label');
+$form_name_placeholder    = get_field('form_name_placeholder');
+$form_phone_placeholder   = get_field('form_phone_placeholder');
+$form_email_placeholder   = get_field('form_email_placeholder');
 $form_message_placeholder = get_field('form_message_placeholder');
 
 $req_name    = get_field('form_name_required');
@@ -103,7 +101,6 @@ $err_phone = get_field('invalid_phone_text') ?: 'Некоректний номе
 
 $popup_success_title = get_field('popup_success_title');
 $popup_success_text  = get_field('popup_success_text');
-
 $popup_error_title   = get_field('popup_error_title');
 $popup_error_text    = get_field('popup_error_text');
 
@@ -114,22 +111,19 @@ $popup_error_text    = get_field('popup_error_text');
 
 $email_link     = get_field('email_link', 'option');
 $email_name     = get_field('email_name', 'option');
-
 $telegram_link  = get_field('telegram_link', 'option');
 $telegram_name  = get_field('telegram_name', 'option');
-
 $linkedin_link  = get_field('linkedin_link', 'option');
 $linkedin_name  = get_field('linkedin_name', 'option');
-
 $avatars        = get_field('avatars', 'option');
 
 /* Clean telegram / linkedin */
 $telegram_full_url  = '';
 $clean_telegram     = '';
 if ($telegram_link) {
-    $clean_telegram = trim($telegram_link);
-    $clean_telegram = str_replace('https://t.me/', '', $clean_telegram);
-    $clean_telegram = ltrim($clean_telegram, '@');
+    $clean_telegram    = trim($telegram_link);
+    $clean_telegram    = str_replace('https://t.me/', '', $clean_telegram);
+    $clean_telegram    = ltrim($clean_telegram, '@');
     $telegram_full_url = 'https://t.me/' . $clean_telegram;
 }
 
@@ -145,35 +139,39 @@ if ($linkedin_link) {
 }
 
 /* Helper: render label with optional required star */
-function contact_field_label_html($text, $required, $classes)
-{
-    $text_safe       = esc_html($text);
-    $label_text_html = '<span class="' . esc_attr($classes['label-text']) . '">' . $text_safe . '</span>';
-    if ($required) {
-        $label_text_html .= '<span class="' . esc_attr($classes['label-required']) . '">*</span>';
+if (! function_exists('sw_contact_field_label_html')) {
+    function sw_contact_field_label_html($text, $required, $classes)
+    {
+        $text_safe       = esc_html($text);
+        $label_text_html = '<span class="' . esc_attr($classes['label-text']) . '">' . $text_safe . '</span>';
+        if ($required) {
+            $label_text_html .= '<span class="' . esc_attr($classes['label-required']) . '">*</span>';
+        }
+        return $label_text_html;
     }
-    return $label_text_html;
 }
-
 /* Helper: render svg use tag with full sprite path */
-function contact_icon_use($icon_id, $classes = [])
-{
-    $sprite     = get_template_directory_uri() . '/assets/img/sprites.svg';
-    $icon_class = $classes['icon'] ?? 'icon';
-    return '<svg class="' . esc_attr($icon_class) . '" aria-hidden="true"><use xlink:href="' . esc_attr($sprite . '#' . $icon_id) . '"></use></svg>';
+if (! function_exists('contact_icon_use')) {
+    function contact_icon_use($icon_id, $classes = [])
+    {
+        $sprite     = get_template_directory_uri() . '/assets/img/sprites.svg';
+        $icon_class = $classes['icon'] ?? 'icon';
+        return '<svg class="' . esc_attr($icon_class) . '" aria-hidden="true"><use xlink:href="' . esc_attr($sprite . '#' . $icon_id) . '"></use></svg>';
+    }
 }
 ?>
 
-<section class="<?= esc_attr($classes['contact-section']) ?>">
+<section aria-labelledby="<?= esc_attr($classes['contact-titles']) ?>" class="<?= esc_attr($classes['contact-section']) ?>">
     <div class="container <?= esc_attr($classes['contact-container']) ?>">
 
         <div class="<?= esc_attr($classes['contact-block']) ?>">
             <!-- Titles -->
-            <div class="<?= esc_attr($classes['contact-titles']) ?>">
-                <?php if ($small): ?><div class="<?= esc_attr($classes['contact-title-small']) ?>"><?= esc_html($small) ?></div><?php endif; ?>
-                <?php if ($medium): ?><div class="<?= esc_attr($classes['contact-title-medium']) ?>"><?= esc_html($medium) ?></div><?php endif; ?>
+            <header id="<?= esc_attr($classes['contact-titles']) ?>"
+                class="<?= esc_attr($classes['contact-titles']) ?>">
+                <?php if ($small): ?><span class="<?= esc_attr($classes['contact-title-small']) ?>"><?= esc_html($small) ?></span><?php endif; ?>
+                <?php if ($medium): ?><h2 class="<?= esc_attr($classes['contact-title-medium']) ?>"><?= esc_html($medium) ?></h2><?php endif; ?>
                 <?php if ($subtitle): ?><div class="<?= esc_attr($classes['contact-subtitle']) ?>"><?= esc_html($subtitle); ?></div><?php endif; ?>
-            </div>
+            </header>
 
             <!-- Contacts -->
             <div class="<?= esc_attr($classes['contact-list']) ?>">
@@ -231,7 +229,7 @@ function contact_icon_use($icon_id, $classes = [])
         <form class="<?= esc_attr($classes['contact-form']) ?>" novalidate>
             <label class="<?= esc_attr($classes['contact-form-field']) ?>">
                 <span class="<?= esc_attr($classes['label-wrapper']) ?>">
-                    <?= contact_field_label_html($form_name_label, $req_name, $classes) ?>
+                    <?= sw_contact_field_label_html($form_name_label, $req_name, $classes) ?>
                 </span>
                 <input type="text"
                     name="name"
@@ -243,7 +241,7 @@ function contact_icon_use($icon_id, $classes = [])
 
             <label class="<?= esc_attr($classes['contact-form-field']) ?>">
                 <span class="<?= esc_attr($classes['label-wrapper']) ?>">
-                    <?= contact_field_label_html($form_phone_label, $req_phone, $classes) ?>
+                    <?= sw_contact_field_label_html($form_phone_label, $req_phone, $classes) ?>
                 </span>
                 <input type="tel"
                     class="contact-phone-input"
@@ -256,7 +254,7 @@ function contact_icon_use($icon_id, $classes = [])
 
             <label class="<?= esc_attr($classes['contact-form-field']) ?>">
                 <span class="<?= esc_attr($classes['label-wrapper']) ?>">
-                    <?= contact_field_label_html($form_email_label, $req_email, $classes) ?>
+                    <?= sw_contact_field_label_html($form_email_label, $req_email, $classes) ?>
                 </span>
                 <input type="email"
                     name="email"
@@ -268,7 +266,7 @@ function contact_icon_use($icon_id, $classes = [])
 
             <label class="<?= esc_attr($classes['contact-form-textarea']) ?>">
                 <span class="<?= esc_attr($classes['label-wrapper']) ?>">
-                    <?= contact_field_label_html($form_message_label, $req_message, $classes) ?>
+                    <?= sw_contact_field_label_html($form_message_label, $req_message, $classes) ?>
                 </span>
 
                 <span class="<?= esc_attr($classes['textarea-wrapper']) ?>">
@@ -349,12 +347,6 @@ function contact_icon_use($icon_id, $classes = [])
             <?php endif; ?>
         </div>
     </div>
-
-
-
-
-
-
 </section>
 
 <script>
