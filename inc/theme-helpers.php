@@ -123,6 +123,45 @@ function sw_sanitize_css_color(mixed $color): ?string
 }
 
 /**
+ * Build an HTML srcset string from an ACF image array.
+ *
+ * Iterates over all registered WordPress image sizes present in the ACF
+ * image's `sizes` sub-array, excluding the listed sizes (default: thumbnail).
+ * Appends the full-size original as the largest candidate.
+ *
+ * @param  array    $image   ACF image array (return_format: array).
+ * @param  string[] $exclude Size names to skip. Default: ['thumbnail'].
+ * @return string            Comma-separated srcset string, or empty string.
+ */
+function sw_build_srcset(array $image, array $exclude = ['thumbnail']): string
+{
+    $known_sizes = ['thumbnail', 'medium', 'medium_large', 'large', '1536x1536', '2048x2048'];
+    $parts = [];
+    $seen_widths = [];
+
+    foreach ($known_sizes as $size) {
+        if (in_array($size, $exclude, true)) {
+            continue;
+        }
+        $url = $image['sizes'][$size] ?? '';
+        $w   = (int) ($image['sizes'][$size . '-width'] ?? 0);
+        if ($url && $w && !isset($seen_widths[$w])) {
+            $parts[]          = esc_url($url) . ' ' . $w . 'w';
+            $seen_widths[$w]  = true;
+        }
+    }
+
+    // Full size (original)
+    $full_url = $image['url'] ?? '';
+    $full_w   = (int) ($image['width'] ?? 0);
+    if ($full_url && $full_w && !isset($seen_widths[$full_w])) {
+        $parts[] = esc_url($full_url) . ' ' . $full_w . 'w';
+    }
+
+    return implode(', ', $parts);
+}
+
+/**
  * Parse a raw date string into a DateTimeImmutable, trying multiple formats.
  *
  * Uses createFromFormat() with strict error/warning checking to avoid silent

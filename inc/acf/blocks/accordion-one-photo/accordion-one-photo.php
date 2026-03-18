@@ -22,12 +22,12 @@ $default_classes = [
 ];
 
 $modules_file = get_template_directory() . '/assets/css/blocks/modules.json';
-$classes = $default_classes;
-$main_title = get_field('main_title');
-$items = get_field('accordion') ?: [];
-$subtitle = get_field('subtitle');
-$btn_text = get_field('btn_text');
-$btn_url = get_field('btn_page');
+$classes      = $default_classes;
+$main_title   = get_field('main_title');
+$items        = get_field('accordion') ?: [];
+$subtitle     = get_field('subtitle');
+$btn_text     = get_field('btn_text');
+$btn_url      = get_field('btn_page');
 
 $is_mode_click_for_touch = get_field('mode_click_for_touch');
 
@@ -51,9 +51,9 @@ if (file_exists($modules_file)) {
                 <?php foreach ($items as $item) : ?>
                     <?php
                     $count++;
-                    $title = $item['title'];
-                    $text = trim($item['text'] ?? '');
-                    $photo1 = $item['photo1'] ?? null;
+                    $title      = $item['title'];
+                    $text       = trim($item['text'] ?? '');
+                    $photo1     = $item['photo1'] ?? null;
                     $photo1_url = $photo1['sizes']['large'] ?? '';
                     $photo1_alt = ($photo1['alt'] ?? '') ?: ($photo1['title'] ?? '');
                     ?>

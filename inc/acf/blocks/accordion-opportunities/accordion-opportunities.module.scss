@@ -1,0 +1,251 @@
+@use "../../../../src/scss/variables" as *;
+@use "../../../../src/scss/mixins/label";
+@use "../../../../src/scss/mixins/media" as *;
+@use "../../../../src/scss/mixins/indents";
+
+.btn1 {
+    display: none;
+
+    @include min-laptop {
+        display: flex;
+    }
+}
+
+.btn2 {
+    display: flex;
+    margin: 0 auto;
+
+    @include min-laptop {
+        display: none;
+    }
+}
+
+.suptitle {
+    @include label.label-dot;
+    @include indents.label-subtitle;
+}
+
+.header-wrap {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 32px;
+}
+
+.header {
+    color: $text-dark;
+    text-transform: uppercase;
+}
+
+.list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 32px;
+}
+
+.item {
+    position: relative;
+    transition: border-bottom 1s $animations;
+    border-bottom: 1px solid rgba($text-light, 0.5);
+    padding: 20px 0;
+
+    @media (hover: none) {
+        &:not([data-active]) .content {
+            opacity: 0;
+            max-height: 0 !important;
+        }
+
+        &[data-active] .content {
+            opacity: 1;
+            transition:
+                opacity 1000ms 500ms ease-out,
+                max-height 750ms linear;
+            pointer-events: auto;
+        }
+
+        &[data-active] .block-photo {
+            opacity: 1;
+        }
+
+        &[data-active] {
+            transition: border-color 1.25s 1s linear;
+            border-bottom: 1px solid $stroke-hover;
+        }
+    }
+
+    @media (hover: hover) {
+        &:not(:hover) .content {
+            opacity: 0;
+            max-height: 0 !important;
+        }
+
+        &:hover .content {
+            opacity: 1;
+            transition:
+                opacity 1000ms 500ms ease-out,
+                max-height 750ms linear;
+            pointer-events: auto;
+        }
+
+        &:hover .block-photo {
+            opacity: 1;
+        }
+
+        &:hover {
+            border-bottom: 1px solid $stroke-hover;
+        }
+    }
+}
+
+.block-title {
+    display: flex;
+    background-color: white;
+
+    @include min-tabland {
+        width: 564px;
+    }
+}
+
+.item-title {
+    /*
+  padding: 4px 18px;
+  border-radius: $radius-element;
+  font-weight: 400;
+  */
+
+    a {
+        color: $text-dark;
+
+        /*
+        position: relative;
+        display: block;
+            &::after {
+            content: "";
+            display: block;
+            width: 30%;
+            border-bottom: 1px solid rgba($text-accent, 0.42);
+            margin-top: 2px;
+            transition: all 0.3s ease-in-out;
+            }
+
+            &:hover {
+            &::after {
+                width: 100%;
+                border-bottom-color: rgba($text-accent, 0.75);
+            }
+         } */
+    }
+}
+
+.count {
+    min-width: 46px;
+    color: $text-accent;
+    font-weight: 400;
+    font-size: 16px;
+
+    @include min-tablet {
+        min-width: 38px;
+    }
+
+    @include min-desktop {
+        width: 40px;
+        font-size: 18px;
+    }
+}
+
+.content {
+    position: relative;
+    transition:
+        opacity 400ms ease-out,
+        max-height 750ms linear;
+    margin-left: 46px;
+    pointer-events: none;
+
+    @include min-tablet {
+        margin-left: 38px;
+    }
+
+    @include min-laptop {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+    }
+
+    @include min-desktop {
+        margin-left: 40px;
+    }
+}
+
+.description {
+    padding-top: 8px;
+    color: $text-basic;
+    font-size: 16px;
+    line-height: 1.3;
+
+    @include min-tablet {
+        margin-bottom: 0;
+    }
+
+    @include min-tabland {
+        width: 564px;
+    }
+
+    @include min-desktop {
+        width: 30%;
+        font-size: 18px;
+    }
+}
+
+.block-photo {
+    display: none;
+    opacity: 0;
+    transition: opacity 750ms ease-out;
+
+    @include min-tabland {
+        display: block;
+        position: absolute;
+        top: -89px;
+        right: 6%;
+        z-index: 1;
+        background-color: white;
+    }
+
+    @include min-laptop {
+        right: 154px;
+    }
+
+    @include min-desktop {
+        top: -103px;
+        right: 500px;
+    }
+}
+
+.photo {
+    width: 120px;
+
+    @include min-tablet {
+        width: 14.583vw;
+    }
+
+    @include min-tabland {
+        width: 225px;
+    }
+
+    @include min-desktop {
+        width: 240px;
+    }
+}
+
+.photo-img {
+    border-radius: 12px;
+}
+
+.section {
+    @include min-laptop {
+        padding-bottom: 160px;
+    }
+
+    @include min-desktop {
+        padding-bottom: 220px;
+    }
+}

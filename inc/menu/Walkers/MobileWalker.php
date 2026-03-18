@@ -63,7 +63,7 @@ class MobileWalker extends \Walker_Nav_Menu
         if ($is_custom) {
             // sprites are not suitable for gradient 
             // $output .= '<svg class="arrow-icon" width="24" height="24" aria-hidden="true"><use xlink:href="' . get_template_directory_uri() . '/assets/img/sprites.svg#icon-stars"></use></svg>'; 
-            $output .= '<img class="icon-menu-custom" width="24" height="24" aria-hidden="true" src="' . get_template_directory_uri() . '/assets/img/icon-stars-gradient.svg" </img>';
+            $output .= '<img class="icon-menu-custom" width="24" height="24" aria-hidden="true" src="' . get_template_directory_uri() . '/assets/img/icon-stars-gradient.svg" alt="' . esc_attr($item->title) . '" >';
         }
 
         $output .= '</a>';
