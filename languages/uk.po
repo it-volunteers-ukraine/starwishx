@@ -8,7 +8,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2026-02-25 10:47+0000\n"
-"PO-Revision-Date: 2026-03-17 21:31+0000\n"
+"PO-Revision-Date: 2026-03-19 04:05+0000\n"
 "Language: uk\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
@@ -797,7 +797,7 @@ msgstr "Надсилання..."
 msgid "Set New Password"
 msgstr "Встановити новий пароль"
 
-#: inc/theme-helpers.php:974
+#: inc/theme-helpers.php:1013
 #, php-format
 msgid "Show %d more"
 msgid_plural "Show %d more"
@@ -805,7 +805,7 @@ msgstr[0] "Показати ще %d"
 msgstr[1] "Показати ще %d"
 msgstr[2] "Показати ще %d"
 
-#: inc/theme-helpers.php:973
+#: inc/theme-helpers.php:1012
 msgid "Show 1 more"
 msgstr "Показати ще 1"
 
@@ -994,7 +994,7 @@ msgstr "Вітаємо"
 msgid "Welcome, %s!"
 msgstr "Ласкаво просимо, %s!"
 
-#: inc/theme-helpers.php:627
+#: inc/theme-helpers.php:666
 msgid "Worldwide"
 msgstr "У всьому світі"
 
@@ -1457,3 +1457,16 @@ msgid ""
 msgstr ""
 "Будь ласка, введіть дійсний номер телефону в міжнародному форматі (наприклад,"
 " +380441231231)."
+
+#: 404.php:10
+msgid "It seems the page you are looking for does not exist."
+msgstr "Схоже сторінка, яку Ви шукаєте, не існує."
+
+#: 404.php:30
+msgid "To the main page"
+msgstr "На головну сторінку"
+
+#: inc/acf/blocks/accordion-opportunities/register.php:4
+#: inc/acf/blocks/accordion-opportunities/register.php:5
+msgid "Block accordion opportunities"
+msgstr "Block accordion opportunities"
