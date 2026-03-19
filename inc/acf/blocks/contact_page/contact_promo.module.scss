@@ -26,7 +26,7 @@
   height: 100%;
   border-radius: 12px;
   overflow: hidden;
-  
+
   img {
     height: 440px;
     object-fit: cover;
@@ -107,6 +107,8 @@
 .icon-bg {
   position: absolute;
   animation: spin 4s linear infinite;
+  border: 2px solid $icon-color-secondary;
+  border-radius: 50%;
 }
 
 @keyframes spin {
@@ -133,7 +135,7 @@
     flex-direction: row;
     gap: 28px;
   }
-  
+
   .promo-image {
     img {
       width: 336px;
@@ -150,7 +152,7 @@
   .promo-image {
     img {
       width: 330px;
-      height: 440px; 
+      height: 440px;
     }
   }
 }
@@ -166,17 +168,17 @@
   }
 
   .promo-text {
-    font-size: 18px; 
+    font-size: 18px;
   }
 
   .contact-item {
-    font-size: 18px; 
+    font-size: 18px;
   }
 
   .promo-image {
     img {
       width: 425px;
-      height: 567px; 
+      height: 567px;
     }
   }
 

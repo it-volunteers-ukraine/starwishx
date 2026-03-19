@@ -24,10 +24,10 @@ if (file_exists($modules_file)) {
 }
 ?>
 
-<section aria-labelledby="video-text-title" class="section ">
+<section aria-labelledby="<?= esc_attr($classes['title']); ?>" class="section ">
     <div class="container <?= esc_attr($classes['container']); ?>">
         <?php if ($title) : ?>
-            <h2 id="video-text-title" class="h3 <?= esc_attr($classes['title']); ?>"><?= $title; ?></h2>
+            <h2 id="<?= esc_attr($classes['title']); ?>" class="h3 <?= esc_attr($classes['title']); ?>"><?= $title; ?></h2>
         <?php endif; ?>
         <div class="<?= esc_attr($classes['content']); ?>">
             <?php if ($video_embed) : ?>

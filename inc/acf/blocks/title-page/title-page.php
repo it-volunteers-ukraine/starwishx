@@ -16,10 +16,10 @@ if (file_exists($modules_file)) {
 $title = get_the_title();
 ?>
 
-<section class="section title-page-section <?php echo esc_attr($classes["section"]); ?>">
-    <div class="container">
-        <h1 class="h3  <?php echo esc_attr($classes["title"]); ?>">
-            <?php echo esc_html($title); ?>
-        </div>
-    </div>
+<section aria-labelledby="<?= esc_attr($classes["title"]); ?>" class="section title-page-section <?= esc_attr($classes["section"]); ?>">
+    <header id="<?= esc_attr($classes["title"]); ?>" class="container">
+        <h1 class="h3 <?= esc_attr($classes["title"]); ?>">
+            <?= esc_html($title); ?>
+        </h1>
+    </header>
 </section>

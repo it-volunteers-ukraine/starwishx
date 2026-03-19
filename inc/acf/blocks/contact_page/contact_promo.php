@@ -1,4 +1,5 @@
 <?php
+
 /**
  * contact_promo.php
  */
@@ -15,7 +16,7 @@ $default_classes = [
     'promo-title'     => 'promo-title',
     'promo-text'      => 'promo-text',
     'promo-contacts'  => 'promo-contacts',
-    
+
     'contact-item'    => 'contact-item',
     'contact-label'   => 'contact-label',
     'contact-value'   => 'contact-value',
@@ -52,16 +53,16 @@ $linkedin_link  = get_field('linkedin_link', 'option');
 $linkedin_name  = get_field('linkedin_name', 'option');
 
 $telegram_full_url = '';
-$clean_telegram = '';
+$clean_telegram    = '';
 if ($telegram_link) {
-    $clean_telegram = trim($telegram_link);
-    $clean_telegram = str_replace('https://t.me/', '', $clean_telegram);
-    $clean_telegram = ltrim($clean_telegram, '@');
+    $clean_telegram    = trim($telegram_link);
+    $clean_telegram    = str_replace('https://t.me/', '', $clean_telegram);
+    $clean_telegram    = ltrim($clean_telegram, '@');
     $telegram_full_url = 'https://t.me/' . $clean_telegram;
 }
 
 $linkedin_full_url = '';
-$clean_linkedin = '';
+$clean_linkedin    = '';
 if ($linkedin_link) {
     $clean_linkedin = trim($linkedin_link);
     if (strpos($clean_linkedin, 'http') === 0) {
@@ -73,7 +74,8 @@ if ($linkedin_link) {
 
 
 if (!function_exists('promo_icon_use')) {
-    function promo_icon_use($icon_id, $classes = []) {
+    function promo_icon_use($icon_id, $classes = [])
+    {
         $sprite = get_template_directory_uri() . '/assets/img/sprites.svg';
         $icon_class = $classes['icon'] ?? 'icon';
         return '<svg class="' . esc_attr($icon_class) . '" aria-hidden="true"><use xlink:href="' . esc_attr($sprite . '#' . $icon_id) . '"></use></svg>';
@@ -81,9 +83,9 @@ if (!function_exists('promo_icon_use')) {
 }
 ?>
 
-<section class="<?= esc_attr($classes['promo-section']) ?>">
+<section aria-labelledby="<?= esc_attr($classes['promo-title']) ?>" class="<?= esc_attr($classes['promo-section']) ?>">
     <div class="<?= esc_attr($classes['promo-container']) ?>">
-        
+
         <?php if ($image_id): ?>
             <div class="<?= esc_attr($classes['promo-image']) ?>">
                 <?= wp_get_attachment_image($image_id, 'full', false, ['alt' => esc_attr($title)]) ?>
@@ -91,11 +93,10 @@ if (!function_exists('promo_icon_use')) {
         <?php endif; ?>
 
         <div class="<?= esc_attr($classes['promo-content']) ?>">
-            
             <div class="<?= esc_attr($classes['promo-wrapper']) ?>">
-                
+
                 <?php if ($title): ?>
-                    <h2 class="h5 <?= esc_attr($classes['promo-title']) ?>"><?= esc_html($title) ?></h2>
+                    <h2 id="<?= esc_attr($classes['promo-title']) ?>" class="h5 <?= esc_attr($classes['promo-title']) ?>"><?= esc_html($title) ?></h2>
                 <?php endif; ?>
 
                 <?php if ($text): ?>
@@ -134,14 +135,10 @@ if (!function_exists('promo_icon_use')) {
                     <?php endif; ?>
                 </div>
             </div>
-
-            <div class="<?php echo esc_attr($classes['icon-star']); ?>">
-                <img src="<?php echo get_template_directory_uri(); ?>/assets/img/star1-bg.png" class="<?php echo esc_attr($classes['icon-bg']); ?>" alt="">
-                <svg class="<?php echo esc_attr($classes['icon-mask']); ?>">
-                    <use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-element_planet_3-circle"></use>
-                </svg> 
-            </div>
-
+            <figure class="<?= esc_attr($classes['icon-star']); ?>">
+                <img src="<?= get_template_directory_uri(); ?>/assets/img/planet-bg-radial-gradient.svg" class="<?= esc_attr($classes['icon-bg']); ?>" alt="Icon star">
+                <img src="<?= get_template_directory_uri(); ?>/assets/img/planet-mask-gradient.svg" class="<?= esc_attr($classes['icon-mask']); ?>" alt="Mask for icon star">
+            </figure>
         </div>
     </div>
 </section>
