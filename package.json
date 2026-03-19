@@ -52,6 +52,6 @@
     "yargs": "^18.0.0"
   },
   "dependencies": {
-    "@wordpress/i18n": "^6.14.0"
+    "@wordpress/i18n": "^6.15.0"
   }
 }
