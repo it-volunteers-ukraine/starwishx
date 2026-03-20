@@ -98,9 +98,11 @@ abstract class AbstractApiController extends WP_REST_Controller
 
         // Default map: only codes that multiple services actually return
         $default_map = [
-            'invalid_data'   => 422,
-            'not_found'      => 404,
-            'rate_limited'   => 429,
+            'invalid_data'      => 422,
+            'not_found'         => 404,
+            'rate_limited'      => 429,
+            'phone_invalid'     => 422,
+            'phone_parse_error' => 422,
         ];
 
         $status_map = array_merge($default_map, $custom_map);

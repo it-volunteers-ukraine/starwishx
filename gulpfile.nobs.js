@@ -286,6 +286,8 @@ export const moduleScripts = () => {
       "inc/favorites/Assets/*.mjs",
       "inc/comments/Assets/*.js",
       "inc/comments/Assets/*.mjs",
+      "inc/contact/Assets/*.js",
+      "inc/contact/Assets/*.mjs",
     ],
     {
       allowEmpty: true,
@@ -364,6 +366,7 @@ export const watchForChanges = () => {
   watch("inc/listing/Assets/**/*.{js,mjs}", moduleScripts);
   watch("inc/favorites/Assets/**/*.{js,mjs}", moduleScripts);
   watch("inc/comments/Assets/**/*.{js,mjs}", moduleScripts);
+  watch("inc/contact/Assets/**/*.{js,mjs}", moduleScripts);
   watch("inc/acf/blocks/**/*.module.scss", blockStyles);
 };
 

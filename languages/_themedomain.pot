@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-03-19T04:04:20+00:00\n"
+"POT-Creation-Date: 2026-03-20T03:25:04+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: starwishx\n"
@@ -254,6 +254,99 @@ msgstr ""
 
 #: inc/comments/Services/CommentsService.php:243
 msgid "Edit time limit expired (15 min)."
+msgstr ""
+
+#: inc/contact/Api/ContactController.php:42
+#: inc/contact/Api/ContactController.php:144
+msgid "Message sent successfully!"
+msgstr ""
+
+#: inc/contact/Api/ContactController.php:55
+#: inc/contact/Api/ContactController.php:64
+#: inc/contact/Api/ContactController.php:92
+#: inc/shared/Policy/PasswordPolicy.php:103
+msgid "Please enter a valid email address"
+msgstr ""
+
+#: inc/contact/Api/ContactController.php:73
+msgid "Links are not allowed in fields"
+msgstr ""
+
+#: inc/contact/Api/ContactController.php:111
+msgid "Please fill in all required fields"
+msgstr ""
+
+#. translators: %s: sender name
+#: inc/contact/Api/ContactController.php:121
+#, php-format
+msgid "Message from website by %s"
+msgstr ""
+
+#: inc/contact/Api/ContactController.php:127
+msgid "Name"
+msgstr ""
+
+#: inc/contact/Api/ContactController.php:129
+#: inc/launchpad/Panels/ProfilePanel.php:163
+#: template-parts/contact-section.php:76
+msgid "Phone"
+msgstr ""
+
+#: inc/contact/Api/ContactController.php:130
+msgid "Not specified"
+msgstr ""
+
+#: inc/contact/Api/ContactController.php:131
+#: inc/launchpad/Panels/ProfilePanel.php:154
+#: template-parts/contact-section.php:77
+msgid "Email"
+msgstr ""
+
+#: inc/contact/Api/ContactController.php:133
+msgid "Message"
+msgstr ""
+
+#: inc/contact/Api/ContactController.php:155
+msgid "Server error. Please try again later."
+msgstr ""
+
+#: inc/contact/Core/ContactCore.php:146
+msgid "Please fill in this field"
+msgstr ""
+
+#: inc/contact/Core/ContactCore.php:147
+msgid "Invalid email address"
+msgstr ""
+
+#: inc/contact/Core/ContactCore.php:148
+msgid "Invalid phone number"
+msgstr ""
+
+#: inc/contact/Core/ContactCore.php:149
+#: template-parts/contact-section.php:367
+msgid "Thank you!"
+msgstr ""
+
+#: inc/contact/Core/ContactCore.php:150
+#: template-parts/contact-section.php:371
+msgid "Your message has been sent successfully."
+msgstr ""
+
+#: inc/contact/Core/ContactCore.php:151
+msgid "Something went wrong. Please try again later."
+msgstr ""
+
+#. Template Name of the theme
+msgid "Home Page"
+msgstr ""
+
+#: inc/contact/page-home.php:21
+#: page-contact.php:21
+msgid "Contacts"
+msgstr ""
+
+#: inc/contact/page-home.php:22
+msgid "Get in Touch"
 msgstr ""
 
 #: inc/favorites/Api/FavoritesController.php:114
@@ -926,14 +1019,6 @@ msgstr ""
 msgid "Last Name"
 msgstr ""
 
-#: inc/launchpad/Panels/ProfilePanel.php:154
-msgid "Email"
-msgstr ""
-
-#: inc/launchpad/Panels/ProfilePanel.php:163
-msgid "Phone"
-msgstr ""
-
 #: inc/launchpad/Panels/ProfilePanel.php:169
 msgid "Telegram"
 msgstr ""
@@ -1216,10 +1301,6 @@ msgstr ""
 msgid "Email is required"
 msgstr ""
 
-#: inc/shared/Policy/PasswordPolicy.php:103
-msgid "Please enter a valid email address"
-msgstr ""
-
 #: inc/shared/Policy/PasswordPolicy.php:104
 msgid "Please enter your username or email"
 msgstr ""
@@ -1241,20 +1322,28 @@ msgstr ""
 msgid "Please enter a valid phone number in international format (e.g. +380441231231)."
 msgstr ""
 
-#: inc/theme-helpers.php:666
+#: inc/theme-helpers.php:619
 msgid "Worldwide"
 msgstr ""
 
-#: inc/theme-helpers.php:1012
+#: inc/theme-helpers.php:965
 msgid "Show 1 more"
 msgstr ""
 
-#: inc/theme-helpers.php:1013
+#: inc/theme-helpers.php:966
 #, php-format
 msgid "Show %d more"
 msgid_plural "Show %d more"
 msgstr[0] ""
 msgstr[1] ""
+
+#. Template Name of the theme
+msgid "Contact Page"
+msgstr ""
+
+#: page-contact.php:22
+msgid "Contact Us"
+msgstr ""
 
 #: template-parts/comments-interactive.php:59
 msgid "Reviews"
@@ -1277,11 +1366,13 @@ msgid "Write your review here..."
 msgstr ""
 
 #: template-parts/comments-interactive.php:139
+#: template-parts/contact-section.php:345
 msgid "Send"
 msgstr ""
 
 #: template-parts/comments-interactive.php:140
 #: template-parts/comments-interactive.php:374
+#: template-parts/contact-section.php:348
 msgid "Sending..."
 msgstr ""
 
@@ -1310,6 +1401,78 @@ msgstr ""
 
 #: template-parts/comments-interactive.php:391
 msgid "Show more"
+msgstr ""
+
+#: template-parts/contact-section.php:26
+msgid "Contact"
+msgstr ""
+
+#: template-parts/contact-section.php:27
+msgid "Open to dialogue"
+msgstr ""
+
+#: template-parts/contact-section.php:28
+msgid "Do you have any questions or suggestions?<br />Leave a request and we will respond within 2 business days."
+msgstr ""
+
+#: template-parts/contact-section.php:75
+msgid "Your name"
+msgstr ""
+
+#: template-parts/contact-section.php:78
+msgid "Your message"
+msgstr ""
+
+#: template-parts/contact-section.php:82
+msgid "Enter your name"
+msgstr ""
+
+#: template-parts/contact-section.php:83
+msgid "Enter your phone number"
+msgstr ""
+
+#: template-parts/contact-section.php:84
+msgid "Enter your email"
+msgstr ""
+
+#: template-parts/contact-section.php:85
+msgid "Enter your message"
+msgstr ""
+
+#: template-parts/contact-section.php:110
+#: template-parts/contact-section.php:113
+msgid "Privacy Policy"
+msgstr ""
+
+#: template-parts/contact-section.php:120
+#: template-parts/contact-section.php:123
+msgid "Data Collection Policy"
+msgstr ""
+
+#. translators: %s: policy links
+#: template-parts/contact-section.php:128
+#, php-format
+msgid "By clicking the “Submit” button, you automatically agree to the %s."
+msgstr ""
+
+#: template-parts/contact-section.php:129
+msgid " and "
+msgstr ""
+
+#: template-parts/contact-section.php:178
+msgid "Email:"
+msgstr ""
+
+#: template-parts/contact-section.php:188
+msgid "Telegram:"
+msgstr ""
+
+#: template-parts/contact-section.php:198
+msgid "LinkedIn:"
+msgstr ""
+
+#: template-parts/contact-section.php:360
+msgid "Success"
 msgstr ""
 
 #: template-parts/control-header-auth.php:44

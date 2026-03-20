@@ -295,6 +295,8 @@ export const moduleScripts = () => {
       "inc/listing/Assets/*.mjs",
       "inc/projects/Assets/*.js",
       "inc/projects/Assets/*.mjs",
+      "inc/contact/Assets/*.js",
+      "inc/contact/Assets/*.mjs",
     ],
     {
       allowEmpty: true,
@@ -374,6 +376,7 @@ export const watchForChanges = () => {
   watch("inc/launchpad/Assets/**/*.{js,mjs}", moduleScripts);
   watch("inc/gateway/Assets/**/*.{js,mjs}", moduleScripts);
   watch("inc/listing/Assets/**/*.{js,mjs}", moduleScripts);
+  watch("inc/contact/Assets/**/*.{js,mjs}", moduleScripts);
   watch("inc/acf/blocks/**/*.module.scss", blockStyles);
   watch("**/*.php", reload);
 };

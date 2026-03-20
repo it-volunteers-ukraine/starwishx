@@ -216,6 +216,9 @@ require_once get_template_directory() . '/inc/listing/setup.php';
 // init for Projects - single project page
 require_once get_template_directory() . '/inc/projects/setup.php';
 
+// init for Contact - contact form module
+require_once get_template_directory() . '/inc/contact/setup.php';
+
 require_once get_template_directory() . '/inc/news-taxonomy-metabox.php';
 
 
