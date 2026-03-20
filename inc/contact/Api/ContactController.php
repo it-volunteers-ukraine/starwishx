@@ -13,6 +13,7 @@ namespace Contact\Api;
 
 use Shared\Core\AbstractApiController;
 use Shared\Sanitize\InputSanitizer;
+use Shared\Policy\RateLimitPolicy;
 use Contact\Core\ContactCore;
 use WP_REST_Request;
 use WP_REST_Response;
@@ -21,6 +22,9 @@ use WP_Error;
 class ContactController extends AbstractApiController
 {
     protected $namespace = 'contact/v1';
+
+    private const RATE_LIMIT_MAX      = 3;
+    private const RATE_LIMIT_WINDOW   = HOUR_IN_SECONDS;
 
     public function registerRoutes(): void
     {
@@ -36,8 +40,25 @@ class ContactController extends AbstractApiController
      */
     public function send(WP_REST_Request $request): WP_REST_Response|WP_Error
     {
+        /* ---- Rate limit: IP-based, every submission counts ---- */
+        $ip = $request->get_header('X-Forwarded-For')
+            ? explode(',', $request->get_header('X-Forwarded-For'))[0]
+            : ($_SERVER['REMOTE_ADDR'] ?? '0.0.0.0');
+        $rl_key = RateLimitPolicy::key('contact', trim($ip));
+
+        $rl_check = RateLimitPolicy::check(
+            $rl_key,
+            self::RATE_LIMIT_MAX,
+            self::RATE_LIMIT_WINDOW,
+            __('Too many messages sent. Please try again later.', 'starwishx')
+        );
+        if (is_wp_error($rl_check)) {
+            return $this->mapServiceError($rl_check);
+        }
+
         /* ---- Honeypot: silent success to avoid tipping off bots ---- */
         if (! empty($request->get_param('honeypot'))) {
+            RateLimitPolicy::hit($rl_key, self::RATE_LIMIT_WINDOW);
             return $this->success([
                 'message' => __('Message sent successfully!', 'starwishx'),
             ]);
@@ -140,6 +161,7 @@ class ContactController extends AbstractApiController
         }
 
         if (wp_mail($email_to, $subject, $body, $headers)) {
+            RateLimitPolicy::hit($rl_key, self::RATE_LIMIT_WINDOW);
             return $this->success([
                 'message' => __('Message sent successfully!', 'starwishx'),
             ]);
