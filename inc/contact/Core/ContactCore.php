@@ -74,7 +74,7 @@ final class ContactCore
      */
     private function needsContactAssets(): bool
     {
-        return is_page_template('page-home.php')
+        return is_page_template('front-page.php')
             || is_page_template('page-contact.php');
     }
 
