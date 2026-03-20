@@ -14,7 +14,7 @@ msgstr ""
 "n%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
 "X-Generator: Loco https://localise.biz/\n"
 "X-Domain: starwishx\n"
-"X-Loco-Version: 2.8.3; wp-6.9.4; php-8.3.29"
+"X-Loco-Version: 2.8.3; wp-6.9.4; php-8.3.29\n"
 
 #: templates/page-policy.php:127
 #, php-format
@@ -43,7 +43,8 @@ msgstr "Додати"
 msgid "Add review"
 msgstr "Додати відгук"
 
-#: inc/listing/Core/ResultsGrid.php:108 template-parts/control-favorites.php:42
+#: inc/listing/Core/ResultsGrid.php:108
+#: template-parts/control-favorites.php:42
 #: template-parts/project-card-opportunity.php:33
 #: template-parts/project-card-opportunity.php:89
 msgid "Add to favorites"
@@ -90,7 +91,8 @@ msgstr "Кабінет"
 msgid "Cancel"
 msgstr "Скасувати"
 
-#: archive-opportunity.php:80 inc/listing/Enums/Taxonomy.php:29
+#: archive-opportunity.php:80
+#: inc/listing/Enums/Taxonomy.php:29
 #: inc/listing/Filters/CategoryFilter.php:31
 #: templates/single-opportunity.php:63
 msgid "Category"
@@ -127,7 +129,8 @@ msgid "Comment not found."
 msgstr "Коментар не знайдено."
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:364
-#: inc/launchpad/Panels/StatsPanel.php:66 inc/listing/Core/ResultsGrid.php:193
+#: inc/launchpad/Panels/StatsPanel.php:66
+#: inc/listing/Core/ResultsGrid.php:193
 msgid "Comments"
 msgstr "Коментарі"
 
@@ -140,7 +143,8 @@ msgid "Confirm Password"
 msgstr "Підтвердьте пароль"
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:538
-#: inc/listing/Enums/Taxonomy.php:30 inc/listing/Filters/CountryFilter.php:21
+#: inc/listing/Enums/Taxonomy.php:30
+#: inc/listing/Filters/CountryFilter.php:21
 msgid "Country"
 msgstr "Країна"
 
@@ -233,8 +237,10 @@ msgid "Failed to post comment."
 msgstr "Не вдалося опублікувати коментар."
 
 #: inc/launchpad/Panels/FavoritesPanel.php:28
-#: inc/launchpad/Panels/StatsPanel.php:61 inc/listing/Core/ResultsGrid.php:117
-#: inc/listing/Core/ResultsGrid.php:137 template-parts/control-favorites.php:43
+#: inc/launchpad/Panels/StatsPanel.php:61
+#: inc/listing/Core/ResultsGrid.php:117
+#: inc/listing/Core/ResultsGrid.php:137
+#: template-parts/control-favorites.php:43
 #: template-parts/control-favorites.php:48
 #: template-parts/control-favorites.php:68
 #: template-parts/project-card-opportunity.php:42
@@ -397,7 +403,8 @@ msgstr "Невірне ім'я користувача або пароль."
 msgid "it-volunteers"
 msgstr "it-volunteers"
 
-#: archive-opportunity.php:148 templates/page-listing-oportunities.php:94
+#: archive-opportunity.php:148
+#: templates/page-listing-oportunities.php:94
 msgid "Keyword search"
 msgstr "Пошук за ключовими словами"
 
@@ -418,7 +425,8 @@ msgid "Launchpad Page"
 msgstr "Сторінка Launchpad"
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:520
-#: templates/single-opportunity.php:213 templates/single-opportunity.php:222
+#: templates/single-opportunity.php:213
+#: templates/single-opportunity.php:222
 msgid "Link"
 msgstr "Посилання"
 
@@ -457,7 +465,8 @@ msgstr "Увійти"
 msgid "Logging in..."
 msgstr "Вхід..."
 
-#: header.php:117 template-parts/control-header-auth.php:38
+#: header.php:117
+#: template-parts/control-header-auth.php:38
 #: template-parts/element-popup.php:59
 msgid "Login"
 msgstr "Увійти"
@@ -497,8 +506,10 @@ msgstr "Нова можливість"
 msgid "New Password"
 msgstr "Новий пароль"
 
-#: archive-news.php:140 inc/favorites/Services/FavoritesService.php:21
-#: templates/single-news.php:135 templates/single-opportunity.php:262
+#: archive-news.php:140
+#: inc/favorites/Services/FavoritesService.php:21
+#: templates/single-news.php:135
+#: templates/single-opportunity.php:262
 #: templates/single-project.php:166
 msgid "News"
 msgstr "Новини"
@@ -540,8 +551,10 @@ msgstr "Тільки заголовок"
 msgid "Open calendar"
 msgstr "Відкрити календар"
 
-#: archive-opportunity.php:78 inc/launchpad/Panels/OpportunitiesPanel.php:29
-#: inc/listing/Core/ListingCore.php:136 templates/single-project.php:86
+#: archive-opportunity.php:78
+#: inc/launchpad/Panels/OpportunitiesPanel.php:29
+#: inc/listing/Core/ListingCore.php:136
+#: templates/single-project.php:86
 msgid "Opportunities"
 msgstr "Можливості"
 
@@ -703,11 +716,13 @@ msgstr "Остання активність"
 msgid "Recievers"
 msgstr "Отримувачі"
 
-#: archive-opportunity.php:110 templates/page-listing-oportunities.php:79
+#: archive-opportunity.php:110
+#: templates/page-listing-oportunities.php:79
 msgid "Refine Search"
 msgstr "Уточнити пошук"
 
-#: header.php:120 inc/gateway/Forms/RegisterForm.php:64
+#: header.php:120
+#: inc/gateway/Forms/RegisterForm.php:64
 #: template-parts/element-popup.php:62
 msgid "Register"
 msgstr "Зареєструватись"
@@ -767,7 +782,8 @@ msgstr "Зберегти пароль"
 msgid "Saving..."
 msgstr "Збереження..."
 
-#: archive-opportunity.php:161 templates/page-listing-oportunities.php:107
+#: archive-opportunity.php:161
+#: templates/page-listing-oportunities.php:107
 msgid "Search by keyword..."
 msgstr "Шукати за ключовим словом..."
 
@@ -934,7 +950,8 @@ msgstr "Щоб скинути пароль, перейдіть за наступ
 msgid "To:"
 msgstr "По:"
 
-#: inc/listing/Core/ResultsGrid.php:124 inc/listing/Core/ResultsGrid.php:144
+#: inc/listing/Core/ResultsGrid.php:124
+#: inc/listing/Core/ResultsGrid.php:144
 #: template-parts/control-favorites.php:56
 #: template-parts/control-favorites.php:76
 #: template-parts/project-card-opportunity.php:48
@@ -1077,7 +1094,8 @@ msgstr "Опишіть можливість."
 msgid "Add information about the opportunity. Describe the essence."
 msgstr "Додайте інформацію про можливість. Опишіть суть."
 
-#: templates/single-news.php:113 templates/single-opportunity.php:180
+#: templates/single-news.php:113
+#: templates/single-opportunity.php:180
 #: templates/single-project.php:115
 msgid "Social share"
 msgstr "Поділитися"
@@ -1092,12 +1110,8 @@ msgid "if opportynity for Oblast"
 msgstr "якщо можливість для Області"
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:558
-msgid ""
-"Not necessary. Only if you want to point that your opportunity is available "
-"for particular locations: City, District, Hromada, etc."
-msgstr ""
-"Необов’язково. Тільки якщо ви хочете зазначити, що ваша можливість доступна "
-"для певних локацій: області, міста, району, громади тощо."
+msgid "Not necessary. Only if you want to point that your opportunity is available for particular locations: City, District, Hromada, etc."
+msgstr "Необов’язково. Тільки якщо ви хочете зазначити, що ваша можливість доступна для певних локацій: області, міста, району, громади тощо."
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:610
 msgid "if for Raion, District, Hromada"
@@ -1116,31 +1130,26 @@ msgid "Bucha c., Vesele v., Obolon..."
 msgstr "Буча м, Веселе с, Оболонь..."
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:659
-msgid ""
-"If you want you coud to select the required administrative level. If the "
-"opportunity is provided throughout the Oblast - select from (1) Oblast, if "
-"the opportunity is for a district or community - select from (2) District, "
-"if the opportunity concerns a city or village select the required City or "
-"Village from (3)."
-msgstr ""
-"За бажанням, ви можете вибрати потрібний адміністративний рівень. Якщо "
-"можливість надається по всій Області – виберіть (1) Область, якщо можливість "
-"стосується району або громади – виберіть (2) Район, якщо можливість "
-"стосується міста або села, виберіть потрібне місто або село з (3)."
+msgid "If you want you coud to select the required administrative level. If the opportunity is provided throughout the Oblast - select from (1) Oblast, if the opportunity is for a district or community - select from (2) District, if the opportunity concerns a city or village select the required City or Village from (3)."
+msgstr "За бажанням, ви можете вибрати потрібний адміністративний рівень. Якщо можливість надається по всій Області – виберіть (1) Область, якщо можливість стосується району або громади – виберіть (2) Район, якщо можливість стосується міста або села, виберіть потрібне місто або село з (3)."
 
-#: archive-opportunity.php:180 header.php:100
+#: archive-opportunity.php:180
+#: header.php:100
 #: inc/launchpad/Panels/OpportunitiesPanel.php:886
 #: template-parts/element-popup.php:42
 msgid "Close"
 msgstr "Закрити"
 
-#: archive-opportunity.php:194 header.php:108
+#: archive-opportunity.php:194
+#: header.php:108
 #: templates/page-listing-oportunities.php:136
-#: templates/single-opportunity.php:273 templates/single-project.php:177
+#: templates/single-opportunity.php:273
+#: templates/single-project.php:177
 msgid "Hi!"
 msgstr "Вітаємо!"
 
-#: archive-opportunity.php:195 templates/page-listing-oportunities.php:137
+#: archive-opportunity.php:195
+#: templates/page-listing-oportunities.php:137
 #: templates/single-opportunity.php:274
 msgid "Add to favorites is only available for registered users."
 msgstr "Додавання до обраного доступне лише для зареєстрованих користувачів."
@@ -1260,12 +1269,8 @@ msgid "Password Changed"
 msgstr "Пароль змінено"
 
 #: inc/launchpad/Panels/ProfilePanel.php:292
-msgid ""
-"Your password has been changed successfully. You will need to log in again "
-"with your new password."
-msgstr ""
-"Ваш пароль успішно змінено. Вам потрібно буде знову увійти, використовуючи "
-"новий пароль."
+msgid "Your password has been changed successfully. You will need to log in again with your new password."
+msgstr "Ваш пароль успішно змінено. Вам потрібно буде знову увійти, використовуючи новий пароль."
 
 #: inc/launchpad/Services/ProfileService.php:18
 msgid "Subscriber"
@@ -1359,7 +1364,8 @@ msgstr "Оновлення збережено."
 msgid "An error occurred while posting."
 msgstr "Під час публікації сталася помилка."
 
-#: archive-opportunity.php:127 templates/page-listing-oportunities.php:81
+#: archive-opportunity.php:127
+#: templates/page-listing-oportunities.php:81
 msgid "Found"
 msgstr "Знайдено"
 
@@ -1395,7 +1401,8 @@ msgstr "Вперед"
 msgid "No projects found."
 msgstr "Проєктів не знайдено."
 
-#: archive-opportunity.php:132 inc/listing/Core/ResultsGrid.php:41
+#: archive-opportunity.php:132
+#: inc/listing/Core/ResultsGrid.php:41
 msgid "Clear all"
 msgstr "Очистити всі"
 
@@ -1460,12 +1467,8 @@ msgid "The phone number is not valid for the selected country."
 msgstr "Номер телефону недійсний для вибраної країни."
 
 #: inc/shared/Policy/PhonePolicy.php:74
-msgid ""
-"Please enter a valid phone number in international format (e.g. "
-"+380441231231)."
-msgstr ""
-"Будь ласка, введіть дійсний номер телефону в міжнародному форматі (наприклад,"
-" +380441231231)."
+msgid "Please enter a valid phone number in international format (e.g. +380441231231)."
+msgstr "Будь ласка, введіть дійсний номер телефону в міжнародному форматі (наприклад, +380441231231)."
 
 #: 404.php:10
 msgid "It seems the page you are looking for does not exist."
@@ -1527,11 +1530,13 @@ msgstr "Недійсна адреса електронної пошти"
 msgid "Invalid phone number"
 msgstr "Недійсний номер телефону"
 
-#: inc/contact/Core/ContactCore.php:149 template-parts/contact-section.php:367
+#: inc/contact/Core/ContactCore.php:149
+#: template-parts/contact-section.php:367
 msgid "Thank you!"
 msgstr "Вітаємо!"
 
-#: inc/contact/Core/ContactCore.php:150 template-parts/contact-section.php:371
+#: inc/contact/Core/ContactCore.php:150
+#: template-parts/contact-section.php:371
 msgid "Your message has been sent successfully."
 msgstr "Ваше повідомлення успішно надіслано."
 
@@ -1543,11 +1548,12 @@ msgstr "Щось пішло не так. Спробуйте ще раз пізн
 msgid "Home Page"
 msgstr ""
 
-#: inc/contact/page-home.php:21 page-contact.php:21
+#: front-page.php:21
+#: page-contact.php:21
 msgid "Contacts"
 msgstr "Контактуй"
 
-#: inc/contact/page-home.php:22
+#: front-page.php:22
 msgid "Get in Touch"
 msgstr "Відкриті до діалогу"
 
@@ -1567,13 +1573,10 @@ msgstr ""
 msgid "Open to dialogue"
 msgstr "Відкриті до діалогу"
 
+#: front-page.php:23
 #: template-parts/contact-section.php:28
-msgid ""
-"Do you have any questions or suggestions?<br />Leave a request and we will "
-"respond within 2 business days."
-msgstr ""
-"Залишились питання чи пропозиції?<br />Залиш заявку і ми дамо відповідь "
-"протягом 2 робочих днів."
+msgid "Do you have any questions or suggestions?<br />Leave a request and we will respond within 2 business days."
+msgstr "Залишились питання чи пропозиції?<br />Залиш заявку і ми дамо відповідь протягом 2 робочих днів."
 
 #: template-parts/contact-section.php:75
 msgid "Your name"
