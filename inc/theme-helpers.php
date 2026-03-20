@@ -16,82 +16,35 @@ if (!defined('ABSPATH')) exit;
  * ========================================================================= */
 
 /**
- * Check if string contains anything looking like a URL/Domain
- * dot inclide. more aggressive against bots.
+ * @deprecated Use \Shared\Sanitize\InputSanitizer::containsUrl() directly.
  */
 function sw_contains_url(string $text): bool
 {
-    // Checks for http/https OR for strings like "example.com" or "bit.ly"
-    if (preg_match('#(https?://|www\.)#i', $text)) {
-        return true;
-    }
-    // Check for domain-like structures (e.g., example.com)
-    return (bool) preg_match('#\b[a-z0-9-]+(\.[a-z]{2,})+(/\S*)?\b#i', $text);
+    return \Shared\Sanitize\InputSanitizer::containsUrl($text);
 }
 
 /**
- * Strip URL-like patterns from a string, breaking bare domains with a space
- * so they no longer resolve as links or pass URL-detection checks.
+ * @deprecated Use \Shared\Sanitize\InputSanitizer::stripUrls() directly.
  */
 function sw_strip_urls(string $text): string
 {
-    if (! is_string($text) || trim($text) === '') {
-        return '';
-    }
-
-    // Remove full protocol URLs (http/https/ftp/sftp/ftps + path/query/fragment/port/auth)
-    $text = preg_replace('#\b(?:https?|ftp|sftp|ftps)://[^\s<>"\']+#i', '', $text);
-
-    // Remove www. domains (requires at least one dot after www + TLD-like structure)
-    $text = preg_replace('#\bwww\.[^\s<>"\']+\.[^\s<>"\']+#i', '', $text);
-
-    // "The Dot Breaker" 
-    // This finds a dot between two letters/numbers that DOES NOT have a space after it.
-    // Example: bit.ly -> bit. ly
-    // It ignores numbers like 10.5 by checking for letters on the right side.
-    $text = preg_replace('/([a-z0-9])\.([a-z]{2,})/i', '$1. $2', $text);
-
-    return $text;
+    return \Shared\Sanitize\InputSanitizer::stripUrls($text);
 }
 
 /**
- * Sanitize a single-line text value coming from any WP/ACF source.
- *
- * Accepts ?string so callers can pass get_field() / get_post_meta() results
- * directly - both routinely return null on empty fields. A TypeError crash at
- * the sanitization boundary in production is worse than graceful handling here.
- * sw_strip_urls() stays strict (string) as it is an internal utility.
- *
- * NOTE: null/empty check avoids empty() which would swallow the valid string '0'.
+ * @deprecated Use \Shared\Sanitize\InputSanitizer::sanitizeText() directly.
  */
 function sw_sanitize_text_field(?string $input): string
 {
-    if ($input === null || $input === '') {
-        return '';
-    }
-
-    $text = sanitize_text_field($input);
-    $text = sw_strip_urls($text);
-
-    return trim((string) preg_replace('/\s+/', ' ', $text));
+    return \Shared\Sanitize\InputSanitizer::sanitizeText($input);
 }
 
 /**
- * Sanitize a multi-line textarea value, preserving intentional line breaks.
- *
- * Accepts ?string - same rationale as sw_sanitize_text_field above.
+ * @deprecated Use \Shared\Sanitize\InputSanitizer::sanitizeTextarea() directly.
  */
 function sw_sanitize_textarea_field(?string $input): string
 {
-    if ($input === null || $input === '') {
-        return '';
-    }
-
-    $text = sanitize_textarea_field($input);
-    $text = sw_strip_urls($text);
-
-    // Normalize horizontal whitespace only - newlines are intentional in textareas
-    return trim((string) preg_replace('/[ \t]+/', ' ', $text));
+    return \Shared\Sanitize\InputSanitizer::sanitizeTextarea($input);
 }
 
 /**
