@@ -356,14 +356,29 @@ class OpportunitiesPanel extends AbstractPanel
                                                     data-wp-bind--hidden="!context.item.isExpired">
                                                     <?php esc_html_e('Finished', 'starwishx'); ?>
                                                 </span>
-                                                <!-- Comments Count Label -->
-                                                <div class="opportunity-comments"
-                                                    data-wp-bind--hidden="!context.item.commentsCount">
-                                                    <span class="opportunity-comments--label">
-                                                        <?= sw_svg('icon-write', 14);?>
-                                                        <?= __("Comments", 'starwishx') ?>:
-                                                        <span class="comments-number" data-wp-text="context.item.commentsCount"></span>
+                                                <!-- Rating & Comments -->
+                                                <div class="opportunity-engage">
+                                                    <span class="opportunity-engage__rating rating-badge"
+                                                        data-wp-bind--hidden="!context.item.ratingCount">
+                                                        <span class="stars-display"
+                                                            data-wp-bind--data-rating="context.item.ratingRounded"
+                                                            aria-hidden="true">
+                                                            <?php for ($s = 1; $s <= 5; $s++): ?>
+                                                                <svg class="icon-star star-<?php echo $s; ?>" width="14" height="14" aria-hidden="true">
+                                                                    <use href="<?php echo get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-star"></use>
+                                                                </svg>
+                                                            <?php endfor; ?>
+                                                        </span>
+                                                        <span class="opportunity-engage__rating-avg"
+                                                            data-wp-text="context.item.ratingAvg"></span>
                                                     </span>
+                                                    <a class="opportunity-engage__comments-link"
+                                                        data-wp-bind--hidden="!context.item.commentsCount"
+                                                        data-wp-bind--href="context.item.commentsUrl">
+                                                        <?= sw_svg('icon-write', 14); ?>
+                                                        <?= __("Comments", 'starwishx') ?>:
+                                                        <span data-wp-text="context.item.commentsCount"></span>
+                                                    </a>
                                                 </div>
                                             </div>
                                             <div class="opportunity-meta__container-statuses">
@@ -452,7 +467,7 @@ class OpportunitiesPanel extends AbstractPanel
                         <label for="opportunity-title" class="label-required"><?php echo esc_html($labels['title'] ?? __('Opportunity Title', 'starwishx')); ?></label>
                         <input id="opportunity-title" type="text" required class="large-text"
                             maxlength="<?= OpportunitiesService::TITLE_MAX_LENGTH ?>"
-                            placeholder="<?= esc_attr( sprintf( __( 'Add title min %1$d, max %2$d characters', 'starwishx' ), OpportunitiesService::TITLE_MIN_LENGTH, OpportunitiesService::TITLE_MAX_LENGTH ) ); ?>"
+                            placeholder="<?= esc_attr(sprintf(__('Add title min %1$d, max %2$d characters', 'starwishx'), OpportunitiesService::TITLE_MIN_LENGTH, OpportunitiesService::TITLE_MAX_LENGTH)); ?>"
                             data-wp-bind--value="<?= $formPath ?>.title"
                             data-wp-on--input="actions.opportunities.updateForm"
                             data-wp-bind--disabled="<?= $isLoadingPath ?>"
