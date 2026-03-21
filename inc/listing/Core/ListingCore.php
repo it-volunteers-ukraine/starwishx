@@ -124,6 +124,12 @@ final class ListingCore
         if (function_exists("rank_math_the_breadcrumbs")) {
             add_filter('rank_math/frontend/breadcrumb/items', [$this, 'add_opportunity_breadcrumb_base'], 10, 2);
         }
+
+        // SEO-friendly category URLs: /opportunities/{slug}/
+        if (defined('LISTING_PRETTY_CATEGORY_URLS') && LISTING_PRETTY_CATEGORY_URLS) {
+            add_action('init', [$this, 'registerCategoryRewrites'], 5);
+            add_filter('query_vars', fn(array $vars) => array_merge($vars, ['listing_cat']));
+        }
     }
 
     /**
@@ -140,6 +146,25 @@ final class ListingCore
             array_splice($crumbs, 1, 0, [$custom_base]);
         }
         return $crumbs;
+    }
+
+    /**
+     * Register rewrite rules for SEO-friendly category URLs.
+     * Maps /opportunities/{slug}/ to the archive template with listing_cat query var.
+     */
+    public function registerCategoryRewrites(): void
+    {
+        // Negative lookahead excludes /page/ so default WP pagination still works
+        add_rewrite_rule(
+            'opportunities/(?!page/)([^/]+)/?$',
+            'index.php?post_type=opportunity&listing_cat=$matches[1]',
+            'top'
+        );
+        add_rewrite_rule(
+            'opportunities/(?!page/)([^/]+)/page/([0-9]+)/?$',
+            'index.php?post_type=opportunity&listing_cat=$matches[1]&paged=$matches[2]',
+            'top'
+        );
     }
 
     /**
@@ -188,11 +213,21 @@ final class ListingCore
             wp_enqueue_script_module('@starwishx/listing');
         }
 
+        $listingConfig = [
+            'nonce'   => wp_create_nonce('wp_rest'),
+            'restUrl' => rest_url('listing/v1/'),
+        ];
+
+        if (defined('LISTING_PRETTY_CATEGORY_URLS') && LISTING_PRETTY_CATEGORY_URLS) {
+            $listingConfig['prettyCategoryUrls'] = true;
+            $listingConfig['archivePath'] = wp_parse_url(
+                get_post_type_archive_link('opportunity'),
+                PHP_URL_PATH
+            ) ?: '/opportunities/';
+        }
+
         wp_interactivity_state('listingSettings', [
-            'config' => [
-                'nonce'   => wp_create_nonce('wp_rest'),
-                'restUrl' => rest_url('listing/v1/'),
-            ],
+            'config' => $listingConfig,
         ]);
 
         wp_interactivity_state('listing', [
@@ -210,14 +245,21 @@ final class ListingCore
 
     /**
      * Get aggregated state for SSR hydration.
-     * Called from page-listing-opportunities.php.
+     * Called from archive-opportunity.php.
      *
      * QueryStringParser::fromServer() is used here rather than in StateAggregator
      * so the aggregator stays free of superglobal access and remains testable.
+     *
+     * @param array $filterOverrides Additional filters to merge (e.g. from pretty URL path).
+     *                               These take precedence over query string values.
      */
-    public function getState(): array
+    public function getState(array $filterOverrides = []): array
     {
         $rawFilters = QueryStringParser::fromServer();
+
+        if ($filterOverrides) {
+            $rawFilters = array_merge($rawFilters, $filterOverrides);
+        }
 
         return $this->stateAggregator->aggregate($this->registry, $rawFilters);
     }

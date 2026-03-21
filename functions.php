@@ -210,6 +210,10 @@ require_once get_template_directory() . '/inc/comments/setup.php';
 // init for Launchpad - user's dashboard
 require_once get_template_directory() . '/inc/launchpad/setup.php';
 
+// Feature flag: SEO-friendly category URLs for Listing (/opportunities/{slug}/)s
+// After toggling, flush rewrite rules via Settings → Permalinks.
+define('LISTING_PRETTY_CATEGORY_URLS', true);
+
 // init for Listing - search & filter opportunities
 require_once get_template_directory() . '/inc/listing/setup.php';
 

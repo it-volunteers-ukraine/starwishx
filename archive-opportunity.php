@@ -23,8 +23,15 @@ $listing = \listing();
 /**
  * STATE HYDRATION (SSR)
  * Seed the 'listing' namespace using the authoritative Core aggregator.
+ * When a pretty category URL is active (/opportunities/{slug}/), inject
+ * the slug into the filter pipeline so SSR matches the URL context.
  */
-wp_interactivity_state('listing', $listing->getState());
+$filterOverrides = [];
+$listingCat = get_query_var('listing_cat');
+if ($listingCat) {
+    $filterOverrides['category'] = sanitize_title($listingCat);
+}
+wp_interactivity_state('listing', $listing->getState($filterOverrides));
 
 /**
  * ASSET FOUC PROTECTION

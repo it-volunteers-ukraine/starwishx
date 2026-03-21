@@ -96,11 +96,12 @@ export async function fetchJson(
  */
 // Around line ~107 - Update the URL sync function
 export function syncStateToUrl(query) {
-  const url = new URL(window.location);
   const params = new URLSearchParams();
 
   // Category facets tree for slug serialization
   const { state } = store("listing");
+  const { state: settingsState } = store("listingSettings");
+  const config = settingsState.config || {};
   const categoryTree = state.facets?.["category-oportunities"] || [];
 
   Object.entries(query).forEach(([key, value]) => {
@@ -134,9 +135,38 @@ export function syncStateToUrl(query) {
     }
   });
 
+  // Base path: use archive root when pretty URLs are active to avoid
+  // stale path segments (e.g., /opportunities/old-slug/ → /opportunities/)
+  const basePath = config.prettyCategoryUrls
+    ? (config.archivePath || "/opportunities/").replace(/\/?$/, "/")
+    : new URL(window.location).pathname;
+
+  // Pretty URL: single parent category slug with no other active filters
+  if (config.prettyCategoryUrls) {
+    const catParams = params.getAll("category");
+    if (catParams.length === 1 && isNaN(catParams[0])) {
+      const otherKeys = [...new Set([...params.keys()])].filter(
+        (k) => k !== "category",
+      );
+      if (
+        otherKeys.length === 0 ||
+        (otherKeys.length === 1 && otherKeys[0] === "page")
+      ) {
+        const slug = catParams[0];
+        params.delete("category");
+        const remaining = params.toString();
+        const prettyUrl = remaining
+          ? `${basePath}${slug}/?${remaining}`
+          : `${basePath}${slug}/`;
+        window.history.pushState({ query: deepClone(query) }, "", prettyUrl);
+        return;
+      }
+    }
+  }
+
   const newUrl = params.toString()
-    ? `${url.pathname}?${params.toString()}`
-    : url.pathname;
+    ? `${basePath}?${params.toString()}`
+    : basePath;
 
   window.history.pushState({ query: deepClone(query) }, "", newUrl);
 }
@@ -152,7 +182,25 @@ export function syncUrlToState(queryState) {
 
   // Category facets tree for slug resolution
   const { state } = store("listing");
+  const { state: settingsState } = store("listingSettings");
+  const config = settingsState.config || {};
   const categoryTree = state.facets?.["category-oportunities"] || [];
+
+  // Pretty URL: extract category slug from pathname into params
+  // so the existing resolution logic below handles it uniformly
+  if (config.prettyCategoryUrls && !params.has("category")) {
+    const archivePath = (config.archivePath || "/opportunities/").replace(
+      /\/$/,
+      "",
+    );
+    const pathname = window.location.pathname.replace(/\/$/, "");
+    if (pathname.startsWith(archivePath + "/")) {
+      const slug = pathname.slice(archivePath.length + 1).split("/")[0];
+      if (slug && slug !== "page") {
+        params.append("category", slug);
+      }
+    }
+  }
 
   // Reset existing state keys to default before filling from URL
   Object.keys(queryState).forEach((key) => {
