@@ -499,28 +499,42 @@
                     font-size: 0.85rem;
                     // .opportunity-meta__container-date {
                     // }
-                    .opportunity-comments {
-                        display: inline-flex;
+                    .opportunity-engage {
+                        display: flex;
                         align-items: center;
-                        gap: 4px;
+                        gap: 12px;
 
-                        &--label {
-                            display: flex;
+                        &__rating {
+                            display: inline-flex;
                             align-items: center;
                             gap: 4px;
-                            // border-color: $buttons-color-text-secondary-hover;
-                            // background-color: $dropdown-surface-color-selected;
-                            padding: 1px 4px;
+
+                            .stars-display svg {
+                                width: 14px;
+                                height: 14px;
+                            }
+                        }
+
+                        &__rating-avg {
+                            color: $text-accent;
+                            font-weight: 500;
+                            font-size: 14px;
+                        }
+
+                        &__comments-link {
+                            display: inline-flex;
+                            align-items: center;
+                            gap: 4px;
                             color: $text-light;
                             font-size: 14px;
-                            line-height: 1;
+                            text-decoration: none;
+
                             svg {
                                 color: $text-accent;
                             }
 
-                            .comments-number {
+                            &:hover {
                                 color: $text-accent;
-                                font-weight: 500;
                             }
                         }
                     }
@@ -692,7 +706,7 @@
                     .opportunity-badge {
                         order: 2;
                     }
-                    .opportunity-comments {
+                    .opportunity-engage {
                         order: 3;
                     }
                 }

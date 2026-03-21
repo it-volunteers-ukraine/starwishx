@@ -122,6 +122,9 @@ class OpportunitiesService
                 }
             }
 
+            $ratingAvg   = (float) get_post_meta($post->ID, '_opportunity_rating_avg', true);
+            $ratingCount = (int) get_post_meta($post->ID, '_opportunity_rating_count', true);
+
             $opportunities[] = [
                 'id'            => $post->ID,
                 'title'         => $post->post_title,
@@ -134,6 +137,10 @@ class OpportunitiesService
                 'dateEnds'      => $this->formatDateForUI($raw_date_ends),
                 'isExpired'     => $is_expired,
                 'commentsCount' => (int) get_comments_number($post->ID),
+                'ratingAvg'     => $ratingCount > 0 ? $ratingAvg : 0,
+                'ratingRounded' => $ratingCount > 0 ? (int) round($ratingAvg) : 0,
+                'ratingCount'   => $ratingCount,
+                'commentsUrl'   => get_permalink($post->ID) . '#comments',
                 'categoryName'  => $top_category,
                 'editUrl'       => get_edit_post_link($post->ID),
                 'viewUrl'       => get_permalink($post->ID),
