@@ -102,11 +102,16 @@ class StateAggregator
 
             $ids[] = $term->term_id;
 
+            // Only include children that have published posts.
+            // The JS facets tree (TermCountingService) excludes empty terms,
+            // and toggleParent() only adds visible children — so SSR must match.
+            // Including empty children creates orphan IDs that removeChip()
+            // cannot clear (it builds its removal set from the facets tree).
             $children = get_terms([
                 'taxonomy'   => 'category-oportunities',
                 'parent'     => $term->term_id,
                 'fields'     => 'ids',
-                'hide_empty' => false,
+                'hide_empty' => true,
             ]);
 
             if (!is_wp_error($children)) {

@@ -64,13 +64,9 @@ store("listing", {
     init() {
       const { state, actions } = store("listing");
 
-      // If URL has query params, sync them into state and fetch.
-      // On a clean URL (/opportunities/ or /listing/), SSR has already hydrated the state —
-      // no sync or fetch needed.
-      if (window.location.search) {
-        syncUrlToState(state.query);
-        actions.updateResults();
-      }
+      // SSR hydration is authoritative for the initial URL state.
+      // Both clean URLs and filtered URLs (?category=..., /slug/)
+      // are correctly hydrated by StateAggregator.
 
       // Close offcanvas sidebar on Escape key
       document.addEventListener("keydown", (e) => {
@@ -342,8 +338,7 @@ window.addEventListener("popstate", () => {
   actions.updateResults();
 });
 
-// Optional patch: Initial sync if not handled by SSR hydration
-// When SSR hydration will done - get rid off this
+// Register keyboard listeners after store is ready
 if (document.readyState === "loading") {
   document.addEventListener("DOMContentLoaded", () => actions.init());
 } else {
