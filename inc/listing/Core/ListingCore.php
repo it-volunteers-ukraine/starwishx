@@ -129,6 +129,7 @@ final class ListingCore
         if (defined('LISTING_PRETTY_CATEGORY_URLS') && LISTING_PRETTY_CATEGORY_URLS) {
             add_action('init', [$this, 'registerCategoryRewrites'], 5);
             add_filter('query_vars', fn(array $vars) => array_merge($vars, ['listing_cat']));
+            add_filter('request', [$this, 'disambiguateCategoryUrl'], 20);
         }
     }
 
@@ -165,6 +166,37 @@ final class ListingCore
             'index.php?post_type=opportunity&listing_cat=$matches[1]&paged=$matches[2]',
             'top'
         );
+    }
+
+    /**
+     * Disambiguate pretty category URLs from single post URLs.
+     *
+     * The rewrite rule for /opportunities/{slug}/ matches both category slugs
+     * and post slugs because both occupy the same URL segment. When listing_cat
+     * is set but doesn't match a valid taxonomy term, rewrite the query vars
+     * so WordPress resolves the request as a single opportunity post instead.
+     *
+     * @param array $vars Parsed query variables from the matched rewrite rule.
+     */
+    public function disambiguateCategoryUrl(array $vars): array
+    {
+        if (empty($vars['listing_cat'])) {
+            return $vars;
+        }
+
+        $term = get_term_by('slug', $vars['listing_cat'], 'category-oportunities');
+
+        if ($term && !is_wp_error($term)) {
+            return $vars;
+        }
+
+        // Not a category term — resolve as a single opportunity post.
+        // post_type=opportunity is already set by the rewrite rule;
+        // adding 'name' switches WordPress from archive to single-post mode.
+        $vars['name'] = $vars['listing_cat'];
+        unset($vars['listing_cat']);
+
+        return $vars;
     }
 
     /**
