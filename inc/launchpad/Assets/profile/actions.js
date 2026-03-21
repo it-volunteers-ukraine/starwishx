@@ -14,6 +14,24 @@ import { ensurePanel, fetchJson } from "../utils.js";
 let itiInstance = null;
 
 /**
+ * Compute display-name dropdown options from current form state.
+ * Mirrors WordPress wp-admin/user-edit.php logic.
+ */
+function computeDisplayNameOptions(p) {
+  const opts = [];
+  if (p.nickname) opts.push(p.nickname.trim());
+  if (p.userLogin) opts.push(p.userLogin.trim());
+  if (p.firstName) opts.push(p.firstName.trim());
+  if (p.lastName) opts.push(p.lastName.trim());
+  if (p.firstName && p.lastName) {
+    opts.push(`${p.firstName.trim()} ${p.lastName.trim()}`);
+    opts.push(`${p.lastName.trim()} ${p.firstName.trim()}`);
+  }
+  if (p.organization) opts.push(p.organization.trim());
+  return [...new Set(opts)].filter(Boolean);
+}
+
+/**
  * Profile actions - plain object using Store Locator pattern.
  */
 export const profileActions = {
@@ -88,7 +106,21 @@ export const profileActions = {
     const { state } = store("launchpad");
     const { ref } = getElement();
     if (ref.dataset.field) {
-      ensurePanel(state, "profile")[ref.dataset.field] = ref.value;
+      const p = ensurePanel(state, "profile");
+      p[ref.dataset.field] = ref.value;
+
+      // Recompute display name options when name-related fields change
+      if (
+        ["firstName", "lastName", "nickname", "organization"].includes(
+          ref.dataset.field,
+        )
+      ) {
+        p.displayNameOptions = computeDisplayNameOptions(p);
+        // If current displayName is no longer among options, reset to first
+        if (p.displayName && !p.displayNameOptions.includes(p.displayName)) {
+          p.displayName = p.displayNameOptions[0] || "";
+        }
+      }
     }
   },
 
@@ -132,6 +164,10 @@ export const profileActions = {
             email: p.email,
             phone,
             phoneCountry,
+            nickname: p.nickname,
+            displayName: p.displayName,
+            userUrl: p.userUrl,
+            description: p.description,
             telegram: p.telegram,
             organization: p.organization,
           },
@@ -312,5 +348,101 @@ export const profileActions = {
         p.error = null;
       }, 5000);
     }
+  },
+
+  /**
+   * Open the delete account confirmation popup.
+   */
+  deleteProfile() {
+    const { state } = store("launchpad");
+    const p = ensurePanel(state, "profile");
+    p.error = null;
+    p.deletePopup = {
+      isOpen: true,
+      password: "",
+      isPasswordVisible: false,
+      isDeleting: false,
+      error: null,
+    };
+  },
+
+  /**
+   * Close the delete popup and reset its state.
+   */
+  cancelDelete() {
+    const { state } = store("launchpad");
+    const p = ensurePanel(state, "profile");
+    p.deletePopup.isOpen = false;
+    p.deletePopup.password = "";
+    p.deletePopup.error = null;
+  },
+
+  /**
+   * Update the delete popup password field from input.
+   */
+  updateDeletePassword() {
+    const { state } = store("launchpad");
+    const { ref } = getElement();
+    ensurePanel(state, "profile").deletePopup.password = ref.value;
+  },
+
+  /**
+   * Toggle password visibility in the delete popup.
+   */
+  toggleDeletePasswordVisibility() {
+    const { state } = store("launchpad");
+    const p = ensurePanel(state, "profile");
+    p.deletePopup.isPasswordVisible = !p.deletePopup.isPasswordVisible;
+  },
+
+  /**
+   * Confirm account deletion: verify password server-side and delete.
+   */
+  async confirmDelete() {
+    const { state } = store("launchpad");
+    const p = ensurePanel(state, "profile");
+    const popup = p.deletePopup;
+
+    if (!popup.password) {
+      popup.error =
+        state.launchpadSettings.validationStrings?.passwordRequired ??
+        "Please enter your password.";
+      setTimeout(() => {
+        popup.error = null;
+      }, 5000);
+      return;
+    }
+
+    popup.isDeleting = true;
+    popup.error = null;
+
+    try {
+      await fetchJson(
+        state,
+        `${state.launchpadSettings.restUrl}profile/delete`,
+        {
+          method: "POST",
+          body: { password: popup.password },
+        },
+      );
+
+      // Close confirmation popup, show success popup
+      popup.isOpen = false;
+      p.deleteSuccessPopup = { isOpen: true };
+    } catch (error) {
+      popup.error = error.message;
+      popup.isDeleting = false;
+      setTimeout(() => {
+        popup.error = null;
+      }, 5000);
+    }
+  },
+
+  /**
+   * After successful deletion, redirect to home.
+   */
+  confirmDeleteSuccess() {
+    const { state } = store("launchpad");
+    window.location.href = state.launchpadSettings.homeUrl || "/";
   },
 };

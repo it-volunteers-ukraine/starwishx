@@ -26,6 +26,30 @@ class ProfileService
     }
 
     /**
+     * Compute display-name dropdown options (mirrors wp-admin/user-edit.php logic).
+     *
+     * @return string[] Unique, non-empty options.
+     */
+    public static function computeDisplayNameOptions(object $user, string $organization = ''): array
+    {
+        $options = [];
+
+        if ($user->nickname)   $options[] = $user->nickname;
+        // $options[] = $user->user_login; // not sure it's a good idea
+        if ($user->first_name) $options[] = $user->first_name;
+        if ($user->last_name)  $options[] = $user->last_name;
+
+        if ($user->first_name && $user->last_name) {
+            $options[] = $user->first_name . ' ' . $user->last_name;
+            $options[] = $user->last_name . ' ' . $user->first_name;
+        }
+
+        if ($organization) $options[] = $organization;
+
+        return array_values(array_unique(array_filter(array_map('trim', $options))));
+    }
+
+    /**
      * Get standardized profile data (Core + ACF).
      */
     public function getProfileData(int $userId): array
@@ -67,19 +91,26 @@ class ProfileService
 
 
         return [
-            'id'        => $user->ID,
-            'firstName' => $user->first_name,
-            'lastName'  => $user->last_name,
-            'email'     => $user->user_email,
-            'role'      => $user->roles[0] ?? 'subscriber',
-            'roleLabel' => self::getRoleLabel($user->roles[0] ?? 'subscriber'),
-            'avatarUrl' => get_avatar_url($userId, ['size' => 150]),
+            'id'          => $user->ID,
+            'userLogin'   => $user->user_login,
+            'firstName'   => $user->first_name,
+            'lastName'    => $user->last_name,
+            'nickname'    => $user->nickname,
+            'displayName' => $user->display_name,
+            'email'       => $user->user_email,
+            'userUrl'     => $user->user_url,
+            'description' => get_user_meta($userId, 'description', true) ?: '',
+            'role'        => $user->roles[0] ?? 'subscriber',
+            'roleLabel'   => self::getRoleLabel($user->roles[0] ?? 'subscriber'),
+            'avatarUrl'   => get_avatar_url($userId, ['size' => 150]),
 
             // Return flattened string for the frontend Input
             // instead of 'phone'     => get_field('phone', $acfId) ?: '',
             'phone'        => $phoneString,
             'telegram'     => get_field('telegram', $acfId) ?: '',
-            'organization' => get_field('organization', $acfId) ?: '',
+            'organization' => ($org = get_field('organization', $acfId) ?: ''),
+
+            'displayNameOptions' => self::computeDisplayNameOptions($user, $org),
         ];
     }
 
@@ -121,6 +152,22 @@ class ProfileService
         }
         if (isset($data['email'])) {
             $coreArgs['user_email'] = sanitize_email($data['email']);
+            $hasCoreUpdate = true;
+        }
+        if (isset($data['nickname'])) {
+            $coreArgs['nickname'] = sanitize_text_field($data['nickname']);
+            $hasCoreUpdate = true;
+        }
+        if (isset($data['displayName'])) {
+            $coreArgs['display_name'] = sanitize_text_field($data['displayName']);
+            $hasCoreUpdate = true;
+        }
+        if (isset($data['userUrl'])) {
+            $coreArgs['user_url'] = esc_url_raw($data['userUrl']);
+            $hasCoreUpdate = true;
+        }
+        if (isset($data['description'])) {
+            $coreArgs['description'] = sanitize_textarea_field($data['description']);
             $hasCoreUpdate = true;
         }
 
@@ -193,5 +240,80 @@ class ProfileService
 
         // Returns an array (with optional flag), satisfying the return type
         return $freshProfile;
+    }
+
+    /**
+     * Self-delete a user account after password verification.
+     *
+     * Only subscribers and contributors may self-delete.
+     * Posts are reassigned to the first available editor, or admin as fallback.
+     * Cleanup hooks (favorites, user meta, ACF fields) fire automatically
+     * via WordPress's `delete_user` action inside `wp_delete_user()`.
+     */
+    public function deleteAccount(int $userId, string $password): bool|WP_Error
+    {
+        $user = get_userdata($userId);
+
+        if (!$user) {
+            return new WP_Error('not_found', __('User not found.', 'starwishx'));
+        }
+
+        // Role guard: only launchpad-level roles may self-delete
+        $allowed = ['subscriber', 'contributor'];
+        if (empty(array_intersect($user->roles, $allowed))) {
+            return new WP_Error(
+                'forbidden',
+                __('Your account role does not permit self-deletion.', 'starwishx')
+            );
+        }
+
+        // Password verification
+        if (!wp_check_password($password, $user->user_pass, $user->ID)) {
+            return new WP_Error(
+                'invalid_password',
+                __('The password you entered is incorrect.', 'starwishx')
+            );
+        }
+
+        // Find reassignment target: editor first, admin fallback
+        $reassignTo = $this->findReassignmentTarget();
+
+        // Requires wp-admin/includes/user.php in frontend context
+        if (!function_exists('wp_delete_user')) {
+            require_once ABSPATH . 'wp-admin/includes/user.php';
+        }
+
+        $deleted = wp_delete_user($userId, $reassignTo);
+
+        if (!$deleted) {
+            return new WP_Error('delete_failed', __('Account deletion failed.', 'starwishx'));
+        }
+
+        return true;
+    }
+
+    /**
+     * Find the best user to reassign orphaned posts to.
+     * Prefers an editor, falls back to administrator.
+     */
+    private function findReassignmentTarget(): ?int
+    {
+        $editors = get_users([
+            'role'   => 'editor',
+            'number' => 1,
+            'fields' => 'ID',
+        ]);
+
+        if (!empty($editors)) {
+            return (int) $editors[0];
+        }
+
+        $admins = get_users([
+            'role'   => 'administrator',
+            'number' => 1,
+            'fields' => 'ID',
+        ]);
+
+        return !empty($admins) ? (int) $admins[0] : null;
     }
 }

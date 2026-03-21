@@ -27,4 +27,10 @@ export const profileGetters = {
   get newPasswordInputType() {
     return this.panels.profile?.isNewPasswordVisible ? "text" : "password";
   },
+
+  get deletePasswordInputType() {
+    return this.panels.profile?.deletePopup?.isPasswordVisible
+      ? "text"
+      : "password";
+  },
 };
