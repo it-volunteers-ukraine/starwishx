@@ -98,12 +98,13 @@ class CommentsService
         // Metadata (Ratings are usually pre-cached by WP, but simple get_metadata is fast)
         $rating = (int) get_comment_meta($commentId, '_star_rating', true);
 
-        // Logic: Author Display Name
+        // Logic: Author Display Name — use display_name (set by the user
+        // via "Display name publicly as" selector in Launchpad profile).
         $display_author = $comment->comment_author;
         if ($commentUserId > 0) {
             $user = get_userdata($commentUserId);
-            if ($user && !empty($user->first_name)) {
-                $display_author = $user->first_name;
+            if ($user) {
+                $display_author = $user->display_name;
             }
         }
 
@@ -163,7 +164,7 @@ class CommentsService
         if (!$post || $post->post_status !== 'publish') {
             return new WP_Error('not_published', __('Comments are only allowed on published posts.', 'starwishx'), ['status' => 403]);
         }
-        $author_name = !empty($user->first_name) ? $user->first_name : $user->user_login;
+        $author_name = $user->display_name ?: $user->user_login;
 
         // Validation
         if ($parentId > 0) {

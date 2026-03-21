@@ -236,11 +236,13 @@ final class LaunchpadCore
                     'loginUrl'            => wp_login_url(home_url('/launchpad/')),
                     'generatePasswordUrl' => rest_url('gateway/v1/password/generate'),
                     'passwordPolicy'      => PasswordPolicy::getClientRules(),
+                    'validationStrings'   => PasswordPolicy::getClientValidationStrings(),
                     'phoneConfig'         => [
                         'initialCountry'   => 'ua',
                         'countryOrder'     => ['ua', 'pl', 'de', 'us', 'gb'],
                         'excludeCountries' => ['ru'],
                     ],
+                    'homeUrl'             => home_url('/'),
                     'messages'            => [
                         'invalidPhone' => __('Please enter a valid phone number.', 'starwishx'),
                     ],

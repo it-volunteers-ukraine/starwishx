@@ -35,11 +35,25 @@ class ProfileController extends AbstractLaunchpadController
                         return !empty($value) && is_email($value);
                     },
                 ],
+                // Core WP fields
+                'nickname'    => ['sanitize_callback' => 'sanitize_text_field'],
+                'displayName' => ['sanitize_callback' => 'sanitize_text_field'],
+                'userUrl'     => ['sanitize_callback' => 'esc_url_raw'],
+                'description' => ['sanitize_callback' => 'sanitize_textarea_field'],
                 // Additional ACF Fields
                 'phone'        => ['sanitize_callback' => 'sanitize_text_field'],
                 'phoneCountry' => ['sanitize_callback' => 'sanitize_text_field'],
                 'telegram'     => ['sanitize_callback' => 'sanitize_text_field'],
                 'organization' => ['sanitize_callback' => 'sanitize_text_field'],
+            ],
+        ]);
+
+        register_rest_route($this->namespace, '/profile/delete', [
+            'methods'             => 'POST',
+            'callback'            => [$this, 'deleteAccount'],
+            'permission_callback' => [$this, 'checkLoggedIn'],
+            'args'                => [
+                'password' => ['required' => true, 'type' => 'string'],
             ],
         ]);
     }
@@ -61,6 +75,27 @@ class ProfileController extends AbstractLaunchpadController
             'message' => __('Profile updated.', 'starwishx'),
             // Spread the updated data back to frontend
             ...$result
+        ]);
+    }
+
+    public function deleteAccount(WP_REST_Request $request): WP_REST_Response|WP_Error
+    {
+        $result = $this->service->deleteAccount(
+            get_current_user_id(),
+            $request->get_param('password')
+        );
+
+        if (is_wp_error($result)) {
+            return $this->error(
+                $result->get_error_message(),
+                $result->get_error_code() === 'forbidden' ? 403 : 400,
+                $result->get_error_code()
+            );
+        }
+
+        return $this->success([
+            'success' => true,
+            'message' => __('Your account has been deleted.', 'starwishx'),
         ]);
     }
 }

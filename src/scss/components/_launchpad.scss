@@ -914,6 +914,13 @@
             color: $input-color-text-disabled;
         }
     }
+    #lp-phone {
+        padding-left: 89px !important;
+        font-size: inherit;
+        @include min-tabland {
+            padding-left: 93px !important;
+        }
+    }
 
     // Form Layout Helpers
     .form-group-card {
@@ -999,6 +1006,11 @@
         margin-top: 2rem;
         border-top: 1px solid $input-color-border-default;
         padding-top: 1rem;
+        &--delete {
+            .btn-profile-delete {
+                margin-left: auto;
+            }
+        }
     }
 }
 
