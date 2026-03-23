@@ -43,12 +43,12 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  document.querySelectorAll('.mobile-header-buttons .search-icon').forEach(el => {
-    el.addEventListener('click', e => {
-      e.preventDefault();
-      alert('Пошук (мобільна)');
-    });
-  });
+  // document.querySelectorAll('.mobile-header-buttons .search-icon').forEach(el => {
+  //   el.addEventListener('click', e => {
+  //     e.preventDefault();
+  //     alert('Пошук (мобільна)');
+  //   });
+  // });
 
   document.querySelectorAll('.mobile-header-buttons .lang-btn').forEach(btn => {
     btn.addEventListener('click', () => {
@@ -69,7 +69,7 @@ document.addEventListener('DOMContentLoaded', () => {
     formSearchInputRef.focus();
   })
 
-  document.querySelectorAll('.menu-item-search').forEach(el => {
+  document.querySelectorAll('.menu-item-search, .search-icon').forEach(el => {
     el.addEventListener('click', e => {
       e.preventDefault();
       // alert('Пошук (десктоп)');
