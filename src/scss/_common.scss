@@ -664,7 +664,7 @@ img {
   left: 0;
   visibility: hidden;
   opacity: 0;
-  z-index: 1;
+  z-index: 1001;
   transition: 0.3s;
   background-color: $background-modal;
   padding-top: 100px; /* Location of the box */
