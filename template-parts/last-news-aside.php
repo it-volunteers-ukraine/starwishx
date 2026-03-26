@@ -64,13 +64,11 @@ $news_last = $results;
         $item_print_title = $item_acf_title ? $item_acf_title : $item_main_title;
         // echo 'item_title: ' . type($item_title) . '<br>';
         ?>
-        <a href="<?php echo $permalink; ?>" class="link-def">
-            <div class="lnew-item">
-                <div class="text-small lnew-date"><?php echo $item_date; ?></div>
-                <div class="subtitle-text-m lnew-title " style="--line-clamp: <?php echo esc_attr($line_clamp); ?>;">
-                    <?php echo $item_print_title; ?>
-                </div>
-            </div>
-        </a>
+        <div class="lnew-item">
+            <div class="text-small lnew-date"><?php echo $item_date; ?></div>
+            <a href="<?php echo $permalink; ?>" class="subtitle-text-m lnew-title link-def " style="--line-clamp: <?php echo esc_attr($line_clamp); ?>;">
+                <?php echo $item_print_title; ?>
+            </a>
+        </div>
     <? endforeach; ?>
 <? endif; ?>
