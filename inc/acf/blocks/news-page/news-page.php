@@ -50,7 +50,7 @@ $qqq = get_query_var('news_cat');
 
 
 $childrens = get_children([
-    'post_parent' => $news_page->ID,
+    'post_parent' => $news_page->ID ?? null,
     'post_type'   => 'page',
     'post_status' => 'publish',
 ]);
@@ -277,8 +277,8 @@ $res_by_cat = $res_by_cat;
                 <div class="container ">
                     <?php
                     $btn_text = esc_html(get_field('button_text'));
-                    $cat_name = $res_by_cat[$cat_id['category']]['term_name'];
-                    $cat_slug = $res_by_cat[$cat_id['category']]['term_slug'];
+                    $cat_name = $res_by_cat[$cat_id['category']]['term_name'] ?? '';
+                    $cat_slug = $res_by_cat[$cat_id['category']]['term_slug'] ?? '';
                     $category_url = $category_base_url . $cat_slug . '/';
                     ?>
                     <a href="<?php echo $category_url; ?>" class="<?php echo esc_attr($classes['cat-link']); ?> ">
@@ -294,7 +294,7 @@ $res_by_cat = $res_by_cat;
                                 'template-parts/new-card',
                                 null,
                                 [
-                                    'item'    => $post_list[0],
+                                    'item'    => $post_list[0] ?? '',
                                     'classes' => $classes,
                                     'swiper'  => false,
                                     'is_card_lg' => true,
