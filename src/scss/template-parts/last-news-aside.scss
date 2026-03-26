@@ -37,6 +37,11 @@
     -webkit-line-clamp: var(--line-clamp);
     overflow: hidden;
     overflow-wrap: anywhere;
+    transition: $animations;
+
+    &:hover{
+        color: inherit
+    }
 }
 
 /* медиа для aside */

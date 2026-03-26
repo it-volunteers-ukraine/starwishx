@@ -122,6 +122,7 @@
   line-clamp: 3;
   -webkit-line-clamp: 3;
   overflow: hidden;
+  overflow-wrap: anywhere;
 }
 
 /* autoprefixer: off */

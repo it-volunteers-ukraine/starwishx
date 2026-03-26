@@ -565,6 +565,14 @@ body {
   }
 }
 
+.link-def {
+  transition: $animations;
+
+  &:hover {
+    color: $buttons-color-background-primary-hover;
+  }
+}
+
 .section {
   padding: 80px 0;
 
