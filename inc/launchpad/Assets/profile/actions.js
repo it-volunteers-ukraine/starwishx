@@ -66,6 +66,15 @@ export const profileActions = {
   },
 
   /**
+   * Toggle the "Show More" section in the edit form.
+   */
+  toggleFormExpanded() {
+    const { state } = store("launchpad");
+    const p = ensurePanel(state, "profile");
+    p.isFormExpanded = !p.isFormExpanded;
+  },
+
+  /**
    * Enter edit mode for profile
    */
   startEdit() {
