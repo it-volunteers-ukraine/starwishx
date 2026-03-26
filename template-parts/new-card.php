@@ -9,7 +9,11 @@
 if (!function_exists('my_post_rating')) {
     function my_post_rating($post_item)
     {
+        if(!$post_item){
+            return null;
+        }
         $rating = get_post_meta($post_item->ID);
+        // print_r($post_item);
 
         if (isset($rating['_opportunity_rating_avg'][0])) {
             $rating = $rating['_opportunity_rating_avg'][0];
