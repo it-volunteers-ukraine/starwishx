@@ -61,7 +61,7 @@ $news_last = $results;
         ?>
         <div class="lnew-item">
             <div class="text-small lnew-date"><?php echo $item_date; ?></div>
-            <a href="<?php echo $permalink; ?>" class="subtitle-text-m lnew-title link-def " style="--line-clamp: <?php echo esc_attr($line_clamp); ?>;">
+            <a href="<?php echo $permalink; ?>" class="subtitle-text-m lnew-title link-def " style="--line-clamp: <?php echo esc_attr($line_clamp); ?>;" title="<?php echo $item_print_title; ?>">
                 <?php echo $item_print_title; ?>
             </a>
         </div>

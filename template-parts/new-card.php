@@ -144,12 +144,12 @@ $item_label = esc_html($item->term_name ?? 'No category');
         </div>
     </div>
 
-    <a href="<?php echo $permalink; ?>" class="link-def <?php echo $class_title; ?> newcard-title">
+    <a href="<?php echo $permalink; ?>" class="link-def <?php echo $class_title; ?> newcard-title" title="<?php echo $item_title; ?>">
         <?php echo esc_html($item_title); ?>
     </a>
 
     <?php if ($item_desc) : ?>
-        <div class="text-r newcard-text">
+        <div class="text-r newcard-text" title="<?php echo $item_desc; ?>">
             <?php echo esc_html($item_desc); ?>
         </div>
     <?php endif; ?>
