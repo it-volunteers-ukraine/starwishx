@@ -236,15 +236,12 @@ class ProfilePanel extends AbstractPanel
                         </div>
 
                     </div>
-                    <!-- <div class="launchpad-grid-auto"> -->
                     <div class="form-field">
                         <label for="lp-description"><?= esc_html__('Biographical Info', 'starwishx'); ?></label>
                         <textarea id="lp-description" data-field="description" rows="4"
                             data-wp-bind--value="<?= $this->statePath('description') ?>"
                             data-wp-on--input="actions.profile.updateField"></textarea>
                     </div>
-                    <!-- </div>
-                    <div class="launchpad-grid-auto"> -->
                     <div class="form-actions form-actions--delete">
                         <button type="button" class="btn-tertiary btn-profile-delete btn-secondary__small" data-wp-on--click="actions.profile.deleteProfile">
                             <!-- < ?= sw_svg_e('icon-close') ?> -->
@@ -252,43 +249,8 @@ class ProfilePanel extends AbstractPanel
                         </button>
                     </div>
                 </div>
-                <!-- </div> -->
 
                 <div class="form-field form-field--checkbox field-notifications">
-                    <label for="lp-receive-notifications">
-                        <input type="checkbox" id="lp-receive-notifications"
-                            data-field="receiveMailNotifications"
-                            data-wp-bind--checked="<?= $this->statePath('receiveMailNotifications') ?>"
-                            data-wp-on--change="actions.profile.updateField" />
-                        <?= esc_html__('Receive email notifications', 'starwishx'); ?>
-                    </label>
-                    <p class="form-field__hint">
-                        <?= esc_html__('Get notified by email when someone comments on your content.', 'starwishx'); ?>
-                    </p>
-                </div>
-
-                <div class="form-field">
-                    <label for="lp-nickname"><?= esc_html__('Nickname', 'starwishx'); ?></label>
-                    <input type="text" id="lp-nickname" data-field="nickname"
-                        data-wp-bind--value="<?= $this->statePath('nickname') ?>"
-                        data-wp-on--input="actions.profile.updateField" />
-                </div>
-
-                <div class="form-field">
-                    <label for="lp-user-url"><?= esc_html__('Website', 'starwishx'); ?></label>
-                    <input type="url" id="lp-user-url" data-field="userUrl"
-                        data-wp-bind--value="<?= $this->statePath('userUrl') ?>"
-                        data-wp-on--input="actions.profile.updateField" />
-                </div>
-
-                <div class="form-field">
-                    <label for="lp-description"><?= esc_html__('Biographical Info', 'starwishx'); ?></label>
-                    <textarea id="lp-description" data-field="description" rows="4"
-                        data-wp-bind--value="<?= $this->statePath('description') ?>"
-                        data-wp-on--input="actions.profile.updateField"></textarea>
-                </div>
-
-                <div class="form-field form-field--checkbox">
                     <label for="lp-receive-notifications">
                         <input type="checkbox" id="lp-receive-notifications"
                             data-field="receiveMailNotifications"

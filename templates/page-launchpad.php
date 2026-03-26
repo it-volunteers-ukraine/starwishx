@@ -155,7 +155,7 @@ if (function_exists('render_block')) {
                     data-wp-bind--hidden="!state.showStartButton"
                     hidden>
                     <svg width="16" height="16">
-                        <use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-lightning"></use>
+                        <use xlink:href="< ?php echo get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-lightning"></use>
                     </svg>
                     <span data-wp-text="state.triggerLabel"></span>
                 </button> -->
