@@ -88,4 +88,9 @@ $final_class = sprintf('%1$s %1$s--%2$s', $base_class, $btn['slug']);
     <?= ($btn['slug'] === 'logout') ? 'role="button"' : ''; ?>>
     <?= sw_svg($btn['icon']) ?>&nbsp;
     <span><?= esc_html($btn['text']); ?></span>
+    <span class="launchpad-tab__badge"
+        data-wp-interactive="chat"
+        data-wp-text="state.badgeText"
+        data-wp-bind--hidden="!state.hasUnread"
+        hidden></span>
 </a>

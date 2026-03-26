@@ -230,6 +230,19 @@ class ProfilePanel extends AbstractPanel
                         data-wp-on--input="actions.profile.updateField"></textarea>
                 </div>
 
+                <div class="form-field form-field--checkbox">
+                    <label for="lp-receive-notifications">
+                        <input type="checkbox" id="lp-receive-notifications"
+                            data-field="receiveMailNotifications"
+                            data-wp-bind--checked="<?= $this->statePath('receiveMailNotifications') ?>"
+                            data-wp-on--change="actions.profile.updateField" />
+                        <?= esc_html__('Receive email notifications', 'starwishx'); ?>
+                    </label>
+                    <p class="form-field__hint">
+                        <?= esc_html__('Get notified by email when someone comments on your content.', 'starwishx'); ?>
+                    </p>
+                </div>
+
                 <div class="form-actions">
                     <button type="submit" class="btn__small"
                         data-wp-bind--disabled="<?= $this->statePath('isSaving') ?>">

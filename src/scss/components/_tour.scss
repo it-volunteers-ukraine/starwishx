@@ -1,0 +1,173 @@
+@use "../variables" as *;
+@use "../mixins/media";
+
+// ==========================================================================
+// Tour — Shepherd.js theme overrides for StarWish
+// ==========================================================================
+
+// ---------------------------------------------------------------------------
+// Sidebar trigger button
+// ---------------------------------------------------------------------------
+.sw-tour-trigger {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: none;
+  border-top: 1px solid $input-color-border-default;
+  background: transparent;
+  color: $text-accent;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
+
+  &:hover {
+    background-color: $surface-violet;
+    color: $buttons-color-background-primary-default;
+  }
+
+  svg {
+    flex-shrink: 0;
+    fill: currentcolor;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Shepherd.js modal overlay
+// ---------------------------------------------------------------------------
+.shepherd-modal-overlay-container {
+  fill: rgb(0 0 0 / 50%);
+}
+
+// ---------------------------------------------------------------------------
+// Step tooltip — scoped via defaultStepOptions.classes = "sw-tour-step"
+// ---------------------------------------------------------------------------
+.sw-tour-step {
+  &.shepherd-element {
+    z-index: 100000;
+    max-width: 420px;
+    border-radius: 12px;
+    box-shadow:
+      0 8px 32px rgb(0 0 0 / 12%),
+      0 2px 8px rgb(0 0 0 / 8%);
+    font-family: "Inter", sans-serif;
+  }
+
+  .shepherd-content {
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  // Header
+  .shepherd-header {
+    padding: 1.25rem 1.25rem 0;
+    background: transparent;
+  }
+
+  .shepherd-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: $text-dark;
+    line-height: 1.4;
+  }
+
+  .shepherd-cancel-icon {
+    color: $text-light;
+    font-size: 1.25rem;
+    opacity: 0.7;
+    transition: opacity 0.15s ease;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+
+  // Body
+  .shepherd-text {
+    padding: 0.75rem 1.25rem;
+    font-size: 0.875rem;
+    line-height: 1.6;
+    color: $text-basic;
+  }
+
+  // Footer
+  .shepherd-footer {
+    padding: 0.75rem 1.25rem 1.25rem;
+    border-top: none;
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
+  }
+
+  // ---------------------------------------------------------------------------
+  // Buttons — map to theme's button system
+  // ---------------------------------------------------------------------------
+  .sw-tour-btn {
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    font-family: inherit;
+    cursor: pointer;
+    transition:
+      background-color 0.15s ease,
+      border-color 0.15s ease;
+    line-height: 1.4;
+  }
+
+  .sw-tour-btn--next,
+  .sw-tour-btn--finish {
+    background-color: $buttons-color-background-primary-default;
+    color: $buttons-color-text-primary-default;
+    border: 1px solid $buttons-color-background-primary-default;
+
+    &:hover {
+      background-color: $buttons-color-background-primary-hover;
+      border-color: $buttons-color-background-primary-hover;
+    }
+
+    &:active {
+      background-color: $buttons-color-background-primary-pressed;
+    }
+  }
+
+  .sw-tour-btn--prev,
+  .sw-tour-btn--skip {
+    background-color: $buttons-color-background-secondary-default;
+    color: $text-basic;
+    border: 1px solid $buttons-color-border-secondary-default;
+
+    &:hover {
+      background-color: $buttons-color-background-secondary-hover;
+      border-color: $buttons-color-border-secondary-hover;
+    }
+
+    &:active {
+      background-color: $buttons-color-background-secondary-pressed;
+      color: $buttons-color-text-secondary-pressed;
+    }
+  }
+
+  // Arrow
+  .shepherd-arrow {
+    border-color: transparent;
+  }
+
+  .shepherd-arrow::before {
+    background: #fff;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Centered modal (steps without attachTo target)
+// ---------------------------------------------------------------------------
+.shepherd-element:not(.shepherd-has-target) {
+  &.sw-tour-step {
+    max-width: 480px;
+  }
+}

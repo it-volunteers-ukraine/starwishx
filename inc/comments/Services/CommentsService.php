@@ -216,6 +216,13 @@ class CommentsService
         // Note: New comments have no replies yet
         $formatted = $this->formatSingleComment($newCommentObj, $userId, $postAuthorId, $currentUserIsPostAuthor);
 
+        do_action('sw_comment_posted', $commentId, [
+            'user_id'   => $userId,
+            'post_id'   => $postId,
+            'parent_id' => $parentId,
+            'rating'    => $rating,
+        ]);
+
         return [
             'comment'    => $formatted,
             'aggregates' => $this->getAggregates($postId)

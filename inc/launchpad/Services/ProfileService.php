@@ -110,6 +110,8 @@ class ProfileService
             'telegram'     => get_field('telegram', $acfId) ?: '',
             'organization' => ($org = get_field('organization', $acfId) ?: ''),
 
+            'receiveMailNotifications' => (bool) (get_field('receive_mail_notifications', $acfId) ?? true),
+
             'displayNameOptions' => self::computeDisplayNameOptions($user, $org),
         ];
     }
@@ -207,6 +209,10 @@ class ProfileService
 
         if (isset($data['organization'])) {
             update_field('organization', sanitize_text_field($data['organization']), $acfId);
+        }
+
+        if (isset($data['receiveMailNotifications'])) {
+            update_field('receive_mail_notifications', $data['receiveMailNotifications'] ? 1 : 0, $acfId);
         }
 
         // 3. Fetch fresh data to see the result of the update

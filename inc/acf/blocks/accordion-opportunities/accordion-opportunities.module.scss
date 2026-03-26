@@ -6,6 +6,12 @@
 .btn1 {
     display: none;
 
+    &:focus-visible {
+        outline: 3px solid $primary-hover;
+        outline-offset: 4px;
+        border-radius: $radius-element;
+    }
+
     @include min-laptop {
         display: flex;
     }
@@ -14,6 +20,12 @@
 .btn2 {
     display: flex;
     margin: 0 auto;
+
+    &:focus-visible {
+        outline: 3px solid $primary-hover;
+        outline-offset: 4px;
+        border-radius: $radius-element;
+    }
 
     @include min-laptop {
         display: none;
@@ -48,6 +60,12 @@
     transition: border-bottom 1s $animations;
     border-bottom: 1px solid rgba($text-light, 0.5);
     padding: 20px 0;
+
+    *:focus-visible {
+        outline: 3px solid $primary-hover;
+        outline-offset: 4px;
+        border-radius: $radius-badge;
+    }
 
     @media (hover: none) {
         &:not([data-active]) .content {

@@ -43,10 +43,10 @@ $query = new WP_Query($query_args);
 
 ?>
 
-<section aria-labelledby="carousel-projects-title" class="<?= $classes['projects-section'] ?>">
+<section aria-labelledby="<?= $classes['title'] ?>" class="<?= $classes['projects-section'] ?>">
     <header class="<?= $classes['header-block'] ?>">
         <span class="<?= $classes['suptitle'] ?>"><?php echo $suptitle ?></span>
-        <h2 id="carousel-projects-title" class="<?= $classes['title'] ?>"><?php echo $title ?></h2>
+        <h2 id="<?= $classes['title'] ?>" class="<?= $classes['title'] ?>"><?php echo $title ?></h2>
         <div class="<?= $classes['arrows'] ?>">
             <!-- Swiper navigation buttons -->
             <button type="button" class="arrow-left <?= $classes['arrow'] ?> <?= $classes['arrow-left'] ?>" aria-label="Previous projects">
@@ -66,7 +66,7 @@ $query = new WP_Query($query_args);
         <?php if ($query->have_posts()) : ?>
             <!-- Swiper -->
             <div class="swiper projects-swiper <?= $classes['projects-swiper'] ?>">
-                <div class="swiper-wrapper projects-swiper-wrapper <?= $classes['projects-swiper-wrapper'] ?>" role="list">
+                <div class="swiper-wrapper <?= $classes['projects-swiper-wrapper'] ?>" role="list">
                     <?php while ($query->have_posts()) : $query->the_post();
 
                         $post_id      = get_the_ID();

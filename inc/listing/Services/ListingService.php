@@ -208,6 +208,7 @@ class ListingService
                     $taxonomy,
                     $contextFilters
                 );
+                $this->enrichCategoryNodes($facets[$taxonomy->value]);
                 continue;
             }
 
@@ -234,6 +235,27 @@ class ListingService
         }
 
         return $facets;
+    }
+
+    /**
+     * Enrich top-level category nodes with display data for the archive header.
+     * Term objects are already in WP's object cache from buildFacetedTree(),
+     * so get_term() calls here are free (no extra DB queries).
+     *
+     * @param array &$nodes Top-level category tree nodes (modified in place).
+     */
+    private function enrichCategoryNodes(array &$nodes): void
+    {
+        foreach ($nodes as &$node) {
+            $term = get_term($node['id'], 'category-oportunities');
+            $node['description'] = ($term && !is_wp_error($term)) ? $term->description : '';
+            $node['imageUrl']    = '';
+            if (function_exists('get_field') && $term && !is_wp_error($term)) {
+                $image = get_field('cat_opportunity_image', $term->taxonomy . '_' . $term->term_id);
+                $node['imageUrl'] = !empty($image) ? ($image['sizes']['medium'] ?? $image['url'] ?? '') : '';
+            }
+        }
+        unset($node);
     }
 
     /**

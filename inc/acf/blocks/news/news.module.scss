@@ -5,11 +5,21 @@
 
 .btn1 {
   display: none;
+
+  &:focus-visible {
+    outline: 3px solid $primary-hover;
+    outline-offset: 4px;
+  }
 }
 
 .btn2 {
   display: flex;
   margin: 0 auto;
+
+  &:focus-visible {
+    outline: 3px solid $primary-hover;
+    outline-offset: 4px;
+  }
 }
 
 .subtitle {

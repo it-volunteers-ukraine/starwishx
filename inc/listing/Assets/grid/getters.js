@@ -209,6 +209,32 @@ export const gridGetters = {
   },
 
   /**
+   * Image URL for the selected single parent category (from ACF term field).
+   */
+  get selectedCategoryImageUrl() {
+    const selected = this.query.category;
+    if (!Array.isArray(selected) || selected.length === 0) return "";
+    const tree = this.facets["category-oportunities"] || [];
+    const selectedParents = tree.filter((node) => selected.includes(node.id));
+    return selectedParents.length === 1
+      ? selectedParents[0].imageUrl || ""
+      : "";
+  },
+
+  /**
+   * WP taxonomy description for the selected single parent category.
+   */
+  get selectedCategoryDescription() {
+    const selected = this.query.category;
+    if (!Array.isArray(selected) || selected.length === 0) return "";
+    const tree = this.facets["category-oportunities"] || [];
+    const selectedParents = tree.filter((node) => selected.includes(node.id));
+    return selectedParents.length === 1
+      ? selectedParents[0].description || ""
+      : "";
+  },
+
+  /**
    * Builds an array of chip objects for all active filters.
    * Each chip: { key, field, value, label }
    * Label is truncated to 33 characters.

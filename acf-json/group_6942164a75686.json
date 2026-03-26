@@ -63,6 +63,27 @@
             "placeholder": "",
             "prepend": "",
             "append": ""
+        },
+        {
+            "key": "field_69bff222f4307",
+            "label": "Receive mail notifications",
+            "name": "receive_mail_notifications",
+            "aria-label": "",
+            "type": "true_false",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "message": "",
+            "default_value": 1,
+            "allow_in_bindings": 0,
+            "ui": 0,
+            "ui_on_text": "",
+            "ui_off_text": ""
         }
     ],
     "location": [
@@ -91,5 +112,5 @@
     "description": "",
     "show_in_rest": 0,
     "display_title": "",
-    "modified": 1771744636
+    "modified": 1774187250
 }

@@ -87,9 +87,18 @@ if (function_exists('render_block')) {
                 <?= esc_html__('Category', 'starwishx'); ?>:&nbsp;
                 <span class="page-subtitle--text" data-wp-text="state.selectedCategoryName"></span>
             </span>
+            <p class="listing-app__header--description"
+                data-wp-bind--hidden="!state.selectedCategoryDescription"
+                data-wp-text="state.selectedCategoryDescription"
+                hidden></p>
         </div>
-        <figure class="listing-app__header--figure" data-wp-bind--hidden="!state.hasSelectedCategory">
-            <img class="listing-app__header--image" width="100" height="70" src="https://starwish.local/wp-content/uploads/2025/04/sp11-300x200.jpg" data-wp-bind--alt="state.selectedCategoryName">
+        <figure class="listing-app__header--figure"
+            data-wp-bind--hidden="!state.selectedCategoryImageUrl"
+            hidden>
+            <img class="listing-app__header--image"
+                width="100" height="70"
+                data-wp-bind--src="state.selectedCategoryImageUrl"
+                data-wp-bind--alt="state.selectedCategoryName">
         </figure>
     </header>
 
