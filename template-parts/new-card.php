@@ -50,8 +50,8 @@ $class_card_version = 'card-version-' . $card_version;
 $class_title = $card_version == 2 ? 'big-text-semibold' : 'subtitle-text-m';
 
 $swiper_class = $swiper ? 'swiper-slide' : '';
-$post_id = $item->ID;
-$permalink = get_permalink($post_id);
+$post_id = $item->ID ?? '';
+$permalink = get_permalink($post_id) ?? '';
 $term_id = $item->term_id ?? null;
 
 $item_date  = date('d.m.Y', strtotime($item->post_date));
