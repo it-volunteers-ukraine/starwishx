@@ -5,6 +5,7 @@
  *
  * @var array $args
  */
+
 $args = $args ?? []; // Prevent "undefined variable" 
 
 $count_news  = $args['count_news'] ?? 8;
@@ -52,18 +53,17 @@ $news_last = $results;
     <?php foreach ($news_last as $item) : ?>
         <?php
         $post_id = $item->ID;
-        $term_id = $item->term_id;
-        $term_full = get_term($term_id);
-        $item_taxonomy = $term_full->taxonomy;
-        $term_name = $item->term_name;
+        $permalink   = get_permalink($post_id);
         $item_date = date('d.m.Y', strtotime($item->post_date));
-        $item_title = get_field('title', $post_id);
+        $item_main_title = get_the_title($post_id);
+        $item_acf_title = get_field('title', $post_id);
+        $item_print_title = $item_acf_title ? $item_acf_title : $item_main_title;
         ?>
         <div class="lnew-item">
             <div class="text-small lnew-date"><?php echo $item_date; ?></div>
-            <div class="subtitle-text-m lnew-title " style="--line-clamp: <?php echo esc_attr($line_clamp); ?>;">
-                <?php echo $item_title; ?>
-            </div>
+            <a href="<?php echo $permalink; ?>" class="subtitle-text-m lnew-title link-def " style="--line-clamp: <?php echo esc_attr($line_clamp); ?>;">
+                <?php echo $item_print_title; ?>
+            </a>
         </div>
     <? endforeach; ?>
 <? endif; ?>

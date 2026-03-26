@@ -74,7 +74,7 @@
     "taxonomies": [
         "category-oportunities"
     ],
-    "has_archive": true,
+    "has_archive": false,
     "has_archive_slug": "",
     "rewrite": {
         "permalink_rewrite": "post_type_key",
@@ -88,5 +88,5 @@
     "delete_with_user": false,
     "register_meta_box_cb": "",
     "enter_title_here": "",
-    "modified": 1773316054
+    "modified": 1774509495
 }
