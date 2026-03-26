@@ -305,22 +305,24 @@ $res_by_cat = $res_by_cat;
                             ?>
                         </div>
                         <div class="<?php echo esc_attr($classes['bycat-other-item']); ?> ">
-                            <?php for ($i = 1; $i < count($post_list); $i++) : ?>
-                                <?php
-                                get_template_part(
-                                    'template-parts/new-card',
-                                    null,
-                                    [
-                                        'item'    => $post_list[$i],
-                                        'classes' => $classes,
-                                        'swiper'  => false,
-                                        'is_card_lg' => true,
-                                        "no_desc" => true,
-                                        'no_photo' => true,
-                                    ]
-                                );
-                                ?>
-                            <?php endfor; ?>
+                            <?php if ($post_list) : ?>
+                                <?php for ($i = 1; $i < count($post_list); $i++) : ?>
+                                    <?php
+                                    get_template_part(
+                                        'template-parts/new-card',
+                                        null,
+                                        [
+                                            'item'    => $post_list[$i],
+                                            'classes' => $classes,
+                                            'swiper'  => false,
+                                            'is_card_lg' => true,
+                                            "no_desc" => true,
+                                            'no_photo' => true,
+                                        ]
+                                    );
+                                    ?>
+                                <?php endfor; ?>
+                            <?php endif; ?>
                         </div>
                     </div>
                     <a href="<?php echo $category_url; ?>" class="btn <?php echo esc_attr($classes['bycat-btn']); ?>"><?php echo esc_html($btn_text); ?></a>
