@@ -31,6 +31,7 @@
   }
 
   & img {
+    transform: scale(1.01);
     transition: $animations-long;
   }
 
@@ -38,7 +39,7 @@
     box-shadow: 0 5px 12px 1px #919191;
 
     & img {
-      transform: scale(1.03)
+      transform: scale(1.04)
     }
   }
 
