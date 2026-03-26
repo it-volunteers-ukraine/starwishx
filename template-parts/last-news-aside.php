@@ -53,16 +53,11 @@ $news_last = $results;
     <?php foreach ($news_last as $item) : ?>
         <?php
         $post_id = $item->ID;
-        // $term_id = $item->term_id;
         $permalink   = get_permalink($post_id);
-        // $term_full = get_term($term_id);
-        // $item_taxonomy = $term_full->taxonomy;
-        // $term_name = $item->term_name;
         $item_date = date('d.m.Y', strtotime($item->post_date));
         $item_main_title = get_the_title($post_id);
         $item_acf_title = get_field('title', $post_id);
         $item_print_title = $item_acf_title ? $item_acf_title : $item_main_title;
-        // echo 'item_title: ' . type($item_title) . '<br>';
         ?>
         <div class="lnew-item">
             <div class="text-small lnew-date"><?php echo $item_date; ?></div>
