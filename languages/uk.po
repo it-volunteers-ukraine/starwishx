@@ -8,7 +8,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2026-02-25 10:47+0000\n"
-"PO-Revision-Date: 2026-03-23 12:24+0000\n"
+"PO-Revision-Date: 2026-03-26 06:59+0000\n"
 "Language: uk\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
@@ -81,9 +81,9 @@ msgid "Cabinet"
 msgstr "Кабінет"
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:948
-#: inc/launchpad/Panels/ProfilePanel.php:258
-#: inc/launchpad/Panels/ProfilePanel.php:338
-#: inc/launchpad/Panels/ProfilePanel.php:430
+#: inc/launchpad/Panels/ProfilePanel.php:282
+#: inc/launchpad/Panels/ProfilePanel.php:362
+#: inc/launchpad/Panels/ProfilePanel.php:454
 #: template-parts/comments-interactive.php:136
 #: template-parts/comments-interactive.php:249
 #: template-parts/comments-interactive.php:326
@@ -101,7 +101,7 @@ msgstr "Категорія"
 msgid "Category Oportunities Index"
 msgstr "Індекс категорій можливостей"
 
-#: inc/launchpad/Panels/ProfilePanel.php:141
+#: inc/launchpad/Panels/ProfilePanel.php:142
 #: inc/launchpad/Panels/SecurityPanel.php:56
 #: inc/launchpad/Panels/SecurityPanel.php:97
 msgid "Change Password"
@@ -157,7 +157,7 @@ msgstr "Створити обліковий запис"
 msgid "Created successfully"
 msgstr "Успішно створено"
 
-#: inc/launchpad/Panels/ProfilePanel.php:275
+#: inc/launchpad/Panels/ProfilePanel.php:299
 #: inc/launchpad/Panels/SecurityPanel.php:59
 msgid "Current Password"
 msgstr "Поточний пароль"
@@ -194,7 +194,7 @@ msgstr "Редагувати"
 msgid "Edit Opportunity"
 msgstr "Редагувати можливість"
 
-#: inc/launchpad/Panels/ProfilePanel.php:137
+#: inc/launchpad/Panels/ProfilePanel.php:138
 msgid "Edit Profile"
 msgstr "Редагувати профіль"
 
@@ -203,7 +203,7 @@ msgid "Edit time limit expired (15 min)."
 msgstr "Термін редагування минув (15 хв.)."
 
 #: inc/contact/Api/ContactController.php:152
-#: inc/launchpad/Panels/ProfilePanel.php:173
+#: inc/launchpad/Panels/ProfilePanel.php:170
 #: template-parts/contact-section.php:77
 msgid "Email"
 msgstr "Електронна пошта"
@@ -277,7 +277,7 @@ msgstr "Знайти місце..."
 msgid "Finished"
 msgstr "Завершено"
 
-#: inc/launchpad/Panels/ProfilePanel.php:159
+#: inc/launchpad/Panels/ProfilePanel.php:157
 msgid "First Name"
 msgstr "Ім'я"
 
@@ -361,7 +361,7 @@ msgid "Generate New Password"
 msgstr "Згенерувати новий пароль"
 
 #: inc/gateway/Forms/ResetPasswordForm.php:95
-#: inc/launchpad/Panels/ProfilePanel.php:328
+#: inc/launchpad/Panels/ProfilePanel.php:352
 msgid "Generating..."
 msgstr "Генерується..."
 
@@ -409,7 +409,7 @@ msgstr "Пошук за ключовими словами"
 msgid "Kyivska, Lvivska..."
 msgstr "Київська, Львівська..."
 
-#: inc/launchpad/Panels/ProfilePanel.php:166
+#: inc/launchpad/Panels/ProfilePanel.php:203
 msgid "Last Name"
 msgstr "Прізвище"
 
@@ -454,7 +454,7 @@ msgid "Location"
 msgstr "Локація"
 
 #: inc/gateway/Forms/LoginForm.php:130
-#: inc/launchpad/Panels/ProfilePanel.php:363
+#: inc/launchpad/Panels/ProfilePanel.php:387
 msgid "Log In"
 msgstr "Увійти"
 
@@ -497,7 +497,7 @@ msgid "New Opportunity"
 msgstr "Нова можливість"
 
 #: inc/gateway/Forms/ResetPasswordForm.php:48
-#: inc/launchpad/Panels/ProfilePanel.php:299
+#: inc/launchpad/Panels/ProfilePanel.php:323
 #: inc/launchpad/Panels/SecurityPanel.php:70
 msgid "New Password"
 msgstr "Новий пароль"
@@ -580,8 +580,8 @@ msgstr "Можливість не знайдена."
 msgid "Opportunity Title"
 msgstr "Назва можливості"
 
-#: inc/launchpad/Panels/ProfilePanel.php:123
-#: inc/launchpad/Panels/ProfilePanel.php:206
+#: inc/launchpad/Panels/ProfilePanel.php:124
+#: inc/launchpad/Panels/ProfilePanel.php:226
 #: inc/tour/Scenarios/OpportunityFormScenario.php:69
 msgid "Organization"
 msgstr "Організація"
@@ -638,8 +638,8 @@ msgid "Pending Save"
 msgstr "Очікує збереження"
 
 #: inc/contact/Api/ContactController.php:150
-#: inc/launchpad/Panels/ProfilePanel.php:117
-#: inc/launchpad/Panels/ProfilePanel.php:182
+#: inc/launchpad/Panels/ProfilePanel.php:118
+#: inc/launchpad/Panels/ProfilePanel.php:165
 #: template-parts/contact-section.php:76
 msgid "Phone"
 msgstr "Телефон"
@@ -684,7 +684,7 @@ msgstr "Обробка..."
 msgid "Profile"
 msgstr "Профіль"
 
-#: inc/launchpad/Panels/ProfilePanel.php:83
+#: inc/launchpad/Panels/ProfilePanel.php:84
 msgid "Profile Information"
 msgstr "Інформація профілю"
 
@@ -758,7 +758,7 @@ msgstr "Вимоги"
 msgid "Reviews"
 msgstr "Відгуки"
 
-#: inc/launchpad/Panels/ProfilePanel.php:250
+#: inc/launchpad/Panels/ProfilePanel.php:274
 #: template-parts/comments-interactive.php:253
 #: template-parts/comments-interactive.php:330
 msgid "Save"
@@ -773,7 +773,7 @@ msgid "Save Password"
 msgstr "Зберегти пароль"
 
 #: inc/gateway/Forms/ResetPasswordForm.php:106
-#: inc/launchpad/Panels/ProfilePanel.php:253
+#: inc/launchpad/Panels/ProfilePanel.php:277
 msgid "Saving..."
 msgstr "Збереження..."
 
@@ -879,8 +879,8 @@ msgstr "Статус оновлено."
 msgid "Submit for Review"
 msgstr "Відправити на перевірку"
 
-#: inc/launchpad/Panels/ProfilePanel.php:120
-#: inc/launchpad/Panels/ProfilePanel.php:199
+#: inc/launchpad/Panels/ProfilePanel.php:121
+#: inc/launchpad/Panels/ProfilePanel.php:219
 msgid "Telegram"
 msgstr "Telegram"
 
@@ -965,11 +965,11 @@ msgstr "Забагато спроб входу. Будь ласка, зачек�
 msgid "Too many password reset attempts. Please try again in %d minutes."
 msgstr "Забагато спроб скидання пароля. Спробуйте ще раз через %d хвилин."
 
-#: inc/launchpad/Panels/ProfilePanel.php:335
+#: inc/launchpad/Panels/ProfilePanel.php:359
 msgid "Update Password"
 msgstr "Оновити пароль"
 
-#: inc/launchpad/Panels/ProfilePanel.php:272
+#: inc/launchpad/Panels/ProfilePanel.php:296
 msgid "Update Security Credentials"
 msgstr "Оновити облікові дані безпеки"
 
@@ -996,7 +996,7 @@ msgstr "Ім'я користувача: %s"
 msgid "View"
 msgstr "Переглянути"
 
-#: inc/launchpad/Panels/ProfilePanel.php:84
+#: inc/launchpad/Panels/ProfilePanel.php:85
 msgid "View/edit personal information, change password"
 msgstr "Перегляд/редагування персональної інформації, зміна пароля"
 
@@ -1260,21 +1260,21 @@ msgstr "Назва має містити щонайменше %d символі�
 msgid "Title must not exceed %d characters."
 msgstr "Назва не повинна перевищувати %d символів."
 
-#: inc/launchpad/Panels/ProfilePanel.php:283
-#: inc/launchpad/Panels/ProfilePanel.php:308
-#: inc/launchpad/Panels/ProfilePanel.php:401
+#: inc/launchpad/Panels/ProfilePanel.php:307
+#: inc/launchpad/Panels/ProfilePanel.php:332
+#: inc/launchpad/Panels/ProfilePanel.php:425
 msgid "Toggle password visibility"
 msgstr "Перемикання видимості пароля"
 
-#: inc/launchpad/Panels/ProfilePanel.php:325
+#: inc/launchpad/Panels/ProfilePanel.php:349
 msgid "Generate Strong Password"
 msgstr "Згенерувати надійний пароль"
 
-#: inc/launchpad/Panels/ProfilePanel.php:353
+#: inc/launchpad/Panels/ProfilePanel.php:377
 msgid "Password Changed"
 msgstr "Пароль змінено"
 
-#: inc/launchpad/Panels/ProfilePanel.php:356
+#: inc/launchpad/Panels/ProfilePanel.php:380
 msgid ""
 "Your password has been changed successfully. You will need to log in again "
 "with your new password."
@@ -1672,15 +1672,15 @@ msgstr "Забагато спроб. Будь ласка, спробуйте щ�
 msgid "Your account has been deleted."
 msgstr "Ваш обліковий запис видалено."
 
-#: inc/launchpad/Panels/ProfilePanel.php:155
+#: inc/launchpad/Panels/ProfilePanel.php:251
 msgid "Delete profile"
 msgstr "Видалити профіль"
 
-#: inc/launchpad/Panels/ProfilePanel.php:379
+#: inc/launchpad/Panels/ProfilePanel.php:403
 msgid "Delete Account"
 msgstr "Видалити обліковий запис"
 
-#: inc/launchpad/Panels/ProfilePanel.php:382
+#: inc/launchpad/Panels/ProfilePanel.php:406
 msgid ""
 "This action is permanent and cannot be undone. All your personal data will "
 "be removed. Your published content will be preserved."
@@ -1688,23 +1688,23 @@ msgstr ""
 "Ця дія є остаточною та не може бути скасована. Усі ваші особисті дані будуть "
 "видалені. Ваш опублікований контент буде збережено."
 
-#: inc/launchpad/Panels/ProfilePanel.php:391
+#: inc/launchpad/Panels/ProfilePanel.php:415
 msgid "Enter your password to confirm"
 msgstr "Введіть свій пароль для підтвердження"
 
-#: inc/launchpad/Panels/ProfilePanel.php:422
+#: inc/launchpad/Panels/ProfilePanel.php:446
 msgid "Delete my account"
 msgstr "Видалити мій обліковий запис"
 
-#: inc/launchpad/Panels/ProfilePanel.php:425
+#: inc/launchpad/Panels/ProfilePanel.php:449
 msgid "Deleting..."
 msgstr "Видалення..."
 
-#: inc/launchpad/Panels/ProfilePanel.php:446
+#: inc/launchpad/Panels/ProfilePanel.php:470
 msgid "Account Deleted"
 msgstr "Обліковий запис видалено"
 
-#: inc/launchpad/Panels/ProfilePanel.php:449
+#: inc/launchpad/Panels/ProfilePanel.php:473
 msgid ""
 "Your account has been successfully deleted. You will be redirected to the "
 "home page."
@@ -1712,7 +1712,7 @@ msgstr ""
 "Ваш обліковий запис успішно видалено. Ви будете перенаправлені на головну "
 "сторінку."
 
-#: inc/launchpad/Panels/ProfilePanel.php:456
+#: inc/launchpad/Panels/ProfilePanel.php:480
 msgid "OK"
 msgstr "Ok"
 
@@ -1728,24 +1728,20 @@ msgstr "Введений вами пароль неправильний."
 msgid "Account deletion failed."
 msgstr "Не вдалося видалити обліковий запис."
 
-#: inc/launchpad/Panels/ProfilePanel.php:213
-msgid "Nickname"
-msgstr "Прізвисько (нікнейм)"
-
-#: inc/launchpad/Panels/ProfilePanel.php:188
+#: inc/launchpad/Panels/ProfilePanel.php:193
 msgid "Display name publicly as"
 msgstr "Публічно показувати ім'я як"
 
-#: inc/launchpad/Panels/ProfilePanel.php:126
-#: inc/launchpad/Panels/ProfilePanel.php:220
+#: inc/launchpad/Panels/ProfilePanel.php:127
+#: inc/launchpad/Panels/ProfilePanel.php:232
 msgid "Website"
 msgstr "Вебсайт"
 
-#: inc/launchpad/Panels/ProfilePanel.php:227
+#: inc/launchpad/Panels/ProfilePanel.php:241
 msgid "Biographical Info"
 msgstr "Поділіться додатковою інформацією про вас"
 
-#: inc/launchpad/Panels/ProfilePanel.php:129
+#: inc/launchpad/Panels/ProfilePanel.php:130
 msgid "Bio"
 msgstr "Біо"
 
@@ -1846,7 +1842,7 @@ msgstr "%d днів тому"
 
 #: inc/chat/Panels/ChatPanel.php:27
 msgid "Chat"
-msgstr "Чат"
+msgstr "Сповіщення"
 
 #: inc/chat/Panels/ChatPanel.php:63
 msgid "Activity"
@@ -1860,11 +1856,11 @@ msgstr "Оновити"
 msgid "Mark all read"
 msgstr "Позначити все як прочитане"
 
-#: inc/launchpad/Panels/ProfilePanel.php:239
+#: inc/launchpad/Panels/ProfilePanel.php:263
 msgid "Receive email notifications"
 msgstr "Отримувати сповіщення електронною поштою"
 
-#: inc/launchpad/Panels/ProfilePanel.php:242
+#: inc/launchpad/Panels/ProfilePanel.php:266
 msgid "Get notified by email when someone comments on your content."
 msgstr ""
 "Отримуйте сповіщення електронною поштою, наприклад якщо хтось коментує ваш "
@@ -1892,7 +1888,7 @@ msgstr "Ваш профіль"
 
 #: inc/tour/Scenarios/LaunchpadIntroScenario.php:88
 msgid "Notifications"
-msgstr ""
+msgstr "Сповіщення"
 
 #: inc/tour/Scenarios/OpportunityFormScenario.php:27
 msgid "Opportunity Form Guide"
@@ -1908,7 +1904,7 @@ msgstr "Категорії"
 
 #: inc/tour/Scenarios/LaunchpadIntroScenario.php:27
 msgid "Welcome Tour"
-msgstr ""
+msgstr "Вітальний тур"
 
 #: inc/tour/Scenarios/LaunchpadIntroScenario.php:52
 msgid "Welcome to StarWishX!"
@@ -1973,7 +1969,7 @@ msgstr ""
 
 #: inc/tour/Scenarios/LaunchpadIntroScenario.php:106
 msgid "Name & Contact"
-msgstr ""
+msgstr "Ім'я та контактна особа"
 
 #: inc/tour/Scenarios/LaunchpadIntroScenario.php:107
 msgid ""
@@ -1987,7 +1983,7 @@ msgstr ""
 
 #: inc/tour/Scenarios/LaunchpadIntroScenario.php:116
 msgid "You're Almost There!"
-msgstr ""
+msgstr "Ви майже на місці!"
 
 #: inc/tour/Scenarios/LaunchpadIntroScenario.php:117
 msgid ""
@@ -2092,3 +2088,11 @@ msgid ""
 msgstr ""
 "Це все, що вам потрібно знати. Створіть свою першу можливість — кожна заявка "
 "допомагає людям знайти необхідну підтримку."
+
+#: inc/launchpad/Panels/ProfilePanel.php:181
+msgid "Show More"
+msgstr "Показати більше"
+
+#: inc/launchpad/Panels/ProfilePanel.php:184
+msgid "Show Less"
+msgstr "Показати менше"

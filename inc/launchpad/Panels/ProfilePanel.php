@@ -63,6 +63,7 @@ class ProfilePanel extends AbstractPanel
                 'error'             => null,
             ],
             'deleteSuccessPopup'       => ['isOpen' => false],
+            'isFormExpanded'           => false,
         ]);
     }
 
@@ -145,68 +146,125 @@ class ProfilePanel extends AbstractPanel
 
             <!-- VIEW 2: EDIT PROFILE MODE -->
             <form
-                class="profile-form placeholder-box"
+                class="profile-form placeholder-box launchpad-form__container"
                 <?= !$isProfileForm ? 'hidden' : ''; ?>
                 data-wp-bind--hidden="!<?= $this->statePath('isEditing') ?>"
                 data-wp-on--submit="actions.profile.save"
                 data-wp-init="actions.profile.initPhoneWidget">
-                <div class="form-actions form-actions--delete">
-                    <button type="button" class="btn-profile-delete btn-secondary__small" data-wp-on--click="actions.profile.deleteProfile">
-                        <?= esc_html__('Delete profile', 'starwishx'); ?>
+                <div class="form-group-card1 launchpad-grid-auto">
+
+                    <div class="form-field">
+                        <label class="label-required" for="lp-first-name"><?= esc_html__('First Name', 'starwishx'); ?></label>
+                        <input type="text" id="lp-first-name" data-field="firstName"
+                            data-wp-bind--value="<?= $this->statePath('firstName') ?>"
+                            data-wp-on--input="actions.profile.updateField" />
+                    </div>
+                    <!-- Phone field: intlTelInput widget owns this input -->
+                    <div class="form-field form-field--phone">
+                        <label for="lp-phone" class="label-required">
+                            <?= esc_html__('Phone', 'starwishx'); ?>
+                        </label>
+                        <input type="tel" id="lp-phone" />
+                    </div>
+                    <div class="form-field">
+                        <label class="label-required" for="lp-email"><?= esc_html__('Email', 'starwishx'); ?></label>
+                        <input type="email" id="lp-email" required data-field="email"
+                            data-wp-bind--value="<?= $this->statePath('email') ?>"
+                            data-wp-on--input="actions.profile.updateField" />
+                    </div>
+                </div>
+                <div class="show-more form-group-card">
+                    <button type="button" class="btn-tertiary"
+                        data-wp-on--click="actions.profile.toggleFormExpanded"
+                        data-wp-bind--aria-expanded="<?= $this->statePath('isFormExpanded') ?>">
+                        <span data-wp-bind--hidden="<?= $this->statePath('isFormExpanded') ?>">
+                            <?= esc_html__('Show More', 'starwishx'); ?>
+                        </span>
+                        <span hidden data-wp-bind--hidden="!<?= $this->statePath('isFormExpanded') ?>">
+                            <?= esc_html__('Show Less', 'starwishx'); ?>
+                        </span>
                     </button>
                 </div>
-                <div class="form-field">
-                    <label class="label-required" for="lp-first-name"><?= esc_html__('First Name', 'starwishx'); ?></label>
-                    <input type="text" id="lp-first-name" data-field="firstName"
-                        data-wp-bind--value="<?= $this->statePath('firstName') ?>"
-                        data-wp-on--input="actions.profile.updateField" />
-                </div>
+                <div class="reveal-container"
+                    hidden
+                    data-wp-bind--hidden="!<?= $this->statePath('isFormExpanded') ?>">
+                    <div class="form-group-card1 launchpad-grid-auto">
+                        <div class="form-field">
+                            <label for="lp-display-name"><?= esc_html__('Display name publicly as', 'starwishx'); ?></label>
+                            <select id="lp-display-name" data-field="displayName"
+                                data-wp-bind--value="<?= $this->statePath('displayName') ?>"
+                                data-wp-on--change="actions.profile.updateField">
+                                <template data-wp-each="<?= $this->statePath('displayNameOptions') ?>">
+                                    <option data-wp-bind--value="context.item" data-wp-text="context.item"></option>
+                                </template>
+                            </select>
+                        </div>
+                        <div class="form-field">
+                            <label for="lp-last-name"><?= esc_html__('Last Name', 'starwishx'); ?></label>
+                            <input type="text" id="lp-last-name" data-field="lastName"
+                                data-wp-bind--value="<?= $this->statePath('lastName') ?>"
+                                data-wp-on--input="actions.profile.updateField" />
+                        </div>
+                        <!-- // temporary hidden -->
+                        <!-- <div class="form-field">
+                            <label for="lp-nickname">< ?= esc_html__('Nickname', 'starwishx'); ?></label>
+                            <input type="text" id="lp-nickname" data-field="nickname"
+                                data-wp-bind--value="< ?= $this->statePath('nickname') ?>"
+                                data-wp-on--input="actions.profile.updateField" />
+                        </div> -->
+                    </div>
 
-                <div class="form-field">
-                    <label for="lp-last-name"><?= esc_html__('Last Name', 'starwishx'); ?></label>
-                    <input type="text" id="lp-last-name" data-field="lastName"
-                        data-wp-bind--value="<?= $this->statePath('lastName') ?>"
-                        data-wp-on--input="actions.profile.updateField" />
-                </div>
+                    <div class="launchpad-grid-auto">
+                        <div class="form-field">
+                            <label for="lp-telegram"><?= esc_html__('Telegram', 'starwishx'); ?></label>
+                            <input type="text" id="lp-telegram" data-field="telegram"
+                                data-wp-bind--value="<?= $this->statePath('telegram') ?>"
+                                data-wp-on--input="actions.profile.updateField" />
+                        </div>
 
-                <div class="form-field">
-                    <label class="label-required" for="lp-email"><?= esc_html__('Email', 'starwishx'); ?></label>
-                    <input type="email" id="lp-email" required data-field="email"
-                        data-wp-bind--value="<?= $this->statePath('email') ?>"
-                        data-wp-on--input="actions.profile.updateField" />
-                </div>
+                        <div class="form-field">
+                            <label for="lp-organization"><?= esc_html__('Organization', 'starwishx'); ?></label>
+                            <input type="text" id="lp-organization" data-field="organization"
+                                data-wp-bind--value="<?= $this->statePath('organization') ?>"
+                                data-wp-on--input="actions.profile.updateField" />
+                        </div>
+                        <div class="form-field">
+                            <label for="lp-user-url"><?= esc_html__('Website', 'starwishx'); ?></label>
+                            <input type="url" id="lp-user-url" data-field="userUrl"
+                                data-wp-bind--value="<?= $this->statePath('userUrl') ?>"
+                                data-wp-on--input="actions.profile.updateField" />
+                        </div>
 
-                <!-- Phone field: intlTelInput widget owns this input -->
-                <div class="form-field form-field--phone">
-                    <label for="lp-phone" class="label-required">
-                        <?= esc_html__('Phone', 'starwishx'); ?>
+                    </div>
+                    <!-- <div class="launchpad-grid-auto"> -->
+                    <div class="form-field">
+                        <label for="lp-description"><?= esc_html__('Biographical Info', 'starwishx'); ?></label>
+                        <textarea id="lp-description" data-field="description" rows="4"
+                            data-wp-bind--value="<?= $this->statePath('description') ?>"
+                            data-wp-on--input="actions.profile.updateField"></textarea>
+                    </div>
+                    <!-- </div>
+                    <div class="launchpad-grid-auto"> -->
+                    <div class="form-actions form-actions--delete">
+                        <button type="button" class="btn-tertiary btn-profile-delete btn-secondary__small" data-wp-on--click="actions.profile.deleteProfile">
+                            <!-- < ?= sw_svg_e('icon-close') ?> -->
+                            <?= esc_html__('Delete profile', 'starwishx'); ?>
+                        </button>
+                    </div>
+                </div>
+                <!-- </div> -->
+
+                <div class="form-field form-field--checkbox field-notifications">
+                    <label for="lp-receive-notifications">
+                        <input type="checkbox" id="lp-receive-notifications"
+                            data-field="receiveMailNotifications"
+                            data-wp-bind--checked="<?= $this->statePath('receiveMailNotifications') ?>"
+                            data-wp-on--change="actions.profile.updateField" />
+                        <?= esc_html__('Receive email notifications', 'starwishx'); ?>
                     </label>
-                    <input type="tel" id="lp-phone" />
-                </div>
-
-                <div class="form-field">
-                    <label for="lp-display-name"><?= esc_html__('Display name publicly as', 'starwishx'); ?></label>
-                    <select id="lp-display-name" data-field="displayName"
-                        data-wp-bind--value="<?= $this->statePath('displayName') ?>"
-                        data-wp-on--change="actions.profile.updateField">
-                        <template data-wp-each="<?= $this->statePath('displayNameOptions') ?>">
-                            <option data-wp-bind--value="context.item" data-wp-text="context.item"></option>
-                        </template>
-                    </select>
-                </div>
-
-                <div class="form-field">
-                    <label for="lp-telegram"><?= esc_html__('Telegram', 'starwishx'); ?></label>
-                    <input type="text" id="lp-telegram" data-field="telegram"
-                        data-wp-bind--value="<?= $this->statePath('telegram') ?>"
-                        data-wp-on--input="actions.profile.updateField" />
-                </div>
-
-                <div class="form-field">
-                    <label for="lp-organization"><?= esc_html__('Organization', 'starwishx'); ?></label>
-                    <input type="text" id="lp-organization" data-field="organization"
-                        data-wp-bind--value="<?= $this->statePath('organization') ?>"
-                        data-wp-on--input="actions.profile.updateField" />
+                    <p class="form-field__hint">
+                        <?= esc_html__('Get notified by email when someone comments on your content.', 'starwishx'); ?>
+                    </p>
                 </div>
 
                 <div class="form-field">

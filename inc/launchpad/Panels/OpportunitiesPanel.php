@@ -226,7 +226,7 @@ class OpportunitiesPanel extends AbstractPanel
                     data-wp-on--click="actions.opportunities.goToProfile">
                     <?php esc_html_e('Fill Profile', 'starwishx'); ?>
                 </button>
-                <div data-wp-interactive="tour">
+                <div class="tour-wrapper" data-wp-interactive="tour">
                     <button class="btn-tertiary sw-tour-trigger sw-tour-subscriber-trigger"
                         data-tour-id="launchpad-intro"
                         data-wp-on--click="actions.startTour"

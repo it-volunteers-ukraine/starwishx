@@ -150,7 +150,7 @@ if (function_exists('render_block')) {
             </nav>
 
             <div class="launchpad-sidebar-footer" data-wp-interactive="tour">
-                <button class="btn-tertiary sw-tour-trigger"
+                <!-- <button class="btn-tertiary sw-tour-trigger"
                     data-wp-on--click="actions.startFirstAvailable"
                     data-wp-bind--hidden="!state.showStartButton"
                     hidden>
@@ -158,7 +158,7 @@ if (function_exists('render_block')) {
                         <use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-lightning"></use>
                     </svg>
                     <span data-wp-text="state.triggerLabel"></span>
-                </button>
+                </button> -->
             </div>
         </aside>
 

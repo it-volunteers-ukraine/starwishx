@@ -1019,17 +1019,51 @@
     .form-actions {
         display: flex;
         gap: 1rem;
-        margin-top: 2rem;
+        margin: 2rem 0 0 0;
         border-top: 1px solid $input-color-border-default;
         padding-top: 1rem;
         &--delete {
+            padding-top: 0;
             .btn-profile-delete {
                 margin-left: auto;
+                gap: 4px;
+                svg {
+                    color: $icon-color-error;
+                }
             }
         }
     }
 }
-
+.profile-form {
+    .show-more {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        &:before,
+        &:after {
+            content: "";
+            position: absolute;
+            width: calc((100% - 180px) / 2);
+            flex: 1;
+            border-bottom: 1px dashed $input-color-border-hover; /* Line color and thickness */
+            margin: 0 15px;
+        }
+        &:before {
+            left: 0;
+        }
+        &:after {
+            right: 0;
+        }
+    }
+    .form-actions {
+        margin-top: 0;
+    }
+    .field-notifications {
+        margin-bottom: 0;
+        margin-top: 1.2rem;
+    }
+}
 .launchpad-form {
     &-header {
         display: flex;
@@ -1076,8 +1110,8 @@
         }
     }
 }
-.password-form,
-.profile-form {
+// .profile-form,
+.password-form {
     max-width: 520px;
 }
 
@@ -1933,4 +1967,10 @@
     font-weight: 600;
     font-size: 0.7rem;
     line-height: 1;
+}
+.launchpad-panel--onboarding {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    max-width: 780px;
 }
