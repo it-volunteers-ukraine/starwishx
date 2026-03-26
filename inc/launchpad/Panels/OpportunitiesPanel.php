@@ -226,6 +226,18 @@ class OpportunitiesPanel extends AbstractPanel
                     data-wp-on--click="actions.opportunities.goToProfile">
                     <?php esc_html_e('Fill Profile', 'starwishx'); ?>
                 </button>
+                <div data-wp-interactive="tour">
+                    <button class="btn-tertiary sw-tour-trigger sw-tour-subscriber-trigger"
+                        data-tour-id="launchpad-intro"
+                        data-wp-on--click="actions.startTour"
+                        data-wp-bind--hidden="!state.showStartButton"
+                        hidden>
+                        <svg width="16" height="16" aria-hidden="true">
+                            <use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-lightning"></use>
+                        </svg>
+                        <span data-wp-text="state.triggerLabel"></span>
+                    </button>
+                </div>
             </div>
             <!-- VIEW: LIST -->
             <div class="launchpad-grid__container"
@@ -236,6 +248,18 @@ class OpportunitiesPanel extends AbstractPanel
                     <hgroup>
                         <h2 class="panel-title"><?php esc_html_e('Opportunities List', 'starwishx'); ?></h2>
                         <p class="panel-description"><?php esc_html_e('You can add new opportunities, edit existing ones, and submit them for review. All opportunity data is reviewed and moderated by the site administration team before being approved for publication or rejected. Please contact the site staff if you have any questions.', 'starwishx'); ?></p>
+                        <div class="launchpad-sidebar-footer" data-wp-interactive="tour">
+                            <button class="btn-tertiary sw-tour-trigger sw-tour-contributor-trigger"
+                                data-tour-id="opportunity-form"
+                                data-wp-on--click="actions.startTour"
+                                data-wp-bind--hidden="!state.showStartButton"
+                                hidden>
+                                <svg width="16" height="16">
+                                    <use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-lightning"></use>
+                                </svg>
+                                <span data-wp-text="state.triggerLabel"></span>
+                            </button>
+                        </div>
                     </hgroup>
 
                     <div class="launchpad-controls">

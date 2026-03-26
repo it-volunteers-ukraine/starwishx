@@ -954,7 +954,6 @@
         gap: 6px;
         margin-bottom: 1rem;
         width: 100%;
-
         label {
             margin-left: 2px;
             color: $text-basic;
@@ -975,7 +974,10 @@
             padding: 4px;
         }
     }
-
+    .form-field__hint {
+        color: $text-light;
+        font-size: 0.95rem;
+    }
     .form-field__footer {
         display: flex;
         justify-content: space-between;
@@ -1249,10 +1251,10 @@
    ====================================== */
 .gateway-checkbox,
 .filter-checkbox,
+.form-field--checkbox,
 .launchpad-form__checkbox {
     display: inline-flex;
     position: relative;
-    align-items: center;
     gap: 8px;
     cursor: pointer;
     box-sizing: border-box;
@@ -1778,4 +1780,157 @@
 
 .opportunity-card__title {
     color: $text-basic;
+}
+
+/* ======================================
+   COMPONENT: CHAT PANEL — Activity Feed
+   ====================================== */
+.chat-panel-header {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+
+    .panel-title {
+        margin: 0;
+    }
+}
+
+.chat-panel-actions {
+    display: flex;
+    flex-flow: row wrap;
+    gap: 0.5rem;
+}
+
+.chat-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 3rem 1rem;
+    color: $text-light;
+    text-align: center;
+
+    svg {
+        opacity: 0.4;
+        margin-bottom: 0.75rem;
+    }
+
+    p {
+        margin: 0;
+    }
+}
+
+.chat-activity-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    border: 1px solid $input-color-border-default;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.activity-item {
+    display: grid;
+    grid-template-columns: 40px 1fr auto;
+    align-items: start;
+    gap: 0.75rem;
+    transition: background $animations;
+    cursor: pointer;
+    background: $surface-primary;
+    padding: 0.875rem 1rem;
+
+    &:hover {
+        background: $element-block-fill;
+    }
+
+    &--unread {
+        background: rgba($surface-violet, 52%);
+
+        &:hover {
+            background: rgba($surface-violet, 48%);
+        }
+    }
+
+    &__avatar {
+        img {
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            object-fit: cover;
+        }
+    }
+
+    &__content {
+        min-width: 0;
+    }
+
+    &__text {
+        margin: 0 0 0.25rem;
+        color: $text-basic;
+        font-size: 0.875rem;
+        line-height: 1.4;
+
+        strong {
+            font-weight: 600;
+        }
+
+        a {
+            color: $text-accent;
+            font-weight: 500;
+            text-decoration: none;
+
+            &:hover {
+                text-decoration: underline;
+            }
+        }
+    }
+
+    &__excerpt {
+        margin: 0 0 0.25rem;
+        overflow: hidden;
+        color: $text-light;
+        font-size: 0.8rem;
+        line-height: 1.4;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    &__time {
+        color: $text-light;
+        font-size: 0.75rem;
+    }
+
+    &__dot {
+        flex-shrink: 0;
+        margin-top: 0.5rem;
+        border-radius: 50%;
+        background: $text-accent;
+        width: 8px;
+        height: 8px;
+    }
+}
+
+.chat-pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 1rem;
+}
+
+/* Badge on the sidebar tab */
+.launchpad-tab__badge {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: 0.5rem;
+    border-radius: 10px;
+    background: $dropdown-surface-color-pressed;
+    padding: 0 6px;
+    min-width: 20px;
+    height: 20px;
+    color: $text-accent;
+    font-weight: 600;
+    font-size: 0.7rem;
+    line-height: 1;
 }

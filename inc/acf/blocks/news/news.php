@@ -84,13 +84,13 @@ foreach ($terms as $term) {
 }
 ?>
 
-<section aria-labelledby="topnews-title" class="section <?= esc_attr($classes['section']); ?>">
+<section aria-labelledby="<?= esc_attr($classes['title']); ?>" class="section <?= esc_attr($classes['section']); ?>">
     <div class="container">
         <?php if ($items) : ?>
             <header>
                 <div class="<?= esc_attr($classes['subtitle']); ?>"><?= esc_html($label_text); ?></div>
                 <div class="<?= esc_attr($classes['title-wrap']); ?>">
-                    <h2 id="topnews-title" class="h2-big <?= esc_attr($classes['title']); ?>"><?= esc_html($title); ?></h2>
+                    <h2 id="<?= esc_attr($classes['title']); ?>" class="h2-big <?= esc_attr($classes['title']); ?>"><?= esc_html($title); ?></h2>
                     <a href="<?= esc_url($btn_url); ?>" class="btn <?= esc_attr($classes['btn1']); ?>"><?= esc_html($btn_text); ?></a>
                 </div>
             </header>

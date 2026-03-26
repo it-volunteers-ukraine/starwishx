@@ -240,6 +240,7 @@ const webpackConfig = (prod, isModule = false) => {
     baseConfig.externalsType = "module";
     baseConfig.externals = {
       "@wordpress/interactivity": "@wordpress/interactivity",
+      "shepherd.js": "shepherd",
     };
   }
 
@@ -288,6 +289,10 @@ export const moduleScripts = () => {
       "inc/comments/Assets/*.mjs",
       "inc/contact/Assets/*.js",
       "inc/contact/Assets/*.mjs",
+      "inc/chat/Assets/*.js",
+      "inc/chat/Assets/*.mjs",
+      "inc/tour/Assets/*.js",
+      "inc/tour/Assets/*.mjs",
     ],
     {
       allowEmpty: true,
@@ -367,6 +372,8 @@ export const watchForChanges = () => {
   watch("inc/favorites/Assets/**/*.{js,mjs}", moduleScripts);
   watch("inc/comments/Assets/**/*.{js,mjs}", moduleScripts);
   watch("inc/contact/Assets/**/*.{js,mjs}", moduleScripts);
+  watch("inc/chat/Assets/**/*.{js,mjs}", moduleScripts);
+  watch("inc/tour/Assets/**/*.{js,mjs}", moduleScripts);
   watch("inc/acf/blocks/**/*.module.scss", blockStyles);
 };
 

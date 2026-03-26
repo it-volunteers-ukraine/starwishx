@@ -138,21 +138,28 @@ if (function_exists('render_block')) {
                             </svg>
                         </span>
                         <span class="tab-text"><?php echo esc_html($panel->getLabel()); ?></span>
+                        <?php if ($id === 'chat') : ?>
+                            <span class="launchpad-tab__badge"
+                                data-wp-interactive="chat"
+                                data-wp-text="state.badgeText"
+                                data-wp-bind--hidden="!state.hasUnread"
+                                hidden></span>
+                        <?php endif; ?>
                     </button>
                 <?php endforeach; ?>
             </nav>
 
-            <!-- <div class="launchpad-sidebar-footer"> -->
-            <!-- <a href="< ?php echo esc_url(home_url('/')); ?>" class="launchpad-back">
-                    <span class="dashicons dashicons-arrow-left-alt"></span>
-                    < ?php esc_html_e('Back to Site', 'starwishx'); ?>
-                </a> -->
-            <!-- 
-                <a class="btn-secondary__small" href="< ?php echo esc_url(wp_logout_url(home_url())); ? >" class="launchpad-logout">
-                    <span class="dashicons dashicons-exit"></span>
-                    < ?php esc_html_e('Logout', 'starwishx'); ? >
-                </a> -->
-            <!-- </div> -->
+            <div class="launchpad-sidebar-footer" data-wp-interactive="tour">
+                <button class="btn-tertiary sw-tour-trigger"
+                    data-wp-on--click="actions.startFirstAvailable"
+                    data-wp-bind--hidden="!state.showStartButton"
+                    hidden>
+                    <svg width="16" height="16">
+                        <use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-lightning"></use>
+                    </svg>
+                    <span data-wp-text="state.triggerLabel"></span>
+                </button>
+            </div>
         </aside>
 
         <!-- Main Workspace Area -->

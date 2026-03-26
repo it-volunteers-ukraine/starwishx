@@ -14,15 +14,22 @@
 .listing-app {
     margin: 1rem 0 80px;
     &__header {
-        display: flex;
-        flex-flow: row wrap;
+        // display: flex;
+        // flex-flow: row wrap;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
         align-items: center;
         gap: 40px;
+        &--figure {
+            margin-left: auto;
+        }
         @include media.max-tabland {
+            display: flex;
+            flex-flow: column wrap;
             justify-content: space-between;
             gap: 8px;
             &--figure {
-                margin-left: auto;
+                display: none;
             }
             &--image {
                 width: 70px;
@@ -33,8 +40,15 @@
         .page-subtitle--text {
             color: $text-accent;
         }
+        &--description {
+            margin: 0.5rem 0 0;
+            color: $text-light;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
         .page-subtitle,
-        &--figure:not([hidden]) {
+        &--figure:not([hidden]),
+        &--description:not([hidden]) {
             animation: fadeIn 0.3s ease-in;
         }
         &--image {

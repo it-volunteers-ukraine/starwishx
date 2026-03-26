@@ -12,6 +12,12 @@
     width: 100%;
     max-width: $width-desktop;
 
+    *:focus-visible {
+        outline: 3px solid $primary-hover;
+        outline-offset: 4px;
+        border-radius: $radius-badge;
+    }
+
     .header-block {
         display: flex;
         position: relative;
@@ -135,22 +141,27 @@
             display: flex;
         }
 
-        .swiper-slide {
-            height: auto;
+        .projects-swiper-wrapper {
+            display: flex;
+            align-items: stretch;
 
-            /* Ensure slides have proper width based on breakpoints */
-            width: 100%;
+            .swiper-slide {
+                height: auto;
 
-            @media (min-width: 420px) {
-                width: calc(50% - 10px);
-            }
+                /* Ensure slides have proper width based on breakpoints */
+                width: 100%;
 
-            @media (min-width: 1024px) {
-                width: calc(33.333% - 14px);
-            }
+                @media (min-width: 420px) {
+                    width: calc(50% - 10px);
+                }
 
-            @media (min-width: 1350px) {
-                width: calc(25% - 15px);
+                @media (min-width: 1024px) {
+                    width: calc(33.333% - 14px);
+                }
+
+                @media (min-width: 1350px) {
+                    width: calc(25% - 15px);
+                }
             }
         }
     }

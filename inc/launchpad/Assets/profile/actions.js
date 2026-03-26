@@ -107,7 +107,8 @@ export const profileActions = {
     const { ref } = getElement();
     if (ref.dataset.field) {
       const p = ensurePanel(state, "profile");
-      p[ref.dataset.field] = ref.value;
+      p[ref.dataset.field] =
+        ref.type === "checkbox" ? ref.checked : ref.value;
 
       // Recompute display name options when name-related fields change
       if (
@@ -170,6 +171,7 @@ export const profileActions = {
             description: p.description,
             telegram: p.telegram,
             organization: p.organization,
+            receiveMailNotifications: p.receiveMailNotifications,
           },
         },
       );
