@@ -10,6 +10,9 @@
   width: 100%;
   height: 250px;
   overflow: hidden;
+  box-shadow: 0 0 6px 0 #080808;
+  box-shadow: 0 4px 9px 1px #c1c1c1;
+  transition: $animations-long;
 
   &::before {
     position: absolute;
@@ -25,6 +28,18 @@
       rgb(0 0 0 / 0%) 100%
     );
     content: "";
+  }
+
+  & img {
+    transition: $animations-long;
+  }
+
+  &:hover {
+    box-shadow: 0 5px 12px 1px #919191;
+
+    & img {
+      transform: scale(1.03)
+    }
   }
 
   // &::after {
@@ -81,14 +96,17 @@
   padding: 4px 8px;
   font-size: 14px;
 
-  @include label.label(var(--label-color), var(--label-bg), var(--label-border));
+  @include label.label(
+    var(--label-color),
+    var(--label-bg),
+    var(--label-border)
+  );
 }
 
 /* .cards-list {
   .newcard-label {
   }
 } */
-
 
 .newcard-info {
   display: flex;
