@@ -3,6 +3,7 @@
 @use "../mixins/label";
 
 .newcard-img-wrap {
+  display: block;
   position: relative;
   margin-bottom: 24px;
   border-radius: $radius-image;
@@ -79,13 +80,15 @@
   border-radius: $radius-element;
   padding: 4px 8px;
   font-size: 14px;
+
+  @include label.label(var(--label-color), var(--label-bg), var(--label-border));
 }
 
-.cards-list {
+/* .cards-list {
   .newcard-label {
-    @include label.label(var(--label-color), var(--label-bg), var(--label-border));
   }
-}
+} */
+
 
 .newcard-info {
   display: flex;

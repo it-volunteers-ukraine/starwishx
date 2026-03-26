@@ -47,17 +47,19 @@ $class_title = $card_version == 2 ? 'big-text-semibold' : 'subtitle-text-m';
 
 $swiper_class = $swiper ? 'swiper-slide' : '';
 $post_id = $item->ID;
+$permalink = get_permalink($post_id);
 $term_id = $item->term_id ?? null;
 
 $item_date  = date('d.m.Y', strtotime($item->post_date));
-$item_title = get_field('title', $post_id);
-$item_desc  = $no_desc ? false : get_field('description', $post_id);
+
+$item_acf_title = get_field('title', $post_id);
+$item_title = $item_acf_title ? $item_acf_title : get_the_title($post_id);
+$item_acf_desc = get_field('description', $post_id);
+$item_def_desc = get_the_excerpt($post_id);
+$item_desc = $item_acf_desc ? $item_acf_desc : $item_def_desc;
+$item_desc  = $no_desc ? false : $item_desc;
 
 $photo = get_field('photo', $post_id);
-
-if (!$item_title) {
-    $item_title = get_the_title($post_id) ?: $err_no_field;
-}
 
 if ($photo) {
     $photo_url = $photo['sizes']['large'] ?? '';
@@ -96,21 +98,22 @@ $item_label = esc_html($item->term_name ?? 'No category');
     data-post-id="<?php echo esc_attr($post_id); ?>"
     data-term-id="<?php echo esc_attr($term_id); ?>">
     <?php if (!$no_photo) : ?>
-        <div class="newcard-img-wrap ">
+        <a href="<?php echo $permalink; ?>" class="newcard-img-wrap ">
+            <!-- <a href="<?php echo $permalink; ?>"> -->
             <img
                 src="<?php echo esc_url($photo_url); ?>"
                 class="newcard-img "
                 alt="<?php echo esc_attr($photo_alt); ?>">
-            <div
-                class="newcard-label"
+            <div class="newcard-label"
                 style="
                     --label-color: <?php echo esc_attr($label_color_text); ?>;
                     --label-bg: <?php echo esc_attr($label_color_background); ?>;
                     --label-border: <?php echo esc_attr($label_color_border); ?>;
-                ">
+                    ">
                 <?php echo $item_label; ?>
             </div>
-        </div>
+            <!-- </a> -->
+        </a>
     <?php endif; ?>
     <div class="newcard-info">
         <?php if (is_numeric($post_rating)) : ?>
@@ -137,9 +140,9 @@ $item_label = esc_html($item->term_name ?? 'No category');
         </div>
     </div>
 
-    <div class="<?php echo $class_title; ?> newcard-title">
+    <a href="<?php echo $permalink; ?>" class="link-def <?php echo $class_title; ?> newcard-title">
         <?php echo esc_html($item_title); ?>
-    </div>
+    </a>
 
     <?php if ($item_desc) : ?>
         <div class="text-r newcard-text">
