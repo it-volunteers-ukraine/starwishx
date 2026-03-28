@@ -113,7 +113,7 @@ class NotificationService
 
         foreach ($pending as $notification) {
             // Recipient preference: skip email if opted out.
-            // The row is still marked 'sent' so it appears in the Chat activity feed.
+            // Mark 'sent' to prevent reprocessing on the next cron run.
             $receiveNotifications = get_field(
                 'receive_mail_notifications',
                 'user_' . $notification->recipient_id
