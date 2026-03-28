@@ -134,15 +134,15 @@ class NotificationRepository
         return (int) $wpdb->query(
             $wpdb->prepare(
                 "DELETE FROM {$this->getTable()}
-                 WHERE status IN ('sent', 'failed')
-                   AND created_at < DATE_SUB(NOW(), INTERVAL %d DAY)",
+                 WHERE created_at < DATE_SUB(NOW(), INTERVAL %d DAY)",
                 $days
             )
         );
     }
 
     /**
-     * Fetch sent notifications for a user (newest first).
+     * Fetch notifications for a user (newest first).
+     * Includes all statuses — the activity feed is decoupled from email delivery.
      */
     public function fetchForRecipient(int $recipientId, int $limit = 15, int $offset = 0): array
     {
@@ -151,7 +151,7 @@ class NotificationRepository
         return $wpdb->get_results(
             $wpdb->prepare(
                 "SELECT * FROM {$this->getTable()}
-                 WHERE recipient_id = %d AND status = 'sent'
+                 WHERE recipient_id = %d
                  ORDER BY created_at DESC
                  LIMIT %d OFFSET %d",
                 $recipientId,
@@ -162,7 +162,7 @@ class NotificationRepository
     }
 
     /**
-     * Count total sent notifications for a user.
+     * Count total notifications for a user.
      */
     public function countForRecipient(int $recipientId): int
     {
@@ -171,14 +171,14 @@ class NotificationRepository
         return (int) $wpdb->get_var(
             $wpdb->prepare(
                 "SELECT COUNT(*) FROM {$this->getTable()}
-                 WHERE recipient_id = %d AND status = 'sent'",
+                 WHERE recipient_id = %d",
                 $recipientId
             )
         );
     }
 
     /**
-     * Count unread sent notifications for a user.
+     * Count unread notifications for a user.
      */
     public function countUnreadForRecipient(int $recipientId): int
     {
@@ -187,7 +187,7 @@ class NotificationRepository
         return (int) $wpdb->get_var(
             $wpdb->prepare(
                 "SELECT COUNT(*) FROM {$this->getTable()}
-                 WHERE recipient_id = %d AND status = 'sent' AND is_read = 0",
+                 WHERE recipient_id = %d AND is_read = 0",
                 $recipientId
             )
         );
