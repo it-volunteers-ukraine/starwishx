@@ -151,6 +151,83 @@ class NotificationService
         $this->repository->deleteByRecipient($userId);
     }
 
+    /**
+     * Handle the sw_opportunity_pending action.
+     * Notifies editors (fallback: administrators) when a contributor submits for review.
+     *
+     * @param int   $postId
+     * @param array $context {user_id}
+     */
+    public function handleOpportunityPending(int $postId, array $context): void
+    {
+        $actorId = (int) ($context['user_id'] ?? 0);
+        if ($actorId === 0) {
+            return;
+        }
+
+        $post = get_post($postId);
+        if (! $post || $post->post_type !== 'opportunity') {
+            return;
+        }
+
+        $recipients = $this->resolveEditorRecipients();
+        if (empty($recipients)) {
+            return;
+        }
+
+        $actorUser   = get_userdata($actorId);
+        $contextJson = wp_json_encode([
+            'post_title'         => get_the_title($post),
+            'post_url'           => get_permalink($post),
+            'actor_display_name' => $actorUser ? $actorUser->display_name : __('Someone', 'starwishx'),
+        ]);
+
+        foreach ($recipients as $recipientId) {
+            // Self-notification guard
+            if ($recipientId === $actorId) {
+                continue;
+            }
+
+            // Deduplication
+            if ($this->repository->findDuplicate($recipientId, 'opportunity_pending', $postId)) {
+                continue;
+            }
+
+            $this->repository->create([
+                'recipient_id' => $recipientId,
+                'actor_id'     => $actorId,
+                'type'         => 'opportunity_pending',
+                'channel'      => 'email',
+                'object_id'    => $postId,
+                'object_type'  => 'post',
+                'context'      => $contextJson,
+            ]);
+        }
+
+        // Schedule near-instant processing
+        if (! wp_next_scheduled('sw_process_notifications')) {
+            wp_schedule_single_event(time(), 'sw_process_notifications');
+        }
+    }
+
+    /**
+     * Resolve editor recipients. Falls back to administrators if no editors found.
+     *
+     * @return int[] User IDs
+     */
+    private function resolveEditorRecipients(): array
+    {
+        $editors = get_users(['role' => 'editor', 'fields' => 'ID']);
+
+        if (!empty($editors)) {
+            return array_map('intval', $editors);
+        }
+
+        // Fallback to administrators
+        $admins = get_users(['role' => 'administrator', 'fields' => 'ID']);
+        return array_map('intval', $admins);
+    }
+
     // --- User-facing read methods (consumed by Chat module) ---
 
     public function getForRecipient(int $userId, int $limit = 15, int $offset = 0): array

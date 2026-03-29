@@ -527,6 +527,14 @@ class OpportunitiesService
             }
 
             $wpdb->query('COMMIT');
+
+            // Notify editors when opportunity is submitted for review
+            if (($data['status'] ?? '') === 'pending') {
+                do_action('sw_opportunity_pending', $id, [
+                    'user_id' => get_current_user_id(),
+                ]);
+            }
+
             return $id;
         } catch (\Throwable $e) {
             $wpdb->query('ROLLBACK');
@@ -564,10 +572,19 @@ class OpportunitiesService
         }
 
         // 4. Atomic Update
-        return wp_update_post([
+        $result = wp_update_post([
             'ID'          => $postId,
             'post_status' => $newStatus,
         ], true);
+
+        // Notify editors when opportunity is submitted for review
+        if (!is_wp_error($result) && $newStatus === 'pending') {
+            do_action('sw_opportunity_pending', $postId, [
+                'user_id' => $userId,
+            ]);
+        }
+
+        return $result;
     }
 
     /**
