@@ -14,6 +14,20 @@ let locationSearchTimeout = null;
 let _pendingUploadFile = null;
 
 /**
+ * Scroll the first errored field into view after validation.
+ */
+function scrollToFirstError(fieldErrors) {
+  requestAnimationFrame(() => {
+    const firstKey = Object.keys(fieldErrors).find((k) => fieldErrors[k]);
+    if (!firstKey) return;
+    const el =
+      document.querySelector(`[data-field="${firstKey}"]`) ||
+      document.getElementById(`opportunity-${firstKey}`);
+    if (el) el.scrollIntoView({ behavior: "smooth", block: "center" });
+  });
+}
+
+/**
  * Opportunity actions.
  * ARCHITECTURE CHANGE: We use store("launchpad") to access state/actions
  * instead of 'this'. This prevents context loss in data-wp-init.
@@ -130,10 +144,6 @@ export const opportunitiesActions = {
     const p = state.panels.opportunities;
     if (p.isSaving) return;
 
-    if (statusOverride) {
-      p.formData.status = statusOverride;
-    }
-
     p.isSaving = true;
     p.error = null;
     p.fieldErrors = {};
@@ -141,14 +151,28 @@ export const opportunitiesActions = {
     // Client-side required field check (messages from PHP state)
     const vm = p.validationMessages || {};
     const titleLen = p.formData.title?.trim().length || 0;
-    if (titleLen > 0 && titleLen < (p.titleLimits?.min || 30)) {
+    if (titleLen === 0) {
+      p.fieldErrors.title = vm.title;
+    } else if (titleLen < (p.titleLimits?.min || 30)) {
       p.fieldErrors.title = vm.titleMinLength;
     }
-    if (!p.formData.description?.trim()) p.fieldErrors.description = vm.description;
+    if (!p.formData.company?.trim()) p.fieldErrors.company = vm.company;
+    if (!p.formData.sourcelink?.trim())
+      p.fieldErrors.sourcelink = vm.sourcelink;
+    if (!p.formData.description?.trim())
+      p.fieldErrors.description = vm.description;
     if (!p.formData.category?.length) p.fieldErrors.category = vm.category;
     if (!p.formData.seekers?.length) p.fieldErrors.seekers = vm.seekers;
+    if (
+      p.formData.date_starts &&
+      p.formData.date_ends &&
+      p.formData.date_starts > p.formData.date_ends
+    ) {
+      p.fieldErrors.date_ends = vm.dateRange;
+    }
     if (Object.keys(p.fieldErrors).length) {
       p.isSaving = false;
+      scrollToFirstError(p.fieldErrors);
       return;
     }
 
@@ -190,6 +214,11 @@ export const opportunitiesActions = {
       // Clone and clean payload
       const payload = deepClone(p.formData);
       delete payload.document; // Don't send UI object to Opportunities endpoint
+
+      // Apply status override to payload, not formData — avoids dirty state on validation failure
+      if (statusOverride) {
+        payload.status = statusOverride;
+      }
 
       await fetchJson(
         state,
@@ -283,8 +312,24 @@ export const opportunitiesActions = {
   updateForm() {
     const { state } = store("launchpad");
     const { ref } = getElement();
-    if (state.panels.opportunities.formData) {
-      state.panels.opportunities.formData[ref.dataset.field] = ref.value;
+    const p = state.panels.opportunities;
+    if (p.formData) {
+      const field = ref.dataset.field;
+      p.formData[field] = ref.value;
+      if (p.fieldErrors?.[field]) p.fieldErrors[field] = null;
+      // Clear date range error when either date is adjusted and range becomes valid
+      if (
+        (field === "date_starts" || field === "date_ends") &&
+        p.fieldErrors?.date_ends
+      ) {
+        if (
+          !p.formData.date_starts ||
+          !p.formData.date_ends ||
+          p.formData.date_starts <= p.formData.date_ends
+        ) {
+          p.fieldErrors.date_ends = null;
+        }
+      }
     }
   },
 
@@ -297,6 +342,7 @@ export const opportunitiesActions = {
     p.formData.seekers = ref.checked
       ? [...new Set([...s, val])]
       : s.filter((id) => id !== val);
+    if (p.fieldErrors?.seekers) p.fieldErrors.seekers = null;
   },
 
   toggleCategory() {
@@ -308,6 +354,7 @@ export const opportunitiesActions = {
     p.formData.category = ref.checked
       ? [...new Set([...c, val])]
       : c.filter((id) => id !== val);
+    if (p.fieldErrors?.category) p.fieldErrors.category = null;
   },
 
   async loadMore() {
@@ -642,6 +689,17 @@ export const opportunitiesActions = {
     }
     if (!p.formData.seekers?.length) {
       p.fieldErrors.seekers = p.validationMessages?.seekers;
+    }
+    if (
+      p.formData.date_starts &&
+      p.formData.date_ends &&
+      p.formData.date_starts > p.formData.date_ends
+    ) {
+      p.fieldErrors.date_ends = p.validationMessages?.dateRange;
+    }
+
+    if (Object.keys(p.fieldErrors).length) {
+      scrollToFirstError(p.fieldErrors);
     }
   },
 
