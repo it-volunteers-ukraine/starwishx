@@ -53,6 +53,9 @@ class NotificationsCore
         // Listen for comment notifications (fired by CommentsService)
         add_action('sw_comment_posted', [$this->service, 'handleCommentPosted'], 10, 2);
 
+        // Listen for opportunity submissions (fired by OpportunitiesService)
+        add_action('sw_opportunity_pending', [$this->service, 'handleOpportunityPending'], 10, 2);
+
         // WP Cron action for queue processing
         add_action('sw_process_notifications', [$this->service, 'processQueue']);
 

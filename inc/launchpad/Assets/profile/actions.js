@@ -116,8 +116,7 @@ export const profileActions = {
     const { ref } = getElement();
     if (ref.dataset.field) {
       const p = ensurePanel(state, "profile");
-      p[ref.dataset.field] =
-        ref.type === "checkbox" ? ref.checked : ref.value;
+      p[ref.dataset.field] = ref.type === "checkbox" ? ref.checked : ref.value;
 
       // Recompute display name options when name-related fields change
       if (
@@ -201,6 +200,10 @@ export const profileActions = {
           const opp = ensurePanel(state, "opportunities");
           opp._loaded = false;
           opp.isLocked = true;
+        }
+        // Role change → refresh tour scenarios so button triggers correct tour
+        if (data._roleUpgraded || data._roleDegraded) {
+          store("tour").actions.refreshScenarios();
         }
       }
       // Return to card view via URL

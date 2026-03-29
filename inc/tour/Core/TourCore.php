@@ -103,9 +103,12 @@ final class TourCore
         $this->hydrateState();
     }
 
-    private function hydrateState(): void
+    /**
+     * Build scenario data for a user (role-aware, i18n in PHP).
+     * Used by both SSR hydration and the REST scenarios endpoint.
+     */
+    public function buildScenarioData(int $userId): array
     {
-        $userId = get_current_user_id();
         $completedTours = get_user_meta($userId, 'sw_completed_tours', true) ?: [];
         $dismissedTours = get_user_meta($userId, 'sw_dismissed_tours', true) ?: [];
 
@@ -116,7 +119,6 @@ final class TourCore
             $dismissedTours = [];
         }
 
-        // Build scenario data for JS (i18n happens here in PHP)
         $scenarios = [];
         foreach ($this->registry->getAll() as $id => $scenario) {
             if (!$scenario->isAvailable($userId)) {
@@ -131,6 +133,14 @@ final class TourCore
                 'dismissed' => in_array($id, $dismissedTours, true),
             ];
         }
+
+        return $scenarios;
+    }
+
+    private function hydrateState(): void
+    {
+        $userId = get_current_user_id();
+        $scenarios = $this->buildScenarioData($userId);
 
         wp_interactivity_state('tour', [
             'config' => [

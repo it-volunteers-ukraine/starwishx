@@ -78,6 +78,31 @@ class EmailChannel implements NotificationChannelInterface
                 $message .= $postUrl . '#comments' . "\r\n";
                 break;
 
+            case 'opportunity_pending':
+                $editUrl = admin_url("post.php?post={$notification->object_id}&action=edit");
+                $subject = sprintf(
+                    /* translators: 1: site name, 2: post title */
+                    __('[%1$s] Opportunity submitted for review: "%2$s"', 'starwishx'),
+                    $siteName,
+                    $postTitle
+                );
+                $message = sprintf(
+                    /* translators: %s: recipient display name */
+                    __('Hi %s,', 'starwishx'),
+                    $recipient->display_name
+                ) . "\r\n\r\n";
+                $message .= sprintf(
+                    /* translators: 1: actor name, 2: post title */
+                    __('%1$s submitted an opportunity "%2$s" for your review.', 'starwishx'),
+                    $actor,
+                    $postTitle
+                ) . "\r\n\r\n";
+                $message .= __('Review it here:', 'starwishx') . "\r\n";
+                $message .= $editUrl . "\r\n\r\n";
+                $message .= __('Or view the public page:', 'starwishx') . "\r\n";
+                $message .= $postUrl . "\r\n";
+                break;
+
             default:
                 error_log("[Notifications] Unknown notification type: {$notification->type}");
                 return false;

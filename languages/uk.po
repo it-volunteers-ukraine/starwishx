@@ -8,7 +8,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2026-02-25 10:47+0000\n"
-"PO-Revision-Date: 2026-03-29 04:42+0000\n"
+"PO-Revision-Date: 2026-03-29 07:08+0000\n"
 "Language: uk\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
@@ -31,7 +31,7 @@ msgstr "[%s] Активуйте свій обліковий запис"
 msgid "[%s] Password Reset"
 msgstr "[%s] Скидання пароля"
 
-#: inc/launchpad/Services/OpportunitiesService.php:549
+#: inc/launchpad/Services/OpportunitiesService.php:557
 msgid "Access denied."
 msgstr "Доступ заборонено."
 
@@ -208,7 +208,7 @@ msgstr "Термін редагування минув (15 хв.)."
 msgid "Email"
 msgstr "Електронна пошта"
 
-#: inc/launchpad/Panels/OpportunitiesPanel.php:547
+#: inc/launchpad/Panels/OpportunitiesPanel.php:544
 msgid "End Date"
 msgstr "Дата закінчення"
 
@@ -532,7 +532,7 @@ msgstr "PDF не завантажено"
 msgid "Nothing found matching your criteria"
 msgstr "Нічого не знайдено за вашими критеріями"
 
-#: inc/launchpad/Services/OpportunitiesService.php:555
+#: inc/launchpad/Services/OpportunitiesService.php:563
 msgid "Only drafts can be submitted for review."
 msgstr "Лише чернетки можуть бути відправлені на перевірку."
 
@@ -541,7 +541,7 @@ msgid "Only Header"
 msgstr "Тільки заголовок"
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:536
-#: inc/launchpad/Panels/OpportunitiesPanel.php:552
+#: inc/launchpad/Panels/OpportunitiesPanel.php:549
 msgid "Open calendar"
 msgstr "Відкрити календар"
 
@@ -1097,7 +1097,7 @@ msgstr "Поділитися"
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:484
 #: inc/launchpad/Panels/OpportunitiesPanel.php:908
-#: inc/tour/Core/TourCore.php:141
+#: inc/tour/Core/TourCore.php:151
 msgid "Back"
 msgstr "Назад"
 
@@ -1206,32 +1206,32 @@ msgid "This feature is only available for registered users."
 msgstr "Ця функція доступна лише для зареєстрованих користувачів."
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:133
-#: inc/launchpad/Services/OpportunitiesService.php:585
+#: inc/launchpad/Services/OpportunitiesService.php:602
 msgid "Title is required."
 msgstr "Назва обов'язкова."
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:138
-#: inc/launchpad/Services/OpportunitiesService.php:603
+#: inc/launchpad/Services/OpportunitiesService.php:620
 msgid "Company is required."
 msgstr "Організація обов'язкова."
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:139
-#: inc/launchpad/Services/OpportunitiesService.php:606
+#: inc/launchpad/Services/OpportunitiesService.php:623
 msgid "Source link is required."
 msgstr "Посилання на джерело обов'язкове."
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:140
-#: inc/launchpad/Services/OpportunitiesService.php:598
+#: inc/launchpad/Services/OpportunitiesService.php:615
 msgid "Description is required."
 msgstr "Опис обов'язковий."
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:141
-#: inc/launchpad/Services/OpportunitiesService.php:612
+#: inc/launchpad/Services/OpportunitiesService.php:629
 msgid "At least one category is required."
 msgstr "Треба обрати хоча б одну категорію."
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:142
-#: inc/launchpad/Services/OpportunitiesService.php:618
+#: inc/launchpad/Services/OpportunitiesService.php:635
 msgid "At least one seeker type is required."
 msgstr "Треба обрати хоча б одного отримувача"
 
@@ -1244,18 +1244,18 @@ msgstr ""
 msgid "Submit"
 msgstr "Надіслати"
 
-#: inc/launchpad/Services/OpportunitiesService.php:632
+#: inc/launchpad/Services/OpportunitiesService.php:649
 msgid "Please fill in all required fields before submitting for review."
 msgstr ""
 "Будь ласка, заповніть усі обов'язкові поля, перш ніж надсилати на розгляд."
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:135
-#: inc/launchpad/Services/OpportunitiesService.php:588
+#: inc/launchpad/Services/OpportunitiesService.php:605
 #, php-format
 msgid "Title must be at least %d characters."
 msgstr "Назва має містити щонайменше %d символів."
 
-#: inc/launchpad/Services/OpportunitiesService.php:593
+#: inc/launchpad/Services/OpportunitiesService.php:610
 #, php-format
 msgid "Title must not exceed %d characters."
 msgstr "Назва не повинна перевищувати %d символів."
@@ -1402,7 +1402,7 @@ msgstr "Проєкти"
 msgid "Previous"
 msgstr "Назад"
 
-#: archive-project.php:109 inc/tour/Core/TourCore.php:140
+#: archive-project.php:109 inc/tour/Core/TourCore.php:150
 msgid "Next"
 msgstr "Вперед"
 
@@ -1751,6 +1751,7 @@ msgstr "можливість"
 
 #: inc/notifications/Channels/EmailChannel.php:28
 #: inc/notifications/Services/NotificationService.php:85
+#: inc/notifications/Services/NotificationService.php:182
 msgid "Someone"
 msgstr "Хтось"
 
@@ -1763,6 +1764,7 @@ msgstr "[%1$s] Новий відгук про \"%2$s\""
 #. translators: %s: recipient display name
 #: inc/notifications/Channels/EmailChannel.php:41
 #: inc/notifications/Channels/EmailChannel.php:65
+#: inc/notifications/Channels/EmailChannel.php:91
 #, php-format
 msgid "Hi %s,"
 msgstr "Вітаємо, %s,"
@@ -1793,7 +1795,7 @@ msgstr "%1$s відповів на ваш відгук про \"%2$s\":"
 msgid "View the reply:"
 msgstr "Перегляньте відповідь:"
 
-#: inc/notifications/Core/NotificationsCore.php:78
+#: inc/notifications/Core/NotificationsCore.php:81
 msgid "Every Five Minutes"
 msgstr "Кожні п'ять хвилин"
 
@@ -1866,19 +1868,19 @@ msgstr ""
 "Отримуйте сповіщення електронною поштою, наприклад якщо хтось коментує ваш "
 "контент."
 
-#: inc/tour/Core/TourCore.php:142
+#: inc/tour/Core/TourCore.php:152
 msgid "Done"
 msgstr "Готово"
 
-#: inc/tour/Core/TourCore.php:143
+#: inc/tour/Core/TourCore.php:153
 msgid "Skip tour"
 msgstr "Пропустити тур"
 
-#: inc/tour/Core/TourCore.php:144
+#: inc/tour/Core/TourCore.php:154
 msgid "Take a Tour"
 msgstr "Здійсніть тур"
 
-#: inc/tour/Core/TourCore.php:145
+#: inc/tour/Core/TourCore.php:155
 msgid "Retake Tour"
 msgstr "Повторити тур"
 
@@ -2106,3 +2108,23 @@ msgstr ""
 #: inc/launchpad/Panels/OpportunitiesPanel.php:143
 msgid "End date cannot be before start date."
 msgstr "Дата завершення не може бути раніше дати початку."
+
+#. translators: 1: site name, 2: post title
+#: inc/notifications/Channels/EmailChannel.php:85
+#, php-format
+msgid "[%1$s] Opportunity submitted for review: \"%2$s\""
+msgstr "[%1$s] Можливість надіслано на розгляд: \"%2$s\""
+
+#. translators: 1: actor name, 2: post title
+#: inc/notifications/Channels/EmailChannel.php:96
+#, php-format
+msgid "%1$s submitted an opportunity \"%2$s\" for your review."
+msgstr "%1$s надіслав(ла) на ваш розгляд можливість \"%2$s\"."
+
+#: inc/notifications/Channels/EmailChannel.php:100
+msgid "Review it here:"
+msgstr "Оцініть це тут:"
+
+#: inc/notifications/Channels/EmailChannel.php:102
+msgid "Or view the public page:"
+msgstr "Або перегляньте публічну сторінку:"

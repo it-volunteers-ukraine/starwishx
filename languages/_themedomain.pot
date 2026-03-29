@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-03-29T03:52:25+00:00\n"
+"POT-Creation-Date: 2026-03-29T07:05:54+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: starwishx\n"
@@ -137,7 +137,7 @@ msgid "Previous"
 msgstr ""
 
 #: archive-project.php:109
-#: inc/tour/Core/TourCore.php:140
+#: inc/tour/Core/TourCore.php:150
 msgid "Next"
 msgstr ""
 
@@ -812,38 +812,38 @@ msgid "Opportunity not found or access denied."
 msgstr ""
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:133
-#: inc/launchpad/Services/OpportunitiesService.php:585
+#: inc/launchpad/Services/OpportunitiesService.php:602
 msgid "Title is required."
 msgstr ""
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:135
-#: inc/launchpad/Services/OpportunitiesService.php:588
+#: inc/launchpad/Services/OpportunitiesService.php:605
 #, php-format
 msgid "Title must be at least %d characters."
 msgstr ""
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:138
-#: inc/launchpad/Services/OpportunitiesService.php:603
+#: inc/launchpad/Services/OpportunitiesService.php:620
 msgid "Company is required."
 msgstr ""
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:139
-#: inc/launchpad/Services/OpportunitiesService.php:606
+#: inc/launchpad/Services/OpportunitiesService.php:623
 msgid "Source link is required."
 msgstr ""
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:140
-#: inc/launchpad/Services/OpportunitiesService.php:598
+#: inc/launchpad/Services/OpportunitiesService.php:615
 msgid "Description is required."
 msgstr ""
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:141
-#: inc/launchpad/Services/OpportunitiesService.php:612
+#: inc/launchpad/Services/OpportunitiesService.php:629
 msgid "At least one category is required."
 msgstr ""
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:142
-#: inc/launchpad/Services/OpportunitiesService.php:618
+#: inc/launchpad/Services/OpportunitiesService.php:635
 msgid "At least one seeker type is required."
 msgstr ""
 
@@ -928,7 +928,7 @@ msgstr ""
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:484
 #: inc/launchpad/Panels/OpportunitiesPanel.php:908
-#: inc/tour/Core/TourCore.php:141
+#: inc/tour/Core/TourCore.php:151
 msgid "Back"
 msgstr ""
 
@@ -954,11 +954,11 @@ msgid "Start Date"
 msgstr ""
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:536
-#: inc/launchpad/Panels/OpportunitiesPanel.php:552
+#: inc/launchpad/Panels/OpportunitiesPanel.php:549
 msgid "Open calendar"
 msgstr ""
 
-#: inc/launchpad/Panels/OpportunitiesPanel.php:547
+#: inc/launchpad/Panels/OpportunitiesPanel.php:544
 msgid "End Date"
 msgstr ""
 
@@ -1281,20 +1281,20 @@ msgstr ""
 msgid "Pending Review"
 msgstr ""
 
-#: inc/launchpad/Services/OpportunitiesService.php:549
+#: inc/launchpad/Services/OpportunitiesService.php:557
 msgid "Access denied."
 msgstr ""
 
-#: inc/launchpad/Services/OpportunitiesService.php:555
+#: inc/launchpad/Services/OpportunitiesService.php:563
 msgid "Only drafts can be submitted for review."
 msgstr ""
 
-#: inc/launchpad/Services/OpportunitiesService.php:593
+#: inc/launchpad/Services/OpportunitiesService.php:610
 #, php-format
 msgid "Title must not exceed %d characters."
 msgstr ""
 
-#: inc/launchpad/Services/OpportunitiesService.php:632
+#: inc/launchpad/Services/OpportunitiesService.php:649
 msgid "Please fill in all required fields before submitting for review."
 msgstr ""
 
@@ -1453,6 +1453,7 @@ msgstr ""
 
 #: inc/notifications/Channels/EmailChannel.php:28
 #: inc/notifications/Services/NotificationService.php:85
+#: inc/notifications/Services/NotificationService.php:182
 msgid "Someone"
 msgstr ""
 
@@ -1465,6 +1466,7 @@ msgstr ""
 #. translators: %s: recipient display name
 #: inc/notifications/Channels/EmailChannel.php:41
 #: inc/notifications/Channels/EmailChannel.php:65
+#: inc/notifications/Channels/EmailChannel.php:91
 #, php-format
 msgid "Hi %s,"
 msgstr ""
@@ -1495,7 +1497,27 @@ msgstr ""
 msgid "View the reply:"
 msgstr ""
 
-#: inc/notifications/Core/NotificationsCore.php:78
+#. translators: 1: site name, 2: post title
+#: inc/notifications/Channels/EmailChannel.php:85
+#, php-format
+msgid "[%1$s] Opportunity submitted for review: \"%2$s\""
+msgstr ""
+
+#. translators: 1: actor name, 2: post title
+#: inc/notifications/Channels/EmailChannel.php:96
+#, php-format
+msgid "%1$s submitted an opportunity \"%2$s\" for your review."
+msgstr ""
+
+#: inc/notifications/Channels/EmailChannel.php:100
+msgid "Review it here:"
+msgstr ""
+
+#: inc/notifications/Channels/EmailChannel.php:102
+msgid "Or view the public page:"
+msgstr ""
+
+#: inc/notifications/Core/NotificationsCore.php:81
 msgid "Every Five Minutes"
 msgstr ""
 
@@ -1577,19 +1599,19 @@ msgid_plural "Show %d more"
 msgstr[0] ""
 msgstr[1] ""
 
-#: inc/tour/Core/TourCore.php:142
+#: inc/tour/Core/TourCore.php:152
 msgid "Done"
 msgstr ""
 
-#: inc/tour/Core/TourCore.php:143
+#: inc/tour/Core/TourCore.php:153
 msgid "Skip tour"
 msgstr ""
 
-#: inc/tour/Core/TourCore.php:144
+#: inc/tour/Core/TourCore.php:154
 msgid "Take a Tour"
 msgstr ""
 
-#: inc/tour/Core/TourCore.php:145
+#: inc/tour/Core/TourCore.php:155
 msgid "Retake Tour"
 msgstr ""
 

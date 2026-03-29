@@ -162,6 +162,25 @@ const { state } = store("tour", {
     },
 
     /**
+     * Re-fetch scenarios from server (role-aware).
+     * Called after profile save when user role changes.
+     */
+    async refreshScenarios() {
+      const { state } = store("tour");
+      if (state.isRunning) return;
+
+      try {
+        const data = await fetchJson(state, `${state.config.restUrl}scenarios`);
+        if (data?.scenarios) {
+          // Replace scenarios entirely — old role's tours removed, new role's added
+          state.scenarios = data.scenarios;
+        }
+      } catch (_) {
+        // Silent — stale scenarios are acceptable fallback
+      }
+    },
+
+    /**
      * Reset a completed/dismissed tour so it can be re-run.
      * Called from template via data-tour-id attribute.
      */
