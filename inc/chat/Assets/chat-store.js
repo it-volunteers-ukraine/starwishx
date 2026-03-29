@@ -17,11 +17,10 @@ const { state } = store("chat", {
 
     /**
      * Whether the user has unread notifications.
-     * Reads from launchpad panel state (cross-store).
+     * Reads from own state — decoupled from launchpad so the header badge works on all pages.
      */
     get hasUnread() {
-      const panel = store("launchpad").state.panels?.chat;
-      return panel && (panel.unreadCount || 0) > 0;
+      return (state.unreadCount || 0) > 0;
     },
 
     /**
@@ -49,11 +48,10 @@ const { state } = store("chat", {
     },
 
     /**
-     * Badge text for the sidebar tab. "3", "99+", or "".
+     * Badge text for the sidebar tab and header button. "3", "99+", or "".
      */
     get badgeText() {
-      const panel = store("launchpad").state.panels?.chat;
-      const count = panel?.unreadCount || 0;
+      const count = state.unreadCount || 0;
       if (count > 99) return "99+";
       return count > 0 ? String(count) : "";
     },
@@ -103,7 +101,7 @@ const { state } = store("chat", {
           panel.page = data.page;
           panel.totalPages = data.totalPages;
           panel.hasMore = data.hasMore;
-          panel.unreadCount = data.unreadCount;
+          state.unreadCount = data.unreadCount;
         }
       } catch (err) {
         panel.error = err.message;
@@ -134,7 +132,7 @@ const { state } = store("chat", {
           panel.items = [...panel.items, ...data.items];
           panel.page = nextPage;
           panel.hasMore = data.hasMore;
-          panel.unreadCount = data.unreadCount;
+          state.unreadCount = data.unreadCount;
         }
       } catch (err) {
         panel.error = err.message;
@@ -159,7 +157,7 @@ const { state } = store("chat", {
 
       // Optimistic update
       item.isRead = true;
-      if (panel) panel.unreadCount = Math.max(0, (panel.unreadCount || 0) - 1);
+      state.unreadCount = Math.max(0, (state.unreadCount || 0) - 1);
 
       try {
         const data = await fetchJson(
@@ -167,13 +165,13 @@ const { state } = store("chat", {
           `${state.config.restUrl}activity/${item.id}/read`,
           { method: "POST" },
         );
-        if (data?.unreadCount !== undefined && panel) {
-          panel.unreadCount = data.unreadCount;
+        if (data?.unreadCount !== undefined) {
+          state.unreadCount = data.unreadCount;
         }
       } catch (err) {
         // Revert on failure
         item.isRead = false;
-        if (panel) panel.unreadCount = (panel.unreadCount || 0) + 1;
+        state.unreadCount = (state.unreadCount || 0) + 1;
       }
     },
 
@@ -190,8 +188,8 @@ const { state } = store("chat", {
       (panel.items || []).forEach((item) => {
         item.isRead = true;
       });
-      const prevCount = panel.unreadCount;
-      panel.unreadCount = 0;
+      const prevCount = state.unreadCount;
+      state.unreadCount = 0;
 
       try {
         await fetchJson(state, `${state.config.restUrl}activity/read-all`, {
@@ -202,7 +200,7 @@ const { state } = store("chat", {
         (panel.items || []).forEach((item, i) => {
           item.isRead = prevStates[i];
         });
-        panel.unreadCount = prevCount;
+        state.unreadCount = prevCount;
         panel.error = err.message;
         setTimeout(() => {
           panel.error = null;

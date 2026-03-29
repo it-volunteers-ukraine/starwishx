@@ -140,6 +140,7 @@ class OpportunitiesPanel extends AbstractPanel
                 'description' => __('Description is required.', 'starwishx'),
                 'category'    => __('At least one category is required.', 'starwishx'),
                 'seekers'     => __('At least one seeker type is required.', 'starwishx'),
+                'dateRange'   => __('End date cannot be before start date.', 'starwishx'),
             ],
             'confirmPopup' => [
                 'isOpen'  => false,
@@ -551,6 +552,9 @@ class OpportunitiesPanel extends AbstractPanel
                                                 </svg>
                                             </button>
                                         </div>
+                                        <label class="exclamation-circle__error" hidden
+                                            data-wp-bind--hidden="!<?= $errPath ?>.date_ends"
+                                            data-wp-text="<?= $errPath ?>.date_ends"></label>
                                     </div>
                                 </div>
 

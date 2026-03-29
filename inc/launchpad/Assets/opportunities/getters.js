@@ -264,4 +264,15 @@ export const opportunitiesGetters = {
     const max = p?.textareaLimits?.details || 2000;
     return len >= max * 0.9;
   },
+
+  /**
+   * Are start/end dates both set and start is after end?
+   * Used for dynamic real-time warning on date fields.
+   */
+  get isDateRangeInvalid() {
+    const p = this.panels.opportunities;
+    const s = p?.formData?.date_starts;
+    const e = p?.formData?.date_ends;
+    return !!(s && e && s > e);
+  },
 };

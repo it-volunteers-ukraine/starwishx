@@ -41,16 +41,10 @@ class ChatPanel extends AbstractPanel
                 'totalPages'  => 0,
                 'page'        => 1,
                 'hasMore'     => false,
-                'unreadCount' => 0,
             ];
         }
 
-        $activity    = $this->service->getActivity($userId, 1, 15);
-        $unreadCount = $this->service->getUnreadCount($userId);
-
-        return array_merge($activity, [
-            'unreadCount' => $unreadCount,
-        ]);
+        return $this->service->getActivity($userId, 1, 15);
     }
 
     public function render(): string

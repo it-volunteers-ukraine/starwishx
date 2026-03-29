@@ -138,12 +138,15 @@ if (function_exists('render_block')) {
                             </svg>
                         </span>
                         <span class="tab-text"><?php echo esc_html($panel->getLabel()); ?></span>
-                        <?php if ($id === 'chat') : ?>
+                        <?php if ($id === 'chat') :
+                            $unread_count = chat()->activityService()->getUnreadCount($user_id);
+                            $badge_text   = $unread_count > 99 ? '99+' : ($unread_count > 0 ? (string) $unread_count : '');
+                        ?>
                             <span class="launchpad-tab__badge"
                                 data-wp-interactive="chat"
                                 data-wp-text="state.badgeText"
                                 data-wp-bind--hidden="!state.hasUnread"
-                                hidden></span>
+                                <?= $unread_count === 0 ? 'hidden' : '' ?>><?= esc_html($badge_text) ?></span>
                         <?php endif; ?>
                     </button>
                 <?php endforeach; ?>
