@@ -15,6 +15,12 @@ class TourController extends AbstractApiController
 
     public function registerRoutes(): void
     {
+        register_rest_route($this->namespace, '/scenarios', [
+            'methods'             => 'GET',
+            'callback'            => [$this, 'getScenarios'],
+            'permission_callback' => [$this, 'checkLoggedIn'],
+        ]);
+
         register_rest_route($this->namespace, '/complete', [
             'methods'             => 'POST',
             'callback'            => [$this, 'completeTour'],
@@ -32,6 +38,14 @@ class TourController extends AbstractApiController
             'callback'            => [$this, 'resetTour'],
             'permission_callback' => [$this, 'checkLoggedIn'],
         ]);
+    }
+
+    public function getScenarios(WP_REST_Request $request): WP_REST_Response
+    {
+        $userId = get_current_user_id();
+        $scenarios = \Tour\Core\TourCore::instance()->buildScenarioData($userId);
+
+        return $this->success(['scenarios' => $scenarios]);
     }
 
     public function completeTour(WP_REST_Request $request): WP_REST_Response
