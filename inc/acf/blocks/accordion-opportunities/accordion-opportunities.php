@@ -21,7 +21,7 @@ $default_classes = [
     'btn2'        => 'btn2'
 ];
 
-$base_url_opportunities  = 'opportunities/?category=';
+$base_url_opportunities  = 'opportunities/';
 $is_mode_click_for_touch = get_field('mode_click_for_touch');
 
 $modules_file = get_template_directory() . '/assets/css/blocks/modules.json';
