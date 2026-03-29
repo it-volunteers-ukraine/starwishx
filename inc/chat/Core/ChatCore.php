@@ -70,10 +70,11 @@ final class ChatCore
 
     public function enqueueAssets(): void
     {
-        if (! is_page('launchpad') || ! is_user_logged_in()) {
+        if (! is_user_logged_in()) {
             return;
         }
 
+        // Badge tier: all pages for logged-in users
         if (function_exists('wp_register_script_module')) {
             wp_register_script_module(
                 '@starwishx/chat',
@@ -85,6 +86,7 @@ final class ChatCore
         }
 
         wp_interactivity_state('chat', [
+            'unreadCount' => $this->activityService->getUnreadCount(get_current_user_id()),
             'config' => [
                 'nonce'   => wp_create_nonce('wp_rest'),
                 'restUrl' => rest_url('chat/v1/'),
