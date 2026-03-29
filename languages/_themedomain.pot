@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-03-26T06:56:54+00:00\n"
+"POT-Creation-Date: 2026-03-29T02:37:13+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: starwishx\n"
@@ -150,11 +150,13 @@ msgid "Home Page"
 msgstr ""
 
 #: front-page.php:21
+#: inc/contact/page-home.php:21
 #: page-contact.php:21
 msgid "Contacts"
 msgstr ""
 
 #: front-page.php:22
+#: inc/contact/page-home.php:22
 msgid "Get in Touch"
 msgstr ""
 
@@ -232,41 +234,41 @@ msgstr ""
 msgid "Notification not found."
 msgstr ""
 
-#: inc/chat/Core/ChatCore.php:92
+#: inc/chat/Core/ChatCore.php:94
 msgid "Failed to load activity."
 msgstr ""
 
-#: inc/chat/Core/ChatCore.php:93
+#: inc/chat/Core/ChatCore.php:95
 msgid "Failed to mark as read."
 msgstr ""
 
-#: inc/chat/Core/ChatCore.php:94
+#: inc/chat/Core/ChatCore.php:96
 msgid "left a review on"
 msgstr ""
 
-#: inc/chat/Core/ChatCore.php:95
+#: inc/chat/Core/ChatCore.php:97
 msgid "replied to your review on"
 msgstr ""
 
-#: inc/chat/Core/ChatCore.php:96
+#: inc/chat/Core/ChatCore.php:98
 msgid "No notifications yet."
 msgstr ""
 
-#: inc/chat/Core/ChatCore.php:98
+#: inc/chat/Core/ChatCore.php:100
 msgid "just now"
 msgstr ""
 
-#: inc/chat/Core/ChatCore.php:99
+#: inc/chat/Core/ChatCore.php:101
 #, php-format
 msgid "%d min ago"
 msgstr ""
 
-#: inc/chat/Core/ChatCore.php:100
+#: inc/chat/Core/ChatCore.php:102
 #, php-format
 msgid "%d hr ago"
 msgstr ""
 
-#: inc/chat/Core/ChatCore.php:101
+#: inc/chat/Core/ChatCore.php:103
 #, php-format
 msgid "%d days ago"
 msgstr ""
@@ -275,26 +277,26 @@ msgstr ""
 msgid "Chat"
 msgstr ""
 
-#: inc/chat/Panels/ChatPanel.php:63
+#: inc/chat/Panels/ChatPanel.php:57
 msgid "Activity"
 msgstr ""
 
-#: inc/chat/Panels/ChatPanel.php:68
+#: inc/chat/Panels/ChatPanel.php:62
 msgid "Refresh"
 msgstr ""
 
-#: inc/chat/Panels/ChatPanel.php:74
+#: inc/chat/Panels/ChatPanel.php:68
 msgid "Mark all read"
 msgstr ""
 
-#: inc/chat/Panels/ChatPanel.php:86
+#: inc/chat/Panels/ChatPanel.php:80
 #: inc/launchpad/Panels/FavoritesPanel.php:66
 #: inc/launchpad/Panels/OpportunitiesPanel.php:336
 #: template-parts/comments-interactive.php:392
 msgid "Loading..."
 msgstr ""
 
-#: inc/chat/Panels/ChatPanel.php:142
+#: inc/chat/Panels/ChatPanel.php:136
 #: inc/launchpad/Panels/FavoritesPanel.php:134
 #: inc/launchpad/Panels/OpportunitiesPanel.php:465
 #: inc/listing/Core/ResultsGrid.php:69
@@ -501,7 +503,7 @@ msgid "Password"
 msgstr ""
 
 #: inc/gateway/Forms/LoginForm.php:130
-#: inc/launchpad/Panels/ProfilePanel.php:387
+#: inc/launchpad/Panels/ProfilePanel.php:383
 msgid "Log In"
 msgstr ""
 
@@ -609,7 +611,7 @@ msgid "Your new password has been pre-generated. You can modify it or generate a
 msgstr ""
 
 #: inc/gateway/Forms/ResetPasswordForm.php:48
-#: inc/launchpad/Panels/ProfilePanel.php:323
+#: inc/launchpad/Panels/ProfilePanel.php:319
 #: inc/launchpad/Panels/SecurityPanel.php:70
 msgid "New Password"
 msgstr ""
@@ -619,7 +621,7 @@ msgid "Generate New Password"
 msgstr ""
 
 #: inc/gateway/Forms/ResetPasswordForm.php:95
-#: inc/launchpad/Panels/ProfilePanel.php:352
+#: inc/launchpad/Panels/ProfilePanel.php:348
 msgid "Generating..."
 msgstr ""
 
@@ -628,7 +630,7 @@ msgid "Save Password"
 msgstr ""
 
 #: inc/gateway/Forms/ResetPasswordForm.php:106
-#: inc/launchpad/Panels/ProfilePanel.php:277
+#: inc/launchpad/Panels/ProfilePanel.php:273
 msgid "Saving..."
 msgstr ""
 
@@ -1070,9 +1072,9 @@ msgid "Submit"
 msgstr ""
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:948
-#: inc/launchpad/Panels/ProfilePanel.php:282
-#: inc/launchpad/Panels/ProfilePanel.php:362
-#: inc/launchpad/Panels/ProfilePanel.php:454
+#: inc/launchpad/Panels/ProfilePanel.php:278
+#: inc/launchpad/Panels/ProfilePanel.php:358
+#: inc/launchpad/Panels/ProfilePanel.php:450
 #: template-parts/comments-interactive.php:136
 #: template-parts/comments-interactive.php:249
 #: template-parts/comments-interactive.php:326
@@ -1142,88 +1144,88 @@ msgstr ""
 msgid "Last Name"
 msgstr ""
 
-#: inc/launchpad/Panels/ProfilePanel.php:241
+#: inc/launchpad/Panels/ProfilePanel.php:240
 msgid "Biographical Info"
 msgstr ""
 
-#: inc/launchpad/Panels/ProfilePanel.php:251
+#: inc/launchpad/Panels/ProfilePanel.php:248
 msgid "Delete profile"
 msgstr ""
 
-#: inc/launchpad/Panels/ProfilePanel.php:263
+#: inc/launchpad/Panels/ProfilePanel.php:259
 msgid "Receive email notifications"
 msgstr ""
 
-#: inc/launchpad/Panels/ProfilePanel.php:266
+#: inc/launchpad/Panels/ProfilePanel.php:262
 msgid "Get notified by email when someone comments on your content."
 msgstr ""
 
-#: inc/launchpad/Panels/ProfilePanel.php:274
+#: inc/launchpad/Panels/ProfilePanel.php:270
 #: template-parts/comments-interactive.php:253
 #: template-parts/comments-interactive.php:330
 msgid "Save"
 msgstr ""
 
-#: inc/launchpad/Panels/ProfilePanel.php:296
+#: inc/launchpad/Panels/ProfilePanel.php:292
 msgid "Update Security Credentials"
 msgstr ""
 
-#: inc/launchpad/Panels/ProfilePanel.php:299
+#: inc/launchpad/Panels/ProfilePanel.php:295
 #: inc/launchpad/Panels/SecurityPanel.php:59
 msgid "Current Password"
 msgstr ""
 
-#: inc/launchpad/Panels/ProfilePanel.php:307
-#: inc/launchpad/Panels/ProfilePanel.php:332
-#: inc/launchpad/Panels/ProfilePanel.php:425
+#: inc/launchpad/Panels/ProfilePanel.php:303
+#: inc/launchpad/Panels/ProfilePanel.php:328
+#: inc/launchpad/Panels/ProfilePanel.php:421
 msgid "Toggle password visibility"
 msgstr ""
 
-#: inc/launchpad/Panels/ProfilePanel.php:349
+#: inc/launchpad/Panels/ProfilePanel.php:345
 msgid "Generate Strong Password"
 msgstr ""
 
-#: inc/launchpad/Panels/ProfilePanel.php:359
+#: inc/launchpad/Panels/ProfilePanel.php:355
 msgid "Update Password"
 msgstr ""
 
-#: inc/launchpad/Panels/ProfilePanel.php:377
+#: inc/launchpad/Panels/ProfilePanel.php:373
 msgid "Password Changed"
 msgstr ""
 
-#: inc/launchpad/Panels/ProfilePanel.php:380
+#: inc/launchpad/Panels/ProfilePanel.php:376
 msgid "Your password has been changed successfully. You will need to log in again with your new password."
 msgstr ""
 
-#: inc/launchpad/Panels/ProfilePanel.php:403
+#: inc/launchpad/Panels/ProfilePanel.php:399
 msgid "Delete Account"
 msgstr ""
 
-#: inc/launchpad/Panels/ProfilePanel.php:406
+#: inc/launchpad/Panels/ProfilePanel.php:402
 msgid "This action is permanent and cannot be undone. All your personal data will be removed. Your published content will be preserved."
 msgstr ""
 
-#: inc/launchpad/Panels/ProfilePanel.php:415
+#: inc/launchpad/Panels/ProfilePanel.php:411
 msgid "Enter your password to confirm"
 msgstr ""
 
-#: inc/launchpad/Panels/ProfilePanel.php:446
+#: inc/launchpad/Panels/ProfilePanel.php:442
 msgid "Delete my account"
 msgstr ""
 
-#: inc/launchpad/Panels/ProfilePanel.php:449
+#: inc/launchpad/Panels/ProfilePanel.php:445
 msgid "Deleting..."
 msgstr ""
 
-#: inc/launchpad/Panels/ProfilePanel.php:470
+#: inc/launchpad/Panels/ProfilePanel.php:466
 msgid "Account Deleted"
 msgstr ""
 
-#: inc/launchpad/Panels/ProfilePanel.php:473
+#: inc/launchpad/Panels/ProfilePanel.php:469
 msgid "Your account has been successfully deleted. You will be redirected to the home page."
 msgstr ""
 
-#: inc/launchpad/Panels/ProfilePanel.php:480
+#: inc/launchpad/Panels/ProfilePanel.php:476
 msgid "OK"
 msgstr ""
 
@@ -1852,6 +1854,10 @@ msgstr ""
 
 #: template-parts/control-header-auth.php:61
 msgid "Cabinet"
+msgstr ""
+
+#: template-parts/control-header-auth.php:98
+msgid "You have new notifications, please check them in your personal account"
 msgstr ""
 
 #: template-parts/search-modal.php:11

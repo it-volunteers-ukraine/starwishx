@@ -95,6 +95,7 @@ $final_class = sprintf('%1$s %1$s--%2$s', $base_class, $btn['slug']);
         <span class="launchpad-tab__badge"
             data-wp-interactive="chat"
             data-wp-text="state.badgeText"
+            title="<?= esc_attr__('You have new notifications, please check them in your personal account', 'starwishx') ?>"
             data-wp-bind--hidden="!state.hasUnread"
             <?= $unread_count === 0 ? 'hidden' : '' ?>><?= esc_html($badge_text) ?></span>
     <?php endif; ?>
