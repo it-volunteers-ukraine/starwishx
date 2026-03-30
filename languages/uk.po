@@ -8,7 +8,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2026-02-25 10:47+0000\n"
-"PO-Revision-Date: 2026-03-29 07:08+0000\n"
+"PO-Revision-Date: 2026-03-30 09:48+0000\n"
 "Language: uk\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
@@ -47,7 +47,7 @@ msgstr "Додати відгук"
 #: template-parts/project-card-opportunity.php:33
 #: template-parts/project-card-opportunity.php:89
 msgid "Add to favorites"
-msgstr "Додати в обране"
+msgstr "Додати у обране"
 
 #: templates/single-opportunity.php:231
 msgid "Additional information"
