@@ -149,17 +149,20 @@ class ResultsGrid implements RenderableInterface
                     </div>
                     <a class="listing-card__title--link" data-wp-bind--href="context.item.url">
                         <h3 class="listing-card__title" data-wp-text="context.item.title"></h3>
+                        <!-- </a> -->
+                        <div class="listing-card__dates">
+                            <span data-wp-bind--hidden="!context.item.date_starts">
+                                <?php esc_html_e('From:', 'starwishx'); ?>
+                                <span data-wp-text="context.item.date_starts"></span>
+                            </span>
+                            <span data-wp-bind--hidden="!context.item.date_ends">
+                                <?php esc_html_e('To:', 'starwishx'); ?>
+                                <span data-wp-text="context.item.date_ends"></span>
+                            </span>
+                        </div>
+                        <!-- <a class="listing-card__excerpt--link" data-wp-bind--href="context.item.url"> -->
+                        <p class="listing-card__excerpt card-text" data-wp-text="context.item.excerpt"></p>
                     </a>
-                    <div class="listing-card__dates">
-                        <span data-wp-bind--hidden="!context.item.date_starts">
-                            <?php esc_html_e('From:', 'starwishx'); ?>
-                            <span data-wp-text="context.item.date_starts"></span>
-                        </span>
-                        <span data-wp-bind--hidden="!context.item.date_ends">
-                            <?php esc_html_e('To:', 'starwishx'); ?>
-                            <span data-wp-text="context.item.date_ends"></span>
-                        </span>
-                    </div>
                     <!-- <span>
                         < ?php esc_html_e('Donator', 'starwishx'); ?>:&nbsp;
                         <span class="company" data-wp-text="context.item.company"></span>
@@ -168,7 +171,6 @@ class ResultsGrid implements RenderableInterface
                         < ?php esc_html_e('Country', 'starwishx'); ?>:&nbsp;
                         <span class="country" data-wp-bind--hidden="!context.item.country" data-wp-text="context.item.country"></span>
                     </span> -->
-                    <p class="listing-card__excerpt card-text" data-wp-text="context.item.excerpt"></p>
                     <!-- <span data-wp-bind--hidden="!state.seekersList">
                         < ?php esc_html_e('Recievers', 'starwishx'); ?>:&nbsp;
                         <span data-wp-text="state.seekersList"></span>
@@ -194,7 +196,7 @@ class ResultsGrid implements RenderableInterface
                             <!-- <svg width="14" height="14" aria-hidden="true">
                                 <use href="< ?php echo get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-write"></use>
                             </svg> -->
-                            <span data-wp-text="context.item.commentCount"></span>
+                            <span class="listing-card__comments--count" data-wp-text="context.item.commentCount"></span>
                         </a>
                     </div>
                 </div> <!-- Meta -->
