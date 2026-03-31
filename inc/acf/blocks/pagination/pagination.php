@@ -82,8 +82,8 @@ $default_per_page_array_str = get_field('per_page_array_data');
 // echo 'btn_loading: ' . $btn_loading . '<br>';
 // echo 'default_per_page: ' . $default_per_page . '<br>';
 // echo 'default_per_page_array_str: ' . $default_per_page_array_str . '<br>';
-$default_per_page_array = 
-array_reverse(array_map('intval', explode(',', (string) $default_per_page_array_str)));
+$default_per_page_array =
+    array_reverse(array_map('intval', explode(',', (string) $default_per_page_array_str)));
 // echo '<pre>';
 // var_dump($default_per_page_array);
 // echo '</pre>';
@@ -101,7 +101,7 @@ $no_desc = false;
 $card_version = 1;
 // $no_desc = isset($_GET['nodesc']) ? filter_var($_GET['nodesc'], FILTER_VALIDATE_BOOLEAN) : false;
 
-if ($wp->request == 'search'){
+if ($wp->request == 'search') {
     $no_desc = true;
     $card_version = 2;
 }
@@ -112,7 +112,7 @@ $post_type = my_post_type();
 $arg_query = my_query_args_prepare([]);
 
 
-if ($category && $category_slug){
+if ($category && $category_slug) {
     // echo 'category_slug: ' . $category_slug . '<br>';
     $tax_query = [
         'taxonomy' => $category,
@@ -138,8 +138,7 @@ if ($category && $category_slug){
 // echo 'per_page: ' . $per_page . '<br>';
 // echo isset($test) ? '$test: ' . $test  . '<br>' : "";
 // -----------------------------
-
-$query = new WP_Query([
+$search_args = [
     'post_type'      => $post_type,
     'posts_per_page' => $per_page,
     's'              => $search_term,
@@ -148,7 +147,21 @@ $query = new WP_Query([
     'no_found_rows'  => false, // нужно для pagination
     // 'tax_query'      => [$tax_query],
     'tax_query'      => [$tax_query],
-]);
+];
+if (isset($search_args['s'])) {
+    $search_term = $search_args['s'];
+    $sainitized_search_term = sanitize_text_field($search_term);
+
+    if (strlen($sainitized_search_term) === 0) {
+        $search_args['post__in'] = [0]; // если строка поиска пустая, возвращаем пустой результат
+        // unset($args->s);
+    }
+} else {
+    $search_args['post__in'] = [0]; // если строка поиска пустая, возвращаем пустой результат
+
+}
+
+$query = new WP_Query($search_args);
 
 // echo '<pre>';
 // print_r($query);
@@ -156,8 +169,6 @@ $query = new WP_Query([
 
 $total_posts = (int) $query->found_posts;
 $total_pages = (int) ceil($total_posts / $per_page);
-// echo 'total_posts: ' . $total_posts . '<br>';
-// echo 'total_pages: ' . $total_pages . '<br>';
 
 ?>
 
@@ -216,8 +227,8 @@ $total_pages = (int) ceil($total_posts / $per_page);
             </div>
             <?php
             $load_next_page = $page < $total_pages ? $page + 1 : $total_pages;
-            $load_more_disabled = $total_pages && $page >= $total_pages ? $classes['link-disabled'] : '';
-            $load_more_hidden = $total_pages && $page >= $total_pages ? "display: none" : "";
+            $load_more_disabled = $total_pages > 0 && $page >= $total_pages ? $classes['link-disabled'] : '';
+            $load_more_hidden = $total_pages > 0  && $page >= $total_pages ? "display: none" : "";
 
             ?>
             <button
