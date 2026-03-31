@@ -131,6 +131,18 @@ if (!function_exists('pagination_url')) {
 if (!function_exists('my_query_search')) {
     function my_query_search($args)
     {
+        if (isset($args->s)) {
+            $search_term = $args->s;
+            $sainitized_search_term = sanitize_text_field($search_term);
+
+            if (strlen($sainitized_search_term) === 0) {
+                $args['post__in'] = [0]; // если строка поиска пустая, возвращаем пустой результат
+                unset($args->s);
+            }
+        } else {
+            $args['post__in'] = [0]; // если строка поиска пустая, возвращаем пустой результат
+
+        }
         // print_r($args);
         $query = new WP_Query($args);
 
