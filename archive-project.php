@@ -52,7 +52,13 @@ if (function_exists('render_block')) {
 <main class="archive-projects">
     <div class="container">
         <h1 class="h3 archive-projects__title"><?php esc_html_e('Projects', 'starwishx'); ?></h1>
-
+        <?php
+        $archive_description = get_the_archive_description();
+        if (! empty($archive_description)) : ?>
+            <div class="archive-projects__description">
+                <?= $archive_description; ?>
+            </div>
+        <?php endif; ?>
         <?php if (have_posts()) : ?>
             <div class="archive-projects__grid">
                 <?php while (have_posts()) : the_post();
