@@ -1749,8 +1749,10 @@
             border-radius: $radius-input;
             background-color: $surface-primary;
             padding: 4px 10px;
-            &:hover {
+            &:hover,
+            &:focus-visible {
                 background: $dropdown-surface-color-selected;
+                outline: none;
             }
             &:active,
             &:active:hover {
@@ -1762,6 +1764,16 @@
             }
         }
     }
+}
+
+// Custom styled select (country dropdown and similar)
+.launchpad-form select {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='%23666' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    padding-right: 36px;
+    cursor: pointer;
 }
 .input-iconed {
     display: inline-block; /* or width:100% if you want full width */

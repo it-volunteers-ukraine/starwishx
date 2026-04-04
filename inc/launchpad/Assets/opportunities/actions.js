@@ -646,6 +646,104 @@ export const opportunitiesActions = {
   },
 
   /**
+   * Close dropdown when focus leaves the wrapper entirely.
+   * Uses focusout + relatedTarget to detect if focus moved outside.
+   */
+  locationFocusout(event) {
+    const { state } = store("launchpad");
+    const wrapper = event.currentTarget;
+    // relatedTarget is where focus is going — if still inside wrapper, ignore
+    if (wrapper.contains(event.relatedTarget)) return;
+    // Small delay lets click handlers on <li> fire first
+    setTimeout(() => {
+      const p = state.panels.opportunities;
+      const input = wrapper.querySelector("input");
+      if (!input) return;
+      // Determine which results to clear by checking which input is in this wrapper
+      const val = input.getAttribute("data-wp-on--input") || "";
+      if (val.includes("Oblast")) {
+        p.formData.resultsOblast = [];
+      } else if (val.includes("Raion")) {
+        p.formData.resultsRaion = [];
+      } else if (val.includes("City")) {
+        p.formData.resultsCity = [];
+      }
+    }, 150);
+  },
+
+  /**
+   * Keyboard handler on the location search wrapper.
+   * Escape: close all dropdowns and return focus to input.
+   * ArrowDown: focus first result item.
+   */
+  locationKeydown(event) {
+    const { state } = store("launchpad");
+    const p = state.panels.opportunities;
+    const wrapper =
+      event.currentTarget.closest?.(".location-search-wrapper") ||
+      event.currentTarget;
+
+    if (event.key === "Escape") {
+      p.formData.resultsOblast = [];
+      p.formData.resultsRaion = [];
+      p.formData.resultsCity = [];
+      wrapper.querySelector("input")?.focus();
+      return;
+    }
+
+    if (event.key === "ArrowDown") {
+      event.preventDefault();
+      const first = wrapper.querySelector(".location-result-item");
+      if (first) first.focus();
+    }
+  },
+
+  /**
+   * Keyboard handler on individual location result items.
+   * Enter/Space: select via click (preserves Interactivity API context).
+   * ArrowDown/Up: navigate. Escape: close.
+   */
+  locationItemKeydown(event) {
+    const { actions } = store("launchpad");
+    const li = event.target.closest(".location-result-item");
+    if (!li) return;
+
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      // Delegate to click so getContext() resolves from the directive
+      li.click();
+      return;
+    }
+
+    if (event.key === "ArrowDown") {
+      event.preventDefault();
+      const next = li.nextElementSibling;
+      if (next) next.focus();
+      return;
+    }
+
+    if (event.key === "ArrowUp") {
+      event.preventDefault();
+      const prev = li.previousElementSibling;
+      if (prev) {
+        prev.focus();
+      } else {
+        li.closest(".location-search-wrapper")?.querySelector("input")?.focus();
+      }
+      return;
+    }
+
+    if (event.key === "Escape") {
+      const wrapper = li.closest(".location-search-wrapper");
+      if (wrapper) {
+        // Trigger the wrapper-level Escape handler via focus + clearing
+        wrapper.querySelector("input")?.focus();
+        actions.opportunities.locationKeydown(event);
+      }
+    }
+  },
+
+  /**
    * Simplified Open Date Picker
    * @param {Event} event - The native DOM event triggered by data-wp-on--click
    */

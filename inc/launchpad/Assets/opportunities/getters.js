@@ -293,4 +293,18 @@ export const opportunitiesGetters = {
     const e = p?.formData?.date_ends;
     return !!(s && e && s > e);
   },
+
+  // --- Location dropdown state (for aria-expanded + hidden binding) ---
+
+  get hasOblastResults() {
+    return !!this.panels.opportunities?.formData?.resultsOblast?.length;
+  },
+
+  get hasRaionResults() {
+    return !!this.panels.opportunities?.formData?.resultsRaion?.length;
+  },
+
+  get hasCityResults() {
+    return !!this.panels.opportunities?.formData?.resultsCity?.length;
+  },
 };
