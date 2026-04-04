@@ -706,7 +706,7 @@ class OpportunitiesPanel extends AbstractPanel
                                 <div class="form-field">
                                     <label class="<?php echo $required['opportunity_category'] ? 'label-required' : ''; ?>"><?php echo esc_html($labels['opportunity_category'] ?? __('Opportunity Category', 'starwishx')); ?></label>
                                     <!-- Hierarchical Checkboxes -->
-                                    <div class="category-group-container ">
+                                    <div class="category-group-container" data-field="category">
                                         <template data-wp-each="<?= $optPath ?>.categories">
                                             <div class="category-group">
                                                 <!-- Parent Category Name (Header) -->
@@ -735,7 +735,7 @@ class OpportunitiesPanel extends AbstractPanel
 
                                 <div class="form-field">
                                     <label class="<?php echo $required['opportunity_seekers'] ? 'label-required' : ''; ?>"><?php echo esc_html($labels['opportunity_seekers'] ?? __('Seekers', 'starwishx')); ?></label>
-                                    <div class="checkbox-group launchpad-grid-3-col">
+                                    <div class="checkbox-group launchpad-grid-3-col" data-field="seekers">
                                         <template data-wp-each="<?= $optPath ?>.seekers">
                                             <label class="launchpad-form__checkbox">
                                                 <input type="checkbox"
