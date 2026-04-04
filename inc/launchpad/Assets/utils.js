@@ -191,6 +191,32 @@ export function normalizeUrl(value) {
 }
 
 /**
+ * Validate a name field (mirrors backend ProfileService::validateNameField).
+ *
+ * Allowed: Unicode letters, spaces, hyphens, apostrophes (straight + curly), periods.
+ * Returns null if valid, or an error-message-key if invalid.
+ * Empty values are valid (fields are optional).
+ *
+ * @param {string|null|undefined} value
+ * @param {{ min?: number, max?: number }} limits
+ * @returns {string|null} Error key or null
+ */
+export function validateName(value, limits = {}) {
+  if (!value || !value.trim()) return null;
+  const t = value.trim();
+  const min = limits.min || 2;
+  const max = limits.max || 80;
+
+  if (t.length < min) return "nameMinLength";
+  if (t.length > max) return "nameMaxLength";
+  // Must contain at least one letter
+  if (!/\p{L}/u.test(t)) return "nameInvalid";
+  // Only allowed characters
+  if (!/^[\p{L}\s\-\u2019'.]+$/u.test(t)) return "nameInvalid";
+  return null;
+}
+
+/**
  * Utility: Safely merges source objects into a target object,
  * preserving Getters/Setters instead of evaluating them.
  *

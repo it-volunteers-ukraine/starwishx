@@ -8,7 +8,7 @@
  */
 
 import { getElement, store } from "@wordpress/interactivity";
-import { ensurePanel, fetchJson, normalizeUrl } from "../utils.js";
+import { ensurePanel, fetchJson, normalizeUrl, validateName } from "../utils.js";
 
 /** intlTelInput instance — survives across action calls */
 let itiInstance = null;
@@ -131,6 +131,9 @@ export const profileActions = {
       const p = ensurePanel(state, "profile");
       p[ref.dataset.field] = ref.type === "checkbox" ? ref.checked : ref.value;
 
+      // Clear field error on input (same pattern as opportunities updateForm)
+      if (p.fieldErrors?.[ref.dataset.field]) p.fieldErrors[ref.dataset.field] = null;
+
       // Recompute display name options when name-related fields change
       if (
         ["firstName", "lastName", "nickname", "organization"].includes(
@@ -153,6 +156,18 @@ export const profileActions = {
     const { state, actions } = store("launchpad");
     event.preventDefault();
     const p = ensurePanel(state, "profile");
+    p.fieldErrors = {};
+
+    // Validate name fields (optional but must be well-formed when provided)
+    const vm = p.validationMessages || {};
+    const nameLimits = p.nameLimits || {};
+    for (const field of ["firstName", "lastName"]) {
+      const err = validateName(p[field], nameLimits);
+      if (err) p.fieldErrors[field] = vm[err] || err;
+    }
+    if (Object.keys(p.fieldErrors).length) {
+      return;
+    }
 
     // Read phone from intlTelInput widget (or fallback to state)
     const phone = itiInstance ? itiInstance.getNumber() : p.phone;
@@ -228,6 +243,13 @@ export const profileActions = {
       window.history.replaceState({}, "", url);
       actions.syncStateFromUrl();
     } catch (error) {
+      // Map backend field_errors keys to translated messages
+      if (error.fieldErrors) {
+        const vm = p.validationMessages || {};
+        for (const [field, errKey] of Object.entries(error.fieldErrors)) {
+          p.fieldErrors[field] = vm[errKey] || errKey;
+        }
+      }
       p.error = error.message;
       setTimeout(() => {
         p.error = null;
