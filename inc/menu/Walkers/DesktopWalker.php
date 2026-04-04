@@ -43,14 +43,14 @@ class DesktopWalker extends \Walker_Nav_Menu
             $auth_attr = ' data-menu-auth data-wp-on--click="actions.handleAuthGate"';
         }
 
-        $output .= '<a href="' . esc_url($item->url) . '"' . $auth_attr . '>';
+        $output .= '<a class="submenu-link" href="' . esc_url($item->url) . '"' . $auth_attr . '>';
 
         if ($depth === 1) {
             $img_id = get_field('images', $item);
             if ($img_id) {
                 $url = wp_get_attachment_image_url($img_id, 'full');
                 $alt = get_post_meta($img_id, '_wp_attachment_image_alt', true);
-                $output .= '<img src="' . esc_url($url) . '" alt="' . esc_attr($alt) . '" class="submenu-bg-image">';
+                $output .= '<img src="' . esc_url($url) . '" alt="' . esc_attr($item->title) . '" class="submenu-bg-image">';
             }
         }
 
