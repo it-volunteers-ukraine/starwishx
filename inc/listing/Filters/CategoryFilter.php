@@ -77,7 +77,7 @@ class CategoryFilter extends AbstractTaxonomyFilter
                             data-wp-bind--checked="state.isFilterChecked"
                             data-field="category">
                         <span class="label-text" data-wp-text="context.item.label"></span>
-                        <data class="count" data-wp-text="context.item.count"></data>
+                        <data class="count" data-wp-text="callbacks.dynamicParentCount"></data>
                     </label>
                     <!-- Children Container -->
                     <div
