@@ -7,8 +7,13 @@
  * File: inc/launchpad/Assets/profile/actions.js
  */
 
-import { getElement, store } from "@wordpress/interactivity";
-import { ensurePanel, fetchJson, normalizeUrl, validateName } from "../utils.js";
+import { getElement, getContext, store } from "@wordpress/interactivity";
+import {
+  ensurePanel,
+  fetchJson,
+  normalizeUrl,
+  validateName,
+} from "../utils.js";
 
 /** intlTelInput instance — survives across action calls */
 let itiInstance = null;
@@ -87,6 +92,86 @@ export const profileActions = {
     }
   },
 
+  // ── Display Name custom dropdown ───────────────────────────────────
+
+  toggleDisplayNameDropdown() {
+    const { state } = store("launchpad");
+    const p = ensurePanel(state, "profile");
+    p.isDisplayNameDropdownOpen = !p.isDisplayNameDropdownOpen;
+  },
+
+  selectDisplayName() {
+    const { state } = store("launchpad");
+    const { item } = getContext();
+    const p = ensurePanel(state, "profile");
+    p.displayName = item;
+    p.isDisplayNameDropdownOpen = false;
+  },
+
+  displayNameFocusout(event) {
+    const { state } = store("launchpad");
+    const wrapper = event.currentTarget;
+    if (wrapper.contains(event.relatedTarget)) return;
+    ensurePanel(state, "profile").isDisplayNameDropdownOpen = false;
+  },
+
+  displayNameKeydown(event) {
+    const { state } = store("launchpad");
+    const p = ensurePanel(state, "profile");
+
+    if (event.key === "Escape") {
+      p.isDisplayNameDropdownOpen = false;
+      event.currentTarget.querySelector(".lp-dropdown__trigger")?.focus();
+      return;
+    }
+    if (event.key === "ArrowDown" && p.isDisplayNameDropdownOpen) {
+      if (event.target.closest(".lp-dropdown__item")) return;
+      event.preventDefault();
+      event.currentTarget.querySelector(".lp-dropdown__item")?.focus();
+    }
+  },
+
+  displayNameItemKeydown(event) {
+    const li = event.target.closest(".lp-dropdown__item");
+    if (!li) return;
+
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      li.click();
+      return;
+    }
+    if (event.key === "ArrowDown") {
+      event.preventDefault();
+      li.nextElementSibling?.focus();
+      return;
+    }
+    if (event.key === "ArrowUp") {
+      event.preventDefault();
+      const prev = li.previousElementSibling;
+      if (prev) {
+        prev.focus();
+      } else {
+        li.closest(".lp-dropdown")
+          ?.querySelector(".lp-dropdown__trigger")
+          ?.focus();
+      }
+      return;
+    }
+    if (event.key === "Escape") {
+      li.closest(".lp-dropdown")
+        ?.querySelector(".lp-dropdown__trigger")
+        ?.focus();
+    }
+  },
+
+  triggerKeydown(event) {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      this.toggleDisplayNameDropdown();
+    }
+  },
+  // ────────────────────────────────────────────────────────────────────
+
   /**
    * Enter edit mode for profile
    */
@@ -132,7 +217,8 @@ export const profileActions = {
       p[ref.dataset.field] = ref.type === "checkbox" ? ref.checked : ref.value;
 
       // Clear field error on input (same pattern as opportunities updateForm)
-      if (p.fieldErrors?.[ref.dataset.field]) p.fieldErrors[ref.dataset.field] = null;
+      if (p.fieldErrors?.[ref.dataset.field])
+        p.fieldErrors[ref.dataset.field] = null;
 
       // Recompute display name options when name-related fields change
       if (

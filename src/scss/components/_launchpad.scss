@@ -1766,14 +1766,100 @@
     }
 }
 
-// Custom styled select (country dropdown and similar)
-.launchpad-form select {
-    appearance: none;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='%23666' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right 12px center;
-    padding-right: 36px;
-    cursor: pointer;
+// Custom dropdown (replaces native <select>)
+.lp-dropdown {
+    position: relative;
+
+    &__trigger {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        transition: border-color $animations;
+        cursor: pointer;
+        border: 1px solid $input-color-border-filled;
+        border-radius: $radius-input;
+        background: $input-color-surface-default;
+        padding: 12px;
+        width: 100%;
+        color: $text-dark;
+        font-size: 1rem;
+        text-align: left;
+
+        &:focus {
+            outline: 2px solid $input-color-border-active;
+        }
+    }
+
+    &__placeholder {
+        color: $input-color-text-default;
+    }
+
+    &__chevron {
+        flex-shrink: 0;
+        transition: transform 0.2s ease;
+        margin-left: 8px;
+        width: 11px;
+        height: 7px;
+        fill: none;
+        stroke: #666;
+
+        .lp-dropdown--open & {
+            transform: rotate(180deg);
+        }
+    }
+
+    &__list {
+        position: absolute;
+        top: 100%;
+        right: 0;
+        left: 0;
+        z-index: 100;
+        margin: 4px 0 0;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        border: 1px solid $input-color-border-default;
+        border-radius: $radius-input;
+        background: $surface-primary;
+        padding: 8px;
+        padding-right: 12px;
+        max-height: 200px;
+        overflow-y: auto;
+        list-style: none;
+
+        &::-webkit-scrollbar {
+            display: block;
+            width: 6px;
+        }
+        &::-webkit-scrollbar-track {
+            background: $surface-violet;
+        }
+        &::-webkit-scrollbar-thumb {
+            border-right: none;
+            border-left: none;
+            border-radius: 4px;
+            background-color: $buttons-color-background-primary-disabled;
+        }
+    }
+
+    &__item {
+        transition: $animations;
+        cursor: pointer;
+        border-radius: $radius-input;
+        background-color: $surface-primary;
+        padding: 4px 10px;
+
+        &:hover,
+        &:focus-visible {
+            background: $dropdown-surface-color-selected;
+            outline: 1px solid $input-color-border-active;
+            outline-offset: 1px;
+        }
+        &:active {
+            background-color: $dropdown-surface-color-pressed;
+        }
+        &--selected {
+            font-weight: 600;
+        }
+    }
 }
 .input-iconed {
     display: inline-block; /* or width:100% if you want full width */
