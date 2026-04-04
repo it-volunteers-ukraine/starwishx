@@ -166,6 +166,12 @@ class CommentsService
         }
         $author_name = $user->display_name ?: $user->user_login;
 
+        // Prevent post author from self-reviewing (top-level comments).
+        // Replies are allowed — the canReply check below handles that path.
+        if ($parentId === 0 && $userId === (int) $post->post_author) {
+            return new WP_Error('self_review', __('You cannot review your own post.', 'starwishx'), ['status' => 403]);
+        }
+
         // Validation
         if ($parentId > 0) {
             $parentComm = get_comment($parentId);

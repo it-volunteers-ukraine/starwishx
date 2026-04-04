@@ -94,14 +94,20 @@ export const opportunitiesActions = {
     const file = event.target.files[0];
     if (!file) return;
 
-    // Simple Client Validation
+    const p = state.panels.opportunities;
+    const vm = p.validationMessages || {};
+
+    // Client-side size guard (backend enforces same limit in MediaService)
     if (file.size > 5 * 1024 * 1024) {
-      alert("File too large");
+      p.fieldErrors.document = vm.document;
+      event.target.value = "";
       return;
     }
 
+    // Clear previous document error on valid selection
+    if (p.fieldErrors?.document) p.fieldErrors.document = null;
+
     _pendingUploadFile = file;
-    const p = state.panels.opportunities;
 
     // UI Preview
     p.formData.document = {
@@ -121,6 +127,7 @@ export const opportunitiesActions = {
     _pendingUploadFile = null;
     p.formData.document = null;
     p.formData.document_id = 0; // 0 signals backend to delete existing
+    if (p.fieldErrors?.document) p.fieldErrors.document = null;
 
     const input = document.getElementById("opp-doc-upload");
     if (input) input.value = "";

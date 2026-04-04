@@ -33,9 +33,10 @@ export const commentsGetters = {
   },
 
   /**
-   * "Add review" button visible only on published posts and when form is closed.
+   * "Add review" button visible on published posts, when form is closed,
+   * and NOT for the post author (authors reply to reviews, not self-review).
    */
   get isAddReviewVisible() {
-    return this.canComment && !this.showForm;
+    return this.canComment && !this.showForm && !this.isPostAuthor;
   },
 };

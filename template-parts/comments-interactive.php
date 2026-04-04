@@ -23,12 +23,14 @@ $aggregates        = $service->getAggregates($post_id);
 
 // Application state — post-specific data. Infrastructure config (config, nonce, restUrl)
 // is already hydrated by CommentsCore::enqueueAssets() — wp_interactivity_state() merges.
-$post_status  = get_post_status($post_id);
-$has_ratings  = $aggregates['count'] > 0;
-$rounded_avg  = (int) round((float) $aggregates['avg']);
+$post_status    = get_post_status($post_id);
+$has_ratings    = $aggregates['count'] > 0;
+$rounded_avg    = (int) round((float) $aggregates['avg']);
+$is_post_author = get_current_user_id() === (int) get_post_field('post_author', $post_id);
 
 wp_interactivity_state('comments', [
     'canComment'     => $post_status === 'publish',
+    'isPostAuthor'   => $is_post_author,
     'list'           => $initial_comments,
     'aggregates'     => $aggregates,
     'page'           => 1,
