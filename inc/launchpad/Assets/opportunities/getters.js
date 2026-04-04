@@ -221,6 +221,20 @@ export const opportunitiesGetters = {
     return len > 0 && len < min;
   },
 
+  get isCompanyTooShort() {
+    const p = this.panels.opportunities;
+    const len = p?.formData?.company?.length || 0;
+    const min = p?.companyLimits?.min || 2;
+    return len > 0 && len < min;
+  },
+
+  get isDescriptionTooShort() {
+    const p = this.panels.opportunities;
+    const len = p?.formData?.description?.length || 0;
+    const min = p?.descriptionLimits?.min || 50;
+    return len > 0 && len < min;
+  },
+
   // --- Textarea character counters ---
 
   get descriptionCounterText() {
@@ -235,6 +249,10 @@ export const opportunitiesGetters = {
     const len = p?.formData?.description?.length || 0;
     const max = p?.textareaLimits?.description || 4000;
     return len >= max * 0.9;
+  },
+
+  get isDescriptionCounterWarn() {
+    return this.isDescriptionTooShort || this.isDescriptionNearLimit;
   },
 
   get requirementsCounterText() {

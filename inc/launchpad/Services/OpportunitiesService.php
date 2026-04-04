@@ -13,6 +13,9 @@ class OpportunitiesService
     public const TITLE_MIN_LENGTH = 30;
     public const TITLE_MAX_LENGTH = 108;
 
+    public const COMPANY_MIN_LENGTH     = 2;
+    public const DESCRIPTION_MIN_LENGTH = 50;
+
     /**
      * Translatable status labels for opportunity cards.
      */
@@ -615,13 +618,25 @@ class OpportunitiesService
                 self::TITLE_MAX_LENGTH
             );
         }
-        if (empty(trim($post->post_content))) {
+        $descLen = mb_strlen(trim($post->post_content));
+        if ($descLen === 0) {
             $errors['description'] = __('Description is required.', 'starwishx');
+        } elseif ($descLen < self::DESCRIPTION_MIN_LENGTH) {
+            $errors['description'] = sprintf(
+                __('Description must be at least %d characters.', 'starwishx'),
+                self::DESCRIPTION_MIN_LENGTH
+            );
         }
 
         // ACF fields
-        if (!get_field('opportunity_company', $postId)) {
+        $companyLen = mb_strlen(trim((string) get_field('opportunity_company', $postId)));
+        if ($companyLen === 0) {
             $errors['company'] = __('Company is required.', 'starwishx');
+        } elseif ($companyLen < self::COMPANY_MIN_LENGTH) {
+            $errors['company'] = sprintf(
+                __('Company must be at least %d characters.', 'starwishx'),
+                self::COMPANY_MIN_LENGTH
+            );
         }
         if (!get_field('opportunity_sourcelink', $postId)) {
             $errors['sourcelink'] = __('Source link is required.', 'starwishx');
