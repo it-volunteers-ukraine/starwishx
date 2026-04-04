@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-04-04T10:28:14+00:00\n"
+"POT-Creation-Date: 2026-04-04T10:48:43+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: starwishx\n"
@@ -292,7 +292,7 @@ msgstr ""
 #: inc/chat/Panels/ChatPanel.php:80
 #: inc/launchpad/Panels/FavoritesPanel.php:66
 #: inc/launchpad/Panels/OpportunitiesPanel.php:338
-#: template-parts/comments-interactive.php:392
+#: template-parts/comments-interactive.php:394
 msgid "Loading..."
 msgstr ""
 
@@ -337,26 +337,30 @@ msgid "Comments are only allowed on published posts."
 msgstr ""
 
 #: inc/comments/Services/CommentsService.php:172
+msgid "You cannot review your own post."
+msgstr ""
+
+#: inc/comments/Services/CommentsService.php:178
 msgid "Parent comment not found."
 msgstr ""
 
-#: inc/comments/Services/CommentsService.php:185
+#: inc/comments/Services/CommentsService.php:191
 msgid "You cannot reply to this thread."
 msgstr ""
 
-#: inc/comments/Services/CommentsService.php:201
+#: inc/comments/Services/CommentsService.php:207
 msgid "Failed to post comment."
 msgstr ""
 
-#: inc/comments/Services/CommentsService.php:240
+#: inc/comments/Services/CommentsService.php:246
 msgid "Comment not found."
 msgstr ""
 
-#: inc/comments/Services/CommentsService.php:243
+#: inc/comments/Services/CommentsService.php:249
 msgid "You cannot edit this comment."
 msgstr ""
 
-#: inc/comments/Services/CommentsService.php:251
+#: inc/comments/Services/CommentsService.php:257
 msgid "Edit time limit expired (15 min)."
 msgstr ""
 
@@ -926,8 +930,8 @@ msgid "Submit for Review"
 msgstr ""
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:455
-#: template-parts/comments-interactive.php:206
-#: template-parts/comments-interactive.php:299
+#: template-parts/comments-interactive.php:208
+#: template-parts/comments-interactive.php:301
 msgid "Edit"
 msgstr ""
 
@@ -1084,10 +1088,10 @@ msgstr ""
 #: inc/launchpad/Panels/ProfilePanel.php:278
 #: inc/launchpad/Panels/ProfilePanel.php:358
 #: inc/launchpad/Panels/ProfilePanel.php:450
-#: template-parts/comments-interactive.php:136
-#: template-parts/comments-interactive.php:249
-#: template-parts/comments-interactive.php:326
-#: template-parts/comments-interactive.php:364
+#: template-parts/comments-interactive.php:138
+#: template-parts/comments-interactive.php:251
+#: template-parts/comments-interactive.php:328
+#: template-parts/comments-interactive.php:366
 msgid "Cancel"
 msgstr ""
 
@@ -1170,8 +1174,8 @@ msgid "Get notified by email when someone comments on your content."
 msgstr ""
 
 #: inc/launchpad/Panels/ProfilePanel.php:270
-#: template-parts/comments-interactive.php:253
-#: template-parts/comments-interactive.php:330
+#: template-parts/comments-interactive.php:255
+#: template-parts/comments-interactive.php:332
 msgid "Save"
 msgstr ""
 
@@ -1308,8 +1312,8 @@ msgid "Contributor"
 msgstr ""
 
 #: inc/launchpad/Services/ProfileService.php:20
-#: template-parts/comments-interactive.php:178
-#: template-parts/comments-interactive.php:281
+#: template-parts/comments-interactive.php:180
+#: template-parts/comments-interactive.php:283
 msgid "Author"
 msgstr ""
 
@@ -1748,61 +1752,61 @@ msgstr ""
 msgid "Contact Us"
 msgstr ""
 
-#: template-parts/comments-interactive.php:59
+#: template-parts/comments-interactive.php:61
 msgid "Reviews"
 msgstr ""
 
-#: template-parts/comments-interactive.php:87
+#: template-parts/comments-interactive.php:89
 msgid "Add review"
 msgstr ""
 
-#: template-parts/comments-interactive.php:91
+#: template-parts/comments-interactive.php:93
 msgid "Enter to comment"
 msgstr ""
 
-#: template-parts/comments-interactive.php:112
+#: template-parts/comments-interactive.php:114
 msgid "Your Rating:"
 msgstr ""
 
-#: template-parts/comments-interactive.php:129
+#: template-parts/comments-interactive.php:131
 msgid "Write your review here..."
 msgstr ""
 
-#: template-parts/comments-interactive.php:139
+#: template-parts/comments-interactive.php:141
 #: template-parts/contact-section.php:345
 msgid "Send"
 msgstr ""
 
-#: template-parts/comments-interactive.php:140
-#: template-parts/comments-interactive.php:374
+#: template-parts/comments-interactive.php:142
+#: template-parts/comments-interactive.php:376
 #: template-parts/contact-section.php:348
 msgid "Sending..."
 msgstr ""
 
-#: template-parts/comments-interactive.php:148
+#: template-parts/comments-interactive.php:150
 msgid "Publishing..."
 msgstr ""
 
-#: template-parts/comments-interactive.php:165
+#: template-parts/comments-interactive.php:167
 msgid "No comments yet."
 msgstr ""
 
-#: template-parts/comments-interactive.php:212
-#: template-parts/comments-interactive.php:304
-#: template-parts/comments-interactive.php:367
+#: template-parts/comments-interactive.php:214
+#: template-parts/comments-interactive.php:306
+#: template-parts/comments-interactive.php:369
 msgid "Reply"
 msgstr ""
 
-#: template-parts/comments-interactive.php:261
-#: template-parts/comments-interactive.php:337
+#: template-parts/comments-interactive.php:263
+#: template-parts/comments-interactive.php:339
 msgid "Updating..."
 msgstr ""
 
-#: template-parts/comments-interactive.php:358
+#: template-parts/comments-interactive.php:360
 msgid "Write a reply..."
 msgstr ""
 
-#: template-parts/comments-interactive.php:391
+#: template-parts/comments-interactive.php:393
 msgid "Show more"
 msgstr ""
 
