@@ -9,6 +9,44 @@ use WP_Error;
 
 class ProfileService
 {
+    public const NAME_MIN_LENGTH = 2;
+    public const NAME_MAX_LENGTH = 80;
+
+    /**
+     * Allowed characters in name fields: Unicode letters, spaces, hyphens,
+     * apostrophes (straight + curly), and periods.
+     */
+    public const NAME_PATTERN = '/^[\p{L}\s\-\x{2019}\'.]+$/u';
+
+    /**
+     * Validate a name field value. Returns null if valid, or error key if invalid.
+     * Empty values are valid (fields are optional).
+     */
+    public static function validateNameField(string $value): ?string
+    {
+        $trimmed = trim($value);
+        if ($trimmed === '') {
+            return null; // optional — empty is OK
+        }
+
+        $len = mb_strlen($trimmed);
+        if ($len < self::NAME_MIN_LENGTH) {
+            return 'nameMinLength';
+        }
+        if ($len > self::NAME_MAX_LENGTH) {
+            return 'nameMaxLength';
+        }
+        // Must contain at least one letter (reject pure punctuation like "---")
+        if (!preg_match('/\p{L}/u', $trimmed)) {
+            return 'nameInvalid';
+        }
+        if (!preg_match(self::NAME_PATTERN, $trimmed)) {
+            return 'nameInvalid';
+        }
+
+        return null;
+    }
+
     /**
      * Translatable role labels for Launchpad users.
      */
@@ -140,6 +178,24 @@ class ProfileService
      */
     public function updateProfile(int $userId, array $data): array|WP_Error
     {
+        // 0. Validate name fields before persisting
+        $fieldErrors = [];
+        foreach (['firstName', 'lastName'] as $nameField) {
+            if (isset($data[$nameField])) {
+                $err = self::validateNameField($data[$nameField]);
+                if ($err) {
+                    $fieldErrors[$nameField] = $err;
+                }
+            }
+        }
+        if (!empty($fieldErrors)) {
+            return new WP_Error(
+                'invalid_data',
+                __('Please correct the highlighted fields.', 'starwishx'),
+                ['status' => 422, 'field_errors' => $fieldErrors]
+            );
+        }
+
         // 1. Update Core WP User Data
         $coreArgs = ['ID' => $userId];
         $hasCoreUpdate = false;

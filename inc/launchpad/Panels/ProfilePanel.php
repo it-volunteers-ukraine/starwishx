@@ -47,6 +47,22 @@ class ProfilePanel extends AbstractPanel
         return array_merge($data, [
             'isEditing'          => ($view === 'profile'),
             'isChangingPassword' => ($view === 'password'),
+            'fieldErrors'        => (object) [],
+            'nameLimits'         => [
+                'min' => ProfileService::NAME_MIN_LENGTH,
+                'max' => ProfileService::NAME_MAX_LENGTH,
+            ],
+            'validationMessages' => [
+                'nameInvalid'   => __('Only letters, spaces, hyphens, and apostrophes allowed.', 'starwishx'),
+                'nameMinLength' => sprintf(
+                    __('Must be at least %d characters.', 'starwishx'),
+                    ProfileService::NAME_MIN_LENGTH
+                ),
+                'nameMaxLength' => sprintf(
+                    __('Must not exceed %d characters.', 'starwishx'),
+                    ProfileService::NAME_MAX_LENGTH
+                ),
+            ],
             'passwordData'       => [
                 'current' => '',
                 'new'     => '',
@@ -156,8 +172,12 @@ class ProfilePanel extends AbstractPanel
                     <div class="form-field">
                         <label class="label-required" for="lp-first-name"><?= esc_html__('First Name', 'starwishx'); ?></label>
                         <input type="text" id="lp-first-name" data-field="firstName"
+                            maxlength="<?= ProfileService::NAME_MAX_LENGTH ?>"
                             data-wp-bind--value="<?= $this->statePath('firstName') ?>"
                             data-wp-on--input="actions.profile.updateField" />
+                        <label class="exclamation-circle__error" hidden
+                            data-wp-bind--hidden="!<?= $this->statePath('fieldErrors') ?>.firstName"
+                            data-wp-text="<?= $this->statePath('fieldErrors') ?>.firstName"></label>
                     </div>
                     <!-- Phone field: intlTelInput widget owns this input -->
                     <div class="form-field form-field--phone">
@@ -190,6 +210,30 @@ class ProfilePanel extends AbstractPanel
                     data-wp-bind--hidden="!<?= $this->statePath('isFormExpanded') ?>">
                     <div class="form-group-card1 launchpad-grid-auto">
                         <div class="form-field">
+                            <label for="lp-last-name"><?= esc_html__('Last Name', 'starwishx'); ?></label>
+                            <input type="text" id="lp-last-name" data-field="lastName"
+                                maxlength="<?= ProfileService::NAME_MAX_LENGTH ?>"
+                                data-wp-bind--value="<?= $this->statePath('lastName') ?>"
+                                data-wp-on--input="actions.profile.updateField" />
+                            <label class="exclamation-circle__error" hidden
+                                data-wp-bind--hidden="!<?= $this->statePath('fieldErrors') ?>.lastName"
+                                data-wp-text="<?= $this->statePath('fieldErrors') ?>.lastName"></label>
+                        </div>
+                        <!-- // temporary hidden -->
+                        <!-- <div class="form-field">
+                            <label for="lp-nickname">< ?= esc_html__('Nickname', 'starwishx'); ?></label>
+                            <input type="text" id="lp-nickname" data-field="nickname"
+                                data-wp-bind--value="< ?= $this->statePath('nickname') ?>"
+                                data-wp-on--input="actions.profile.updateField" />
+                        </div> -->
+                        <div class="form-field">
+                            <label for="lp-organization"><?= esc_html__('Organization', 'starwishx'); ?></label>
+                            <input type="text" id="lp-organization" data-field="organization"
+                                data-wp-bind--value="<?= $this->statePath('organization') ?>"
+                                data-wp-on--input="actions.profile.updateField" />
+                        </div>
+
+                        <div class="form-field">
                             <label for="lp-display-name"><?= esc_html__('Display name publicly as', 'starwishx'); ?></label>
                             <select id="lp-display-name" data-field="displayName"
                                 data-wp-bind--value="<?= $this->statePath('displayName') ?>"
@@ -199,19 +243,7 @@ class ProfilePanel extends AbstractPanel
                                 </template>
                             </select>
                         </div>
-                        <div class="form-field">
-                            <label for="lp-last-name"><?= esc_html__('Last Name', 'starwishx'); ?></label>
-                            <input type="text" id="lp-last-name" data-field="lastName"
-                                data-wp-bind--value="<?= $this->statePath('lastName') ?>"
-                                data-wp-on--input="actions.profile.updateField" />
-                        </div>
-                        <!-- // temporary hidden -->
-                        <!-- <div class="form-field">
-                            <label for="lp-nickname">< ?= esc_html__('Nickname', 'starwishx'); ?></label>
-                            <input type="text" id="lp-nickname" data-field="nickname"
-                                data-wp-bind--value="< ?= $this->statePath('nickname') ?>"
-                                data-wp-on--input="actions.profile.updateField" />
-                        </div> -->
+
                     </div>
 
                     <div class="launchpad-grid-auto">
@@ -222,12 +254,6 @@ class ProfilePanel extends AbstractPanel
                                 data-wp-on--input="actions.profile.updateField" />
                         </div>
 
-                        <div class="form-field">
-                            <label for="lp-organization"><?= esc_html__('Organization', 'starwishx'); ?></label>
-                            <input type="text" id="lp-organization" data-field="organization"
-                                data-wp-bind--value="<?= $this->statePath('organization') ?>"
-                                data-wp-on--input="actions.profile.updateField" />
-                        </div>
                         <div class="form-field">
                             <label for="lp-user-url"><?= esc_html__('Website', 'starwishx'); ?></label>
                             <input type="url" id="lp-user-url" data-field="userUrl"
