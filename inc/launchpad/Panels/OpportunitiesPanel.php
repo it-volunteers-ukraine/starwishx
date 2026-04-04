@@ -141,6 +141,7 @@ class OpportunitiesPanel extends AbstractPanel
                 'category'    => __('At least one category is required.', 'starwishx'),
                 'seekers'     => __('At least one seeker type is required.', 'starwishx'),
                 'dateRange'   => __('End date cannot be before start date.', 'starwishx'),
+                'document'    => __('File is too large. Max 5MB.', 'starwishx'),
             ],
             'confirmPopup' => [
                 'isOpen'  => false,
@@ -873,6 +874,9 @@ class OpportunitiesPanel extends AbstractPanel
                                     <label>
                                         <?php esc_html_e('Format (PDF, DOCX). Max size 5Mb.', 'starwishx'); ?>
                                     </label>
+                                    <label class="exclamation-circle__error" hidden
+                                        data-wp-bind--hidden="!<?= $errPath ?>.document"
+                                        data-wp-text="<?= $errPath ?>.document"></label>
                                 </div>
                             </div>
                         </div>
