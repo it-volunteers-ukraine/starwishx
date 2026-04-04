@@ -54,6 +54,34 @@ final class InputSanitizer
     }
 
     /**
+     * Sanitize a URL field intended for web links (http/https only).
+     *
+     * - Auto-prepends https:// when the input has no scheme
+     * - Rejects non-http(s) schemes (ftp, mailto, javascript, data, file…)
+     * - Delegates final cleaning to WordPress esc_url_raw()
+     *
+     * Used as REST API sanitize_callback for sourcelink, application_form, userUrl.
+     */
+    public static function sanitizeUrl(?string $input): string
+    {
+        if ($input === null || trim($input) === '') {
+            return '';
+        }
+
+        $url = trim($input);
+
+        // If no scheme is present, assume https.
+        // Matches "letters:" — covers http:, https:, ftp:, mailto:, javascript:, data:, etc.
+        if (!preg_match('#^[a-zA-Z][a-zA-Z0-9+.-]*:#', $url)) {
+            $url = 'https://' . $url;
+        }
+
+        // Delegate to WordPress core, restricted to web protocols.
+        // esc_url_raw returns '' for disallowed schemes.
+        return esc_url_raw($url, ['http', 'https']);
+    }
+
+    /**
      * Sanitize a single-line text value.
      *
      * Accepts ?string so callers can pass get_field() / get_post_meta() results

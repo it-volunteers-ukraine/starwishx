@@ -164,6 +164,33 @@ export async function fetchJson(
 }
 
 /**
+ * Normalize a URL field value (mirrors backend InputSanitizer::sanitizeUrl).
+ *
+ * - Auto-prepends https:// when no scheme is present
+ * - Rejects non-http(s) schemes (ftp, mailto, javascript, data, file…)
+ * - Returns "" for invalid input so required-field checks catch it
+ *
+ * @param {string|null|undefined} value Raw field value
+ * @returns {string} Normalized URL or ""
+ */
+export function normalizeUrl(value) {
+  if (!value || !value.trim()) return "";
+  let url = value.trim();
+
+  // No scheme at all → assume https
+  if (!/^[a-zA-Z][a-zA-Z0-9+.-]*:/.test(url)) {
+    url = "https://" + url;
+  }
+
+  // Only allow http/https — reject everything else
+  if (!/^https?:\/\//i.test(url)) {
+    return "";
+  }
+
+  return url;
+}
+
+/**
  * Utility: Safely merges source objects into a target object,
  * preserving Getters/Setters instead of evaluating them.
  *

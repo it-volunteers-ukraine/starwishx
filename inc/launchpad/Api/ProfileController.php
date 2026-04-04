@@ -6,6 +6,7 @@ declare(strict_types=1);
 namespace Launchpad\Api;
 
 use Launchpad\Services\ProfileService;
+use Shared\Sanitize\InputSanitizer;
 use WP_REST_Request;
 use WP_REST_Response;
 use WP_Error;
@@ -38,7 +39,7 @@ class ProfileController extends AbstractLaunchpadController
                 // Core WP fields
                 'nickname'    => ['sanitize_callback' => 'sanitize_text_field'],
                 'displayName' => ['sanitize_callback' => 'sanitize_text_field'],
-                'userUrl'     => ['sanitize_callback' => 'esc_url_raw'],
+                'userUrl'     => ['sanitize_callback' => [InputSanitizer::class, 'sanitizeUrl']],
                 'description' => ['sanitize_callback' => 'sanitize_textarea_field'],
                 // Additional ACF Fields
                 'phone'        => ['sanitize_callback' => 'sanitize_text_field'],

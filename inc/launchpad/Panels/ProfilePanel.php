@@ -232,7 +232,8 @@ class ProfilePanel extends AbstractPanel
                             <label for="lp-user-url"><?= esc_html__('Website', 'starwishx'); ?></label>
                             <input type="url" id="lp-user-url" data-field="userUrl"
                                 data-wp-bind--value="<?= $this->statePath('userUrl') ?>"
-                                data-wp-on--input="actions.profile.updateField" />
+                                data-wp-on--input="actions.profile.updateField"
+                                data-wp-on--blur="actions.profile.normalizeUrlField" />
                         </div>
 
                     </div>
