@@ -106,6 +106,42 @@ store("listing", {
     },
   },
   callbacks: {
+    /**
+     * Dynamic parent count: when some children are selected, computes the
+     * deduplicated post count across only the selected children's postId
+     * sets (Set union). Falls back to server-provided total otherwise.
+     */
+    dynamicParentCount: () => {
+      const { state } = store("listing");
+      const context = getContext();
+      const item = context?.item;
+
+      if (!item || !item.children?.length) return item?.count ?? 0;
+
+      const selected = state.query.category || [];
+      if (selected.length === 0) return item.count;
+
+      // Parent selected → means "all children" → show total
+      if (selected.includes(item.id)) return item.count;
+
+      // Find which children of THIS parent are selected
+      const selectedChildren = item.children.filter((c) =>
+        selected.includes(c.id),
+      );
+      if (selectedChildren.length === 0) return item.count;
+
+      // Deduplicated union of selected children's post IDs
+      const unique = new Set();
+      for (const child of selectedChildren) {
+        if (child.postIds) {
+          for (const id of child.postIds) {
+            unique.add(id);
+          }
+        }
+      }
+      return unique.size;
+    },
+
     isParentExpanded: () => {
       const { state } = store("listing");
       const context = getContext();
