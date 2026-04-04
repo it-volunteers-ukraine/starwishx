@@ -47,6 +47,7 @@
   .header-cabinet-btn,
   .header-login-btn {
     display: inline-flex;
+    position: relative;
     justify-content: center;
     align-items: center;
     transition: background-color 0.2s ease;
@@ -54,7 +55,6 @@
     background: $buttons-color-background-primary-default;
     padding-right: 18px;
     padding-left: 18px;
-    position: relative;
     height: 44px; // width: 105px;
     color: $buttons-color-text-primary-default;
     font-size: 18px;
@@ -64,10 +64,10 @@
     }
 
     .launchpad-tab__badge {
+      display: flex;
       position: absolute;
       top: -6px;
       right: 3px;
-      display: flex;
       justify-content: center;
       align-items: center;
     }
@@ -173,8 +173,8 @@
 
 .header .sub-menu li .submenu-bg-image {
   position: absolute;
-  left: 0;
   transition: opacity 0.3s;
+  inset: 0;
 }
 
 .header .sub-menu li .submenu-text {
@@ -542,6 +542,7 @@
   .logout-button-mobile,
   .login-button-mobile {
     display: flex;
+    position: relative;
     justify-content: center;
     align-items: center;
     margin-top: 10px;
@@ -552,13 +553,12 @@
     height: 44px;
     color: $buttons-color-text-primary-default;
     line-height: 1.2;
-    position: relative;
 
     .launchpad-tab__badge {
+      display: flex;
       position: absolute;
       top: -6px;
       right: 3px;
-      display: flex;
       justify-content: center;
       align-items: center;
     }
