@@ -1786,8 +1786,7 @@
         text-align: left;
 
         &:focus {
-            border-color: $input-color-border-active;
-            outline: none;
+            outline: 2px solid $input-color-border-active;
         }
     }
 
@@ -1851,7 +1850,8 @@
         &:hover,
         &:focus-visible {
             background: $dropdown-surface-color-selected;
-            outline: none;
+            outline: 1px solid $input-color-border-active;
+            outline-offset: 1px;
         }
         &:active {
             background-color: $dropdown-surface-color-pressed;

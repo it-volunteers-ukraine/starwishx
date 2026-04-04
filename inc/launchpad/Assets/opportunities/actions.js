@@ -531,6 +531,7 @@ export const opportunitiesActions = {
       return;
     }
     if (event.key === "ArrowDown" && p.isCountryDropdownOpen) {
+      if (event.target.closest(".lp-dropdown__item")) return;
       event.preventDefault();
       event.currentTarget.querySelector(".lp-dropdown__item")?.focus();
     }
@@ -767,6 +768,7 @@ export const opportunitiesActions = {
     }
 
     if (event.key === "ArrowDown") {
+      if (event.target.closest(".location-result-item")) return;
       event.preventDefault();
       const first = wrapper.querySelector(".location-result-item");
       if (first) first.focus();

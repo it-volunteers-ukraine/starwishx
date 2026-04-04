@@ -125,6 +125,7 @@ export const profileActions = {
       return;
     }
     if (event.key === "ArrowDown" && p.isDisplayNameDropdownOpen) {
+      if (event.target.closest(".lp-dropdown__item")) return;
       event.preventDefault();
       event.currentTarget.querySelector(".lp-dropdown__item")?.focus();
     }
