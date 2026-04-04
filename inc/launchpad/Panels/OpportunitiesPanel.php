@@ -565,7 +565,7 @@ class OpportunitiesPanel extends AbstractPanel
                                         <input id="opportunity-sourcelink" type="url"
                                             <?php echo $required['opportunity_sourcelink'] ? 'required' : ''; ?>
                                             placeholder="<?php echo esc_attr($placeholders['opportunity_sourcelink'] ?? ''); ?>"
-                                            data-wp-bind--value="<?= $formPath ?>.sourcelink" data-wp-on--input="actions.opportunities.updateForm" data-field="sourcelink">
+                                            data-wp-bind--value="<?= $formPath ?>.sourcelink" data-wp-on--input="actions.opportunities.updateForm" data-wp-on--blur="actions.opportunities.normalizeUrlField" data-field="sourcelink">
                                         <label class="exclamation-circle__error" hidden
                                             data-wp-bind--hidden="!<?= $errPath ?>.sourcelink"
                                             data-wp-text="<?= $errPath ?>.sourcelink"></label>
@@ -575,7 +575,7 @@ class OpportunitiesPanel extends AbstractPanel
                                         <input type="url"
                                             <?php echo $required['opportunity_application_form'] ? 'required' : ''; ?>
                                             placeholder="<?php echo esc_attr($placeholders['opportunity_application_form'] ?? ''); ?>"
-                                            data-wp-bind--value="<?= $formPath ?>.application_form" data-wp-on--input="actions.opportunities.updateForm" data-field="application_form">
+                                            data-wp-bind--value="<?= $formPath ?>.application_form" data-wp-on--input="actions.opportunities.updateForm" data-wp-on--blur="actions.opportunities.normalizeUrlField" data-field="application_form">
                                     </div>
                                     <!-- Country Select -->
                                     <div class="form-field">

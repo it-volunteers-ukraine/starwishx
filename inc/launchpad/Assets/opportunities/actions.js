@@ -8,7 +8,7 @@
  */
 
 import { getElement, getContext, store } from "@wordpress/interactivity"; // Import store
-import { deepClone, ensurePanel, fetchJson } from "../utils.js";
+import { deepClone, ensurePanel, fetchJson, normalizeUrl } from "../utils.js";
 
 let locationSearchTimeout = null;
 let _pendingUploadFile = null;
@@ -154,6 +154,10 @@ export const opportunitiesActions = {
     p.isSaving = true;
     p.error = null;
     p.fieldErrors = {};
+
+    // Normalize URL fields before validation (mirrors backend sanitizeUrl)
+    p.formData.sourcelink = normalizeUrl(p.formData.sourcelink);
+    p.formData.application_form = normalizeUrl(p.formData.application_form);
 
     // Client-side required field check (messages from PHP state)
     const vm = p.validationMessages || {};
@@ -337,6 +341,21 @@ export const opportunitiesActions = {
           p.fieldErrors.date_ends = null;
         }
       }
+    }
+  },
+
+  /**
+   * Normalize URL fields on blur.
+   * Auto-prepends https://, rejects non-http(s) schemes.
+   * Mirrors backend InputSanitizer::sanitizeUrl().
+   */
+  normalizeUrlField() {
+    const { state } = store("launchpad");
+    const { ref } = getElement();
+    const p = state.panels.opportunities;
+    const field = ref.dataset.field;
+    if (field && p.formData?.[field] !== undefined) {
+      p.formData[field] = normalizeUrl(p.formData[field]);
     }
   },
 

@@ -8,7 +8,7 @@
  */
 
 import { getElement, store } from "@wordpress/interactivity";
-import { ensurePanel, fetchJson } from "../utils.js";
+import { ensurePanel, fetchJson, normalizeUrl } from "../utils.js";
 
 /** intlTelInput instance — survives across action calls */
 let itiInstance = null;
@@ -72,6 +72,19 @@ export const profileActions = {
     const { state } = store("launchpad");
     const p = ensurePanel(state, "profile");
     p.isFormExpanded = !p.isFormExpanded;
+  },
+
+  /**
+   * Normalize URL fields on blur (mirrors backend InputSanitizer::sanitizeUrl).
+   */
+  normalizeUrlField() {
+    const { state } = store("launchpad");
+    const { ref } = getElement();
+    const field = ref.dataset.field;
+    const p = ensurePanel(state, "profile");
+    if (field && p[field] !== undefined) {
+      p[field] = normalizeUrl(p[field]);
+    }
   },
 
   /**
@@ -158,6 +171,9 @@ export const profileActions = {
       }, 5000);
       return;
     }
+
+    // Normalize URL field before sending (mirrors backend sanitizeUrl)
+    p.userUrl = normalizeUrl(p.userUrl);
 
     p.isSaving = true;
 

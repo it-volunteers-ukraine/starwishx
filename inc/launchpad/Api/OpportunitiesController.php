@@ -7,6 +7,7 @@ namespace Launchpad\Api;
 
 use Launchpad\Services\OpportunitiesService;
 use Launchpad\Services\ProfileService;
+use Shared\Sanitize\InputSanitizer;
 use WP_REST_Request;
 use WP_REST_Response;
 use WP_Error;
@@ -78,7 +79,7 @@ class OpportunitiesController extends AbstractLaunchpadController
                 ],
             ],
             'city'            => ['sanitize_callback' => 'sanitize_text_field'],
-            'sourcelink'      => ['sanitize_callback' => 'esc_url_raw'],
+            'sourcelink'      => ['sanitize_callback' => [InputSanitizer::class, 'sanitizeUrl']],
             'seekers'         => ['type' => 'array', 'items' => ['type' => 'integer']],
             'description'     => [
                 'required'          => true,
@@ -109,7 +110,7 @@ class OpportunitiesController extends AbstractLaunchpadController
             ],
             'application_form' => [
                 'required'          => false,
-                'sanitize_callback' => 'esc_url_raw',
+                'sanitize_callback' => [InputSanitizer::class, 'sanitizeUrl'],
             ],
         ];
 
