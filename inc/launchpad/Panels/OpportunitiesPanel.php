@@ -641,24 +641,32 @@ class OpportunitiesPanel extends AbstractPanel
                                     <div class="launchpad-grid-3-col">
 
                                         <!-- BOX 1: OBLAST -->
-                                        <div class="location-input-wrapper location-search-wrapper">
+                                        <div class="location-input-wrapper location-search-wrapper"
+                                            data-wp-on--focusout="actions.opportunities.locationFocusout"
+                                            data-wp-on--keydown="actions.opportunities.locationKeydown">
                                             <label><?php esc_html_e('if opportynity for Oblast', 'starwishx'); ?></label>
                                             <div class="input-iconed">
                                                 <input type="text"
                                                     placeholder="<?php esc_attr_e('Kyivska, Lvivska...', 'starwishx'); ?>"
                                                     data-wp-bind--value="state.panels.opportunities.formData.searchOblast"
                                                     data-wp-on--input="actions.opportunities.searchKatottgOblast"
+                                                    role="combobox"
+                                                    aria-autocomplete="list"
+                                                    data-wp-bind--aria-expanded="state.hasOblastResults"
                                                     autocomplete="off">
                                                 <svg class="">
                                                     <use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-search-small"></use>
                                                 </svg>
                                             </div>
 
-                                            <ul class="location-results location-dropdown" data-wp-bind--hidden="!state.panels.opportunities.formData.resultsOblast.length">
+                                            <ul class="location-results location-dropdown" role="listbox"
+                                                data-wp-bind--hidden="!state.hasOblastResults">
                                                 <template data-wp-each="state.panels.opportunities.formData.resultsOblast">
-                                                    <li class="location-result-item" data-wp-on--click="actions.opportunities.addLocation"
+                                                    <li class="location-result-item"
+                                                        data-wp-on--click="actions.opportunities.addLocation"
+                                                        data-wp-on--keydown="actions.opportunities.locationItemKeydown"
                                                         tabindex="0"
-                                                        role="button">
+                                                        role="option">
                                                         <span data-wp-text="context.item.name"></span>
                                                     </li>
                                                 </template>
@@ -666,50 +674,64 @@ class OpportunitiesPanel extends AbstractPanel
                                         </div>
 
                                         <!-- BOX 2: RAION -->
-                                        <div class="location-input-wrapper location-search-wrapper">
+                                        <div class="location-input-wrapper location-search-wrapper"
+                                            data-wp-on--focusout="actions.opportunities.locationFocusout"
+                                            data-wp-on--keydown="actions.opportunities.locationKeydown">
                                             <label><?php esc_html_e('if for Raion, District, Hromada', 'starwishx'); ?></label>
                                             <div class="input-iconed">
                                                 <input type="text"
                                                     placeholder="<?php esc_attr_e('Buchanskyi r-n, Dolynska tg..', 'starwishx'); ?>"
                                                     data-wp-bind--value="state.panels.opportunities.formData.searchRaion"
                                                     data-wp-on--input="actions.opportunities.searchKatottgRaion"
+                                                    role="combobox"
+                                                    aria-autocomplete="list"
+                                                    data-wp-bind--aria-expanded="state.hasRaionResults"
                                                     autocomplete="off">
                                                 <svg class="">
                                                     <use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-search-small"></use>
                                                 </svg>
                                             </div>
-                                            <ul class="location-results location-dropdown" data-wp-bind--hidden="!state.panels.opportunities.formData.resultsRaion.length">
+                                            <ul class="location-results location-dropdown" role="listbox"
+                                                data-wp-bind--hidden="!state.hasRaionResults">
                                                 <template data-wp-each="state.panels.opportunities.formData.resultsRaion">
-                                                    <li class="location-result-item" data-wp-on--click="actions.opportunities.addLocation"
+                                                    <li class="location-result-item"
+                                                        data-wp-on--click="actions.opportunities.addLocation"
+                                                        data-wp-on--keydown="actions.opportunities.locationItemKeydown"
                                                         tabindex="0"
-                                                        role="button">
+                                                        role="option">
                                                         <span data-wp-text="context.item.name"></span>
-                                                        <!-- <small data-wp-text="context.item.category"></small> -->
                                                     </li>
                                                 </template>
                                             </ul>
                                         </div>
 
                                         <!-- BOX 3: CITY/HROMADA -->
-                                        <div class="location-input-wrapper location-search-wrapper">
+                                        <div class="location-input-wrapper location-search-wrapper"
+                                            data-wp-on--focusout="actions.opportunities.locationFocusout"
+                                            data-wp-on--keydown="actions.opportunities.locationKeydown">
                                             <label><?php esc_html_e('if for City, Settlement, City district', 'starwishx'); ?></label>
                                             <div class="input-iconed">
                                                 <input type="text"
                                                     placeholder="<?php esc_attr_e('Bucha c., Vesele v., Obolon...', 'starwishx'); ?>"
                                                     data-wp-bind--value="state.panels.opportunities.formData.searchCity"
                                                     data-wp-on--input="actions.opportunities.searchKatottgCity"
+                                                    role="combobox"
+                                                    aria-autocomplete="list"
+                                                    data-wp-bind--aria-expanded="state.hasCityResults"
                                                     autocomplete="off">
                                                 <svg class="">
                                                     <use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-search-small"></use>
                                                 </svg>
                                             </div>
-                                            <ul class="location-results location-dropdown" data-wp-bind--hidden="!state.panels.opportunities.formData.resultsCity.length">
+                                            <ul class="location-results location-dropdown" role="listbox"
+                                                data-wp-bind--hidden="!state.hasCityResults">
                                                 <template data-wp-each="state.panels.opportunities.formData.resultsCity">
-                                                    <li class="location-result-item" data-wp-on--click="actions.opportunities.addLocation"
+                                                    <li class="location-result-item"
+                                                        data-wp-on--click="actions.opportunities.addLocation"
+                                                        data-wp-on--keydown="actions.opportunities.locationItemKeydown"
                                                         tabindex="0"
-                                                        role="button">
+                                                        role="option">
                                                         <span data-wp-text="context.item.name"></span>
-                                                        <!-- <small data-wp-text="context.item.category"></small> -->
                                                     </li>
                                                 </template>
                                             </ul>
