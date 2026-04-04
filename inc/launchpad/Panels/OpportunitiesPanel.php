@@ -124,6 +124,13 @@ class OpportunitiesPanel extends AbstractPanel
                 'min' => OpportunitiesService::TITLE_MIN_LENGTH,
                 'max' => OpportunitiesService::TITLE_MAX_LENGTH,
             ],
+            'companyLimits' => [
+                'min' => OpportunitiesService::COMPANY_MIN_LENGTH,
+            ],
+            'descriptionLimits' => [
+                'min' => OpportunitiesService::DESCRIPTION_MIN_LENGTH,
+                'max' => OpportunitiesService::DESCRIPTION_MAX_LENGTH,
+            ],
             'textareaLimits' => [
                 'description'  => OpportunitiesService::DESCRIPTION_MAX_LENGTH,
                 'requirements' => OpportunitiesService::REQUIREMENTS_MAX_LENGTH,
@@ -135,9 +142,17 @@ class OpportunitiesPanel extends AbstractPanel
                     __('Title must be at least %d characters.', 'starwishx'),
                     OpportunitiesService::TITLE_MIN_LENGTH
                 ),
-                'company'     => __('Company is required.', 'starwishx'),
+                'company'           => __('Company is required.', 'starwishx'),
+                'companyMinLength'  => sprintf(
+                    __('Company must be at least %d characters.', 'starwishx'),
+                    OpportunitiesService::COMPANY_MIN_LENGTH
+                ),
                 'sourcelink'  => __('Source link is required.', 'starwishx'),
-                'description' => __('Description is required.', 'starwishx'),
+                'description'          => __('Description is required.', 'starwishx'),
+                'descriptionMinLength' => sprintf(
+                    __('Description must be at least %d characters.', 'starwishx'),
+                    OpportunitiesService::DESCRIPTION_MIN_LENGTH
+                ),
                 'category'    => __('At least one category is required.', 'starwishx'),
                 'seekers'     => __('At least one seeker type is required.', 'starwishx'),
                 'dateRange'   => __('End date cannot be before start date.', 'starwishx'),
@@ -524,6 +539,7 @@ class OpportunitiesPanel extends AbstractPanel
                                             data-wp-bind--value="<?= $formPath ?>.company" data-wp-on--input="actions.opportunities.updateForm" data-field="company">
                                         <label class="exclamation-circle__error" hidden
                                             data-wp-bind--hidden="!<?= $errPath ?>.company"
+                                            data-wp-class--char-counter--warn="state.isCompanyTooShort"
                                             data-wp-text="<?= $errPath ?>.company"></label>
                                     </div>
 
@@ -768,7 +784,7 @@ class OpportunitiesPanel extends AbstractPanel
                                             data-wp-bind--hidden="!<?= $errPath ?>.description"
                                             data-wp-text="<?= $errPath ?>.description"></label>
                                         <span class="char-counter"
-                                            data-wp-class--char-counter--warn="state.isDescriptionNearLimit"
+                                            data-wp-class--char-counter--warn="state.isDescriptionCounterWarn"
                                             data-wp-text="state.descriptionCounterText"></span>
                                     </div>
                                 </div>

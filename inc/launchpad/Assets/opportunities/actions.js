@@ -167,11 +167,20 @@ export const opportunitiesActions = {
     } else if (titleLen < (p.titleLimits?.min || 30)) {
       p.fieldErrors.title = vm.titleMinLength;
     }
-    if (!p.formData.company?.trim()) p.fieldErrors.company = vm.company;
+    const companyLen = p.formData.company?.trim().length || 0;
+    if (companyLen === 0) {
+      p.fieldErrors.company = vm.company;
+    } else if (companyLen < (p.companyLimits?.min || 2)) {
+      p.fieldErrors.company = vm.companyMinLength;
+    }
     if (!p.formData.sourcelink?.trim())
       p.fieldErrors.sourcelink = vm.sourcelink;
-    if (!p.formData.description?.trim())
+    const descLen = p.formData.description?.trim().length || 0;
+    if (descLen === 0) {
       p.fieldErrors.description = vm.description;
+    } else if (descLen < (p.descriptionLimits?.min || 50)) {
+      p.fieldErrors.description = vm.descriptionMinLength;
+    }
     if (!p.formData.category?.length) p.fieldErrors.category = vm.category;
     if (!p.formData.seekers?.length) p.fieldErrors.seekers = vm.seekers;
     if (
@@ -703,10 +712,18 @@ export const opportunitiesActions = {
       }
     });
 
-    // Title min length (maxlength is enforced by HTML attribute)
+    // Min-length checks (only when field is non-empty — empty is caught by required above)
     const titleLen = p.formData.title?.trim().length || 0;
     if (titleLen > 0 && titleLen < (p.titleLimits?.min || 30)) {
       p.fieldErrors.title = p.validationMessages?.titleMinLength;
+    }
+    const companyLen = p.formData.company?.trim().length || 0;
+    if (companyLen > 0 && companyLen < (p.companyLimits?.min || 2)) {
+      p.fieldErrors.company = p.validationMessages?.companyMinLength;
+    }
+    const descLen = p.formData.description?.trim().length || 0;
+    if (descLen > 0 && descLen < (p.descriptionLimits?.min || 50)) {
+      p.fieldErrors.description = p.validationMessages?.descriptionMinLength;
     }
 
     // Checkbox groups (no HTML required attribute to query)
