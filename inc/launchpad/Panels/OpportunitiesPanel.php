@@ -158,6 +158,7 @@ class OpportunitiesPanel extends AbstractPanel
                 'dateRange'   => __('End date cannot be before start date.', 'starwishx'),
                 'document'    => __('File is too large. Max 5MB.', 'starwishx'),
             ],
+            'isCountryDropdownOpen' => false,
             'confirmPopup' => [
                 'isOpen'  => false,
                 'itemId'  => null,
@@ -593,19 +594,41 @@ class OpportunitiesPanel extends AbstractPanel
                                             placeholder="<?php echo esc_attr($placeholders['opportunity_application_form'] ?? ''); ?>"
                                             data-wp-bind--value="<?= $formPath ?>.application_form" data-wp-on--input="actions.opportunities.updateForm" data-wp-on--blur="actions.opportunities.normalizeUrlField" data-field="application_form">
                                     </div>
-                                    <!-- Country Select -->
+                                    <!-- Country Dropdown -->
                                     <div class="form-field">
                                         <label class="<?php echo $required['country'] ? 'label-required' : ''; ?>"><?php echo esc_html($labels['country'] ?? __('Country', 'starwishx')); ?></label>
-                                        <select
-                                            <?php echo $required['country'] ? 'required' : ''; ?>
-                                            data-wp-bind--value="<?= $formPath ?>.country"
-                                            data-wp-on--change="actions.opportunities.updateForm"
-                                            data-field="country">
-                                            <option value=""><?php esc_html_e('Select Country', 'starwishx'); ?></option>
-                                            <template data-wp-each="<?= $optPath ?>.countries">
-                                                <option data-wp-bind--value="context.item.id" data-wp-text="context.item.name"></option>
-                                            </template>
-                                        </select>
+                                        <div class="lp-dropdown"
+                                            data-wp-class--lp-dropdown--open="state.isCountryDropdownOpen"
+                                            data-wp-on--focusout="actions.opportunities.countryFocusout"
+                                            data-wp-on--keydown="actions.opportunities.countryKeydown">
+                                            <button type="button" class="lp-dropdown__trigger"
+                                                data-wp-on--click="actions.opportunities.toggleCountryDropdown"
+                                                data-field="country"
+                                                aria-haspopup="listbox"
+                                                data-wp-bind--aria-expanded="state.isCountryDropdownOpen">
+                                                <span data-wp-bind--hidden="state.selectedCountryLabel">
+                                                    <span class="lp-dropdown__placeholder"><?php esc_html_e('Select Country', 'starwishx'); ?></span>
+                                                </span>
+                                                <span data-wp-bind--hidden="!state.selectedCountryLabel"
+                                                    data-wp-text="state.selectedCountryLabel"></span>
+                                                <svg class="lp-dropdown__chevron" viewBox="0 0 11 7">
+                                                    <use href="<?= get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-arrow-down"></use>
+                                                </svg>
+                                            </button>
+                                            <ul class="lp-dropdown__list" role="listbox" hidden
+                                                data-wp-bind--hidden="!state.isCountryDropdownOpen">
+                                                <template data-wp-each="<?= $optPath ?>.countries">
+                                                    <li class="lp-dropdown__item"
+                                                        data-wp-on--click="actions.opportunities.selectCountry"
+                                                        data-wp-on--keydown="actions.opportunities.dropdownItemKeydown"
+                                                        data-wp-class--lp-dropdown__item--selected="state.isCountryItemSelected"
+                                                        tabindex="0"
+                                                        role="option">
+                                                        <span data-wp-text="context.item.name"></span>
+                                                    </li>
+                                                </template>
+                                            </ul>
+                                        </div>
                                     </div>
                                 </div>
 

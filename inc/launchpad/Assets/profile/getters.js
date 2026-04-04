@@ -7,6 +7,8 @@
  * File: inc/launchpad/Assets/profile/getters.js
  */
 
+import { getContext } from "@wordpress/interactivity";
+
 /**
  * Profile getters - plain object to be mixed into state via extendState.
  */
@@ -32,5 +34,13 @@ export const profileGetters = {
     return this.panels.profile?.deletePopup?.isPasswordVisible
       ? "text"
       : "password";
+  },
+
+  /**
+   * Is the current display-name option the selected one? (context-aware)
+   */
+  get isDisplayNameItemSelected() {
+    const val = getContext()?.item;
+    return val === this.panels.profile?.displayName;
   },
 };

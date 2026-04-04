@@ -497,6 +497,81 @@ export const opportunitiesActions = {
     p.isLayoutGrid = val === "grid";
   },
 
+  // ── Country custom dropdown ────────────────────────────────────────
+
+  toggleCountryDropdown() {
+    const { state } = store("launchpad");
+    const p = state.panels.opportunities;
+    p.isCountryDropdownOpen = !p.isCountryDropdownOpen;
+  },
+
+  selectCountry() {
+    const { state } = store("launchpad");
+    const { item } = getContext();
+    const p = state.panels.opportunities;
+    p.formData.country = item.id;
+    p.isCountryDropdownOpen = false;
+    if (p.fieldErrors?.country) p.fieldErrors.country = null;
+  },
+
+  countryFocusout(event) {
+    const { state } = store("launchpad");
+    const wrapper = event.currentTarget;
+    if (wrapper.contains(event.relatedTarget)) return;
+    state.panels.opportunities.isCountryDropdownOpen = false;
+  },
+
+  countryKeydown(event) {
+    const { state, actions } = store("launchpad");
+    const p = state.panels.opportunities;
+
+    if (event.key === "Escape") {
+      p.isCountryDropdownOpen = false;
+      event.currentTarget.querySelector(".lp-dropdown__trigger")?.focus();
+      return;
+    }
+    if (event.key === "ArrowDown" && p.isCountryDropdownOpen) {
+      event.preventDefault();
+      event.currentTarget.querySelector(".lp-dropdown__item")?.focus();
+    }
+  },
+
+  /**
+   * Keyboard on individual dropdown items (shared pattern).
+   * Enter/Space: select via click. ArrowDown/Up: navigate. Escape: close.
+   */
+  dropdownItemKeydown(event) {
+    const li = event.target.closest(".lp-dropdown__item");
+    if (!li) return;
+
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      li.click();
+      return;
+    }
+    if (event.key === "ArrowDown") {
+      event.preventDefault();
+      li.nextElementSibling?.focus();
+      return;
+    }
+    if (event.key === "ArrowUp") {
+      event.preventDefault();
+      const prev = li.previousElementSibling;
+      if (prev) {
+        prev.focus();
+      } else {
+        li.closest(".lp-dropdown")?.querySelector(".lp-dropdown__trigger")?.focus();
+      }
+      return;
+    }
+    if (event.key === "Escape") {
+      li.closest(".lp-dropdown")?.querySelector(".lp-dropdown__trigger")?.focus();
+      // Bubbles up to wrapper keydown which closes the dropdown
+    }
+  },
+
+  // ── Location search ───────────────────────────────────────────────
+
   /**
    * Generic internal helper to avoid code duplication
    */

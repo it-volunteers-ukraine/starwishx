@@ -181,6 +181,33 @@ export const opportunitiesGetters = {
    * Check if selected country is Ukraine.
    * We scan the 'options.countries' list to find the ID for "Ukraine".
    */
+  /**
+   * Is the country dropdown currently open?
+   */
+  get isCountryDropdownOpen() {
+    return !!this.panels.opportunities?.isCountryDropdownOpen;
+  },
+
+  /**
+   * Label for the currently selected country.
+   */
+  get selectedCountryLabel() {
+    const p = this.panels.opportunities;
+    if (!p?.formData?.country || !p?.options?.countries) return "";
+    const id = parseInt(p.formData.country);
+    const c = p.options.countries.find((c) => c.id === id);
+    return c?.name || "";
+  },
+
+  /**
+   * Is the current country item the selected one? (context-aware)
+   */
+  get isCountryItemSelected() {
+    const id = getContext()?.item?.id;
+    const sel = this.panels.opportunities?.formData?.country;
+    return !!sel && parseInt(sel) === id;
+  },
+
   get isUkraineSelected() {
     const p = this.panels.opportunities;
     if (!p || !p.formData || !p.formData.country) return false;

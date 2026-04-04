@@ -47,6 +47,7 @@ class ProfilePanel extends AbstractPanel
         return array_merge($data, [
             'isEditing'          => ($view === 'profile'),
             'isChangingPassword' => ($view === 'password'),
+            'isDisplayNameDropdownOpen' => false,
             'fieldErrors'        => (object) [],
             'nameLimits'         => [
                 'min' => ProfileService::NAME_MIN_LENGTH,
@@ -234,14 +235,34 @@ class ProfilePanel extends AbstractPanel
                         </div>
 
                         <div class="form-field">
-                            <label for="lp-display-name"><?= esc_html__('Display name publicly as', 'starwishx'); ?></label>
-                            <select id="lp-display-name" data-field="displayName"
-                                data-wp-bind--value="<?= $this->statePath('displayName') ?>"
-                                data-wp-on--change="actions.profile.updateField">
-                                <template data-wp-each="<?= $this->statePath('displayNameOptions') ?>">
-                                    <option data-wp-bind--value="context.item" data-wp-text="context.item"></option>
-                                </template>
-                            </select>
+                            <label><?= esc_html__('Display name publicly as', 'starwishx'); ?></label>
+                            <div class="lp-dropdown"
+                                data-wp-class--lp-dropdown--open="<?= $this->statePath('isDisplayNameDropdownOpen') ?>"
+                                data-wp-on--focusout="actions.profile.displayNameFocusout"
+                                data-wp-on--keydown="actions.profile.displayNameKeydown">
+                                <button type="button" class="lp-dropdown__trigger"
+                                    data-wp-on--click="actions.profile.toggleDisplayNameDropdown"
+                                    aria-haspopup="listbox"
+                                    data-wp-bind--aria-expanded="<?= $this->statePath('isDisplayNameDropdownOpen') ?>">
+                                    <span data-wp-text="<?= $this->statePath('displayName') ?>"></span>
+                                    <svg class="lp-dropdown__chevron" viewBox="0 0 11 7">
+                                        <use href="<?= get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-arrow-down"></use>
+                                    </svg>
+                                </button>
+                                <ul class="lp-dropdown__list" role="listbox" hidden
+                                    data-wp-bind--hidden="!<?= $this->statePath('isDisplayNameDropdownOpen') ?>">
+                                    <template data-wp-each="<?= $this->statePath('displayNameOptions') ?>">
+                                        <li class="lp-dropdown__item"
+                                            data-wp-on--click="actions.profile.selectDisplayName"
+                                            data-wp-on--keydown="actions.profile.displayNameItemKeydown"
+                                            data-wp-class--lp-dropdown__item--selected="state.isDisplayNameItemSelected"
+                                            tabindex="0"
+                                            role="option">
+                                            <span data-wp-text="context.item"></span>
+                                        </li>
+                                    </template>
+                                </ul>
+                            </div>
                         </div>
 
                     </div>
