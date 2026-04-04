@@ -315,7 +315,7 @@ function sw_clear_search_flags_on_spa($vars)
     'opportunities' => ['type' => 'post_type', 'post_type' => 'opportunity'],
   ];
 
-  if (!isset($vars['s'])) {
+  if (!isset($vars['s']) && !isset($vars['country'])) {
     return $vars;
   }
 
@@ -342,6 +342,7 @@ function sw_clear_search_flags_on_spa($vars)
 
   // Remove the search flag so WP doesn't enter search mode.
   unset($vars['s']);
+  unset($vars['country']);
 
   $config = $target_slugs[$first_segment];
 
