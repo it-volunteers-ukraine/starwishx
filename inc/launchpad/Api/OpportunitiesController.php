@@ -52,7 +52,7 @@ class OpportunitiesController extends AbstractLaunchpadController
                 'required' => false,
                 'sanitize_callback' => 'sanitize_key',
                 'validate_callback' => function ($param) {
-                    return in_array($param, ['draft', 'pending', 'publish']);
+                    return in_array($param, ['draft', 'pending']);
                 }
             ],
             'company'         => ['sanitize_callback' => 'sanitize_text_field'],

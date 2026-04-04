@@ -371,7 +371,11 @@ class OpportunitiesService
 
             // Determine Status
             // Logic: Use provided status, or default to 'draft' for new, or preserve for updates.
+            // Defense-in-depth: only editors/admins may set 'publish' directly.
             if (!empty($data['status'])) {
+                if ($data['status'] === 'publish' && !current_user_can('publish_posts')) {
+                    $data['status'] = 'pending';
+                }
                 $postData['post_status'] = $data['status'];
             } elseif (!$postId) {
                 $postData['post_status'] = 'draft';
