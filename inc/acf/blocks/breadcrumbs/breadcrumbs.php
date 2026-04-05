@@ -76,6 +76,9 @@ if (is_post_type_archive()) {
         $archive_pt = reset($archive_pt);
     }
     $pt_object = get_post_type_object($archive_pt);
+    // echo '<pre>';
+    // var_dump($archive_pt, $pt_object);
+    // echo '</pre>';
 
     if ($pt_object) {
         $breadcrumbs[] = [
@@ -93,7 +96,9 @@ if (is_post_type_archive()) {
     if ($is_cpt) {
         $pt_object   = get_post_type_object($post_type);
         $archive_url = $pt_object ? get_post_type_archive_link($post_type) : '';
-
+        // echo '<pre>';
+        // var_dump($archive_pt, $pt_object);
+        // echo '</pre>';
         if ($pt_object && $archive_url) {
             $breadcrumbs[] = [
                 'title' => $pt_object->labels->name,

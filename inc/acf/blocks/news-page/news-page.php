@@ -96,68 +96,67 @@ $terms = get_terms([
 // }
 
 // получение последних новостей
-$results = [];
-$query = new WP_Query([
-    'post_type'      => $post_name,
-    'posts_per_page' => 8,   // сколько нужно вывести
-    'orderby'        => 'date',
-    'order'          => 'DESC',
-    'tax_query'      => [
-        [
-            'taxonomy' => $category,
-            'operator' => 'EXISTS'
-        ]
-    ]
-]);
+// $results = [];
+// $query = new WP_Query([
+//     'post_type'      => $post_name,
+//     'posts_per_page' => 8,   // сколько нужно вывести
+//     'orderby'        => 'date',
+//     'order'          => 'DESC',
+//     'tax_query'      => [
+//         [
+//             'taxonomy' => $category,
+//             'operator' => 'EXISTS'
+//         ]
+//     ]
+// ]);
 
-// добавляем данные категории внутрь поста
-if ($query->have_posts()) {
-    foreach ($query->posts as $post_item) {
+// // добавляем данные категории внутрь поста
+// if ($query->have_posts()) {
+//     foreach ($query->posts as $post_item) {
 
-        $term_post = get_the_terms($post_item->ID, $category);
-        $post_item->term_id = $term_post ? $term_post[0]->term_id : null;
-        $post_item->term_name = $term_post ? $term_post[0]->name : null;
+//         $term_post = get_the_terms($post_item->ID, $category);
+//         $post_item->term_id = $term_post ? $term_post[0]->term_id : null;
+//         $post_item->term_name = $term_post ? $term_post[0]->name : null;
 
-        $results[] = $post_item;
-    }
-}
+//         $results[] = $post_item;
+//     }
+// }
 
-wp_reset_postdata();
+// wp_reset_postdata();
 
-$news_last = $results;
+// $news_last = $results;
 
 $res_last_by_cat = [];
 // Получение с каждой категории по последнему посту
-foreach ($terms as $term) {
-    $query = new WP_Query([
-        'post_type' => $post_name,
-        'posts_per_page' => 1,
-        'tax_query' => [
-            [
-                'taxonomy' => $category,
-                'field' => 'term_id',
-                'terms' => $term->term_id
-            ]
-        ],
-        'orderby' => 'date',
-        'order' => 'DESC'
-    ]);
+// foreach ($terms as $term) {
+//     $query = new WP_Query([
+//         'post_type' => $post_name,
+//         'posts_per_page' => 1,
+//         'tax_query' => [
+//             [
+//                 'taxonomy' => $category,
+//                 'field' => 'term_id',
+//                 'terms' => $term->term_id
+//             ]
+//         ],
+//         'orderby' => 'date',
+//         'order' => 'DESC'
+//     ]);
 
-    if ($query->have_posts()) {
-        $post_item = $query->posts[0];
+//     if ($query->have_posts()) {
+//         $post_item = $query->posts[0];
 
-        // добавляем категорию внутрь объекта
-        $term_post = get_the_terms($post_item->ID, $category);
-        $post_item->term_id = $term_post ? $term_post[0]->term_id : null;
-        $post_item->term_name = $term_post ? $term_post[0]->name : null;
+//         // добавляем категорию внутрь объекта
+//         $term_post = get_the_terms($post_item->ID, $category);
+//         $post_item->term_id = $term_post ? $term_post[0]->term_id : null;
+//         $post_item->term_name = $term_post ? $term_post[0]->name : null;
 
-        $res_last_by_cat[] = $post_item;
-    }
+//         $res_last_by_cat[] = $post_item;
+//     }
 
-    wp_reset_postdata();
-}
+//     wp_reset_postdata();
+// }
 
-$last_one_by_category = $res_last_by_cat;
 
 // Получение новостей по категориям для блока ниже
 $res_by_cat = [];
@@ -165,6 +164,9 @@ foreach ($terms as $term) {
     $query = new WP_Query([
         'post_type'      => $post_name,
         'posts_per_page' => 7,
+        'orderby'        => 'date',
+        'order'          => 'DESC',
+        'no_found_rows'  => true,
         'tax_query'      => [
             [
                 'taxonomy' => $category,
@@ -172,8 +174,6 @@ foreach ($terms as $term) {
                 'terms'    => $term->term_id
             ]
         ],
-        'orderby'        => 'date',
-        'order'          => 'DESC'
     ]);
 
     if ($query->have_posts()) {
@@ -199,6 +199,9 @@ foreach ($terms as $term) {
     wp_reset_postdata();
 }
 
+// $last_one_by_category = $res_last_by_cat;
+$last_one_by_category = array_map(fn($cat) => $cat['posts'][0], $res_by_cat);
+// $one_per_category = array_map(fn($cat) => $cat['posts'][0], $by_category);
 
 $res_by_cat = $res_by_cat;
 // echo '<pre>'; // Обертываем в теги для форматирования

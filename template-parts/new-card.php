@@ -88,6 +88,9 @@ if (is_numeric($post_rating)) {
 } else {
     $post_rating = null; // Если рейтинг не числовой, устанавливаем его в null
 }
+$post_rating = null;
+
+$post_type_name = $args['post_type_name'] ?? $item->post_type_name ?? '';
 
 $category_current_color = my_category_colors($term_id);
 $label_color_text       = $category_current_color['label_color_text'];
@@ -139,6 +142,12 @@ $item_label = esc_html($item->term_name ?? 'No category');
                 </div>
             </div>
         <?php endif; ?>
+        <?php if ($post_type_name) : ?>
+            <div class="text-small newcard-post-type">
+                <?php echo esc_html($post_type_name); ?>
+            </div>
+        <?php endif; ?>
+
         <div class="text-small newcard-date">
             <?php echo esc_html($item_date); ?>
         </div>
