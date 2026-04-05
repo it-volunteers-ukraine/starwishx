@@ -18,6 +18,9 @@ import {
 /** intlTelInput instance — survives across action calls */
 let itiInstance = null;
 
+/** Auto re-blur timers keyed by field name */
+const revealTimers = {};
+
 /**
  * Compute display-name dropdown options from current form state.
  * Mirrors WordPress wp-admin/user-edit.php logic.
@@ -89,6 +92,43 @@ export const profileActions = {
     const p = ensurePanel(state, "profile");
     if (field && p[field] !== undefined) {
       p[field] = normalizeUrl(p[field]);
+    }
+  },
+
+  // ── Sensitive field reveal/blur ─────────────────────────────────────
+
+  toggleReveal() {
+    const { state } = store("launchpad");
+    const { ref } = getElement();
+    const field = ref.dataset.field;
+    if (!field) return;
+    const p = ensurePanel(state, "profile");
+    if (!Array.isArray(p.revealedFields)) p.revealedFields = [];
+
+    // Clear any pending timer for this field
+    if (revealTimers[field]) {
+      clearTimeout(revealTimers[field]);
+      delete revealTimers[field];
+    }
+
+    const idx = p.revealedFields.indexOf(field);
+    if (idx === -1) {
+      p.revealedFields = [...p.revealedFields, field];
+      // Auto re-blur after 10 s
+      revealTimers[field] = setTimeout(() => {
+        p.revealedFields = p.revealedFields.filter((f) => f !== field);
+        delete revealTimers[field];
+      }, 10_000);
+    } else {
+      p.revealedFields = p.revealedFields.filter((f) => f !== field);
+    }
+  },
+
+  revealKeydown(event) {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      const { actions } = store("launchpad");
+      actions.profile.toggleReveal();
     }
   },
 

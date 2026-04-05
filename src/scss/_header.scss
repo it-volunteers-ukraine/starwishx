@@ -1,4 +1,5 @@
 @use "variables" as *;
+@use "mixins/media" as *;
 
 .burger-menu-button,
 .mobile-header-buttons,
@@ -165,16 +166,36 @@
   border-radius: 12px;
   width: 154px;
   height: 154px;
+  overflow: hidden;
 }
 
 .header .sub-menu li:hover {
   background: $buttons-color-background-primary-default;
 }
 
+// Submenu link fills its li and becomes the positioning context
+.header .sub-menu li .submenu-link {
+  display: block;
+  position: relative;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+}
+
+// figure > picture > img semantic wrapper
+.header .sub-menu li .submenu-figure {
+  position: absolute;
+  margin: 0;
+  inset: 0;
+}
+
 .header .sub-menu li .submenu-bg-image {
   position: absolute;
   transition: opacity 0.3s;
   inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .header .sub-menu li .submenu-text {
@@ -253,7 +274,7 @@
   color: $icon-color-primary;
 }
 
-@media (max-width: 1440px) {
+@include max-laptop {
   .header .sub-menu {
     transform: translateX(-27%);
   }
@@ -298,7 +319,7 @@
   }
 }
 
-@media (max-width: 1000px) {
+@include max-tabland {
   .header .header-center,
   .header .header-right {
     display: none;
@@ -515,21 +536,26 @@
       content: "";
     }
 
-    .submenu-image {
+    .submenu-figure {
       position: absolute;
-      left: 0;
+      margin: 0;
+      inset: 0;
+    }
+
+    .submenu-bg-image {
+      position: absolute;
       transition: opacity 0.3s ease;
+      inset: 0;
       width: 100%;
       height: 100%;
       object-fit: cover;
     }
 
-    .text {
+    .submenu-text {
       position: absolute;
       bottom: 8px;
       left: 8px;
       z-index: 2;
-      padding: 0 8px 8px;
       color: #fffdf8;
       font-weight: 500;
       font-size: 14px;

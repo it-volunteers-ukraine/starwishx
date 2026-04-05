@@ -149,7 +149,7 @@
             },
             "default_value": "",
             "allow_in_bindings": 0,
-            "placeholder": ""
+            "placeholder": "google form, asana і т.ін."
         },
         {
             "key": "field_693747eaf0639",
@@ -322,5 +322,5 @@
     "description": "",
     "show_in_rest": 0,
     "display_title": "",
-    "modified": 1775316353
+    "modified": 1775370300
 }

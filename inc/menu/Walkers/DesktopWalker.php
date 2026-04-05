@@ -45,16 +45,22 @@ class DesktopWalker extends \Walker_Nav_Menu
 
         $output .= '<a class="submenu-link" href="' . esc_url($item->url) . '"' . $auth_attr . '>';
 
-        if ($depth === 1) {
-            $img_id = get_field('images', $item);
-            if ($img_id) {
-                $url = wp_get_attachment_image_url($img_id, 'full');
-                $alt = get_post_meta($img_id, '_wp_attachment_image_alt', true);
-                $output .= '<img src="' . esc_url($url) . '" alt="' . esc_attr($item->title) . '" class="submenu-bg-image">';
-            }
+        if ($depth === 1 && ($img_id = get_field('images', $item))) {
+            // Semantic: figure > picture > img + figcaption
+            // alt="" because figcaption provides the accessible name (avoids double announcement)
+            $output .= '<figure class="submenu-figure">';
+            $output .= '<picture>';
+            $output .= wp_get_attachment_image($img_id, 'medium_large', false, [
+                'class'   => 'submenu-bg-image',
+                'loading' => 'lazy',
+                'alt'     => '',
+            ]);
+            $output .= '</picture>';
+            $output .= '<figcaption class="submenu-text">' . esc_html($item->title) . '</figcaption>';
+            $output .= '</figure>';
+        } else {
+            $output .= '<span class="submenu-text">' . $item->title . '</span>';
         }
-
-        $output .= '<span class="submenu-text">' . $item->title . '</span>';
 
         if ($depth === 0 && in_array('has-children', $classes, true)) {
             $output .= '<svg class="arrow-icon" width="24" height="24" aria-hidden="true">

@@ -37,6 +37,16 @@ export const profileGetters = {
   },
 
   /**
+   * Is the current sensitive field blurred? (context-aware via data-field)
+   * Reads data-field from the element to check against revealedFields array.
+   */
+  get isFieldBlurred() {
+    const field = getContext()?.field;
+    const revealed = this.panels.profile?.revealedFields;
+    return !field || !Array.isArray(revealed) || !revealed.includes(field);
+  },
+
+  /**
    * Is the current display-name option the selected one? (context-aware)
    */
   get isDisplayNameItemSelected() {

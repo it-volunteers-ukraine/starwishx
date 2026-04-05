@@ -52,6 +52,7 @@ export const coreActions = {
     // Profile routing (view=profile | view=password | default=card)
     if (panelId === "profile") {
       const prof = state.panels.profile;
+      prof.revealedFields = [];
       const view = params.get("view");
       const wasEditing = prof.isEditing;
       prof.isEditing = view === "profile";
