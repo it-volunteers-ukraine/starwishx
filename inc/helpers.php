@@ -101,6 +101,9 @@ function my_iter_posts_add_category($query)
     if (isset($query->posts)) {
         // echo 'have posts: ' . count($query->posts) . '<br>';
         foreach ($query->posts as $post_item) {
+            $post_type = $post_item->post_type;
+            $post_type_obj = get_post_type_object($post_type);
+            $post_item->post_type_name = __($post_type_obj->labels->singular_name, 'starwishx');
 
             $new_post = my_add_category_post($post_item);
             array_push($result, $new_post);
@@ -325,7 +328,7 @@ if (!function_exists('my_post_type')) {
             $res = ['news'];
             $res = ['opportunity'];
         } elseif ($parent === 'search') {
-            $res = ['news', 'opportunity'];
+            $res = ['news', 'opportunity', 'project'];
         }
         return $res;
         // return $request_path;

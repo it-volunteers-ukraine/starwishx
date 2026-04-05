@@ -227,7 +227,7 @@ $total_pages = (int) ceil($total_posts / $per_page);
             </div>
             <?php
             $load_next_page = $page < $total_pages ? $page + 1 : $total_pages;
-            $load_more_disabled = $total_pages >= 0 && $page >= $total_pages ? $classes['link-disabled'] : '';
+            $load_more_disabled = $total_pages > 0 && $page >= $total_pages ? $classes['link-disabled'] : '';
             $load_more_hidden = $total_pages >= 0  && $page >= $total_pages ? "display: none" : "";
 
             ?>
