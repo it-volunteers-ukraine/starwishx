@@ -131,6 +131,9 @@ final class ListingCore
             add_filter('query_vars', fn(array $vars) => array_merge($vars, ['listing_cat']));
             add_filter('request', [$this, 'disambiguateCategoryUrl'], 20);
         }
+
+        // SEO meta for the opportunity archive (title, description, OG, canonical)
+        (new ListingSeoProvider())->register();
     }
 
     /**
