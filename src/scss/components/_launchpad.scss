@@ -812,7 +812,8 @@
     border: 2px dashed $element-card-cult-stroke;
     border-radius: 12px;
 
-    background: $surface-primary;
+    // background: $surface-primary;
+    background: $surface-violet;
     padding: 1.5rem;
     max-width: 640px;
 
@@ -843,13 +844,13 @@
         justify-content: center;
 
         h2 {
-            margin-bottom: 0.5rem;
             color: $text-dark;
             font-size: 1.5rem;
         }
     }
-
+    .profile-auth,
     .profile-meta {
+        margin-top: 12px;
         color: $text-basic;
         font-size: 0.95rem;
 
@@ -884,8 +885,30 @@
             flex-wrap: wrap;
         }
     }
+    .btn-secondary__small {
+        background: $surface-primary;
+        &:hover {
+            background-color: $buttons-color-background-secondary-hover;
+        }
+    }
 }
 
+.blurred {
+    filter: blur(5px);
+    cursor: pointer;
+    transition: filter 0.3s ease;
+    user-select: none;
+}
+
+.unblurred {
+    filter: blur(0);
+}
+
+.explanation-block {
+    border: 1px dashed $input-color-border-filled;
+    border-radius: 12px;
+    padding: 4px;
+}
 /* ======================================
    9. FORMS & INPUTS
    ====================================== */
@@ -1040,6 +1063,8 @@
         display: flex;
         align-items: center;
         justify-content: center;
+        margin-top: 10px;
+
         &:before,
         &:after {
             content: "";
@@ -1088,7 +1113,7 @@
             background: $surface-primary;
             min-width: 112px;
             &:hover {
-                background-color: $buttons-color-background-secondary-selected;
+                background-color: $buttons-color-background-secondary-hover;
             }
 
             &:disabled {
@@ -1845,9 +1870,14 @@
         cursor: pointer;
         border-radius: $radius-input;
         background-color: $surface-primary;
-        padding: 4px 10px;
+        padding: 10px 4px;
 
-        &:hover,
+        &::not(:first-child) {
+            margin-top: 2px;
+        }
+        &:hover {
+            background: $dropdown-surface-color-hover;
+        }
         &:focus-visible {
             background: $dropdown-surface-color-selected;
             outline: 1px solid $input-color-border-active;

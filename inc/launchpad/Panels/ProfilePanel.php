@@ -81,6 +81,7 @@ class ProfilePanel extends AbstractPanel
             ],
             'deleteSuccessPopup'       => ['isOpen' => false],
             'isFormExpanded'           => false,
+            'revealedFields'           => [],
         ]);
     }
 
@@ -121,21 +122,63 @@ class ProfilePanel extends AbstractPanel
                         <span data-wp-text="<?= $this->statePath('displayName') ?>"></span>
                     </h2>
 
-
+                    <!-- Profile Auth -->
+                    <div class="profile-auth">
+                        <div class="profile-email">
+                            <strong><?= esc_html__('Email', 'starwishx'); ?>:</strong>
+                            <span class="profile-email__info"
+                                data-wp-context='{"field":"email"}'
+                                data-wp-class--blurred="state.isFieldBlurred"
+                                data-wp-on--click="actions.profile.toggleReveal"
+                                data-wp-on--keydown="actions.profile.revealKeydown"
+                                data-field="email"
+                                role="button"
+                                tabindex="0"
+                                data-wp-text="<?= $this->statePath('email') ?>"></span>
+                        </div>
+                        <div class="profile-login">
+                            <strong><?= esc_html__('Login name', 'starwishx'); ?>:</strong>
+                            <span class="profile-login__info"
+                                data-wp-context='{"field":"userLogin"}'
+                                data-wp-class--blurred="state.isFieldBlurred"
+                                data-wp-on--click="actions.profile.toggleReveal"
+                                data-wp-on--keydown="actions.profile.revealKeydown"
+                                data-field="userLogin"
+                                role="button"
+                                tabindex="0"
+                                data-wp-text="<?= $this->statePath('userLogin') ?>"></span>
+                        </div>
+                    </div>
                     <!-- Profile Meta -->
                     <div class="profile-meta">
-                        <p class="profile-email" data-wp-text="<?= $this->statePath('email') ?>"></p>
-                        <p class="profile-login" data-wp-text="<?= $this->statePath('userLogin') ?>"></p>
                         <div class="profile-role">
                             <span class="status-badge"
                                 data-wp-bind--data-role="<?= $this->statePath('role') ?>"
                                 data-wp-text="<?= $this->statePath('roleLabel') ?>"></span>
                         </div>
                         <div data-wp-bind--hidden="!<?= $this->statePath('phone') ?>">
-                            <strong><?= esc_html__('Phone', 'starwishx'); ?>:</strong> <span data-wp-text="<?= $this->statePath('phone') ?>"></span>
+                            <strong><?= esc_html__('Phone', 'starwishx'); ?>:</strong>
+                            <span class="profile-phone__info"
+                                data-wp-context='{"field":"phone"}'
+                                data-wp-class--blurred="state.isFieldBlurred"
+                                data-wp-on--click="actions.profile.toggleReveal"
+                                data-wp-on--keydown="actions.profile.revealKeydown"
+                                data-field="phone"
+                                role="button"
+                                tabindex="0"
+                                data-wp-text="<?= $this->statePath('phone') ?>"></span>
                         </div>
                         <div data-wp-bind--hidden="!<?= $this->statePath('telegram') ?>">
-                            <strong><?= esc_html__('Telegram', 'starwishx'); ?>:</strong> <span data-wp-text="<?= $this->statePath('telegram') ?>"></span>
+                            <strong><?= esc_html__('Telegram', 'starwishx'); ?>:</strong>
+                            <span class="profile-messenger__info"
+                                data-wp-context='{"field":"telegram"}'
+                                data-wp-class--blurred="state.isFieldBlurred"
+                                data-wp-on--click="actions.profile.toggleReveal"
+                                data-wp-on--keydown="actions.profile.revealKeydown"
+                                data-field="telegram"
+                                role="button"
+                                tabindex="0"
+                                data-wp-text="<?= $this->statePath('telegram') ?>"></span>
                         </div>
                         <div data-wp-bind--hidden="!<?= $this->statePath('organization') ?>">
                             <strong><?= esc_html__('Organization', 'starwishx'); ?>:</strong> <span data-wp-text="<?= $this->statePath('organization') ?>"></span>
@@ -173,6 +216,7 @@ class ProfilePanel extends AbstractPanel
                     <div class="form-field">
                         <label class="label-required" for="lp-first-name"><?= esc_html__('First Name', 'starwishx'); ?></label>
                         <input type="text" id="lp-first-name" data-field="firstName"
+                            placeholder="<?= esc_attr__('e.g. Jane', 'starwishx'); ?>"
                             maxlength="<?= ProfileService::NAME_MAX_LENGTH ?>"
                             data-wp-bind--value="<?= $this->statePath('firstName') ?>"
                             data-wp-on--input="actions.profile.updateField" />
@@ -194,6 +238,16 @@ class ProfilePanel extends AbstractPanel
                             data-wp-on--input="actions.profile.updateField" />
                     </div>
                 </div>
+                <div class="explanation-block">
+                    <div class="label-info">
+                        <span class="exclamation-circle">
+                            <?= esc_html__('First Name', 'starwishx'); ?>,
+                            <?= esc_html__('Phone', 'starwishx'); ?>
+                            <?= esc_html__('are necessary to fill if you want to receive Contributor status, to be able to post opportunities. Because we all want real people to post and get real opportunities.', 'starwishx'); ?>
+                            <?= esc_html__('Note: The information in your profile is not publicly available.', 'starwishx'); ?>
+                        </span>
+                    </div>
+                </div>
                 <div class="show-more form-group-card">
                     <button type="button" class="btn-tertiary"
                         data-wp-on--click="actions.profile.toggleFormExpanded"
@@ -213,6 +267,7 @@ class ProfilePanel extends AbstractPanel
                         <div class="form-field">
                             <label for="lp-last-name"><?= esc_html__('Last Name', 'starwishx'); ?></label>
                             <input type="text" id="lp-last-name" data-field="lastName"
+                                placeholder="<?= esc_attr__('e.g. Dow', 'starwishx'); ?>"
                                 maxlength="<?= ProfileService::NAME_MAX_LENGTH ?>"
                                 data-wp-bind--value="<?= $this->statePath('lastName') ?>"
                                 data-wp-on--input="actions.profile.updateField" />
@@ -220,20 +275,27 @@ class ProfilePanel extends AbstractPanel
                                 data-wp-bind--hidden="!<?= $this->statePath('fieldErrors') ?>.lastName"
                                 data-wp-text="<?= $this->statePath('fieldErrors') ?>.lastName"></label>
                         </div>
-                        <!-- // temporary hidden -->
-                        <!-- <div class="form-field">
-                            <label for="lp-nickname">< ?= esc_html__('Nickname', 'starwishx'); ?></label>
+                        <!-- // could be temporary hidden -->
+                        <div class="form-field">
+                            <label for="lp-nickname">
+                                <?= esc_html__('Nickname', 'starwishx'); ?>
+                            </label>
                             <input type="text" id="lp-nickname" data-field="nickname"
+                                placeholder="<?= esc_attr__('e.g. Janie, kat25', 'starwishx'); ?>"
                                 data-wp-bind--value="< ?= $this->statePath('nickname') ?>"
                                 data-wp-on--input="actions.profile.updateField" />
-                        </div> -->
+                        </div>
                         <div class="form-field">
                             <label for="lp-organization"><?= esc_html__('Organization', 'starwishx'); ?></label>
                             <input type="text" id="lp-organization" data-field="organization"
+                                placeholder="<?= esc_attr__('If you represent any organization', 'starwishx'); ?>"
                                 data-wp-bind--value="<?= $this->statePath('organization') ?>"
                                 data-wp-on--input="actions.profile.updateField" />
                         </div>
 
+                    </div>
+
+                    <div class="launchpad-grid-auto">
                         <div class="form-field">
                             <label><?= esc_html__('Display name publicly as', 'starwishx'); ?></label>
                             <div class="lp-dropdown"
@@ -265,12 +327,10 @@ class ProfilePanel extends AbstractPanel
                             </div>
                         </div>
 
-                    </div>
-
-                    <div class="launchpad-grid-auto">
                         <div class="form-field">
                             <label for="lp-telegram"><?= esc_html__('Telegram', 'starwishx'); ?></label>
                             <input type="text" id="lp-telegram" data-field="telegram"
+                                placeholder="<?= esc_attr('@jane_smith'); ?>"
                                 data-wp-bind--value="<?= $this->statePath('telegram') ?>"
                                 data-wp-on--input="actions.profile.updateField" />
                         </div>
@@ -278,6 +338,7 @@ class ProfilePanel extends AbstractPanel
                         <div class="form-field">
                             <label for="lp-user-url"><?= esc_html__('Website', 'starwishx'); ?></label>
                             <input type="url" id="lp-user-url" data-field="userUrl"
+                                placeholder="<?= esc_attr__('dou.ua, https://me.ua', 'starwishx'); ?>"
                                 data-wp-bind--value="<?= $this->statePath('userUrl') ?>"
                                 data-wp-on--input="actions.profile.updateField"
                                 data-wp-on--blur="actions.profile.normalizeUrlField" />
@@ -285,8 +346,9 @@ class ProfilePanel extends AbstractPanel
 
                     </div>
                     <div class="form-field">
-                        <label for="lp-description"><?= esc_html__('Biographical Info', 'starwishx'); ?></label>
+                        <label for="lp-description"><?= esc_html__('Description', 'starwishx'); ?></label>
                         <textarea id="lp-description" data-field="description" rows="4"
+                            placeholder="<?= esc_attr__('Biographical Info', 'starwishx'); ?>"
                             data-wp-bind--value="<?= $this->statePath('description') ?>"
                             data-wp-on--input="actions.profile.updateField"></textarea>
                     </div>
@@ -483,17 +545,17 @@ class ProfilePanel extends AbstractPanel
                     </div>
 
                     <div class="popup__footer">
-                        <button type="button" class="btn btn--danger popup__footer--button"
+                        <button type="button" class="btn-secondary__small btn--danger popup__footer--button"
                             data-wp-on--click="actions.profile.confirmDelete"
                             data-wp-bind--disabled="<?= $statePath ?>.deletePopup.isDeleting">
-                            <span data-wp-bind--hidden="<?= $statePath ?>.deletePopup.isDeleting">
+                            <span class="exclamation-circle__error1" data-wp-bind--hidden="<?= $statePath ?>.deletePopup.isDeleting">
                                 <?= esc_html__('Delete my account', 'starwishx'); ?>
                             </span>
                             <span data-wp-bind--hidden="!<?= $statePath ?>.deletePopup.isDeleting">
                                 <?= esc_html__('Deleting...', 'starwishx'); ?>
                             </span>
                         </button>
-                        <button type="button" class="btn-secondary popup__footer--button"
+                        <button type="button" class="btn__small popup__footer--button"
                             data-wp-on--click="actions.profile.cancelDelete">
                             <?= esc_html__('Cancel', 'starwishx'); ?>
                         </button>

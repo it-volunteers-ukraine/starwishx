@@ -35,6 +35,19 @@
     @include max-tablet {
         min-width: unset;
     }
+    input {
+        background: $input-color-surface-default;
+    }
+    .btn-secondary__small,
+    .btn-secondary {
+        background: $input-color-surface-default;
+        &:hover {
+            background-color: $buttons-color-background-secondary-hover;
+        }
+    }
+    .btn--danger {
+        border-color: $icon-color-error;
+    }
 }
 
 .popup__close {
