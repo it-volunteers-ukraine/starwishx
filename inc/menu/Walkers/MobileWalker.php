@@ -95,9 +95,18 @@ class MobileWalker extends \Walker_Nav_Menu
                     $alt    = $img_id ? get_post_meta($img_id, '_wp_attachment_image_alt', true) : '';
                     $output .= '<a class="mobile-submenu-item" href="' . esc_url(get_post_meta($ch->ID, '_menu_item_url', true)) . '">';
                     if ($url) {
-                        $output .= '<img src="' . esc_url($url) . '" alt="' . esc_attr($alt) . '" class="submenu-image">';
+                        // Semantic: figure > picture > img + figcaption
+                        // alt="" because figcaption provides the accessible name (avoids double announcement)
+                        $output .= '<figure class="submenu-figure">';
+                        $output .= '<picture>';
+                        $output .= '<img src="' . esc_url($url) . '" class="submenu-bg-image" loading="lazy" alt="">';
+                        $output .= '</picture>';
+                        $output .= '<figcaption class="submenu-text">' . esc_html($ch->post_title) . '</figcaption>';
+                        $output .= '</figure>';
+                    } else {
+                        $output .= '<span class="submenu-text">' . esc_html($ch->post_title) . '</span>';
                     }
-                    $output .= '<span class="text">' . esc_html($ch->post_title) . '</span></a>';
+                    $output .= '</a>';
                 }
                 $output .= '</div>';
             }
