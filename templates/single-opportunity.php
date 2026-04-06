@@ -10,6 +10,8 @@
 
 declare(strict_types=1);
 
+use Shared\View\CollapsibleList;
+
 $post_id = get_the_ID();
 
 // Used inc/theme-helpers.php function
@@ -140,7 +142,7 @@ if (function_exists('render_block')) {
                                             <li class="tag-locations">< ?php echo esc_html(trim($loc->name)); ?></li>
                                         < ?php endforeach; ?>
                                     </ul> -->
-                                    <?= sw_render_collapsible_tag_list($data['locations'], 'tag-locations', 5); ?>
+                                    <?= CollapsibleList::render($data['locations'], 'tag-locations', 5) ?>
                                 </dd>
                                 <!-- < ?php $loc_names = array_column($data['locations'], 'name'); echo esc_html(implode(', ', $loc_names)); ? > -->
                             <?php elseif (!empty($data['country_name'])) : ?>
@@ -169,7 +171,7 @@ if (function_exists('render_block')) {
                                     </ul>
                                 </dd> -->
                                 <dd class="tag-cloud tag-cloud__seekers">
-                                    <?= sw_render_collapsible_tag_list($data['seeker_terms'], 'tag-seekers', 5); ?>
+                                    <?= CollapsibleList::render($data['seeker_terms'], 'tag-seekers', 5) ?>
                                 </dd>
                             </div>
                         <?php endif; ?>

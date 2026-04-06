@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-04-06T06:31:35+00:00\n"
+"POT-Creation-Date: 2026-04-06T08:29:40+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: starwishx\n"
@@ -50,7 +50,7 @@ msgstr ""
 #: archive-news.php:140
 #: inc/favorites/Services/FavoritesService.php:21
 #: templates/single-news.php:135
-#: templates/single-opportunity.php:262
+#: templates/single-opportunity.php:264
 #: templates/single-project.php:166
 msgid "News"
 msgstr ""
@@ -74,7 +74,7 @@ msgstr ""
 #: archive-opportunity.php:87
 #: inc/listing/Enums/Taxonomy.php:29
 #: inc/listing/Filters/CategoryFilter.php:31
-#: templates/single-opportunity.php:63
+#: templates/single-opportunity.php:65
 msgid "Category"
 msgstr ""
 
@@ -113,7 +113,7 @@ msgstr ""
 
 #: archive-opportunity.php:196
 #: header.php:100
-#: inc/launchpad/Panels/OpportunitiesPanel.php:996
+#: inc/launchpad/Panels/OpportunitiesPanel.php:995
 #: template-parts/element-popup.php:42
 msgid "Close"
 msgstr ""
@@ -121,14 +121,14 @@ msgstr ""
 #: archive-opportunity.php:210
 #: header.php:108
 #: templates/page-listing-oportunities.php:136
-#: templates/single-opportunity.php:273
+#: templates/single-opportunity.php:275
 #: templates/single-project.php:177
 msgid "Hi!"
 msgstr ""
 
 #: archive-opportunity.php:211
 #: templates/page-listing-oportunities.php:137
-#: templates/single-opportunity.php:274
+#: templates/single-opportunity.php:276
 msgid "Add to favorites is only available for registered users."
 msgstr ""
 
@@ -941,8 +941,8 @@ msgid "Comments"
 msgstr ""
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:463
-#: inc/launchpad/Panels/OpportunitiesPanel.php:968
-#: inc/launchpad/Panels/OpportunitiesPanel.php:1004
+#: inc/launchpad/Panels/OpportunitiesPanel.php:967
+#: inc/launchpad/Panels/OpportunitiesPanel.php:1003
 msgid "Submit for Review"
 msgstr ""
 
@@ -953,7 +953,7 @@ msgid "Edit"
 msgstr ""
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:501
-#: inc/launchpad/Panels/OpportunitiesPanel.php:975
+#: inc/launchpad/Panels/OpportunitiesPanel.php:974
 #: inc/tour/Core/TourCore.php:151
 msgid "Back"
 msgstr ""
@@ -989,8 +989,8 @@ msgid "End Date"
 msgstr ""
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:581
-#: templates/single-opportunity.php:213
-#: templates/single-opportunity.php:222
+#: templates/single-opportunity.php:215
+#: templates/single-opportunity.php:224
 msgid "Link"
 msgstr ""
 
@@ -1065,7 +1065,7 @@ msgid "Add information about the opportunity. Describe the essence."
 msgstr ""
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:837
-#: templates/single-opportunity.php:202
+#: templates/single-opportunity.php:204
 msgid "Requirements"
 msgstr ""
 
@@ -1077,36 +1077,36 @@ msgstr ""
 msgid "required fields"
 msgstr ""
 
-#: inc/launchpad/Panels/OpportunitiesPanel.php:869
-#: templates/single-opportunity.php:241
+#: inc/launchpad/Panels/OpportunitiesPanel.php:868
+#: templates/single-opportunity.php:243
 msgid "Document"
 msgstr ""
 
-#: inc/launchpad/Panels/OpportunitiesPanel.php:887
+#: inc/launchpad/Panels/OpportunitiesPanel.php:886
 msgid "Attach File"
 msgstr ""
 
-#: inc/launchpad/Panels/OpportunitiesPanel.php:919
+#: inc/launchpad/Panels/OpportunitiesPanel.php:918
 msgid "Pending Save"
 msgstr ""
 
-#: inc/launchpad/Panels/OpportunitiesPanel.php:938
+#: inc/launchpad/Panels/OpportunitiesPanel.php:937
 msgid "Format (PDF, DOCX). Max size 5Mb."
 msgstr ""
 
-#: inc/launchpad/Panels/OpportunitiesPanel.php:956
+#: inc/launchpad/Panels/OpportunitiesPanel.php:955
 msgid "Save Draft"
 msgstr ""
 
-#: inc/launchpad/Panels/OpportunitiesPanel.php:1007
+#: inc/launchpad/Panels/OpportunitiesPanel.php:1006
 msgid "Submit your changes and request a review from the moderation team?"
 msgstr ""
 
-#: inc/launchpad/Panels/OpportunitiesPanel.php:1015
+#: inc/launchpad/Panels/OpportunitiesPanel.php:1014
 msgid "Submit"
 msgstr ""
 
-#: inc/launchpad/Panels/OpportunitiesPanel.php:1019
+#: inc/launchpad/Panels/OpportunitiesPanel.php:1018
 #: inc/launchpad/Panels/ProfilePanel.php:387
 #: inc/launchpad/Panels/ProfilePanel.php:467
 #: inc/launchpad/Panels/ProfilePanel.php:559
@@ -1487,7 +1487,7 @@ msgstr ""
 
 #: inc/listing/Filters/LocationsFilter.php:28
 #: inc/listing/Filters/LocationsFilterSimple.php:34
-#: templates/single-opportunity.php:134
+#: templates/single-opportunity.php:136
 msgid "Location"
 msgstr ""
 
@@ -1665,20 +1665,26 @@ msgstr ""
 msgid "Too many attempts. Please try again in %d minutes."
 msgstr ""
 
-#: inc/theme-helpers.php:619
-msgid "Worldwide"
-msgstr ""
-
+#: inc/shared/View/CollapsibleList.php:67
 #: inc/theme-helpers.php:965
 msgid "Show 1 more"
 msgstr ""
 
+#: inc/shared/View/CollapsibleList.php:69
 #: inc/theme-helpers.php:966
 #, php-format
 msgid "Show %d more"
 msgid_plural "Show %d more"
 msgstr[0] ""
 msgstr[1] ""
+
+#: inc/shared/View/CollapsibleList.php:72
+msgid "Show less"
+msgstr ""
+
+#: inc/theme-helpers.php:619
+msgid "Worldwide"
+msgstr ""
 
 #: inc/tour/Core/TourCore.php:152
 msgid "Done"
@@ -2029,7 +2035,7 @@ msgid "Single News View"
 msgstr ""
 
 #: templates/single-news.php:113
-#: templates/single-opportunity.php:180
+#: templates/single-opportunity.php:182
 #: templates/single-project.php:115
 msgid "Social share"
 msgstr ""
@@ -2038,23 +2044,23 @@ msgstr ""
 msgid "Single Opportunity View"
 msgstr ""
 
-#: templates/single-opportunity.php:114
+#: templates/single-opportunity.php:116
 msgid "Dates"
 msgstr ""
 
-#: templates/single-opportunity.php:162
+#: templates/single-opportunity.php:164
 msgid "Receivers"
 msgstr ""
 
-#: templates/single-opportunity.php:208
+#: templates/single-opportunity.php:210
 msgid "Source"
 msgstr ""
 
-#: templates/single-opportunity.php:220
+#: templates/single-opportunity.php:222
 msgid "Application form"
 msgstr ""
 
-#: templates/single-opportunity.php:231
+#: templates/single-opportunity.php:233
 msgid "Additional information"
 msgstr ""
 
