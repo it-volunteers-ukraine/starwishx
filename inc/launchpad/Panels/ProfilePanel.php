@@ -241,9 +241,8 @@ class ProfilePanel extends AbstractPanel
                 <div class="explanation-block">
                     <div class="label-info">
                         <span class="exclamation-circle">
-                            <?= esc_html__('First Name', 'starwishx'); ?>,
-                            <?= esc_html__('Phone', 'starwishx'); ?>
-                            <?= esc_html__('are necessary to fill if you want to receive Contributor status, to be able to post opportunities. Because we all want real people to post and get real opportunities.', 'starwishx'); ?>
+                            <?= esc_html__('If you want to be an active part of the StarwishX community, sharing opportunities with others and receive Contributor status, the First Name and Phone fields in your profile must be filled in. We want real people to post and receive real opportunities.', 'starwishx'); ?>
+                            </br>
                             <?= esc_html__('Note: The information in your profile is not publicly available.', 'starwishx'); ?>
                         </span>
                     </div>

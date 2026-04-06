@@ -909,6 +909,14 @@
     border-radius: 12px;
     padding: 4px;
 }
+
+.asterisk::before {
+    margin-right: 3px;
+    content: "*";
+    color: $icon-color-error;
+    font-weight: bold;
+}
+
 /* ======================================
    9. FORMS & INPUTS
    ====================================== */
