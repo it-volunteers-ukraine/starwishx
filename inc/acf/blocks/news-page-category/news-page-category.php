@@ -10,7 +10,7 @@ $default_classes = [
 ];
 
 $post_type = my_post_type();
-// echo 'post_type: ' . 
+// echo 'post_type: ' ;
 // print_r($post_type) . '<br>';
 
 // update_post_meta(get_the_ID(), 'post_type', $post_type);
