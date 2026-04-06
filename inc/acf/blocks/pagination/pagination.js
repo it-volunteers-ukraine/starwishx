@@ -13,8 +13,8 @@ if (btn && container) {
         const textLoading = btn.dataset.textLoading || 'Loading...';
         const noDesc = Boolean(btn.dataset.nodesc) || false;
         const cardVersion = btn.dataset.cardVersion || '1';
-        console.log('search: ', searchTerm);
-        console.log('noDesc: ', noDesc);
+        // console.log('search: ', searchTerm);
+        // console.log('noDesc: ', noDesc);
 
         btn.disabled = true;
         btn.textContent = textLoading;

@@ -148,7 +148,7 @@ if (!function_exists('my_query_search')) {
         }
         // print_r($args);
         $query = new WP_Query($args);
-
+        
         $query = my_iter_posts_add_category($query);
         wp_reset_postdata();
         return $query;

@@ -82,10 +82,6 @@ $sort_date_old = esc_html(get_field('sort_date_old'));
 // update_post_meta(get_the_ID(), 'post_type', $post_type);
 
 
-// echo 'args_query: ' . '<br>';
-// echo '<pre>';
-// print_r($args_query);
-// echo '</pre>';
 
 
 // $args = [
@@ -111,6 +107,13 @@ $query = my_query_search($args_query);
 $total_posts = (int) $query->found_posts;
 $posts = $query->posts;
 $card_version = 2;
+
+// echo 'args_query: ' . '<br>';
+// echo '<pre>';
+// print_r($args_query);
+// echo '</pre>';
+
+// echo 'search page fount_posts: ' . $query->found_posts . '<br>';
 // echo '<pre>';
 // print_r($query);
 // echo '</pre>';
