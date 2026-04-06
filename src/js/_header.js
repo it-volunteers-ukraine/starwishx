@@ -101,7 +101,8 @@ document.addEventListener('DOMContentLoaded', () => {
     window.SpeechRecognition || window.webkitSpeechRecognition;
   
   if (!SpeechRecognition) {
-    alert('Голосовой ввод не поддерживается в этом браузере 😢');
+    // alert('Голосовой ввод не поддерживается в этом браузере 😢');
+    console.warn('SpeechRecognition API is not supported in this browser.');
   } else {
     const recognition = new SpeechRecognition();
   
