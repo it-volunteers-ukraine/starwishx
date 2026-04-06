@@ -6,6 +6,7 @@
  */
 import { store, getContext } from "@wordpress/interactivity";
 import "../../shared/Assets/popup-store.js";
+import "../../shared/Assets/collapsible-store.js";
 
 const { state } = store("starwishx/opportunities", {
   // No state defaults here — isFavorite, isUserLoggedIn, canFavorite are
