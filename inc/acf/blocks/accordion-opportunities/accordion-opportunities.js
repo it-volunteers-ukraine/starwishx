@@ -15,16 +15,18 @@ function setHeight(item) {
   const itemContentText = itemContent.children[0];
   if (!itemContentText) return;
 
-  let curTextHeight = itemContentText.style.minHeight;
-  itemContentText.style.minHeight = 0;
+  const prevMinHeight = itemContentText.style.minHeight;
+
+  if (prevMinHeight !== "") {
+    const existingScrollHeight = itemContentText.scrollHeight + "px";
+    if (prevMinHeight === existingScrollHeight) return;
+  }
+
+  itemContentText.style.minHeight = "0";
   const textHeight = itemContentText.scrollHeight + "px";
 
-  if (curTextHeight !== textHeight) {
-    itemContent.style.maxHeight = textHeight;
-    itemContentText.style.minHeight = textHeight;
-  } else {
-    itemContentText.style.minHeight = curTextHeight;
-  }
+  itemContent.style.maxHeight = textHeight;
+  itemContentText.style.minHeight = textHeight;
 }
 
 requestAnimationFrame(() => {
@@ -35,7 +37,7 @@ requestAnimationFrame(() => {
   });
 
   // IntersectionObserver for touch devices (scroll-activated accordion)
-  // rootMargin "-50% 0px -50% 0px" shrinks the observation area to a
+  // rootMargin "0% 0px -50% 0px" shrinks the observation area to a
   // zero-height line at viewport center — fires when an item straddles it.
   if (!isClickModeForTouch && noMouse) {
     const observer = new IntersectionObserver(
@@ -45,11 +47,15 @@ requestAnimationFrame(() => {
             setHeight(entry.target);
             entry.target.setAttribute("data-active", "true");
           } else {
-            entry.target.removeAttribute("data-active");
+            // Only collapse if item is BELOW viewport (not yet reached)
+            // If it's above (top < 0), it already passed — leave it open
+            if (entry.boundingClientRect.top >= 0) {
+              entry.target.removeAttribute("data-active");
+            }
           }
         });
       },
-      { rootMargin: "-15% 0px -25% 0px" },
+      { rootMargin: "0px 0px -25% 0px" },
     );
 
     itemsArray.forEach((item) => observer.observe(item));
