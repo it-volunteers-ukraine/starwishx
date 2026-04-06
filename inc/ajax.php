@@ -62,20 +62,17 @@ function ajax_load_news()
     // echo 'search3: ' . get_query_var('search') . '<br>';
 
     $args = [
-        'post_type'      => $post_type,
+        'post_type'      => $post_type_request,
         'paged'          => $page,
         'posts_per_page' => $per_page,
         's'             => $search,
-        // 's'             => '',      
-        'tax_query'      => [
-                $tax
-            // [
-            //     'taxonomy' => $category, // Или твоя кастомная taxonomy
-            //     'field'    => 'slug',
-            //     'terms'    => $category_slug,
-            // ]
-        ]
+        'post_status'   => 'publish',
+        // 'fields'         => 'ids', // важно!
+        'no_found_rows'  => false, // нужно для pagination
     ];
+    if ($tax) {
+        $args['tax_query'] = [$tax];
+    }
 
     $query = new WP_Query($args);
 
@@ -107,6 +104,7 @@ function ajax_load_news()
     // $query_args = my_query_args_prepare(['post_type' => $post_type_request]);
 
     // $query = my_query_search($query_args);
+    wp_reset_postdata();
 
     ob_start();
     $posts = $query->posts;
@@ -142,9 +140,10 @@ function ajax_load_news()
         'term_name'  => $term_name,
         'count'       => $count,
         'search'      => $search,
-        // 'query_args' => $query_args,
-        'post_type_request' => $post_type_request,
+        // 'args'      => $args,
+        // 'post_type_request' => $post_type_request,
         // 'request_path' => $request_path,
+        // 'query' => $query,
 
     ]);
     wp_die();
