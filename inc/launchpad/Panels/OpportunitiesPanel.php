@@ -859,6 +859,7 @@ class OpportunitiesPanel extends AbstractPanel
                                             data-wp-text="state.detailsCounterText"></span>
                                     </div>
                                 </div>
+                                <span class="asterisk label-info"> — <?= esc_html__('required fields', 'starwishx'); ?></span>
                             </div>
                         </div>
 

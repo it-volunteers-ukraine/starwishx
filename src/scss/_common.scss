@@ -17,8 +17,8 @@ h6 {
 }
 
 a {
-  text-decoration: none;
   cursor: pointer;
+  text-decoration: none;
 }
 
 body {
@@ -269,6 +269,7 @@ body {
   align-items: center;
   transition: $animations;
   cursor: pointer;
+  border: none;
   border-radius: 40px;
   background-color: $buttons-color-background-primary-default;
   padding: 12.5px 24px;
@@ -276,7 +277,6 @@ body {
   color: $buttons-color-text-primary-default;
   font-weight: 500;
   font-size: 16px;
-  border: none;
 
   &:hover {
     background-color: $buttons-color-background-primary-hover;
@@ -298,6 +298,7 @@ body {
   align-items: center;
   transition: $animations;
   cursor: pointer;
+  border: none;
   border-radius: 40px;
   background-color: $buttons-color-background-primary-default;
   padding: 6px 16px;
@@ -305,7 +306,6 @@ body {
   color: $buttons-color-text-primary-default;
   font-weight: 500;
   font-size: 16px;
-  border: none;
 
   &:hover {
     background-color: $buttons-color-background-primary-hover;
@@ -434,21 +434,20 @@ body {
 
   &:disabled {
     cursor: not-allowed;
+    background-color: unset;
     color: $buttons-color-background-secondary-disabled;
   }
 
-  &:hover {
-    color: $buttons-color-background-primary-hover;
+  @media (hover: hover) and (pointer: fine) {
+    &:not(:disabled):hover {
+      color: $buttons-color-background-primary-hover;
+    }
   }
 
-  &:active,
-  &:active:hover {
+  &:not(:disabled):active,
+  &:not(:disabled):active:hover {
     background-color: $buttons-color-background-secondary-pressed;
   }
-
-  // @include media.min-desktop {
-  //   font-size: 16px;
-  // }
 }
 
 .btn-chip {
@@ -464,9 +463,9 @@ body {
   // Default colors only for chips without a category slug.
   // Category chips get their colors from generated [data-slug] rules.
   &:not([data-slug]) {
-    color: $text-dark;
-    background-color: $buttons-color-background-secondary-default;
     border: 1px solid $buttons-color-border-secondary-default;
+    background-color: $buttons-color-background-secondary-default;
+    color: $text-dark;
   }
 
   &[data-child="true"] {
@@ -713,10 +712,10 @@ img {
 }
 
 .label-info {
-  display: flex;
-  flex-flow: row nowrap;
-  align-items: center;
-  gap: 4px;
+  // display: flex;
+  // flex-flow: row nowrap;
+  // align-items: center;
+  // gap: 4px;
   border-radius: $radius-badge;
   background-color: rgb(122 90 228 / 10%);
   padding: 4px;
