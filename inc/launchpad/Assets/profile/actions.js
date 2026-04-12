@@ -291,9 +291,6 @@ export const profileActions = {
       const err = validateName(p[field], nameLimits);
       if (err) p.fieldErrors[field] = vm[err] || err;
     }
-    if (Object.keys(p.fieldErrors).length) {
-      return;
-    }
 
     // Read phone from intlTelInput widget (or fallback to state)
     const phone = itiInstance ? itiInstance.getNumber() : p.phone;
@@ -303,13 +300,12 @@ export const profileActions = {
 
     // Client-side phone validation via intlTelInput
     if (itiInstance && phone && !itiInstance.isValidNumber()) {
-      const msg =
+      p.fieldErrors.phone =
         state.launchpadSettings.messages?.invalidPhone ??
         "Invalid phone number";
-      p.error = msg;
-      setTimeout(() => {
-        p.error = null;
-      }, 5000);
+    }
+
+    if (Object.keys(p.fieldErrors).length) {
       return;
     }
 
@@ -375,10 +371,13 @@ export const profileActions = {
           p.fieldErrors[field] = vm[errKey] || errKey;
         }
       }
-      p.error = error.message;
-      setTimeout(() => {
-        p.error = null;
-      }, 5000);
+      // Show banner only when there are no inline field errors
+      if (!Object.keys(p.fieldErrors).length) {
+        p.error = error.message;
+        setTimeout(() => {
+          p.error = null;
+        }, 5000);
+      }
     } finally {
       p.isSaving = false;
     }
@@ -572,7 +571,7 @@ export const profileActions = {
 
     if (!popup.newEmail || !popup.password) {
       popup.error =
-        state.launchpadSettings.validationStrings?.requiredFields ??
+        state.launchpadSettings.messages?.requiredFields ??
         "Please fill in all fields.";
       setTimeout(() => { popup.error = null; }, 5000);
       return;
@@ -665,7 +664,7 @@ export const profileActions = {
 
     if (!popup.password) {
       popup.error =
-        state.launchpadSettings.validationStrings?.passwordRequired ??
+        state.launchpadSettings.messages?.passwordRequired ??
         "Please enter your password.";
       setTimeout(() => {
         popup.error = null;

@@ -108,8 +108,11 @@ abstract class AbstractApiController extends WP_REST_Controller
         $status_map = array_merge($default_map, $custom_map);
         $status = $status_map[$code] ?? 400;
 
-        // Pin status to the specific error code for deterministic behavior
-        $error->add_data(['status' => $status], $code);
+        // Merge status into existing data (preserves field_errors, etc.)
+        $existing = $error->get_error_data($code);
+        $data = is_array($existing) ? $existing : [];
+        $data['status'] = $status;
+        $error->add_data($data, $code);
 
         return $error;
     }

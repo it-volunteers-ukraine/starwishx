@@ -200,6 +200,23 @@ class ProfileService
             }
         }
 
+        // Validate phone field (pre-compute values for persistence later)
+        $phoneE164 = '';
+        $phoneCountry = 'ua';
+        if (isset($data['phone'])) {
+            $phoneE164 = preg_replace('/[^\d\+]/', '', (string) $data['phone']);
+            $phoneCountry = !empty($data['phoneCountry'])
+                ? sanitize_text_field($data['phoneCountry'])
+                : 'ua';
+
+            if ($phoneE164 !== '') {
+                $validation = PhonePolicy::validate($phoneE164, $phoneCountry);
+                if (is_wp_error($validation)) {
+                    $fieldErrors['phone'] = $validation->get_error_message();
+                }
+            }
+        }
+
         if (!empty($fieldErrors)) {
             return new WP_Error(
                 'invalid_data',
@@ -249,23 +266,10 @@ class ProfileService
         $acfId = 'user_' . $userId;
 
         if (isset($data['phone'])) {
-            $e164 = preg_replace('/[^\d\+]/', '', (string) $data['phone']);
-            $country = !empty($data['phoneCountry'])
-                ? sanitize_text_field($data['phoneCountry'])
-                : 'ua';
-
-            // Server-side validation (libphonenumber when available, E.164 regex fallback)
-            if ($e164 !== '') {
-                $validation = PhonePolicy::validate($e164, $country);
-                if (is_wp_error($validation)) {
-                    return $validation;
-                }
-            }
-
             $fieldObj = get_field_object('phone', $acfId);
             $key = is_array($fieldObj) && !empty($fieldObj['key']) ? $fieldObj['key'] : 'phone';
 
-            update_field($key, ['number' => $e164, 'country' => $country], $acfId);
+            update_field($key, ['number' => $phoneE164, 'country' => $phoneCountry], $acfId);
         }
 
         if (isset($data['telegram'])) {

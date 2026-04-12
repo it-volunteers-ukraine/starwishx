@@ -110,7 +110,7 @@ class ProfilePanel extends AbstractPanel
                 <h2 class="panel-title"><?= esc_html__('Profile Information', 'starwishx'); ?></h2>
                 <p class="panel-description"><?= esc_html__('View/edit personal information, change password', 'starwishx'); ?></p>
             </hgroup>
-            <div
+            <div id="panel-alert"
                 class="launchpad-alert launchpad-alert--error label-info exclamation-circle__error"
                 data-wp-bind--hidden="!<?= $this->statePath('error') ?>"
                 data-wp-text="<?= $this->statePath('error') ?>"></div>
@@ -238,6 +238,9 @@ class ProfilePanel extends AbstractPanel
                             <?= esc_html__('Phone', 'starwishx'); ?>
                         </label>
                         <input type="tel" id="lp-phone" />
+                        <label class="exclamation-circle__error" hidden
+                            data-wp-bind--hidden="!<?= $this->statePath('fieldErrors') ?>.phone"
+                            data-wp-text="<?= $this->statePath('fieldErrors') ?>.phone"></label>
                     </div>
                     <div class="form-field form-field--with-action">
                         <label for="lp-email"><?= esc_html__('Email', 'starwishx'); ?></label>
@@ -356,6 +359,9 @@ class ProfilePanel extends AbstractPanel
                                 data-wp-bind--value="<?= $this->statePath('userUrl') ?>"
                                 data-wp-on--input="actions.profile.updateField"
                                 data-wp-on--blur="actions.profile.normalizeUrlField" />
+                            <label class="exclamation-circle__error" hidden
+                                data-wp-bind--hidden="!<?= $this->statePath('fieldErrors') ?>.userUrl"
+                                data-wp-text="<?= $this->statePath('fieldErrors') ?>.userUrl"></label>
                         </div>
 
                     </div>

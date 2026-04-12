@@ -244,7 +244,9 @@ final class LaunchpadCore
                     ],
                     'homeUrl'             => home_url('/'),
                     'messages'            => [
-                        'invalidPhone' => __('Please enter a valid phone number.', 'starwishx'),
+                        'invalidPhone'     => __('Please enter a valid phone number.', 'starwishx'),
+                        'requiredFields'   => __('Please fill in all fields.', 'starwishx'),
+                        'passwordRequired' => __('Please enter your password.', 'starwishx'),
                     ],
                 ],
             ]);
