@@ -593,6 +593,9 @@ class OpportunitiesPanel extends AbstractPanel
                                             <?php echo $required['opportunity_application_form'] ? 'required' : ''; ?>
                                             placeholder="<?php echo esc_attr($placeholders['opportunity_application_form'] ?? ''); ?>"
                                             data-wp-bind--value="<?= $formPath ?>.application_form" data-wp-on--input="actions.opportunities.updateForm" data-wp-on--blur="actions.opportunities.normalizeUrlField" data-field="application_form">
+                                        <label class="exclamation-circle__error" hidden
+                                            data-wp-bind--hidden="!<?= $errPath ?>.application_form"
+                                            data-wp-text="<?= $errPath ?>.application_form"></label>
                                     </div>
                                     <!-- Country Dropdown -->
                                     <div class="form-field">

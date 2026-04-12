@@ -895,8 +895,8 @@
 
 .blurred {
     filter: blur(5px);
-    cursor: pointer;
     transition: filter 0.3s ease;
+    cursor: pointer;
     user-select: none;
 }
 
@@ -1056,8 +1056,8 @@
         &--delete {
             padding-top: 0;
             .btn-profile-delete {
-                margin-left: auto;
                 gap: 4px;
+                margin-left: auto;
                 svg {
                     color: $icon-color-error;
                 }
@@ -1067,20 +1067,20 @@
 }
 .profile-form {
     .show-more {
-        position: relative;
         display: flex;
-        align-items: center;
+        position: relative;
         justify-content: center;
+        align-items: center;
         margin-top: 10px;
 
         &:before,
         &:after {
-            content: "";
             position: absolute;
-            width: calc((100% - 180px) / 2);
             flex: 1;
-            border-bottom: 1px dashed $input-color-border-hover; /* Line color and thickness */
             margin: 0 15px;
+            border-bottom: 1px dashed $input-color-border-hover; /* Line color and thickness */
+            width: calc((100% - 180px) / 2);
+            content: "";
         }
         &:before {
             left: 0;
@@ -1093,8 +1093,8 @@
         margin-top: 0;
     }
     .field-notifications {
-        margin-bottom: 0;
         margin-top: 1.2rem;
+        margin-bottom: 0;
     }
 }
 .launchpad-form {
@@ -1784,8 +1784,8 @@
             padding: 4px 10px;
             &:hover,
             &:focus-visible {
-                background: $dropdown-surface-color-selected;
                 outline: none;
+                background: $dropdown-surface-color-selected;
             }
             &:active,
             &:active:hover {
@@ -1805,8 +1805,8 @@
 
     &__trigger {
         display: flex;
-        align-items: center;
         justify-content: space-between;
+        align-items: center;
         transition: border-color $animations;
         cursor: pointer;
         border: 1px solid $input-color-border-filled;
@@ -1830,11 +1830,11 @@
     &__chevron {
         flex-shrink: 0;
         transition: transform 0.2s ease;
+        fill: none;
+        stroke: #666;
         margin-left: 8px;
         width: 11px;
         height: 7px;
-        fill: none;
-        stroke: #666;
 
         .lp-dropdown--open & {
             transform: rotate(180deg);
@@ -1887,15 +1887,32 @@
             background: $dropdown-surface-color-hover;
         }
         &:focus-visible {
-            background: $dropdown-surface-color-selected;
             outline: 1px solid $input-color-border-active;
             outline-offset: 1px;
+            background: $dropdown-surface-color-selected;
         }
         &:active {
             background-color: $dropdown-surface-color-pressed;
         }
         &--selected {
+            display: flex;
+            align-items: center;
+            color: $icon-color-accent;
             font-weight: 600;
+            &::after {
+                transform-origin: 50% 60%;
+                transition: all $animations;
+                cursor: pointer;
+                margin-right: 4px;
+                margin-left: auto;
+                content: "🗙";
+                color: $icon-color-accent;
+                font-weight: 400;
+                line-height: 1;
+            }
+            &:hover::after {
+                transform: rotate(180deg);
+            }
         }
     }
 }

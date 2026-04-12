@@ -255,6 +255,9 @@ export const opportunitiesActions = {
     } catch (error) {
       p.error = error.message;
       p.fieldErrors = error.fieldErrors || {};
+      if (Object.keys(p.fieldErrors).length) {
+        scrollToFirstError(p.fieldErrors);
+      }
     } finally {
       p.isSaving = false;
       p.isUploading = false;
@@ -509,7 +512,8 @@ export const opportunitiesActions = {
     const { state } = store("launchpad");
     const { item } = getContext();
     const p = state.panels.opportunities;
-    p.formData.country = item.id;
+    // Toggle: clicking the already-selected country clears the selection
+    p.formData.country = parseInt(p.formData.country) === item.id ? "" : item.id;
     p.isCountryDropdownOpen = false;
     if (p.fieldErrors?.country) p.fieldErrors.country = null;
   },
