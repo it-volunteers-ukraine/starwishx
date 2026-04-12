@@ -7,7 +7,6 @@ DS
 .DS_Store
 dist/
 /assets/
-/vendor
 
 # JetBrains IDE
 .idea/
