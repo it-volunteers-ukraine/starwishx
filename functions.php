@@ -192,6 +192,9 @@ if (! function_exists('yourtheme_mobile_search_lang')) {
 //   echo '<meta name="color-scheme" content="light">';
 // });
 
+// Composer autoload (league/uri, etc.)
+require_once get_template_directory() . '/vendor/autoload.php';
+
 // init for Shared infrastructure
 require_once get_template_directory() . '/inc/shared/setup.php';
 

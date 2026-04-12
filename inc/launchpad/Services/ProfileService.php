@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Launchpad\Services;
 
 use Shared\Policy\PhonePolicy;
+use Shared\Policy\UrlPolicy;
 use WP_Error;
 
 class ProfileService
@@ -188,6 +189,17 @@ class ProfileService
                 }
             }
         }
+
+        // Validate URL field — validate() returns the normalized URL or WP_Error
+        if (isset($data['userUrl']) && $data['userUrl'] !== '') {
+            $urlResult = UrlPolicy::validate($data['userUrl']);
+            if (is_wp_error($urlResult)) {
+                $fieldErrors['userUrl'] = $urlResult->get_error_message();
+            } else {
+                $data['userUrl'] = $urlResult;
+            }
+        }
+
         if (!empty($fieldErrors)) {
             return new WP_Error(
                 'invalid_data',

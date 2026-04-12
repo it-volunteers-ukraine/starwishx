@@ -1,22 +1,24 @@
 <?php
 $default_classes = [
-    'projects-section' => 'projects-section',
-    'header-block' => 'header-block',
-    'suptitle' => 'suptitle',
-    'title' => 'title',
-    'projects-wrapper' => 'projects-wrapper',
-    'projects-swiper' => 'projects-swiper',
+    'projects-section'        => 'projects-section',
+    'header-block'            => 'header-block',
+    'suptitle'                => 'suptitle',
+    'title'                   => 'title',
+    'projects-wrapper'        => 'projects-wrapper',
+    'projects-swiper'         => 'projects-swiper',
     'projects-swiper-wrapper' => 'projects-swiper-wrapper',
-    'project-card' => 'project-card',
-    'img-wrapper' => 'img-wrapper',
-    'project-image' => 'project-image',
-    'project-category' => 'project-category',
-    'project-date' => 'project-date',
-    'project-heading' => 'project-heading',
-    'arrows' => 'arrows',
-    'arrow' => 'arrow',
-    'arrow-left' => 'arrow-left',
-    'arrow-right' => 'arrow-right',
+    'project-article'         => 'project-article',
+    'project-card'            => 'project-card',
+    'img-wrapper'             => 'img-wrapper',
+    'project-image'           => 'project-image',
+    'project-category'        => 'project-category',
+    'project-date'            => 'project-date',
+    'project-card-header'     => 'project-card-header',
+    'project-card-title'      => 'project-card-title',
+    'arrows'                  => 'arrows',
+    'arrow'                   => 'arrow',
+    'arrow-left'              => 'arrow-left',
+    'arrow-right'             => 'arrow-right',
 ];
 
 $modules_file = get_template_directory() . '/assets/css/blocks/modules.json';
@@ -45,8 +47,8 @@ $query = new WP_Query($query_args);
 
 <section aria-labelledby="<?= $classes['title'] ?>" class="<?= $classes['projects-section'] ?>">
     <header class="<?= $classes['header-block'] ?>">
-        <span class="<?= $classes['suptitle'] ?>"><?php echo $suptitle ?></span>
-        <h2 id="<?= $classes['title'] ?>" class="<?= $classes['title'] ?>"><?php echo $title ?></h2>
+        <span class="<?= $classes['suptitle'] ?>"><?= $suptitle ?></span>
+        <h2 id="<?= $classes['title'] ?>" class="<?= $classes['title'] ?>"><?= $title ?></h2>
         <div class="<?= $classes['arrows'] ?>">
             <!-- Swiper navigation buttons -->
             <button type="button" class="arrow-left <?= $classes['arrow'] ?> <?= $classes['arrow-left'] ?>" aria-label="Previous projects">
@@ -78,13 +80,12 @@ $query = new WP_Query($query_args);
                         // $category = get_field('category', $post_id); // possible feature
                     ?>
 
-                        <article class="swiper-slide">
+                        <article class="swiper-slide <?= $classes['project-article'] ?>">
                             <a href="<?= esc_url($permalink); ?>" class="<?= $classes['project-card'] ?>" rel="bookmark">
 
                                 <?php if ($image_id) : ?>
                                     <figure class="<?= $classes['img-wrapper'] ?>">
-                                        <?php
-                                        echo wp_get_attachment_image(
+                                        <?= wp_get_attachment_image(
                                             $image_id,
                                             'large',
                                             false,
@@ -95,14 +96,14 @@ $query = new WP_Query($query_args);
                                 <?php endif; ?>
 
                                 <time datetime="<?= esc_attr($iso_date); ?>" class="<?= $classes['project-date'] ?>">
-                                    <?php echo esc_html($date_display); ?>
+                                    <?= esc_html($date_display); ?>
                                 </time>
-                                <header>
-                                    <h3 class="<?= $classes['project-heading'] ?>">
-                                        <?php echo esc_html($title_post); ?>
+
+                                <header class="<?= $classes['project-card-header'] ?>">
+                                    <h3 class="<?= $classes['project-card-title'] ?>">
+                                        <?= esc_html($title_post); ?>
                                     </h3>
                                 </header>
-
                             </a>
                         </article>
 

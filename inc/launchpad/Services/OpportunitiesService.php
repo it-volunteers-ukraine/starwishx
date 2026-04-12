@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Launchpad\Services;
 
+use Shared\Policy\UrlPolicy;
 use WP_Error;
 
 class OpportunitiesService
@@ -356,6 +357,26 @@ class OpportunitiesService
             ) {
                 return new WP_Error('forbidden', 'You do not have permission to edit this item.');
             }
+        }
+
+        // Validate URL fields — validate() returns the normalized URL or WP_Error
+        $fieldErrors = [];
+        foreach (['sourcelink', 'application_form'] as $urlField) {
+            if (!empty($data[$urlField])) {
+                $urlResult = UrlPolicy::validate($data[$urlField]);
+                if (is_wp_error($urlResult)) {
+                    $fieldErrors[$urlField] = $urlResult->get_error_message();
+                } else {
+                    $data[$urlField] = $urlResult;
+                }
+            }
+        }
+        if (!empty($fieldErrors)) {
+            return new WP_Error(
+                'invalid_data',
+                __('Please correct the highlighted fields.', 'starwishx'),
+                ['status' => 422, 'field_errors' => $fieldErrors]
+            );
         }
 
         $wpdb->query('START TRANSACTION');
