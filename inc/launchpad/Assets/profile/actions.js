@@ -327,7 +327,6 @@ export const profileActions = {
           body: {
             firstName: p.firstName,
             lastName: p.lastName,
-            email: p.email,
             phone,
             phoneCountry,
             nickname: p.nickname,
@@ -527,6 +526,89 @@ export const profileActions = {
       }, 5000);
     }
   },
+
+  // ── Email change popup ──────────────────────────────────────────────
+
+  openEmailChange() {
+    const { state } = store("launchpad");
+    const p = ensurePanel(state, "profile");
+    p.emailPopup = {
+      isOpen: true,
+      newEmail: p.email,
+      password: "",
+      isPasswordVisible: false,
+      isChanging: false,
+      error: null,
+    };
+  },
+
+  cancelEmailChange() {
+    const { state } = store("launchpad");
+    const p = ensurePanel(state, "profile");
+    p.emailPopup.isOpen = false;
+    p.emailPopup.password = "";
+    p.emailPopup.error = null;
+  },
+
+  updateEmailPopupField() {
+    const { state } = store("launchpad");
+    const { ref } = getElement();
+    const popup = ensurePanel(state, "profile").emailPopup;
+    if (ref.dataset.field) {
+      popup[ref.dataset.field] = ref.value;
+    }
+  },
+
+  toggleEmailPasswordVisibility() {
+    const { state } = store("launchpad");
+    const popup = ensurePanel(state, "profile").emailPopup;
+    popup.isPasswordVisible = !popup.isPasswordVisible;
+  },
+
+  async confirmEmailChange() {
+    const { state } = store("launchpad");
+    const p = ensurePanel(state, "profile");
+    const popup = p.emailPopup;
+
+    if (!popup.newEmail || !popup.password) {
+      popup.error =
+        state.launchpadSettings.validationStrings?.requiredFields ??
+        "Please fill in all fields.";
+      setTimeout(() => { popup.error = null; }, 5000);
+      return;
+    }
+
+    popup.isChanging = true;
+    popup.error = null;
+
+    try {
+      const data = await fetchJson(
+        state,
+        `${state.launchpadSettings.restUrl}profile/email`,
+        {
+          method: "POST",
+          body: {
+            email: popup.newEmail,
+            password: popup.password,
+          },
+        },
+      );
+
+      if (data) {
+        Object.assign(p, data);
+      }
+
+      popup.isOpen = false;
+      popup.password = "";
+    } catch (error) {
+      popup.error = error.message;
+      setTimeout(() => { popup.error = null; }, 5000);
+    } finally {
+      popup.isChanging = false;
+    }
+  },
+
+  // ── Delete account ────────────────────────────────────────────────
 
   /**
    * Open the delete account confirmation popup.

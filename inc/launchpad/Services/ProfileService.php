@@ -220,10 +220,7 @@ class ProfileService
             $coreArgs['last_name']  = sanitize_text_field($data['lastName']);
             $hasCoreUpdate = true;
         }
-        if (isset($data['email'])) {
-            $coreArgs['user_email'] = sanitize_email($data['email']);
-            $hasCoreUpdate = true;
-        }
+        // Email is handled by the dedicated changeEmail() method (requires password).
         if (isset($data['nickname'])) {
             $coreArgs['nickname'] = sanitize_text_field($data['nickname']);
             $hasCoreUpdate = true;
@@ -314,6 +311,54 @@ class ProfileService
 
         // Returns an array (with optional flag), satisfying the return type
         return $freshProfile;
+    }
+
+    /**
+     * Change user email after password verification.
+     *
+     * @return array|WP_Error Fresh profile data on success.
+     */
+    public function changeEmail(int $userId, string $newEmail, string $password): array|WP_Error
+    {
+        $user = get_userdata($userId);
+
+        if (!$user) {
+            return new WP_Error('not_found', __('User not found.', 'starwishx'));
+        }
+
+        if (!wp_check_password($password, $user->user_pass, $user->ID)) {
+            return new WP_Error(
+                'invalid_password',
+                __('The password you entered is incorrect.', 'starwishx')
+            );
+        }
+
+        if (!is_email($newEmail)) {
+            return new WP_Error(
+                'email_invalid',
+                __('Please enter a valid email address.', 'starwishx')
+            );
+        }
+
+        // Check uniqueness — email_exists() returns user ID or false
+        $existing = email_exists($newEmail);
+        if ($existing && $existing !== $userId) {
+            return new WP_Error(
+                'email_exists',
+                __('This email address is already in use.', 'starwishx')
+            );
+        }
+
+        $result = wp_update_user([
+            'ID'         => $userId,
+            'user_email' => $newEmail,
+        ]);
+
+        if (is_wp_error($result)) {
+            return $result;
+        }
+
+        return $this->getProfileData($userId);
     }
 
     /**

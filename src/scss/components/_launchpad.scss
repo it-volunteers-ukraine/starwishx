@@ -208,7 +208,9 @@
 .launchpad-panel {
     position: relative;
     padding: 0 0 2rem 0;
-
+    * > * {
+        overflow-wrap: anywhere;
+    }
     @include max-tablet {
         padding-bottom: 1rem;
     }
@@ -811,11 +813,9 @@
     gap: 1.5rem;
     border: 2px dashed $element-card-cult-stroke;
     border-radius: 12px;
-
-    // background: $surface-primary;
     background: $surface-violet;
     padding: 1.5rem;
-    max-width: 640px;
+    max-width: 820px;
 
     @include max-tablet {
         grid-template-columns: 1fr;
@@ -1920,6 +1920,23 @@
                 transform: rotate(180deg);
             }
         }
+    }
+}
+.form-field__group {
+    position: relative;
+    .btn-changemail {
+        position: absolute;
+        top: 6px;
+        right: 8px;
+        border: unset;
+        border-radius: 10px;
+        padding: 10px 12px;
+    }
+}
+.profile-form {
+    .form-field--disabled[type="email"] {
+        background: rgba($dropdown-surface-color-pressed, 0.1);
+        color: $text-light;
     }
 }
 .input-iconed {

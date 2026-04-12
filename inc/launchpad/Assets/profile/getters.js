@@ -36,6 +36,12 @@ export const profileGetters = {
       : "password";
   },
 
+  get emailPasswordInputType() {
+    return this.panels.profile?.emailPopup?.isPasswordVisible
+      ? "text"
+      : "password";
+  },
+
   /**
    * Is the current sensitive field blurred? (context-aware via data-field)
    * Reads data-field from the element to check against revealedFields array.

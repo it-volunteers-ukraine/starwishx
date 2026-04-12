@@ -29,13 +29,7 @@ class ProfileController extends AbstractLaunchpadController
             'args'                => [
                 'firstName' => ['sanitize_callback' => 'sanitize_text_field'],
                 'lastName'  => ['sanitize_callback' => 'sanitize_text_field'],
-                'email'     => [
-                    'required'          => true,
-                    'sanitize_callback' => 'sanitize_email',
-                    'validate_callback' => function ($value) {
-                        return !empty($value) && is_email($value);
-                    },
-                ],
+                // Email is handled by the dedicated /profile/email endpoint.
                 // Core WP fields
                 'nickname'    => ['sanitize_callback' => 'sanitize_text_field'],
                 'displayName' => ['sanitize_callback' => 'sanitize_text_field'],
@@ -46,6 +40,22 @@ class ProfileController extends AbstractLaunchpadController
                 'phoneCountry' => ['sanitize_callback' => 'sanitize_text_field'],
                 'telegram'     => ['sanitize_callback' => 'sanitize_text_field'],
                 'organization' => ['sanitize_callback' => 'sanitize_text_field'],
+            ],
+        ]);
+
+        register_rest_route($this->namespace, '/profile/email', [
+            'methods'             => 'POST',
+            'callback'            => [$this, 'changeEmail'],
+            'permission_callback' => [$this, 'checkLoggedIn'],
+            'args'                => [
+                'email' => [
+                    'required'          => true,
+                    'sanitize_callback' => 'sanitize_email',
+                    'validate_callback' => function ($value) {
+                        return !empty($value) && is_email($value);
+                    },
+                ],
+                'password' => ['required' => true, 'type' => 'string'],
             ],
         ]);
 
@@ -68,13 +78,35 @@ class ProfileController extends AbstractLaunchpadController
         $result = $this->service->updateProfile(get_current_user_id(), $params);
 
         if (is_wp_error($result)) {
-            return $this->error($result->get_error_message());
+            return $this->mapServiceError($result);
         }
 
         return $this->success([
             'success' => true,
             'message' => __('Profile updated.', 'starwishx'),
-            // Spread the updated data back to frontend
+            ...$result
+        ]);
+    }
+
+    public function changeEmail(WP_REST_Request $request): WP_REST_Response|WP_Error
+    {
+        $result = $this->service->changeEmail(
+            get_current_user_id(),
+            $request->get_param('email'),
+            $request->get_param('password')
+        );
+
+        if (is_wp_error($result)) {
+            return $this->mapServiceError($result, [
+                'invalid_password' => 422,
+                'email_exists'     => 422,
+                'email_invalid'    => 422,
+            ]);
+        }
+
+        return $this->success([
+            'success' => true,
+            'message' => __('Email updated.', 'starwishx'),
             ...$result
         ]);
     }
