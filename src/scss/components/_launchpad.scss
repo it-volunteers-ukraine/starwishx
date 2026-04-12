@@ -1899,6 +1899,12 @@
             align-items: center;
             color: $icon-color-accent;
             font-weight: 600;
+        }
+    }
+}
+.lp-dropdown--toggleable {
+    .lp-dropdown__item {
+        &--selected {
             &::after {
                 transform-origin: 50% 60%;
                 transition: all $animations;
