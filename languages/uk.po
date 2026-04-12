@@ -8,13 +8,13 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2026-02-25 10:47+0000\n"
-"PO-Revision-Date: 2026-04-06 08:30+0000\n"
+"PO-Revision-Date: 2026-04-12 15:49+0000\n"
 "Language: uk\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
 "X-Generator: Loco https://localise.biz/\n"
 "X-Domain: starwishx\n"
-"X-Loco-Version: 2.8.3; wp-6.9.4; php-8.3.29"
+"X-Loco-Version: 2.8.3; wp-6.9.4; php-8.4.16"
 
 #: templates/page-policy.php:127
 #, php-format
@@ -31,7 +31,8 @@ msgstr "[%s] Активуйте свій обліковий запис"
 msgid "[%s] Password Reset"
 msgstr "[%s] Скидання пароля"
 
-#: inc/launchpad/Services/OpportunitiesService.php:564
+#: docs/UrlPolicy/inc/launchpad/Services/OpportunitiesService.php:583
+#: inc/launchpad/Services/OpportunitiesService.php:585
 msgid "Access denied."
 msgstr "Доступ заборонено."
 
@@ -65,7 +66,8 @@ msgstr "URL форми заявки"
 msgid "Attach File"
 msgstr "Додати файл"
 
-#: inc/launchpad/Services/ProfileService.php:58
+#: docs/UrlPolicy/inc/launchpad/Services/ProfileService.php:59
+#: inc/launchpad/Services/ProfileService.php:59
 #: template-parts/comments-interactive.php:180
 #: template-parts/comments-interactive.php:283
 msgid "Author"
@@ -535,7 +537,8 @@ msgstr "PDF не завантажено"
 msgid "Nothing found matching your criteria"
 msgstr "Нічого не знайдено за вашими критеріями"
 
-#: inc/launchpad/Services/OpportunitiesService.php:570
+#: docs/UrlPolicy/inc/launchpad/Services/OpportunitiesService.php:589
+#: inc/launchpad/Services/OpportunitiesService.php:591
 msgid "Only drafts can be submitted for review."
 msgstr "Лише чернетки можуть бути відправлені на перевірку."
 
@@ -699,8 +702,9 @@ msgstr "Інформація профілю"
 msgid "Profile updated."
 msgstr "Профіль оновлено."
 
+#: docs/UrlPolicy/inc/launchpad/Services/OpportunitiesService.php:28
 #: inc/launchpad/Panels/OpportunitiesPanel.php:292
-#: inc/launchpad/Services/OpportunitiesService.php:27
+#: inc/launchpad/Services/OpportunitiesService.php:28
 msgid "Published"
 msgstr "Опубліковано"
 
@@ -989,8 +993,9 @@ msgstr "Успішно оновлено"
 msgid "Updating..."
 msgstr "Оновлення..."
 
+#: docs/UrlPolicy/inc/launchpad/Services/ProfileService.php:330
 #: inc/comments/Services/CommentsService.php:159
-#: inc/launchpad/Services/ProfileService.php:320
+#: inc/launchpad/Services/ProfileService.php:332
 msgid "User not found."
 msgstr "Користувача не знайдено."
 
@@ -1184,11 +1189,11 @@ msgstr "Блок FAQ"
 msgid "Frequently Asked Questions Block"
 msgstr "Блок часто задаваних питань"
 
-#: inc/acf/blocks/projects/register.php:4
+#: docs/projects/register.php:4 inc/acf/blocks/projects/register.php:4
 msgid "Projects Carousel"
 msgstr "Карусель проєктів"
 
-#: inc/acf/blocks/projects/register.php:5
+#: docs/projects/register.php:5 inc/acf/blocks/projects/register.php:5
 msgid "Carousel of project cards"
 msgstr "Карусель карток проєктів"
 
@@ -1212,33 +1217,39 @@ msgstr "Организації"
 msgid "This feature is only available for registered users."
 msgstr "Ця функція доступна лише для зареєстрованих користувачів."
 
+#: docs/UrlPolicy/inc/launchpad/Services/OpportunitiesService.php:628
 #: inc/launchpad/Panels/OpportunitiesPanel.php:140
-#: inc/launchpad/Services/OpportunitiesService.php:609
+#: inc/launchpad/Services/OpportunitiesService.php:630
 msgid "Title is required."
 msgstr "Назва обов'язкова."
 
+#: docs/UrlPolicy/inc/launchpad/Services/OpportunitiesService.php:653
 #: inc/launchpad/Panels/OpportunitiesPanel.php:145
-#: inc/launchpad/Services/OpportunitiesService.php:634
+#: inc/launchpad/Services/OpportunitiesService.php:655
 msgid "Company is required."
 msgstr "Організація обов'язкова."
 
+#: docs/UrlPolicy/inc/launchpad/Services/OpportunitiesService.php:661
 #: inc/launchpad/Panels/OpportunitiesPanel.php:150
-#: inc/launchpad/Services/OpportunitiesService.php:642
+#: inc/launchpad/Services/OpportunitiesService.php:663
 msgid "Source link is required."
 msgstr "Посилання на джерело обов'язкове."
 
+#: docs/UrlPolicy/inc/launchpad/Services/OpportunitiesService.php:642
 #: inc/launchpad/Panels/OpportunitiesPanel.php:151
-#: inc/launchpad/Services/OpportunitiesService.php:623
+#: inc/launchpad/Services/OpportunitiesService.php:644
 msgid "Description is required."
 msgstr "Опис обов'язковий."
 
+#: docs/UrlPolicy/inc/launchpad/Services/OpportunitiesService.php:667
 #: inc/launchpad/Panels/OpportunitiesPanel.php:156
-#: inc/launchpad/Services/OpportunitiesService.php:648
+#: inc/launchpad/Services/OpportunitiesService.php:669
 msgid "At least one category is required."
 msgstr "Треба обрати хоча б одну категорію."
 
+#: docs/UrlPolicy/inc/launchpad/Services/OpportunitiesService.php:673
 #: inc/launchpad/Panels/OpportunitiesPanel.php:157
-#: inc/launchpad/Services/OpportunitiesService.php:654
+#: inc/launchpad/Services/OpportunitiesService.php:675
 msgid "At least one seeker type is required."
 msgstr "Треба обрати хоча б одного отримувача"
 
@@ -1251,18 +1262,21 @@ msgstr ""
 msgid "Submit"
 msgstr "Надіслати"
 
-#: inc/launchpad/Services/OpportunitiesService.php:668
+#: docs/UrlPolicy/inc/launchpad/Services/OpportunitiesService.php:687
+#: inc/launchpad/Services/OpportunitiesService.php:689
 msgid "Please fill in all required fields before submitting for review."
 msgstr ""
 "Будь ласка, заповніть усі обов'язкові поля, перш ніж надсилати на розгляд."
 
+#: docs/UrlPolicy/inc/launchpad/Services/OpportunitiesService.php:631
 #: inc/launchpad/Panels/OpportunitiesPanel.php:142
-#: inc/launchpad/Services/OpportunitiesService.php:612
+#: inc/launchpad/Services/OpportunitiesService.php:633
 #, php-format
 msgid "Title must be at least %d characters."
 msgstr "Назва має містити щонайменше %d символів."
 
-#: inc/launchpad/Services/OpportunitiesService.php:617
+#: docs/UrlPolicy/inc/launchpad/Services/OpportunitiesService.php:636
+#: inc/launchpad/Services/OpportunitiesService.php:638
 #, php-format
 msgid "Title must not exceed %d characters."
 msgstr "Назва не повинна перевищувати %d символів."
@@ -1289,27 +1303,33 @@ msgstr ""
 "Ваш пароль успішно змінено. Вам потрібно буде знову увійти, використовуючи "
 "новий пароль."
 
-#: inc/launchpad/Services/ProfileService.php:56
+#: docs/UrlPolicy/inc/launchpad/Services/ProfileService.php:57
+#: inc/launchpad/Services/ProfileService.php:57
 msgid "Subscriber"
 msgstr "Підписник"
 
-#: inc/launchpad/Services/ProfileService.php:57
+#: docs/UrlPolicy/inc/launchpad/Services/ProfileService.php:58
+#: inc/launchpad/Services/ProfileService.php:58
 msgid "Contributor"
 msgstr "Учасник"
 
-#: inc/launchpad/Services/ProfileService.php:59
+#: docs/UrlPolicy/inc/launchpad/Services/ProfileService.php:60
+#: inc/launchpad/Services/ProfileService.php:60
 msgid "Editor"
 msgstr "Редактор"
 
-#: inc/launchpad/Services/ProfileService.php:60
+#: docs/UrlPolicy/inc/launchpad/Services/ProfileService.php:61
+#: inc/launchpad/Services/ProfileService.php:61
 msgid "Administrator"
 msgstr "Адміністратор"
 
-#: inc/launchpad/Services/OpportunitiesService.php:25
+#: docs/UrlPolicy/inc/launchpad/Services/OpportunitiesService.php:26
+#: inc/launchpad/Services/OpportunitiesService.php:26
 msgid "Draft"
 msgstr "Чернетка"
 
-#: inc/launchpad/Services/OpportunitiesService.php:26
+#: docs/UrlPolicy/inc/launchpad/Services/OpportunitiesService.php:27
+#: inc/launchpad/Services/OpportunitiesService.php:27
 msgid "Pending Review"
 msgstr "Очікує розгляду"
 
@@ -1393,7 +1413,7 @@ msgstr "Переглянути всі"
 msgid "Home"
 msgstr "Додому"
 
-#: inc/acf/blocks/breadcrumbs/breadcrumbs.php:158
+#: inc/acf/blocks/breadcrumbs/breadcrumbs.php:163
 msgid "Breadcrumbs"
 msgstr "Хлібні кріхти"
 
@@ -1723,15 +1743,18 @@ msgstr ""
 msgid "OK"
 msgstr "Ok"
 
-#: inc/launchpad/Services/ProfileService.php:328
+#: docs/UrlPolicy/inc/launchpad/Services/ProfileService.php:338
+#: inc/launchpad/Services/ProfileService.php:340
 msgid "Your account role does not permit self-deletion."
 msgstr "Роль вашого облікового запису не дозволяє самостійне видалення."
 
-#: inc/launchpad/Services/ProfileService.php:336
+#: docs/UrlPolicy/inc/launchpad/Services/ProfileService.php:346
+#: inc/launchpad/Services/ProfileService.php:348
 msgid "The password you entered is incorrect."
 msgstr "Введений вами пароль неправильний."
 
-#: inc/launchpad/Services/ProfileService.php:351
+#: docs/UrlPolicy/inc/launchpad/Services/ProfileService.php:361
+#: inc/launchpad/Services/ProfileService.php:363
 msgid "Account deletion failed."
 msgstr "Не вдалося видалити обліковий запис."
 
@@ -2140,14 +2163,16 @@ msgstr "Або перегляньте публічну сторінку:"
 msgid "You cannot review your own post."
 msgstr "Ви не можете оцінювати власну публікацію."
 
+#: docs/UrlPolicy/inc/launchpad/Services/OpportunitiesService.php:656
 #: inc/launchpad/Panels/OpportunitiesPanel.php:147
-#: inc/launchpad/Services/OpportunitiesService.php:637
+#: inc/launchpad/Services/OpportunitiesService.php:658
 #, php-format
 msgid "Company must be at least %d characters."
 msgstr "Назва надавача має містити щонайменше %d символів."
 
+#: docs/UrlPolicy/inc/launchpad/Services/OpportunitiesService.php:645
 #: inc/launchpad/Panels/OpportunitiesPanel.php:153
-#: inc/launchpad/Services/OpportunitiesService.php:626
+#: inc/launchpad/Services/OpportunitiesService.php:647
 #, php-format
 msgid "Description must be at least %d characters."
 msgstr "Опис має містити щонайменше %d символів."
@@ -2166,7 +2191,10 @@ msgstr "Має бути щонайменше %d символів."
 msgid "Must not exceed %d characters."
 msgstr "Не повинно перевищувати %d символів."
 
-#: inc/launchpad/Services/ProfileService.php:194
+#: docs/UrlPolicy/inc/launchpad/Services/OpportunitiesService.php:375
+#: docs/UrlPolicy/inc/launchpad/Services/ProfileService.php:204
+#: inc/launchpad/Services/OpportunitiesService.php:377
+#: inc/launchpad/Services/ProfileService.php:206
 msgid "Please correct the highlighted fields."
 msgstr "Будь ласка, виправте виділені поля."
 
@@ -2221,3 +2249,8 @@ msgstr ""
 #: inc/shared/View/CollapsibleList.php:72
 msgid "Show less"
 msgstr "Показати менше"
+
+#: docs/UrlPolicy/inc/shared/Policy/UrlPolicy.php:43
+#: inc/shared/Policy/UrlPolicy.php:81
+msgid "Please enter a valid URL (e.g. https://example.com)."
+msgstr "Будь ласка, введіть дійсну URL-адресу (наприклад, https://example.com)"
