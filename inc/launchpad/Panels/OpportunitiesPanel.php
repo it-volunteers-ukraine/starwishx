@@ -825,7 +825,7 @@ class OpportunitiesPanel extends AbstractPanel
                                     <label class="label-required"><?php esc_html_e('Describe the opportunity', 'starwishx'); ?></label>
                                     <textarea id="opportunity-description" rows="6" required class="widefat"
                                         maxlength="<?= OpportunitiesService::DESCRIPTION_MAX_LENGTH ?>"
-                                        placeholder="<?php esc_html_e('Add information about the opportunity. Describe the essence.', 'starwishx'); ?>"
+                                        placeholder="<?= esc_attr(sprintf(__('Add information about the opportunity. Describe the essence. Min %1$d, max %2$d characters', 'starwishx'), OpportunitiesService::DESCRIPTION_MIN_LENGTH, OpportunitiesService::DESCRIPTION_MAX_LENGTH)); ?>"
                                         data-wp-bind--value="<?= $formPath ?>.description" data-wp-on--input="actions.opportunities.updateForm" data-field="description"></textarea>
                                     <div class="form-field__footer">
                                         <label class="exclamation-circle__error" hidden
