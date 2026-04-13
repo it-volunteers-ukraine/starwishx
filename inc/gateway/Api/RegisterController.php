@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Gateway\Api;
 
 use Shared\Core\AbstractApiController;
+use Shared\Policy\EmailPolicy;
 use Gateway\Services\RegisterService;
 use WP_REST_Request;
 use WP_REST_Response;
@@ -31,7 +32,16 @@ class RegisterController extends AbstractApiController
             'permission_callback' => [$this, 'checkLoggedOut'],
             'args'                => [
                 'username' => ['required' => true, 'sanitize_callback' => 'sanitize_user'],
-                'email'    => ['required' => true, 'sanitize_callback' => 'sanitize_email'],
+                'email'    => [
+                    'required'          => true,
+                    'sanitize_callback' => 'sanitize_email',
+                    'validate_callback' => function ($value) {
+                        if (empty($value)) {
+                            return false;
+                        }
+                        return EmailPolicy::validate($value);
+                    },
+                ],
             ],
         ]);
     }
