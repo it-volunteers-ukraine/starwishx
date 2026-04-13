@@ -25,7 +25,7 @@
     display: flex;
     position: relative;
     flex-direction: column;
-    gap: 16px;
+    gap: 40px;
     z-index: 1;
     border-radius: $radius-m;
     background: $surface-violet;
@@ -47,6 +47,9 @@
     }
     .btn--danger {
         border-color: $icon-color-error;
+    }
+    .gateway-form {
+        min-width: unset;
     }
 }
 

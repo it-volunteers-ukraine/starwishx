@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Launchpad\Services;
 
+use Shared\Policy\EmailPolicy;
 use Shared\Policy\PhonePolicy;
 use Shared\Policy\UrlPolicy;
 use WP_Error;
@@ -337,11 +338,9 @@ class ProfileService
             );
         }
 
-        if (!is_email($newEmail)) {
-            return new WP_Error(
-                'email_invalid',
-                __('Please enter a valid email address.', 'starwishx')
-            );
+        $emailResult = EmailPolicy::validate($newEmail);
+        if (is_wp_error($emailResult)) {
+            return $emailResult;
         }
 
         // Check uniqueness — email_exists() returns user ID or false

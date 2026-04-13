@@ -6,6 +6,7 @@ declare(strict_types=1);
 namespace Launchpad\Api;
 
 use Launchpad\Services\ProfileService;
+use Shared\Policy\EmailPolicy;
 use Shared\Sanitize\InputSanitizer;
 use WP_REST_Request;
 use WP_REST_Response;
@@ -52,7 +53,10 @@ class ProfileController extends AbstractLaunchpadController
                     'required'          => true,
                     'sanitize_callback' => 'sanitize_email',
                     'validate_callback' => function ($value) {
-                        return !empty($value) && is_email($value);
+                        if (empty($value)) {
+                            return false;
+                        }
+                        return EmailPolicy::validate($value);
                     },
                 ],
                 'password' => ['required' => true, 'type' => 'string'],
@@ -98,9 +102,10 @@ class ProfileController extends AbstractLaunchpadController
 
         if (is_wp_error($result)) {
             return $this->mapServiceError($result, [
-                'invalid_password' => 422,
-                'email_exists'     => 422,
-                'email_invalid'    => 422,
+                'invalid_password'  => 422,
+                'email_exists'      => 422,
+                'email_invalid'     => 422,
+                'email_dns_failed'  => 422,
             ]);
         }
 
