@@ -11,6 +11,7 @@ declare(strict_types=1);
 
 namespace Gateway\Services;
 
+use Shared\Policy\EmailPolicy;
 use WP_Error;
 use WP_User;
 
@@ -22,8 +23,17 @@ class RegisterService
     public function handleRegistration(string $username, string $email): bool|WP_Error
     {
         // 1. Basic Validation
-        if (empty($username) || !is_email($email)) {
+        if (empty($username)) {
             return new WP_Error('invalid_data', __('Please provide a valid username and email address.', 'starwishx'));
+        }
+
+        if (empty($email)) {
+            return new WP_Error('invalid_data', __('Please provide a valid username and email address.', 'starwishx'));
+        }
+
+        $emailResult = EmailPolicy::validate($email);
+        if (is_wp_error($emailResult)) {
+            return $emailResult;
         }
 
         // 2. Username Format Validation
