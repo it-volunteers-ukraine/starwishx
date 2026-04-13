@@ -189,7 +189,7 @@ wp_reset_postdata();
 
             <div class="btn-text-medium <?php echo esc_attr($classes['pages']); ?>">
                 <a id='pagination-prev'
-                    href="<?= pagination_url($base_url, $page - 1, $per_page); ?>"
+                    href="<?= pagination_url($base_url, $page - 1, $per_page, $search_term); ?>"
                     class="<?php echo esc_attr($classes['nav-arrow']); ?> <?php echo esc_attr($classes['nav-arrow-rotate']); ?>"
                     data-link-disabled=<?php echo $prev_disabled; ?>
                     rel="prev">
