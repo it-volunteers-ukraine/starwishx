@@ -79,6 +79,14 @@ class ProfilePanel extends AbstractPanel
                 'isDeleting'        => false,
                 'error'             => null,
             ],
+            'emailPopup'               => [
+                'isOpen'            => false,
+                'newEmail'          => '',
+                'password'          => '',
+                'isPasswordVisible' => false,
+                'isChanging'        => false,
+                'error'             => null,
+            ],
             'deleteSuccessPopup'       => ['isOpen' => false],
             'isFormExpanded'           => false,
             'revealedFields'           => [],
@@ -102,7 +110,7 @@ class ProfilePanel extends AbstractPanel
                 <h2 class="panel-title"><?= esc_html__('Profile Information', 'starwishx'); ?></h2>
                 <p class="panel-description"><?= esc_html__('View/edit personal information, change password', 'starwishx'); ?></p>
             </hgroup>
-            <div
+            <div id="panel-alert"
                 class="launchpad-alert launchpad-alert--error label-info exclamation-circle__error"
                 data-wp-bind--hidden="!<?= $this->statePath('error') ?>"
                 data-wp-text="<?= $this->statePath('error') ?>"></div>
@@ -230,12 +238,22 @@ class ProfilePanel extends AbstractPanel
                             <?= esc_html__('Phone', 'starwishx'); ?>
                         </label>
                         <input type="tel" id="lp-phone" />
+                        <label class="exclamation-circle__error" hidden
+                            data-wp-bind--hidden="!<?= $this->statePath('fieldErrors') ?>.phone"
+                            data-wp-text="<?= $this->statePath('fieldErrors') ?>.phone"></label>
                     </div>
-                    <div class="form-field">
-                        <label class="label-required" for="lp-email"><?= esc_html__('Email', 'starwishx'); ?></label>
-                        <input type="email" id="lp-email" required data-field="email"
-                            data-wp-bind--value="<?= $this->statePath('email') ?>"
-                            data-wp-on--input="actions.profile.updateField" />
+                    <div class="form-field form-field--with-action">
+                        <label for="lp-email"><?= esc_html__('Email', 'starwishx'); ?></label>
+                        <div class="form-field__group">
+                            <input class="form-field--disabled" type="email" id="lp-email" readonly tabindex="-1"
+                                data-wp-bind--value="<?= $this->statePath('email') ?>" />
+                            <button type="button" class="btn btn-changemail"
+                                title="<?= esc_attr__('Change Email', 'starwishx') ?>"
+                                data-wp-on--click="actions.profile.openEmailChange">
+                                <?= sw_svg('icon-write', 14); ?>
+                                <!-- < ?= esc_html__('Change', 'starwishx'); ? > -->
+                            </button>
+                        </div>
                     </div>
                 </div>
                 <div class="explanation-block">
@@ -341,6 +359,9 @@ class ProfilePanel extends AbstractPanel
                                 data-wp-bind--value="<?= $this->statePath('userUrl') ?>"
                                 data-wp-on--input="actions.profile.updateField"
                                 data-wp-on--blur="actions.profile.normalizeUrlField" />
+                            <label class="exclamation-circle__error" hidden
+                                data-wp-bind--hidden="!<?= $this->statePath('fieldErrors') ?>.userUrl"
+                                data-wp-text="<?= $this->statePath('fieldErrors') ?>.userUrl"></label>
                         </div>
 
                     </div>
@@ -490,6 +511,83 @@ class ProfilePanel extends AbstractPanel
                         <button type="button" class="btn popup__footer--button"
                             data-wp-on--click="actions.profile.confirmPasswordSuccess">
                             <?= esc_html__('Log In', 'starwishx'); ?>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Change Email Confirmation Popup -->
+            <div class="popup"
+                hidden
+                data-wp-bind--hidden="!<?= $statePath ?>.emailPopup.isOpen">
+
+                <div class="popup__backdrop" data-wp-on--click="actions.profile.cancelEmailChange"></div>
+
+                <div class="popup__dialog" role="dialog" aria-modal="true" aria-labelledby="email-change-title">
+                    <div class="popup__body gateway-form">
+                        <h2 id="email-change-title" class="popup__title">
+                            <?= esc_html__('Change Email', 'starwishx'); ?>
+                        </h2>
+                        <p class="popup__text">
+                            <?= esc_html__('Enter your new email address and current password to confirm the change.', 'starwishx'); ?>
+                        </p>
+
+                        <div class="launchpad-alert launchpad-alert--error label-info exclamation-circle__error"
+                            data-wp-bind--hidden="!<?= $statePath ?>.emailPopup.error"
+                            data-wp-text="<?= $statePath ?>.emailPopup.error"></div>
+
+                        <div class="form-field">
+                            <label for="lp-email-new">
+                                <?= esc_html__('New Email', 'starwishx'); ?>
+                            </label>
+                            <input type="email" id="lp-email-new" required
+                                data-wp-bind--value="<?= $statePath ?>.emailPopup.newEmail"
+                                data-wp-on--input="actions.profile.updateEmailPopupField"
+                                data-field="newEmail" />
+                        </div>
+
+                        <div class="form-field">
+                            <label for="lp-email-password">
+                                <?= esc_html__('Current Password', 'starwishx'); ?>
+                            </label>
+                            <div class="gateway-password-group">
+                                <input type="password" id="lp-email-password" required
+                                    data-wp-bind--type="state.emailPasswordInputType"
+                                    data-wp-bind--value="<?= $statePath ?>.emailPopup.password"
+                                    data-wp-on--input="actions.profile.updateEmailPopupField"
+                                    data-field="password" />
+                                <button type="button" class="btn-hide-pw"
+                                    data-wp-on--click="actions.profile.toggleEmailPasswordVisibility"
+                                    aria-label="<?= esc_attr__('Toggle password visibility', 'starwishx'); ?>">
+                                    <span data-wp-bind--hidden="<?= $statePath ?>.emailPopup.isPasswordVisible">
+                                        <svg width="23" height="23" class="btn-hide-pw__icon">
+                                            <use href="<?= get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-eye-opened"></use>
+                                        </svg>
+                                    </span>
+                                    <span data-wp-bind--hidden="!<?= $statePath ?>.emailPopup.isPasswordVisible">
+                                        <svg width="23" height="23" class="btn-hide-pw__icon">
+                                            <use href="<?= get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-eye-closed"></use>
+                                        </svg>
+                                    </span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="popup__footer">
+                        <button type="button" class="btn__small popup__footer--button"
+                            data-wp-on--click="actions.profile.confirmEmailChange"
+                            data-wp-bind--disabled="<?= $statePath ?>.emailPopup.isChanging">
+                            <span data-wp-bind--hidden="<?= $statePath ?>.emailPopup.isChanging">
+                                <?= esc_html__('Change Email', 'starwishx'); ?>
+                            </span>
+                            <span data-wp-bind--hidden="!<?= $statePath ?>.emailPopup.isChanging">
+                                <?= esc_html__('Changing...', 'starwishx'); ?>
+                            </span>
+                        </button>
+                        <button type="button" class="btn-secondary__small popup__footer--button"
+                            data-wp-on--click="actions.profile.cancelEmailChange">
+                            <?= esc_html__('Cancel', 'starwishx'); ?>
                         </button>
                     </div>
                 </div>
