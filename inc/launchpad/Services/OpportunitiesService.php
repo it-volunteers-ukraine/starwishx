@@ -229,13 +229,13 @@ class OpportunitiesService
             if (!is_wp_error($children)) {
                 $childData = array_map(fn($c) => [
                     'id'   => $c->term_id,
-                    'name' => $c->name
+                    'name' => html_entity_decode($c->name)
                 ], $children);
             }
 
             $result[] = [
                 'id'       => $parent->term_id,
-                'name'     => $parent->name,
+                'name'     => html_entity_decode($parent->name),
                 'children' => $childData,
             ];
         }
