@@ -83,6 +83,7 @@
   top: 0;
   width: 50px;
   height: 42px;
+  z-index: 1;
 }
 
 @media screen and (min-width: 768px) {
@@ -125,7 +126,7 @@
     height: 399px;
   }
 
-  .block-title,
+  .title,
   .text {
     width: 55%;
   }
@@ -142,6 +143,7 @@
     margin-top: -84px;
     padding-top: 0;
     justify-content: start;
+    z-index: 2;
   }
 
   .photo1,
