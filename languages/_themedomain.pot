@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-04-13T08:04:07+00:00\n"
+"POT-Creation-Date: 2026-04-13T10:15:41+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: starwishx\n"
@@ -178,7 +178,7 @@ msgstr ""
 #: docs/UrlPolicy/inc/launchpad/Services/OpportunitiesService.php:375
 #: docs/UrlPolicy/inc/launchpad/Services/ProfileService.php:204
 #: inc/launchpad/Services/OpportunitiesService.php:377
-#: inc/launchpad/Services/ProfileService.php:223
+#: inc/launchpad/Services/ProfileService.php:224
 msgid "Please correct the highlighted fields."
 msgstr ""
 
@@ -261,52 +261,52 @@ msgid "Please fill in all required fields before submitting for review."
 msgstr ""
 
 #: docs/UrlPolicy/inc/launchpad/Services/ProfileService.php:57
-#: inc/launchpad/Services/ProfileService.php:57
+#: inc/launchpad/Services/ProfileService.php:58
 msgid "Subscriber"
 msgstr ""
 
 #: docs/UrlPolicy/inc/launchpad/Services/ProfileService.php:58
-#: inc/launchpad/Services/ProfileService.php:58
+#: inc/launchpad/Services/ProfileService.php:59
 msgid "Contributor"
 msgstr ""
 
 #: docs/UrlPolicy/inc/launchpad/Services/ProfileService.php:59
-#: inc/launchpad/Services/ProfileService.php:59
+#: inc/launchpad/Services/ProfileService.php:60
 #: template-parts/comments-interactive.php:180
 #: template-parts/comments-interactive.php:283
 msgid "Author"
 msgstr ""
 
 #: docs/UrlPolicy/inc/launchpad/Services/ProfileService.php:60
-#: inc/launchpad/Services/ProfileService.php:60
+#: inc/launchpad/Services/ProfileService.php:61
 msgid "Editor"
 msgstr ""
 
 #: docs/UrlPolicy/inc/launchpad/Services/ProfileService.php:61
-#: inc/launchpad/Services/ProfileService.php:61
+#: inc/launchpad/Services/ProfileService.php:62
 msgid "Administrator"
 msgstr ""
 
 #: docs/UrlPolicy/inc/launchpad/Services/ProfileService.php:330
 #: inc/comments/Services/CommentsService.php:159
-#: inc/launchpad/Services/ProfileService.php:330
-#: inc/launchpad/Services/ProfileService.php:381
+#: inc/launchpad/Services/ProfileService.php:331
+#: inc/launchpad/Services/ProfileService.php:380
 msgid "User not found."
 msgstr ""
 
 #: docs/UrlPolicy/inc/launchpad/Services/ProfileService.php:338
-#: inc/launchpad/Services/ProfileService.php:389
+#: inc/launchpad/Services/ProfileService.php:388
 msgid "Your account role does not permit self-deletion."
 msgstr ""
 
 #: docs/UrlPolicy/inc/launchpad/Services/ProfileService.php:346
-#: inc/launchpad/Services/ProfileService.php:336
-#: inc/launchpad/Services/ProfileService.php:397
+#: inc/launchpad/Services/ProfileService.php:337
+#: inc/launchpad/Services/ProfileService.php:396
 msgid "The password you entered is incorrect."
 msgstr ""
 
 #: docs/UrlPolicy/inc/launchpad/Services/ProfileService.php:361
-#: inc/launchpad/Services/ProfileService.php:412
+#: inc/launchpad/Services/ProfileService.php:411
 msgid "Account deletion failed."
 msgstr ""
 
@@ -521,63 +521,61 @@ msgstr ""
 msgid "Edit time limit expired (15 min)."
 msgstr ""
 
-#: inc/contact/Api/ContactController.php:53
+#: inc/contact/Api/ContactController.php:54
 msgid "Too many messages sent. Please try again later."
 msgstr ""
 
-#: inc/contact/Api/ContactController.php:63
-#: inc/contact/Api/ContactController.php:166
+#: inc/contact/Api/ContactController.php:64
+#: inc/contact/Api/ContactController.php:154
 msgid "Message sent successfully!"
 msgstr ""
 
-#: inc/contact/Api/ContactController.php:76
-#: inc/contact/Api/ContactController.php:85
-#: inc/contact/Api/ContactController.php:113
+#: inc/contact/Api/ContactController.php:77
 #: inc/shared/Policy/PasswordPolicy.php:103
 msgid "Please enter a valid email address"
 msgstr ""
 
-#: inc/contact/Api/ContactController.php:94
+#: inc/contact/Api/ContactController.php:91
 msgid "Links are not allowed in fields"
 msgstr ""
 
-#: inc/contact/Api/ContactController.php:132
+#: inc/contact/Api/ContactController.php:120
 msgid "Please fill in all required fields"
 msgstr ""
 
 #. translators: %s: sender name
-#: inc/contact/Api/ContactController.php:142
+#: inc/contact/Api/ContactController.php:130
 #, php-format
 msgid "Message from website by %s"
 msgstr ""
 
-#: inc/contact/Api/ContactController.php:148
+#: inc/contact/Api/ContactController.php:136
 msgid "Name"
 msgstr ""
 
-#: inc/contact/Api/ContactController.php:150
+#: inc/contact/Api/ContactController.php:138
 #: inc/launchpad/Panels/ProfilePanel.php:168
 #: inc/launchpad/Panels/ProfilePanel.php:238
 #: template-parts/contact-section.php:76
 msgid "Phone"
 msgstr ""
 
-#: inc/contact/Api/ContactController.php:151
+#: inc/contact/Api/ContactController.php:139
 msgid "Not specified"
 msgstr ""
 
-#: inc/contact/Api/ContactController.php:152
+#: inc/contact/Api/ContactController.php:140
 #: inc/launchpad/Panels/ProfilePanel.php:136
 #: inc/launchpad/Panels/ProfilePanel.php:246
 #: template-parts/contact-section.php:77
 msgid "Email"
 msgstr ""
 
-#: inc/contact/Api/ContactController.php:154
+#: inc/contact/Api/ContactController.php:142
 msgid "Message"
 msgstr ""
 
-#: inc/contact/Api/ContactController.php:177
+#: inc/contact/Api/ContactController.php:165
 msgid "Server error. Please try again later."
 msgstr ""
 
@@ -922,15 +920,15 @@ msgstr ""
 msgid "Please complete your profile (name and phone) before posting opportunities."
 msgstr ""
 
-#: inc/launchpad/Api/ProfileController.php:86
+#: inc/launchpad/Api/ProfileController.php:90
 msgid "Profile updated."
 msgstr ""
 
-#: inc/launchpad/Api/ProfileController.php:109
+#: inc/launchpad/Api/ProfileController.php:114
 msgid "Email updated."
 msgstr ""
 
-#: inc/launchpad/Api/ProfileController.php:131
+#: inc/launchpad/Api/ProfileController.php:136
 msgid "Your account has been deleted."
 msgstr ""
 
@@ -1484,11 +1482,7 @@ msgstr ""
 msgid "Invalid file type. Only PDF and DOC/DOCX allowed."
 msgstr ""
 
-#: inc/launchpad/Services/ProfileService.php:343
-msgid "Please enter a valid email address."
-msgstr ""
-
-#: inc/launchpad/Services/ProfileService.php:352
+#: inc/launchpad/Services/ProfileService.php:351
 msgid "This email address is already in use."
 msgstr ""
 
@@ -1687,6 +1681,14 @@ msgstr ""
 
 #: inc/shared/Core/AbstractApiController.php:64
 msgid "You are already logged in."
+msgstr ""
+
+#: inc/shared/Policy/EmailPolicy.php:45
+msgid "Please enter a valid email address."
+msgstr ""
+
+#: inc/shared/Policy/EmailPolicy.php:55
+msgid "This email domain doesn't appear to accept mail."
 msgstr ""
 
 #: inc/shared/Policy/PasswordPolicy.php:34
