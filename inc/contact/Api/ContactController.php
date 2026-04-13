@@ -12,6 +12,7 @@ declare(strict_types=1);
 namespace Contact\Api;
 
 use Shared\Core\AbstractApiController;
+use Shared\Policy\EmailPolicy;
 use Shared\Sanitize\InputSanitizer;
 use Shared\Policy\RateLimitPolicy;
 use Contact\Core\ContactCore;
@@ -70,8 +71,8 @@ class ContactController extends AbstractApiController
         $raw_phone   = (string) ($request->get_param('phone')   ?? '');
         $raw_message = (string) ($request->get_param('message') ?? '');
 
-        /* ---- Email: validate raw, then sanitize, then re-validate ---- */
-        if (empty($raw_email) || ! is_email($raw_email)) {
+        /* ---- Email: RFC 5321/5322 validation ---- */
+        if (empty($raw_email)) {
             return $this->error(
                 __('Please enter a valid email address', 'starwishx'),
                 422,
@@ -79,13 +80,9 @@ class ContactController extends AbstractApiController
             );
         }
 
-        $domain = explode('@', $raw_email)[1] ?? '';
-        if (strpos($domain, '.') === false) {
-            return $this->error(
-                __('Please enter a valid email address', 'starwishx'),
-                422,
-                'invalid_email'
-            );
+        $emailResult = EmailPolicy::validate($raw_email);
+        if (is_wp_error($emailResult)) {
+            return $this->mapServiceError($emailResult);
         }
 
         /* ---- Spam: links in name field ---- */
@@ -106,15 +103,6 @@ class ContactController extends AbstractApiController
             $raw_message = mb_substr($raw_message, 0, $char_limit, 'UTF-8');
         }
         $message = InputSanitizer::sanitizeTextarea($raw_message);
-
-        /* ---- Email: double-check after sanitize ---- */
-        if (empty($email) || ! is_email($email)) {
-            return $this->error(
-                __('Please enter a valid email address', 'starwishx'),
-                422,
-                'invalid_email'
-            );
-        }
 
         /* ---- Phone: sanitize then validate via PhonePolicy ---- */
         $phone = InputSanitizer::sanitizeText($raw_phone);

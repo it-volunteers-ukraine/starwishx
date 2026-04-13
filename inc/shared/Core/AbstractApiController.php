@@ -103,6 +103,8 @@ abstract class AbstractApiController extends WP_REST_Controller
             'rate_limited'      => 429,
             'phone_invalid'     => 422,
             'phone_parse_error' => 422,
+            'email_invalid'     => 422,
+            'email_dns_failed'  => 422,
         ];
 
         $status_map = array_merge($default_map, $custom_map);
