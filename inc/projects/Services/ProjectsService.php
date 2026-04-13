@@ -129,7 +129,7 @@ class ProjectsService
 
             $cards[] = [
                 'id'         => $post->ID,
-                'title'      => get_the_title($post->ID),
+                'title'      => html_entity_decode(get_the_title($post->ID)),
                 'url'        => get_permalink($post->ID),
                 'excerpt'    => get_the_excerpt($post->ID),
                 'thumbnail'  => $thumbnail ?: '',

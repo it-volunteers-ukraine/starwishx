@@ -346,7 +346,7 @@ class ListingService
 
         return [
             'id'            => $postId,
-            'title'         => get_the_title($post),
+            'title'         => html_entity_decode(get_the_title($post)),
             'excerpt'       => wp_trim_words($post->post_content, 38, ' …'),
             'thumbnail'     => get_the_post_thumbnail_url($post, 'medium') ?: null,
             'company'       => get_post_meta($postId, 'opportunity_company', true),
