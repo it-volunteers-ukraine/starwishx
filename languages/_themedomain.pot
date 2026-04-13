@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-04-12T23:52:49+00:00\n"
+"POT-Creation-Date: 2026-04-13T08:04:07+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: starwishx\n"
@@ -1173,7 +1173,8 @@ msgid "Describe the opportunity"
 msgstr ""
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:828
-msgid "Add information about the opportunity. Describe the essence."
+#, php-format
+msgid "Add information about the opportunity. Describe the essence. Min %1$d, max %2$d characters"
 msgstr ""
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:840
