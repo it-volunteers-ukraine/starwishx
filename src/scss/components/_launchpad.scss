@@ -1963,8 +1963,16 @@
     color: $icon-color-accent;
     input[type="date"] {
         padding-right: 44px;
-        -webkit-appearance: none;
-        appearance: none;
+        -webkit-appearance: textfield;
+        appearance: textfield;
+        height: 46px;
+        min-height: 46px;
+        // -webkit-appearance: none;
+        // appearance: none;
+        // input[type="date"]::-webkit-date-and-time-value {
+        //     height: 1rem;
+        // }
+
         &::-webkit-calendar-picker-indicator,
         &::-webkit-clear-button,
         &::-webkit-inner-spin-button {

@@ -50,9 +50,9 @@
 }
 
 .list {
-    list-style: none;
-    padding: 0;
     margin: 0 0 32px;
+    padding: 0;
+    list-style: none;
 }
 
 .item {
@@ -176,9 +176,9 @@
     transition:
         opacity 400ms ease-out,
         max-height 750ms linear;
+    will-change: opacity;
     margin-left: 46px;
     pointer-events: none;
-    will-change: opacity;
 
     @include min-tablet {
         margin-left: 38px;
@@ -221,22 +221,24 @@
     transition: opacity 750ms ease-out;
     will-change: opacity;
 
-    @include min-tabland {
-        display: block;
-        position: absolute;
-        top: -89px;
-        right: 6%;
-        z-index: 1;
-        background-color: $surface-primary;
-    }
+    @include hover-fine {
+        @include min-tabland {
+            display: block;
+            position: absolute;
+            top: -89px;
+            right: 6%;
+            z-index: 1;
+            background-color: $surface-primary;
+        }
 
-    @include min-laptop {
-        right: 154px;
-    }
+        @include min-laptop {
+            right: 154px;
+        }
 
-    @include min-desktop {
-        top: -103px;
-        right: 500px;
+        @include min-desktop {
+            top: -103px;
+            right: 500px;
+        }
     }
 }
 
