@@ -1905,18 +1905,30 @@
 .lp-dropdown--toggleable {
     .lp-dropdown__item {
         &--selected {
+            position: relative;
+            &::before,
             &::after {
-                transform-origin: 50% 55%;
+                position: absolute;
+                top: 50%;
+                right: 6px;
                 transition: all $animations;
-                cursor: pointer;
-                margin-right: 4px;
-                margin-left: auto;
-                content: "🗙";
-                color: $icon-color-accent;
-                font-weight: 400;
-                line-height: 1;
+                border-radius: 2px;
+                background-color: $icon-color-accent;
+                width: 100%;
+                max-width: 16px;
+                height: 2px;
+                max-height: 16px;
+                content: "";
             }
-            &:hover::after {
+            &::before {
+                transform: rotate(45deg);
+            }
+
+            &::after {
+                transform: rotate(-45deg);
+            }
+            &:hover::after,
+            &:hover::before {
                 transform: rotate(180deg);
             }
         }
@@ -1965,8 +1977,8 @@
         padding-right: 44px;
         -webkit-appearance: textfield;
         appearance: textfield;
-        height: 46px;
-        min-height: 46px;
+        height: 44px;
+        min-height: 44px;
         // -webkit-appearance: none;
         // appearance: none;
         // input[type="date"]::-webkit-date-and-time-value {
