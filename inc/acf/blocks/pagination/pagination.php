@@ -219,7 +219,7 @@ wp_reset_postdata();
                 <?php endfor; ?>
 
                 <!-- Next -->
-                <?php $next_disabled = $total_pages == 0 && $page >= $total_pages ? true : false; ?>
+                <?php $next_disabled = $total_pages == 0 || $page >= $total_pages ? true : false; ?>
                 <a id='pagination-next'
                     href="<?= pagination_url($base_url, $page + 1, $per_page, $search_term); ?>"
                     class="<?php echo esc_attr($classes['nav-arrow']); ?>"
