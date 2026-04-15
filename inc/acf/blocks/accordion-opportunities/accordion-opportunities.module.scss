@@ -57,8 +57,9 @@
 
 .item {
     position: relative;
-    transition: border-color 1s $animations;
-    border-bottom: 1px solid rgba($text-light, 0.5);
+    transition: border-color $animations-very-long;
+
+    /* border-bottom: 1px solid rgba($text-light, 0.5); */
     padding: 20px 0;
 
     *:focus-visible {
