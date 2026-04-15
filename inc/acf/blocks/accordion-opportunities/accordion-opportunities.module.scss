@@ -59,7 +59,7 @@
     position: relative;
     border-bottom: 1px solid rgba($text-light, 0.5);
 
-    /* transition: border-color $animations-very-long; */
+    /* transition: border-color 1s $animations; */
     padding: 20px 0;
 
     *:focus-visible {
@@ -72,13 +72,13 @@
         &:not([data-active]) .content {
             opacity: 0;
             max-height: 0 !important;
+            pointer-events: auto;
+        }
+        
+        &[data-active] .content {
             transition:
                 opacity 1000ms 500ms ease-out,
                 max-height 750ms linear;
-            pointer-events: auto;
-        }
-
-        &[data-active] .content {
             opacity: 1;
         }
 
@@ -96,13 +96,13 @@
         &:not(:hover) .content {
             opacity: 0;
             max-height: 0 !important;
+        }
+        
+        &:hover .content {
+            opacity: 1;
             transition:
                 opacity 1000ms 500ms ease-out,
                 max-height 750ms linear;
-        }
-
-        &:hover .content {
-            opacity: 1;
             pointer-events: auto;
         }
 
