@@ -67,7 +67,7 @@
         border-radius: $radius-badge;
     }
 
-    @media (hover: none) {
+    @media (pointer: coarse) {
         &:not([data-active]) .content {
             opacity: 0;
             max-height: 0 !important;
@@ -91,7 +91,7 @@
         }
     }
 
-    @media (hover: hover) {
+    @media (pointer: fine) {
         &:not(:hover) .content {
             opacity: 0;
             max-height: 0 !important;
