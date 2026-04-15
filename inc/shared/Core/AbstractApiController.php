@@ -101,6 +101,24 @@ abstract class AbstractApiController extends WP_REST_Controller
     }
 
     /**
+     * Shared Guard: Guest + valid wp_rest nonce
+     *
+     * Convenience composite for public endpoints that must only accept
+     * anonymous requests originating from a page that was issued a nonce
+     * (login, register, password recovery). Short-circuits on the first
+     * failing guard so the caller gets a precise error code.
+     */
+    public function checkGuestWithNonce(WP_REST_Request $request): bool|WP_Error
+    {
+        $loggedOut = $this->checkLoggedOut($request);
+        if (is_wp_error($loggedOut)) {
+            return $loggedOut;
+        }
+
+        return $this->checkRestNonce($request);
+    }
+
+    /**
      * Unified success response
      *
      * @param array $data Response data

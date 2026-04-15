@@ -29,7 +29,7 @@ class AuthController extends AbstractApiController
         register_rest_route($this->namespace, '/login', [
             'methods'             => 'POST',
             'callback'            => [$this, 'login'],
-            'permission_callback' => [$this, 'checkLoggedOut'],
+            'permission_callback' => [$this, 'checkGuestWithNonce'],
             'args'                => [
                 'username' => [
                     'required'          => true,

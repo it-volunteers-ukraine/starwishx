@@ -29,13 +29,7 @@ class RegisterController extends AbstractApiController
         register_rest_route($this->namespace, '/register', [
             'methods'             => 'POST',
             'callback'            => [$this, 'register'],
-            'permission_callback' => function (WP_REST_Request $request) {
-                $loggedOut = $this->checkLoggedOut($request);
-                if (is_wp_error($loggedOut)) {
-                    return $loggedOut;
-                }
-                return $this->checkRestNonce($request);
-            },
+            'permission_callback' => [$this, 'checkGuestWithNonce'],
             'args'                => [
                 'username' => ['required' => true, 'sanitize_callback' => 'sanitize_user'],
                 'email'    => [

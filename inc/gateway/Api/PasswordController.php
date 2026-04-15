@@ -30,7 +30,7 @@ class PasswordController extends AbstractApiController
         register_rest_route($this->namespace, '/password/lost', [
             'methods'             => 'POST',
             'callback'            => [$this, 'lostPassword'],
-            'permission_callback' => [$this, 'checkLoggedOut'],
+            'permission_callback' => [$this, 'checkGuestWithNonce'],
             'args'                => [
                 'user_login' => ['required' => true, 'sanitize_callback' => 'sanitize_text_field'],
             ],
@@ -39,7 +39,7 @@ class PasswordController extends AbstractApiController
         register_rest_route($this->namespace, '/password/reset', [
             'methods'             => 'POST',
             'callback'            => [$this, 'resetPassword'],
-            'permission_callback' => [$this, 'checkLoggedOut'],
+            'permission_callback' => [$this, 'checkGuestWithNonce'],
             'args'                => [
                 'login'    => ['required' => true, 'sanitize_callback' => 'sanitize_user'],
                 'key'      => ['required' => true, 'sanitize_callback' => 'sanitize_text_field'],
@@ -47,10 +47,12 @@ class PasswordController extends AbstractApiController
             ],
         ]);
         // GET /gateway/v1/password/generate
+        // Bound to a page-load nonce so this can't be used as a public
+        // random-string service from outside the gateway UI.
         register_rest_route($this->namespace, '/password/generate', [
             'methods'             => 'GET',
             'callback'            => [$this, 'generatePassword'],
-            'permission_callback' => '__return_true', // Public endpoint (just returns random string)
+            'permission_callback' => [$this, 'checkRestNonce'],
         ]);
     }
     public function lostPassword(WP_REST_Request $request): WP_REST_Response|WP_Error
