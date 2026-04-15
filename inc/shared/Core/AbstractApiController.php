@@ -49,12 +49,11 @@ abstract class AbstractApiController extends WP_REST_Controller
      *
      * Returns WP_Error (not bare false) for unambiguous HTTP response.
      *
-     * NOTE: This fixes the case where browser requests via Interactivity API
-     * (with X-WP-Nonce) correctly identify authenticated users. For requests
-     * with cookies but no nonce (e.g., Postman), is_user_logged_in() returns
-     * false in REST context - this is a WordPress constraint, not fixed here.
-     * The WP_Error return ensures unambiguous handling when authentication
-     * state IS correctly detected.
+     * NOTE: WordPress requires BOTH auth cookie AND valid nonce to report a
+     * user as logged-in in REST context. A request with cookies but no nonce
+     * (e.g., Postman) is seen as logged-out here — this is a WordPress
+     * constraint, not fixed in this guard. The correct fix for that gap is
+     * to compose this guard with checkRestNonce() in the permission callback.
      */
     public function checkLoggedOut(WP_REST_Request $request): bool|WP_Error
     {
@@ -67,6 +66,56 @@ abstract class AbstractApiController extends WP_REST_Controller
         }
 
         return true;
+    }
+
+    /**
+     * Shared Guard: Require a valid wp_rest nonce
+     *
+     * WordPress core only verifies the nonce for requests that already carry
+     * auth cookies (see rest_cookie_check_errors). Anonymous requests bypass
+     * nonce validation entirely, which is why Postman can hit a public
+     * endpoint without any token. This guard closes that gap by verifying
+     * the wp_rest nonce regardless of auth state, binding the request to a
+     * prior page load where the nonce was hydrated into the client.
+     *
+     * Uses the same error code as WP core (rest_cookie_invalid_nonce) so the
+     * client retry flow in gateway utils.js recovers automatically when a
+     * legitimate user's nonce has rolled over.
+     */
+    public function checkRestNonce(WP_REST_Request $request): bool|WP_Error
+    {
+        $nonce = $request->get_header('X-WP-Nonce');
+        if (!$nonce) {
+            $nonce = (string) $request->get_param('_wpnonce');
+        }
+
+        if (!$nonce || !wp_verify_nonce($nonce, 'wp_rest')) {
+            return new WP_Error(
+                'rest_cookie_invalid_nonce',
+                __('Cookie check failed.', 'starwishx'),
+                ['status' => 403]
+            );
+        }
+
+        return true;
+    }
+
+    /**
+     * Shared Guard: Guest + valid wp_rest nonce
+     *
+     * Convenience composite for public endpoints that must only accept
+     * anonymous requests originating from a page that was issued a nonce
+     * (login, register, password recovery). Short-circuits on the first
+     * failing guard so the caller gets a precise error code.
+     */
+    public function checkGuestWithNonce(WP_REST_Request $request): bool|WP_Error
+    {
+        $loggedOut = $this->checkLoggedOut($request);
+        if (is_wp_error($loggedOut)) {
+            return $loggedOut;
+        }
+
+        return $this->checkRestNonce($request);
     }
 
     /**

@@ -12,6 +12,7 @@ declare(strict_types=1);
 namespace Contact\Api;
 
 use Shared\Core\AbstractApiController;
+use Shared\Http\ClientIp;
 use Shared\Policy\EmailPolicy;
 use Shared\Sanitize\InputSanitizer;
 use Shared\Policy\RateLimitPolicy;
@@ -32,7 +33,7 @@ class ContactController extends AbstractApiController
         register_rest_route($this->namespace, '/send', [
             'methods'             => 'POST',
             'callback'            => [$this, 'send'],
-            'permission_callback' => '__return_true',
+            'permission_callback' => [$this, 'checkRestNonce'],
         ]);
     }
 
@@ -41,11 +42,8 @@ class ContactController extends AbstractApiController
      */
     public function send(WP_REST_Request $request): WP_REST_Response|WP_Error
     {
-        /* ---- Rate limit: IP-based, every submission counts ---- */
-        $ip = $request->get_header('X-Forwarded-For')
-            ? explode(',', $request->get_header('X-Forwarded-For'))[0]
-            : ($_SERVER['REMOTE_ADDR'] ?? '0.0.0.0');
-        $rl_key = RateLimitPolicy::key('contact', trim($ip));
+        /* ---- Rate limit: IP-based, every attempt counts ---- */
+        $rl_key = RateLimitPolicy::key('contact', ClientIp::resolve());
 
         $rl_check = RateLimitPolicy::check(
             $rl_key,
@@ -56,20 +54,20 @@ class ContactController extends AbstractApiController
         if (is_wp_error($rl_check)) {
             return $this->mapServiceError($rl_check);
         }
+        RateLimitPolicy::hit($rl_key, self::RATE_LIMIT_WINDOW);
 
         /* ---- Honeypot: silent success to avoid tipping off bots ---- */
         if (! empty($request->get_param('honeypot'))) {
-            RateLimitPolicy::hit($rl_key, self::RATE_LIMIT_WINDOW);
             return $this->success([
                 'message' => __('Message sent successfully!', 'starwishx'),
             ]);
         }
 
-        /* ---- Raw input ---- */
-        $raw_name    = (string) ($request->get_param('name')    ?? '');
-        $raw_email   = (string) ($request->get_param('email')   ?? '');
-        $raw_phone   = (string) ($request->get_param('phone')   ?? '');
-        $raw_message = (string) ($request->get_param('message') ?? '');
+        /* ---- Raw input, capped at field limits (log/memory hardening) ---- */
+        $raw_name    = mb_substr((string) ($request->get_param('name')    ?? ''), 0, ContactCore::NAME_MAX_LENGTH,    'UTF-8');
+        $raw_email   = mb_substr((string) ($request->get_param('email')   ?? ''), 0, ContactCore::EMAIL_MAX_LENGTH,   'UTF-8');
+        $raw_phone   = mb_substr((string) ($request->get_param('phone')   ?? ''), 0, ContactCore::PHONE_MAX_LENGTH,   'UTF-8');
+        $raw_message = mb_substr((string) ($request->get_param('message') ?? ''), 0, ContactCore::MESSAGE_MAX_LENGTH, 'UTF-8');
 
         /* ---- Email: RFC 5321/5322 validation ---- */
         if (empty($raw_email)) {
@@ -95,14 +93,20 @@ class ContactController extends AbstractApiController
         }
 
         /* ---- Sanitize ---- */
-        $name  = InputSanitizer::sanitizeText($raw_name);
-        $email = sanitize_email($raw_email);
-
-        $char_limit = ContactCore::MESSAGE_MAX_LENGTH;
-        if (mb_strlen($raw_message, 'UTF-8') > $char_limit) {
-            $raw_message = mb_substr($raw_message, 0, $char_limit, 'UTF-8');
-        }
+        $name    = InputSanitizer::sanitizeText($raw_name);
+        $email   = sanitize_email($raw_email);
         $message = InputSanitizer::sanitizeTextarea($raw_message);
+
+        // sanitize_email can strip a value that passed EmailPolicy to empty
+        // (quirky but policy-valid locals). Re-check before we compose a mail
+        // header with it.
+        if (empty($email)) {
+            return $this->error(
+                __('Please enter a valid email address', 'starwishx'),
+                422,
+                'invalid_email'
+            );
+        }
 
         /* ---- Phone: sanitize then validate via PhonePolicy ---- */
         $phone = InputSanitizer::sanitizeText($raw_phone);
@@ -143,13 +147,9 @@ class ContactController extends AbstractApiController
             $message
         );
 
-        $headers = [];
-        if (! empty($email)) {
-            $headers[] = sprintf('Reply-To: %s', $email);
-        }
+        $headers = [sprintf('Reply-To: %s', $email)];
 
         if (wp_mail($email_to, $subject, $body, $headers)) {
-            RateLimitPolicy::hit($rl_key, self::RATE_LIMIT_WINDOW);
             return $this->success([
                 'message' => __('Message sent successfully!', 'starwishx'),
             ]);
