@@ -11,6 +11,8 @@ declare(strict_types=1);
 namespace Gateway\Api;
 
 use Shared\Core\AbstractApiController;
+use Shared\Http\ClientIp;
+use Shared\Policy\RateLimitPolicy;
 use Gateway\Services\PasswordResetService;
 use WP_REST_Request;
 use WP_REST_Response;
@@ -19,6 +21,16 @@ use WP_Error;
 class PasswordController extends AbstractApiController
 {
     protected $namespace = 'gateway/v1';
+
+    // Per-IP budget — caps SMTP-flooding / cross-user email bombing.
+    private const LOST_IP_MAX    = 5;
+    private const LOST_IP_WINDOW = HOUR_IN_SECONDS;
+
+    // Per (IP, user_login) — protects an individual user's inbox from a
+    // targeted flood while keeping the per-IP cap as an overall ceiling.
+    private const LOST_TARGET_MAX    = 3;
+    private const LOST_TARGET_WINDOW = 15 * MINUTE_IN_SECONDS;
+
     private PasswordResetService $service;
     public function __construct(?PasswordResetService $service = null)
     {
@@ -30,7 +42,7 @@ class PasswordController extends AbstractApiController
         register_rest_route($this->namespace, '/password/lost', [
             'methods'             => 'POST',
             'callback'            => [$this, 'lostPassword'],
-            'permission_callback' => [$this, 'checkLoggedOut'],
+            'permission_callback' => [$this, 'checkGuestWithNonce'],
             'args'                => [
                 'user_login' => ['required' => true, 'sanitize_callback' => 'sanitize_text_field'],
             ],
@@ -39,7 +51,7 @@ class PasswordController extends AbstractApiController
         register_rest_route($this->namespace, '/password/reset', [
             'methods'             => 'POST',
             'callback'            => [$this, 'resetPassword'],
-            'permission_callback' => [$this, 'checkLoggedOut'],
+            'permission_callback' => [$this, 'checkGuestWithNonce'],
             'args'                => [
                 'login'    => ['required' => true, 'sanitize_callback' => 'sanitize_user'],
                 'key'      => ['required' => true, 'sanitize_callback' => 'sanitize_text_field'],
@@ -47,22 +59,53 @@ class PasswordController extends AbstractApiController
             ],
         ]);
         // GET /gateway/v1/password/generate
+        // Bound to a page-load nonce so this can't be used as a public
+        // random-string service from outside the gateway UI.
         register_rest_route($this->namespace, '/password/generate', [
             'methods'             => 'GET',
             'callback'            => [$this, 'generatePassword'],
-            'permission_callback' => '__return_true', // Public endpoint (just returns random string)
+            'permission_callback' => [$this, 'checkRestNonce'],
         ]);
     }
     public function lostPassword(WP_REST_Request $request): WP_REST_Response|WP_Error
     {
-        $result = $this->service->handleLostPassword($request->get_param('user_login'));
+        $user_login = (string) $request->get_param('user_login');
+        $ip = ClientIp::resolve();
+
+        // Dual rate limit — evaluated BEFORE user lookup so timing cannot
+        // reveal whether an account exists (the service applies the same
+        // pre-lookup discipline for enumeration resistance).
+        $ipKey = RateLimitPolicy::key('gateway.password_lost', $ip);
+        $ipCheck = RateLimitPolicy::check(
+            $ipKey,
+            self::LOST_IP_MAX,
+            self::LOST_IP_WINDOW,
+            __('Too many password reset attempts. Please try again later.', 'starwishx')
+        );
+        if (is_wp_error($ipCheck)) {
+            return $this->mapServiceError($ipCheck);
+        }
+
+        $targetKey = RateLimitPolicy::key('gateway.password_lost_target', $ip, $user_login);
+        $targetCheck = RateLimitPolicy::check(
+            $targetKey,
+            self::LOST_TARGET_MAX,
+            self::LOST_TARGET_WINDOW,
+            __('Too many password reset attempts. Please try again later.', 'starwishx')
+        );
+        if (is_wp_error($targetCheck)) {
+            return $this->mapServiceError($targetCheck);
+        }
+
+        RateLimitPolicy::hit($ipKey, self::LOST_IP_WINDOW);
+        RateLimitPolicy::hit($targetKey, self::LOST_TARGET_WINDOW);
+
+        $result = $this->service->handleLostPassword($user_login);
         if (is_wp_error($result)) {
-            // Only codes that handleLostPassword can actually return:
-            // - empty_username (PasswordResetService.php:33)
-            // - too_many_attempts (via checkRateLimit, PasswordResetService.php:39-40)
+            // Only code handleLostPassword can actually return now that
+            // rate limiting lives at the controller edge: empty_username.
             return $this->mapServiceError($result, [
-                'empty_username'    => 400,
-                'too_many_attempts' => 429,
+                'empty_username' => 400,
             ]);
         }
         return $this->success([
@@ -78,10 +121,6 @@ class PasswordController extends AbstractApiController
             $request->get_param('password')
         );
         if (is_wp_error($result)) {
-            // Only codes that resetPassword can actually return:
-            // - invalid_key (via validateKey, PasswordResetService.php:119-121)
-            // - password_too_short, password_too_weak, password_contains_userdata (via validatePasswordStrength, PasswordResetService.php:125-128)
-            // NOTE: resetPassword does NOT call checkRateLimit, so too_many_attempts is NOT returned here
             return $this->mapServiceError($result, [
                 'password_too_short'         => 400,
                 'password_too_weak'          => 400,

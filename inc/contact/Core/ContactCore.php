@@ -18,6 +18,9 @@ namespace Contact\Core;
 
 final class ContactCore
 {
+    public const NAME_MAX_LENGTH    = 100;
+    public const EMAIL_MAX_LENGTH   = 254; // RFC 5321 total-length cap
+    public const PHONE_MAX_LENGTH   = 30;  // E.164 + separators/formatting slack
     public const MESSAGE_MAX_LENGTH = 500;
 
     private static ?self $instance = null;
