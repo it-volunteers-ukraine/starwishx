@@ -17,12 +17,13 @@ use WP_User;
 
 class PasswordResetService
 {
-    private const RATE_LIMIT_MAX_ATTEMPTS = 5;
-    private const RATE_LIMIT_TIMEOUT_MINUTES = 15;
-
     /**
      * Phase 1: Handle the "Lost Password" request.
      * Generates a key and sends the email link.
+     *
+     * Rate limiting lives at the controller edge (PasswordController) and
+     * runs before this method, so enumeration timing attacks see identical
+     * latency regardless of whether the account exists.
      *
      * @param string $user_login Username or Email.
      * @return true|WP_Error
@@ -31,13 +32,6 @@ class PasswordResetService
     {
         if (empty($user_login)) {
             return new WP_Error('empty_username', __('Please enter a username or email.', 'starwishx'));
-        }
-
-        // CRITICAL: Check rate limit BEFORE any user lookup
-        // This prevents enumeration via timing attacks
-        $rate_check = $this->checkRateLimit($user_login);
-        if (is_wp_error($rate_check)) {
-            return $rate_check;
         }
 
         // Identify user by login or email
@@ -129,51 +123,6 @@ class PasswordResetService
 
         // Uses the function from your provided user.php (Line 2118)
         reset_password($user, $new_password);
-
-        return true;
-    }
-
-    /**
-     * Check rate limiting for password reset requests.
-     * Uses combination of user_login + IP to prevent global user lockout.
-     *
-     * @param string $userLogin Username or email attempting reset
-     * @return true|WP_Error
-     */
-    private function checkRateLimit(string $userLogin): bool|WP_Error
-    {
-        $ip = $_SERVER['REMOTE_ADDR'] ?? 'unknown';
-
-        // Combine user login and IP for the transient key
-        // This prevents attackers from locking out a user globally
-        $identifier = sanitize_key($userLogin . '_' . $ip);
-        $transient_key = "pwd_reset_attempts_{$identifier}";
-
-        $attempts = (int) get_transient($transient_key);
-
-        if ($attempts >= self::RATE_LIMIT_MAX_ATTEMPTS) {
-            // Log the blocked attempt
-            error_log(sprintf(
-                '[Gateway Security] Password reset rate limit exceeded for user: %s from IP: %s',
-                $userLogin,
-                $ip
-            ));
-
-            return new WP_Error(
-                'too_many_attempts',
-                sprintf(
-                    __('Too many password reset attempts. Please try again in %d minutes.', 'starwishx'),
-                    self::RATE_LIMIT_TIMEOUT_MINUTES
-                )
-            );
-        }
-
-        // Increment attempt counter
-        set_transient(
-            $transient_key,
-            $attempts + 1,
-            self::RATE_LIMIT_TIMEOUT_MINUTES * MINUTE_IN_SECONDS
-        );
 
         return true;
     }

@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace Gateway\Api;
 
 use Shared\Core\AbstractApiController;
+use Shared\Http\ClientIp;
 use Shared\Policy\EmailPolicy;
+use Shared\Policy\RateLimitPolicy;
 use Gateway\Services\RegisterService;
 use WP_REST_Request;
 use WP_REST_Response;
@@ -17,6 +19,10 @@ use WP_Error;
 class RegisterController extends AbstractApiController
 {
     protected $namespace = 'gateway/v1';
+
+    private const RATE_LIMIT_MAX    = 5;
+    private const RATE_LIMIT_WINDOW = HOUR_IN_SECONDS;
+
     private RegisterService $service;
 
     public function __construct(?RegisterService $service = null)
@@ -48,6 +54,21 @@ class RegisterController extends AbstractApiController
 
     public function register(WP_REST_Request $request): WP_REST_Response|WP_Error
     {
+        // Rate limit: every attempt past this point counts against the IP's
+        // quota, including ones that fail validation downstream. Abuse
+        // prevention beats typo leniency for registration.
+        $rlKey = RateLimitPolicy::key('gateway.register', ClientIp::resolve());
+        $rlCheck = RateLimitPolicy::check(
+            $rlKey,
+            self::RATE_LIMIT_MAX,
+            self::RATE_LIMIT_WINDOW,
+            __('Too many registration attempts. Please try again later.', 'starwishx')
+        );
+        if (is_wp_error($rlCheck)) {
+            return $this->mapServiceError($rlCheck);
+        }
+        RateLimitPolicy::hit($rlKey, self::RATE_LIMIT_WINDOW);
+
         $result = $this->service->handleRegistration(
             (string) $request->get_param('username'),
             (string) $request->get_param('email')
