@@ -71,14 +71,14 @@
         &:not([data-active]) .content {
             opacity: 0;
             max-height: 0 !important;
-        }
-
-        &[data-active] .content {
-            opacity: 1;
             transition:
                 opacity 1000ms 500ms ease-out,
                 max-height 750ms linear;
             pointer-events: auto;
+        }
+
+        &[data-active] .content {
+            opacity: 1;
         }
 
         &[data-active] .block-photo {
@@ -95,13 +95,13 @@
         &:not(:hover) .content {
             opacity: 0;
             max-height: 0 !important;
+            transition:
+                opacity 1000ms 500ms ease-out,
+                max-height 750ms linear;
         }
 
         &:hover .content {
             opacity: 1;
-            transition:
-                opacity 1000ms 500ms ease-out,
-                max-height 750ms linear;
             pointer-events: auto;
         }
 
