@@ -12,6 +12,7 @@ declare(strict_types=1);
 namespace Contact\Api;
 
 use Shared\Core\AbstractApiController;
+use Shared\Http\ClientIp;
 use Shared\Policy\EmailPolicy;
 use Shared\Sanitize\InputSanitizer;
 use Shared\Policy\RateLimitPolicy;
@@ -42,10 +43,7 @@ class ContactController extends AbstractApiController
     public function send(WP_REST_Request $request): WP_REST_Response|WP_Error
     {
         /* ---- Rate limit: IP-based, every submission counts ---- */
-        $ip = $request->get_header('X-Forwarded-For')
-            ? explode(',', $request->get_header('X-Forwarded-For'))[0]
-            : ($_SERVER['REMOTE_ADDR'] ?? '0.0.0.0');
-        $rl_key = RateLimitPolicy::key('contact', trim($ip));
+        $rl_key = RateLimitPolicy::key('contact', ClientIp::resolve());
 
         $rl_check = RateLimitPolicy::check(
             $rl_key,
