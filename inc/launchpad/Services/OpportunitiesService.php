@@ -156,10 +156,13 @@ class OpportunitiesService
 
     public function countUserOpportunities(int $userId, array $filters = []): int
     {
+        // We only need the count; fetch a single ID row so SQL_CALC_FOUND_ROWS
+        // populates found_posts without inflating every post object.
         $args = [
             'post_type'      => 'opportunity',
             'author'         => $userId,
-            'posts_per_page' => -1,
+            'posts_per_page' => 1,
+            'fields'         => 'ids',
             'post_status'    => ['publish', 'draft', 'pending'],
         ];
 
@@ -566,10 +569,14 @@ class OpportunitiesService
             return $id;
         } catch (\Throwable $e) {
             $wpdb->query('ROLLBACK');
-            // Log the actual error
             error_log('OpportunitiesService Save Failure: ' . $e->getMessage());
 
-            return new WP_Error('db_transaction_failed', $e->getMessage());
+            // Generic message — internal exception text can leak schema/ACF details.
+            return new WP_Error(
+                'db_transaction_failed',
+                __('Could not save opportunity. Please try again.', 'starwishx'),
+                ['status' => 500]
+            );
         }
     }
 

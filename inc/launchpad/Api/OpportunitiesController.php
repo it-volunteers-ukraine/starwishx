@@ -7,6 +7,7 @@ namespace Launchpad\Api;
 
 use Launchpad\Services\OpportunitiesService;
 use Launchpad\Services\ProfileService;
+use Shared\Policy\RateLimitPolicy;
 use Shared\Sanitize\InputSanitizer;
 use WP_REST_Request;
 use WP_REST_Response;
@@ -21,6 +22,20 @@ use WP_Error;
  */
 class OpportunitiesController extends AbstractLaunchpadController
 {
+    private const WRITE_RATE_LIMIT_MAX     = 30;
+    private const WRITE_RATE_LIMIT_WINDOW  = HOUR_IN_SECONDS;
+    private const SEARCH_RATE_LIMIT_MAX    = 60;
+    private const SEARCH_RATE_LIMIT_WINDOW = MINUTE_IN_SECONDS;
+
+    private const PER_PAGE_MAX          = 50;
+    private const SEARCH_MAX_LENGTH     = 100;
+    private const CATEGORY_MAX_ITEMS    = 10;
+    private const SUBCATEGORY_MAX_ITEMS = 30;
+    private const SEEKERS_MAX_ITEMS     = 10;
+    private const LOCATIONS_MAX_ITEMS   = 20;
+    private const STATUSES_MAX_ITEMS    = 3;
+    private const LEVELS_MAX_ITEMS      = 4;
+
     private OpportunitiesService $service;
     private ProfileService $profileService;
 
@@ -53,14 +68,22 @@ class OpportunitiesController extends AbstractLaunchpadController
                 'required' => false,
                 'sanitize_callback' => 'sanitize_key',
                 'validate_callback' => function ($param) {
-                    return in_array($param, ['draft', 'pending']);
+                    return in_array($param, ['draft', 'pending'], true);
                 }
             ],
             'company'         => ['sanitize_callback' => 'sanitize_text_field'],
             'date_starts'     => ['sanitize_callback' => 'sanitize_text_field'],
             'date_ends'       => ['sanitize_callback' => 'sanitize_text_field'],
-            'category'        => ['type' => 'array', 'items' => ['type' => 'integer']],
-            'subcategory'     => ['type' => 'array', 'items' => ['type' => 'integer']],
+            'category'        => [
+                'type'              => 'array',
+                'items'             => ['type' => 'integer'],
+                'validate_callback' => fn($v) => is_array($v) && count($v) <= self::CATEGORY_MAX_ITEMS,
+            ],
+            'subcategory'     => [
+                'type'              => 'array',
+                'items'             => ['type' => 'integer'],
+                'validate_callback' => fn($v) => is_array($v) && count($v) <= self::SUBCATEGORY_MAX_ITEMS,
+            ],
             'country'         => ['sanitize_callback' => 'absint'],
             'locations' => [
                 'type' => 'array',
@@ -72,15 +95,20 @@ class OpportunitiesController extends AbstractLaunchpadController
                             'required' => true,
                             'sanitize_callback' => 'sanitize_text_field'
                         ],
-                        // We allow name/level to pass through for UI convenience, 
+                        // We allow name/level to pass through for UI convenience,
                         // but Service ignores them for DB insert.
                         'name' => ['type' => 'string', 'sanitize_callback' => 'sanitize_text_field'],
                     ]
                 ],
+                'validate_callback' => fn($v) => is_array($v) && count($v) <= self::LOCATIONS_MAX_ITEMS,
             ],
             'city'            => ['sanitize_callback' => 'sanitize_text_field'],
             'sourcelink'      => ['sanitize_callback' => [InputSanitizer::class, 'sanitizeUrl']],
-            'seekers'         => ['type' => 'array', 'items' => ['type' => 'integer']],
+            'seekers'         => [
+                'type'              => 'array',
+                'items'             => ['type' => 'integer'],
+                'validate_callback' => fn($v) => is_array($v) && count($v) <= self::SEEKERS_MAX_ITEMS,
+            ],
             'description'     => [
                 'required'          => true,
                 'sanitize_callback' => 'sanitize_textarea_field',
@@ -118,7 +146,7 @@ class OpportunitiesController extends AbstractLaunchpadController
         register_rest_route($this->namespace, '/opportunities', [
             'methods'             => 'GET',
             'callback'            => [$this, 'getOpportunities'],
-            'permission_callback' => [$this, 'checkLoggedIn'],
+            'permission_callback' => [$this, 'checkLoggedInWithNonce'],
             'args'                => [
                 'page'     => [
                     'default'           => 1,
@@ -127,6 +155,11 @@ class OpportunitiesController extends AbstractLaunchpadController
                 'per_page' => [
                     'default'           => OpportunitiesService::ITEMS_PER_PAGE,
                     'sanitize_callback' => 'absint',
+                    'validate_callback' => function ($param) {
+                        return is_numeric($param)
+                            && (int) $param >= 1
+                            && (int) $param <= self::PER_PAGE_MAX;
+                    },
                 ],
                 // Accept statuses as an array
                 'statuses' => [
@@ -135,6 +168,7 @@ class OpportunitiesController extends AbstractLaunchpadController
                     'sanitize_callback' => function ($val) {
                         return array_map('sanitize_key', (array)$val);
                     },
+                    'validate_callback' => fn($v) => is_array($v) && count($v) <= self::STATUSES_MAX_ITEMS,
                 ],
             ],
         ]);
@@ -152,12 +186,12 @@ class OpportunitiesController extends AbstractLaunchpadController
             [
                 'methods'             => 'GET',
                 'callback'            => [$this, 'getSingle'],
-                'permission_callback' => [$this, 'checkPostOwner'], // Inherited from Abstract
+                'permission_callback' => [$this, 'checkPostOwnerWithNonce'],
             ],
             [
                 'methods'             => 'PUT',
                 'callback'            => [$this, 'saveOpportunity'],
-                'permission_callback' => [$this, 'checkCanPostWithNonce'],
+                'permission_callback' => [$this, 'checkOwnsAndCanPostWithNonce'],
                 'args'                => $saveArgs,
             ],
         ]);
@@ -166,12 +200,12 @@ class OpportunitiesController extends AbstractLaunchpadController
         register_rest_route($this->namespace, '/opportunities/(?P<id>\d+)/status', [
             'methods'             => 'POST',
             'callback'            => [$this, 'handleStatusChange'],
-            'permission_callback' => [$this, 'checkCanPostWithNonce'],
+            'permission_callback' => [$this, 'checkOwnsAndCanPostWithNonce'],
             'args'                => [
                 'status' => [
                     'required'          => true,
                     'sanitize_callback' => 'sanitize_key',
-                    'validate_callback' => fn($param) => in_array($param, ['pending', 'draft']),
+                    'validate_callback' => fn($param) => in_array($param, ['pending', 'draft'], true),
                 ],
             ],
         ]);
@@ -180,13 +214,15 @@ class OpportunitiesController extends AbstractLaunchpadController
         register_rest_route($this->namespace, '/opportunities/locations', [
             'methods'             => 'GET',
             'callback'            => [$this, 'searchLocations'],
-            'permission_callback' => [$this, 'checkLoggedIn'],
+            'permission_callback' => [$this, 'checkLoggedInWithNonce'],
             'args'                => [
                 'search' => [
                     'required' => true,
                     'sanitize_callback' => 'sanitize_text_field',
                     'validate_callback' => function ($p) {
-                        return strlen($p) >= 2;
+                        return is_string($p)
+                            && strlen($p) >= 2
+                            && strlen($p) <= self::SEARCH_MAX_LENGTH;
                     }
                 ],
                 'levels' => [
@@ -195,20 +231,22 @@ class OpportunitiesController extends AbstractLaunchpadController
                         'type' => 'integer',
                         'sanitize_callback' => 'absint'
                     ],
-                    'default' => []
+                    'default' => [],
+                    'validate_callback' => fn($v) => is_array($v) && count($v) <= self::LEVELS_MAX_ITEMS,
                 ]
             ]
         ]);
     }
 
-    public function searchLocations(WP_REST_Request $request): WP_REST_Response
+    public function searchLocations(WP_REST_Request $request): WP_REST_Response|WP_Error
     {
-        // $query = $request->get_param('search');
-        // $results = $this->service->searchKatottg($query);
-        // return $this->success($results);
+        $rateLimited = $this->applySearchRateLimit(get_current_user_id());
+        if ($rateLimited !== null) {
+            return $rateLimited;
+        }
 
-        $query = $request->get_param('search');
-        $levels = $request->get_param('levels') ?: []; // Get the array
+        $query  = $request->get_param('search');
+        $levels = $request->get_param('levels') ?: [];
 
         $results = $this->service->searchKatottg($query, $levels);
 
@@ -220,6 +258,11 @@ class OpportunitiesController extends AbstractLaunchpadController
      */
     public function handleStatusChange(WP_REST_Request $request): WP_REST_Response|WP_Error
     {
+        $rateLimited = $this->applyWriteRateLimit(get_current_user_id());
+        if ($rateLimited !== null) {
+            return $rateLimited;
+        }
+
         $id     = (int) $request->get_param('id');
         $status = $request->get_param('status');
 
@@ -286,10 +329,15 @@ class OpportunitiesController extends AbstractLaunchpadController
      */
     public function saveOpportunity(WP_REST_Request $request): WP_REST_Response|WP_Error
     {
+        $rateLimited = $this->applyWriteRateLimit(get_current_user_id());
+        if ($rateLimited !== null) {
+            return $rateLimited;
+        }
+
         $method = $request->get_method(); // POST or PUT
         /**
          * SECURITY: Determine the ID.
-         * 
+         *
          * If PUT: We ONLY take the ID from the URL route (?P<id>\d+).
          * If POST: We hard-force the ID to null, ignoring the body entirely.
          */
@@ -297,13 +345,13 @@ class OpportunitiesController extends AbstractLaunchpadController
         if ($method === 'PUT' || $method === 'PATCH') {
             // fetch directly from the URL attributes to avoid Body injection
             $id = (int) $request->get_url_params()['id'];
-            // Now, even if the user sends {"id": 500} in a POST, 
+            // Now, even if the user sends {"id": 500} in a POST,
             // our $id variable remains NULL.
         }
 
         $current_user_id = get_current_user_id();
 
-        // Guard: Ownership (existing logic, unchanged)
+        // Defense-in-depth: route layer already verified ownership for PUT.
         if ($id) {
             $existing_post = get_post($id);
             if (
@@ -368,10 +416,9 @@ class OpportunitiesController extends AbstractLaunchpadController
     /**
      * Composite: checkCanPost + wp_rest nonce.
      *
-     * Applied to write endpoints (create / update / status-change). See
-     * AbstractApiController::checkLoggedInWithNonce — the nonce closes the
-     * non-cookie auth bypass that would otherwise let a leaked Application
-     * Password flood this controller from a headless script.
+     * Applied to the create endpoint. See AbstractApiController::checkLoggedInWithNonce —
+     * the nonce closes the non-cookie auth bypass that would otherwise let a
+     * leaked Application Password flood this controller from a headless script.
      */
     public function checkCanPostWithNonce(WP_REST_Request $request): bool|WP_Error
     {
@@ -381,5 +428,75 @@ class OpportunitiesController extends AbstractLaunchpadController
         }
 
         return $this->checkRestNonce($request);
+    }
+
+    /**
+     * Composite: ownership of {id} + checkCanPost + wp_rest nonce.
+     *
+     * Applied to PUT and /status endpoints — both target a specific
+     * opportunity. Closes the route-layer ownership gap that was previously
+     * only enforced inside the service: the request now fails at the routing
+     * layer for non-owners, before any service code or audit/log hooks run.
+     */
+    public function checkOwnsAndCanPostWithNonce(WP_REST_Request $request): bool|WP_Error
+    {
+        if (!$this->checkPostOwner($request)) {
+            return false;
+        }
+
+        $canPost = $this->checkCanPost();
+        if ($canPost !== true) {
+            return $canPost;
+        }
+
+        return $this->checkRestNonce($request);
+    }
+
+    /**
+     * Per-user write rate limit — shared bucket across create, update, status.
+     *
+     * Returns a mapped WP_Error (HTTP 429) when the limit is exceeded; null
+     * otherwise. Every attempt counts — same pattern as ContactController.
+     */
+    private function applyWriteRateLimit(int $userId): ?WP_Error
+    {
+        $key = RateLimitPolicy::key('opportunity_write', (string) $userId);
+
+        $check = RateLimitPolicy::check(
+            $key,
+            self::WRITE_RATE_LIMIT_MAX,
+            self::WRITE_RATE_LIMIT_WINDOW
+        );
+        if (is_wp_error($check)) {
+            return $this->mapServiceError($check);
+        }
+
+        RateLimitPolicy::hit($key, self::WRITE_RATE_LIMIT_WINDOW);
+
+        return null;
+    }
+
+    /**
+     * Per-user search rate limit — autocomplete bucket (separate from writes).
+     *
+     * Higher ceiling because typing-driven UI legitimately fires many requests
+     * per minute, but capped to discourage scraping the KATOTTG dictionary.
+     */
+    private function applySearchRateLimit(int $userId): ?WP_Error
+    {
+        $key = RateLimitPolicy::key('opportunity_search', (string) $userId);
+
+        $check = RateLimitPolicy::check(
+            $key,
+            self::SEARCH_RATE_LIMIT_MAX,
+            self::SEARCH_RATE_LIMIT_WINDOW
+        );
+        if (is_wp_error($check)) {
+            return $this->mapServiceError($check);
+        }
+
+        RateLimitPolicy::hit($key, self::SEARCH_RATE_LIMIT_WINDOW);
+
+        return null;
     }
 }
