@@ -143,8 +143,7 @@ class OpportunitiesController extends AbstractLaunchpadController
         register_rest_route($this->namespace, '/opportunities', [
             'methods'             => 'POST',
             'callback'            => [$this, 'saveOpportunity'],
-            // 'permission_callback' => [$this, 'checkLoggedIn'],
-            'permission_callback' => [$this, 'checkCanPost'],
+            'permission_callback' => [$this, 'checkCanPostWithNonce'],
             'args'                => $saveArgs,
         ]);
 
@@ -158,8 +157,7 @@ class OpportunitiesController extends AbstractLaunchpadController
             [
                 'methods'             => 'PUT',
                 'callback'            => [$this, 'saveOpportunity'],
-                // Inherited from Abstract
-                'permission_callback' => [$this, 'checkCanPost'],
+                'permission_callback' => [$this, 'checkCanPostWithNonce'],
                 'args'                => $saveArgs,
             ],
         ]);
@@ -168,7 +166,7 @@ class OpportunitiesController extends AbstractLaunchpadController
         register_rest_route($this->namespace, '/opportunities/(?P<id>\d+)/status', [
             'methods'             => 'POST',
             'callback'            => [$this, 'handleStatusChange'],
-            'permission_callback' => [$this, 'checkCanPost'],
+            'permission_callback' => [$this, 'checkCanPostWithNonce'],
             'args'                => [
                 'status' => [
                     'required'          => true,
@@ -365,5 +363,23 @@ class OpportunitiesController extends AbstractLaunchpadController
         }
 
         return true;
+    }
+
+    /**
+     * Composite: checkCanPost + wp_rest nonce.
+     *
+     * Applied to write endpoints (create / update / status-change). See
+     * AbstractApiController::checkLoggedInWithNonce — the nonce closes the
+     * non-cookie auth bypass that would otherwise let a leaked Application
+     * Password flood this controller from a headless script.
+     */
+    public function checkCanPostWithNonce(WP_REST_Request $request): bool|WP_Error
+    {
+        $result = $this->checkCanPost();
+        if ($result !== true) {
+            return $result;
+        }
+
+        return $this->checkRestNonce($request);
     }
 }

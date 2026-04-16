@@ -7,6 +7,7 @@ namespace Launchpad\Api;
 
 use Shared\Core\AbstractApiController as BaseController;
 use WP_REST_Request;
+use WP_Error;
 
 /**
  * The specific base for all Launchpad module endpoints.
@@ -37,7 +38,7 @@ abstract class AbstractLaunchpadController extends BaseController
 
     /**
      * Core logic: Check if a user owns a specific post ID.
-     * 
+     *
      * This must be public to be accessible as a valid callback.
      */
     public function checkOwner(?int $postId): bool
@@ -50,5 +51,22 @@ abstract class AbstractLaunchpadController extends BaseController
 
         // Ensure post exists and author matches current user
         return $post && (int) $post->post_author === get_current_user_id();
+    }
+
+    /**
+     * Composite: ownership check + wp_rest nonce.
+     *
+     * Same rationale as AbstractApiController::checkLoggedInWithNonce —
+     * binds the request to a page-load origin so non-cookie auth paths
+     * (Application Passwords, JWT) can't be used to read another user's
+     * content with a leaked token and no browser session.
+     */
+    public function checkPostOwnerWithNonce(WP_REST_Request $request): bool|WP_Error
+    {
+        if (!$this->checkPostOwner($request)) {
+            return false;
+        }
+
+        return $this->checkRestNonce($request);
     }
 }
