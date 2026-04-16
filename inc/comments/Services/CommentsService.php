@@ -11,6 +11,7 @@ class CommentsService
 {
     public const ITEMS_PER_PAGE = 2;
     public const EDIT_TIMEOUT_SECONDS = 15 * 60;
+    public const CONTENT_MAX_LENGTH = 2000;
 
     /**
      * Get comments with rating data (Optimized to avoid N+1 queries)
