@@ -119,6 +119,28 @@ abstract class AbstractApiController extends WP_REST_Controller
     }
 
     /**
+     * Shared Guard: Logged-in user + valid wp_rest nonce
+     *
+     * Binds authenticated requests to a page-load origin. WP core already
+     * enforces the nonce for cookie auth (via rest_cookie_check_errors), so
+     * this guard is a no-op for the browser path. Its value is closing the
+     * non-cookie auth bypass: Application Passwords / JWT / OAuth accept
+     * credentials without a nonce, which would let a script with a leaked
+     * token reach write endpoints from Postman. Requiring the nonce on top
+     * means the attacker must also compromise an interactive browser
+     * session — a meaningfully higher bar.
+     */
+    public function checkLoggedInWithNonce(WP_REST_Request $request): bool|WP_Error
+    {
+        $loggedIn = $this->checkLoggedIn($request);
+        if (is_wp_error($loggedIn)) {
+            return $loggedIn;
+        }
+
+        return $this->checkRestNonce($request);
+    }
+
+    /**
      * Unified success response
      *
      * @param array $data Response data
