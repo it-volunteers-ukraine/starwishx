@@ -219,7 +219,7 @@ class ProfilePanel extends AbstractPanel
                 data-wp-bind--hidden="!<?= $this->statePath('isEditing') ?>"
                 data-wp-on--submit="actions.profile.save"
                 data-wp-init="actions.profile.initPhoneWidget">
-                <div class="form-group-card1 launchpad-grid-auto">
+                <div class="launchpad-grid-auto">
 
                     <div class="form-field">
                         <label class="label-required" for="lp-first-name"><?= esc_html__('First Name', 'starwishx'); ?></label>

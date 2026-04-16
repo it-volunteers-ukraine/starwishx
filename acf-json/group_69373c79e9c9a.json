@@ -131,7 +131,7 @@
             },
             "default_value": "",
             "allow_in_bindings": 0,
-            "placeholder": "посилання на першоджерело"
+            "placeholder": "Посилання на першоджерело"
         },
         {
             "key": "field_6999cd702bcfd",
@@ -322,5 +322,5 @@
     "description": "",
     "show_in_rest": 0,
     "display_title": "",
-    "modified": 1775370300
+    "modified": 1776340625
 }

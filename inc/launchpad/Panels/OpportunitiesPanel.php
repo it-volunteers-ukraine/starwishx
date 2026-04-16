@@ -578,10 +578,10 @@ class OpportunitiesPanel extends AbstractPanel
 
                                 <div class="launchpad-grid-auto">
                                     <div class="form-field">
-                                        <label for="opportunity-sourcelink" class="<?php echo $required['opportunity_sourcelink'] ? 'label-required' : ''; ?>"><?php echo esc_html($labels['opportunity_sourcelink'] ?? __('Link', 'starwishx')); ?></label>
+                                        <label for="opportunity-sourcelink" class="<?php echo $required['opportunity_sourcelink'] ? 'label-required' : ''; ?>"><?= esc_html($labels['opportunity_sourcelink'] ?? __('Link', 'starwishx')); ?></label>
                                         <input id="opportunity-sourcelink" type="url"
-                                            <?php echo $required['opportunity_sourcelink'] ? 'required' : ''; ?>
-                                            placeholder="<?php echo esc_attr($placeholders['opportunity_sourcelink'] ?? ''); ?>"
+                                            <?= $required['opportunity_sourcelink'] ? 'required' : ''; ?>
+                                            placeholder="<?= esc_attr($placeholders['opportunity_sourcelink'] ?? ''); ?>"
                                             data-wp-bind--value="<?= $formPath ?>.sourcelink" data-wp-on--input="actions.opportunities.updateForm" data-wp-on--blur="actions.opportunities.normalizeUrlField" data-field="sourcelink">
                                         <label class="exclamation-circle__error" hidden
                                             data-wp-bind--hidden="!<?= $errPath ?>.sourcelink"

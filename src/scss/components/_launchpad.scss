@@ -1143,9 +1143,24 @@
         }
     }
 }
-// .profile-form,
+
 .password-form {
     max-width: 520px;
+}
+.profile-form {
+    .launchpad-grid-auto {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 10px;
+        @include max-laptop {
+            & > *:last-child {
+                grid-column: 1 / -1;
+            }
+        }
+        @include min-tablet {
+            grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+        }
+    }
 }
 
 .launchpad-grid-3-col {
