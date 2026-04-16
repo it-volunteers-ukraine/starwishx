@@ -11,6 +11,8 @@ class CommentsService
 {
     public const ITEMS_PER_PAGE = 2;
     public const EDIT_TIMEOUT_SECONDS = 15 * 60;
+    public const CONTENT_MAX_LENGTH = 2000;
+    public const ALLOWED_POST_TYPES = ['opportunity', 'project', 'news'];
 
     /**
      * Get comments with rating data (Optimized to avoid N+1 queries)
@@ -164,6 +166,11 @@ class CommentsService
         if (!$post || $post->post_status !== 'publish') {
             return new WP_Error('not_published', __('Comments are only allowed on published posts.', 'starwishx'), ['status' => 403]);
         }
+
+        if (!in_array($post->post_type, self::ALLOWED_POST_TYPES, true)) {
+            return new WP_Error('not_commentable', __('Comments are not allowed on this content.', 'starwishx'), ['status' => 403]);
+        }
+
         $author_name = $user->display_name ?: $user->user_login;
 
         // Prevent post author from self-reviewing (top-level comments).
@@ -177,9 +184,15 @@ class CommentsService
             $parentComm = get_comment($parentId);
             if (!$parentComm) return new WP_Error('invalid_parent', __('Parent comment not found.', 'starwishx'));
 
+            // Cross-post guard: without this, a client could submit
+            // post_id=A & parent_id=<comment of B> and graft an orphan reply
+            // onto the wrong thread.
+            if ((int) $parentComm->comment_post_ID !== $postId) {
+                return new WP_Error('parent_post_mismatch', __('Invalid parent comment.', 'starwishx'), ['status' => 422]);
+            }
+
             // Server-side canReply validation
-            $post                = get_post($postId);
-            $postAuthorId        = $post ? (int) $post->post_author : 0;
+            $postAuthorId        = (int) $post->post_author;
             $parentCommentUserId = (int) $parentComm->user_id;
 
             $canReply = (
