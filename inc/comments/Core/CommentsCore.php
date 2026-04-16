@@ -72,11 +72,7 @@ final class CommentsCore
      */
     public function enqueueAssets(): void
     {
-        $needsComments = is_singular('opportunity')
-            || is_singular('project')
-            || is_singular('news');
-
-        if (!$needsComments) {
+        if (!is_singular(CommentsService::ALLOWED_POST_TYPES)) {
             return;
         }
 
