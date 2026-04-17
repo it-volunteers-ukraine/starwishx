@@ -12,6 +12,7 @@ import {
   ensurePanel,
   fetchJson,
   normalizeUrl,
+  scrollToFirstError,
   validateName,
 } from "../utils.js";
 
@@ -306,6 +307,7 @@ export const profileActions = {
     }
 
     if (Object.keys(p.fieldErrors).length) {
+      scrollToFirstError();
       return;
     }
 
@@ -378,6 +380,7 @@ export const profileActions = {
           p.error = null;
         }, 5000);
       }
+      scrollToFirstError();
     } finally {
       p.isSaving = false;
     }
@@ -486,6 +489,7 @@ export const profileActions = {
       setTimeout(() => {
         p.error = null;
       }, 5000);
+      scrollToFirstError();
       return;
     }
     if (
@@ -497,6 +501,7 @@ export const profileActions = {
       setTimeout(() => {
         p.error = null;
       }, 5000);
+      scrollToFirstError();
       return;
     }
     // ──────────────────────────────────────────────────────────────────────
@@ -523,6 +528,7 @@ export const profileActions = {
       setTimeout(() => {
         p.error = null;
       }, 5000);
+      scrollToFirstError();
     }
   },
 

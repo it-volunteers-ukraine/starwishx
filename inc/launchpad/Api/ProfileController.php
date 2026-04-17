@@ -23,16 +23,17 @@ class ProfileController extends AbstractLaunchpadController
     private const DELETE_RATE_LIMIT_MAX    = 3;
     private const DELETE_RATE_LIMIT_WINDOW = HOUR_IN_SECONDS;
 
-    private const FIRST_NAME_MAX    = 80;
-    private const LAST_NAME_MAX     = 80;
+    // First/last-name caps are owned by ProfileService::NAME_MAX_LENGTH
+    // (business rule — used by validateNameField). Referenced directly in
+    // the RestArg calls below so the two layers cannot drift.
     private const NICKNAME_MAX      = 50;
-    private const DISPLAY_NAME_MAX  = 100;
+    private const DISPLAY_NAME_MAX  = 128;
     private const USER_URL_MAX      = 500;
     private const DESCRIPTION_MAX   = 1000;
     private const PHONE_MAX         = 32;
     private const PHONE_COUNTRY_MAX = 8;
-    private const TELEGRAM_MAX      = 64;
-    private const ORGANIZATION_MAX  = 200;
+    private const TELEGRAM_MAX      = 32;
+    private const ORGANIZATION_MAX  = 128;
     private const PASSWORD_MAX      = 256;
 
     /**
@@ -73,7 +74,7 @@ class ProfileController extends AbstractLaunchpadController
                     'sanitize_callback' => 'sanitize_text_field',
                     'validate_callback' => RestArg::stringLength(
                         0,
-                        self::FIRST_NAME_MAX,
+                        ProfileService::NAME_MAX_LENGTH,
                         __('First name', 'starwishx')
                     ),
                 ],
@@ -81,7 +82,7 @@ class ProfileController extends AbstractLaunchpadController
                     'sanitize_callback' => 'sanitize_text_field',
                     'validate_callback' => RestArg::stringLength(
                         0,
-                        self::LAST_NAME_MAX,
+                        ProfileService::NAME_MAX_LENGTH,
                         __('Last name', 'starwishx')
                     ),
                 ],

@@ -23,3 +23,10 @@ spl_autoload_register(function (string $class): void {
         require $file;
     }
 });
+
+// Normalise WP core's rest_invalid_param errors into our field_errors
+// contract so arg-level validate_callbacks reach the inline UI surface
+// instead of the generic "Invalid parameter(s): X" banner. Hooked at the
+// earliest REST init point so every subsequently-registered route inherits
+// the rewrite.
+add_action('rest_api_init', [\Shared\Core\AbstractApiController::class, 'bootErrorShapeFilter'], 0);

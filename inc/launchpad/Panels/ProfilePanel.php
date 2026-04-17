@@ -301,6 +301,9 @@ class ProfilePanel extends AbstractPanel
                                 placeholder="<?= esc_attr__('e.g. Janie, kat25', 'starwishx'); ?>"
                                 data-wp-bind--value="< ?= $this->statePath('nickname') ?>"
                                 data-wp-on--input="actions.profile.updateField" />
+                            <label class="exclamation-circle__error" hidden
+                                data-wp-bind--hidden="!<?= $this->statePath('fieldErrors') ?>.nickname"
+                                data-wp-text="<?= $this->statePath('fieldErrors') ?>.nickname"></label>
                         </div>
                         <div class="form-field">
                             <label for="lp-organization"><?= esc_html__('Organization', 'starwishx'); ?></label>
@@ -308,6 +311,9 @@ class ProfilePanel extends AbstractPanel
                                 placeholder="<?= esc_attr__('If you represent any organization', 'starwishx'); ?>"
                                 data-wp-bind--value="<?= $this->statePath('organization') ?>"
                                 data-wp-on--input="actions.profile.updateField" />
+                            <label class="exclamation-circle__error" hidden
+                                data-wp-bind--hidden="!<?= $this->statePath('fieldErrors') ?>.organization"
+                                data-wp-text="<?= $this->statePath('fieldErrors') ?>.organization"></label>
                         </div>
 
                     </div>
@@ -350,6 +356,9 @@ class ProfilePanel extends AbstractPanel
                                 placeholder="<?= esc_attr('@jane_smith'); ?>"
                                 data-wp-bind--value="<?= $this->statePath('telegram') ?>"
                                 data-wp-on--input="actions.profile.updateField" />
+                            <label class="exclamation-circle__error" hidden
+                                data-wp-bind--hidden="!<?= $this->statePath('fieldErrors') ?>.telegram"
+                                data-wp-text="<?= $this->statePath('fieldErrors') ?>.telegram"></label>
                         </div>
 
                         <div class="form-field">
@@ -371,6 +380,9 @@ class ProfilePanel extends AbstractPanel
                             placeholder="<?= esc_attr__('Biographical Info', 'starwishx'); ?>"
                             data-wp-bind--value="<?= $this->statePath('description') ?>"
                             data-wp-on--input="actions.profile.updateField"></textarea>
+                        <label class="exclamation-circle__error" hidden
+                            data-wp-bind--hidden="!<?= $this->statePath('fieldErrors') ?>.description"
+                            data-wp-text="<?= $this->statePath('fieldErrors') ?>.description"></label>
                     </div>
                     <div class="form-actions form-actions--delete">
                         <button type="button" class="btn-tertiary btn-profile-delete btn-secondary__small" data-wp-on--click="actions.profile.deleteProfile">

@@ -11,7 +11,29 @@ use WP_REST_Request;
 
 /**
  * Base class for REST API controllers.
- * Provides common functionality for authentication, response formatting, and namespace management.
+ *
+ * Provides common functionality for authentication, response formatting,
+ * and namespace management.
+ *
+ * ## Error-shape contract
+ *
+ * The client splits errors into two UI surfaces: inline (next to a field)
+ * and banner (panel header / popup). To route an error to the inline
+ * surface, responses MUST carry `data.field_errors` as a `{field => message}`
+ * map; anything else falls through to the banner via the top-level `message`.
+ *
+ *  - Services signal field-level failure with
+ *    `new WP_Error('invalid_data', ..., ['field_errors' => [...]])` — JS
+ *    reads `error.data.field_errors` and maps each entry to the matching
+ *    `.exclamation-circle__error` slot.
+ *  - WordPress's built-in `rest_invalid_param` error (emitted when a
+ *    `validate_callback` returns a `WP_Error`) uses a different shape:
+ *    `data.params[field]` with a generic top-level message. The
+ *    `reshapeInvalidParamError()` filter normalizes that into the same
+ *    `field_errors` contract so arg-level validators get the same inline
+ *    routing for free, without each controller re-translating the error.
+ *  - System-scoped failures (auth, rate-limit, not found, network) carry
+ *    only a top-level `message` and are rendered in the panel banner.
  */
 abstract class AbstractApiController extends WP_REST_Controller
 {
@@ -19,6 +41,97 @@ abstract class AbstractApiController extends WP_REST_Controller
      * Every child must define its own namespace (e.g., 'launchpad/v1')
      */
     protected $namespace;
+
+    /**
+     * Guard against double-registering the global error-shape filter when
+     * multiple controller subclasses boot in the same request.
+     */
+    private static bool $errorFilterRegistered = false;
+
+    /**
+     * Register the one-time global filter that normalises WordPress's
+     * `rest_invalid_param` error into our `field_errors` contract.
+     *
+     * Called from `inc/shared/setup.php` on `rest_api_init`. Idempotent —
+     * the static flag makes repeated calls a no-op.
+     */
+    public static function bootErrorShapeFilter(): void
+    {
+        if (self::$errorFilterRegistered) {
+            return;
+        }
+        self::$errorFilterRegistered = true;
+
+        add_filter(
+            'rest_request_after_callbacks',
+            [self::class, 'reshapeInvalidParamError'],
+            10,
+            3
+        );
+    }
+
+    /**
+     * Normalise WP core's `rest_invalid_param` into the `invalid_data` /
+     * `field_errors` shape the Launchpad UI already understands.
+     *
+     * Scope: only rewrites responses from callbacks whose controller is an
+     * instance of this base class, so third-party REST routes are untouched.
+     *
+     * WP core emits, for a failing `validate_callback`:
+     *   code:    rest_invalid_param
+     *   message: "Invalid parameter(s): description"
+     *   data:    [ status => 400, params => [field => i18n message], details => [...] ]
+     *
+     * After this filter, the client sees:
+     *   code:    invalid_data
+     *   message: "Please correct the highlighted fields." (fallback banner only)
+     *   data:    [ status => 422, field_errors => [field => i18n message] ]
+     *
+     * The JS fetch helper reads `data.field_errors` and routes each entry to
+     * the matching inline error slot; the banner message is suppressed when
+     * any inline error is present (see `profile/actions.js::save()`).
+     *
+     * @param mixed            $response WP_REST_Response, WP_Error, or raw result
+     * @param array            $handler  The matched route handler (callback + args)
+     * @param WP_REST_Request  $request  The current request
+     * @return mixed Possibly-rewritten response
+     */
+    public static function reshapeInvalidParamError($response, $handler, $request)
+    {
+        if (!is_wp_error($response)) {
+            return $response;
+        }
+        if ($response->get_error_code() !== 'rest_invalid_param') {
+            return $response;
+        }
+
+        // Scope to our controllers — identified by the handler's callback
+        // receiver. Keeps the filter from rewriting errors emitted by
+        // unrelated plugins that happen to share this hook.
+        $callback = $handler['callback'] ?? null;
+        $controller = is_array($callback) ? ($callback[0] ?? null) : null;
+        if (!($controller instanceof self)) {
+            return $response;
+        }
+
+        $data = $response->get_error_data() ?? [];
+        $params = is_array($data['params'] ?? null) ? $data['params'] : [];
+
+        // Drop WP-internal keys so they can't leak into field_errors or
+        // shadow the renamed payload on the client.
+        unset($data['params'], $data['details']);
+
+        if (!empty($params)) {
+            $data['field_errors'] = $params;
+        }
+        $data['status'] = 422;
+
+        return new WP_Error(
+            'invalid_data',
+            __('Please correct the highlighted fields.', 'starwishx'),
+            $data
+        );
+    }
 
     /**
      * Register REST API routes.
