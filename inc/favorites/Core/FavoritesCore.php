@@ -119,7 +119,7 @@ final class FavoritesCore
             $this->cachedIds = $ids;
 
             wp_interactivity_state('favorites', [
-                '       ' => $ids,
+                'myFavoriteIds' => $ids,
                 'config'        => [
                     'nonce'   => wp_create_nonce('wp_rest'),
                     'restUrl' => rest_url('favorites/v1/'),
