@@ -51,7 +51,12 @@ class MediaService
         }
 
         // 5. Create Attachment Record
-        $filename = preg_replace('/\.[^.]+$/', '', basename($file['name'])); // Sanitize filename
+        // basename() neutralizes path traversal; sanitize_text_field strips
+        // control chars / tags so the value is safe to echo back to the client
+        // and embed in the response body.
+        $filename = sanitize_text_field(
+            preg_replace('/\.[^.]+$/', '', basename($file['name']))
+        );
         $attachment = [
             'guid'           => $movefile['url'],
             'post_mime_type' => $movefile['type'],
