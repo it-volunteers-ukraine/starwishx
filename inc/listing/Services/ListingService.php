@@ -11,6 +11,17 @@ use WP_Query;
 
 class ListingService
 {
+    /**
+     * Single source of truth for which filter IDs the /sub-filter route
+     * supports. Consumed by:
+     *   - MainController route validate_callback (rejects unknown IDs early)
+     *   - searchFilterOptions() service-layer safety net
+     * Adding a new filter is a one-line change here.
+     *
+     * @var string[]
+     */
+    public const SUPPORTED_SUB_FILTERS = ['location'];
+
     private QueryBuilder $queryBuilder;
     private TermCountingService $termCounter;
     private FavoritesService $favoritesService;
@@ -266,9 +277,10 @@ class ListingService
     {
         global $wpdb;
 
-        // Guard is kept as a safety net; the route's validate_callback should
-        // already have rejected unsupported filter IDs before reaching here.
-        if ($filterId !== 'location') {
+        // Safety net — the route's validate_callback should already have
+        // rejected unsupported filter IDs. Reads from the shared const so
+        // adding a filter is a one-line change in one place.
+        if (!in_array($filterId, self::SUPPORTED_SUB_FILTERS, true)) {
             return new \WP_Error(
                 'unsupported_filter',
                 sprintf(__('Filter "%s" is not supported.', 'starwishx'), $filterId),
