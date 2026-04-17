@@ -19,6 +19,17 @@ abstract class AbstractListingController extends AbstractApiController
     protected $namespace = 'listing/v1';
 
     /**
+     * Defensive cap on repeated-key array params after normalization in
+     * getFilterParams(). Intentionally set high enough that no realistic UI
+     * selection is truncated (facet trees may legitimately push into the
+     * low hundreds when users expand multiple categories), while still
+     * blocking pathological payloads like ?category=1&category=2&…×10k.
+     *
+     * This is a DoS cap, not a UX constraint.
+     */
+    protected const ARRAY_PARAM_MAX = 100;
+
+    /**
      * Declare which query params should always resolve as arrays,
      * regardless of how many times they appear in the query string.
      *
@@ -55,6 +66,9 @@ abstract class AbstractListingController extends AbstractApiController
      *
      * Params declared in arrayParamKeys() are always cast to arrays, even when
      * only a single value is present, giving the service layer a consistent type.
+     * Each declared array is also truncated to ARRAY_PARAM_MAX items as a DoS
+     * defense — WP's args schema cannot validate repeated-key params, so the
+     * cap has to live here.
      */
     protected function getFilterParams(WP_REST_Request $request): array
     {
@@ -63,10 +77,12 @@ abstract class AbstractListingController extends AbstractApiController
         // Strip framework internals that are not filter keys
         unset($params['_locale'], $params['_wpnonce']);
 
-        // Normalize declared array params: scalar → single-element array
+        // Normalize declared array params: scalar → single-element array,
+        // then cap length. The cap sits here because these keys bypass WP's
+        // schema layer (see class docblock on arrayParamKeys).
         foreach ($this->arrayParamKeys() as $key) {
             if (array_key_exists($key, $params)) {
-                $params[$key] = (array) $params[$key];
+                $params[$key] = array_slice((array) $params[$key], 0, static::ARRAY_PARAM_MAX);
             }
         }
 
