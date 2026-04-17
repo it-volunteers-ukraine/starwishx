@@ -230,3 +230,26 @@ export function extendState(target, ...sources) {
   });
   return target;
 }
+
+/**
+ * Scroll the first visible error into view.
+ *
+ * Targets any `.exclamation-circle__error` element that is currently not
+ * hidden — covers both the panel-header banner (when p.error is set) and
+ * inline field errors (when p.fieldErrors is populated). The double-rAF
+ * waits for the Interactivity API to commit the pending state update so
+ * the target element's `hidden` attribute reflects the new state before
+ * we query the DOM.
+ *
+ * @param {Element|Document} [root=document] Scope to search within.
+ */
+export function scrollToFirstError(root = document) {
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      const target = root.querySelector(
+        ".exclamation-circle__error:not([hidden])",
+      );
+      target?.scrollIntoView({ behavior: "smooth", block: "center" });
+    });
+  });
+}

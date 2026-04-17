@@ -491,7 +491,9 @@ class OpportunitiesPanel extends AbstractPanel
                 data-wp-bind--hidden="!state.isOppFormVisible"
                 data-wp-bind--data-is-loading="<?= $isLoadingPath ?>">
                 <!-- Bind loading state ☝🏻 to a data attribute for CSS targeting -->
-
+                <div id="launchpad-form-alert" class="launchpad-alert launchpad-alert--error label-info exclamation-circle__error"
+                    data-wp-bind--hidden="!<?= $this->statePath('error') ?>"
+                    data-wp-text="<?= $this->statePath('error') ?>"></div>
                 <div class="launchpad-form-header" data-wp-bind--data-status="state.panels.opportunities.formData.status">
                     <h2 data-wp-text="state.opportunityFormHeaders"></h2>
                     <button class="btn-secondary__small" type="button" data-wp-on--click="actions.opportunities.cancel">

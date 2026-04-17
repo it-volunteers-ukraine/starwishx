@@ -45,11 +45,18 @@ class ContactController extends AbstractApiController
         /* ---- Rate limit: IP-based, every attempt counts ---- */
         $rl_key = RateLimitPolicy::key('contact', ClientIp::resolve());
 
+        $rl_message = sprintf(
+            /* translators: 1: action name, 2: human-readable wait duration */
+            __('%1$s limit reached. Please wait %2$s before trying again.', 'starwishx'),
+            __('Contact form', 'starwishx'),
+            human_time_diff(time(), time() + self::RATE_LIMIT_WINDOW)
+        );
+
         $rl_check = RateLimitPolicy::check(
             $rl_key,
             self::RATE_LIMIT_MAX,
             self::RATE_LIMIT_WINDOW,
-            __('Too many messages sent. Please try again later.', 'starwishx')
+            $rl_message
         );
         if (is_wp_error($rl_check)) {
             return $this->mapServiceError($rl_check);

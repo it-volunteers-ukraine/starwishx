@@ -8,24 +8,16 @@
  */
 
 import { getElement, getContext, store } from "@wordpress/interactivity"; // Import store
-import { deepClone, ensurePanel, fetchJson, normalizeUrl } from "../utils.js";
+import {
+  deepClone,
+  ensurePanel,
+  fetchJson,
+  normalizeUrl,
+  scrollToFirstError,
+} from "../utils.js";
 
 let locationSearchTimeout = null;
 let _pendingUploadFile = null;
-
-/**
- * Scroll the first errored field into view after validation.
- */
-function scrollToFirstError(fieldErrors) {
-  requestAnimationFrame(() => {
-    const firstKey = Object.keys(fieldErrors).find((k) => fieldErrors[k]);
-    if (!firstKey) return;
-    const el =
-      document.querySelector(`[data-field="${firstKey}"]`) ||
-      document.getElementById(`opportunity-${firstKey}`);
-    if (el) el.scrollIntoView({ behavior: "smooth", block: "center" });
-  });
-}
 
 /**
  * Opportunity actions.
@@ -69,6 +61,10 @@ export const opportunitiesActions = {
       }
     } catch (e) {
       p.error = e.message;
+      setTimeout(() => {
+        p.error = null;
+      }, 5000);
+      scrollToFirstError();
     } finally {
       p.isLoading = false;
     }
@@ -192,7 +188,7 @@ export const opportunitiesActions = {
     }
     if (Object.keys(p.fieldErrors).length) {
       p.isSaving = false;
-      scrollToFirstError(p.fieldErrors);
+      scrollToFirstError();
       return;
     }
 
@@ -253,11 +249,20 @@ export const opportunitiesActions = {
       actions.opportunities.cancel();
       await actions.loadPanelState("opportunities");
     } catch (error) {
-      p.error = error.message;
+      // Map backend field_errors first so we can decide whether the
+      // banner is still needed — PR1's rest_invalid_param reshape lands
+      // the per-field messages in `error.fieldErrors`.
       p.fieldErrors = error.fieldErrors || {};
-      if (Object.keys(p.fieldErrors).length) {
-        scrollToFirstError(p.fieldErrors);
+      // Show banner only when there are no inline field errors — otherwise
+      // the generic "Please correct the highlighted fields." duplicates
+      // the inline guidance.
+      if (!Object.keys(p.fieldErrors).length) {
+        p.error = error.message;
+        setTimeout(() => {
+          p.error = null;
+        }, 5000);
       }
+      scrollToFirstError();
     } finally {
       p.isSaving = false;
       p.isUploading = false;
@@ -317,6 +322,7 @@ export const opportunitiesActions = {
         setTimeout(() => {
           p.error = null;
         }, 5000);
+        scrollToFirstError();
       } finally {
         p.isSaving = false;
       }
@@ -424,6 +430,10 @@ export const opportunitiesActions = {
       }
     } catch (error) {
       p.error = error.message;
+      setTimeout(() => {
+        p.error = null;
+      }, 5000);
+      scrollToFirstError();
     } finally {
       p.isLoading = false;
     }
@@ -481,6 +491,10 @@ export const opportunitiesActions = {
       }
     } catch (error) {
       p.error = error.message;
+      setTimeout(() => {
+        p.error = null;
+      }, 5000);
+      scrollToFirstError();
     } finally {
       p.isLoading = false;
     }
@@ -513,7 +527,8 @@ export const opportunitiesActions = {
     const { item } = getContext();
     const p = state.panels.opportunities;
     // Toggle: clicking the already-selected country clears the selection
-    p.formData.country = parseInt(p.formData.country) === item.id ? "" : item.id;
+    p.formData.country =
+      parseInt(p.formData.country) === item.id ? "" : item.id;
     p.isCountryDropdownOpen = false;
     if (p.fieldErrors?.country) p.fieldErrors.country = null;
   },
@@ -565,12 +580,16 @@ export const opportunitiesActions = {
       if (prev) {
         prev.focus();
       } else {
-        li.closest(".lp-dropdown")?.querySelector(".lp-dropdown__trigger")?.focus();
+        li.closest(".lp-dropdown")
+          ?.querySelector(".lp-dropdown__trigger")
+          ?.focus();
       }
       return;
     }
     if (event.key === "Escape") {
-      li.closest(".lp-dropdown")?.querySelector(".lp-dropdown__trigger")?.focus();
+      li.closest(".lp-dropdown")
+        ?.querySelector(".lp-dropdown__trigger")
+        ?.focus();
       // Bubbles up to wrapper keydown which closes the dropdown
     }
   },
@@ -921,7 +940,7 @@ export const opportunitiesActions = {
     }
 
     if (Object.keys(p.fieldErrors).length) {
-      scrollToFirstError(p.fieldErrors);
+      scrollToFirstError();
     }
   },
 

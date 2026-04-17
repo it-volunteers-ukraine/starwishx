@@ -12,6 +12,7 @@ import {
   ensurePanel,
   fetchJson,
   normalizeUrl,
+  scrollToFirstError,
   validateName,
 } from "../utils.js";
 
@@ -306,6 +307,7 @@ export const profileActions = {
     }
 
     if (Object.keys(p.fieldErrors).length) {
+      scrollToFirstError();
       return;
     }
 
@@ -378,6 +380,7 @@ export const profileActions = {
           p.error = null;
         }, 5000);
       }
+      scrollToFirstError();
     } finally {
       p.isSaving = false;
     }
@@ -486,6 +489,7 @@ export const profileActions = {
       setTimeout(() => {
         p.error = null;
       }, 5000);
+      scrollToFirstError();
       return;
     }
     if (
@@ -497,6 +501,7 @@ export const profileActions = {
       setTimeout(() => {
         p.error = null;
       }, 5000);
+      scrollToFirstError();
       return;
     }
     // ──────────────────────────────────────────────────────────────────────
@@ -523,6 +528,7 @@ export const profileActions = {
       setTimeout(() => {
         p.error = null;
       }, 5000);
+      scrollToFirstError();
     }
   },
 
@@ -552,10 +558,16 @@ export const profileActions = {
   updateEmailPopupField() {
     const { state } = store("launchpad");
     const { ref } = getElement();
-    const popup = ensurePanel(state, "profile").emailPopup;
-    if (ref.dataset.field) {
-      popup[ref.dataset.field] = ref.value;
-    }
+    // const popup = ensurePanel(state, "profile").emailPopup;
+    // if (ref.dataset.field) {
+    //   popup[ref.dataset.field] = ref.value;
+    // }
+    /* hotfix actions.js:563 Uncaught TypeError: Cannot set properties of undefined (setting 'newEmail') at updateEmailPopupField */
+    const p = ensurePanel(state, "profile");
+    if (!p || !ref.dataset.field) return;
+    const popup = p.emailPopup;
+    if (!popup) return;
+    popup[ref.dataset.field] = ref.value;
   },
 
   toggleEmailPasswordVisibility() {
@@ -573,7 +585,9 @@ export const profileActions = {
       popup.error =
         state.launchpadSettings.messages?.requiredFields ??
         "Please fill in all fields.";
-      setTimeout(() => { popup.error = null; }, 5000);
+      setTimeout(() => {
+        popup.error = null;
+      }, 5000);
       return;
     }
 
@@ -601,7 +615,9 @@ export const profileActions = {
       popup.password = "";
     } catch (error) {
       popup.error = error.message;
-      setTimeout(() => { popup.error = null; }, 5000);
+      setTimeout(() => {
+        popup.error = null;
+      }, 5000);
     } finally {
       popup.isChanging = false;
     }

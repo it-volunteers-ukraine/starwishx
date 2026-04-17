@@ -142,7 +142,7 @@ final class LaunchpadCore
             new \Launchpad\Api\OpportunitiesController($this->services['opportunities'], $this->services['profile']),
             new \Launchpad\Api\SecurityController($this->services['security']),
             // CommentsController is now registered by the independent Comments module
-            new \Launchpad\Api\MediaController($this->services['media']),
+            new \Launchpad\Api\MediaController($this->services['media'], $this->services['profile']),
         ];
 
         // Register routes for each controller

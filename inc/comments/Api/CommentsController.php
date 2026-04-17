@@ -7,6 +7,7 @@ namespace Comments\Api;
 use Comments\Services\CommentsService;
 use Shared\Core\AbstractApiController;
 use Shared\Policy\RateLimitPolicy;
+use Shared\Validation\RestArg;
 use WP_REST_Request;
 use WP_REST_Response;
 use WP_Error;
@@ -32,11 +33,11 @@ class CommentsController extends AbstractApiController
         $contentArg = [
             'required'          => true,
             'sanitize_callback' => 'sanitize_textarea_field',
-            'validate_callback' => function ($param) {
-                return is_string($param)
-                    && trim($param) !== ''
-                    && mb_strlen($param) <= CommentsService::CONTENT_MAX_LENGTH;
-            },
+            'validate_callback' => RestArg::stringLength(
+                1,
+                CommentsService::CONTENT_MAX_LENGTH,
+                __('Comment', 'starwishx')
+            ),
         ];
 
         // 1. Get List with Pagination
@@ -57,11 +58,11 @@ class CommentsController extends AbstractApiController
                 'per_page' => [
                     'default'           => CommentsService::ITEMS_PER_PAGE,
                     'sanitize_callback' => 'absint',
-                    'validate_callback' => function ($param) {
-                        return is_numeric($param)
-                            && (int) $param >= 1
-                            && (int) $param <= self::PER_PAGE_MAX;
-                    },
+                    'validate_callback' => RestArg::intRange(
+                        1,
+                        self::PER_PAGE_MAX,
+                        __('Items per page', 'starwishx')
+                    ),
                 ],
             ],
         ]);
@@ -193,15 +194,27 @@ class CommentsController extends AbstractApiController
      *
      * Returns a mapped WP_Error (HTTP 429) when the limit is exceeded; null
      * otherwise. Every attempt counts — same pattern as ContactController.
+     *
+     * The 429 message names the action and shows a friendly, single-unit
+     * wait duration via human_time_diff() (e.g., "1 hour", "30 mins"),
+     * derived from the window so the wording tracks any future changes.
      */
     private function applyWriteRateLimit(int $userId): ?WP_Error
     {
         $key = RateLimitPolicy::key('comment_write', (string) $userId);
 
+        $message = sprintf(
+            /* translators: 1: action name, 2: human-readable wait duration */
+            __('%1$s limit reached. Please wait %2$s before trying again.', 'starwishx'),
+            __('Comment posting', 'starwishx'),
+            human_time_diff(time(), time() + self::RATE_LIMIT_WINDOW)
+        );
+
         $check = RateLimitPolicy::check(
             $key,
             self::RATE_LIMIT_MAX,
-            self::RATE_LIMIT_WINDOW
+            self::RATE_LIMIT_WINDOW,
+            $message
         );
         if (is_wp_error($check)) {
             return $this->mapServiceError($check);
