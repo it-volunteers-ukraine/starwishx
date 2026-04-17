@@ -59,9 +59,19 @@ class SecurityController extends AbstractLaunchpadController
     {
         $userId = get_current_user_id();
 
-        $rateLimited = $this->applyPasswordRateLimit($userId);
-        if ($rateLimited !== null) {
-            return $rateLimited;
+        // Conditional rate limit (auth pattern): only failed attempts count
+        // toward the bucket; a successful change clears it. This avoids
+        // penalizing a legitimate user who simply rotates their password
+        // while still throttling brute-force on `currentPassword`.
+        $rlKey = $this->checkAuthRateLimit(
+            'security_password',
+            $userId,
+            self::PASSWORD_RATE_LIMIT_MAX,
+            self::PASSWORD_RATE_LIMIT_WINDOW,
+            __('Password change', 'starwishx')
+        );
+        if (is_wp_error($rlKey)) {
+            return $rlKey;
         }
 
         $result = $this->service->changePassword(
@@ -71,6 +81,8 @@ class SecurityController extends AbstractLaunchpadController
         );
 
         if (is_wp_error($result)) {
+            RateLimitPolicy::hit($rlKey, self::PASSWORD_RATE_LIMIT_WINDOW);
+
             return $this->mapServiceError($result, [
                 'invalid_password'           => 422,
                 'password_too_short'         => 422,
@@ -78,6 +90,8 @@ class SecurityController extends AbstractLaunchpadController
                 'password_contains_userdata' => 422,
             ]);
         }
+
+        RateLimitPolicy::clear($rlKey);
 
         // Note: wp_set_password invalidates auth cookies.
         // The frontend launchpad-store.js must handle the redirect to login immediately.
@@ -88,39 +102,24 @@ class SecurityController extends AbstractLaunchpadController
     }
 
     /**
-     * Per-user rate limit — password change bucket.
+     * Conditional rate-limit guard for auth flows.
      *
-     * Slows brute-force on `currentPassword` (the highest-blast-radius
-     * endpoint in the dashboard — success rotates the credential and
-     * locks out the legitimate owner).
+     * Returns the transient key on pass — the caller MUST subsequently call
+     * `RateLimitPolicy::hit($key, $window)` on auth failure or
+     * `RateLimitPolicy::clear($key)` on success. Returns a mapped WP_Error
+     * (HTTP 429) when the limit is already exceeded.
+     *
+     * Mirrors the "Conditional (auth)" usage documented in RateLimitPolicy.
+     * The 429 message names the action and shows a single-unit, localized
+     * wait duration via human_time_diff() (e.g., "1 hour", "30 mins").
      */
-    private function applyPasswordRateLimit(int $userId): ?WP_Error
-    {
-        return $this->applyRateLimit(
-            'security_password',
-            $userId,
-            self::PASSWORD_RATE_LIMIT_MAX,
-            self::PASSWORD_RATE_LIMIT_WINDOW,
-            __('Password change', 'starwishx')
-        );
-    }
-
-    /**
-     * Generic per-user rate-limit guard with an action-named, friendly message.
-     *
-     * Mirrors OpportunitiesController / ProfileController — the user-facing
-     * message names the action and shows a single-unit, localized wait
-     * duration via human_time_diff() (e.g., "1 hour", "30 mins").
-     *
-     * `mapServiceError()` translates the policy's `rate_limited` code into 429.
-     */
-    private function applyRateLimit(
+    private function checkAuthRateLimit(
         string $action,
         int $userId,
         int $max,
         int $window,
         string $actionLabel
-    ): ?WP_Error {
+    ): string|WP_Error {
         $key = RateLimitPolicy::key($action, (string) $userId);
 
         $message = sprintf(
@@ -135,8 +134,6 @@ class SecurityController extends AbstractLaunchpadController
             return $this->mapServiceError($check);
         }
 
-        RateLimitPolicy::hit($key, $window);
-
-        return null;
+        return $key;
     }
 }
