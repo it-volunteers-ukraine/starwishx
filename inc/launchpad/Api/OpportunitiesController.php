@@ -9,6 +9,7 @@ use Launchpad\Services\OpportunitiesService;
 use Launchpad\Services\ProfileService;
 use Shared\Policy\RateLimitPolicy;
 use Shared\Sanitize\InputSanitizer;
+use Shared\Validation\RestArg;
 use WP_REST_Request;
 use WP_REST_Response;
 use WP_Error;
@@ -77,12 +78,18 @@ class OpportunitiesController extends AbstractLaunchpadController
             'category'        => [
                 'type'              => 'array',
                 'items'             => ['type' => 'integer'],
-                'validate_callback' => fn($v) => is_array($v) && count($v) <= self::CATEGORY_MAX_ITEMS,
+                'validate_callback' => RestArg::arrayMaxItems(
+                    self::CATEGORY_MAX_ITEMS,
+                    __('Categories', 'starwishx')
+                ),
             ],
             'subcategory'     => [
                 'type'              => 'array',
                 'items'             => ['type' => 'integer'],
-                'validate_callback' => fn($v) => is_array($v) && count($v) <= self::SUBCATEGORY_MAX_ITEMS,
+                'validate_callback' => RestArg::arrayMaxItems(
+                    self::SUBCATEGORY_MAX_ITEMS,
+                    __('Subcategories', 'starwishx')
+                ),
             ],
             'country'         => ['sanitize_callback' => 'absint'],
             'locations' => [
@@ -100,14 +107,20 @@ class OpportunitiesController extends AbstractLaunchpadController
                         'name' => ['type' => 'string', 'sanitize_callback' => 'sanitize_text_field'],
                     ]
                 ],
-                'validate_callback' => fn($v) => is_array($v) && count($v) <= self::LOCATIONS_MAX_ITEMS,
+                'validate_callback' => RestArg::arrayMaxItems(
+                    self::LOCATIONS_MAX_ITEMS,
+                    __('Locations', 'starwishx')
+                ),
             ],
             'city'            => ['sanitize_callback' => 'sanitize_text_field'],
             'sourcelink'      => ['sanitize_callback' => [InputSanitizer::class, 'sanitizeUrl']],
             'seekers'         => [
                 'type'              => 'array',
                 'items'             => ['type' => 'integer'],
-                'validate_callback' => fn($v) => is_array($v) && count($v) <= self::SEEKERS_MAX_ITEMS,
+                'validate_callback' => RestArg::arrayMaxItems(
+                    self::SEEKERS_MAX_ITEMS,
+                    __('Seekers', 'starwishx')
+                ),
             ],
             'description'     => [
                 'required'          => true,
@@ -155,11 +168,11 @@ class OpportunitiesController extends AbstractLaunchpadController
                 'per_page' => [
                     'default'           => OpportunitiesService::ITEMS_PER_PAGE,
                     'sanitize_callback' => 'absint',
-                    'validate_callback' => function ($param) {
-                        return is_numeric($param)
-                            && (int) $param >= 1
-                            && (int) $param <= self::PER_PAGE_MAX;
-                    },
+                    'validate_callback' => RestArg::intRange(
+                        1,
+                        self::PER_PAGE_MAX,
+                        __('Items per page', 'starwishx')
+                    ),
                 ],
                 // Accept statuses as an array
                 'statuses' => [
@@ -168,7 +181,10 @@ class OpportunitiesController extends AbstractLaunchpadController
                     'sanitize_callback' => function ($val) {
                         return array_map('sanitize_key', (array)$val);
                     },
-                    'validate_callback' => fn($v) => is_array($v) && count($v) <= self::STATUSES_MAX_ITEMS,
+                    'validate_callback' => RestArg::arrayMaxItems(
+                        self::STATUSES_MAX_ITEMS,
+                        __('Statuses filter', 'starwishx')
+                    ),
                 ],
             ],
         ]);
@@ -217,13 +233,13 @@ class OpportunitiesController extends AbstractLaunchpadController
             'permission_callback' => [$this, 'checkLoggedInWithNonce'],
             'args'                => [
                 'search' => [
-                    'required' => true,
+                    'required'          => true,
                     'sanitize_callback' => 'sanitize_text_field',
-                    'validate_callback' => function ($p) {
-                        return is_string($p)
-                            && strlen($p) >= 2
-                            && strlen($p) <= self::SEARCH_MAX_LENGTH;
-                    }
+                    'validate_callback' => RestArg::stringLength(
+                        2,
+                        self::SEARCH_MAX_LENGTH,
+                        __('Search term', 'starwishx')
+                    ),
                 ],
                 'levels' => [
                     'type' => 'array',
@@ -232,7 +248,10 @@ class OpportunitiesController extends AbstractLaunchpadController
                         'sanitize_callback' => 'absint'
                     ],
                     'default' => [],
-                    'validate_callback' => fn($v) => is_array($v) && count($v) <= self::LEVELS_MAX_ITEMS,
+                    'validate_callback' => RestArg::arrayMaxItems(
+                        self::LEVELS_MAX_ITEMS,
+                        __('Levels filter', 'starwishx')
+                    ),
                 ]
             ]
         ]);
@@ -460,20 +479,13 @@ class OpportunitiesController extends AbstractLaunchpadController
      */
     private function applyWriteRateLimit(int $userId): ?WP_Error
     {
-        $key = RateLimitPolicy::key('opportunity_write', (string) $userId);
-
-        $check = RateLimitPolicy::check(
-            $key,
+        return $this->applyRateLimit(
+            'opportunity_write',
+            $userId,
             self::WRITE_RATE_LIMIT_MAX,
-            self::WRITE_RATE_LIMIT_WINDOW
+            self::WRITE_RATE_LIMIT_WINDOW,
+            __('Opportunity changes', 'starwishx')
         );
-        if (is_wp_error($check)) {
-            return $this->mapServiceError($check);
-        }
-
-        RateLimitPolicy::hit($key, self::WRITE_RATE_LIMIT_WINDOW);
-
-        return null;
     }
 
     /**
@@ -484,18 +496,48 @@ class OpportunitiesController extends AbstractLaunchpadController
      */
     private function applySearchRateLimit(int $userId): ?WP_Error
     {
-        $key = RateLimitPolicy::key('opportunity_search', (string) $userId);
-
-        $check = RateLimitPolicy::check(
-            $key,
+        return $this->applyRateLimit(
+            'opportunity_search',
+            $userId,
             self::SEARCH_RATE_LIMIT_MAX,
-            self::SEARCH_RATE_LIMIT_WINDOW
+            self::SEARCH_RATE_LIMIT_WINDOW,
+            __('Location search', 'starwishx')
         );
+    }
+
+    /**
+     * Generic per-user rate-limit guard with an action-named, friendly message.
+     *
+     * The user-facing message names the action ("Opportunity changes") and
+     * shows a single-unit, localized wait duration via human_time_diff()
+     * (e.g., "1 hour", "30 mins") — derived from the window so the wording
+     * automatically tracks any future window changes.
+     *
+     * `mapServiceError()` translates the policy's `rate_limited` code into
+     * HTTP 429.
+     */
+    private function applyRateLimit(
+        string $action,
+        int $userId,
+        int $max,
+        int $window,
+        string $actionLabel
+    ): ?WP_Error {
+        $key = RateLimitPolicy::key($action, (string) $userId);
+
+        $message = sprintf(
+            /* translators: 1: action name (e.g., "Opportunity changes"), 2: human-readable wait duration */
+            __('%1$s limit reached. Please wait %2$s before trying again.', 'starwishx'),
+            $actionLabel,
+            human_time_diff(time(), time() + $window)
+        );
+
+        $check = RateLimitPolicy::check($key, $max, $window, $message);
         if (is_wp_error($check)) {
             return $this->mapServiceError($check);
         }
 
-        RateLimitPolicy::hit($key, self::SEARCH_RATE_LIMIT_WINDOW);
+        RateLimitPolicy::hit($key, $window);
 
         return null;
     }
