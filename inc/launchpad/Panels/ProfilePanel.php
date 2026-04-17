@@ -348,6 +348,9 @@ class ProfilePanel extends AbstractPanel
                                     </template>
                                 </ul>
                             </div>
+                            <label class="exclamation-circle__error" hidden
+                                data-wp-bind--hidden="!<?= $this->statePath('fieldErrors') ?>.displayName"
+                                data-wp-text="<?= $this->statePath('fieldErrors') ?>.displayName"></label>
                         </div>
 
                         <div class="form-field">
