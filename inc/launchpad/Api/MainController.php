@@ -8,6 +8,7 @@ namespace Launchpad\Api;
 use Launchpad\Core\PanelRegistry;
 use WP_REST_Request;
 use WP_REST_Response;
+use WP_Error;
 
 class MainController extends AbstractLaunchpadController
 {
@@ -24,12 +25,20 @@ class MainController extends AbstractLaunchpadController
         register_rest_route($this->namespace, '/panel/(?P<id>[a-z0-9-]+)/state', [
             'methods'             => 'GET',
             'callback'            => [$this, 'getPanelState'],
-            'permission_callback' => [$this, 'checkLoggedIn'],
+            'permission_callback' => [$this, 'checkLoggedInWithNonce'],
             'args'                => [
                 'id' => [
                     'required'          => true,
-                    // Validation happens here, preventing invalid IDs from reaching logic
-                    'validate_callback' => fn($id) => $this->registry->has($id),
+                    // Reject unknown panel IDs at the route boundary with a
+                    // localized 404 — same code/message as the in-handler
+                    // safety net so the client sees one consistent error shape.
+                    'validate_callback' => fn($id) => $this->registry->has($id)
+                        ? true
+                        : new WP_Error(
+                            'panel_missing',
+                            __('Panel not found.', 'starwishx'),
+                            ['status' => 404]
+                        ),
                 ],
             ],
         ]);
