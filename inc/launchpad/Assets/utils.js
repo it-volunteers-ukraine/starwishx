@@ -121,11 +121,11 @@ export async function fetchJson(
 
     // DETECT FORM DATA
     if (body instanceof FormData) {
-        // Do NOT set Content-Type; browser sets it with boundary
-        // payload remains FormData
+      // Do NOT set Content-Type; browser sets it with boundary
+      // payload remains FormData
     } else if (body) {
-        headers["Content-Type"] = "application/json";
-        payload = JSON.stringify(body);
+      headers["Content-Type"] = "application/json";
+      payload = JSON.stringify(body);
     }
 
     const response = await fetch(url, {
@@ -158,6 +158,12 @@ export async function fetchJson(
     }
 
     return await response.json();
+  } catch (error) {
+    if (error.name === "AbortError") {
+      // Aborted intentionally — do not throw or log as an error
+      return; // Or throw a custom signal if needed
+    }
+    throw error; // Re-throw other errors
   } finally {
     if (panelId) panelControllers.delete(panelId);
   }
