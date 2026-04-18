@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-04-17T12:55:54+00:00\n"
+"POT-Creation-Date: 2026-04-18T13:00:56+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: starwishx\n"
@@ -160,104 +160,104 @@ msgid "Carousel of project cards"
 msgstr ""
 
 #: docs/UrlPolicy/inc/launchpad/Services/OpportunitiesService.php:26
-#: inc/launchpad/Services/OpportunitiesService.php:26
+#: inc/launchpad/Services/OpportunitiesService.php:56
 msgid "Draft"
 msgstr ""
 
 #: docs/UrlPolicy/inc/launchpad/Services/OpportunitiesService.php:27
-#: inc/launchpad/Services/OpportunitiesService.php:27
+#: inc/launchpad/Services/OpportunitiesService.php:57
 msgid "Pending Review"
 msgstr ""
 
 #: docs/UrlPolicy/inc/launchpad/Services/OpportunitiesService.php:28
 #: inc/launchpad/Panels/OpportunitiesPanel.php:292
-#: inc/launchpad/Services/OpportunitiesService.php:28
+#: inc/launchpad/Services/OpportunitiesService.php:58
 msgid "Published"
 msgstr ""
 
 #: docs/UrlPolicy/inc/launchpad/Services/OpportunitiesService.php:375
 #: docs/UrlPolicy/inc/launchpad/Services/ProfileService.php:204
-#: inc/launchpad/Services/OpportunitiesService.php:380
+#: inc/launchpad/Services/OpportunitiesService.php:438
 #: inc/launchpad/Services/ProfileService.php:224
 #: inc/shared/Core/AbstractApiController.php:131
 msgid "Please correct the highlighted fields."
 msgstr ""
 
 #: docs/UrlPolicy/inc/launchpad/Services/OpportunitiesService.php:583
-#: inc/launchpad/Services/OpportunitiesService.php:592
+#: inc/launchpad/Services/OpportunitiesService.php:664
 msgid "Access denied."
 msgstr ""
 
 #: docs/UrlPolicy/inc/launchpad/Services/OpportunitiesService.php:589
-#: inc/launchpad/Services/OpportunitiesService.php:598
+#: inc/launchpad/Services/OpportunitiesService.php:670
 msgid "Only drafts can be submitted for review."
 msgstr ""
 
 #: docs/UrlPolicy/inc/launchpad/Services/OpportunitiesService.php:628
 #: inc/launchpad/Panels/OpportunitiesPanel.php:140
-#: inc/launchpad/Services/OpportunitiesService.php:637
+#: inc/launchpad/Services/OpportunitiesService.php:709
 msgid "Title is required."
 msgstr ""
 
 #: docs/UrlPolicy/inc/launchpad/Services/OpportunitiesService.php:631
 #: inc/launchpad/Panels/OpportunitiesPanel.php:142
-#: inc/launchpad/Services/OpportunitiesService.php:640
+#: inc/launchpad/Services/OpportunitiesService.php:712
 #, php-format
 msgid "Title must be at least %d characters."
 msgstr ""
 
 #: docs/UrlPolicy/inc/launchpad/Services/OpportunitiesService.php:636
-#: inc/launchpad/Services/OpportunitiesService.php:645
+#: inc/launchpad/Services/OpportunitiesService.php:717
 #, php-format
 msgid "Title must not exceed %d characters."
 msgstr ""
 
 #: docs/UrlPolicy/inc/launchpad/Services/OpportunitiesService.php:642
 #: inc/launchpad/Panels/OpportunitiesPanel.php:151
-#: inc/launchpad/Services/OpportunitiesService.php:651
+#: inc/launchpad/Services/OpportunitiesService.php:723
 msgid "Description is required."
 msgstr ""
 
 #: docs/UrlPolicy/inc/launchpad/Services/OpportunitiesService.php:645
 #: inc/launchpad/Panels/OpportunitiesPanel.php:153
-#: inc/launchpad/Services/OpportunitiesService.php:654
+#: inc/launchpad/Services/OpportunitiesService.php:726
 #, php-format
 msgid "Description must be at least %d characters."
 msgstr ""
 
 #: docs/UrlPolicy/inc/launchpad/Services/OpportunitiesService.php:653
 #: inc/launchpad/Panels/OpportunitiesPanel.php:145
-#: inc/launchpad/Services/OpportunitiesService.php:662
+#: inc/launchpad/Services/OpportunitiesService.php:734
 msgid "Company is required."
 msgstr ""
 
 #: docs/UrlPolicy/inc/launchpad/Services/OpportunitiesService.php:656
 #: inc/launchpad/Panels/OpportunitiesPanel.php:147
-#: inc/launchpad/Services/OpportunitiesService.php:665
+#: inc/launchpad/Services/OpportunitiesService.php:737
 #, php-format
 msgid "Company must be at least %d characters."
 msgstr ""
 
 #: docs/UrlPolicy/inc/launchpad/Services/OpportunitiesService.php:661
 #: inc/launchpad/Panels/OpportunitiesPanel.php:150
-#: inc/launchpad/Services/OpportunitiesService.php:670
+#: inc/launchpad/Services/OpportunitiesService.php:742
 msgid "Source link is required."
 msgstr ""
 
 #: docs/UrlPolicy/inc/launchpad/Services/OpportunitiesService.php:667
 #: inc/launchpad/Panels/OpportunitiesPanel.php:156
-#: inc/launchpad/Services/OpportunitiesService.php:676
+#: inc/launchpad/Services/OpportunitiesService.php:748
 msgid "At least one category is required."
 msgstr ""
 
 #: docs/UrlPolicy/inc/launchpad/Services/OpportunitiesService.php:673
 #: inc/launchpad/Panels/OpportunitiesPanel.php:157
-#: inc/launchpad/Services/OpportunitiesService.php:682
+#: inc/launchpad/Services/OpportunitiesService.php:754
 msgid "At least one seeker type is required."
 msgstr ""
 
 #: docs/UrlPolicy/inc/launchpad/Services/OpportunitiesService.php:687
-#: inc/launchpad/Services/OpportunitiesService.php:696
+#: inc/launchpad/Services/OpportunitiesService.php:768
 msgid "Please fill in all required fields before submitting for review."
 msgstr ""
 
@@ -393,8 +393,50 @@ msgstr ""
 msgid "Video cover"
 msgstr ""
 
-#: inc/chat/Api/ActivityController.php:66
+#: inc/chat/Api/ActivityController.php:56
+#: inc/favorites/Api/FavoritesController.php:58
+#: inc/favorites/Services/FavoritesService.php:20
+#: inc/listing/Api/MainController.php:70
+msgid "Page"
+msgstr ""
+
+#: inc/chat/Api/ActivityController.php:65
+#: inc/favorites/Api/FavoritesController.php:67
+msgid "Per page"
+msgstr ""
+
+#: inc/chat/Api/ActivityController.php:80
+msgid "Notification ID"
+msgstr ""
+
+#: inc/chat/Api/ActivityController.php:128
 msgid "Notification not found."
+msgstr ""
+
+#: inc/chat/Api/ActivityController.php:163
+msgid "Notification changes"
+msgstr ""
+
+#: inc/chat/Api/ActivityController.php:178
+msgid "Activity feed"
+msgstr ""
+
+#. translators: 1: action name (e.g., "Notification changes"), 2: human-readable wait duration
+#. translators: 1: action name, 2: human-readable wait duration
+#. translators: 1: action name (e.g., "File upload"), 2: human-readable wait duration
+#. translators: 1: action name (e.g., "Opportunity changes"), 2: human-readable wait duration
+#. translators: 1: action name (e.g., "Profile changes"), 2: human-readable wait duration
+#. translators: 1: action name (e.g., "Password change"), 2: human-readable wait duration
+#: inc/chat/Api/ActivityController.php:202
+#: inc/comments/Api/CommentsController.php:208
+#: inc/contact/Api/ContactController.php:50
+#: inc/launchpad/Api/MediaController.php:146
+#: inc/launchpad/Api/OpportunitiesController.php:540
+#: inc/launchpad/Api/ProfileController.php:360
+#: inc/launchpad/Api/SecurityController.php:127
+#: inc/listing/Api/MainController.php:239
+#, php-format
+msgid "%1$s limit reached. Please wait %2$s before trying again."
 msgstr ""
 
 #: inc/chat/Core/ChatCore.php:94
@@ -471,23 +513,8 @@ msgid "Comment"
 msgstr ""
 
 #: inc/comments/Api/CommentsController.php:64
-#: inc/launchpad/Api/OpportunitiesController.php:174
+#: inc/launchpad/Api/OpportunitiesController.php:184
 msgid "Items per page"
-msgstr ""
-
-#. translators: 1: action name, 2: human-readable wait duration
-#. translators: 1: action name (e.g., "File upload"), 2: human-readable wait duration
-#. translators: 1: action name (e.g., "Opportunity changes"), 2: human-readable wait duration
-#. translators: 1: action name (e.g., "Profile changes"), 2: human-readable wait duration
-#. translators: 1: action name (e.g., "Password change"), 2: human-readable wait duration
-#: inc/comments/Api/CommentsController.php:208
-#: inc/contact/Api/ContactController.php:50
-#: inc/launchpad/Api/MediaController.php:146
-#: inc/launchpad/Api/OpportunitiesController.php:530
-#: inc/launchpad/Api/ProfileController.php:360
-#: inc/launchpad/Api/SecurityController.php:127
-#, php-format
-msgid "%1$s limit reached. Please wait %2$s before trying again."
 msgstr ""
 
 #: inc/comments/Api/CommentsController.php:209
@@ -648,15 +675,6 @@ msgstr ""
 msgid "Post ID"
 msgstr ""
 
-#: inc/favorites/Api/FavoritesController.php:58
-#: inc/favorites/Services/FavoritesService.php:20
-msgid "Page"
-msgstr ""
-
-#: inc/favorites/Api/FavoritesController.php:67
-msgid "Per page"
-msgstr ""
-
 #: inc/favorites/Api/FavoritesController.php:203
 msgid "Post not found."
 msgstr ""
@@ -732,7 +750,7 @@ msgid "Password"
 msgstr ""
 
 #: inc/gateway/Forms/LoginForm.php:130
-#: inc/launchpad/Panels/ProfilePanel.php:525
+#: inc/launchpad/Panels/ProfilePanel.php:528
 msgid "Log In"
 msgstr ""
 
@@ -840,7 +858,7 @@ msgid "Your new password has been pre-generated. You can modify it or generate a
 msgstr ""
 
 #: inc/gateway/Forms/ResetPasswordForm.php:48
-#: inc/launchpad/Panels/ProfilePanel.php:461
+#: inc/launchpad/Panels/ProfilePanel.php:464
 #: inc/launchpad/Panels/SecurityPanel.php:70
 msgid "New Password"
 msgstr ""
@@ -850,7 +868,7 @@ msgid "Generate New Password"
 msgstr ""
 
 #: inc/gateway/Forms/ResetPasswordForm.php:95
-#: inc/launchpad/Panels/ProfilePanel.php:490
+#: inc/launchpad/Panels/ProfilePanel.php:493
 msgid "Generating..."
 msgstr ""
 
@@ -859,7 +877,7 @@ msgid "Save Password"
 msgstr ""
 
 #: inc/gateway/Forms/ResetPasswordForm.php:106
-#: inc/launchpad/Panels/ProfilePanel.php:415
+#: inc/launchpad/Panels/ProfilePanel.php:418
 msgid "Saving..."
 msgstr ""
 
@@ -974,63 +992,72 @@ msgstr ""
 msgid "File upload"
 msgstr ""
 
-#: inc/launchpad/Api/OpportunitiesController.php:83
+#: inc/launchpad/Api/OpportunitiesController.php:82
+msgid "Start date"
+msgstr ""
+
+#: inc/launchpad/Api/OpportunitiesController.php:86
+msgid "End date"
+msgstr ""
+
+#: inc/launchpad/Api/OpportunitiesController.php:93
 #: inc/tour/Scenarios/OpportunityFormScenario.php:87
 msgid "Categories"
 msgstr ""
 
-#: inc/launchpad/Api/OpportunitiesController.php:91
+#: inc/launchpad/Api/OpportunitiesController.php:101
 msgid "Subcategories"
 msgstr ""
 
-#: inc/launchpad/Api/OpportunitiesController.php:112
+#: inc/launchpad/Api/OpportunitiesController.php:122
 msgid "Locations"
 msgstr ""
 
-#: inc/launchpad/Api/OpportunitiesController.php:122
+#: inc/launchpad/Api/OpportunitiesController.php:132
 #: inc/launchpad/Panels/OpportunitiesPanel.php:803
 #: inc/listing/Enums/Taxonomy.php:31
 #: inc/tour/Scenarios/OpportunityFormScenario.php:96
 msgid "Seekers"
 msgstr ""
 
-#: inc/launchpad/Api/OpportunitiesController.php:186
+#: inc/launchpad/Api/OpportunitiesController.php:196
 msgid "Statuses filter"
 msgstr ""
 
-#: inc/launchpad/Api/OpportunitiesController.php:241
+#: inc/launchpad/Api/OpportunitiesController.php:251
 msgid "Search term"
 msgstr ""
 
-#: inc/launchpad/Api/OpportunitiesController.php:253
+#: inc/launchpad/Api/OpportunitiesController.php:263
 msgid "Levels filter"
 msgstr ""
 
-#: inc/launchpad/Api/OpportunitiesController.php:296
+#: inc/launchpad/Api/OpportunitiesController.php:306
 msgid "Status updated."
 msgstr ""
 
-#: inc/launchpad/Api/OpportunitiesController.php:339
+#: inc/launchpad/Api/OpportunitiesController.php:349
 msgid "Opportunity not found."
 msgstr ""
 
-#: inc/launchpad/Api/OpportunitiesController.php:416
+#: inc/launchpad/Api/OpportunitiesController.php:426
 msgid "Updated successfully"
 msgstr ""
 
-#: inc/launchpad/Api/OpportunitiesController.php:416
+#: inc/launchpad/Api/OpportunitiesController.php:426
 msgid "Created successfully"
 msgstr ""
 
-#: inc/launchpad/Api/OpportunitiesController.php:427
+#: inc/launchpad/Api/OpportunitiesController.php:437
 msgid "Please complete your profile (name and phone) before posting opportunities."
 msgstr ""
 
-#: inc/launchpad/Api/OpportunitiesController.php:487
+#: inc/launchpad/Api/OpportunitiesController.php:497
 msgid "Opportunity changes"
 msgstr ""
 
-#: inc/launchpad/Api/OpportunitiesController.php:504
+#: inc/launchpad/Api/OpportunitiesController.php:514
+#: inc/listing/Api/MainController.php:215
 msgid "Location search"
 msgstr ""
 
@@ -1066,7 +1093,7 @@ msgstr ""
 
 #: inc/launchpad/Api/ProfileController.php:145
 #: inc/launchpad/Panels/ProfilePanel.php:180
-#: inc/launchpad/Panels/ProfilePanel.php:354
+#: inc/launchpad/Panels/ProfilePanel.php:357
 msgid "Telegram"
 msgstr ""
 
@@ -1122,15 +1149,15 @@ msgstr ""
 msgid "Password changed. Please log in again."
 msgstr ""
 
-#: inc/launchpad/Core/LaunchpadCore.php:247
+#: inc/launchpad/Core/LaunchpadCore.php:252
 msgid "Please enter a valid phone number."
 msgstr ""
 
-#: inc/launchpad/Core/LaunchpadCore.php:248
+#: inc/launchpad/Core/LaunchpadCore.php:253
 msgid "Please fill in all fields."
 msgstr ""
 
-#: inc/launchpad/Core/LaunchpadCore.php:249
+#: inc/launchpad/Core/LaunchpadCore.php:254
 msgid "Please enter your password."
 msgstr ""
 
@@ -1341,7 +1368,7 @@ msgid "Opportunity Category"
 msgstr ""
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:824
-#: inc/launchpad/Panels/ProfilePanel.php:378
+#: inc/launchpad/Panels/ProfilePanel.php:381
 #: inc/tour/Scenarios/OpportunityFormScenario.php:105
 msgid "Description"
 msgstr ""
@@ -1398,10 +1425,10 @@ msgid "Submit"
 msgstr ""
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:1023
-#: inc/launchpad/Panels/ProfilePanel.php:420
-#: inc/launchpad/Panels/ProfilePanel.php:500
-#: inc/launchpad/Panels/ProfilePanel.php:602
-#: inc/launchpad/Panels/ProfilePanel.php:669
+#: inc/launchpad/Panels/ProfilePanel.php:423
+#: inc/launchpad/Panels/ProfilePanel.php:503
+#: inc/launchpad/Panels/ProfilePanel.php:605
+#: inc/launchpad/Panels/ProfilePanel.php:672
 #: template-parts/comments-interactive.php:138
 #: template-parts/comments-interactive.php:251
 #: template-parts/comments-interactive.php:328
@@ -1440,7 +1467,7 @@ msgid "Login name"
 msgstr ""
 
 #: inc/launchpad/Panels/ProfilePanel.php:195
-#: inc/launchpad/Panels/ProfilePanel.php:365
+#: inc/launchpad/Panels/ProfilePanel.php:368
 msgid "Website"
 msgstr ""
 
@@ -1463,8 +1490,8 @@ msgid "e.g. Jane"
 msgstr ""
 
 #: inc/launchpad/Panels/ProfilePanel.php:251
-#: inc/launchpad/Panels/ProfilePanel.php:541
-#: inc/launchpad/Panels/ProfilePanel.php:594
+#: inc/launchpad/Panels/ProfilePanel.php:544
+#: inc/launchpad/Panels/ProfilePanel.php:597
 msgid "Change Email"
 msgstr ""
 
@@ -1504,106 +1531,106 @@ msgstr ""
 msgid "Display name publicly as"
 msgstr ""
 
-#: inc/launchpad/Panels/ProfilePanel.php:367
+#: inc/launchpad/Panels/ProfilePanel.php:370
 msgid "dou.ua, https://me.ua"
 msgstr ""
 
-#: inc/launchpad/Panels/ProfilePanel.php:380
+#: inc/launchpad/Panels/ProfilePanel.php:383
 msgid "Biographical Info"
 msgstr ""
 
-#: inc/launchpad/Panels/ProfilePanel.php:390
+#: inc/launchpad/Panels/ProfilePanel.php:393
 msgid "Delete profile"
 msgstr ""
 
-#: inc/launchpad/Panels/ProfilePanel.php:401
+#: inc/launchpad/Panels/ProfilePanel.php:404
 msgid "Receive email notifications"
 msgstr ""
 
-#: inc/launchpad/Panels/ProfilePanel.php:404
+#: inc/launchpad/Panels/ProfilePanel.php:407
 msgid "Get notified by email when someone comments on your content."
 msgstr ""
 
-#: inc/launchpad/Panels/ProfilePanel.php:412
+#: inc/launchpad/Panels/ProfilePanel.php:415
 #: template-parts/comments-interactive.php:255
 #: template-parts/comments-interactive.php:332
 msgid "Save"
 msgstr ""
 
-#: inc/launchpad/Panels/ProfilePanel.php:434
+#: inc/launchpad/Panels/ProfilePanel.php:437
 msgid "Update Security Credentials"
 msgstr ""
 
-#: inc/launchpad/Panels/ProfilePanel.php:437
-#: inc/launchpad/Panels/ProfilePanel.php:563
+#: inc/launchpad/Panels/ProfilePanel.php:440
+#: inc/launchpad/Panels/ProfilePanel.php:566
 #: inc/launchpad/Panels/SecurityPanel.php:59
 msgid "Current Password"
 msgstr ""
 
-#: inc/launchpad/Panels/ProfilePanel.php:445
-#: inc/launchpad/Panels/ProfilePanel.php:470
-#: inc/launchpad/Panels/ProfilePanel.php:573
-#: inc/launchpad/Panels/ProfilePanel.php:640
+#: inc/launchpad/Panels/ProfilePanel.php:448
+#: inc/launchpad/Panels/ProfilePanel.php:473
+#: inc/launchpad/Panels/ProfilePanel.php:576
+#: inc/launchpad/Panels/ProfilePanel.php:643
 msgid "Toggle password visibility"
 msgstr ""
 
-#: inc/launchpad/Panels/ProfilePanel.php:487
+#: inc/launchpad/Panels/ProfilePanel.php:490
 msgid "Generate Strong Password"
 msgstr ""
 
-#: inc/launchpad/Panels/ProfilePanel.php:497
+#: inc/launchpad/Panels/ProfilePanel.php:500
 msgid "Update Password"
 msgstr ""
 
-#: inc/launchpad/Panels/ProfilePanel.php:515
+#: inc/launchpad/Panels/ProfilePanel.php:518
 msgid "Password Changed"
 msgstr ""
 
-#: inc/launchpad/Panels/ProfilePanel.php:518
+#: inc/launchpad/Panels/ProfilePanel.php:521
 msgid "Your password has been changed successfully. You will need to log in again with your new password."
 msgstr ""
 
-#: inc/launchpad/Panels/ProfilePanel.php:544
+#: inc/launchpad/Panels/ProfilePanel.php:547
 msgid "Enter your new email address and current password to confirm the change."
 msgstr ""
 
-#: inc/launchpad/Panels/ProfilePanel.php:553
+#: inc/launchpad/Panels/ProfilePanel.php:556
 msgid "New Email"
 msgstr ""
 
-#: inc/launchpad/Panels/ProfilePanel.php:597
+#: inc/launchpad/Panels/ProfilePanel.php:600
 msgid "Changing..."
 msgstr ""
 
-#: inc/launchpad/Panels/ProfilePanel.php:618
+#: inc/launchpad/Panels/ProfilePanel.php:621
 msgid "Delete Account"
 msgstr ""
 
-#: inc/launchpad/Panels/ProfilePanel.php:621
+#: inc/launchpad/Panels/ProfilePanel.php:624
 msgid "This action is permanent and cannot be undone. All your personal data will be removed. Your published content will be preserved."
 msgstr ""
 
-#: inc/launchpad/Panels/ProfilePanel.php:630
+#: inc/launchpad/Panels/ProfilePanel.php:633
 msgid "Enter your password to confirm"
 msgstr ""
 
-#: inc/launchpad/Panels/ProfilePanel.php:661
+#: inc/launchpad/Panels/ProfilePanel.php:664
 msgid "Delete my account"
 msgstr ""
 
-#: inc/launchpad/Panels/ProfilePanel.php:664
+#: inc/launchpad/Panels/ProfilePanel.php:667
 msgid "Deleting..."
 msgstr ""
 
-#: inc/launchpad/Panels/ProfilePanel.php:685
+#: inc/launchpad/Panels/ProfilePanel.php:688
 msgid "Account Deleted"
 msgstr ""
 
-#: inc/launchpad/Panels/ProfilePanel.php:688
+#: inc/launchpad/Panels/ProfilePanel.php:691
 msgid "Your account has been successfully deleted. You will be redirected to the home page."
 msgstr ""
 
-#: inc/launchpad/Panels/ProfilePanel.php:695
+#: inc/launchpad/Panels/ProfilePanel.php:698
 msgid "OK"
 msgstr ""
 
@@ -1643,7 +1670,7 @@ msgstr ""
 msgid "Invalid file type. Only PDF and DOC/DOCX allowed."
 msgstr ""
 
-#: inc/launchpad/Services/OpportunitiesService.php:577
+#: inc/launchpad/Services/OpportunitiesService.php:649
 msgid "Could not save opportunity. Please try again."
 msgstr ""
 
@@ -1665,6 +1692,29 @@ msgstr ""
 
 #: inc/launchpad/setup.php:89
 msgid "The Launchpad page cannot be trashed."
+msgstr ""
+
+#: inc/listing/Api/MainController.php:79
+#: inc/listing/Filters/LocationsFilter.php:28
+#: inc/listing/Filters/LocationsFilterSimple.php:34
+#: templates/single-opportunity.php:136
+msgid "Location"
+msgstr ""
+
+#: inc/listing/Api/MainController.php:92
+#: inc/listing/Api/MainController.php:199
+msgid "Search"
+msgstr ""
+
+#: inc/listing/Api/MainController.php:111
+msgid "Search query"
+msgstr ""
+
+#. translators: %s: filter identifier supplied by client
+#: inc/listing/Api/MainController.php:127
+#: inc/listing/Services/ListingService.php:286
+#, php-format
+msgid "Filter \"%s\" is not supported."
 msgstr ""
 
 #: inc/listing/Core/ResultsGrid.php:33
@@ -1723,12 +1773,6 @@ msgstr ""
 msgid "Clear selection"
 msgstr ""
 
-#: inc/listing/Filters/LocationsFilter.php:28
-#: inc/listing/Filters/LocationsFilterSimple.php:34
-#: templates/single-opportunity.php:136
-msgid "Location"
-msgstr ""
-
 #: inc/listing/Filters/LocationsFilter.php:101
 msgid "Find location..."
 msgstr ""
@@ -1745,12 +1789,7 @@ msgstr ""
 msgid "Recievers"
 msgstr ""
 
-#: inc/listing/Services/ListingService.php:274
-#, php-format
-msgid "Filter \"%s\" is not supported."
-msgstr ""
-
-#: inc/listing/Services/ListingService.php:300
+#: inc/listing/Services/ListingService.php:312
 msgid "Failed to fetch location options."
 msgstr ""
 
@@ -1935,20 +1974,32 @@ msgstr ""
 msgid "%1$s: must be between %2$d and %3$d."
 msgstr ""
 
+#. translators: %s: name of the date field
+#: inc/shared/Validation/RestArg.php:132
+#, php-format
+msgid "%s: expected YYYY-MM-DD format."
+msgstr ""
+
+#. translators: %s: name of the date field
+#: inc/shared/Validation/RestArg.php:144
+#, php-format
+msgid "%s: not a valid calendar date."
+msgstr ""
+
 #. translators: %s: name of the field that received an invalid value
-#: inc/shared/Validation/RestArg.php:122
+#: inc/shared/Validation/RestArg.php:169
 #, php-format
 msgid "%s: expected a string."
 msgstr ""
 
 #. translators: 1: field name, 2: minimum character count
-#: inc/shared/Validation/RestArg.php:134
+#: inc/shared/Validation/RestArg.php:181
 #, php-format
 msgid "%1$s: at least %2$d characters required."
 msgstr ""
 
 #. translators: 1: field name, 2: maximum character count
-#: inc/shared/Validation/RestArg.php:147
+#: inc/shared/Validation/RestArg.php:194
 #, php-format
 msgid "%1$s: maximum %2$d characters allowed."
 msgstr ""
