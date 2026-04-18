@@ -73,8 +73,18 @@ class OpportunitiesController extends AbstractLaunchpadController
                 }
             ],
             'company'         => ['sanitize_callback' => 'sanitize_text_field'],
-            'date_starts'     => ['sanitize_callback' => 'sanitize_text_field'],
-            'date_ends'       => ['sanitize_callback' => 'sanitize_text_field'],
+            // Dates are stored typed (DATE column in wp_opportunity_details).
+            // Accept only the HTML5 date-input wire format (Y-m-d) and reject
+            // at the boundary — historical rows may carry Ymd/d-m-Y shapes,
+            // but any NEW write goes through this validator.
+            'date_starts'     => [
+                'sanitize_callback' => 'sanitize_text_field',
+                'validate_callback' => RestArg::datePattern(__('Start date', 'starwishx')),
+            ],
+            'date_ends'       => [
+                'sanitize_callback' => 'sanitize_text_field',
+                'validate_callback' => RestArg::datePattern(__('End date', 'starwishx')),
+            ],
             'category'        => [
                 'type'              => 'array',
                 'items'             => ['type' => 'integer'],

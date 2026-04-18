@@ -106,6 +106,53 @@ final class RestArg
     }
 
     /**
+     * Validate value is a Y-m-d calendar date.
+     *
+     * Two-stage: regex for shape, then checkdate() for real-calendar validity
+     * (so 2024-02-30 and 2024-13-01 are rejected, not just parsed-as-garbage
+     * and tolerated downstream).
+     *
+     * Empty strings are allowed when $nullable is true — useful for optional
+     * date fields where "unset" is a legitimate value (e.g., open-ended
+     * opportunities). Required dates should pair this with required=>true at
+     * the arg level and pass $nullable=false here.
+     */
+    public static function datePattern(string $fieldLabel, bool $nullable = true): Closure
+    {
+        return static function ($value) use ($fieldLabel, $nullable) {
+            if ($nullable && ($value === null || $value === '')) {
+                return true;
+            }
+
+            if (!is_string($value) || !preg_match('/^(\d{4})-(\d{2})-(\d{2})$/', $value, $m)) {
+                return new WP_Error(
+                    'invalid_date_format',
+                    sprintf(
+                        /* translators: %s: name of the date field */
+                        __('%s: expected YYYY-MM-DD format.', 'starwishx'),
+                        $fieldLabel
+                    ),
+                    ['status' => 422]
+                );
+            }
+
+            if (!checkdate((int) $m[2], (int) $m[3], (int) $m[1])) {
+                return new WP_Error(
+                    'invalid_date',
+                    sprintf(
+                        /* translators: %s: name of the date field */
+                        __('%s: not a valid calendar date.', 'starwishx'),
+                        $fieldLabel
+                    ),
+                    ['status' => 422]
+                );
+            }
+
+            return true;
+        };
+    }
+
+    /**
      * Validate string length is within bounds (inclusive).
      *
      * Trim is applied before the min check so whitespace-only strings fail.
