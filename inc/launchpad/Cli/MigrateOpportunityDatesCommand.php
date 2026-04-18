@@ -33,6 +33,10 @@ class MigrateOpportunityDatesCommand
     /** @var string[] Formats tried in order. Order matches existing fallback. */
     private const PARSE_FORMATS = ['Y-m-d', 'd/m/Y', 'Ymd'];
 
+    // To trigger: update_option('starwish_run_opportunity_dates_migration', 1);
+    // Fires once on the next request, then self-clears.
+    private const TRIGGER_OPTION = 'starwish_run_opportunity_dates_migration';
+
     public function __construct(?OpportunityDetailsRepository $repository = null)
     {
         $this->repository = $repository ?? new OpportunityDetailsRepository();
@@ -43,13 +47,81 @@ class MigrateOpportunityDatesCommand
      */
     public static function register(): void
     {
-        if (!defined('WP_CLI') || !WP_CLI) {
+        if (defined('WP_CLI') && WP_CLI) {
+            WP_CLI::add_command('starwish migrate-opportunity-dates', [self::class, 'handle']);
+        }
+        add_action('init', [self::class, 'maybeRunFromOptions'], 20);  // +1 line
+    }
+    // ── NEW: options-based entry point ────────────────────────────────────────
+
+    public static function maybeRunFromOptions(): void
+    {
+        if (!get_option(self::TRIGGER_OPTION)) {
             return;
         }
 
-        WP_CLI::add_command('starwish migrate-opportunity-dates', [self::class, 'handle']);
+        delete_option(self::TRIGGER_OPTION); // clear before running — prevents retry loops on fatal
+
+        (new self())->applyWithoutCli();
     }
 
+    // ── NEW: silent apply — no WP_CLI calls, no dry-run ──────────────────────
+
+    private function applyWithoutCli(int $batchSize = 100): void
+    {
+        $page = 1;
+
+        while (true) {
+            $query = new \WP_Query([
+                'post_type'      => 'opportunity',
+                'post_status'    => ['publish', 'draft', 'pending', 'future', 'private'],
+                'posts_per_page' => $batchSize,
+                'paged'          => $page,
+                'fields'         => 'ids',
+                'orderby'        => 'ID',
+                'order'          => 'ASC',
+                'no_found_rows'  => false,
+            ]);
+
+            if (empty($query->posts)) {
+                break;
+            }
+
+            foreach ($query->posts as $postId) {
+                $postId = (int) $postId;
+
+                $rawStart  = (string) get_post_meta($postId, 'opportunity_date_starts', true);
+                $rawEnd    = (string) get_post_meta($postId, 'opportunity_date_ends',   true);
+                $normStart = $this->normalize($rawStart);
+                $normEnd   = $this->normalize($rawEnd);
+
+                // Skip unparseable rows — same safety rule as the CLI path.
+                if (
+                    (trim($rawStart) !== '' && $normStart === '') ||
+                    (trim($rawEnd)   !== '' && $normEnd   === '')
+                ) {
+                    continue;
+                }
+
+                if ($normStart !== '' && $rawStart !== $normStart) {
+                    update_post_meta($postId, 'opportunity_date_starts', $normStart);
+                }
+                if ($normEnd !== '' && $rawEnd !== $normEnd) {
+                    update_post_meta($postId, 'opportunity_date_ends', $normEnd);
+                }
+
+                $this->repository->upsertDates(
+                    $postId,
+                    $normStart === '' ? null : $normStart,
+                    $normEnd   === '' ? null : $normEnd
+                );
+            }
+
+            $page++;
+            wp_cache_flush();
+        }
+    }
+    
     /**
      * WP-CLI entry point.
      *

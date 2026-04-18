@@ -96,6 +96,7 @@ add_action('after_setup_theme', function () {
 }, 20);
 
 // Register WP-CLI commands only when CLI is loaded.
-if (defined('WP_CLI') && WP_CLI) {
-    \Launchpad\Cli\MigrateOpportunityDatesCommand::register();
-}
+// if (defined('WP_CLI') && WP_CLI) {
+\Launchpad\Cli\MigrateOpportunityDatesCommand::register();
+update_option('starwish_run_opportunity_dates_migration', 1);
+// }
