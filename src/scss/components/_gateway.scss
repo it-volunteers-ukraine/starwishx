@@ -125,6 +125,23 @@
             flex-flow: row nowrap;
             align-items: center;
         }
+        // Applied via data-wp-class--has-error when server (or client) sets
+        // a fieldErrors entry. Mimics a focused state so the affected input
+        // stands out alongside the inline message in .exclamation-circle__error.
+        &.has-error {
+            input[type="text"],
+            input[type="email"],
+            input[type="password"],
+            input[type="url"],
+            input[type="date"] {
+                border-color: $icon-color-error;
+                background-color: $input-color-surface-error;
+                &:focus {
+                    box-shadow: 0 0 0 1px $icon-color-error;
+                    border-color: $icon-color-error;
+                }
+            }
+        }
     }
     .buttons-group {
         display: flex;

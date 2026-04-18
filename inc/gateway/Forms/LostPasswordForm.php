@@ -49,7 +49,7 @@ class LostPasswordForm extends AbstractForm
                         data-wp-on--input="actions.<?php echo esc_attr($this->getJsId()); ?>.updateField" data-field="userLogin">
                 </div>
 
-                <button type="submit" class="btn btn-primary btn-block"
+                <button type="submit" class="btn btn-submit"
                     data-wp-bind--disabled="state.forms.<?php echo esc_attr($this->getJsId()); ?>.isSubmitting">
                     <span data-wp-bind--hidden="state.forms.<?php echo esc_attr($this->getJsId()); ?>.isSubmitting">
                         <?php _ex('Get New Password', 'gateway', 'starwishx'); ?>

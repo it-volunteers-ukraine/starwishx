@@ -56,7 +56,14 @@ export const lostPasswordActions = {
       // prevents user enumeration via timing or response differences.
       form.success = true;
     } catch (error) {
-      form.error = error.message;
+      // Route backend field_errors to inline slots (shared contract).
+      const fieldErrors =
+        (error instanceof RestApiError && error.fieldErrors) || null;
+      if (fieldErrors && Object.keys(fieldErrors).length) {
+        form.fieldErrors = { ...form.fieldErrors, ...fieldErrors };
+      } else {
+        form.error = error.message;
+      }
     } finally {
       form.isSubmitting = false;
     }
@@ -134,7 +141,11 @@ export const resetPasswordActions = {
       form.error = messages.tooShort ?? "";
       return;
     }
-    if (!/[A-Z]/.test(password) || !/[0-9]/.test(password) || !/[^A-Za-z0-9]/.test(password)) {
+    if (
+      !/[A-Z]/.test(password) ||
+      !/[0-9]/.test(password) ||
+      !/[^A-Za-z0-9]/.test(password)
+    ) {
       form.error = messages.tooWeak ?? "";
       return;
     }

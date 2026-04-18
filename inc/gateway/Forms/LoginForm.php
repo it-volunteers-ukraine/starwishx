@@ -67,7 +67,7 @@ class LoginForm extends AbstractForm
                     data-wp-on--input="actions.<?php echo esc_attr($this->getJsId()); ?>.updateField"
                     data-field="username">
                 <span
-                    class="field-error"
+                    class="exclamation-circle__error"
                     data-wp-bind--hidden="!state.forms.<?php echo esc_attr($this->getJsId()); ?>.fieldErrors.username"
                     data-wp-text="state.forms.<?php echo esc_attr($this->getJsId()); ?>.fieldErrors.username">
                 </span>
@@ -92,13 +92,13 @@ class LoginForm extends AbstractForm
 
                     <button type="button" class="btn-hide-pw"
                         data-wp-on--click="actions.<?php echo esc_attr($this->getJsId()); ?>.toggleVisibility">
-                        <span data-wp-bind--hidden="state.forms.<?php echo esc_attr($this->getJsId()); ?>.isPasswordVisible">
+                        <span data-wp-bind--hidden="state.forms.<?php echo esc_attr($this->getJsId()); ?>.isPasswordVisible" aria-label="<?= esc_attr__('Show password', 'starwishx'); ?>">
                             <!-- < ?php esc_html_e('Show', 'starwishx'); ?> -->
                             <svg width="23" height="23" class="btn-hide-pw__icon">
                                 <use href="/wp-content/themes/starwishx/assets/img/sprites.svg#icon-eye-opened"></use>
                             </svg>
                         </span>
-                        <span data-wp-bind--hidden="!state.forms.<?php echo esc_attr($this->getJsId()); ?>.isPasswordVisible">
+                        <span data-wp-bind--hidden="!state.forms.<?php echo esc_attr($this->getJsId()); ?>.isPasswordVisible" aria-label="<?= esc_attr__('Hide password', 'starwishx'); ?>">
                             <!-- < ?php esc_html_e('Hide', 'starwishx'); ?> -->
                             <svg width="23" height="23" class="btn-hide-pw__icon">
                                 <use href="/wp-content/themes/starwishx/assets/img/sprites.svg#icon-eye-closed"></use>
@@ -107,7 +107,7 @@ class LoginForm extends AbstractForm
                     </button>
                 </div>
                 <span
-                    class="field-error"
+                    class="exclamation-circle__error"
                     data-wp-bind--hidden="!state.forms.<?php echo esc_attr($this->getJsId()); ?>.fieldErrors.password"
                     data-wp-text="state.forms.<?php echo esc_attr($this->getJsId()); ?>.fieldErrors.password">
                 </span>
@@ -124,7 +124,7 @@ class LoginForm extends AbstractForm
             <div class="buttons-group">
                 <button
                     type="submit"
-                    class="btn btn-primary btn-block"
+                    class="btn btn-submit"
                     data-wp-bind--disabled="state.forms.<?php echo esc_attr($this->getJsId()); ?>.isSubmitting">
                     <span data-wp-bind--hidden="state.forms.<?php echo esc_attr($this->getJsId()); ?>.isSubmitting">
                         <?php esc_html_e('Log In', 'starwishx'); ?>
@@ -135,7 +135,7 @@ class LoginForm extends AbstractForm
                 </button>
 
                 <a
-                    class="btn btn-secondary btn-block"
+                    class="btn btn-secondary"
                     href="?view=register"
                     data-wp-on--click="actions.switchView">
                     <?php esc_html_e('Create account', 'starwishx'); ?>

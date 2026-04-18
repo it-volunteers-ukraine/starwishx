@@ -89,7 +89,16 @@ export const registerActions = {
         return;
       }
 
-      form.error = error.message;
+      // Route backend field_errors to inline slots (contract in
+      // AbstractApiController). Suppress the banner when inline errors
+      // are present so we don't duplicate the "Please correct…" fallback.
+      const fieldErrors =
+        (error instanceof RestApiError && error.fieldErrors) || null;
+      if (fieldErrors && Object.keys(fieldErrors).length) {
+        form.fieldErrors = { ...form.fieldErrors, ...fieldErrors };
+      } else {
+        form.error = error.message;
+      }
     } finally {
       form.isSubmitting = false;
     }

@@ -85,7 +85,7 @@ class ResetPasswordForm extends AbstractForm
 
                 <div class="buttons-group">
 
-                    <button type="button" class="btn btn-secondary btn-block"
+                    <button type="button" class="btn btn-secondary"
                         data-wp-on--click="actions.<?php echo esc_attr($this->getJsId()); ?>.generate"
                         data-wp-bind--disabled="state.forms.<?php echo esc_attr($this->getJsId()); ?>.isGenerating">
                         <span data-wp-bind--hidden="state.forms.<?php echo esc_attr($this->getJsId()); ?>.isGenerating">
@@ -97,7 +97,7 @@ class ResetPasswordForm extends AbstractForm
                     </button>
 
                     <!-- Submit Button with Loading State -->
-                    <button type="submit" class="btn btn-primary btn-block"
+                    <button type="submit" class="btn btn-submit"
                         data-wp-bind--disabled="state.forms.<?php echo esc_attr($this->getJsId()); ?>.isSubmitting">
                         <span data-wp-bind--hidden="state.forms.<?php echo esc_attr($this->getJsId()); ?>.isSubmitting">
                             <?php esc_html_e('Save Password', 'starwishx'); ?>
