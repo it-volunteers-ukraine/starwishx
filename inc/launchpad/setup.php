@@ -94,3 +94,8 @@ add_action('wp_trash_post', function ($post_id) {
 add_action('after_setup_theme', function () {
     \launchpad();
 }, 20);
+
+// Register WP-CLI commands only when CLI is loaded.
+if (defined('WP_CLI') && WP_CLI) {
+    \Launchpad\Cli\MigrateOpportunityDatesCommand::register();
+}

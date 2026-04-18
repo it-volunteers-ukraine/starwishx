@@ -17,7 +17,15 @@ class MigrationManager
      */
     public static function maybeRunMigrations(): void
     {
-        if (!CreateLaunchpadTables::needsUpgrade()) {
+        $pending = [];
+        if (CreateLaunchpadTables::needsUpgrade()) {
+            $pending[] = CreateLaunchpadTables::class;
+        }
+        if (CreateOpportunityDetailsTable::needsUpgrade()) {
+            $pending[] = CreateOpportunityDetailsTable::class;
+        }
+
+        if (empty($pending)) {
             return;
         }
         // Check lock: Another process is running migration
@@ -27,7 +35,9 @@ class MigrationManager
         // Acquire lock
         set_transient(self::LOCK_TRANSIENT, true, self::LOCK_TIMEOUT);
         try {
-            CreateLaunchpadTables::run();
+            foreach ($pending as $migration) {
+                $migration::run();
+            }
         } catch (\Throwable $e) {
             error_log('Launchpad Migration Exception: ' . $e->getMessage());
             update_option('launchpad_db_error', $e->getMessage());

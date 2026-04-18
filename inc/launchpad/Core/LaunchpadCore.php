@@ -112,6 +112,11 @@ final class LaunchpadCore
         if (!wp_next_scheduled('launchpad_daily_cleanup')) {
             wp_schedule_event(time(), 'daily', 'launchpad_daily_cleanup');
         }
+
+        // Keep wp_opportunity_details in sync with wp_posts. Runs on hard
+        // delete (not trash) to match the table's "source of truth" role
+        // for active opportunities.
+        add_action('delete_post', [$this->services['opportunities'], 'cleanupDetails']);
     }
 
     /**

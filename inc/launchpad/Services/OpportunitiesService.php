@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Launchpad\Services;
 
+use Launchpad\Data\Repositories\OpportunityDetailsRepository;
 use Shared\Policy\UrlPolicy;
 use WP_Error;
 
@@ -16,6 +17,35 @@ class OpportunitiesService
 
     public const COMPANY_MIN_LENGTH     = 2;
     public const DESCRIPTION_MIN_LENGTH = 50;
+
+    private OpportunityDetailsRepository $detailsRepository;
+
+    /**
+     * Repository is injected so tests can swap it. Default keeps the
+     * call-site in LaunchpadCore unchanged during migration — pass null
+     * to get the concrete implementation.
+     */
+    public function __construct(?OpportunityDetailsRepository $detailsRepository = null)
+    {
+        $this->detailsRepository = $detailsRepository ?? new OpportunityDetailsRepository();
+    }
+
+    /**
+     * Cleanup hook: remove the details row when an opportunity is deleted.
+     *
+     * Wired from LaunchpadCore::bootstrap on the delete_post action. No FK
+     * cascade (dbDelta limitation), so this is the only thing keeping
+     * wp_opportunity_details in sync with wp_posts.
+     */
+    public function cleanupDetails(int $postId): void
+    {
+        $post = get_post($postId);
+        if (!$post || $post->post_type !== 'opportunity') {
+            return;
+        }
+
+        $this->detailsRepository->deleteByPost($postId);
+    }
 
     /**
      * Translatable status labels for opportunity cards.
@@ -72,6 +102,12 @@ class OpportunitiesService
 
         $query = new \WP_Query($args);
 
+        // Batch-fetch typed date rows for the whole page in one query.
+        // Replaces the per-card post_meta + DateTime parsing loop. Missing
+        // ids (backfill not run yet) fall through to the legacy path below.
+        $postIds       = array_map(static fn($p) => (int) $p->ID, $query->posts);
+        $detailsByPost = $this->detailsRepository->getBatchDates($postIds);
+
         $opportunities = [];
         foreach ($query->posts as $post) {
             // -1. :) Get category-oportunities
@@ -111,18 +147,27 @@ class OpportunitiesService
             // 3. Clean and Truncate (approx 20 words for a clean card look)
             $trimmed_excerpt = wp_trim_words($display_text, 30, '...');
 
-            // Fetch ACF Dates (using get_post_meta for performance in loops)
-            $raw_date_starts = get_post_meta($post->ID, 'opportunity_date_starts', true);
-            $raw_date_ends   = get_post_meta($post->ID, 'opportunity_date_ends', true);
-            // Logic: Is Expired?
-            $is_expired = false;
-            if (!empty($raw_date_ends)) {
-                // Assuming ACF stores as 'd/m/Y' based on your single-opportunity.php
-                // $end_dt = \DateTime::createFromFormat('d/m/Y', $raw_date_ends);
-                // Try Ymd first (raw meta), then d/m/Y (ACF format)
-                $end_dt = \DateTime::createFromFormat('Ymd', $raw_date_ends) ?: \DateTime::createFromFormat('d/m/Y', $raw_date_ends);
-                if ($end_dt && $end_dt < new \DateTime('today')) {
-                    $is_expired = true;
+            // Prefer the typed row from wp_opportunity_details. Dates come
+            // back as Y-m-d (DATE column) and is_expired is DB-derived.
+            // When missing (pre-backfill rows), fall back to post_meta +
+            // the historical 3-format parser — this fallback exists only to
+            // keep pages rendering during the migration window.
+            $details = $detailsByPost[(int) $post->ID] ?? null;
+            if ($details !== null) {
+                $raw_date_starts = $details['date_start'] ?? '';
+                $raw_date_ends   = $details['date_end']   ?? '';
+                $is_expired      = (bool) $details['is_expired'];
+            } else {
+                $raw_date_starts = get_post_meta($post->ID, 'opportunity_date_starts', true);
+                $raw_date_ends   = get_post_meta($post->ID, 'opportunity_date_ends', true);
+                $is_expired      = false;
+                if (!empty($raw_date_ends)) {
+                    $end_dt = \DateTime::createFromFormat('Y-m-d', $raw_date_ends)
+                        ?: \DateTime::createFromFormat('Ymd', $raw_date_ends)
+                        ?: \DateTime::createFromFormat('d/m/Y', $raw_date_ends);
+                    if ($end_dt && $end_dt < new \DateTime('today')) {
+                        $is_expired = true;
+                    }
                 }
             }
 
@@ -276,6 +321,19 @@ class OpportunitiesService
             $postId
         ), ARRAY_A);
 
+        // Dates: prefer the typed details row. Already Y-m-d by column
+        // type — matches the HTML5 <input type="date"> wire format, so no
+        // conversion is needed. Fall back to ACF + formatDateForInput for
+        // pre-backfill rows.
+        $details = $this->detailsRepository->getDates($postId);
+        if ($details !== null) {
+            $dateStarts = $details['date_start'] ?? '';
+            $dateEnds   = $details['date_end']   ?? '';
+        } else {
+            $dateStarts = $this->formatDateForInput(get_field('opportunity_date_starts', $postId));
+            $dateEnds   = $this->formatDateForInput(get_field('opportunity_date_ends', $postId));
+        }
+
         // Map ACF fields to our simplified FormData structure
         // Note: applicant fields are no longer returned - they're auto-filled from profile on save
         return [
@@ -285,8 +343,8 @@ class OpportunitiesService
 
             // Group 1: Info
             'company'         => get_field('opportunity_company', $postId) ?: '',
-            'date_starts'     => $this->formatDateForInput(get_field('opportunity_date_starts', $postId)),
-            'date_ends'       => $this->formatDateForInput(get_field('opportunity_date_ends', $postId)),
+            'date_starts'     => $dateStarts,
+            'date_ends'       => $dateEnds,
             'category'        => $getIntArray('opportunity_category'), // Now an array
 
             'country'         => get_field('country', $postId) ?: '',
@@ -452,6 +510,20 @@ class OpportunitiesService
             update_field('opportunity_company', $data['company'], $id);
             update_field('opportunity_date_starts', $data['date_starts'], $id);
             update_field('opportunity_date_ends', $data['date_ends'], $id);
+
+            // Dual-write: typed storage in wp_opportunity_details.
+            // post_meta above stays authoritative until the read-switch
+            // migration lands (PR#5) and the backfill (PR#4) has run. Failure
+            // here rolls back the whole save — drift is what this change
+            // exists to prevent.
+            $detailsWritten = $this->detailsRepository->upsertDates(
+                (int) $id,
+                $data['date_starts'] ?? null,
+                $data['date_ends'] ?? null
+            );
+            if (!$detailsWritten) {
+                throw new \RuntimeException('Failed to persist opportunity details row.');
+            }
             update_field('city', $data['city'], $id);
             update_field('opportunity_sourcelink', $data['sourcelink'], $id);
             update_field('opportunity_application_form', $data['application_form'], $id);
@@ -714,11 +786,12 @@ class OpportunitiesService
     }
 
     /**
-     * Helper: Convert various date strings to a UI-friendly format (d.m.y).
-     * 
-     * @param string|null $dateStr Raw date from DB (usually Ymd or d/m/Y)
-     * @param string $format The target format, defaults to d.m.y
-     * @return string
+     * Convert a date string to a UI-friendly format (d.m.y).
+     *
+     * After the backfill (PR#4) and dual-write (PR#3), input should be
+     * canonical Y-m-d — the Ymd / d/m/Y branches remain as a defensive
+     * fallback for any row that somehow escaped normalization (e.g., a
+     * restored-from-backup opportunity that never hit the save path).
      */
     private function formatDateForUI(?string $dateStr, string $format = 'd.m.y'): string
     {
@@ -726,18 +799,9 @@ class OpportunitiesService
             return '';
         }
 
-        // 1. Try ACF's raw DB format (Ymd - 20210903)
-        $date = \DateTime::createFromFormat('Ymd', $dateStr);
-
-        // 2. Fallback: Try d/m/Y (if ACF formatting was applied)
-        if (!$date) {
-            $date = \DateTime::createFromFormat('d/m/Y', $dateStr);
-        }
-
-        // 3. Fallback: Try standard Y-m-d
-        if (!$date) {
-            $date = \DateTime::createFromFormat('Y-m-d', $dateStr);
-        }
+        $date = \DateTime::createFromFormat('Y-m-d', $dateStr)
+            ?: \DateTime::createFromFormat('Ymd', $dateStr)
+            ?: \DateTime::createFromFormat('d/m/Y', $dateStr);
 
         return $date ? $date->format($format) : $dateStr;
     }
