@@ -391,13 +391,28 @@ class OpportunitiesPanel extends AbstractPanel
                                         </a>
                                         <div class="opportunity-meta">
                                             <div class="opportunity-meta__container-date">
-                                                <span class="opportunity-date" data-wp-text="context.item.date"></span>
+                                                <span data-wp-bind--hidden="!context.item.dateStarts"><?= esc_html__('Lasts', 'starwishx') ?> </span>
+                                                <span data-wp-bind--hidden="!context.item.dateStarts"><?= esc_html__('from', 'starwishx') ?> </span>
+                                                <span class="opportunity-date" data-wp-text="context.item.dateStarts"></span>
+                                                <span data-wp-bind--hidden="!context.item.dateEnds"><span data-wp-bind--hidden="context.item.dateStarts"><?= esc_html__('Lasts', 'starwishx') ?> </span><?= esc_html__('to', 'starwishx') ?> </span>
+                                                <span class="opportunity-date" data-wp-text="context.item.dateEnds"></span>
                                                 <!-- Expired Label -->
                                                 <span
                                                     class="status-badge status-badge--expired"
                                                     data-wp-bind--hidden="!context.item.isExpired">
                                                     <?php esc_html_e('Finished', 'starwishx'); ?>
                                                 </span>
+                                            </div>
+                                            <div class="opportunity-meta__container-statuses">
+                                                <!-- Visual Label -->
+                                                <span
+                                                    class="status-badge"
+                                                    data-wp-bind--data-status="context.item.status"
+                                                    data-wp-text="context.item.statusLabel">
+                                                </span>
+                                                <!-- Date publish -->
+                                                <span><?= esc_html__('Created', 'starwishx') ?>: </span>
+                                                <span class="opportunity-date" data-wp-text="context.item.date"></span>
                                                 <!-- Rating & Comments -->
                                                 <div class="opportunity-engage">
                                                     <span class="opportunity-engage__rating rating-badge"
@@ -423,20 +438,12 @@ class OpportunitiesPanel extends AbstractPanel
                                                     </a>
                                                 </div>
                                             </div>
-                                            <div class="opportunity-meta__container-statuses">
-                                                <!-- Visual Label -->
-                                                <span
-                                                    class="status-badge"
-                                                    data-wp-bind--data-status="context.item.status"
-                                                    data-wp-text="context.item.statusLabel">
-                                                </span>
-                                            </div>
                                         </div>
                                         <!-- <div class="opportunity-taxonomy"
                                     data-wp-text="context.item.categoryName"
                                     data-wp-bind--hidden="!context.item.categoryName">
                                 </div> -->
-                                        <div class="opportunity-info">
+                                        <!-- <div class="opportunity-info">
                                             <div class="opportunity-range">
                                                 <span class="opportunity-range__title">Lasts</span>
                                                 <span data-wp-text="context.item.dateStarts"></span>
@@ -444,7 +451,7 @@ class OpportunitiesPanel extends AbstractPanel
                                                 <span class="range-sep">—</span>
                                                 <span data-wp-text="context.item.dateEnds"></span>
                                             </div>
-                                        </div>
+                                        </div> -->
                                         <!-- <p class="opportunity-excerpt"
                                     data-wp-text="context.item.excerpt"
                                     data-wp-bind--hidden="!context.item.excerpt"></p> -->

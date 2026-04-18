@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-04-18T13:00:56+00:00\n"
+"POT-Creation-Date: 2026-04-18T17:02:20+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: starwishx\n"
@@ -113,7 +113,7 @@ msgstr ""
 
 #: archive-opportunity.php:196
 #: header.php:100
-#: inc/launchpad/Panels/OpportunitiesPanel.php:1000
+#: inc/launchpad/Panels/OpportunitiesPanel.php:1007
 #: template-parts/element-popup.php:42
 msgid "Close"
 msgstr ""
@@ -503,7 +503,7 @@ msgstr ""
 
 #: inc/chat/Panels/ChatPanel.php:136
 #: inc/launchpad/Panels/FavoritesPanel.php:134
-#: inc/launchpad/Panels/OpportunitiesPanel.php:483
+#: inc/launchpad/Panels/OpportunitiesPanel.php:490
 #: inc/listing/Core/ResultsGrid.php:69
 msgid "Load More"
 msgstr ""
@@ -1014,7 +1014,7 @@ msgid "Locations"
 msgstr ""
 
 #: inc/launchpad/Api/OpportunitiesController.php:132
-#: inc/launchpad/Panels/OpportunitiesPanel.php:803
+#: inc/launchpad/Panels/OpportunitiesPanel.php:810
 #: inc/listing/Enums/Taxonomy.php:31
 #: inc/tour/Scenarios/OpportunityFormScenario.php:96
 msgid "Seekers"
@@ -1253,178 +1253,195 @@ msgstr ""
 msgid "No opportunities yet."
 msgstr ""
 
-#: inc/launchpad/Panels/OpportunitiesPanel.php:399
+#: inc/launchpad/Panels/OpportunitiesPanel.php:394
+#: inc/launchpad/Panels/OpportunitiesPanel.php:397
+msgid "Lasts"
+msgstr ""
+
+#: inc/launchpad/Panels/OpportunitiesPanel.php:395
+msgid "from"
+msgstr ""
+
+#: inc/launchpad/Panels/OpportunitiesPanel.php:397
+msgid "to"
+msgstr ""
+
+#: inc/launchpad/Panels/OpportunitiesPanel.php:403
 msgid "Finished"
 msgstr ""
 
-#: inc/launchpad/Panels/OpportunitiesPanel.php:421
+#: inc/launchpad/Panels/OpportunitiesPanel.php:414
+msgid "Created"
+msgstr ""
+
+#: inc/launchpad/Panels/OpportunitiesPanel.php:436
 #: inc/launchpad/Panels/StatsPanel.php:66
 #: inc/listing/Core/ResultsGrid.php:195
 msgid "Comments"
 msgstr ""
 
-#: inc/launchpad/Panels/OpportunitiesPanel.php:463
-#: inc/launchpad/Panels/OpportunitiesPanel.php:972
-#: inc/launchpad/Panels/OpportunitiesPanel.php:1008
+#: inc/launchpad/Panels/OpportunitiesPanel.php:470
+#: inc/launchpad/Panels/OpportunitiesPanel.php:979
+#: inc/launchpad/Panels/OpportunitiesPanel.php:1015
 msgid "Submit for Review"
 msgstr ""
 
-#: inc/launchpad/Panels/OpportunitiesPanel.php:471
+#: inc/launchpad/Panels/OpportunitiesPanel.php:478
 #: template-parts/comments-interactive.php:208
 #: template-parts/comments-interactive.php:301
 msgid "Edit"
 msgstr ""
 
-#: inc/launchpad/Panels/OpportunitiesPanel.php:503
-#: inc/launchpad/Panels/OpportunitiesPanel.php:979
+#: inc/launchpad/Panels/OpportunitiesPanel.php:510
+#: inc/launchpad/Panels/OpportunitiesPanel.php:986
 #: inc/tour/Core/TourCore.php:151
 msgid "Back"
 msgstr ""
 
-#: inc/launchpad/Panels/OpportunitiesPanel.php:511
+#: inc/launchpad/Panels/OpportunitiesPanel.php:518
 msgid "Opportunity Title"
 msgstr ""
 
-#: inc/launchpad/Panels/OpportunitiesPanel.php:514
+#: inc/launchpad/Panels/OpportunitiesPanel.php:521
 #, php-format
 msgid "Add title min %1$d, max %2$d characters"
 msgstr ""
 
-#: inc/launchpad/Panels/OpportunitiesPanel.php:534
+#: inc/launchpad/Panels/OpportunitiesPanel.php:541
 msgid "Opportunity Info"
 msgstr ""
 
-#: inc/launchpad/Panels/OpportunitiesPanel.php:538
+#: inc/launchpad/Panels/OpportunitiesPanel.php:545
 msgid "Company"
 msgstr ""
 
-#: inc/launchpad/Panels/OpportunitiesPanel.php:551
+#: inc/launchpad/Panels/OpportunitiesPanel.php:558
 msgid "Start Date"
 msgstr ""
 
-#: inc/launchpad/Panels/OpportunitiesPanel.php:556
-#: inc/launchpad/Panels/OpportunitiesPanel.php:569
+#: inc/launchpad/Panels/OpportunitiesPanel.php:563
+#: inc/launchpad/Panels/OpportunitiesPanel.php:576
 msgid "Open calendar"
 msgstr ""
 
-#: inc/launchpad/Panels/OpportunitiesPanel.php:564
+#: inc/launchpad/Panels/OpportunitiesPanel.php:571
 msgid "End Date"
 msgstr ""
 
-#: inc/launchpad/Panels/OpportunitiesPanel.php:583
+#: inc/launchpad/Panels/OpportunitiesPanel.php:590
 #: templates/single-opportunity.php:215
 #: templates/single-opportunity.php:224
 msgid "Link"
 msgstr ""
 
-#: inc/launchpad/Panels/OpportunitiesPanel.php:593
+#: inc/launchpad/Panels/OpportunitiesPanel.php:600
 msgid "Application Form URL"
 msgstr ""
 
-#: inc/launchpad/Panels/OpportunitiesPanel.php:604
+#: inc/launchpad/Panels/OpportunitiesPanel.php:611
 #: inc/listing/Enums/Taxonomy.php:30
 #: inc/listing/Filters/CountryFilter.php:21
 msgid "Country"
 msgstr ""
 
-#: inc/launchpad/Panels/OpportunitiesPanel.php:615
+#: inc/launchpad/Panels/OpportunitiesPanel.php:622
 msgid "Select Country"
 msgstr ""
 
-#: inc/launchpad/Panels/OpportunitiesPanel.php:646
+#: inc/launchpad/Panels/OpportunitiesPanel.php:653
 msgid "Not necessary. Only if you want to point that your opportunity is available for particular locations: City, District, Hromada, etc."
 msgstr ""
 
-#: inc/launchpad/Panels/OpportunitiesPanel.php:675
+#: inc/launchpad/Panels/OpportunitiesPanel.php:682
 msgid "if opportynity for Oblast"
 msgstr ""
 
-#: inc/launchpad/Panels/OpportunitiesPanel.php:678
+#: inc/launchpad/Panels/OpportunitiesPanel.php:685
 msgid "Kyivska, Lvivska..."
 msgstr ""
 
-#: inc/launchpad/Panels/OpportunitiesPanel.php:708
+#: inc/launchpad/Panels/OpportunitiesPanel.php:715
 msgid "if for Raion, District, Hromada"
 msgstr ""
 
-#: inc/launchpad/Panels/OpportunitiesPanel.php:711
+#: inc/launchpad/Panels/OpportunitiesPanel.php:718
 msgid "Buchanskyi r-n, Dolynska tg.."
 msgstr ""
 
-#: inc/launchpad/Panels/OpportunitiesPanel.php:740
+#: inc/launchpad/Panels/OpportunitiesPanel.php:747
 msgid "if for City, Settlement, City district"
 msgstr ""
 
-#: inc/launchpad/Panels/OpportunitiesPanel.php:743
+#: inc/launchpad/Panels/OpportunitiesPanel.php:750
 msgid "Bucha c., Vesele v., Obolon..."
 msgstr ""
 
-#: inc/launchpad/Panels/OpportunitiesPanel.php:769
+#: inc/launchpad/Panels/OpportunitiesPanel.php:776
 msgid "If you want you coud to select the required administrative level. If the opportunity is provided throughout the Oblast - select from (1) Oblast, if the opportunity is for a district or community - select from (2) District, if the opportunity concerns a city or village select the required City or Village from (3)."
 msgstr ""
 
-#: inc/launchpad/Panels/OpportunitiesPanel.php:773
+#: inc/launchpad/Panels/OpportunitiesPanel.php:780
 msgid "Opportunity Category"
 msgstr ""
 
-#: inc/launchpad/Panels/OpportunitiesPanel.php:824
+#: inc/launchpad/Panels/OpportunitiesPanel.php:831
 #: inc/launchpad/Panels/ProfilePanel.php:381
 #: inc/tour/Scenarios/OpportunityFormScenario.php:105
 msgid "Description"
 msgstr ""
 
-#: inc/launchpad/Panels/OpportunitiesPanel.php:827
+#: inc/launchpad/Panels/OpportunitiesPanel.php:834
 msgid "Describe the opportunity"
 msgstr ""
 
-#: inc/launchpad/Panels/OpportunitiesPanel.php:830
+#: inc/launchpad/Panels/OpportunitiesPanel.php:837
 #, php-format
 msgid "Add information about the opportunity. Describe the essence. Min %1$d, max %2$d characters"
 msgstr ""
 
-#: inc/launchpad/Panels/OpportunitiesPanel.php:842
+#: inc/launchpad/Panels/OpportunitiesPanel.php:849
 #: templates/single-opportunity.php:204
 msgid "Requirements"
 msgstr ""
 
-#: inc/launchpad/Panels/OpportunitiesPanel.php:855
+#: inc/launchpad/Panels/OpportunitiesPanel.php:862
 msgid "Details"
 msgstr ""
 
-#: inc/launchpad/Panels/OpportunitiesPanel.php:867
+#: inc/launchpad/Panels/OpportunitiesPanel.php:874
 msgid "required fields"
 msgstr ""
 
-#: inc/launchpad/Panels/OpportunitiesPanel.php:873
+#: inc/launchpad/Panels/OpportunitiesPanel.php:880
 #: templates/single-opportunity.php:243
 msgid "Document"
 msgstr ""
 
-#: inc/launchpad/Panels/OpportunitiesPanel.php:891
+#: inc/launchpad/Panels/OpportunitiesPanel.php:898
 msgid "Attach File"
 msgstr ""
 
-#: inc/launchpad/Panels/OpportunitiesPanel.php:923
+#: inc/launchpad/Panels/OpportunitiesPanel.php:930
 msgid "Pending Save"
 msgstr ""
 
-#: inc/launchpad/Panels/OpportunitiesPanel.php:942
+#: inc/launchpad/Panels/OpportunitiesPanel.php:949
 msgid "Format (PDF, DOCX). Max size 5Mb."
 msgstr ""
 
-#: inc/launchpad/Panels/OpportunitiesPanel.php:960
+#: inc/launchpad/Panels/OpportunitiesPanel.php:967
 msgid "Save Draft"
 msgstr ""
 
-#: inc/launchpad/Panels/OpportunitiesPanel.php:1011
+#: inc/launchpad/Panels/OpportunitiesPanel.php:1018
 msgid "Submit your changes and request a review from the moderation team?"
 msgstr ""
 
-#: inc/launchpad/Panels/OpportunitiesPanel.php:1019
+#: inc/launchpad/Panels/OpportunitiesPanel.php:1026
 msgid "Submit"
 msgstr ""
 
-#: inc/launchpad/Panels/OpportunitiesPanel.php:1023
+#: inc/launchpad/Panels/OpportunitiesPanel.php:1030
 #: inc/launchpad/Panels/ProfilePanel.php:423
 #: inc/launchpad/Panels/ProfilePanel.php:503
 #: inc/launchpad/Panels/ProfilePanel.php:605
