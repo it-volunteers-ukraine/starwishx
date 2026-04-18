@@ -42,7 +42,7 @@ export const loginActions = {
         !state.forms.login.isPasswordVisible;
     }
   },
-  
+
   async submit(event) {
     event.preventDefault();
 
@@ -105,7 +105,14 @@ export const loginActions = {
       }
       // ──────────────────────────────────────────────────────────────────
 
-      form.error = error.message;
+      // Route backend field_errors to inline slots (shared contract).
+      const fieldErrors =
+        (error instanceof RestApiError && error.fieldErrors) || null;
+      if (fieldErrors && Object.keys(fieldErrors).length) {
+        form.fieldErrors = { ...form.fieldErrors, ...fieldErrors };
+      } else {
+        form.error = error.message;
+      }
     } finally {
       form.isSubmitting = false;
     }

@@ -44,24 +44,41 @@ class RegisterForm extends AbstractForm
             <div class="gateway-fields__container" data-wp-bind--hidden="state.forms.<?php echo $jsId; ?>.success">
                 <p class="gateway-form__intro"><?php esc_html_e('Enter your details to receive an activation link.', 'starwishx'); ?></p>
 
-                <div class="form-field">
+                <div class="form-field" data-wp-class--has-error="state.forms.<?php echo $jsId; ?>.fieldErrors.username">
                     <label><?php _ex('Login (latin letters unique username for login)', 'gateway', 'starwishx'); ?></label>
                     <input type="text" required data-field="username"
-                    placeholder="<?php _ex('Latin letters, digits, . - _', 'gateway', 'starwishx'); ?>"
-                    data-wp-bind--value="state.forms.<?php echo $jsId; ?>.username"
-                    data-wp-on--input="actions.<?php echo $jsId; ?>.updateField">
+                        placeholder="<?php _ex('Latin letters, digits, . - _', 'gateway', 'starwishx'); ?>"
+                        data-wp-bind--value="state.forms.<?php echo $jsId; ?>.username"
+                        data-wp-bind--disabled="state.forms.<?php echo $jsId; ?>.isSubmitting"
+                        data-wp-on--input="actions.<?php echo $jsId; ?>.updateField">
                     <span class="label-info exclamation-circle"><?php _ex('f.ex.: Oleg12, kat33, grew.panda', 'gateway', 'starwishx'); ?></span>
+                    <span
+                        class="exclamation-circle__error"
+                        data-wp-bind--hidden="!state.forms.<?php echo esc_attr($this->getJsId()); ?>.fieldErrors.username"
+                        data-wp-text="state.forms.<?php echo esc_attr($this->getJsId()); ?>.fieldErrors.username">
+                    </span>
                 </div>
 
-                <div class="form-field">
+                <div class="form-field" data-wp-class--has-error="state.forms.<?php echo $jsId; ?>.fieldErrors.email">
                     <label><?php _ex('Email', 'gateway', 'starwishx'); ?></label>
                     <input type="email" required data-field="email"
                         data-wp-bind--value="state.forms.<?php echo $jsId; ?>.email"
+                        data-wp-bind--disabled="state.forms.<?php echo $jsId; ?>.isSubmitting"
                         data-wp-on--input="actions.<?php echo $jsId; ?>.updateField">
+                    <span
+                        class="exclamation-circle__error"
+                        data-wp-bind--hidden="!state.forms.<?php echo esc_attr($this->getJsId()); ?>.fieldErrors.email"
+                        data-wp-text="state.forms.<?php echo esc_attr($this->getJsId()); ?>.fieldErrors.email">
+                    </span>
                 </div>
 
-                <button type="submit" class="btn btn-primary btn-block" data-wp-bind--disabled="state.forms.<?php echo $jsId; ?>.isSubmitting">
-                    <?php esc_html_e('Register', 'starwishx'); ?>
+                <button type="submit" class="btn btn-submit" data-wp-bind--disabled="state.forms.<?php echo $jsId; ?>.isSubmitting">
+                    <span data-wp-bind--hidden="state.forms.<?php echo $jsId; ?>.isSubmitting">
+                        <?php esc_html_e('Register', 'starwishx'); ?>
+                    </span>
+                    <span data-wp-bind--hidden="!state.forms.<?php echo $jsId; ?>.isSubmitting">
+                        <?php esc_html_e('Registering...', 'starwishx'); ?>
+                    </span>
                 </button>
             </div>
 

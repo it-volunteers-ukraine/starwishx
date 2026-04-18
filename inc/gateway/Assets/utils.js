@@ -11,12 +11,14 @@ export class RestApiError extends Error {
    * @param {string} message - Human-readable message (from WP error or HTTP status)
    * @param {string} code    - WordPress error code e.g. 'rest_cookie_invalid_nonce'
    * @param {number} status  - HTTP status code
+   * @param {Object|null} fieldErrors - `{field => message}` map from `data.field_errors`
    */
-  constructor(message, code = "", status = 0) {
+  constructor(message, code = "", status = 0, fieldErrors = null) {
     super(message);
     this.name = "RestApiError";
     this.code = code;
     this.status = status;
+    this.fieldErrors = fieldErrors;
   }
 }
 
@@ -107,10 +109,15 @@ export async function fetchJson(
   if (!response.ok) {
     let errorData = {};
     let message = `${response.status} ${response.statusText}`;
+    let fieldErrors = null;
 
     try {
       errorData = await response.json();
       if (errorData?.message) message = errorData.message;
+      // Honors the shared error-shape contract (AbstractApiController):
+      // `data.field_errors` routes to inline slots, top-level `message` to banner.
+      if (errorData?.data?.field_errors)
+        fieldErrors = errorData.data.field_errors;
     } catch (_) {
       // Non-JSON body — keep the HTTP status message
     }
@@ -130,7 +137,12 @@ export async function fetchJson(
     }
     // ──────────────────────────────────────────────────────────────────────
 
-    throw new RestApiError(message, errorData?.code ?? "", response.status);
+    throw new RestApiError(
+      message,
+      errorData?.code ?? "",
+      response.status,
+      fieldErrors,
+    );
   }
 
   if (response.status === 204) return {};
