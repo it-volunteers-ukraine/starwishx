@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Launchpad\Services;
 
 use Shared\Policy\EmailPolicy;
+use Shared\Policy\MessengerPolicy;
 use Shared\Policy\PhonePolicy;
 use Shared\Policy\UrlPolicy;
 use Shared\Policy\UsernamePolicy;
@@ -196,15 +197,30 @@ class ProfileService
         // login name (same character set). Legacy nicknames that predate this
         // rule remain valid — we only reject when the user actively changes
         // to a non-conforming value. Empty nickname is allowed (field optional).
+        $currentUser = get_userdata($userId);
         if (isset($data['nickname'])) {
             $newNickname = trim((string) $data['nickname']);
-            $currentUser = get_userdata($userId);
             $currentNickname = $currentUser ? (string) $currentUser->nickname : '';
 
             if ($newNickname !== '' && $newNickname !== $currentNickname) {
                 $nicknameResult = UsernamePolicy::validate($newNickname);
                 if (is_wp_error($nicknameResult)) {
                     $fieldErrors['nickname'] = $nicknameResult->get_error_message();
+                }
+            }
+        }
+
+        // Telegram: validate-on-change with MessengerPolicy (Telegram-style
+        // format). Same rationale as nickname — legacy values persist until
+        // the user actively edits the field. Empty value is allowed.
+        if (isset($data['telegram'])) {
+            $newTelegram = trim((string) $data['telegram']);
+            $currentTelegram = (string) (get_field('telegram', 'user_' . $userId) ?: '');
+
+            if ($newTelegram !== '' && $newTelegram !== $currentTelegram) {
+                $telegramResult = MessengerPolicy::validate($newTelegram);
+                if (is_wp_error($telegramResult)) {
+                    $fieldErrors['telegram'] = $telegramResult->get_error_message();
                 }
             }
         }
@@ -257,10 +273,9 @@ class ProfileService
             $hasCoreUpdate = true;
         }
         // Email is handled by the dedicated changeEmail() method (requires password).
-        if (isset($data['nickname'])) {
-            $coreArgs['nickname'] = sanitize_text_field($data['nickname']);
-            $hasCoreUpdate = true;
-        }
+        // NOTE: nickname is written directly to user_meta below — wp_insert_user
+        // silently replaces empty nickname with user_login, which would prevent
+        // users from clearing the field.
         if (isset($data['displayName'])) {
             $coreArgs['display_name'] = sanitize_text_field($data['displayName']);
             $hasCoreUpdate = true;
@@ -279,6 +294,13 @@ class ProfileService
             if (is_wp_error($result)) {
                 return $result;
             }
+        }
+
+        // Nickname write-path: direct user_meta update bypasses the
+        // wp_insert_user fallback that otherwise substitutes user_login
+        // when the submitted value is empty. Users must be able to clear it.
+        if (isset($data['nickname'])) {
+            update_user_meta($userId, 'nickname', sanitize_text_field($data['nickname']));
         }
 
         // 2. Update ACF Fields

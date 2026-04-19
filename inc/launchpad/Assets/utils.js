@@ -252,6 +252,28 @@ export function validateUsername(value, policy) {
 }
 
 /**
+ * Validate a messenger handle against the hydrated MessengerPolicy rules.
+ * Returns the translated error message on failure, or null on success.
+ *
+ * The regex already encodes length + character-set + first-char rules, so
+ * a single `messages.invalid` string covers every failure mode.
+ *
+ * @param {string|null|undefined} value
+ * @param {{pattern?: string, messages?: Object}} policy
+ * @returns {string|null}
+ */
+export function validateMessenger(value, policy) {
+  if (!policy) return null;
+  const { pattern, messages = {} } = policy;
+  const str = String(value ?? "");
+
+  if (pattern && !new RegExp(pattern).test(str)) {
+    return messages.invalid ?? "";
+  }
+  return null;
+}
+
+/**
  * Utility: Safely merges source objects into a target object,
  * preserving Getters/Setters instead of evaluating them.
  *
