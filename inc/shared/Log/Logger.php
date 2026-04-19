@@ -1,15 +1,15 @@
 <?php
 
 /**
- * Shared\Log\Logger — lightweight file-based application logger.
+ * Shared\Log\Logger — static facade over Monolog 3.x.
  *
- * Writes to wp-content/uploads/sw/app-YYYY-MM-DD.log.
- * Date-based filenames avoid rename-race hazards that plague size-based
- * rotation under concurrent PHP processes. A daily prune job (registered
- * by UsersCore) removes files older than 30 days.
+ * Writes to wp-content/uploads/sw/app-YYYY-MM-DD.log via Monolog's
+ * RotatingFileHandler, which auto-prunes files older than RETENTION_DAYS.
  *
- * Method signatures deliberately mirror Psr\Log\LoggerInterface so a future
- * swap to Monolog requires only adapter glue, not a call-site rewrite.
+ * Monolog 3 is PSR-3 compatible; this facade keeps a simpler static call
+ * shape (`Logger::info($module, $message, $context)`) so call sites don't
+ * have to juggle channel construction — $module becomes the Monolog
+ * channel, memoized per name.
  *
  * File: inc/shared/Log/Logger.php
  */
@@ -18,105 +18,109 @@ declare(strict_types=1);
 
 namespace Shared\Log;
 
+use Monolog\Formatter\LineFormatter;
+use Monolog\Handler\RotatingFileHandler;
+use Monolog\Level;
+use Monolog\Logger as MonologLogger;
+
 final class Logger
 {
-    private const DIR = 'sw';
+    private const DIR            = 'sw';
+    private const FILENAME       = 'app.log';
+    private const RETENTION_DAYS = 30;
+
+    /** @var array<string, MonologLogger> */
+    private static array $channels = [];
 
     public static function info(string $module, string $message, array $context = []): void
     {
-        self::write('INFO', $module, $message, $context);
+        self::channel($module)->info($message, $context);
     }
 
     public static function warning(string $module, string $message, array $context = []): void
     {
-        self::write('WARNING', $module, $message, $context);
+        self::channel($module)->warning($message, $context);
     }
 
     public static function error(string $module, string $message, array $context = []): void
     {
-        self::write('ERROR', $module, $message, $context);
+        self::channel($module)->error($message, $context);
     }
 
     public static function debug(string $module, string $message, array $context = []): void
     {
-        if (!(defined('WP_DEBUG') && WP_DEBUG)) {
-            return;
-        }
-        self::write('DEBUG', $module, $message, $context);
+        self::channel($module)->debug($message, $context);
     }
 
     /**
-     * Delete log files older than the given retention window.
-     * Called by the daily sw_log_prune cron.
-     *
-     * @return int Number of files deleted.
+     * Reset the memoized channel registry — intended for tests.
      */
-    public static function pruneOldLogs(int $daysToKeep = 30): int
+    public static function reset(): void
     {
-        $dir = self::logDirectory();
-        if ($dir === null || !is_dir($dir)) {
-            return 0;
-        }
-
-        $threshold = time() - ($daysToKeep * DAY_IN_SECONDS);
-        $deleted = 0;
-
-        foreach ((array) glob($dir . '/app-*.log') as $file) {
-            if (is_file($file) && filemtime($file) < $threshold) {
-                if (@unlink($file)) {
-                    $deleted++;
-                }
-            }
-        }
-
-        return $deleted;
+        self::$channels = [];
     }
 
-    private static function write(string $level, string $module, string $message, array $context): void
+    private static function channel(string $module): MonologLogger
     {
-        $path = self::ensureTodayPath();
-        if ($path === null) {
-            // Filesystem unavailable — degrade to PHP error log so nothing is lost silently.
-            error_log(sprintf('[%s] [%s] %s', $level, $module, $message));
-            return;
+        $name = $module !== '' ? $module : 'app';
+
+        if (isset(self::$channels[$name])) {
+            return self::$channels[$name];
         }
 
-        $ctx = !empty($context) ? ' ' . wp_json_encode($context) : '';
-        $line = sprintf("[%s] [%s] [%s] %s%s\n", gmdate('c'), $level, $module, $message, $ctx);
+        $logger = new MonologLogger($name);
 
-        // error_log with type=3 performs an atomic append per call — safe under concurrent writes.
-        @error_log($line, 3, $path);
+        $path = self::ensureLogPath();
+        if ($path !== null) {
+            $minLevel = (defined('WP_DEBUG') && WP_DEBUG) ? Level::Debug : Level::Info;
+
+            $handler = new RotatingFileHandler(
+                $path,
+                self::RETENTION_DAYS,
+                $minLevel,
+                true,   // bubble
+                null,   // filePermission — inherit umask
+                true    // useLocking — safer under concurrent PHP-FPM writers on Windows
+            );
+
+            // Default Monolog format: "[%datetime%] %channel%.%level_name%: %message% %context% %extra%\n"
+            // Example: [2026-04-19T14:23:11+00:00] Users.INFO: Wiped inactive account {"userId":42}
+            $handler->setFormatter(new LineFormatter(
+                null,   // use default template
+                'c',    // ISO-8601 datetime
+                true,   // allowInlineLineBreaks — useful for stack traces
+                true    // ignoreEmptyContextAndExtra
+            ));
+
+            $logger->pushHandler($handler);
+        }
+
+        self::$channels[$name] = $logger;
+        return $logger;
     }
 
-    private static function ensureTodayPath(): ?string
-    {
-        $dir = self::logDirectory();
-        if ($dir === null) {
-            return null;
-        }
-
-        if (!is_dir($dir)) {
-            wp_mkdir_p($dir);
-
-            $htaccess = $dir . '/.htaccess';
-            if (!file_exists($htaccess)) {
-                @file_put_contents($htaccess, "Deny from all\n");
-            }
-            $index = $dir . '/index.php';
-            if (!file_exists($index)) {
-                @file_put_contents($index, "<?php\n// Silence is golden.\n");
-            }
-        }
-
-        return $dir . '/app-' . gmdate('Y-m-d') . '.log';
-    }
-
-    private static function logDirectory(): ?string
+    private static function ensureLogPath(): ?string
     {
         $upload = wp_upload_dir(null, false);
         if (!empty($upload['error']) || empty($upload['basedir'])) {
             return null;
         }
-        return rtrim((string) $upload['basedir'], '/\\') . DIRECTORY_SEPARATOR . self::DIR;
+
+        $dir = rtrim((string) $upload['basedir'], '/\\') . DIRECTORY_SEPARATOR . self::DIR;
+
+        if (!is_dir($dir)) {
+            wp_mkdir_p($dir);
+
+            $htaccess = $dir . DIRECTORY_SEPARATOR . '.htaccess';
+            if (!file_exists($htaccess)) {
+                @file_put_contents($htaccess, "Deny from all\n");
+            }
+            $index = $dir . DIRECTORY_SEPARATOR . 'index.php';
+            if (!file_exists($index)) {
+                @file_put_contents($index, "<?php\n// Silence is golden.\n");
+            }
+        }
+
+        return $dir . DIRECTORY_SEPARATOR . self::FILENAME;
     }
 }

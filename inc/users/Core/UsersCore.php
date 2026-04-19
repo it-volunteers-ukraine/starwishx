@@ -7,7 +7,8 @@
  *   - user_register           → flag new users as unactivated, detect admin-created
  *   - after_password_reset    → flip is_activated=true after reset_password() commits
  *   - sw_users_daily_cleanup  → cron handler (finds + wipes inactive subscribers)
- *   - sw_log_prune            → daily log retention (30 days)
+ *
+ * Log retention is handled by Monolog's RotatingFileHandler — no custom prune cron.
  *
  * File: inc/users/Core/UsersCore.php
  */
@@ -16,7 +17,6 @@ declare(strict_types=1);
 
 namespace Users\Core;
 
-use Shared\Log\Logger;
 use Users\Services\UserCleanupService;
 use Users\Services\UserStateService;
 use WP_User;
@@ -24,7 +24,6 @@ use WP_User;
 final class UsersCore
 {
     public const CRON_CLEANUP = 'sw_users_daily_cleanup';
-    public const CRON_PRUNE   = 'sw_log_prune';
 
     private static ?self $instance = null;
 
@@ -66,11 +65,10 @@ final class UsersCore
         add_action('user_register',         [$this, 'onUserRegister'], 10, 1);
         add_action('after_password_reset',  [$this, 'onPasswordReset'], 10, 2);
 
-        // Cron handlers
+        // Cron handler
         add_action(self::CRON_CLEANUP, [$this->cleanupService, 'runCleanup']);
-        add_action(self::CRON_PRUNE,   [$this, 'onPruneLogs']);
 
-        // Schedule crons on init (runs after WP-Cron has parsed existing schedules)
+        // Schedule cron on init (runs after WP-Cron has parsed existing schedules)
         add_action('init', [$this, 'ensureCronSchedules'], 20);
     }
 
@@ -78,9 +76,6 @@ final class UsersCore
     {
         if (!wp_next_scheduled(self::CRON_CLEANUP)) {
             wp_schedule_event(time() + HOUR_IN_SECONDS, 'daily', self::CRON_CLEANUP);
-        }
-        if (!wp_next_scheduled(self::CRON_PRUNE)) {
-            wp_schedule_event(time() + HOUR_IN_SECONDS, 'daily', self::CRON_PRUNE);
         }
     }
 
@@ -108,14 +103,6 @@ final class UsersCore
     {
         if (!$this->stateService->isActivated($user->ID)) {
             $this->stateService->activate($user->ID, ['trigger' => 'password_reset_link']);
-        }
-    }
-
-    public function onPruneLogs(): void
-    {
-        $deleted = Logger::pruneOldLogs();
-        if ($deleted > 0) {
-            Logger::info('Users', 'Pruned old log files', ['deleted' => $deleted]);
         }
     }
 
