@@ -3,6 +3,59 @@
     "title": "Users",
     "fields": [
         {
+            "key": "field_69e4ca2342bd0",
+            "label": "Is Activated",
+            "name": "is_activated",
+            "aria-label": "",
+            "type": "true_false",
+            "instructions": "If subscriber's account is not activated via email activation link it will be automatically wiped",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "message": "Subscriber's account is activated via email link",
+            "default_value": 0,
+            "allow_in_bindings": 0,
+            "ui": 0,
+            "ui_on_text": "",
+            "ui_off_text": ""
+        },
+        {
+            "key": "field_69e4ccb9f8d5b",
+            "label": "Account Moderation Status",
+            "name": "moderation_status",
+            "aria-label": "",
+            "type": "select",
+            "instructions": "-Subscriber-: `normal` \/ `muted`, `restricted` can't comment, still can add to favorites \/ `suspended` only login \/ `banned` can't login \/\r\n-Contributor-: `normal` \/ `muted` can't comment, still can add to favorites, add opportunities \/  `restricted` can't comment & add opportunities, still can add to favorites \/ `suspended` only login \/ `banned` can't login",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "choices": {
+                "normal": "normal",
+                "muted": "muted",
+                "restricted": "restricted",
+                "suspended": "suspended",
+                "banned": "banned"
+            },
+            "default_value": false,
+            "return_format": "value",
+            "multiple": 0,
+            "allow_null": 1,
+            "allow_in_bindings": 0,
+            "ui": 0,
+            "ajax": 0,
+            "placeholder": "",
+            "create_options": 0,
+            "save_options": 0
+        },
+        {
             "key": "field_6942164aad908",
             "label": "Телефон",
             "name": "phone",
@@ -112,5 +165,5 @@
     "description": "",
     "show_in_rest": 0,
     "display_title": "",
-    "modified": 1774187250
+    "modified": 1776605658
 }
