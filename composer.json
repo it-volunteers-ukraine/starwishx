@@ -1,6 +1,7 @@
 {
     "require": {
         "league/uri": "^7.8",
-        "egulias/email-validator": "^4.0"
+        "egulias/email-validator": "^4.0",
+        "monolog/monolog": "^3.10"
     }
 }

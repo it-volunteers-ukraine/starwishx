@@ -198,6 +198,11 @@ require_once get_template_directory() . '/vendor/autoload.php';
 // init for Shared infrastructure
 require_once get_template_directory() . '/inc/shared/setup.php';
 
+// init for Users - user-lifecycle state (is_activated, moderation_status)
+// Loads before Gateway so user_register / after_password_reset / login hooks
+// are registered before Gateway starts firing them.
+require_once get_template_directory() . '/inc/users/setup.php';
+
 // init for Menu - header navigation module
 require_once get_template_directory() . '/inc/menu/setup.php';
 

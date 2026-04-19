@@ -55,6 +55,16 @@ class AuthService
             );
         }
 
+        // Activation gate — block login for accounts that haven't completed
+        // the activation flow (clicking the emailed link + setting password).
+        // Must fire before wp_set_auth_cookie so inactive bots never get a session.
+        if (function_exists('users') && !\users()->stateService()->isActivated($user->ID)) {
+            return new WP_Error(
+                'account_not_activated',
+                __('Please activate your account via the link sent to your email.', 'starwishx')
+            );
+        }
+
         // Success - clear rate limiting
         $this->clearAttempts($username);
 
