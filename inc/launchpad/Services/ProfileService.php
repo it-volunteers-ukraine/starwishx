@@ -7,6 +7,7 @@ namespace Launchpad\Services;
 use Shared\Policy\EmailPolicy;
 use Shared\Policy\PhonePolicy;
 use Shared\Policy\UrlPolicy;
+use Shared\Policy\UsernamePolicy;
 use WP_Error;
 
 class ProfileService
@@ -187,6 +188,23 @@ class ProfileService
                 $err = self::validateNameField($data[$nameField]);
                 if ($err) {
                     $fieldErrors[$nameField] = $err;
+                }
+            }
+        }
+
+        // Nickname: validate-on-change. Shares UsernamePolicy with register's
+        // login name (same character set). Legacy nicknames that predate this
+        // rule remain valid — we only reject when the user actively changes
+        // to a non-conforming value. Empty nickname is allowed (field optional).
+        if (isset($data['nickname'])) {
+            $newNickname = trim((string) $data['nickname']);
+            $currentUser = get_userdata($userId);
+            $currentNickname = $currentUser ? (string) $currentUser->nickname : '';
+
+            if ($newNickname !== '' && $newNickname !== $currentNickname) {
+                $nicknameResult = UsernamePolicy::validate($newNickname);
+                if (is_wp_error($nicknameResult)) {
+                    $fieldErrors['nickname'] = $nicknameResult->get_error_message();
                 }
             }
         }

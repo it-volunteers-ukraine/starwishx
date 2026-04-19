@@ -12,6 +12,7 @@ declare(strict_types=1);
 namespace Gateway\Services;
 
 use Shared\Policy\EmailPolicy;
+use Shared\Policy\UsernamePolicy;
 use WP_Error;
 use WP_User;
 
@@ -36,16 +37,13 @@ class RegisterService
             return $emailResult;
         }
 
-        // 2. Username Format Validation
-        // NOTE: This regex must be a strict subset of what sanitize_user() accepts.
-        // WordPress sanitize_user() allows: alphanumeric, spaces, ., -, _, @
-        // We restrict further for security: alphanumeric, ., -, _ (no spaces, no @)
-        // See: https://developer.wordpress.org/reference/functions/sanitize_user/
-        if (!preg_match('/^[a-zA-Z0-9._-]{3,60}$/', $username)) {
-            return new WP_Error(
-                'invalid_username_format',
-                __('Login name may only contain latin letters, numbers, dots, underscores, and hyphens (3-60 characters).', 'starwishx')
-            );
+        // 2. Username Format Validation — defense-in-depth.
+        // RegisterController's validate_callback already enforces this, but the
+        // service can be called from other contexts (tests, wp-cli, future APIs).
+        // UsernamePolicy is a strict subset of sanitize_user()'s accepted chars.
+        $usernameResult = UsernamePolicy::validate($username);
+        if (is_wp_error($usernameResult)) {
+            return $usernameResult;
         }
 
         // 3. Existence Checks (Standard WP behavior allows these leaks on registration for UX)

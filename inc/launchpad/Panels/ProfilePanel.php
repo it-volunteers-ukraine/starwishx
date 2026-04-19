@@ -6,6 +6,7 @@ namespace Launchpad\Panels;
 
 use Launchpad\Services\ProfileService;
 use Shared\Policy\PasswordPolicy;
+use Shared\Policy\UsernamePolicy;
 
 class ProfilePanel extends AbstractPanel
 {
@@ -49,9 +50,18 @@ class ProfilePanel extends AbstractPanel
             'isChangingPassword' => ($view === 'password'),
             'isDisplayNameDropdownOpen' => false,
             'fieldErrors'        => (object) [],
+            // Snapshot for validate-on-change: client compares current
+            // p.nickname against this to preserve legacy nicknames that
+            // predate UsernamePolicy. Mirrors server-side semantics in
+            // ProfileService::updateProfile().
+            '_originalNickname'  => (string) ($data['nickname'] ?? ''),
             'nameLimits'         => [
                 'min' => ProfileService::NAME_MIN_LENGTH,
                 'max' => ProfileService::NAME_MAX_LENGTH,
+            ],
+            'usernameLimits'     => [
+                'min' => UsernamePolicy::MIN_LENGTH,
+                'max' => UsernamePolicy::MAX_LENGTH,
             ],
             'validationMessages' => [
                 'nameInvalid'   => __('Only letters, spaces, hyphens, and apostrophes allowed.', 'starwishx'),
@@ -293,13 +303,15 @@ class ProfilePanel extends AbstractPanel
                                 data-wp-text="<?= $this->statePath('fieldErrors') ?>.lastName"></label>
                         </div>
                         <!-- // could be temporary hidden -->
-                        <div class="form-field">
+                        <div class="form-field"
+                            data-wp-class--has-error="<?= $this->statePath('fieldErrors') ?>.nickname">
                             <label for="lp-nickname">
                                 <?= esc_html__('Nickname', 'starwishx'); ?>
                             </label>
                             <input type="text" id="lp-nickname" data-field="nickname"
                                 placeholder="<?= esc_attr__('e.g. Janie, kat25', 'starwishx'); ?>"
-                                data-wp-bind--value="< ?= $this->statePath('nickname') ?>"
+                                maxlength="<?= UsernamePolicy::MAX_LENGTH ?>"
+                                data-wp-bind--value="<?= $this->statePath('nickname') ?>"
                                 data-wp-on--input="actions.profile.updateField" />
                             <label class="exclamation-circle__error" hidden
                                 data-wp-bind--hidden="!<?= $this->statePath('fieldErrors') ?>.nickname"

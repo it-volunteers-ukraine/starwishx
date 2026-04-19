@@ -55,6 +55,7 @@ class ResetPasswordForm extends AbstractForm
                             type="text"
                             data-wp-bind--type="state.resetPasswordInputType"
                             data-wp-bind--value="state.forms.<?php echo esc_attr($this->getJsId()); ?>.newPassword"
+                            data-wp-bind--disabled="state.forms.<?php echo esc_attr($this->getJsId()); ?>.isSubmitting"
                             data-wp-on--input="actions.<?php echo esc_attr($this->getJsId()); ?>.updateField"
                             data-field="newPassword"
                             autocomplete="new-password">

@@ -64,6 +64,7 @@ class LoginForm extends AbstractForm
                     required
                     placeholder="<?php _ex('Latin letters, digits, . - _ @', 'gateway', 'starwishx'); ?>"
                     data-wp-bind--value="state.forms.<?php echo esc_attr($this->getJsId()); ?>.username"
+                    data-wp-bind--disabled="state.forms.<?php echo esc_attr($this->getJsId()); ?>.isSubmitting"
                     data-wp-on--input="actions.<?php echo esc_attr($this->getJsId()); ?>.updateField"
                     data-field="username">
                 <span
@@ -87,6 +88,7 @@ class LoginForm extends AbstractForm
                         required
                         data-wp-bind--type="state.loginPasswordInputType"
                         data-wp-bind--value="state.forms.<?php echo esc_attr($this->getJsId()); ?>.password"
+                        data-wp-bind--disabled="state.forms.<?php echo esc_attr($this->getJsId()); ?>.isSubmitting"
                         data-wp-on--input="actions.<?php echo esc_attr($this->getJsId()); ?>.updateField"
                         data-field="password">
 

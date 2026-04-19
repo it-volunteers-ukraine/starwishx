@@ -223,6 +223,35 @@ export function validateName(value, limits = {}) {
 }
 
 /**
+ * Validate a username/nickname against the hydrated UsernamePolicy rules.
+ * Returns the translated error message on failure, or null on success.
+ * Policy i18n messages are hydrated from PHP via wp_interactivity_state().
+ *
+ * Callers decide whether empty values are allowed — this only checks
+ * the character-set / length constraints when a value is present.
+ *
+ * @param {string|null|undefined} value
+ * @param {{pattern?: string, minLength?: number, maxLength?: number, messages?: Object}} policy
+ * @returns {string|null}
+ */
+export function validateUsername(value, policy) {
+  if (!policy) return null;
+  const { pattern, minLength, maxLength, messages = {} } = policy;
+  const str = String(value ?? "");
+
+  if (typeof minLength === "number" && str.length < minLength) {
+    return messages.tooShort ?? "";
+  }
+  if (typeof maxLength === "number" && str.length > maxLength) {
+    return messages.tooLong ?? "";
+  }
+  if (pattern && !new RegExp(pattern).test(str)) {
+    return messages.invalid ?? "";
+  }
+  return null;
+}
+
+/**
  * Utility: Safely merges source objects into a target object,
  * preserving Getters/Setters instead of evaluating them.
  *

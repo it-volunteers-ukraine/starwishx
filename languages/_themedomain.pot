@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-04-18T17:02:20+00:00\n"
+"POT-Creation-Date: 2026-04-19T00:19:19+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: starwishx\n"
@@ -178,7 +178,7 @@ msgstr ""
 #: docs/UrlPolicy/inc/launchpad/Services/OpportunitiesService.php:375
 #: docs/UrlPolicy/inc/launchpad/Services/ProfileService.php:204
 #: inc/launchpad/Services/OpportunitiesService.php:438
-#: inc/launchpad/Services/ProfileService.php:224
+#: inc/launchpad/Services/ProfileService.php:242
 #: inc/shared/Core/AbstractApiController.php:131
 msgid "Please correct the highlighted fields."
 msgstr ""
@@ -262,52 +262,52 @@ msgid "Please fill in all required fields before submitting for review."
 msgstr ""
 
 #: docs/UrlPolicy/inc/launchpad/Services/ProfileService.php:57
-#: inc/launchpad/Services/ProfileService.php:58
+#: inc/launchpad/Services/ProfileService.php:59
 msgid "Subscriber"
 msgstr ""
 
 #: docs/UrlPolicy/inc/launchpad/Services/ProfileService.php:58
-#: inc/launchpad/Services/ProfileService.php:59
+#: inc/launchpad/Services/ProfileService.php:60
 msgid "Contributor"
 msgstr ""
 
 #: docs/UrlPolicy/inc/launchpad/Services/ProfileService.php:59
-#: inc/launchpad/Services/ProfileService.php:60
+#: inc/launchpad/Services/ProfileService.php:61
 #: template-parts/comments-interactive.php:180
 #: template-parts/comments-interactive.php:283
 msgid "Author"
 msgstr ""
 
 #: docs/UrlPolicy/inc/launchpad/Services/ProfileService.php:60
-#: inc/launchpad/Services/ProfileService.php:61
+#: inc/launchpad/Services/ProfileService.php:62
 msgid "Editor"
 msgstr ""
 
 #: docs/UrlPolicy/inc/launchpad/Services/ProfileService.php:61
-#: inc/launchpad/Services/ProfileService.php:62
+#: inc/launchpad/Services/ProfileService.php:63
 msgid "Administrator"
 msgstr ""
 
 #: docs/UrlPolicy/inc/launchpad/Services/ProfileService.php:330
 #: inc/comments/Services/CommentsService.php:161
-#: inc/launchpad/Services/ProfileService.php:331
-#: inc/launchpad/Services/ProfileService.php:380
+#: inc/launchpad/Services/ProfileService.php:349
+#: inc/launchpad/Services/ProfileService.php:398
 msgid "User not found."
 msgstr ""
 
 #: docs/UrlPolicy/inc/launchpad/Services/ProfileService.php:338
-#: inc/launchpad/Services/ProfileService.php:388
+#: inc/launchpad/Services/ProfileService.php:406
 msgid "Your account role does not permit self-deletion."
 msgstr ""
 
 #: docs/UrlPolicy/inc/launchpad/Services/ProfileService.php:346
-#: inc/launchpad/Services/ProfileService.php:337
-#: inc/launchpad/Services/ProfileService.php:396
+#: inc/launchpad/Services/ProfileService.php:355
+#: inc/launchpad/Services/ProfileService.php:414
 msgid "The password you entered is incorrect."
 msgstr ""
 
 #: docs/UrlPolicy/inc/launchpad/Services/ProfileService.php:361
-#: inc/launchpad/Services/ProfileService.php:411
+#: inc/launchpad/Services/ProfileService.php:429
 msgid "Account deletion failed."
 msgstr ""
 
@@ -351,7 +351,7 @@ msgid "Login"
 msgstr ""
 
 #: header.php:120
-#: inc/gateway/Forms/RegisterForm.php:64
+#: inc/gateway/Forms/RegisterForm.php:77
 #: template-parts/element-popup.php:62
 msgid "Register"
 msgstr ""
@@ -620,8 +620,8 @@ msgstr ""
 
 #: inc/contact/Api/ContactController.php:149
 #: inc/launchpad/Api/ProfileController.php:129
-#: inc/launchpad/Panels/ProfilePanel.php:168
-#: inc/launchpad/Panels/ProfilePanel.php:238
+#: inc/launchpad/Panels/ProfilePanel.php:178
+#: inc/launchpad/Panels/ProfilePanel.php:248
 #: template-parts/contact-section.php:76
 msgid "Phone"
 msgstr ""
@@ -631,8 +631,8 @@ msgid "Not specified"
 msgstr ""
 
 #: inc/contact/Api/ContactController.php:151
-#: inc/launchpad/Panels/ProfilePanel.php:136
-#: inc/launchpad/Panels/ProfilePanel.php:246
+#: inc/launchpad/Panels/ProfilePanel.php:146
+#: inc/launchpad/Panels/ProfilePanel.php:256
 #: template-parts/contact-section.php:77
 msgid "Email"
 msgstr ""
@@ -714,11 +714,11 @@ msgstr ""
 msgid "Password reset successfully!"
 msgstr ""
 
-#: inc/gateway/Api/RegisterController.php:65
+#: inc/gateway/Api/RegisterController.php:75
 msgid "Too many registration attempts. Please try again later."
 msgstr ""
 
-#: inc/gateway/Api/RegisterController.php:88
+#: inc/gateway/Api/RegisterController.php:98
 msgid "Registration successful! Please check your email to set your password."
 msgstr ""
 
@@ -743,30 +743,38 @@ msgctxt "gateway"
 msgid "Latin letters, digits, . - _ @"
 msgstr ""
 
-#: inc/gateway/Forms/LoginForm.php:79
+#: inc/gateway/Forms/LoginForm.php:80
 #: inc/launchpad/Api/ProfileController.php:190
 #: inc/launchpad/Api/ProfileController.php:207
 msgid "Password"
 msgstr ""
 
-#: inc/gateway/Forms/LoginForm.php:130
-#: inc/launchpad/Panels/ProfilePanel.php:528
+#: inc/gateway/Forms/LoginForm.php:97
+msgid "Show password"
+msgstr ""
+
+#: inc/gateway/Forms/LoginForm.php:103
+msgid "Hide password"
+msgstr ""
+
+#: inc/gateway/Forms/LoginForm.php:132
+#: inc/launchpad/Panels/ProfilePanel.php:540
 msgid "Log In"
 msgstr ""
 
-#: inc/gateway/Forms/LoginForm.php:133
+#: inc/gateway/Forms/LoginForm.php:135
 msgid "Logging in..."
 msgstr ""
 
-#: inc/gateway/Forms/LoginForm.php:141
+#: inc/gateway/Forms/LoginForm.php:143
 msgid "Create account"
 msgstr ""
 
-#: inc/gateway/Forms/LoginForm.php:154
+#: inc/gateway/Forms/LoginForm.php:156
 msgid "Remember me"
 msgstr ""
 
-#: inc/gateway/Forms/LoginForm.php:162
+#: inc/gateway/Forms/LoginForm.php:164
 msgid "Forgot password?"
 msgstr ""
 
@@ -825,22 +833,26 @@ msgctxt "gateway"
 msgid "Latin letters, digits, . - _"
 msgstr ""
 
-#: inc/gateway/Forms/RegisterForm.php:53
+#: inc/gateway/Forms/RegisterForm.php:54
 msgctxt "gateway"
 msgid "f.ex.: Oleg12, kat33, grew.panda"
 msgstr ""
 
-#: inc/gateway/Forms/RegisterForm.php:57
+#: inc/gateway/Forms/RegisterForm.php:63
 msgctxt "gateway"
 msgid "Email"
 msgstr ""
 
-#: inc/gateway/Forms/RegisterForm.php:69
+#: inc/gateway/Forms/RegisterForm.php:80
+msgid "Registering..."
+msgstr ""
+
+#: inc/gateway/Forms/RegisterForm.php:86
 msgid "Registration successful! Please check your email for the activation link."
 msgstr ""
 
-#: inc/gateway/Forms/RegisterForm.php:75
-#: inc/gateway/Forms/ResetPasswordForm.php:121
+#: inc/gateway/Forms/RegisterForm.php:92
+#: inc/gateway/Forms/ResetPasswordForm.php:122
 msgid "Back to Login"
 msgstr ""
 
@@ -858,30 +870,30 @@ msgid "Your new password has been pre-generated. You can modify it or generate a
 msgstr ""
 
 #: inc/gateway/Forms/ResetPasswordForm.php:48
-#: inc/launchpad/Panels/ProfilePanel.php:464
+#: inc/launchpad/Panels/ProfilePanel.php:476
 #: inc/launchpad/Panels/SecurityPanel.php:70
 msgid "New Password"
 msgstr ""
 
-#: inc/gateway/Forms/ResetPasswordForm.php:92
+#: inc/gateway/Forms/ResetPasswordForm.php:93
 msgid "Generate New Password"
 msgstr ""
 
-#: inc/gateway/Forms/ResetPasswordForm.php:95
-#: inc/launchpad/Panels/ProfilePanel.php:493
+#: inc/gateway/Forms/ResetPasswordForm.php:96
+#: inc/launchpad/Panels/ProfilePanel.php:505
 msgid "Generating..."
 msgstr ""
 
-#: inc/gateway/Forms/ResetPasswordForm.php:103
+#: inc/gateway/Forms/ResetPasswordForm.php:104
 msgid "Save Password"
 msgstr ""
 
-#: inc/gateway/Forms/ResetPasswordForm.php:106
-#: inc/launchpad/Panels/ProfilePanel.php:418
+#: inc/gateway/Forms/ResetPasswordForm.php:107
+#: inc/launchpad/Panels/ProfilePanel.php:430
 msgid "Saving..."
 msgstr ""
 
-#: inc/gateway/Forms/ResetPasswordForm.php:115
+#: inc/gateway/Forms/ResetPasswordForm.php:116
 msgid "Password Reset Successful!"
 msgstr ""
 
@@ -928,38 +940,34 @@ msgstr ""
 msgid "This link is invalid or expired. Please request a new one."
 msgstr ""
 
-#: inc/gateway/Services/RegisterService.php:27
-#: inc/gateway/Services/RegisterService.php:31
+#: inc/gateway/Services/RegisterService.php:28
+#: inc/gateway/Services/RegisterService.php:32
 msgid "Please provide a valid username and email address."
 msgstr ""
 
-#: inc/gateway/Services/RegisterService.php:47
-msgid "Login name may only contain latin letters, numbers, dots, underscores, and hyphens (3-60 characters)."
-msgstr ""
-
-#: inc/gateway/Services/RegisterService.php:53
+#: inc/gateway/Services/RegisterService.php:51
 msgid "This username is already taken."
 msgstr ""
 
-#: inc/gateway/Services/RegisterService.php:56
+#: inc/gateway/Services/RegisterService.php:54
 msgid "This email is already registered."
 msgstr ""
 
-#: inc/gateway/Services/RegisterService.php:95
+#: inc/gateway/Services/RegisterService.php:93
 #, php-format
 msgid "[%s] Activate Your Account"
 msgstr ""
 
-#: inc/gateway/Services/RegisterService.php:97
+#: inc/gateway/Services/RegisterService.php:95
 #, php-format
 msgid "Welcome, %s!"
 msgstr ""
 
-#: inc/gateway/Services/RegisterService.php:98
+#: inc/gateway/Services/RegisterService.php:96
 msgid "To complete your registration and set your password, click the link below:"
 msgstr ""
 
-#: inc/gateway/Services/RegisterService.php:100
+#: inc/gateway/Services/RegisterService.php:98
 msgid "If you did not request this, please ignore this email."
 msgstr ""
 
@@ -1070,7 +1078,7 @@ msgid "Last name"
 msgstr ""
 
 #: inc/launchpad/Api/ProfileController.php:96
-#: inc/launchpad/Panels/ProfilePanel.php:298
+#: inc/launchpad/Panels/ProfilePanel.php:309
 msgid "Nickname"
 msgstr ""
 
@@ -1083,7 +1091,7 @@ msgid "Website URL"
 msgstr ""
 
 #: inc/launchpad/Api/ProfileController.php:120
-#: inc/launchpad/Panels/ProfilePanel.php:198
+#: inc/launchpad/Panels/ProfilePanel.php:208
 msgid "Bio"
 msgstr ""
 
@@ -1092,14 +1100,14 @@ msgid "Phone country"
 msgstr ""
 
 #: inc/launchpad/Api/ProfileController.php:145
-#: inc/launchpad/Panels/ProfilePanel.php:180
-#: inc/launchpad/Panels/ProfilePanel.php:357
+#: inc/launchpad/Panels/ProfilePanel.php:190
+#: inc/launchpad/Panels/ProfilePanel.php:369
 msgid "Telegram"
 msgstr ""
 
 #: inc/launchpad/Api/ProfileController.php:153
-#: inc/launchpad/Panels/ProfilePanel.php:192
-#: inc/launchpad/Panels/ProfilePanel.php:309
+#: inc/launchpad/Panels/ProfilePanel.php:202
+#: inc/launchpad/Panels/ProfilePanel.php:321
 #: inc/tour/Scenarios/OpportunityFormScenario.php:69
 msgid "Organization"
 msgstr ""
@@ -1149,15 +1157,15 @@ msgstr ""
 msgid "Password changed. Please log in again."
 msgstr ""
 
-#: inc/launchpad/Core/LaunchpadCore.php:252
+#: inc/launchpad/Core/LaunchpadCore.php:254
 msgid "Please enter a valid phone number."
 msgstr ""
 
-#: inc/launchpad/Core/LaunchpadCore.php:253
+#: inc/launchpad/Core/LaunchpadCore.php:255
 msgid "Please fill in all fields."
 msgstr ""
 
-#: inc/launchpad/Core/LaunchpadCore.php:254
+#: inc/launchpad/Core/LaunchpadCore.php:256
 msgid "Please enter your password."
 msgstr ""
 
@@ -1385,7 +1393,7 @@ msgid "Opportunity Category"
 msgstr ""
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:831
-#: inc/launchpad/Panels/ProfilePanel.php:381
+#: inc/launchpad/Panels/ProfilePanel.php:393
 #: inc/tour/Scenarios/OpportunityFormScenario.php:105
 msgid "Description"
 msgstr ""
@@ -1442,10 +1450,10 @@ msgid "Submit"
 msgstr ""
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:1030
-#: inc/launchpad/Panels/ProfilePanel.php:423
-#: inc/launchpad/Panels/ProfilePanel.php:503
-#: inc/launchpad/Panels/ProfilePanel.php:605
-#: inc/launchpad/Panels/ProfilePanel.php:672
+#: inc/launchpad/Panels/ProfilePanel.php:435
+#: inc/launchpad/Panels/ProfilePanel.php:515
+#: inc/launchpad/Panels/ProfilePanel.php:617
+#: inc/launchpad/Panels/ProfilePanel.php:684
 #: template-parts/comments-interactive.php:138
 #: template-parts/comments-interactive.php:251
 #: template-parts/comments-interactive.php:328
@@ -1453,201 +1461,203 @@ msgstr ""
 msgid "Cancel"
 msgstr ""
 
-#: inc/launchpad/Panels/ProfilePanel.php:26
+#: inc/launchpad/Panels/ProfilePanel.php:27
 msgid "Profile"
 msgstr ""
 
-#: inc/launchpad/Panels/ProfilePanel.php:57
+#: inc/launchpad/Panels/ProfilePanel.php:67
 msgid "Only letters, spaces, hyphens, and apostrophes allowed."
 msgstr ""
 
-#: inc/launchpad/Panels/ProfilePanel.php:59
+#: inc/launchpad/Panels/ProfilePanel.php:69
+#: inc/shared/Policy/UsernamePolicy.php:79
 #, php-format
 msgid "Must be at least %d characters."
 msgstr ""
 
-#: inc/launchpad/Panels/ProfilePanel.php:63
+#: inc/launchpad/Panels/ProfilePanel.php:73
+#: inc/shared/Policy/UsernamePolicy.php:87
 #, php-format
 msgid "Must not exceed %d characters."
 msgstr ""
 
-#: inc/launchpad/Panels/ProfilePanel.php:110
+#: inc/launchpad/Panels/ProfilePanel.php:120
 msgid "Profile Information"
 msgstr ""
 
-#: inc/launchpad/Panels/ProfilePanel.php:111
+#: inc/launchpad/Panels/ProfilePanel.php:121
 msgid "View/edit personal information, change password"
 msgstr ""
 
-#: inc/launchpad/Panels/ProfilePanel.php:148
+#: inc/launchpad/Panels/ProfilePanel.php:158
 msgid "Login name"
 msgstr ""
 
-#: inc/launchpad/Panels/ProfilePanel.php:195
-#: inc/launchpad/Panels/ProfilePanel.php:368
+#: inc/launchpad/Panels/ProfilePanel.php:205
+#: inc/launchpad/Panels/ProfilePanel.php:380
 msgid "Website"
 msgstr ""
 
-#: inc/launchpad/Panels/ProfilePanel.php:206
+#: inc/launchpad/Panels/ProfilePanel.php:216
 msgid "Edit Profile"
 msgstr ""
 
-#: inc/launchpad/Panels/ProfilePanel.php:210
+#: inc/launchpad/Panels/ProfilePanel.php:220
 #: inc/launchpad/Panels/SecurityPanel.php:56
 #: inc/launchpad/Panels/SecurityPanel.php:97
 msgid "Change Password"
 msgstr ""
 
-#: inc/launchpad/Panels/ProfilePanel.php:225
+#: inc/launchpad/Panels/ProfilePanel.php:235
 msgid "First Name"
 msgstr ""
 
-#: inc/launchpad/Panels/ProfilePanel.php:227
+#: inc/launchpad/Panels/ProfilePanel.php:237
 msgid "e.g. Jane"
 msgstr ""
 
-#: inc/launchpad/Panels/ProfilePanel.php:251
-#: inc/launchpad/Panels/ProfilePanel.php:544
-#: inc/launchpad/Panels/ProfilePanel.php:597
+#: inc/launchpad/Panels/ProfilePanel.php:261
+#: inc/launchpad/Panels/ProfilePanel.php:556
+#: inc/launchpad/Panels/ProfilePanel.php:609
 msgid "Change Email"
 msgstr ""
 
-#: inc/launchpad/Panels/ProfilePanel.php:262
+#: inc/launchpad/Panels/ProfilePanel.php:272
 msgid "If you want to be an active part of the StarwishX community, sharing opportunities with others and receive Contributor status, the First Name and Phone fields in your profile must be filled in. We want real people to post and receive real opportunities."
 msgstr ""
 
-#: inc/launchpad/Panels/ProfilePanel.php:264
+#: inc/launchpad/Panels/ProfilePanel.php:274
 msgid "Note: The information in your profile is not publicly available."
 msgstr ""
 
-#: inc/launchpad/Panels/ProfilePanel.php:273
+#: inc/launchpad/Panels/ProfilePanel.php:283
 msgid "Show More"
 msgstr ""
 
-#: inc/launchpad/Panels/ProfilePanel.php:276
+#: inc/launchpad/Panels/ProfilePanel.php:286
 msgid "Show Less"
 msgstr ""
 
-#: inc/launchpad/Panels/ProfilePanel.php:285
+#: inc/launchpad/Panels/ProfilePanel.php:295
 msgid "Last Name"
 msgstr ""
 
-#: inc/launchpad/Panels/ProfilePanel.php:287
+#: inc/launchpad/Panels/ProfilePanel.php:297
 msgid "e.g. Dow"
 msgstr ""
 
-#: inc/launchpad/Panels/ProfilePanel.php:301
+#: inc/launchpad/Panels/ProfilePanel.php:312
 msgid "e.g. Janie, kat25"
 msgstr ""
 
-#: inc/launchpad/Panels/ProfilePanel.php:311
+#: inc/launchpad/Panels/ProfilePanel.php:323
 msgid "If you represent any organization"
 msgstr ""
 
-#: inc/launchpad/Panels/ProfilePanel.php:323
+#: inc/launchpad/Panels/ProfilePanel.php:335
 msgid "Display name publicly as"
 msgstr ""
 
-#: inc/launchpad/Panels/ProfilePanel.php:370
+#: inc/launchpad/Panels/ProfilePanel.php:382
 msgid "dou.ua, https://me.ua"
 msgstr ""
 
-#: inc/launchpad/Panels/ProfilePanel.php:383
+#: inc/launchpad/Panels/ProfilePanel.php:395
 msgid "Biographical Info"
 msgstr ""
 
-#: inc/launchpad/Panels/ProfilePanel.php:393
+#: inc/launchpad/Panels/ProfilePanel.php:405
 msgid "Delete profile"
 msgstr ""
 
-#: inc/launchpad/Panels/ProfilePanel.php:404
+#: inc/launchpad/Panels/ProfilePanel.php:416
 msgid "Receive email notifications"
 msgstr ""
 
-#: inc/launchpad/Panels/ProfilePanel.php:407
+#: inc/launchpad/Panels/ProfilePanel.php:419
 msgid "Get notified by email when someone comments on your content."
 msgstr ""
 
-#: inc/launchpad/Panels/ProfilePanel.php:415
+#: inc/launchpad/Panels/ProfilePanel.php:427
 #: template-parts/comments-interactive.php:255
 #: template-parts/comments-interactive.php:332
 msgid "Save"
 msgstr ""
 
-#: inc/launchpad/Panels/ProfilePanel.php:437
+#: inc/launchpad/Panels/ProfilePanel.php:449
 msgid "Update Security Credentials"
 msgstr ""
 
-#: inc/launchpad/Panels/ProfilePanel.php:440
-#: inc/launchpad/Panels/ProfilePanel.php:566
+#: inc/launchpad/Panels/ProfilePanel.php:452
+#: inc/launchpad/Panels/ProfilePanel.php:578
 #: inc/launchpad/Panels/SecurityPanel.php:59
 msgid "Current Password"
 msgstr ""
 
-#: inc/launchpad/Panels/ProfilePanel.php:448
-#: inc/launchpad/Panels/ProfilePanel.php:473
-#: inc/launchpad/Panels/ProfilePanel.php:576
-#: inc/launchpad/Panels/ProfilePanel.php:643
+#: inc/launchpad/Panels/ProfilePanel.php:460
+#: inc/launchpad/Panels/ProfilePanel.php:485
+#: inc/launchpad/Panels/ProfilePanel.php:588
+#: inc/launchpad/Panels/ProfilePanel.php:655
 msgid "Toggle password visibility"
 msgstr ""
 
-#: inc/launchpad/Panels/ProfilePanel.php:490
+#: inc/launchpad/Panels/ProfilePanel.php:502
 msgid "Generate Strong Password"
 msgstr ""
 
-#: inc/launchpad/Panels/ProfilePanel.php:500
+#: inc/launchpad/Panels/ProfilePanel.php:512
 msgid "Update Password"
 msgstr ""
 
-#: inc/launchpad/Panels/ProfilePanel.php:518
+#: inc/launchpad/Panels/ProfilePanel.php:530
 msgid "Password Changed"
 msgstr ""
 
-#: inc/launchpad/Panels/ProfilePanel.php:521
+#: inc/launchpad/Panels/ProfilePanel.php:533
 msgid "Your password has been changed successfully. You will need to log in again with your new password."
 msgstr ""
 
-#: inc/launchpad/Panels/ProfilePanel.php:547
+#: inc/launchpad/Panels/ProfilePanel.php:559
 msgid "Enter your new email address and current password to confirm the change."
 msgstr ""
 
-#: inc/launchpad/Panels/ProfilePanel.php:556
+#: inc/launchpad/Panels/ProfilePanel.php:568
 msgid "New Email"
 msgstr ""
 
-#: inc/launchpad/Panels/ProfilePanel.php:600
+#: inc/launchpad/Panels/ProfilePanel.php:612
 msgid "Changing..."
 msgstr ""
 
-#: inc/launchpad/Panels/ProfilePanel.php:621
+#: inc/launchpad/Panels/ProfilePanel.php:633
 msgid "Delete Account"
 msgstr ""
 
-#: inc/launchpad/Panels/ProfilePanel.php:624
+#: inc/launchpad/Panels/ProfilePanel.php:636
 msgid "This action is permanent and cannot be undone. All your personal data will be removed. Your published content will be preserved."
 msgstr ""
 
-#: inc/launchpad/Panels/ProfilePanel.php:633
+#: inc/launchpad/Panels/ProfilePanel.php:645
 msgid "Enter your password to confirm"
 msgstr ""
 
-#: inc/launchpad/Panels/ProfilePanel.php:664
+#: inc/launchpad/Panels/ProfilePanel.php:676
 msgid "Delete my account"
 msgstr ""
 
-#: inc/launchpad/Panels/ProfilePanel.php:667
+#: inc/launchpad/Panels/ProfilePanel.php:679
 msgid "Deleting..."
 msgstr ""
 
-#: inc/launchpad/Panels/ProfilePanel.php:688
+#: inc/launchpad/Panels/ProfilePanel.php:700
 msgid "Account Deleted"
 msgstr ""
 
-#: inc/launchpad/Panels/ProfilePanel.php:691
+#: inc/launchpad/Panels/ProfilePanel.php:703
 msgid "Your account has been successfully deleted. You will be redirected to the home page."
 msgstr ""
 
-#: inc/launchpad/Panels/ProfilePanel.php:698
+#: inc/launchpad/Panels/ProfilePanel.php:710
 msgid "OK"
 msgstr ""
 
@@ -1691,7 +1701,7 @@ msgstr ""
 msgid "Could not save opportunity. Please try again."
 msgstr ""
 
-#: inc/launchpad/Services/ProfileService.php:351
+#: inc/launchpad/Services/ProfileService.php:369
 msgid "This email address is already in use."
 msgstr ""
 
@@ -1944,11 +1954,6 @@ msgstr ""
 msgid "Please enter your username or email"
 msgstr ""
 
-#: inc/shared/Policy/PasswordPolicy.php:105
-#, php-format
-msgid "Username must be at least %d characters"
-msgstr ""
-
 #: inc/shared/Policy/PhonePolicy.php:51
 msgid "The phone number could not be recognized. Please check the format."
 msgstr ""
@@ -1965,6 +1970,10 @@ msgstr ""
 #: inc/shared/Policy/RateLimitPolicy.php:59
 #, php-format
 msgid "Too many attempts. Please try again in %d minutes."
+msgstr ""
+
+#: inc/shared/Policy/UsernamePolicy.php:94
+msgid "Only latin letters, digits, and the characters . _ - are allowed."
 msgstr ""
 
 #. translators: %s: name of the field that received an invalid value

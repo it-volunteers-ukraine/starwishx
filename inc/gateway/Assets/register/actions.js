@@ -6,6 +6,7 @@ import { getElement, store } from "@wordpress/interactivity";
 import {
   fetchJson,
   validators,
+  validateUsername,
   RestApiError,
   WP_ALREADY_AUTHENTICATED,
   WP_NONCE_INVALID,
@@ -40,8 +41,9 @@ export const registerActions = {
 
     if (!validators.required(form.username)) {
       errors.username = strings.usernameRequired ?? "";
-    } else if (!validators.minLength(3)(form.username)) {
-      errors.username = strings.usernameTooShort ?? "";
+    } else {
+      const usernameError = validateUsername(form.username, state.usernamePolicy);
+      if (usernameError) errors.username = usernameError;
     }
 
     if (!validators.required(form.email)) {

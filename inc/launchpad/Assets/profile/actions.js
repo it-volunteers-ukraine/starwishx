@@ -14,6 +14,7 @@ import {
   normalizeUrl,
   scrollToFirstError,
   validateName,
+  validateUsername,
 } from "../utils.js";
 
 /** intlTelInput instance — survives across action calls */
@@ -293,6 +294,20 @@ export const profileActions = {
       if (err) p.fieldErrors[field] = vm[err] || err;
     }
 
+    // Nickname: validate-on-change (mirrors ProfileService).
+    // Shares UsernamePolicy with register's login name. Legacy values that
+    // predate this rule survive — we only reject when the user actively
+    // changes to a non-conforming value. Empty nickname is allowed.
+    const newNickname = (p.nickname ?? "").trim();
+    const originalNickname = p._originalNickname ?? "";
+    if (newNickname !== "" && newNickname !== originalNickname) {
+      const usernameError = validateUsername(
+        newNickname,
+        state.launchpadSettings?.usernamePolicy,
+      );
+      if (usernameError) p.fieldErrors.nickname = usernameError;
+    }
+
     // Read phone from intlTelInput widget (or fallback to state)
     const phone = itiInstance ? itiInstance.getNumber() : p.phone;
     const phoneCountry = itiInstance
@@ -339,6 +354,9 @@ export const profileActions = {
       );
       if (data) {
         Object.assign(p, data);
+        // Snapshot the saved nickname so future validate-on-change checks
+        // compare against the server-confirmed value, not a stale load-time one.
+        p._originalNickname = (data.nickname ?? "").toString();
         // Sync widget with server-returned value
         if (itiInstance && data.phone) {
           itiInstance.setNumber(data.phone);
