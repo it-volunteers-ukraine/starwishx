@@ -8,6 +8,7 @@ use Shared\Core\AbstractApiController;
 use Shared\Http\ClientIp;
 use Shared\Policy\EmailPolicy;
 use Shared\Policy\RateLimitPolicy;
+use Shared\Policy\UsernamePolicy;
 use Gateway\Services\RegisterService;
 use WP_REST_Request;
 use WP_REST_Response;
@@ -37,7 +38,16 @@ class RegisterController extends AbstractApiController
             'callback'            => [$this, 'register'],
             'permission_callback' => [$this, 'checkGuestWithNonce'],
             'args'                => [
-                'username' => ['required' => true, 'sanitize_callback' => 'sanitize_user'],
+                'username' => [
+                    'required'          => true,
+                    'sanitize_callback' => 'sanitize_user',
+                    'validate_callback' => function ($value) {
+                        if (empty($value)) {
+                            return false;
+                        }
+                        return UsernamePolicy::validate((string) $value);
+                    },
+                ],
                 'email'    => [
                     'required'          => true,
                     'sanitize_callback' => 'sanitize_email',

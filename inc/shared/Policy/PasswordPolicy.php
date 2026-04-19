@@ -102,7 +102,6 @@ final class PasswordPolicy
             'emailRequired'      => __('Email is required', 'starwishx'),
             'emailInvalid'       => __('Please enter a valid email address', 'starwishx'),
             'userLoginRequired'  => __('Please enter your username or email', 'starwishx'),
-            'usernameTooShort'   => sprintf(__('Username must be at least %d characters', 'starwishx'), 3),
         ];
     }
 }

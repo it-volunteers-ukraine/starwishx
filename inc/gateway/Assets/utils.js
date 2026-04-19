@@ -158,3 +158,29 @@ export const validators = {
   email: (value) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value),
   minLength: (min) => (value) => value?.length >= min,
 };
+
+/**
+ * Validate a username/nickname against the hydrated UsernamePolicy rules.
+ * Returns the translated error message on failure, or null on success.
+ * Policy i18n messages come from PHP — no hardcoded strings here.
+ *
+ * @param {string} value
+ * @param {{pattern?: string, minLength?: number, maxLength?: number, messages?: Object}} policy
+ * @returns {string|null}
+ */
+export function validateUsername(value, policy) {
+  if (!policy) return null;
+  const { pattern, minLength, maxLength, messages = {} } = policy;
+  const str = String(value ?? "");
+
+  if (typeof minLength === "number" && str.length < minLength) {
+    return messages.tooShort ?? "";
+  }
+  if (typeof maxLength === "number" && str.length > maxLength) {
+    return messages.tooLong ?? "";
+  }
+  if (pattern && !new RegExp(pattern).test(str)) {
+    return messages.invalid ?? "";
+  }
+  return null;
+}

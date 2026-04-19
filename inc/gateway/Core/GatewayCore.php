@@ -19,6 +19,7 @@ use Gateway\Api\AuthController;
 use Gateway\Api\RegisterController;
 use Gateway\Api\PasswordController;
 use Shared\Policy\PasswordPolicy;
+use Shared\Policy\UsernamePolicy;
 
 /**
  * Main Gateway singleton.
@@ -158,6 +159,7 @@ final class GatewayCore
                 'baseUrl' => home_url('/gateway/'),
             ],
             'passwordPolicy'    => PasswordPolicy::getClientRules(),
+            'usernamePolicy'    => UsernamePolicy::getClientRules(),
             'validationStrings' => PasswordPolicy::getClientValidationStrings(),
         ]);
     }
