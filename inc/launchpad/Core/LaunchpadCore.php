@@ -21,6 +21,7 @@ use Launchpad\Services\ProfileService;
 use Launchpad\Services\StatsService;
 use Launchpad\Services\SecurityService;
 use Launchpad\Services\MediaService;
+use Shared\Policy\MessengerPolicy;
 use Shared\Policy\PasswordPolicy;
 use Shared\Policy\UsernamePolicy;
 
@@ -243,6 +244,7 @@ final class LaunchpadCore
                     'generatePasswordUrl' => rest_url('gateway/v1/password/generate'),
                     'passwordPolicy'      => PasswordPolicy::getClientRules(),
                     'usernamePolicy'      => UsernamePolicy::getClientRules(),
+                    'messengerPolicy'     => MessengerPolicy::getClientRules(),
                     'validationStrings'   => PasswordPolicy::getClientValidationStrings(),
                     'phoneConfig'         => [
                         'initialCountry'   => 'ua',

@@ -15,6 +15,7 @@ import {
   scrollToFirstError,
   validateName,
   validateUsername,
+  validateMessenger,
 } from "../utils.js";
 
 /** intlTelInput instance — survives across action calls */
@@ -308,6 +309,18 @@ export const profileActions = {
       if (usernameError) p.fieldErrors.nickname = usernameError;
     }
 
+    // Telegram: validate-on-change via MessengerPolicy (Telegram-style rules).
+    // Same legacy-tolerant semantics as nickname.
+    const newTelegram = (p.telegram ?? "").trim();
+    const originalTelegram = p._originalTelegram ?? "";
+    if (newTelegram !== "" && newTelegram !== originalTelegram) {
+      const telegramError = validateMessenger(
+        newTelegram,
+        state.launchpadSettings?.messengerPolicy,
+      );
+      if (telegramError) p.fieldErrors.telegram = telegramError;
+    }
+
     // Read phone from intlTelInput widget (or fallback to state)
     const phone = itiInstance ? itiInstance.getNumber() : p.phone;
     const phoneCountry = itiInstance
@@ -354,9 +367,10 @@ export const profileActions = {
       );
       if (data) {
         Object.assign(p, data);
-        // Snapshot the saved nickname so future validate-on-change checks
-        // compare against the server-confirmed value, not a stale load-time one.
+        // Snapshot saved values so future validate-on-change checks compare
+        // against server-confirmed state, not a stale load-time one.
         p._originalNickname = (data.nickname ?? "").toString();
+        p._originalTelegram = (data.telegram ?? "").toString();
         // Sync widget with server-returned value
         if (itiInstance && data.phone) {
           itiInstance.setNumber(data.phone);

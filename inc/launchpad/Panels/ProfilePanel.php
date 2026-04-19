@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Launchpad\Panels;
 
 use Launchpad\Services\ProfileService;
+use Shared\Policy\MessengerPolicy;
 use Shared\Policy\PasswordPolicy;
 use Shared\Policy\UsernamePolicy;
 
@@ -51,10 +52,11 @@ class ProfilePanel extends AbstractPanel
             'isDisplayNameDropdownOpen' => false,
             'fieldErrors'        => (object) [],
             // Snapshot for validate-on-change: client compares current
-            // p.nickname against this to preserve legacy nicknames that
-            // predate UsernamePolicy. Mirrors server-side semantics in
-            // ProfileService::updateProfile().
+            // p.nickname / p.telegram against these to preserve legacy values
+            // that predate UsernamePolicy / MessengerPolicy. Mirrors the
+            // server-side semantics in ProfileService::updateProfile().
             '_originalNickname'  => (string) ($data['nickname'] ?? ''),
+            '_originalTelegram'  => (string) ($data['telegram'] ?? ''),
             'nameLimits'         => [
                 'min' => ProfileService::NAME_MIN_LENGTH,
                 'max' => ProfileService::NAME_MAX_LENGTH,
@@ -365,10 +367,12 @@ class ProfilePanel extends AbstractPanel
                                 data-wp-text="<?= $this->statePath('fieldErrors') ?>.displayName"></label>
                         </div>
 
-                        <div class="form-field">
+                        <div class="form-field"
+                            data-wp-class--has-error="<?= $this->statePath('fieldErrors') ?>.telegram">
                             <label for="lp-telegram"><?= esc_html__('Telegram', 'starwishx'); ?></label>
                             <input type="text" id="lp-telegram" data-field="telegram"
                                 placeholder="<?= esc_attr('@jane_smith'); ?>"
+                                maxlength="<?= MessengerPolicy::MAX_LENGTH + 1 /* allow leading @ */ ?>"
                                 data-wp-bind--value="<?= $this->statePath('telegram') ?>"
                                 data-wp-on--input="actions.profile.updateField" />
                             <label class="exclamation-circle__error" hidden
