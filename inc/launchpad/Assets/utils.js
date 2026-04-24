@@ -293,20 +293,24 @@ export function extendState(target, ...sources) {
  *
  * Targets any `.exclamation-circle__error` element that is currently not
  * hidden — covers both the panel-header banner (when p.error is set) and
- * inline field errors (when p.fieldErrors is populated). The double-rAF
- * waits for the Interactivity API to commit the pending state update so
- * the target element's `hidden` attribute reflects the new state before
- * we query the DOM.
+ * inline field errors (when p.fieldErrors is populated). When the match
+ * sits inside a `.form-field`, we scroll that container instead so the
+ * input and its error are both in frame; otherwise (banner case) we scroll
+ * the error element itself. The double-rAF waits for the Interactivity API
+ * to commit the pending state update so the target element's `hidden`
+ * attribute reflects the new state before we query the DOM.
  *
  * @param {Element|Document} [root=document] Scope to search within.
  */
 export function scrollToFirstError(root = document) {
   requestAnimationFrame(() => {
     requestAnimationFrame(() => {
-      const target = root.querySelector(
+      const err = root.querySelector(
         ".exclamation-circle__error:not([hidden])",
       );
-      target?.scrollIntoView({ behavior: "smooth", block: "center" });
+      if (!err) return;
+      const target = err.closest(".form-field") || err;
+      target.scrollIntoView({ behavior: "smooth", block: "center" });
     });
   });
 }
