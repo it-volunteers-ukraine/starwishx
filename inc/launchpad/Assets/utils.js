@@ -310,3 +310,16 @@ export function scrollToFirstError(root = document) {
     });
   });
 }
+
+/**
+ * Scroll the window to the very top.
+ *
+ * Called at the success path of form-save actions so the user lands at
+ * the top of the page — above the panel, where the full cabinet chrome
+ * (header, nav, mobile tab switcher) is visible — instead of sitting at
+ * the footer where the submit button was. Honors prefers-reduced-motion.
+ */
+export function scrollToPageTop() {
+  const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  window.scrollTo({ top: 0, behavior: reduced ? "auto" : "smooth" });
+}

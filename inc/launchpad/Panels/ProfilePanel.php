@@ -249,7 +249,8 @@ class ProfilePanel extends AbstractPanel
                         <label for="lp-phone" class="label-required">
                             <?= esc_html__('Phone', 'starwishx'); ?>
                         </label>
-                        <input type="tel" id="lp-phone" />
+                        <input type="tel" id="lp-phone"
+                            data-wp-on--input="actions.profile.updatePhoneField" />
                         <label class="exclamation-circle__error" hidden
                             data-wp-bind--hidden="!<?= $this->statePath('fieldErrors') ?>.phone"
                             data-wp-text="<?= $this->statePath('fieldErrors') ?>.phone"></label>
