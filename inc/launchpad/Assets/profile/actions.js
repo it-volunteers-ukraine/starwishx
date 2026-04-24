@@ -279,6 +279,26 @@ export const profileActions = {
   },
 
   /**
+   * Input handler for the phone field.
+   * intlTelInput with separateDialCode:true keeps only the national part in
+   * input.value — the dial code lives in a sibling widget element. Read the
+   * canonical E.164 from the widget so state.phone (shown in the profile
+   * card view) keeps its country code. Falls back to ref.value only before
+   * the widget has initialized.
+   */
+  updatePhoneField() {
+    const { state } = store("launchpad");
+    const p = ensurePanel(state, "profile");
+    if (itiInstance) {
+      p.phone = itiInstance.getNumber() || "";
+    } else {
+      const { ref } = getElement();
+      p.phone = ref.value;
+    }
+    if (p.fieldErrors?.phone) p.fieldErrors.phone = null;
+  },
+
+  /**
    * Save profile changes to server
    */
   async save(event) {
