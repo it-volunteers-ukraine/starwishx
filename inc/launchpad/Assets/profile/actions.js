@@ -13,6 +13,7 @@ import {
   fetchJson,
   normalizeUrl,
   scrollToFirstError,
+  scrollToPageTop,
   validateName,
   validateUsername,
   validateMessenger,
@@ -417,6 +418,7 @@ export const profileActions = {
       url.searchParams.delete("view");
       window.history.replaceState({}, "", url);
       actions.syncStateFromUrl();
+      scrollToPageTop();
     } catch (error) {
       // Map backend field_errors keys to translated messages
       if (error.fieldErrors) {

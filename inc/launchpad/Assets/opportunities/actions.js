@@ -14,6 +14,7 @@ import {
   fetchJson,
   normalizeUrl,
   scrollToFirstError,
+  scrollToPageTop,
 } from "../utils.js";
 
 let locationSearchTimeout = null;
@@ -247,6 +248,7 @@ export const opportunitiesActions = {
       );
 
       actions.opportunities.cancel();
+      scrollToPageTop();
       await actions.loadPanelState("opportunities");
     } catch (error) {
       // Map backend field_errors first so we can decide whether the
