@@ -109,6 +109,19 @@ export class TourManager {
         stepOptions.extraHighlights = stepDef.extraHighlights;
       }
 
+      // Advance the tour when the user performs the step's action directly
+      // on the page (e.g. clicking the highlighted button) instead of the
+      // tooltip's Next button. Shepherd attaches the listener on step show
+      // and cleans it up on step exit. Both pathways converge on the same
+      // next step: prepareStep is idempotent against a URL/view that
+      // already matches stepDef.view.
+      if (stepDef.advanceOn?.selector && stepDef.advanceOn?.event) {
+        stepOptions.advanceOn = {
+          selector: stepDef.advanceOn.selector,
+          event: stepDef.advanceOn.event,
+        };
+      }
+
       // The key integration: beforeShowPromise handles panel/view switching + DOM readiness
       stepOptions.beforeShowPromise = () => this.prepareStep(stepDef);
 
