@@ -46,13 +46,17 @@ class OpportunityFormScenario implements ScenarioInterface
     {
         return [
             // Step 1 — Add button (on list view)
+            // advanceOn lets the user click the highlighted Add button directly
+            // and have the tour follow them into the form view, instead of
+            // leaving this step's tooltip stranded over the now-hidden list.
             [
-                'id'       => 'add-button',
-                'title'    => __('Share an Opportunity', 'starwishx'),
-                'text'     => __('Ready to help? Click this button to create a new opportunity and share it with people who may benefit.', 'starwishx'),
-                'attachTo' => ['element' => '.btn-opportunity__add', 'on' => 'bottom'],
-                'panel'    => 'opportunities',
-                'view'     => null,
+                'id'        => 'add-button',
+                'title'     => __('Share an Opportunity', 'starwishx'),
+                'text'      => __('Ready to help? Click this button to create a new opportunity and share it with people who may benefit.', 'starwishx'),
+                'attachTo'  => ['element' => '.btn-opportunity__add', 'on' => 'bottom'],
+                'advanceOn' => ['selector' => '.btn-opportunity__add', 'event' => 'click'],
+                'panel'     => 'opportunities',
+                'view'      => null,
             ],
             // Step 2 — Title field (opens form view)
             [
