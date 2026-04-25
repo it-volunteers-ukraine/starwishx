@@ -104,6 +104,16 @@ final class TourCore
     }
 
     /**
+     * Whether the given tour ID corresponds to a registered scenario.
+     * Used by TourController to allowlist tourId at the REST boundary so
+     * arbitrary strings can't accumulate in user_meta.
+     */
+    public function hasScenario(string $id): bool
+    {
+        return $this->registry->has($id);
+    }
+
+    /**
      * Build scenario data for a user (role-aware, i18n in PHP).
      * Used by both SSR hydration and the REST scenarios endpoint.
      */
