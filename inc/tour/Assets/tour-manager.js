@@ -11,6 +11,18 @@
 import { store } from "@wordpress/interactivity";
 import Shepherd from "shepherd.js";
 
+/**
+ * Touch-input detection for the focusAfterRender workaround below.
+ * Mirrors the coarse-pointer test in opportunities/actions.js::openDatePicker
+ * — touch laptops with a mouse register a fine pointer and stay on the
+ * desktop path, where Shepherd's a11y focus assertion is preserved.
+ */
+const isTouchDevice =
+  typeof navigator !== "undefined" &&
+  (navigator.maxTouchPoints > 0 ||
+    (typeof matchMedia === "function" &&
+      matchMedia("(pointer: coarse)").matches));
+
 export class TourManager {
   constructor(tourState) {
     this.tourState = tourState;
@@ -100,10 +112,24 @@ export class TourManager {
       // The key integration: beforeShowPromise handles panel/view switching + DOM readiness
       stepOptions.beforeShowPromise = () => this.prepareStep(stepDef);
 
-      // Track active step index for reactive state
+      // Track active step index for reactive state. Regular function so
+      // `this` resolves to the Shepherd Step instance (for getElement);
+      // the manager is reached via the captured `manager` const.
+      const manager = this;
       stepOptions.when = {
-        show: () => {
-          this.tourState.activeStepIndex = index;
+        show() {
+          manager.tourState.activeStepIndex = index;
+          // shepherd-issues #1143: on touch devices floating-ui's
+          // focusAfterRender refires on every resize — including the one
+          // triggered by the on-screen keyboard opening — and re-asserts
+          // focus on the step element, dismissing the keyboard. Neutralise
+          // the step element's .focus() so user input retains focus.
+          // Desktop a11y (focus-trap, screen-reader step announcement) is
+          // left intact because the gate stays false there.
+          if (isTouchDevice) {
+            const stepEl = this.getElement?.();
+            if (stepEl) stepEl.focus = () => {};
+          }
         },
       };
 
