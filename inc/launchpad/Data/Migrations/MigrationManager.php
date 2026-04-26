@@ -34,6 +34,14 @@ class MigrationManager
         if (CreateOpportunityCountriesTable::needsUpgrade()) {
             $pending[] = CreateOpportunityCountriesTable::class;
         }
+        // Backfill must run after BOTH schema migrations above:
+        // sw_countries needs to be populated for slug resolution, and
+        // opportunity_countries needs to exist as the write target.
+        // Pending array is processed in insertion order, so position
+        // here is enough to enforce that ordering.
+        if (BackfillOpportunityCountries::needsUpgrade()) {
+            $pending[] = BackfillOpportunityCountries::class;
+        }
 
         if (empty($pending)) {
             return;

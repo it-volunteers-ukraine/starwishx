@@ -119,6 +119,10 @@ final class LaunchpadCore
         // delete (not trash) to match the table's "source of truth" role
         // for active opportunities.
         add_action('delete_post', [$this->services['opportunities'], 'cleanupDetails']);
+
+        // Same rationale for the country junction — no FK cascade, so
+        // we have to clean up junction rows ourselves on hard delete.
+        add_action('delete_post', [$this->services['opportunities'], 'cleanupCountries']);
     }
 
     /**

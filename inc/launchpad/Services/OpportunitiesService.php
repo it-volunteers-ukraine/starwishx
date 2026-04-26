@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Launchpad\Services;
 
+use Launchpad\Data\Repositories\OpportunityCountriesRepository;
 use Launchpad\Data\Repositories\OpportunityDetailsRepository;
 use Shared\Policy\UrlPolicy;
 use WP_Error;
@@ -19,15 +20,19 @@ class OpportunitiesService
     public const DESCRIPTION_MIN_LENGTH = 50;
 
     private OpportunityDetailsRepository $detailsRepository;
+    private OpportunityCountriesRepository $countriesRepository;
 
     /**
-     * Repository is injected so tests can swap it. Default keeps the
-     * call-site in LaunchpadCore unchanged during migration — pass null
-     * to get the concrete implementation.
+     * Repositories are injected so tests can swap them. Defaults keep
+     * the call-site in LaunchpadCore unchanged during migration — pass
+     * null to get the concrete implementation.
      */
-    public function __construct(?OpportunityDetailsRepository $detailsRepository = null)
-    {
-        $this->detailsRepository = $detailsRepository ?? new OpportunityDetailsRepository();
+    public function __construct(
+        ?OpportunityDetailsRepository $detailsRepository = null,
+        ?OpportunityCountriesRepository $countriesRepository = null
+    ) {
+        $this->detailsRepository   = $detailsRepository   ?? new OpportunityDetailsRepository();
+        $this->countriesRepository = $countriesRepository ?? new OpportunityCountriesRepository();
     }
 
     /**
@@ -45,6 +50,24 @@ class OpportunitiesService
         }
 
         $this->detailsRepository->deleteByPost($postId);
+    }
+
+    /**
+     * Cleanup hook: remove junction rows when an opportunity is deleted.
+     *
+     * Wired from LaunchpadCore::bootstrap on the delete_post action.
+     * Mirrors cleanupDetails — same FK-less cascade rationale, same
+     * post-type guard so non-opportunity deletions don't pay the DB
+     * cost of an empty DELETE.
+     */
+    public function cleanupCountries(int $postId): void
+    {
+        $post = get_post($postId);
+        if (!$post || $post->post_type !== 'opportunity') {
+            return;
+        }
+
+        $this->countriesRepository->deleteByPost($postId);
     }
 
     /**
