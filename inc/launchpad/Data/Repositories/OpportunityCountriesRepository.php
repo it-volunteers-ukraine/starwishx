@@ -50,6 +50,98 @@ class OpportunityCountriesRepository
     }
 
     /**
+     * Set the (single) country for $postId, enforcing 1:1 cardinality
+     * at the application layer. The composite PK on (post_id, country_id)
+     * technically permits many-to-many, but the opportunity form is
+     * single-select — so writes go through this method, not assign().
+     *
+     * Atomic delete-then-insert: drops any prior assignment, then
+     * inserts the new one. Pass null (or 0) to clear without
+     * reassigning. The caller is expected to be inside a transaction
+     * (saveOpportunity wraps every save in one), so the empty state
+     * between DELETE and INSERT is never observed by other readers.
+     */
+    public function setCountry(int $postId, ?int $countryId): bool
+    {
+        global $wpdb;
+
+        $deleted = $wpdb->delete(
+            $this->getTable(),
+            ['post_id' => $postId],
+            ['%d']
+        );
+        if ($deleted === false) {
+            return false;
+        }
+
+        if ($countryId === null || $countryId === 0) {
+            return true;
+        }
+
+        return $this->assign($postId, $countryId);
+    }
+
+    /**
+     * Fetch the (single) country_id for $postId, or null if unset.
+     *
+     * 1:1 is enforced at write time via setCountry(); LIMIT 1 here is
+     * defensive — picks a deterministic row if the invariant is ever
+     * broken by direct SQL or migration mishap, rather than throwing.
+     */
+    public function getCountryId(int $postId): ?int
+    {
+        global $wpdb;
+
+        $value = $wpdb->get_var(
+            $wpdb->prepare(
+                "SELECT country_id FROM {$this->getTable()} WHERE post_id = %d LIMIT 1",
+                $postId
+            )
+        );
+
+        return $value === null ? null : (int) $value;
+    }
+
+    /**
+     * Batch fetch country_ids for a page of posts, keyed by post_id.
+     *
+     * Missing post ids are simply absent from the result — the listing
+     * card formatter falls back to an empty country display rather than
+     * surfacing a synthetic placeholder.
+     *
+     * @param  int[] $postIds
+     * @return array<int, int>
+     */
+    public function getBatchCountryIds(array $postIds): array
+    {
+        if (empty($postIds)) {
+            return [];
+        }
+
+        global $wpdb;
+
+        $postIds = array_map('intval', $postIds);
+        $placeholders = implode(',', array_fill(0, count($postIds), '%d'));
+
+        $rows = $wpdb->get_results(
+            $wpdb->prepare(
+                "SELECT post_id, country_id
+                 FROM {$this->getTable()}
+                 WHERE post_id IN ($placeholders)",
+                ...$postIds
+            ),
+            ARRAY_A
+        );
+
+        $indexed = [];
+        foreach ($rows as $row) {
+            $indexed[(int) $row['post_id']] = (int) $row['country_id'];
+        }
+
+        return $indexed;
+    }
+
+    /**
      * Clean up on post deletion. Called from the delete_post hook —
      * without FK cascade, this is what keeps the junction in sync with
      * wp_posts when an opportunity is hard-deleted.

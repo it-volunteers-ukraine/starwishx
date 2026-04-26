@@ -125,9 +125,35 @@ class ListingService
         }
 
         // --- Taxonomy terms — prime the WP object cache in bulk -------------
-        // One query per taxonomy (3 total). All subsequent get_the_terms() calls
-        // in formatOpportunityCard() resolve from cache, not the database.
-        update_object_term_cache($postIds, ['country', 'category-oportunities', 'category-seekers']);
+        // Two queries (one per taxonomy). Country is no longer a taxonomy —
+        // it's read from wp_opportunity_countries below, joined to the
+        // dictionary in a single batch query.
+        update_object_term_cache($postIds, ['category-oportunities', 'category-seekers']);
+
+        // --- Countries (typed table) ----------------------------------------
+        // One query joining wp_opportunity_countries with wp_sw_countries to
+        // hydrate id + code + display name per post. Replaces the per-post
+        // get_the_terms('country') call previously satisfied by the cache prime.
+        $countriesByPost = [];
+        if (!empty($postIds)) {
+            $countryRows = $wpdb->get_results(
+                $wpdb->prepare(
+                    "SELECT oc.post_id, c.id, c.code, c.name
+                     FROM {$wpdb->prefix}opportunity_countries oc
+                     INNER JOIN {$wpdb->prefix}sw_countries c ON c.id = oc.country_id
+                     WHERE oc.post_id IN ($placeholders)",
+                    ...$postIds
+                ),
+                ARRAY_A
+            );
+            foreach ($countryRows ?: [] as $row) {
+                $countriesByPost[(int) $row['post_id']] = [
+                    'id'   => (int) $row['id'],
+                    'code' => (string) $row['code'],
+                    'name' => (string) $row['name'],
+                ];
+            }
+        }
 
         // --- Full category term map for parent-climbing ---------------------
         // Cached via transient so the get_terms() query is only paid once per hour
@@ -164,6 +190,7 @@ class ListingService
             'locations'       => $locationsByPost,
             'categoryTermMap' => $categoryTermMap,
             'favoriteIds'     => $favoriteIds,
+            'countriesByPost' => $countriesByPost,
         ];
     }
 
@@ -245,7 +272,57 @@ class ListingService
             ], $activeTerms));
         }
 
+        // Country lives in wp_opportunity_countries — outside Taxonomy::cases()
+        // because the typed-table path doesn't share term_id semantics with
+        // the term_relationships joins in TermCountingService. Same "Exclude
+        // Self" rule applied: drop country from the context before counting.
+        $contextForCountry = $filters;
+        unset($contextForCountry['country']);
+        $facets['country'] = $this->buildCountryFacets($contextForCountry);
+
         return $facets;
+    }
+
+    /**
+     * Build country facets from wp_opportunity_countries joined with
+     * wp_sw_countries, scoped to the post set produced by the current
+     * filter context.
+     *
+     * Mirrors TermCountingService's trick of embedding $query->request as
+     * a subquery — the post selection is computed by WP_Query once, then
+     * the count rolls up over the typed junction without re-executing.
+     */
+    private function buildCountryFacets(array $contextFilters): array
+    {
+        $args                  = $this->queryBuilder->build($contextFilters, -1);
+        $args['fields']        = 'ids';
+        $args['no_found_rows'] = true;
+
+        $query = new WP_Query($args);
+
+        if (empty($query->request)) {
+            return [];
+        }
+
+        global $wpdb;
+        $sw = $wpdb->prefix . 'sw_countries';
+        $oc = $wpdb->prefix . 'opportunity_countries';
+
+        $rows = $wpdb->get_results(
+            "SELECT c.id, c.name AS label, COUNT(DISTINCT oc.post_id) AS count
+             FROM {$sw} c
+             INNER JOIN {$oc} ON oc.country_id = c.id
+             WHERE oc.post_id IN ({$query->request})
+             GROUP BY c.id
+             ORDER BY c.priority ASC, c.name ASC",
+            ARRAY_A
+        );
+
+        return array_map(static fn(array $r): array => [
+            'id'    => (int) $r['id'],
+            'label' => (string) $r['label'],
+            'count' => (int) $r['count'],
+        ], $rows ?: []);
     }
 
     /**
@@ -331,11 +408,8 @@ class ListingService
 
         $locations = $preloaded['locations'][$postId] ?? [];
 
-        // Country — first term only (one per post by convention)
-        $countryTerms = get_the_terms($postId, 'country');
-        $country      = (! empty($countryTerms) && ! is_wp_error($countryTerms))
-            ? $countryTerms[0]->name
-            : '';
+        // Country — typed table, hydrated in bulk by preloadPostData().
+        $country = $preloaded['countriesByPost'][$postId]['name'] ?? '';
 
         // Categories — resolved to unique top-level ancestors
         $rawCategories = get_the_terms($postId, 'category-oportunities');

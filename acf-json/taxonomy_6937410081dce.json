@@ -2,7 +2,7 @@
     "key": "taxonomy_6937410081dce",
     "title": "Countries",
     "menu_order": 0,
-    "active": true,
+    "active": false,
     "taxonomy": "country",
     "object_type": [
         "opportunity"
@@ -71,5 +71,5 @@
     "meta_box": "default",
     "meta_box_cb": "",
     "meta_box_sanitize_cb": "",
-    "modified": 1775292613
+    "modified": 1777225678
 }
