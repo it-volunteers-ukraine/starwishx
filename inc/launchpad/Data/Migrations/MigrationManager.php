@@ -24,6 +24,16 @@ class MigrationManager
         if (CreateOpportunityDetailsTable::needsUpgrade()) {
             $pending[] = CreateOpportunityDetailsTable::class;
         }
+        // Countries is ordered before the junction so that the seed
+        // populates a real referent before any opportunity↔country rows
+        // can exist. Junction has no FK, but logical ordering keeps the
+        // schema readable for future maintainers.
+        if (CreateCountriesTable::needsUpgrade()) {
+            $pending[] = CreateCountriesTable::class;
+        }
+        if (CreateOpportunityCountriesTable::needsUpgrade()) {
+            $pending[] = CreateOpportunityCountriesTable::class;
+        }
 
         if (empty($pending)) {
             return;
