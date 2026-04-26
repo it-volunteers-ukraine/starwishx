@@ -127,8 +127,18 @@ export function syncStateToUrl(query) {
           }
         }
       }
+    } else if (key === "country" && Array.isArray(value)) {
+      // Country: emit alpha-2 code (?country=pl) for SEO. Look up each
+      // selected id in facets to get its code; fall back to the numeric
+      // id only if the facet entry is missing (orphaned id, or facets
+      // not yet hydrated). The server-side 301 catches that fallback.
+      const countryFacets = state.facets?.country || [];
+      for (const id of value) {
+        const c = countryFacets.find((cf) => cf.id === id);
+        params.append(key, c?.code || id);
+      }
     } else if (Array.isArray(value)) {
-      // Clean URL: ?country=75 (no brackets)
+      // Clean URL: ?seekers=75 (no brackets, repeated key)
       value.forEach((val) => params.append(key, val));
     } else {
       params.set(key, value);
@@ -232,18 +242,40 @@ export function syncUrlToState(queryState) {
     queryState.category = [...new Set(ids)];
   }
 
-  // Handle remaining params (skip category — already resolved)
+  // Resolve country: alpha-2 codes → ids via facets, numerics → as-is.
+  // The server-side 301 normalizes numeric URLs to slugs on full page
+  // loads; this branch keeps back/forward (popstate) navigation robust
+  // when an older state object is restored from history.
+  const countryFacets = state.facets?.country || [];
+  const countryRaw = params.getAll("country");
+  if (countryRaw.length > 0) {
+    const ids = [];
+    for (const val of countryRaw) {
+      if (isNaN(val)) {
+        const c = countryFacets.find(
+          (cf) => cf.code === String(val).toLowerCase(),
+        );
+        if (c) ids.push(c.id);
+      } else {
+        ids.push(Number(val));
+      }
+    }
+    queryState.country = [...new Set(ids)];
+  }
+
+  // Handle remaining params (skip category and country — already resolved)
   for (const [key, value] of params.entries()) {
     const cleanKey = key.replace("[]", "");
 
     if (cleanKey === "category") continue;
+    if (cleanKey === "country") continue;
 
     if (Array.isArray(queryState[cleanKey])) {
       // It's a taxonomy array
       const allValues = params.getAll(key);
       queryState[cleanKey] = allValues.map((v) => (isNaN(v) ? v : Number(v)));
-    } else if (cleanKey === "page" || cleanKey === "country") {
-      // Forced numeric types
+    } else if (cleanKey === "page") {
+      // Forced numeric type
       queryState[cleanKey] = Number(value);
     } else {
       // Standard strings (city, search)

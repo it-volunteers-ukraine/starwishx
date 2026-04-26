@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Launchpad\Services;
 
+use Launchpad\Data\Repositories\CountriesRepository;
 use Launchpad\Data\Repositories\OpportunityCountriesRepository;
 use Launchpad\Data\Repositories\OpportunityDetailsRepository;
 use Shared\Policy\UrlPolicy;
@@ -21,6 +22,7 @@ class OpportunitiesService
 
     private OpportunityDetailsRepository $detailsRepository;
     private OpportunityCountriesRepository $countriesRepository;
+    private CountriesRepository $countriesDictionary;
 
     /**
      * Repositories are injected so tests can swap them. Defaults keep
@@ -29,10 +31,12 @@ class OpportunitiesService
      */
     public function __construct(
         ?OpportunityDetailsRepository $detailsRepository = null,
-        ?OpportunityCountriesRepository $countriesRepository = null
+        ?OpportunityCountriesRepository $countriesRepository = null,
+        ?CountriesRepository $countriesDictionary = null
     ) {
         $this->detailsRepository   = $detailsRepository   ?? new OpportunityDetailsRepository();
         $this->countriesRepository = $countriesRepository ?? new OpportunityCountriesRepository();
+        $this->countriesDictionary = $countriesDictionary ?? new CountriesRepository();
     }
 
     /**
@@ -250,7 +254,7 @@ class OpportunitiesService
     {
         return [
             'categories' => $this->getHierarchicalCategoryTerms('category-oportunities'),
-            'countries'  => $this->getTerms('country'),
+            'countries'  => $this->countriesDictionary->getAll(),
             'seekers'    => $this->getTerms('category-seekers'),
         ];
     }
@@ -370,7 +374,7 @@ class OpportunitiesService
             'date_ends'       => $dateEnds,
             'category'        => $getIntArray('opportunity_category'), // Now an array
 
-            'country'         => get_field('country', $postId) ?: '',
+            'country'         => $this->countriesRepository->getCountryId($postId) ?? '',
             'locations'       => $locations,
             // We keep 'city' just for now in case to not brake things
             'city'            => get_field('city', $postId) ?: '',
@@ -558,10 +562,18 @@ class OpportunitiesService
             update_field('opportunity_category', $categories, $id);
             wp_set_object_terms($id, $categories, 'category-oportunities');
 
-            // Country
+            // Country — typed storage in wp_opportunity_countries replaces the
+            // `country` taxonomy and ACF field. setCountry() is delete-then-
+            // insert, atomic inside this transaction. Failure rolls back the
+            // entire save (caught below).
             $countryId = (int) ($data['country'] ?? 0);
-            update_field('country', $countryId, $id);
-            wp_set_object_terms($id, $countryId, 'country');
+            $countryWritten = $this->countriesRepository->setCountry(
+                (int) $id,
+                $countryId > 0 ? $countryId : null
+            );
+            if (!$countryWritten) {
+                throw new \RuntimeException('Failed to persist opportunity country.');
+            }
 
             // Seekers (Multi)
             $seekers = array_map('intval', $data['seekers'] ?? []);

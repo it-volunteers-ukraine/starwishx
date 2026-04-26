@@ -608,7 +608,7 @@ class OpportunitiesPanel extends AbstractPanel
                                     </div>
                                     <!-- Country Dropdown -->
                                     <div class="form-field">
-                                        <label class="<?php echo $required['country'] ? 'label-required' : ''; ?>"><?php echo esc_html($labels['country'] ?? __('Country', 'starwishx')); ?></label>
+                                        <label><?= esc_html__('Country', 'starwishx'); ?></label>
                                         <div class="lp-dropdown lp-dropdown--toggleable"
                                             data-wp-class--lp-dropdown--open="state.isCountryDropdownOpen"
                                             data-wp-on--focusout="actions.opportunities.countryFocusout"

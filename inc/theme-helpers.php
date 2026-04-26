@@ -613,10 +613,18 @@ function sw_get_opportunity_view_data(int $post_id): array
     $d_start = sw_format_date_for_ui(get_post_meta($post_id, 'opportunity_date_starts', true), 'd.m.y', true);
     $d_end   = sw_format_date_for_ui(get_post_meta($post_id, 'opportunity_date_ends',   true), 'd.m.y', true);
 
-    $country_id   = sw_get_field('country', $post_id);
-    $country_name = $country_id
-        ? (get_term($country_id, 'country')?->name ?? '')
-        : __('Worldwide', 'starwishx');
+    // Country — typed storage replaces the `country` taxonomy. JOIN against
+    // wp_sw_countries gets the display name in one round trip; LIMIT 1
+    // matches the 1:1 invariant enforced at write time (setCountry()).
+    $country_row = $wpdb->get_row($wpdb->prepare(
+        "SELECT c.id, c.code, c.name
+         FROM {$wpdb->prefix}sw_countries c
+         INNER JOIN {$wpdb->prefix}opportunity_countries oc ON oc.country_id = c.id
+         WHERE oc.post_id = %d
+         LIMIT 1",
+        $post_id
+    ));
+    $country_name = $country_row ? $country_row->name : __('Worldwide', 'starwishx');
 
     $seeker_ids   = sw_get_field('opportunity_seekers', $post_id) ?? [];
     $seeker_terms = sw_get_prepared_terms($seeker_ids, 'category-seekers');
