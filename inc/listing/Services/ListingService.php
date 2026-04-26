@@ -311,7 +311,7 @@ class ListingService
         $rows = $wpdb->get_results(
             "SELECT c.id, c.name AS label, COUNT(DISTINCT oc.post_id) AS count
              FROM {$sw} c
-             INNER JOIN {$oc} ON oc.country_id = c.id
+             INNER JOIN {$oc} oc ON oc.country_id = c.id
              WHERE oc.post_id IN ({$query->request})
              GROUP BY c.id
              ORDER BY c.priority ASC, c.name ASC",
