@@ -15,6 +15,7 @@ declare(strict_types=1);
 
 namespace Listing\Core;
 
+use Launchpad\Data\Repositories\CountriesRepository;
 use Listing\Api\MainController;
 use Listing\Services\ListingService;
 use Listing\Filters\CategoryFilter;
@@ -38,6 +39,7 @@ final class ListingCore
     private StateAggregator $stateAggregator;
     private ResultsGrid $grid;
     private TermCountingService $termCounter;
+    private CountriesRepository $countriesRepository;
 
     /**
      * Reset singleton (for testing only).
@@ -65,23 +67,26 @@ final class ListingCore
         ?StateAggregator $stateAggregator = null,
         ?ResultsGrid $grid = null,
         ?QueryBuilder $queryBuilder = null,
-        ?TermCountingService $termCounter = null
+        ?TermCountingService $termCounter = null,
+        ?CountriesRepository $countriesRepository = null
     ): self {
         if (!self::$instance) {
-            $registry         = $registry        ?? new FilterRegistry();
-            $queryBuilder     = $queryBuilder    ?? new QueryBuilder($registry);
-            $termCounter      = $termCounter     ?? new TermCountingService($queryBuilder);
+            $registry            = $registry            ?? new FilterRegistry();
+            $queryBuilder        = $queryBuilder        ?? new QueryBuilder($registry);
+            $termCounter         = $termCounter         ?? new TermCountingService($queryBuilder);
+            $countriesRepository = $countriesRepository ?? new CountriesRepository();
             // Reuse service from the shared Favorites module
-            $favoritesService = \favorites()->service();
-            $service          = $service         ?? new ListingService($queryBuilder, $termCounter, $favoritesService);
-            $stateAggregator  = $stateAggregator ?? new StateAggregator($service);
+            $favoritesService    = \favorites()->service();
+            $service             = $service             ?? new ListingService($queryBuilder, $termCounter, $favoritesService);
+            $stateAggregator     = $stateAggregator     ?? new StateAggregator($service, $countriesRepository);
 
-            self::$instance   = new self(
+            self::$instance      = new self(
                 $registry,
                 $service,
                 $stateAggregator,
                 $grid ?? new ResultsGrid(),
-                $termCounter
+                $termCounter,
+                $countriesRepository
             );
         }
 
@@ -93,13 +98,15 @@ final class ListingCore
         ListingService $service,
         StateAggregator $stateAggregator,
         ResultsGrid $grid,
-        TermCountingService $termCounter
+        TermCountingService $termCounter,
+        CountriesRepository $countriesRepository
     ) {
-        $this->registry        = $registry;
-        $this->service         = $service;
-        $this->stateAggregator = $stateAggregator;
-        $this->grid            = $grid;
-        $this->termCounter     = $termCounter;
+        $this->registry            = $registry;
+        $this->service             = $service;
+        $this->stateAggregator     = $stateAggregator;
+        $this->grid                = $grid;
+        $this->termCounter         = $termCounter;
+        $this->countriesRepository = $countriesRepository;
 
         $this->bootstrap();
     }
@@ -109,8 +116,9 @@ final class ListingCore
      */
     private function bootstrap(): void
     {
-        add_action('wp_enqueue_scripts', [$this, 'enqueueAssets']);
-        add_action('rest_api_init',      [$this, 'registerRestRoutes']);
+        add_action('wp_enqueue_scripts',  [$this, 'enqueueAssets']);
+        add_action('rest_api_init',       [$this, 'registerRestRoutes']);
+        add_action('template_redirect',   [$this, 'redirectNumericCountryParams']);
         add_action('init', fn() => do_action('listing_register_filters', $this->registry), 20);
         add_action('listing_register_filters', [$this, 'registerDefaultFilters'], 5);
         // Invalidate the category term map transient whenever a term is saved.
@@ -200,6 +208,93 @@ final class ListingCore
         unset($vars['listing_cat']);
 
         return $vars;
+    }
+
+    /**
+     * 301 any numeric country query value to its alpha-2 slug, so that
+     * `/opportunities/?country=804` becomes `/opportunities/?country=ua`
+     * before the page renders.
+     *
+     * Why a redirect rather than just a canonical link tag:
+     *   - A canonical is a hint; bots may take time to consolidate, and
+     *     Bing/Yandex respect it less reliably than Google.
+     *   - A 301 normalizes immediately for both bots and users, prevents
+     *     ranking dilution and split crawl budget across `?country=804`
+     *     and `?country=ua` for identical content, and silently catches
+     *     accidental leaks (legacy links, raw-state shares, future bugs
+     *     that emit ids by mistake).
+     *
+     * SPA in-page filter changes go through syncStateToUrl which already
+     * emits slugs — so this only fires on full page loads.
+     *
+     * Uses QueryStringParser rather than $_GET so multi-value
+     * (?country=pl&country=de — repeated-key, no brackets) round-trips
+     * correctly: PHP's default $_GET would silently drop all but the
+     * last value.
+     */
+    public function redirectNumericCountryParams(): void
+    {
+        if (!is_post_type_archive('opportunity')) {
+            return;
+        }
+
+        $rawParams = QueryStringParser::fromServer();
+        if (empty($rawParams['country'])) {
+            return;
+        }
+
+        $rawCountries = (array) $rawParams['country'];
+
+        // Bail if all values are already non-numeric (slug form) — no work to do.
+        $hasNumeric = false;
+        foreach ($rawCountries as $val) {
+            if (is_numeric($val)) {
+                $hasNumeric = true;
+                break;
+            }
+        }
+        if (!$hasNumeric) {
+            return;
+        }
+
+        // Resolve each value to its alpha-2 code; numerics that don't
+        // map to a known country are silently dropped (mirrors the
+        // missing-slug behavior in StateAggregator::resolveCountryValues).
+        $codes = [];
+        foreach ($rawCountries as $val) {
+            if (is_numeric($val)) {
+                $row = $this->countriesRepository->getById((int) $val);
+                if ($row) {
+                    $codes[] = $row['code'];
+                }
+            } else {
+                $codes[] = strtolower(sanitize_text_field((string) $val));
+            }
+        }
+
+        // Rebuild the query string keeping the repeated-key shape that
+        // syncStateToUrl emits (?key=v1&key=v2, no brackets), so the URL
+        // layout stays consistent across server-side 301 and client-side
+        // pushState navigation.
+        $queryParts = [];
+        foreach ($rawParams as $key => $val) {
+            if ($key === 'country') {
+                continue;
+            }
+            $vals = is_array($val) ? $val : [$val];
+            foreach ($vals as $v) {
+                $queryParts[] = rawurlencode((string) $key) . '=' . rawurlencode((string) $v);
+            }
+        }
+        foreach (array_unique($codes) as $code) {
+            $queryParts[] = 'country=' . rawurlencode((string) $code);
+        }
+
+        $path  = strtok($_SERVER['REQUEST_URI'] ?? '/', '?');
+        $query = !empty($queryParts) ? '?' . implode('&', $queryParts) : '';
+
+        wp_safe_redirect(home_url($path . $query), 301);
+        exit;
     }
 
     /**

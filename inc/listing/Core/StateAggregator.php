@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Listing\Core;
 
+use Launchpad\Data\Repositories\CountriesRepository;
 use Listing\Services\ListingService;
 
 /**
@@ -17,10 +18,14 @@ use Listing\Services\ListingService;
 class StateAggregator
 {
     private ListingService $service;
+    private CountriesRepository $countriesRepository;
 
-    public function __construct(ListingService $service)
-    {
-        $this->service = $service;
+    public function __construct(
+        ListingService $service,
+        ?CountriesRepository $countriesRepository = null
+    ) {
+        $this->service             = $service;
+        $this->countriesRepository = $countriesRepository ?? new CountriesRepository();
     }
 
     /**
@@ -63,7 +68,7 @@ class StateAggregator
         return [
             's'        => sanitize_text_field($raw['s'] ?? ''),
             'category' => $this->resolveCategoryValues((array) ($raw['category'] ?? [])),
-            'country'  => array_map('absint', (array) ($raw['country']  ?? [])),
+            'country'  => $this->resolveCountryValues((array) ($raw['country'] ?? [])),
             'location' => sanitize_text_field($raw['location'] ?? ''),
             'seekers'  => array_map('absint', (array) ($raw['seekers']  ?? [])),
             'page'     => absint($raw['paged'] ?? $raw['page'] ?? 1),
@@ -116,6 +121,42 @@ class StateAggregator
 
             if (!is_wp_error($children)) {
                 $ids = array_merge($ids, array_map('absint', $children));
+            }
+        }
+
+        return array_values(array_unique($ids));
+    }
+
+    /**
+     * Resolve mixed country values from the URL into ISO numeric IDs.
+     *
+     * Accepts either form:
+     *   - alpha-2 code (`?country=ua`) — canonical for SEO, resolved via
+     *     wp_sw_countries.code lookup
+     *   - numeric ISO id (`?country=804`) — accepted but non-canonical;
+     *     ListingCore::redirectNumericCountryParams 301s browser-facing
+     *     numeric URLs into slug form. Numeric remains supported here
+     *     for REST clients and any future internal links that prefer ids.
+     *
+     * Unresolvable codes are silently dropped, mirroring
+     * resolveCategoryValues' missing-slug behavior.
+     *
+     * @param  array $values  Raw values from the query string.
+     * @return int[]          Deduplicated array of ISO numeric IDs.
+     */
+    private function resolveCountryValues(array $values): array
+    {
+        $ids = [];
+
+        foreach ($values as $value) {
+            if (is_numeric($value)) {
+                $ids[] = absint($value);
+                continue;
+            }
+
+            $row = $this->countriesRepository->getByCode(sanitize_text_field((string) $value));
+            if ($row) {
+                $ids[] = (int) $row['id'];
             }
         }
 

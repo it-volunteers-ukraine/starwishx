@@ -308,8 +308,12 @@ class ListingService
         $sw = $wpdb->prefix . 'sw_countries';
         $oc = $wpdb->prefix . 'opportunity_countries';
 
+        // `code` is exposed alongside id so the client can serialize
+        // ?country=pl in syncStateToUrl without a separate dictionary
+        // round trip. Server-side 301 catches any URL that arrives
+        // with the numeric form.
         $rows = $wpdb->get_results(
-            "SELECT c.id, c.name AS label, COUNT(DISTINCT oc.post_id) AS count
+            "SELECT c.id, c.code, c.name AS label, COUNT(DISTINCT oc.post_id) AS count
              FROM {$sw} c
              INNER JOIN {$oc} oc ON oc.country_id = c.id
              WHERE oc.post_id IN ({$query->request})
@@ -320,6 +324,7 @@ class ListingService
 
         return array_map(static fn(array $r): array => [
             'id'    => (int) $r['id'],
+            'code'  => (string) $r['code'],
             'label' => (string) $r['label'],
             'count' => (int) $r['count'],
         ], $rows ?: []);
