@@ -338,6 +338,7 @@ export const opportunitiesActions = {
     url.searchParams.delete("id");
     window.history.pushState({}, "", url);
     actions.syncStateFromUrl();
+    scrollToPageTop();
   },
 
   updateForm() {
