@@ -238,7 +238,12 @@ class OpportunitiesPanel extends AbstractPanel
                 data-wp-bind--hidden="!state.isOppOnboardingVisible">
                 <hgroup>
                     <h2 class="panel-title"><?php esc_html_e('Post an Opportunity', 'starwishx'); ?></h2>
-                    <p><?php esc_html_e('To publish opportunities, please complete your profile first — we need your name and phone number.', 'starwishx'); ?></p>
+                    <div class="panel-description">
+                        <p><?= esc_html__('To publish an opportunity, we need a bit more information about you. Please complete your profile with your name and contact phone number.', 'starwishx') ?></p>
+                        <p><?= esc_html__('This helps keep the platform safe and easy to use for everyone, and it makes it easier for interested people to reach out to you about your opportunity.', 'starwishx') ?></p>
+                        <p><?= esc_html__('When you publish opportunities, you are doing more than sharing information — you are helping others find support, new chances, and a way through difficult times. Every action you take here can make a real difference for someone.', 'starwishx') ?></p>
+                        <p><?= esc_html__('It only takes a few minutes to complete your profile, but it can greatly increase trust in your opportunities and make them more effective.', 'starwishx') ?></p>
+                    </div>
                 </hgroup>
                 <button class="btn"
                     data-wp-on--click="actions.opportunities.goToProfile">
