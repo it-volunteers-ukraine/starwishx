@@ -210,16 +210,19 @@ final class LaunchpadCore
             // intlTelInput CDN — phone field widget (CSS + all-in-one JS with utils)
             wp_enqueue_style(
                 'intl-tel-input',
-                'https://cdn.jsdelivr.net/npm/intl-tel-input@26.8.1/build/css/intlTelInput.css',
+                'https://cdn.jsdelivr.net/npm/intl-tel-input@latest/build/css/intlTelInput.css',
                 [],
-                '26.8.1'
+                null
             );
             wp_enqueue_script(
                 'intl-tel-input',
-                'https://cdn.jsdelivr.net/npm/intl-tel-input@26.8.1/build/js/intlTelInputWithUtils.min.js',
+                'https://cdn.jsdelivr.net/npm/intl-tel-input@latest/build/js/intlTelInputWithUtils.min.js',
                 [],
-                '26.8.1',
-                true
+                null,
+                [
+                    'in_footer' => true,
+                    'strategy'   => 'defer',
+                ]
             );
 
             $asset_path = get_template_directory() . '/inc/launchpad/Assets/store.asset.php';

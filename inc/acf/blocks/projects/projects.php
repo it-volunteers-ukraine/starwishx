@@ -118,11 +118,11 @@ $query = new WP_Query($query_args);
 <?php wp_reset_postdata(); ?>
 
 <?php
-wp_enqueue_script('swiper-js');
+wp_enqueue_script('swiper');
 wp_enqueue_script(
     'projects-block-script',
     get_template_directory_uri() . '/assets/js/projects.js',
-    ['swiper-js'],
+    ['swiper'],
     '1.0',
     true
 );
