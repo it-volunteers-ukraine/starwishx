@@ -414,7 +414,7 @@
     border: 1px solid $stroke-default;
     border-radius: $radius-input;
     background: $surface-primary;
-    .opportunity-card--inner {
+    &--inner {
         display: flex;
         flex-wrap: wrap;
         justify-content: space-between;

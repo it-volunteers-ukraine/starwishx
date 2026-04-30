@@ -10,11 +10,11 @@ import pkg from "gulp";
 import postcss from "gulp-postcss";
 import sourcemaps from "gulp-sourcemaps";
 import autoprefixer from "autoprefixer";
+import cssnano from "cssnano";
 import yargs from "yargs/yargs";
 import { hideBin } from "yargs/helpers";
 import gulpSass from "gulp-sass";
 import * as sass from "sass";
-import cleanCss from "gulp-clean-css";
 import gulpif from "gulp-if";
 import imagemin from "gulp-imagemin";
 import { deleteAsync } from "del";
@@ -43,19 +43,20 @@ let cssModulesJSON = {};
 
 // Styles
 export const styles = () => {
-  return src(["src/scss/*.scss"])
-    .pipe(
-      stylelint({
-        fix: true,
-        reporters: [{ formatter: "string", console: true }],
-      }),
-    )
-    .pipe(gulpif(!PRODUCTION, sourcemaps.init()))
-    .pipe(SASS().on("error", SASS.logError))
-    .pipe(gulpif(PRODUCTION, postcss([autoprefixer])))
-    .pipe(gulpif(PRODUCTION, cleanCss({ compatibility: "ie8" })))
-    .pipe(gulpif(!PRODUCTION, sourcemaps.write()))
-    .pipe(dest("assets/css"));
+  return (
+    src(["src/scss/*.scss"])
+      .pipe(
+        stylelint({
+          fix: true,
+          reporters: [{ formatter: "string", console: true }],
+        }),
+      )
+      .pipe(gulpif(!PRODUCTION, sourcemaps.init()))
+      .pipe(SASS().on("error", SASS.logError))
+      .pipe(gulpif(PRODUCTION, postcss([autoprefixer, cssnano])))
+      .pipe(gulpif(!PRODUCTION, sourcemaps.write()))
+      .pipe(dest("assets/css"))
+  );
 };
 
 export const templatesStyles = () => {
@@ -68,8 +69,7 @@ export const templatesStyles = () => {
     )
     .pipe(gulpif(!PRODUCTION, sourcemaps.init()))
     .pipe(SASS().on("error", SASS.logError))
-    .pipe(gulpif(PRODUCTION, postcss([autoprefixer])))
-    .pipe(gulpif(PRODUCTION, cleanCss({ compatibility: "ie8" })))
+    .pipe(gulpif(PRODUCTION, postcss([autoprefixer, cssnano])))
     .pipe(gulpif(!PRODUCTION, sourcemaps.write()))
     .pipe(dest("assets/css/template-parts"));
 };
@@ -100,8 +100,7 @@ export const blockStyles = () => {
     )
     .pipe(gulpif(!PRODUCTION, sourcemaps.init()))
     .pipe(SASS().on("error", SASS.logError))
-    .pipe(gulpif(PRODUCTION, postcss([autoprefixer])))
-    .pipe(gulpif(PRODUCTION, cleanCss({ compatibility: "ie8" })))
+    .pipe(gulpif(PRODUCTION, postcss([autoprefixer, cssnano])))
     .pipe(gulpif(!PRODUCTION, sourcemaps.write()))
     .pipe(dest("assets/css/blocks"));
 };

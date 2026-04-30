@@ -7,7 +7,8 @@
 @use "components/404" as *;
 @use "components/page-policy" as *;
 @use "components/lg-shared" as *;
-@use "components/launchpad" as *;
+
+// @use "components/launchpad" as *;
 @use "components/gateway" as *;
 @use "components/comments" as *;
 @use "components/listing" as *;
@@ -22,4 +23,5 @@
 @use "components/single-news" as *;
 @use "components/archive-projects" as *;
 @use "components/contact" as *;
-@use "components/tour" as *;
+
+// @use "components/tour" as *;
