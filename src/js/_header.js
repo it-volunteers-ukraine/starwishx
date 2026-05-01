@@ -37,11 +37,11 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
 
-  document.querySelectorAll('.menu-item-lang button').forEach(btn => {
-    btn.addEventListener('click', () => {
-      alert('Мова (десктоп)');
-    });
-  });
+  // document.querySelectorAll('.menu-item-lang button').forEach(btn => {
+  //   btn.addEventListener('click', () => {
+  //     alert('Мова (десктоп)');
+  //   });
+  // });
 
   // document.querySelectorAll('.mobile-header-buttons .search-icon').forEach(el => {
   //   el.addEventListener('click', e => {
@@ -50,11 +50,11 @@ document.addEventListener('DOMContentLoaded', () => {
   //   });
   // });
 
-  document.querySelectorAll('.mobile-header-buttons .lang-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      alert('Мова (мобільна)');
-    });
-  });
+  // document.querySelectorAll('.mobile-header-buttons .lang-btn').forEach(btn => {
+  //   btn.addEventListener('click', () => {
+  //     alert('Мова (мобільна)');
+  //   });
+  // });
 
 
   // modal form
