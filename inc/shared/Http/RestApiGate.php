@@ -11,8 +11,9 @@ use Shared\Policy\RestApiAccessPolicy;
  *
  * Uses the `rest_endpoints` filter so matched routes never enter the
  * dispatcher — controllers respond with a clean 404, not a 401, and scrapers
- * get no signal that the route exists. Bypassed entirely for logged-in users
- * so the block editor and authenticated integrations keep working.
+ * get no signal that the route exists. Privilege threshold lives in
+ * RestApiAccessPolicy::isPrivileged() — defaults to editorial roles, so
+ * Gutenberg keeps working while subscribers and guests are gated.
  */
 final class RestApiGate
 {
@@ -27,7 +28,7 @@ final class RestApiGate
      */
     public static function filterEndpoints(array $endpoints): array
     {
-        if (is_user_logged_in()) {
+        if (RestApiAccessPolicy::isPrivileged()) {
             return $endpoints;
         }
 

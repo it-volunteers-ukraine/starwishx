@@ -26,6 +26,29 @@ namespace Shared\Policy;
 final class RestApiAccessPolicy
 {
     /**
+     * Whether the current user has enough privilege to bypass the gate.
+     *
+     * Default threshold: `edit_posts` capability — admits contributors,
+     * authors, editors, and admins (the roles that legitimately need REST
+     * access for editorial workflows like Gutenberg's author-picker).
+     * Guests and subscribers are gated.
+     *
+     * Why not `list_users` (admin-only)? Gutenberg fetches `/wp/v2/users`
+     * for the author dropdown; stripping it for non-admins would break the
+     * block editor for contributors and editors.
+     *
+     * Override via the `starwishx/rest_gate_bypass` filter — useful for
+     * sites with custom roles or stricter requirements ("admins only").
+     */
+    public static function isPrivileged(): bool
+    {
+        return (bool) apply_filters(
+            'starwishx/rest_gate_bypass',
+            current_user_can('list_users')
+        );
+    }
+
+    /**
      * @return string[] Route patterns as registered in `rest_endpoints` —
      *                  leading slash, regex placeholders preserved.
      */
