@@ -377,3 +377,10 @@ function sw_clear_search_flags_on_spa($vars)
   return $vars;
 }
 add_filter('request', 'sw_clear_search_flags_on_spa', 10, 1);
+
+/**
+ * Should partially disable XML-RPC & remove trace from <head>
+ */
+add_filter('xmlrpc_enabled', '__return_false');
+add_filter('xmlrpc_methods', '__return_empty_array');
+remove_action('wp_head', 'rsd_link');

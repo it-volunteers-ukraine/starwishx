@@ -109,10 +109,10 @@ if (function_exists('render_block')) {
                     </div>
 
                     <div class="news-social">
-                        <div class="news-social__share">
-                            <span><?php esc_html_e('Social share', 'starwishx'); ?></span>
-                            <?php sw_svg_e('icon-share', 18, 20, 'icon-share'); ?>
-                        </div>
+                        <!-- <div class="news-social__share">
+                            <span>< ?php esc_html_e('Social share', 'starwishx'); ?></span>
+                            < ?php sw_svg_e('icon-share', 18, 20, 'icon-share'); ?>
+                        </div> -->
                         <!-- <div class="news-badges">
                             < ?php if (get_post_status() === 'publish') {
                                 get_template_part('template-parts/control-favorites', null, ['post_id' => $post_id]);
