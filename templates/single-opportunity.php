@@ -178,12 +178,12 @@ if (function_exists('render_block')) {
                     </dl>
 
                     <div class="opportunity-social">
-                        <div class="opportunity-social__share">
-                            <span><?php esc_html_e('Social share', 'starwishx') ?></span>
+                        <!-- <div class="opportunity-social__share">
+                            <span>< ?php esc_html_e('Social share', 'starwishx') ?></span>
                             <svg width="18" height="20" class="icon-share">
-                                <use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-share"></use>
+                                <use xlink:href="< hp echo get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-share"></use>
                             </svg>
-                        </div>
+                        </div> -->
                         <div class="opportunity-badges">
                             <?php if (get_post_status() === 'publish') {
                                 get_template_part('template-parts/control-favorites', null, ['post_id' => $post_id]);
