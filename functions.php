@@ -184,11 +184,12 @@ if (! function_exists('yourtheme_mobile_search_lang')) {
           <use xlink:href="<?php echo esc_url(get_template_directory_uri() . '/assets/img/sprites.svg#icon-find'); ?>"></use>
         </svg>
       </div>
-      <div class="language-switch">
+      <!-- <div class="language-switch">
         <button class="lang-btn">УКР</button>
         <span class="lang-separator">|</span>
         <button class="lang-btn">ENG</button>
-      </div>
+      </div> -->
+      <?php echo do_shortcode('[prisna-google-website-translator]'); ?>
     </div>
 <?php
   }

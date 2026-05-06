@@ -52,7 +52,8 @@
                         </nav>
                         <div class="header-addons">
                             <?php yourtheme_search_trigger(); ?>
-                            <?php yourtheme_language_switcher(); ?>
+                            <!-- < ?php yourtheme_language_switcher(); ?> -->
+                            <?php echo do_shortcode('[prisna-google-website-translator]'); ?>
                         </div>
                     </div>
                 </div>

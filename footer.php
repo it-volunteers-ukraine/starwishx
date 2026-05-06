@@ -79,7 +79,7 @@ $linkedin_link = esc_html(get_field('linkedin_link', 'options'));
 
         <div class="footer-logo-wrapper">
             <div class="footer-logo-container">
-                <span class="footer-logo">STAR WISH X</span>
+                <span class="footer-logo notranslate">STAR WISH X</span>
                 <img src="<?php echo get_template_directory_uri(); ?>/assets/img/star-satellite.svg" class="footer-logo-satellite" alt="">
             </div>
         </div>
