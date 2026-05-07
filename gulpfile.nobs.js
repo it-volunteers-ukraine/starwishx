@@ -43,20 +43,18 @@ let cssModulesJSON = {};
 
 // Styles
 export const styles = () => {
-  return (
-    src(["src/scss/*.scss"])
-      .pipe(
-        stylelint({
-          fix: true,
-          reporters: [{ formatter: "string", console: true }],
-        }),
-      )
-      .pipe(gulpif(!PRODUCTION, sourcemaps.init()))
-      .pipe(SASS().on("error", SASS.logError))
-      .pipe(gulpif(PRODUCTION, postcss([autoprefixer, cssnano])))
-      .pipe(gulpif(!PRODUCTION, sourcemaps.write()))
-      .pipe(dest("assets/css"))
-  );
+  return src(["src/scss/*.scss"])
+    .pipe(
+      stylelint({
+        fix: true,
+        reporters: [{ formatter: "string", console: true }],
+      }),
+    )
+    .pipe(gulpif(!PRODUCTION, sourcemaps.init()))
+    .pipe(SASS().on("error", SASS.logError))
+    .pipe(gulpif(PRODUCTION, postcss([autoprefixer, cssnano])))
+    .pipe(gulpif(!PRODUCTION, sourcemaps.write()))
+    .pipe(dest("assets/css"));
 };
 
 export const templatesStyles = () => {
@@ -177,13 +175,15 @@ const fonts = series(otfToTtf, ttfToWoff, fontsStyle);
 
 // Optimized Images with 'changed'
 export const images = () => {
-  return src(["src/img/**/*.{jpg,jpeg,png,gif,webp,avif}"], {
-    allowEmpty: true,
-    encoding: false,
-  })
-    .pipe(changed("assets/img")) // Skip if file hasn't changed
-    .pipe(gulpif(PRODUCTION, imagemin()))
-    .pipe(dest("assets/img"));
+  return (
+    src(["src/img/**/*.{jpg,jpeg,png,gif,webp,avif}"], {
+      allowEmpty: true,
+      encoding: false,
+    })
+      .pipe(changed("assets/img")) // Skip if file hasn't changed
+      // .pipe(gulpif(PRODUCTION, imagemin()))
+      .pipe(dest("assets/img"))
+  );
 };
 
 // for now just copy svgs
@@ -330,6 +330,8 @@ export const production = () => {
       "!src{,/**}",
       "!production{,/**}", // Prevent copying the production folder into itself
       "!assets/css/blocks/modules.json", // Optional: clean up build
+      "!assets/img{,/**}",
+      "!assets/fonts{,/**}",
       "!.babelrc",
       "!.gitignore",
       "!gulpfile*.js",
@@ -350,6 +352,21 @@ export const production = () => {
     .pipe(replace("_themeversion", version))
     .pipe(replace("_themedescription", config.theme.description))
     .pipe(dest("./production"));
+};
+
+export const copyBinariesToProduction = () => {
+  const sources = [];
+  if (fs.existsSync("assets/img")) {
+    sources.push("assets/img/**/*");
+  }
+  if (fs.existsSync("assets/fonts")) {
+    sources.push("assets/fonts/**/*");
+  }
+  if (sources.length === 0) return Promise.resolve();
+  return src(sources, {
+    allowEmpty: true,
+    encoding: false,
+  }).pipe(dest("production/assets"));
 };
 
 export const watchForChanges = () => {
@@ -411,6 +428,7 @@ export const build = series(
   ),
   pot,
   production,
+  copyBinariesToProduction,
 );
 
 export default dev;
