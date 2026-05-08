@@ -33,6 +33,7 @@ function _themeprefix_theme_setup()
     )
   );
 
+  add_post_type_support('page', 'excerpt');
 
   add_theme_support('customize-selective-refresh-widgets');
 
@@ -385,3 +386,49 @@ add_filter('request', 'sw_clear_search_flags_on_spa', 10, 1);
 add_filter('xmlrpc_enabled', '__return_false');
 add_filter('xmlrpc_methods', '__return_empty_array');
 remove_action('wp_head', 'rsd_link');
+
+/**
+ * Array of OpenGraph images fo RM
+ */
+if (defined('RANK_MATH_VERSION')) {
+
+  add_action('rank_math/opengraph/facebook/add_additional_images', function ($image) {
+    if (is_singular() && has_post_thumbnail()) {
+      return;
+    }
+
+    $uploads = wp_get_upload_dir();
+    $base    = trailingslashit($uploads['baseurl']);
+
+    $image->add_image([
+      'url'    => $base . '2026/05/og-starwishx-2x.webp',
+      'width'  => 2400,
+      'height' => 1260,
+      'type'   => 'image/webp',
+      'alt'    => 'StarWishX',
+    ]);
+
+    $image->add_image([
+      'url'    => $base . '2026/05/og-starwishx.jpg',
+      'width'  => 1200,
+      'height' => 630,
+      'type'   => 'image/jpeg',
+      'alt'    => 'StarWishX',
+    ]);
+  });
+
+  add_filter('rank_math/opengraph/twitter/image_array', function ($image) {
+    if (is_singular() && has_post_thumbnail()) {
+      return;
+    }
+
+    $uploads = wp_get_upload_dir();
+    $base    = trailingslashit($uploads['baseurl']);
+    return [
+      'url'    => $base . '2026/05/og-starwishx-2x.webp',
+      'width'  => 2400,
+      'height' => 1260,
+      'type'   => 'image/webp',
+    ];
+  });
+}
