@@ -104,7 +104,7 @@ if ($items) {
                             <?php endif; ?>
                             <div class="<?= esc_attr($classes['block-photo']); ?>">
                                 <figure class="<?= esc_attr($classes['photo']); ?>">
-                                    <img src="<?= esc_url($photo_url); ?>" class="<?= esc_attr($classes['photo-img']); ?>" alt="<?= esc_attr($photo_alt) ?>">
+                                    <img src="<?= esc_url($photo_url); ?>" class="<?= esc_attr($classes['photo-img']); ?>" alt="<?= esc_attr($photo_alt) ?>" loading="lazy">
                                 </figure>
                             </div>
                         </div>

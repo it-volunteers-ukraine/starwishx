@@ -27,6 +27,7 @@
 
 .header .header-logo {
   transition: transform 0.3s ease;
+  margin-right: 45px;
 }
 
 .header .header-logo:hover {
@@ -284,6 +285,10 @@
     height: 120px;
   }
 
+  .header .header-logo {
+    margin-right: 61px;
+  }
+
   .header .header-logo img,
   .header .header-logo svg {
     width: 64px;
@@ -316,6 +321,17 @@
     width: 98px;
     height: 44px;
     font-size: 16px;
+  }
+}
+
+.header-right {
+  min-width: 125px;
+  text-align: right;
+}
+
+@media only screen and (max-width: 1080px) {
+  .header .header-logo {
+    margin-right: auto;
   }
 }
 

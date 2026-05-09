@@ -59,12 +59,12 @@ if (file_exists($modules_file)) {
                             <?php endif; ?>
                             <div class="<?= esc_attr($classes['block-photo']); ?>">
                                 <div class="<?= esc_attr($classes['photo1']); ?>">
-                                    <img src="<?= esc_url($photo1_url); ?>" class="<?= esc_attr($classes['photo1-img']); ?>" alt="<?= $photo1_alt; ?>">
+                                    <img src="<?= esc_url($photo1_url); ?>" class="<?= esc_attr($classes['photo1-img']); ?>" alt="<?= $photo1_alt; ?>" loading="lazy">
                                 </div>
                                 <div class="<?= esc_attr($classes['photo2']); ?>">
-                                    <img src="<?= esc_url($photo2_url); ?>" class="<?= esc_attr($classes['photo2-img']); ?>" alt="<?= $photo2_alt; ?>">
+                                    <img src="<?= esc_url($photo2_url); ?>" class="<?= esc_attr($classes['photo2-img']); ?>" alt="<?= $photo2_alt; ?>" loading="lazy">
                                 </div>
-                                <img class="<?= esc_attr($classes['icon']); ?>" width="24" height="24" aria-hidden="true" src="<?= get_template_directory_uri(); ?>/assets/img/icon-stars-gradient.svg" alt="icon stars">
+                                <img class="<?= esc_attr($classes['icon']); ?>" width="24" height="24" aria-hidden="true" src="<?= get_template_directory_uri(); ?>/assets/img/icon-stars-gradient.svg" alt="icon stars" loading="lazy">
                             </div>
 
                         </div>

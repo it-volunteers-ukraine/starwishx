@@ -5,9 +5,21 @@ acf_register_block_type(array(
     'description'     => __('Block accordion opportunities', 'starwishx'),
     'render_template' => acf_theme_blocks_path('accordion-opportunities/accordion-opportunities.php'),
     'enqueue_style'   => get_template_directory_uri() . '/assets/css/blocks/accordion-opportunities/accordion-opportunities.module.css',
-    'enqueue_script'  => get_template_directory_uri() . '/assets/js/accordion-opportunities.js',
-    'icon'            =>  'format-image',
+    // 'enqueue_script'  => get_template_directory_uri() . '/assets/js/accordion-opportunities.js',
+    'icon'            => 'format-image',
     'category'        => 'custom-blocks',
+    'enqueue_assets'  => function () {
+        wp_enqueue_script(
+            'accordion-opportunities',
+            get_template_directory_uri() . '/assets/js/accordion-opportunities.js',
+            [],
+            null,
+            [
+                'in_footer' => true,
+                'strategy'  => 'defer',
+            ]
+        );
+    }
 ));
 
 // Show only top-level (parent) terms in the category selector for this block.

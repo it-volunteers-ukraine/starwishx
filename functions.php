@@ -92,7 +92,10 @@ function _themeprefix_theme_scripts()
   }
 
   // wp_register_script('app', get_stylesheet_directory_uri() . '/assets/js/app.js', array('jquery'), $version, true);
-  wp_register_script('app', get_stylesheet_directory_uri() . '/assets/js/app.js', [], $version, true);
+  wp_register_script('app', get_stylesheet_directory_uri() . '/assets/js/app.js', [], $version, [
+    'in_footer' => true,
+    'strategy'   => 'defer',
+  ]);
   // wp_register_script('swiper-js', get_stylesheet_directory_uri() . '/assets/js/swiper.min.js', array('jquery'), $version, true);
   wp_register_script('swiper', get_stylesheet_directory_uri() . '/assets/js/vendor/swiper-bundle.min.js', [], $version, [
     'in_footer' => true,
@@ -432,3 +435,15 @@ if (defined('RANK_MATH_VERSION')) {
     ];
   });
 }
+
+/**
+ * Disables the threshold for omitting the 'loading' attribute on images.
+ *
+ * The 'wp_omit_loading_attr_threshold' filter is used by WordPress to determine when to omit the 'loading' attribute on images by default threshold is 3. Here we setting the threshold to 0, this filter ensures that the 'loading' attribute is always included on images.
+ *
+ * @param int $omit_threshold The current threshold for omitting the 'loading' attribute.
+ * @return int 0, which disables the threshold and ensures the 'loading' attribute is always included.
+ */
+add_filter('wp_omit_loading_attr_threshold', function ($omit_threshold) {
+  return 0;
+});
