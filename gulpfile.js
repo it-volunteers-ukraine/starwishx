@@ -365,18 +365,29 @@ export const production = () => {
 };
 
 export const copyBinariesToProduction = () => {
-  const sources = [];
+  const promises = [];
+
   if (fs.existsSync("assets/img")) {
-    sources.push("assets/img/**/*");
+    promises.push(
+      new Promise((resolve) =>
+        src("assets/img/**/*", { allowEmpty: true, encoding: false })
+          .pipe(dest("production/assets/img"))
+          .on("end", resolve),
+      ),
+    );
   }
+
   if (fs.existsSync("assets/fonts")) {
-    sources.push("assets/fonts/**/*");
+    promises.push(
+      new Promise((resolve) =>
+        src("assets/fonts/**/*", { allowEmpty: true, encoding: false })
+          .pipe(dest("production/assets/fonts"))
+          .on("end", resolve),
+      ),
+    );
   }
-  if (sources.length === 0) return Promise.resolve(); // Nothing to copy
-  return src(sources, {
-    allowEmpty: true,
-    encoding: false,
-  }).pipe(dest("production/assets"));
+
+  return Promise.all(promises);
 };
 
 export const watchForChanges = () => {
