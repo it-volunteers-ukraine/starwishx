@@ -129,8 +129,8 @@ final class ContactCore
         if (! wp_style_is('intl-tel-input', 'registered')) {
             wp_register_style(
                 'intl-tel-input',
-                'https://cdn.jsdelivr.net/npm/intl-tel-input@26.8.1/build/css/intlTelInput.css',
-                [],
+                'https://cdn.jsdelivr.net/npm/intl-tel-input@latest/build/css/intlTelInput.min.css',
+                []
             );
         }
         wp_enqueue_style('intl-tel-input');
