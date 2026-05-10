@@ -1,0 +1,181 @@
+@use "../variables" as *;
+@use "../mixins/media" as *;
+
+.social-share {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+
+    &__trigger {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 0;
+        border: 0;
+        background: transparent;
+        color: $text-basic;
+        cursor: pointer;
+        transition: color $animations;
+
+        .icon-share {
+            width: 24px;
+            height: 24px;
+            color: $icon-color-accent;
+            transition: color $animations;
+        }
+
+        &:hover,
+        &[aria-expanded="true"] {
+            color: $text-accent;
+
+            .icon-share {
+                color: $icon-color-accent;
+            }
+        }
+
+        &:focus-visible {
+            color: $text-accent;
+            outline: 2px solid $text-accent;
+            outline-offset: 3px;
+            border-radius: 2px;
+        }
+    }
+
+    &__trigger-label {
+        font-size: 1.125rem;
+        font-weight: 500;
+        line-height: 1.2;
+        @include max-tablet {
+            font-size: 1rem;
+        }
+    }
+
+    &__panel {
+        position: absolute;
+        top: calc(100% + 10px);
+        right: 0;
+        z-index: 20;
+        display: grid;
+        gap: 0;
+        min-width: max-content;
+        max-width: min(204px, calc(100vw - 32px));
+        padding: 12px;
+        border: 1px solid rgb(120 76 219 / 10%);
+        border-radius: 14px;
+        background: $surface-primary;
+        box-shadow: 0 12px 30px rgb(17 17 17 / 10%);
+        transition:
+            padding $animations,
+            gap $animations,
+            box-shadow $animations;
+        @include max-tabland {
+            left: 0;
+        }
+        @include max-tablet {
+            max-width: min(176px, calc(100vw - 24px));
+        }
+        &.has-status {
+            gap: 8px;
+            padding-bottom: 10px;
+        }
+    }
+
+    &__links {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        @include max-tablet {
+            flex-wrap: wrap;
+        }
+    }
+
+    &__action {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 24px;
+        height: 24px;
+        padding: 0;
+        border: 0;
+        background: transparent;
+        color: $text-accent;
+        text-decoration: none;
+        cursor: pointer;
+        transition:
+            color $animations,
+            transform $animations,
+            filter $animations;
+
+        &:hover {
+            color: $text-accent;
+            transform: translateY(-1px) scale(1.06);
+            filter: drop-shadow(0 4px 10px rgb(120 76 219 / 18%));
+        }
+
+        &:focus-visible {
+            color: $text-accent;
+            outline: 2px solid $text-accent;
+            outline-offset: 3px;
+            border-radius: 4px;
+        }
+
+        &:active {
+            transform: translateY(0) scale(0.96);
+            filter: none;
+        }
+    }
+
+    &__icon {
+        display: inline-flex;
+        width: 24px;
+        height: 24px;
+
+        svg {
+            width: 24px;
+            height: 24px;
+            display: block;
+        }
+    }
+
+    &__status {
+        color: $text-accent;
+        font-size: 0.75rem;
+        line-height: 1.4;
+        opacity: 0;
+        max-height: 0;
+        overflow: hidden;
+        text-align: center;
+        transform: translateY(-4px);
+        transition:
+            opacity $animations,
+            max-height $animations,
+            transform $animations;
+
+        &.is-visible {
+            opacity: 1;
+            max-height: 24px;
+            transform: translateY(0);
+        }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        &__trigger,
+        &__trigger .icon-share,
+        &__action,
+        &__panel,
+        &__status {
+            transition: none;
+        }
+
+        &__action:hover {
+            transform: none;
+            filter: none;
+        }
+
+        &__action:active {
+            transform: none;
+        }
+    }
+}

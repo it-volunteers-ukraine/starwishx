@@ -111,10 +111,9 @@ if (function_exists('render_block')) {
                     <?php the_title(); ?>
                 </h1>
                 <div class="project-social">
-                    <div class="project-social__share">
-                        <span><?php esc_html_e('Social share', 'starwishx') ?></span>
-                        <?php sw_svg_e('icon-share', 18, 20, 'icon-share'); ?>
-                    </div>
+                    <?php get_template_part('template-parts/social-share', null, [
+                        'post_id' => $post_id,
+                    ]); ?>
                 </div>
             </header>
 

@@ -50,6 +50,12 @@
   width: 24px;
   height: 24px;
   margin-right: 8px;
+  color: $icon-color-accent;
+  transition: color $animations;
+
+  &:hover {
+    color: $primary-hover;
+  }
 }
 
 .footer .nav {
@@ -68,19 +74,19 @@
   display: inline-block;
   padding: 3px 12px;
   line-height: 1.3;
+  transition: color $animations;
 
   &:hover {
     color: $buttons-color-background-secondary-hover;
   }
 }
 
-.socblock-link:hover,
-.socblock-link:hover .socblock-icon {
+.socblock-link:hover {
   color: $buttons-color-background-secondary-hover;
-  transition: color $animations;
-  fill: $primary-hover;
+}
 
-  // stroke: $primary-hover;
+.socblock-link:hover .socblock-icon {
+  color: $primary-hover;
 }
 
 .footer-logo-wrapper {
@@ -242,18 +248,17 @@
       #4c9cc6 100%
     ); */
 
-  background:
-    conic-gradient(
-      from 90deg at 50% 50%,
-      #b6d0f7 0deg,
-      #eef4e1 15deg,
-      #fafcfe 161deg,
-      #e2c1f9 171deg,
-      #bfd1f9 190.8deg,
-      #fafcfe 270deg,
-      #bae4e2 350deg,
-      #b6d0f7 360deg
-    );
+  background: conic-gradient(
+    from 90deg at 50% 50%,
+    #b6d0f7 0deg,
+    #eef4e1 15deg,
+    #fafcfe 161deg,
+    #e2c1f9 171deg,
+    #bfd1f9 190.8deg,
+    #fafcfe 270deg,
+    #bae4e2 350deg,
+    #b6d0f7 360deg
+  );
   -webkit-text-fill-color: transparent;
   background-clip: text;
   color: transparent;
