@@ -8,7 +8,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2026-02-25 10:47+0000\n"
-"PO-Revision-Date: 2026-05-10 08:04+0000\n"
+"PO-Revision-Date: 2026-05-11 11:03+0000\n"
 "Language: uk\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
@@ -207,7 +207,8 @@ msgstr "Редагувати профіль"
 msgid "Edit time limit expired (15 min)."
 msgstr "Термін редагування минув (15 хв.)."
 
-#: inc/contact/Api/ContactController.php:151
+#: inc/contact/Channels/EmailChannel.php:58
+#: inc/contact/Channels/TelegramChannel.php:119
 #: inc/launchpad/Panels/ProfilePanel.php:148
 #: inc/launchpad/Panels/ProfilePanel.php:259
 #: template-parts/contact-section.php:77
@@ -644,7 +645,8 @@ msgstr "В очікуванні"
 msgid "Pending Save"
 msgstr "Очікує збереження"
 
-#: inc/contact/Api/ContactController.php:149
+#: inc/contact/Channels/EmailChannel.php:56
+#: inc/contact/Channels/TelegramChannel.php:117
 #: inc/launchpad/Api/ProfileController.php:129
 #: inc/launchpad/Panels/ProfilePanel.php:180
 #: inc/launchpad/Panels/ProfilePanel.php:250
@@ -1360,8 +1362,8 @@ msgstr "Потрібен пароль"
 msgid "Email is required"
 msgstr "Потрібно вказати електронну пошту"
 
-#: inc/contact/Api/ContactController.php:82
-#: inc/contact/Api/ContactController.php:112
+#: inc/contact/Api/ContactController.php:84
+#: inc/contact/Api/ContactController.php:114
 #: inc/shared/Policy/PasswordPolicy.php:103
 msgid "Please enter a valid email address"
 msgstr "Будь ласка, введіть дійсну адресу електронної пошти"
@@ -1504,62 +1506,66 @@ msgstr "На головну сторінку"
 msgid "Block accordion opportunities"
 msgstr "Block accordion opportunities"
 
-#: inc/contact/Api/ContactController.php:69
-#: inc/contact/Api/ContactController.php:161
+#: inc/contact/Api/ContactController.php:71
+#: inc/contact/Api/ContactController.php:166
 msgid "Message sent successfully!"
 msgstr "Повідомлення успішно надіслано!"
 
-#: inc/contact/Api/ContactController.php:96
+#: inc/contact/Api/ContactController.php:98
 msgid "Links are not allowed in fields"
 msgstr "Посилання в полях не дозволені"
 
-#: inc/contact/Api/ContactController.php:131
+#: inc/contact/Api/ContactController.php:133
 msgid "Please fill in all required fields"
 msgstr "Будь ласка, заповніть усі обов'язкові поля"
 
 #. translators: %s: sender name
-#: inc/contact/Api/ContactController.php:141
+#: inc/contact/Channels/EmailChannel.php:48
 #, php-format
 msgid "Message from website by %s"
 msgstr "Повідомлення з вебсайту від %s"
 
-#: inc/contact/Api/ContactController.php:147
+#: inc/contact/Channels/EmailChannel.php:54
+#: inc/contact/Channels/TelegramChannel.php:115
 msgid "Name"
 msgstr "Ім'я"
 
-#: inc/contact/Api/ContactController.php:150
+#: inc/contact/Channels/EmailChannel.php:57
+#: inc/contact/Channels/TelegramChannel.php:110
 msgid "Not specified"
 msgstr "Не вказано"
 
-#: inc/contact/Api/ContactController.php:153
+#: inc/contact/Channels/EmailChannel.php:60
+#: inc/contact/Channels/TelegramChannel.php:121
 msgid "Message"
 msgstr "Повідомлення"
 
-#: inc/contact/Api/ContactController.php:172
+#: inc/contact/Api/ContactController.php:151
+#: inc/contact/Api/ContactController.php:159
 msgid "Server error. Please try again later."
 msgstr "Помилка сервера. Будь ласка, спробуйте пізніше."
 
-#: inc/contact/Core/ContactCore.php:151
+#: inc/contact/Core/ContactCore.php:187
 msgid "Please fill in this field"
 msgstr "Будь ласка, заповніть це поле"
 
-#: inc/contact/Core/ContactCore.php:152
+#: inc/contact/Core/ContactCore.php:188
 msgid "Invalid email address"
 msgstr "Недійсна адреса електронної пошти"
 
-#: inc/contact/Core/ContactCore.php:153
+#: inc/contact/Core/ContactCore.php:189
 msgid "Invalid phone number"
 msgstr "Недійсний номер телефону"
 
-#: inc/contact/Core/ContactCore.php:154 template-parts/contact-section.php:367
+#: inc/contact/Core/ContactCore.php:190 template-parts/contact-section.php:367
 msgid "Thank you!"
 msgstr "Вітаємо!"
 
-#: inc/contact/Core/ContactCore.php:155 template-parts/contact-section.php:371
+#: inc/contact/Core/ContactCore.php:191 template-parts/contact-section.php:371
 msgid "Your message has been sent successfully."
 msgstr "Ваше повідомлення успішно надіслано."
 
-#: inc/contact/Core/ContactCore.php:156
+#: inc/contact/Core/ContactCore.php:192
 msgid "Something went wrong. Please try again later."
 msgstr "Щось пішло не так. Спробуйте ще раз пізніше."
 
@@ -1567,11 +1573,11 @@ msgstr "Щось пішло не так. Спробуйте ще раз пізн
 msgid "Home Page"
 msgstr ""
 
-#: front-page.php:21 inc/contact/page-home.php:21 page-contact.php:21
+#: front-page.php:21 page-contact.php:21
 msgid "Contacts"
 msgstr "Контактуй"
 
-#: front-page.php:22 inc/contact/page-home.php:22
+#: front-page.php:22
 msgid "Get in Touch"
 msgstr "Відкриті до діалогу"
 
@@ -2313,7 +2319,7 @@ msgstr "Елементів на сторінці"
 #. translators: 1: action name (e.g., "Tour changes"), 2: human-readable wait duration
 #: inc/chat/Api/ActivityController.php:202
 #: inc/comments/Api/CommentsController.php:208
-#: inc/contact/Api/ContactController.php:50
+#: inc/contact/Api/ContactController.php:52
 #: inc/launchpad/Api/MediaController.php:146
 #: inc/launchpad/Api/OpportunitiesController.php:540
 #: inc/launchpad/Api/ProfileController.php:360
@@ -2336,7 +2342,7 @@ msgstr "Коментарі до цього контенту заборонені
 msgid "Invalid parent comment."
 msgstr "Недійсний батьківський коментар."
 
-#: inc/contact/Api/ContactController.php:51
+#: inc/contact/Api/ContactController.php:53
 msgid "Contact form"
 msgstr ""
 
@@ -2699,3 +2705,47 @@ msgstr "Поділитися через"
 #, php-format
 msgid "Share on %s"
 msgstr "Поділитися у %s"
+
+#: inc/contact/Channels/EmailChannel.php:43
+msgid "No email recipient configured."
+msgstr ""
+
+#: inc/contact/Channels/EmailChannel.php:78
+msgid "Failed to deliver email."
+msgstr ""
+
+#: inc/contact/Channels/TelegramChannel.php:72
+msgid "Telegram transport error."
+msgstr ""
+
+#: inc/contact/Channels/TelegramChannel.php:85
+msgid "Telegram rejected the message."
+msgstr ""
+
+#: inc/contact/Channels/TelegramChannel.php:114
+msgid "New message from website"
+msgstr "Нове повідомлення з вебсайту"
+
+#: inc/shared/Policy/TelegramConfigPolicy.php:51
+msgid "Telegram bot token is required."
+msgstr ""
+
+#: inc/shared/Policy/TelegramConfigPolicy.php:58
+msgid "Telegram bot token format is invalid. Expected: <id>:<token>."
+msgstr ""
+
+#: inc/shared/Policy/TelegramConfigPolicy.php:76
+msgid "Telegram chat ID is required."
+msgstr ""
+
+#: inc/shared/Policy/TelegramConfigPolicy.php:86
+msgid "Telegram chat ID must be numeric or a @channel handle."
+msgstr ""
+
+#: inc/shared/Policy/TelegramConfigPolicy.php:133
+msgid "Could not reach Telegram API to verify the bot."
+msgstr ""
+
+#: inc/shared/Policy/TelegramConfigPolicy.php:140
+msgid "Telegram rejected the bot token."
+msgstr ""

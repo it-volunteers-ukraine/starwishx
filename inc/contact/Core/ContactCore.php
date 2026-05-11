@@ -23,6 +23,14 @@ final class ContactCore
     public const PHONE_MAX_LENGTH   = 30;  // E.164 + separators/formatting slack
     public const MESSAGE_MAX_LENGTH = 500;
 
+    /**
+     * When true, successful per-channel deliveries are recorded at debug level.
+     * Failures and skipped-config events always log regardless of this flag.
+     * The Logger also gates debug output behind WP_DEBUG, so this is the
+     * narrower of the two switches.
+     */
+    public const LOG_SUCCESSFUL_DELIVERY = true;
+
     private static ?self $instance = null;
     private bool $assetsLoaded     = false;
 
@@ -45,6 +53,34 @@ final class ContactCore
         add_action('rest_api_init', [$this, 'registerRestRoutes']);
         add_action('wp_enqueue_scripts', [$this, 'enqueueAssets']);
         add_shortcode('starwish_contact', [$this, 'renderShortcode']);
+
+        $this->registerAcfValidators();
+    }
+
+    /**
+     * Validate Telegram credentials at ACF save time so admins get immediate
+     * feedback on bad formats. Empty values are allowed — the channel falls
+     * back to "not configured" at dispatch and the dispatcher logs it.
+     */
+    private function registerAcfValidators(): void
+    {
+        // tg_bot_token — group_6a0199cd6b786 field_6a0199cd43e7d
+        add_filter('acf/validate_value/key=field_6a0199cd43e7d', static function ($valid, $value) {
+            if ($valid !== true || $value === '' || $value === null) {
+                return $valid;
+            }
+            $result = \Shared\Policy\TelegramConfigPolicy::validateToken((string) $value);
+            return is_wp_error($result) ? $result->get_error_message() : true;
+        }, 10, 2);
+
+        // tg_chat_id — group_6a0199cd6b786 field_6a019c0ea55c1
+        add_filter('acf/validate_value/key=field_6a019c0ea55c1', static function ($valid, $value) {
+            if ($valid !== true || $value === '' || $value === null) {
+                return $valid;
+            }
+            $result = \Shared\Policy\TelegramConfigPolicy::validateChatId((string) $value);
+            return is_wp_error($result) ? $result->get_error_message() : true;
+        }, 10, 2);
     }
 
     /* ---------------------------------------------------------------
