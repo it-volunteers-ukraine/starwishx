@@ -16,7 +16,9 @@ use Shared\Http\ClientIp;
 use Shared\Policy\EmailPolicy;
 use Shared\Sanitize\InputSanitizer;
 use Shared\Policy\RateLimitPolicy;
+use Contact\Channels\ChannelDispatcher;
 use Contact\Core\ContactCore;
+use Contact\Dto\ContactMessage;
 use WP_REST_Request;
 use WP_REST_Response;
 use WP_Error;
@@ -134,44 +136,34 @@ class ContactController extends AbstractApiController
             );
         }
 
-        /* ---- Compose & send ---- */
-        $email_to = get_field('email_link', 'option') ?: get_option('admin_email');
-        $subject  = sprintf(
-            /* translators: %s: sender name */
-            __('Message from website by %s', 'starwishx'),
-            $name
+        /* ---- Dispatch across enabled channels ---- */
+        $contactMessage = new ContactMessage(
+            name:    $name,
+            email:   $email,
+            phone:   $phone,
+            message: $message,
         );
 
-        $body = sprintf(
-            "%s: %s\n%s: %s\n%s: %s\n\n%s:\n%s",
-            __('Name', 'starwishx'),
-            $name,
-            __('Phone', 'starwishx'),
-            $phone ?: __('Not specified', 'starwishx'),
-            __('Email', 'starwishx'),
-            $email,
-            __('Message', 'starwishx'),
-            $message
-        );
+        $result = (new ChannelDispatcher())->dispatch($contactMessage);
 
-        $headers = [sprintf('Reply-To: %s', $email)];
-
-        if (wp_mail($email_to, $subject, $body, $headers)) {
-            return $this->success([
-                'message' => __('Message sent successfully!', 'starwishx'),
-            ]);
+        if ($result['attempted'] === 0) {
+            return $this->error(
+                __('Server error. Please try again later.', 'starwishx'),
+                500,
+                'no_channel'
+            );
         }
 
-        /* ---- Mail failure: log and return generic error ---- */
-        global $phpmailer;
-        if (! empty($phpmailer->ErrorInfo)) {
-            error_log('Contact Form SMTP Error: ' . $phpmailer->ErrorInfo);
+        if ($result['succeeded'] === 0) {
+            return $this->error(
+                __('Server error. Please try again later.', 'starwishx'),
+                500,
+                'delivery_failed'
+            );
         }
 
-        return $this->error(
-            __('Server error. Please try again later.', 'starwishx'),
-            500,
-            'mail_error'
-        );
+        return $this->success([
+            'message' => __('Message sent successfully!', 'starwishx'),
+        ]);
     }
 }

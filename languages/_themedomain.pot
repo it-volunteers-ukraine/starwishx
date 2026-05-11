@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-05-10T07:57:46+00:00\n"
+"POT-Creation-Date: 2026-05-11T11:01:01+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: starwishx\n"
@@ -376,13 +376,11 @@ msgid "Home Page"
 msgstr ""
 
 #: front-page.php:21
-#: inc/contact/page-home.php:21
 #: page-contact.php:21
 msgid "Contacts"
 msgstr ""
 
 #: front-page.php:22
-#: inc/contact/page-home.php:22
 msgid "Get in Touch"
 msgstr ""
 
@@ -485,7 +483,7 @@ msgstr ""
 #. translators: 1: action name (e.g., "Tour changes"), 2: human-readable wait duration
 #: inc/chat/Api/ActivityController.php:202
 #: inc/comments/Api/CommentsController.php:208
-#: inc/contact/Api/ContactController.php:50
+#: inc/contact/Api/ContactController.php:52
 #: inc/launchpad/Api/MediaController.php:146
 #: inc/launchpad/Api/OpportunitiesController.php:540
 #: inc/launchpad/Api/ProfileController.php:360
@@ -642,40 +640,51 @@ msgstr ""
 msgid "Edit time limit expired (15 min)."
 msgstr ""
 
-#: inc/contact/Api/ContactController.php:51
+#: inc/contact/Api/ContactController.php:53
 msgid "Contact form"
 msgstr ""
 
-#: inc/contact/Api/ContactController.php:69
-#: inc/contact/Api/ContactController.php:161
+#: inc/contact/Api/ContactController.php:71
+#: inc/contact/Api/ContactController.php:166
 msgid "Message sent successfully!"
 msgstr ""
 
-#: inc/contact/Api/ContactController.php:82
-#: inc/contact/Api/ContactController.php:112
+#: inc/contact/Api/ContactController.php:84
+#: inc/contact/Api/ContactController.php:114
 #: inc/shared/Policy/PasswordPolicy.php:103
 msgid "Please enter a valid email address"
 msgstr ""
 
-#: inc/contact/Api/ContactController.php:96
+#: inc/contact/Api/ContactController.php:98
 msgid "Links are not allowed in fields"
 msgstr ""
 
-#: inc/contact/Api/ContactController.php:131
+#: inc/contact/Api/ContactController.php:133
 msgid "Please fill in all required fields"
 msgstr ""
 
+#: inc/contact/Api/ContactController.php:151
+#: inc/contact/Api/ContactController.php:159
+msgid "Server error. Please try again later."
+msgstr ""
+
+#: inc/contact/Channels/EmailChannel.php:43
+msgid "No email recipient configured."
+msgstr ""
+
 #. translators: %s: sender name
-#: inc/contact/Api/ContactController.php:141
+#: inc/contact/Channels/EmailChannel.php:48
 #, php-format
 msgid "Message from website by %s"
 msgstr ""
 
-#: inc/contact/Api/ContactController.php:147
+#: inc/contact/Channels/EmailChannel.php:54
+#: inc/contact/Channels/TelegramChannel.php:115
 msgid "Name"
 msgstr ""
 
-#: inc/contact/Api/ContactController.php:149
+#: inc/contact/Channels/EmailChannel.php:56
+#: inc/contact/Channels/TelegramChannel.php:117
 #: inc/launchpad/Api/ProfileController.php:129
 #: inc/launchpad/Panels/ProfilePanel.php:180
 #: inc/launchpad/Panels/ProfilePanel.php:250
@@ -683,48 +692,63 @@ msgstr ""
 msgid "Phone"
 msgstr ""
 
-#: inc/contact/Api/ContactController.php:150
+#: inc/contact/Channels/EmailChannel.php:57
+#: inc/contact/Channels/TelegramChannel.php:110
 msgid "Not specified"
 msgstr ""
 
-#: inc/contact/Api/ContactController.php:151
+#: inc/contact/Channels/EmailChannel.php:58
+#: inc/contact/Channels/TelegramChannel.php:119
 #: inc/launchpad/Panels/ProfilePanel.php:148
 #: inc/launchpad/Panels/ProfilePanel.php:259
 #: template-parts/contact-section.php:77
 msgid "Email"
 msgstr ""
 
-#: inc/contact/Api/ContactController.php:153
+#: inc/contact/Channels/EmailChannel.php:60
+#: inc/contact/Channels/TelegramChannel.php:121
 msgid "Message"
 msgstr ""
 
-#: inc/contact/Api/ContactController.php:172
-msgid "Server error. Please try again later."
+#: inc/contact/Channels/EmailChannel.php:78
+msgid "Failed to deliver email."
 msgstr ""
 
-#: inc/contact/Core/ContactCore.php:151
+#: inc/contact/Channels/TelegramChannel.php:72
+msgid "Telegram transport error."
+msgstr ""
+
+#: inc/contact/Channels/TelegramChannel.php:85
+msgid "Telegram rejected the message."
+msgstr ""
+
+#: inc/contact/Channels/TelegramChannel.php:114
+msgid "New message from website"
+msgstr ""
+
+#: inc/contact/Core/ContactCore.php:187
 msgid "Please fill in this field"
 msgstr ""
 
-#: inc/contact/Core/ContactCore.php:152
+#: inc/contact/Core/ContactCore.php:188
 msgid "Invalid email address"
 msgstr ""
 
-#: inc/contact/Core/ContactCore.php:153
+#: inc/contact/Core/ContactCore.php:189
 msgid "Invalid phone number"
 msgstr ""
 
-#: inc/contact/Core/ContactCore.php:154
+#: inc/contact/Core/ContactCore.php:190
 #: template-parts/contact-section.php:367
 msgid "Thank you!"
 msgstr ""
 
-#: inc/contact/Core/ContactCore.php:155
+#: inc/contact/Core/ContactCore.php:191
 #: template-parts/contact-section.php:371
 msgid "Your message has been sent successfully."
 msgstr ""
 
-#: inc/contact/Core/ContactCore.php:156
+#: inc/contact/Core/ContactCore.php:192
 msgid "Something went wrong. Please try again later."
 msgstr ""
 
@@ -2042,6 +2066,30 @@ msgstr ""
 #: inc/shared/Policy/RateLimitPolicy.php:59
 #, php-format
 msgid "Too many attempts. Please try again in %d minutes."
+msgstr ""
+
+#: inc/shared/Policy/TelegramConfigPolicy.php:51
+msgid "Telegram bot token is required."
+msgstr ""
+
+#: inc/shared/Policy/TelegramConfigPolicy.php:58
+msgid "Telegram bot token format is invalid. Expected: <id>:<token>."
+msgstr ""
+
+#: inc/shared/Policy/TelegramConfigPolicy.php:76
+msgid "Telegram chat ID is required."
+msgstr ""
+
+#: inc/shared/Policy/TelegramConfigPolicy.php:86
+msgid "Telegram chat ID must be numeric or a @channel handle."
+msgstr ""
+
+#: inc/shared/Policy/TelegramConfigPolicy.php:133
+msgid "Could not reach Telegram API to verify the bot."
+msgstr ""
+
+#: inc/shared/Policy/TelegramConfigPolicy.php:140
+msgid "Telegram rejected the bot token."
 msgstr ""
 
 #: inc/shared/Policy/UsernamePolicy.php:94
