@@ -114,7 +114,7 @@ export const gridGetters = {
 
     const queryValue = this.query[field];
 
-    // Case 1: Array (Taxonomies: Category, Country, Seekers)
+    // Case 1: Array (Taxonomies: Category, Country, Beneficiaries)
     if (Array.isArray(queryValue)) {
       // Use == for loose comparison because SSR sends IDs as Strings,
       // but JS updates them as Numbers.
@@ -150,15 +150,15 @@ export const gridGetters = {
   },
 
   /**
-   * Get comma-separated seekers list.
+   * Get comma-separated beneficiaries list.
    */
-  get seekersList() {
+  get beneficiariesList() {
     const ctx = getContext();
-    const seekers = ctx?.item?.seekers || [];
-    if (!Array.isArray(seekers) || seekers.length === 0) {
+    const beneficiaries = ctx?.item?.beneficiaries || [];
+    if (!Array.isArray(beneficiaries) || beneficiaries.length === 0) {
       return "";
     }
-    return seekers.map((s) => s.name).join(", ");
+    return beneficiaries.map((s) => s.name).join(", ");
   },
 
   get isCurrentItemFavorite() {
@@ -304,10 +304,10 @@ export const gridGetters = {
       }
     }
 
-    // --- Flat arrays: country, seekers ---
+    // --- Flat arrays: country, beneficiaries ---
     const flat = [
       { field: "country", facetKey: "country" },
-      { field: "seekers", facetKey: "category-seekers" },
+      { field: "beneficiaries", facetKey: "category-beneficiaries" },
     ];
     for (const { field, facetKey } of flat) {
       const ids = this.query[field];

@@ -154,7 +154,7 @@
         {
             "key": "field_693747eaf0639",
             "label": "Для кого відкрита можливість",
-            "name": "opportunity_seekers",
+            "name": "opportunity_beneficiaries",
             "aria-label": "",
             "type": "taxonomy",
             "instructions": "",
@@ -165,7 +165,7 @@
                 "class": "",
                 "id": ""
             },
-            "taxonomy": "category-seekers",
+            "taxonomy": "category-beneficiaries",
             "add_term": 0,
             "save_terms": 0,
             "load_terms": 0,
@@ -322,5 +322,7 @@
     "description": "",
     "show_in_rest": 0,
     "display_title": "",
-    "modified": 1776340625
+    "allow_ai_access": false,
+    "ai_description": "",
+    "modified": 1778618864
 }

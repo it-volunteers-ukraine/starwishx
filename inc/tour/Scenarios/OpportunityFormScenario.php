@@ -94,10 +94,10 @@ class OpportunityFormScenario implements ScenarioInterface
                 'panel'    => 'opportunities',
                 'view'     => 'add',
             ],
-            // Step 6 — Seekers
+            // Step 6 — Beneficiaries
             [
-                'id'       => 'seekers',
-                'title'    => __('Seekers', 'starwishx'),
+                'id'       => 'beneficiaries',
+                'title'    => __('Beneficiaries', 'starwishx'),
                 'text'     => __('Choose who this opportunity is intended for — the groups of people who can benefit from it.', 'starwishx'),
                 'attachTo' => ['element' => '.checkbox-group.launchpad-grid-3-col', 'on' => 'top'],
                 'panel'    => 'opportunities',

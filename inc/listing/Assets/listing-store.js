@@ -297,7 +297,7 @@ store("listing", {
         return count > 0 ? `(${count})` : "";
       }
 
-      // 4. Handle Flat Arrays (Country, Seekers)
+      // 4. Handle Flat Arrays (Country, Beneficiaries)
       return `(${value.length})`;
     },
 

@@ -250,7 +250,7 @@ class ListingSeoProvider
      */
     private function isOnlyCategoryFilter(): bool
     {
-        foreach (['seekers', 'country', 'location', 's'] as $key) {
+        foreach (['beneficiaries', 'country', 'location', 's'] as $key) {
             if (!empty($_GET[$key])) {
                 return false;
             }

@@ -33,7 +33,7 @@ export const opportunitiesActions = {
     const p = state.panels.opportunities;
     p.formData = p.emptyForm
       ? deepClone(p.emptyForm)
-      : { id: null, title: "", seekers: [], subcategory: [], category: [] };
+      : { id: null, title: "", beneficiaries: [], subcategory: [], category: [] };
     p.error = null;
     p.fieldErrors = {};
   },
@@ -179,7 +179,7 @@ export const opportunitiesActions = {
       p.fieldErrors.description = vm.descriptionMinLength;
     }
     if (!p.formData.category?.length) p.fieldErrors.category = vm.category;
-    if (!p.formData.seekers?.length) p.fieldErrors.seekers = vm.seekers;
+    if (!p.formData.beneficiaries?.length) p.fieldErrors.beneficiaries = vm.beneficiaries;
     if (
       p.formData.date_starts &&
       p.formData.date_ends &&
@@ -380,16 +380,16 @@ export const opportunitiesActions = {
     }
   },
 
-  toggleSeeker() {
+  toggleBeneficiary() {
     const { state } = store("launchpad");
     const { ref } = getElement();
     const p = state.panels.opportunities;
     const val = Number(ref.value);
-    let s = Array.isArray(p.formData.seekers) ? [...p.formData.seekers] : [];
-    p.formData.seekers = ref.checked
+    let s = Array.isArray(p.formData.beneficiaries) ? [...p.formData.beneficiaries] : [];
+    p.formData.beneficiaries = ref.checked
       ? [...new Set([...s, val])]
       : s.filter((id) => id !== val);
-    if (p.fieldErrors?.seekers) p.fieldErrors.seekers = null;
+    if (p.fieldErrors?.beneficiaries) p.fieldErrors.beneficiaries = null;
   },
 
   toggleCategory() {
@@ -931,8 +931,8 @@ export const opportunitiesActions = {
     if (!p.formData.category?.length) {
       p.fieldErrors.category = p.validationMessages?.category;
     }
-    if (!p.formData.seekers?.length) {
-      p.fieldErrors.seekers = p.validationMessages?.seekers;
+    if (!p.formData.beneficiaries?.length) {
+      p.fieldErrors.beneficiaries = p.validationMessages?.beneficiaries;
     }
     if (
       p.formData.date_starts &&

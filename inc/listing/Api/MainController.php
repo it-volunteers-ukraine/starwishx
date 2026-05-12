@@ -45,7 +45,7 @@ class MainController extends AbstractListingController
      */
     protected function arrayParamKeys(): array
     {
-        return ['seekers', 'category', 'country'];
+        return ['beneficiaries', 'category', 'country'];
     }
 
     public function registerRoutes(): void
@@ -57,7 +57,7 @@ class MainController extends AbstractListingController
             'permission_callback' => [$this, 'publicAccess'],
             'args'                => [
                 // Scalar params validated at the WP layer.
-                // Array params (category, country, seekers) are handled by
+                // Array params (category, country, beneficiaries) are handled by
                 // QueryStringParser — they bypass WP's schema because WP
                 // cannot represent repeated keys without [] notation. Their
                 // length cap lives in AbstractListingController::getFilterParams.

@@ -40,7 +40,7 @@ const DEFAULT_PANEL_STATE = {
   items: [],
   currentView: "list",
   formData: {
-    seekers: [],
+    beneficiaries: [],
     subcategory: [],
     // Shared list of selected chips
     locations: [],

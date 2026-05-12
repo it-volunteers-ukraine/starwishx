@@ -83,12 +83,12 @@ export const opportunitiesGetters = {
   // ──────────────────────────────────────────────────────────────
 
   /**
-   * Is the current seeker checkbox checked?
-   * Used in: data-wp-bind--checked="state.isSeekerChecked"
+   * Is the current beneficiary checkbox checked?
+   * Used in: data-wp-bind--checked="state.isBeneficiaryChecked"
    */
-  get isSeekerChecked() {
+  get isBeneficiaryChecked() {
     const id = getContext()?.item?.id;
-    const selected = this.panels.opportunities?.formData?.seekers;
+    const selected = this.panels.opportunities?.formData?.beneficiaries;
     return Array.isArray(selected) && selected.some((s) => s == id);
   },
 

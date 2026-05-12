@@ -255,7 +255,7 @@ class OpportunitiesService
         return [
             'categories' => $this->getHierarchicalCategoryTerms('category-oportunities'),
             'countries'  => $this->countriesDictionary->getAll(),
-            'seekers'    => $this->getTerms('category-seekers'),
+            'beneficiaries'    => $this->getTerms('category-beneficiaries'),
         ];
     }
 
@@ -383,7 +383,7 @@ class OpportunitiesService
 
             // FIX: Ensure these are Integers for JS .includes() check
             'subcategory'     => $getIntArray('opportunity_subcategory'),
-            'seekers'         => $getIntArray('opportunity_seekers'),
+            'beneficiaries'         => $getIntArray('opportunity_beneficiaries'),
 
             // Group 3: Description
             // Description now stored in post_content (native WordPress column)
@@ -575,10 +575,10 @@ class OpportunitiesService
                 throw new \RuntimeException('Failed to persist opportunity country.');
             }
 
-            // Seekers (Multi)
-            $seekers = array_map('intval', $data['seekers'] ?? []);
-            update_field('opportunity_seekers', $seekers, $id);
-            wp_set_object_terms($id, $seekers, 'category-seekers');
+            // Beneficiaries (Multi)
+            $beneficiaries = array_map('intval', $data['beneficiaries'] ?? []);
+            update_field('opportunity_beneficiaries', $beneficiaries, $id);
+            wp_set_object_terms($id, $beneficiaries, 'category-beneficiaries');
 
             // Group 3 - Description is now saved to post_content via wp_insert_post/wp_update_post
             update_field('opportunity_requirements', $data['requirements'], $id);
@@ -783,10 +783,10 @@ class OpportunitiesService
             $errors['category'] = __('At least one category is required.', 'starwishx');
         }
 
-        // Taxonomy: at least one seeker
-        $seekers = wp_get_object_terms($postId, 'category-seekers', ['fields' => 'ids']);
-        if (empty($seekers) || is_wp_error($seekers)) {
-            $errors['seekers'] = __('At least one seeker type is required.', 'starwishx');
+        // Taxonomy: at least one beneficiary
+        $beneficiaries = wp_get_object_terms($postId, 'category-beneficiaries', ['fields' => 'ids']);
+        if (empty($beneficiaries) || is_wp_error($beneficiaries)) {
+            $errors['beneficiaries'] = __('At least one beneficiary type is required.', 'starwishx');
         }
 
         // Dates — commented out, uncomment for testing

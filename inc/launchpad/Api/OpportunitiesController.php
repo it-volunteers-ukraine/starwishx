@@ -32,7 +32,7 @@ class OpportunitiesController extends AbstractLaunchpadController
     private const SEARCH_MAX_LENGTH     = 100;
     private const CATEGORY_MAX_ITEMS    = 10;
     private const SUBCATEGORY_MAX_ITEMS = 30;
-    private const SEEKERS_MAX_ITEMS     = 10;
+    private const BENEFICIARIES_MAX_ITEMS     = 10;
     private const LOCATIONS_MAX_ITEMS   = 20;
     private const STATUSES_MAX_ITEMS    = 3;
     private const LEVELS_MAX_ITEMS      = 4;
@@ -124,12 +124,12 @@ class OpportunitiesController extends AbstractLaunchpadController
             ],
             'city'            => ['sanitize_callback' => 'sanitize_text_field'],
             'sourcelink'      => ['sanitize_callback' => [InputSanitizer::class, 'sanitizeUrl']],
-            'seekers'         => [
+            'beneficiaries'         => [
                 'type'              => 'array',
                 'items'             => ['type' => 'integer'],
                 'validate_callback' => RestArg::arrayMaxItems(
-                    self::SEEKERS_MAX_ITEMS,
-                    __('Seekers', 'starwishx')
+                    self::BENEFICIARIES_MAX_ITEMS,
+                    __('Beneficiaries', 'starwishx')
                 ),
             ],
             'description'     => [
@@ -407,7 +407,7 @@ class OpportunitiesController extends AbstractLaunchpadController
             'sourcelink'      => $request->get_param('sourcelink'),
             'application_form' => $request->get_param('application_form'),
             'subcategory'     => (array) $request->get_param('subcategory'),
-            'seekers'         => (array) $request->get_param('seekers'),
+            'beneficiaries'         => (array) $request->get_param('beneficiaries'),
             'description'     => $request->get_param('description'),
             'requirements'    => $request->get_param('requirements'),
             'details'         => $request->get_param('details'),

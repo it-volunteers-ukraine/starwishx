@@ -626,8 +626,8 @@ function sw_get_opportunity_view_data(int $post_id): array
     ));
     $country_name = $country_row ? $country_row->name : __('Worldwide', 'starwishx');
 
-    $seeker_ids   = sw_get_field('opportunity_seekers', $post_id) ?? [];
-    $seeker_terms = sw_get_prepared_terms($seeker_ids, 'category-seekers');
+    $beneficiary_ids   = sw_get_field('opportunity_beneficiaries', $post_id) ?? [];
+    $beneficiary_terms = sw_get_prepared_terms($beneficiary_ids, 'category-beneficiaries');
 
     $post = get_post($post_id);
 
@@ -646,7 +646,7 @@ function sw_get_opportunity_view_data(int $post_id): array
         'details'          => (string) get_post_meta($post_id, 'opportunity_details',          true),
         // Complex / relational fields
         'country_name'     => $country_name,
-        'seeker_terms'     => $seeker_terms,
+        'beneficiary_terms'     => $beneficiary_terms,
         'document'         => sw_prepare_document(sw_get_field('opportunity_document', $post_id)),
         // Computed
         'locations'        => $locations,

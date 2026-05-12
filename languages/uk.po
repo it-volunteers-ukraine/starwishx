@@ -8,7 +8,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2026-02-25 10:47+0000\n"
-"PO-Revision-Date: 2026-05-11 11:03+0000\n"
+"PO-Revision-Date: 2026-05-12 21:08+0000\n"
 "Language: uk\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
@@ -713,17 +713,18 @@ msgstr "Опубліковано"
 msgid "Publishing..."
 msgstr "Публікується..."
 
+#: inc/launchpad/Api/OpportunitiesController.php:132
+#: inc/launchpad/Panels/OpportunitiesPanel.php:815
+#: inc/listing/Enums/Taxonomy.php:38
+#: inc/listing/Filters/BeneficiariesFilter.php:23
+#: inc/tour/Scenarios/OpportunityFormScenario.php:100
 #: templates/single-opportunity.php:164
-msgid "Receivers"
-msgstr "Отримувачі"
+msgid "Beneficiaries"
+msgstr "Набувачі"
 
 #: inc/launchpad/Panels/StatsPanel.php:71
 msgid "Recent Activity"
 msgstr "Остання активність"
-
-#: inc/listing/Filters/SeekersFilter.php:23
-msgid "Recievers"
-msgstr "Отримувачі"
 
 #: archive-opportunity.php:126 templates/page-listing-oportunities.php:79
 msgid "Refine Search"
@@ -800,13 +801,6 @@ msgstr "Безпека"
 #: inc/launchpad/Panels/SecurityPanel.php:40
 msgid "Security Settings"
 msgstr "Налаштування безпеки"
-
-#: inc/launchpad/Api/OpportunitiesController.php:132
-#: inc/launchpad/Panels/OpportunitiesPanel.php:815
-#: inc/listing/Enums/Taxonomy.php:38
-#: inc/tour/Scenarios/OpportunityFormScenario.php:100
-msgid "Seekers"
-msgstr "Отримувачі"
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:627
 msgid "Select Country"
@@ -1235,11 +1229,10 @@ msgstr "Опис обов'язковий."
 msgid "At least one category is required."
 msgstr "Треба обрати хоча б одну категорію."
 
-#: docs/UrlPolicy/inc/launchpad/Services/OpportunitiesService.php:673
 #: inc/launchpad/Panels/OpportunitiesPanel.php:157
 #: inc/launchpad/Services/OpportunitiesService.php:789
-msgid "At least one seeker type is required."
-msgstr "Треба обрати хоча б одного отримувача"
+msgid "At least one beneficiary type is required."
+msgstr "Треба обрати хоча б одного набувача"
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:1023
 msgid "Submit your changes and request a review from the moderation team?"
@@ -2608,7 +2601,7 @@ msgstr ""
 
 #: inc/tour/Api/TourController.php:56
 msgid "Unknown tour."
-msgstr ""
+msgstr "Невідомий тур."
 
 #: inc/tour/Api/TourController.php:210
 msgid "Tour changes"
@@ -2748,4 +2741,8 @@ msgstr ""
 
 #: inc/shared/Policy/TelegramConfigPolicy.php:140
 msgid "Telegram rejected the bot token."
+msgstr ""
+
+#: docs/UrlPolicy/inc/launchpad/Services/OpportunitiesService.php:673
+msgid "At least one receiver type is required."
 msgstr ""

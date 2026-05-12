@@ -156,7 +156,7 @@ export const filterActions = {
     state.query.category = [];
     state.query.country = [];
     state.query.location = "";
-    state.query.seekers = [];
+    state.query.beneficiaries = [];
     refreshResults();
   },
 

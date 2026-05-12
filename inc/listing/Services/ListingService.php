@@ -128,7 +128,7 @@ class ListingService
         // Two queries (one per taxonomy). Country is no longer a taxonomy —
         // it's read from wp_opportunity_countries below, joined to the
         // dictionary in a single batch query.
-        update_object_term_cache($postIds, ['category-oportunities', 'category-seekers']);
+        update_object_term_cache($postIds, ['category-oportunities', 'category-beneficiaries']);
 
         // --- Countries (typed table) ----------------------------------------
         // One query joining wp_opportunity_countries with wp_sw_countries to
@@ -401,7 +401,7 @@ class ListingService
      * Formats the CPT into a lean object for the iAPI Results Grid.
      * Relies on data pre-loaded by preloadPostData() to avoid N+1 queries.
      *
-     * Term data (country, categories, seekers) is read via get_the_terms(), which
+     * Term data (country, categories, beneficiaries) is read via get_the_terms(), which
      * resolves from the object cache primed by update_object_term_cache() — zero
      * additional DB queries per post.
      *
@@ -423,10 +423,10 @@ class ListingService
             $preloaded['categoryTermMap']
         );
 
-        // Seekers
-        $seekerTerms = get_the_terms($postId, 'category-seekers');
-        $seekers     = (! empty($seekerTerms) && ! is_wp_error($seekerTerms))
-            ? array_map(fn($t) => ['name' => $t->name], $seekerTerms)
+        // Beneficiaries
+        $beneficiaryTerms = get_the_terms($postId, 'category-beneficiaries');
+        $beneficiaries     = (! empty($beneficiaryTerms) && ! is_wp_error($beneficiaryTerms))
+            ? array_map(fn($t) => ['name' => $t->name], $beneficiaryTerms)
             : [];
 
         $isFavorite   = isset($preloaded['favoriteIds'][$postId]);
@@ -444,7 +444,7 @@ class ListingService
             'locations'     => $locations,
             'country'       => $country,
             'categories'    => $categories,
-            'seekers'       => $seekers,
+            'beneficiaries'       => $beneficiaries,
             'date_starts'   => $this->formatDateForUI(get_post_meta($postId, 'opportunity_date_starts', true)),
             'date_ends'     => $this->formatDateForUI(get_post_meta($postId, 'opportunity_date_ends', true)),
             'url'           => get_permalink($post),
