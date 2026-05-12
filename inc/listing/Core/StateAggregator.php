@@ -70,7 +70,7 @@ class StateAggregator
             'category' => $this->resolveCategoryValues((array) ($raw['category'] ?? [])),
             'country'  => $this->resolveCountryValues((array) ($raw['country'] ?? [])),
             'location' => sanitize_text_field($raw['location'] ?? ''),
-            'seekers'  => array_map('absint', (array) ($raw['seekers']  ?? [])),
+            'beneficiaries'  => array_map('absint', (array) ($raw['beneficiaries']  ?? [])),
             'page'     => absint($raw['paged'] ?? $raw['page'] ?? 1),
         ];
     }

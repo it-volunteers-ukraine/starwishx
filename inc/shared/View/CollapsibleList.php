@@ -24,7 +24,7 @@ class CollapsibleList
      * Render a tag list with iAPI-powered "Show N more / Show less".
      *
      * @param array  $items        WP_Term objects, arrays with 'name' key, or strings.
-     * @param string $itemClass    CSS class per <li> (e.g. 'tag-seekers').
+     * @param string $itemClass    CSS class per <li> (e.g. 'tag-beneficiaries').
      * @param int    $visibleCount Items visible before collapse.
      * @param array  $options      Optional overrides:
      *                             - containerClass (string, default 'tag-list')

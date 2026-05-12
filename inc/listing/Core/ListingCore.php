@@ -21,7 +21,7 @@ use Listing\Services\ListingService;
 use Listing\Filters\CategoryFilter;
 use Listing\Filters\CountryFilter;
 use Listing\Filters\LocationsFilterSimple;
-use Listing\Filters\SeekersFilter;
+use Listing\Filters\BeneficiariesFilter;
 use Listing\Services\TermCountingService;
 use Favorites\Services\FavoritesService;
 use Shared\Http\QueryStringParser;
@@ -306,7 +306,7 @@ final class ListingCore
         $categoryFilter->setTermCounter($this->termCounter);
         $registry->register('category', $categoryFilter,              10);
         $registry->register('location', new LocationsFilterSimple(),  20);
-        $registry->register('seekers',  new SeekersFilter(),          30);
+        $registry->register('beneficiaries',  new BeneficiariesFilter(),          30);
         $registry->register('country',  new CountryFilter(),          40);
     }
 

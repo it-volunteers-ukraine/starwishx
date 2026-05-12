@@ -13,9 +13,9 @@
  * Ukrainian content is counted by characters, not bytes.
  *
  * Usage:
- *   'seekers' => [
+ *   'beneficiaries' => [
  *       'type'              => 'array',
- *       'validate_callback' => RestArg::arrayMaxItems(10, __('Seekers', 'starwishx')),
+ *       'validate_callback' => RestArg::arrayMaxItems(10, __('Beneficiaries', 'starwishx')),
  *   ],
  *
  * File: inc/shared/Validation/RestArg.php

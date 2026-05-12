@@ -17,7 +17,7 @@ namespace Listing\Enums;
 enum Taxonomy: string
 {
     case CATEGORY = 'category-oportunities';
-    case SEEKERS  = 'category-seekers';
+    case BENEFICIARIES  = 'category-beneficiaries';
 
     /**
      * Returns the key used in the URL/State for this taxonomy.
@@ -27,7 +27,7 @@ enum Taxonomy: string
     {
         return match ($this) {
             self::CATEGORY => 'category',
-            self::SEEKERS  => 'seekers',
+            self::BENEFICIARIES  => 'beneficiaries',
         };
     }
 
@@ -35,7 +35,7 @@ enum Taxonomy: string
     {
         return match ($this) {
             self::CATEGORY => __('Category', 'starwishx'),
-            self::SEEKERS  => __('Seekers', 'starwishx'),
+            self::BENEFICIARIES  => __('Beneficiaries', 'starwishx'),
         };
     }
 }

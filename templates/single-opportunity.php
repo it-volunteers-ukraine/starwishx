@@ -154,24 +154,24 @@ if (function_exists('render_block')) {
                             <?php endif; ?>
                         </div>
 
-                        <!-- 4. Seekers -->
-                        <?php if (!empty($data['seeker_terms'])) : ?>
+                        <!-- 4. Beneficiaries -->
+                        <?php if (!empty($data['beneficiary_terms'])) : ?>
                             <div class="info-card">
                                 <dt class="info-card__title">
                                     <svg width="24" height="24" class="info-card__icon">
                                         <use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-person"></use>
                                     </svg>
-                                    <?php esc_html_e('Receivers', 'starwishx'); ?>
+                                    <?php esc_html_e('Beneficiaries', 'starwishx'); ?>
                                 </dt>
-                                <!-- <dd class="tag-cloud tag-cloud__seekers">
+                                <!-- <dd class="tag-cloud tag-cloud__beneficiaries">
                                     <ul class="tag-list">
-                                        < ?php foreach ($data['seeker_ids'] as $s_id) : ?>
-                                            <li class="tag-seekers">< ?php echo esc_html(get_term($s_id)->name); ?></li>
+                                        < ?php foreach ($data['beneficiary_ids'] as $s_id) : ?>
+                                            <li class="tag-beneficiaries">< ?php echo esc_html(get_term($s_id)->name); ?></li>
                                         < ?php endforeach; ?>
                                     </ul>
                                 </dd> -->
-                                <dd class="tag-cloud tag-cloud__seekers">
-                                    <?= CollapsibleList::render($data['seeker_terms'], 'tag-seekers', 5) ?>
+                                <dd class="tag-cloud tag-cloud__beneficiaries">
+                                    <?= CollapsibleList::render($data['beneficiary_terms'], 'tag-beneficiaries', 5) ?>
                                 </dd>
                             </div>
                         <?php endif; ?>

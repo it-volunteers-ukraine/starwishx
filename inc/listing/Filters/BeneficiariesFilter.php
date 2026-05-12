@@ -1,25 +1,25 @@
 <?php
-// file: inc/listing/Filters/SeekersFilter.php
+// file: inc/listing/Filters/BeneficiariesFilter.php
 declare(strict_types=1);
 
 namespace Listing\Filters;
 
 use Listing\Enums\Taxonomy;
 
-class SeekersFilter extends AbstractTaxonomyFilter
+class BeneficiariesFilter extends AbstractTaxonomyFilter
 {
     protected function getTaxonomy(): Taxonomy
     {
-        return Taxonomy::SEEKERS;
+        return Taxonomy::BENEFICIARIES;
     }
 
     public function getId(): string
     {
-        return 'seekers';
+        return 'beneficiaries';
     }
 
     public function getLabel(): string
     {
-        return __('Recievers', 'starwishx');
+        return __('Beneficiaries', 'starwishx');
     }
 }

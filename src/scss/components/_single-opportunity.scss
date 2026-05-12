@@ -298,12 +298,12 @@
         }
     }
     .tag-cloud__locations,
-    .tag-cloud__seekers {
+    .tag-cloud__beneficiaries {
         .tag-list {
             padding-left: 1.5rem;
             list-style-position: inside;
             .tag-locations,
-            .tag-seekers {
+            .tag-beneficiaries {
                 list-style: disc;
             }
             // @include media.min-tablet {
@@ -312,7 +312,7 @@
             //     gap: 4px;
             //     padding-left: unset;
             //     .tag-locations,
-            //     .tag-seekers {
+            //     .tag-beneficiaries {
             //         border: 1px dotted $text-light;
             //         border-radius: $radius-element;
             //         padding: 4px 8px;

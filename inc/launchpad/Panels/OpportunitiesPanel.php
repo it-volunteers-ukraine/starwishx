@@ -61,7 +61,7 @@ class OpportunitiesPanel extends AbstractPanel
             'city' => '',
             'sourcelink' => '',
             'application_form' => '',
-            'seekers' => [],
+            'beneficiaries' => [],
             'subcategory' => [],
             'description' => '',
             'requirements' => '',
@@ -154,7 +154,7 @@ class OpportunitiesPanel extends AbstractPanel
                     OpportunitiesService::DESCRIPTION_MIN_LENGTH
                 ),
                 'category'    => __('At least one category is required.', 'starwishx'),
-                'seekers'     => __('At least one seeker type is required.', 'starwishx'),
+                'beneficiaries'     => __('At least one beneficiary type is required.', 'starwishx'),
                 'dateRange'   => __('End date cannot be before start date.', 'starwishx'),
                 'document'    => __('File is too large. Max 5MB.', 'starwishx'),
             ],
@@ -812,21 +812,21 @@ class OpportunitiesPanel extends AbstractPanel
                                 </div>
 
                                 <div class="form-field">
-                                    <label class="<?php echo $required['opportunity_seekers'] ? 'label-required' : ''; ?>"><?php echo esc_html($labels['opportunity_seekers'] ?? __('Seekers', 'starwishx')); ?></label>
-                                    <div class="checkbox-group launchpad-grid-3-col" data-field="seekers">
-                                        <template data-wp-each="<?= $optPath ?>.seekers">
+                                    <label class="<?php echo $required['opportunity_beneficiaries'] ? 'label-required' : ''; ?>"><?php echo esc_html($labels['opportunity_beneficiaries'] ?? __('Beneficiaries', 'starwishx')); ?></label>
+                                    <div class="checkbox-group launchpad-grid-3-col" data-field="beneficiaries">
+                                        <template data-wp-each="<?= $optPath ?>.beneficiaries">
                                             <label class="launchpad-form__checkbox">
                                                 <input type="checkbox"
                                                     data-wp-bind--value="context.item.id"
-                                                    data-wp-bind--checked="state.isSeekerChecked"
-                                                    data-wp-on--change="actions.opportunities.toggleSeeker">
+                                                    data-wp-bind--checked="state.isBeneficiaryChecked"
+                                                    data-wp-on--change="actions.opportunities.toggleBeneficiary">
                                                 <span data-wp-text="context.item.name"></span>
                                             </label>
                                         </template>
                                     </div>
                                     <label class="exclamation-circle__error" hidden
-                                        data-wp-bind--hidden="!<?= $errPath ?>.seekers"
-                                        data-wp-text="<?= $errPath ?>.seekers"></label>
+                                        data-wp-bind--hidden="!<?= $errPath ?>.beneficiaries"
+                                        data-wp-text="<?= $errPath ?>.beneficiaries"></label>
                                 </div>
                             </div>
                         </div>

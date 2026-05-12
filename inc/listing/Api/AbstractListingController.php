@@ -37,7 +37,7 @@ abstract class AbstractListingController extends AbstractApiController
      *
      *   protected function arrayParamKeys(): array
      *   {
-     *       return ['seekers', 'category', 'country'];
+     *       return ['beneficiaries', 'category', 'country'];
      *   }
      *
      * @return string[]

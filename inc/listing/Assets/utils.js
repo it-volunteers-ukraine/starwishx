@@ -138,7 +138,7 @@ export function syncStateToUrl(query) {
         params.append(key, c?.code || id);
       }
     } else if (Array.isArray(value)) {
-      // Clean URL: ?seekers=75 (no brackets, repeated key)
+      // Clean URL: ?beneficiaries=75 (no brackets, repeated key)
       value.forEach((val) => params.append(key, val));
     } else {
       params.set(key, value);

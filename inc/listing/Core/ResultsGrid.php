@@ -171,9 +171,9 @@ class ResultsGrid implements RenderableInterface
                         < ?php esc_html_e('Country', 'starwishx'); ?>:&nbsp;
                         <span class="country" data-wp-bind--hidden="!context.item.country" data-wp-text="context.item.country"></span>
                     </span> -->
-                    <!-- <span data-wp-bind--hidden="!state.seekersList">
-                        < ?php esc_html_e('Recievers', 'starwishx'); ?>:&nbsp;
-                        <span data-wp-text="state.seekersList"></span>
+                    <!-- <span data-wp-bind--hidden="!state.beneficiariesList">
+                        < ?php esc_html_e('Beneficiaries', 'starwishx'); ?>:&nbsp;
+                        <span data-wp-text="state.beneficiariesList"></span>
                     </span> -->
                     <div class="listing-card__engage">
                         <span class="listing-card__rating rating-badge" data-wp-bind--hidden="!context.item.ratingCount">
@@ -201,10 +201,10 @@ class ResultsGrid implements RenderableInterface
                     </div>
                 </div> <!-- Meta -->
 
-                <!-- <div class="seekers" data-wp-bind--hidden="!context.item.seekers.length">
-                    <span class="seekers__label">Seekers:</span>
-                    <template data-wp-each--seeker="context.item.seekers">
-                        <span class="seeker-chip" data-wp-text="context.seeker.name"></span>
+                <!-- <div class="beneficiaries" data-wp-bind--hidden="!context.item.beneficiaries.length">
+                    <span class="beneficiaries__label">Beneficiaries:</span>
+                    <template data-wp-each--beneficiary="context.item.beneficiaries">
+                        <span class="beneficiary-chip" data-wp-text="context.beneficiary.name"></span>
                     </template>
                 </div> -->
             </div>
