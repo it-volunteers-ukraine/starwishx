@@ -17,6 +17,7 @@ declare(strict_types=1);
 
 namespace Notifications\Core;
 
+use Notifications\Broadcast\EditorBroadcaster;
 use Notifications\Data\Repositories\NotificationRepository;
 use Notifications\Services\NotificationService;
 
@@ -34,8 +35,9 @@ class NotificationsCore
     public static function instance(): self
     {
         if (self::$instance === null) {
-            $repository = new NotificationRepository();
-            $service    = new NotificationService($repository);
+            $repository  = new NotificationRepository();
+            $broadcaster = new EditorBroadcaster();
+            $service     = new NotificationService($repository, $broadcaster);
 
             self::$instance = new self($service);
         }
@@ -55,6 +57,9 @@ class NotificationsCore
 
         // Listen for opportunity submissions (fired by OpportunitiesService)
         add_action('sw_opportunity_pending', [$this->service, 'handleOpportunityPending'], 10, 2);
+
+        // WP Cron action for retrying transient editor-broadcast failures
+        add_action('sw_retry_editor_broadcast', [$this->service, 'retryEditorBroadcast'], 10, 3);
 
         // WP Cron action for queue processing
         add_action('sw_process_notifications', [$this->service, 'processQueue']);

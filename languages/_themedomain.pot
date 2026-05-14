@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-05-12T21:07:52+00:00\n"
+"POT-Creation-Date: 2026-05-14T00:31:29+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: starwishx\n"
@@ -239,69 +239,69 @@ msgid "Please correct the highlighted fields."
 msgstr ""
 
 #: docs/UrlPolicy/inc/launchpad/Services/OpportunitiesService.php:583
-#: inc/launchpad/Services/OpportunitiesService.php:699
+#: inc/launchpad/Services/OpportunitiesService.php:702
 msgid "Access denied."
 msgstr ""
 
 #: docs/UrlPolicy/inc/launchpad/Services/OpportunitiesService.php:589
-#: inc/launchpad/Services/OpportunitiesService.php:705
+#: inc/launchpad/Services/OpportunitiesService.php:708
 msgid "Only drafts can be submitted for review."
 msgstr ""
 
 #: docs/UrlPolicy/inc/launchpad/Services/OpportunitiesService.php:628
 #: inc/launchpad/Panels/OpportunitiesPanel.php:140
-#: inc/launchpad/Services/OpportunitiesService.php:744
+#: inc/launchpad/Services/OpportunitiesService.php:750
 msgid "Title is required."
 msgstr ""
 
 #: docs/UrlPolicy/inc/launchpad/Services/OpportunitiesService.php:631
 #: inc/launchpad/Panels/OpportunitiesPanel.php:142
-#: inc/launchpad/Services/OpportunitiesService.php:747
+#: inc/launchpad/Services/OpportunitiesService.php:753
 #, php-format
 msgid "Title must be at least %d characters."
 msgstr ""
 
 #: docs/UrlPolicy/inc/launchpad/Services/OpportunitiesService.php:636
-#: inc/launchpad/Services/OpportunitiesService.php:752
+#: inc/launchpad/Services/OpportunitiesService.php:758
 #, php-format
 msgid "Title must not exceed %d characters."
 msgstr ""
 
 #: docs/UrlPolicy/inc/launchpad/Services/OpportunitiesService.php:642
 #: inc/launchpad/Panels/OpportunitiesPanel.php:151
-#: inc/launchpad/Services/OpportunitiesService.php:758
+#: inc/launchpad/Services/OpportunitiesService.php:764
 msgid "Description is required."
 msgstr ""
 
 #: docs/UrlPolicy/inc/launchpad/Services/OpportunitiesService.php:645
 #: inc/launchpad/Panels/OpportunitiesPanel.php:153
-#: inc/launchpad/Services/OpportunitiesService.php:761
+#: inc/launchpad/Services/OpportunitiesService.php:767
 #, php-format
 msgid "Description must be at least %d characters."
 msgstr ""
 
 #: docs/UrlPolicy/inc/launchpad/Services/OpportunitiesService.php:653
 #: inc/launchpad/Panels/OpportunitiesPanel.php:145
-#: inc/launchpad/Services/OpportunitiesService.php:769
+#: inc/launchpad/Services/OpportunitiesService.php:775
 msgid "Company is required."
 msgstr ""
 
 #: docs/UrlPolicy/inc/launchpad/Services/OpportunitiesService.php:656
 #: inc/launchpad/Panels/OpportunitiesPanel.php:147
-#: inc/launchpad/Services/OpportunitiesService.php:772
+#: inc/launchpad/Services/OpportunitiesService.php:778
 #, php-format
 msgid "Company must be at least %d characters."
 msgstr ""
 
 #: docs/UrlPolicy/inc/launchpad/Services/OpportunitiesService.php:661
 #: inc/launchpad/Panels/OpportunitiesPanel.php:150
-#: inc/launchpad/Services/OpportunitiesService.php:777
+#: inc/launchpad/Services/OpportunitiesService.php:783
 msgid "Source link is required."
 msgstr ""
 
 #: docs/UrlPolicy/inc/launchpad/Services/OpportunitiesService.php:667
 #: inc/launchpad/Panels/OpportunitiesPanel.php:156
-#: inc/launchpad/Services/OpportunitiesService.php:783
+#: inc/launchpad/Services/OpportunitiesService.php:789
 msgid "At least one category is required."
 msgstr ""
 
@@ -310,7 +310,7 @@ msgid "At least one receiver type is required."
 msgstr ""
 
 #: docs/UrlPolicy/inc/launchpad/Services/OpportunitiesService.php:687
-#: inc/launchpad/Services/OpportunitiesService.php:803
+#: inc/launchpad/Services/OpportunitiesService.php:809
 msgid "Please fill in all required fields before submitting for review."
 msgstr ""
 
@@ -677,12 +677,12 @@ msgid "Message from website by %s"
 msgstr ""
 
 #: inc/contact/Channels/EmailChannel.php:54
-#: inc/contact/Channels/TelegramChannel.php:115
+#: inc/contact/Channels/TelegramChannel.php:78
 msgid "Name"
 msgstr ""
 
 #: inc/contact/Channels/EmailChannel.php:56
-#: inc/contact/Channels/TelegramChannel.php:117
+#: inc/contact/Channels/TelegramChannel.php:80
 #: inc/launchpad/Api/ProfileController.php:129
 #: inc/launchpad/Panels/ProfilePanel.php:180
 #: inc/launchpad/Panels/ProfilePanel.php:250
@@ -691,12 +691,12 @@ msgid "Phone"
 msgstr ""
 
 #: inc/contact/Channels/EmailChannel.php:57
-#: inc/contact/Channels/TelegramChannel.php:110
+#: inc/contact/Channels/TelegramChannel.php:73
 msgid "Not specified"
 msgstr ""
 
 #: inc/contact/Channels/EmailChannel.php:58
-#: inc/contact/Channels/TelegramChannel.php:119
+#: inc/contact/Channels/TelegramChannel.php:82
 #: inc/launchpad/Panels/ProfilePanel.php:148
 #: inc/launchpad/Panels/ProfilePanel.php:259
 #: template-parts/contact-section.php:77
@@ -704,7 +704,7 @@ msgid "Email"
 msgstr ""
 
 #: inc/contact/Channels/EmailChannel.php:60
-#: inc/contact/Channels/TelegramChannel.php:121
+#: inc/contact/Channels/TelegramChannel.php:84
 msgid "Message"
 msgstr ""
 
@@ -712,15 +712,7 @@ msgstr ""
 msgid "Failed to deliver email."
 msgstr ""
 
-#: inc/contact/Channels/TelegramChannel.php:72
-msgid "Telegram transport error."
-msgstr ""
-
-#: inc/contact/Channels/TelegramChannel.php:85
-msgid "Telegram rejected the message."
-msgstr ""
-
-#: inc/contact/Channels/TelegramChannel.php:114
+#: inc/contact/Channels/TelegramChannel.php:77
 msgid "New message from website"
 msgstr ""
 
@@ -1284,7 +1276,7 @@ msgid "Opportunity not found or access denied."
 msgstr ""
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:157
-#: inc/launchpad/Services/OpportunitiesService.php:789
+#: inc/launchpad/Services/OpportunitiesService.php:795
 msgid "At least one beneficiary type is required."
 msgstr ""
 
@@ -1792,7 +1784,7 @@ msgstr ""
 msgid "Invalid file type. Only PDF and DOC/DOCX allowed."
 msgstr ""
 
-#: inc/launchpad/Services/OpportunitiesService.php:684
+#: inc/launchpad/Services/OpportunitiesService.php:687
 msgid "Could not save opportunity. Please try again."
 msgstr ""
 
@@ -1923,13 +1915,36 @@ msgstr ""
 msgid "The Listing page cannot be trashed."
 msgstr ""
 
+#: inc/notifications/Broadcast/TelegramEditorChannel.php:56
+msgid "Unsupported broadcast payload type."
+msgstr ""
+
+#. translators: 1: actor display name, 2: opportunity title
+#: inc/notifications/Broadcast/TelegramEditorChannel.php:76
+#, php-format
+msgid "%1$s submitted \"%2$s\" for editorial review."
+msgstr ""
+
+#: inc/notifications/Broadcast/TelegramEditorChannel.php:83
+msgid "Opportunity submitted for review"
+msgstr ""
+
+#: inc/notifications/Broadcast/TelegramEditorChannel.php:86
+msgid "Preview"
+msgstr ""
+
+#: inc/notifications/Broadcast/TelegramEditorChannel.php:88
+msgid "Edit in admin"
+msgstr ""
+
 #: inc/notifications/Channels/EmailChannel.php:26
 msgid "an opportunity"
 msgstr ""
 
 #: inc/notifications/Channels/EmailChannel.php:28
-#: inc/notifications/Services/NotificationService.php:85
-#: inc/notifications/Services/NotificationService.php:182
+#: inc/notifications/Services/NotificationService.php:110
+#: inc/notifications/Services/NotificationService.php:206
+#: inc/notifications/Services/NotificationService.php:354
 msgid "Someone"
 msgstr ""
 
@@ -1993,7 +2008,7 @@ msgstr ""
 msgid "Or view the public page:"
 msgstr ""
 
-#: inc/notifications/Core/NotificationsCore.php:81
+#: inc/notifications/Core/NotificationsCore.php:86
 msgid "Every Five Minutes"
 msgstr ""
 
@@ -2095,6 +2110,14 @@ msgstr ""
 
 #: inc/shared/Policy/UsernamePolicy.php:94
 msgid "Only latin letters, digits, and the characters . _ - are allowed."
+msgstr ""
+
+#: inc/shared/Telegram/TelegramClient.php:64
+msgid "Telegram transport error."
+msgstr ""
+
+#: inc/shared/Telegram/TelegramClient.php:76
+msgid "Telegram rejected the message."
 msgstr ""
 
 #. translators: %s: name of the field that received an invalid value

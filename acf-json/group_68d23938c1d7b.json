@@ -4,7 +4,7 @@
     "fields": [
         {
             "key": "field_68d23938b84f4",
-            "label": "Socseti",
+            "label": "Social Networks",
             "name": "",
             "aria-label": "",
             "type": "tab",
@@ -279,5 +279,8 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1758622517
+    "display_title": "",
+    "allow_ai_access": false,
+    "ai_description": "",
+    "modified": 1778706777
 }

@@ -668,8 +668,11 @@ class OpportunitiesService
 
             // Notify editors when opportunity is submitted for review
             if (($data['status'] ?? '') === 'pending') {
+                $submittedAt = time();
+                update_post_meta($id, '_sw_pending_submitted_at', $submittedAt);
                 do_action('sw_opportunity_pending', $id, [
-                    'user_id' => get_current_user_id(),
+                    'user_id'      => get_current_user_id(),
+                    'submitted_at' => $submittedAt,
                 ]);
             }
 
@@ -721,8 +724,11 @@ class OpportunitiesService
 
         // Notify editors when opportunity is submitted for review
         if (!is_wp_error($result) && $newStatus === 'pending') {
+            $submittedAt = time();
+            update_post_meta($postId, '_sw_pending_submitted_at', $submittedAt);
             do_action('sw_opportunity_pending', $postId, [
-                'user_id' => $userId,
+                'user_id'      => $userId,
+                'submitted_at' => $submittedAt,
             ]);
         }
 
