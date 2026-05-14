@@ -385,6 +385,111 @@ class NotificationService
     }
 
     /**
+     * Handle the sw_opportunity_published action.
+     *
+     * Notifies the contributor (post author) anonymously — the editor's
+     * identity is intentionally not surfaced, to prevent targeted abuse if
+     * a contributor takes issue with editorial decisions.
+     *
+     * @param int   $postId
+     * @param array $context {actor_id, author_id}
+     */
+    public function handleOpportunityPublished(int $postId, array $context): void
+    {
+        $actorId  = (int) ($context['actor_id'] ?? 0);
+        $authorId = (int) ($context['author_id'] ?? 0);
+        if ($authorId === 0 || $actorId === $authorId) {
+            return;
+        }
+
+        $post = get_post($postId);
+        if (! $post || $post->post_type !== 'opportunity') {
+            return;
+        }
+
+        // Race-protection dedup only — duplicates here would be double-clicks.
+        if ($this->repository->findDuplicate($authorId, 'opportunity_published', $postId)) {
+            return;
+        }
+
+        $contextJson = wp_json_encode([
+            'post_title'         => get_the_title($post),
+            'post_url'           => (string) get_permalink($post),
+            'actor_display_name' => '',  // intentionally anonymous
+        ]);
+
+        $this->repository->create([
+            'recipient_id' => $authorId,
+            'actor_id'     => 0,  // anonymised — actor name never reaches the recipient
+            'type'         => 'opportunity_published',
+            'channel'      => 'email',
+            'object_id'    => $postId,
+            'object_type'  => 'post',
+            'context'      => $contextJson,
+        ]);
+
+        if (! wp_next_scheduled('sw_process_notifications')) {
+            wp_schedule_single_event(time(), 'sw_process_notifications');
+        }
+    }
+
+    /**
+     * Handle the sw_opportunity_returned_to_draft action.
+     *
+     * Notifies the contributor anonymously that revisions are needed.
+     * Covers both pending→draft (rejected from review) and publish→draft
+     * (demoted from live) — the contributor's next action is the same:
+     * edit and resubmit.
+     *
+     * @param int   $postId
+     * @param array $context {actor_id, author_id}
+     */
+    public function handleOpportunityReturnedToDraft(int $postId, array $context): void
+    {
+        $actorId  = (int) ($context['actor_id'] ?? 0);
+        $authorId = (int) ($context['author_id'] ?? 0);
+        if ($authorId === 0 || $actorId === $authorId) {
+            return;
+        }
+
+        $post = get_post($postId);
+        if (! $post || $post->post_type !== 'opportunity') {
+            return;
+        }
+
+        if ($this->repository->findDuplicate($authorId, 'opportunity_returned_to_draft', $postId)) {
+            return;
+        }
+
+        // Frontend launchpad URL — contributors edit drafts via the SPA, not wp-admin.
+        $pageId = (int) get_option('launchpad_page_id');
+        $url    = $pageId > 0 ? (string) (get_permalink($pageId) ?: '') : '';
+        if ($url === '') {
+            $url = home_url('/launchpad/');
+        }
+
+        $contextJson = wp_json_encode([
+            'post_title'         => get_the_title($post),
+            'post_url'           => $url,
+            'actor_display_name' => '',
+        ]);
+
+        $this->repository->create([
+            'recipient_id' => $authorId,
+            'actor_id'     => 0,
+            'type'         => 'opportunity_returned_to_draft',
+            'channel'      => 'email',
+            'object_id'    => $postId,
+            'object_type'  => 'post',
+            'context'      => $contextJson,
+        ]);
+
+        if (! wp_next_scheduled('sw_process_notifications')) {
+            wp_schedule_single_event(time(), 'sw_process_notifications');
+        }
+    }
+
+    /**
      * Resolve editor recipients. Falls back to administrators if no editors found.
      *
      * @return int[] User IDs

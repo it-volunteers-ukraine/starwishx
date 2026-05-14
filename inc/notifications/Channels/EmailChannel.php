@@ -103,6 +103,48 @@ class EmailChannel implements NotificationChannelInterface
                 $message .= $postUrl . "\r\n";
                 break;
 
+            case 'opportunity_published':
+                $subject = sprintf(
+                    /* translators: 1: site name, 2: post title */
+                    __('[%1$s] Your opportunity has been published: "%2$s"', 'starwishx'),
+                    $siteName,
+                    $postTitle
+                );
+                $message = sprintf(
+                    /* translators: %s: recipient display name */
+                    __('Hi %s,', 'starwishx'),
+                    $recipient->display_name
+                ) . "\r\n\r\n";
+                $message .= sprintf(
+                    /* translators: %s: post title */
+                    __('Your opportunity "%s" has been reviewed and is now published.', 'starwishx'),
+                    $postTitle
+                ) . "\r\n\r\n";
+                $message .= __('View it here:', 'starwishx') . "\r\n";
+                $message .= $postUrl . "\r\n";
+                break;
+
+            case 'opportunity_returned_to_draft':
+                $subject = sprintf(
+                    /* translators: 1: site name, 2: post title */
+                    __('[%1$s] Your opportunity needs revisions: "%2$s"', 'starwishx'),
+                    $siteName,
+                    $postTitle
+                );
+                $message = sprintf(
+                    /* translators: %s: recipient display name */
+                    __('Hi %s,', 'starwishx'),
+                    $recipient->display_name
+                ) . "\r\n\r\n";
+                $message .= sprintf(
+                    /* translators: %s: post title */
+                    __('Your opportunity "%s" has been returned to draft. Please review the content and submit it for approval again when ready.', 'starwishx'),
+                    $postTitle
+                ) . "\r\n\r\n";
+                $message .= __('Edit your draft here:', 'starwishx') . "\r\n";
+                $message .= $postUrl . "\r\n";
+                break;
+
             default:
                 error_log("[Notifications] Unknown notification type: {$notification->type}");
                 return false;

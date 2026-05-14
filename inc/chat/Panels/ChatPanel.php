@@ -57,15 +57,15 @@ class ChatPanel extends AbstractPanel
                 <h2 class="panel-title"><?php esc_html_e('Activity', 'starwishx'); ?></h2>
                 <div class="chat-panel-actions" data-wp-interactive="chat">
                     <button class="btn-secondary__small"
-                        data-wp-on--click="actions.refresh"
-                        data-wp-bind--disabled="state.isRefreshing">
-                        <?php esc_html_e('Refresh', 'starwishx'); ?>
-                    </button>
-                    <button class="btn-secondary__small"
                         data-wp-on--click="actions.markAllRead"
                         data-wp-bind--hidden="!state.hasUnread"
                         hidden>
                         <?php esc_html_e('Mark all read', 'starwishx'); ?>
+                    </button>
+                    <button class="btn-secondary__small"
+                        data-wp-on--click="actions.refresh"
+                        data-wp-bind--disabled="state.isRefreshing">
+                        <?php esc_html_e('Refresh', 'starwishx'); ?>
                     </button>
                 </div>
             </div>

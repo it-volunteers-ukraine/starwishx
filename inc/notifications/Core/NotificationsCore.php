@@ -58,6 +58,10 @@ class NotificationsCore
         // Listen for opportunity submissions (fired by OpportunitiesService)
         add_action('sw_opportunity_pending', [$this->service, 'handleOpportunityPending'], 10, 2);
 
+        // Listen for editor status changes (fired by OpportunitiesService::handleStatusTransition)
+        add_action('sw_opportunity_published',         [$this->service, 'handleOpportunityPublished'], 10, 2);
+        add_action('sw_opportunity_returned_to_draft', [$this->service, 'handleOpportunityReturnedToDraft'], 10, 2);
+
         // WP Cron action for retrying transient editor-broadcast failures
         add_action('sw_retry_editor_broadcast', [$this->service, 'retryEditorBroadcast'], 10, 3);
 

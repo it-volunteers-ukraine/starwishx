@@ -75,6 +75,48 @@ class OpportunitiesService
     }
 
     /**
+     * Classify a WordPress post-status transition into our domain events.
+     *
+     * Registered on `transition_post_status` from LaunchpadCore::bootstrap.
+     * Filters to the opportunity post type and fires narrow domain events
+     * that the Notifications module subscribes to.
+     *
+     * Trash transitions are intentionally silent — trashing is the moderation
+     * lever, and notifying a contributor that their content was trashed tips
+     * off bad actors and incentivises account-cycling.
+     *
+     * Draft → pending is handled by the explicit do_action in saveOpportunity
+     * and updateStatus, where we have clean actor context; we don't double-fire here.
+     */
+    public function handleStatusTransition(string $new, string $old, \WP_Post $post): void
+    {
+        if ($post->post_type !== 'opportunity' || $new === $old) {
+            return;
+        }
+
+        $actorId  = get_current_user_id();
+        $authorId = (int) $post->post_author;
+
+        // Author content now public — applies to admin-fast-tracked drafts too.
+        if ($new === 'publish' && in_array($old, ['pending', 'draft'], true)) {
+            do_action('sw_opportunity_published', $post->ID, [
+                'actor_id'  => $actorId,
+                'author_id' => $authorId,
+            ]);
+            return;
+        }
+
+        // Editor wants revisions — covers both pending→draft and publish→draft.
+        if ($new === 'draft' && in_array($old, ['pending', 'publish'], true)) {
+            do_action('sw_opportunity_returned_to_draft', $post->ID, [
+                'actor_id'  => $actorId,
+                'author_id' => $authorId,
+            ]);
+            return;
+        }
+    }
+
+    /**
      * Translatable status labels for opportunity cards.
      */
     public static function getStatusLabel(string $slug): string

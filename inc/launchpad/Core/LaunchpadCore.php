@@ -123,6 +123,11 @@ final class LaunchpadCore
         // Same rationale for the country junction — no FK cascade, so
         // we have to clean up junction rows ourselves on hard delete.
         add_action('delete_post', [$this->services['opportunities'], 'cleanupCountries']);
+
+        // Notify contributors when an editor changes their opportunity's status.
+        // OpportunitiesService classifies the transition and fires narrow domain
+        // events; NotificationsCore subscribes to those.
+        add_action('transition_post_status', [$this->services['opportunities'], 'handleStatusTransition'], 10, 3);
     }
 
     /**
