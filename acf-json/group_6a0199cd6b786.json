@@ -1,6 +1,6 @@
 {
     "key": "group_6a0199cd6b786",
-    "title": "_Contact channels",
+    "title": "_Contact form & Editor notification channels",
     "fields": [
         {
             "key": "field_6a0199cd43e7d",
@@ -58,7 +58,7 @@
                 "class": "",
                 "id": ""
             },
-            "message": "",
+            "message": "Use this Telegram Channel for Contact form",
             "default_value": 0,
             "allow_in_bindings": 0,
             "ui_on_text": "",
@@ -79,8 +79,29 @@
                 "class": "",
                 "id": ""
             },
-            "message": "",
+            "message": "Use Email Channel for Contact form",
             "default_value": 1,
+            "allow_in_bindings": 0,
+            "ui_on_text": "",
+            "ui_off_text": "",
+            "ui": 1
+        },
+        {
+            "key": "field_6a04ecda73b07",
+            "label": "Use Telegram Channel for Editor's notifications",
+            "name": "use_telegram_channel_for_editor_notifications",
+            "aria-label": "",
+            "type": "true_false",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "message": "To use this Telegram Channel for Editor's notifications (pending reviws Opportunities etc)",
+            "default_value": 0,
             "allow_in_bindings": 0,
             "ui_on_text": "",
             "ui_off_text": "",
@@ -108,5 +129,5 @@
     "display_title": "",
     "allow_ai_access": false,
     "ai_description": "",
-    "modified": 1778494713
+    "modified": 1778708962
 }

@@ -125,6 +125,38 @@ class NotificationRepository
     }
 
     /**
+     * Check for an existing notification of this type for this recipient/object
+     * created since a given Unix timestamp. Used for event-scoped dedup where
+     * the calling code knows the boundary of "this submission attempt" rather
+     * than relying on a fixed time window.
+     */
+    public function findDuplicateSince(
+        int $recipientId,
+        string $type,
+        int $objectId,
+        int $sinceTimestamp
+    ): bool {
+        global $wpdb;
+
+        $result = $wpdb->get_var(
+            $wpdb->prepare(
+                "SELECT 1 FROM {$this->getTable()}
+                 WHERE recipient_id = %d
+                   AND type = %s
+                   AND object_id = %d
+                   AND created_at >= %s
+                 LIMIT 1",
+                $recipientId,
+                $type,
+                $objectId,
+                gmdate('Y-m-d H:i:s', $sinceTimestamp)
+            )
+        );
+
+        return (bool) $result;
+    }
+
+    /**
      * Purge old sent/failed notifications.
      */
     public function purgeOld(int $days = 30): int

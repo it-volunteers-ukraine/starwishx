@@ -5,21 +5,46 @@ declare(strict_types=1);
 
 namespace Notifications\Services;
 
+use Notifications\Broadcast\BroadcastPayloadInterface;
+use Notifications\Broadcast\EditorBroadcaster;
+use Notifications\Broadcast\Payloads\OpportunityPendingPayload;
 use Notifications\Channels\EmailChannel;
 use Notifications\Channels\NotificationChannelInterface;
 use Notifications\Data\Repositories\NotificationRepository;
+use Shared\Log\Logger;
 
 class NotificationService
 {
+    /**
+     * Max broadcast attempts (initial + retries). Conservative — beyond this,
+     * Telegram is plausibly down for a while and an editor will notice.
+     */
+    private const BROADCAST_MAX_ATTEMPTS = 3;
+
+    /**
+     * Backoff between retries, in seconds. Indexed by attempt number minus 1
+     * (so attempt 1 failure schedules attempt 2 after RETRY_DELAYS[0] seconds).
+     */
+    private const BROADCAST_RETRY_DELAYS = [60, 300];
+
+    /**
+     * Transient lock TTL for per-post broadcast dispatch — comfortably above
+     * Telegram's request timeout so a long send still finishes inside its
+     * own lock.
+     */
+    private const BROADCAST_LOCK_TTL = 30;
+
     private NotificationRepository $repository;
+    private EditorBroadcaster $broadcaster;
 
     /** @var NotificationChannelInterface[] */
     private array $channels;
 
-    public function __construct(NotificationRepository $repository)
+    public function __construct(NotificationRepository $repository, EditorBroadcaster $broadcaster)
     {
-        $this->repository = $repository;
-        $this->channels   = [new EmailChannel()];
+        $this->repository  = $repository;
+        $this->broadcaster = $broadcaster;
+        $this->channels    = [new EmailChannel()];
     }
 
     /**
@@ -153,14 +178,21 @@ class NotificationService
 
     /**
      * Handle the sw_opportunity_pending action.
-     * Notifies editors (fallback: administrators) when a contributor submits for review.
+     *
+     * Two parallel flows:
+     *  1. Personal email queue — one row per editor (fallback: admins),
+     *     event-scoped dedup keyed on the submission timestamp so a contributor
+     *     resubmitting after rework notifies editors again.
+     *  2. Group broadcast — single dispatch to the editor TG group (if configured),
+     *     idempotent per submission attempt via _sw_editor_broadcast_at postmeta.
      *
      * @param int   $postId
-     * @param array $context {user_id}
+     * @param array $context {user_id, submitted_at}
      */
     public function handleOpportunityPending(int $postId, array $context): void
     {
-        $actorId = (int) ($context['user_id'] ?? 0);
+        $actorId     = (int) ($context['user_id'] ?? 0);
+        $submittedAt = (int) ($context['submitted_at'] ?? time());
         if ($actorId === 0) {
             return;
         }
@@ -170,26 +202,25 @@ class NotificationService
             return;
         }
 
-        $recipients = $this->resolveEditorRecipients();
-        if (empty($recipients)) {
-            return;
-        }
+        $actorUser = get_userdata($actorId);
+        $actorName = $actorUser ? $actorUser->display_name : __('Someone', 'starwishx');
+        $postTitle = get_the_title($post);
+        $postUrl   = (string) get_permalink($post);
 
-        $actorUser   = get_userdata($actorId);
+        // 1) Personal queue — event-scoped dedup
+        $recipients  = $this->resolveEditorRecipients();
         $contextJson = wp_json_encode([
-            'post_title'         => get_the_title($post),
-            'post_url'           => get_permalink($post),
-            'actor_display_name' => $actorUser ? $actorUser->display_name : __('Someone', 'starwishx'),
+            'post_title'         => $postTitle,
+            'post_url'           => $postUrl,
+            'actor_display_name' => $actorName,
+            'submitted_at'       => $submittedAt,
         ]);
 
         foreach ($recipients as $recipientId) {
-            // Self-notification guard
             if ($recipientId === $actorId) {
                 continue;
             }
-
-            // Deduplication
-            if ($this->repository->findDuplicate($recipientId, 'opportunity_pending', $postId)) {
+            if ($this->repository->findDuplicateSince($recipientId, 'opportunity_pending', $postId, $submittedAt)) {
                 continue;
             }
 
@@ -204,10 +235,153 @@ class NotificationService
             ]);
         }
 
-        // Schedule near-instant processing
-        if (! wp_next_scheduled('sw_process_notifications')) {
+        if (! empty($recipients) && ! wp_next_scheduled('sw_process_notifications')) {
             wp_schedule_single_event(time(), 'sw_process_notifications');
         }
+
+        // 2) Group broadcast — first attempt; retries scheduled via cron on transient failure
+        $payload = new OpportunityPendingPayload(
+            postId: $postId,
+            submittedAt: $submittedAt,
+            postTitle: $postTitle,
+            postUrl: $postUrl,
+            previewUrl: get_preview_post_link($postId),
+            editUrl: admin_url("post.php?post={$postId}&action=edit"),
+            actorDisplayName: $actorName,
+        );
+        $this->attemptBroadcast($payload, 1);
+    }
+
+    /**
+     * WP Cron handler for retrying a previously-failed editor broadcast.
+     * Rebuilds the payload from current post state so a stale snapshot
+     * can't be replayed against a renamed/moved post.
+     */
+    public function retryEditorBroadcast(int $postId, int $submittedAt, int $attempt): void
+    {
+        // A newer submission has since broadcast successfully — abort this chain.
+        $lastBroadcast = (int) get_post_meta($postId, '_sw_editor_broadcast_at', true);
+        if ($lastBroadcast >= $submittedAt) {
+            return;
+        }
+
+        $payload = $this->buildOpportunityPendingPayload($postId, $submittedAt);
+        if ($payload === null) {
+            return;
+        }
+
+        $this->attemptBroadcast($payload, $attempt);
+    }
+
+    /**
+     * Attempt one broadcast dispatch. On transient failure, schedule the next
+     * attempt via cron. On permanent failure or after exhausting attempts,
+     * record a failure marker and log.
+     */
+    private function attemptBroadcast(BroadcastPayloadInterface $payload, int $attempt): void
+    {
+        if (! $payload instanceof OpportunityPendingPayload) {
+            // Retry plumbing is shaped around OpportunityPendingPayload's
+            // postId/submittedAt keys; future payload types need their own.
+            return;
+        }
+
+        $postId      = $payload->postId;
+        $submittedAt = $payload->submittedAt;
+
+        // Idempotency: a successful broadcast already covered this submission.
+        $lastBroadcast = (int) get_post_meta($postId, '_sw_editor_broadcast_at', true);
+        if ($lastBroadcast >= $submittedAt) {
+            return;
+        }
+
+        if (! $this->acquireBroadcastLock($postId)) {
+            Logger::debug('Notifications', 'Broadcast lock held, deferring', [
+                'postId'  => $postId,
+                'attempt' => $attempt,
+            ]);
+            return;
+        }
+
+        try {
+            $result = $this->broadcaster->dispatch($payload);
+
+            if ($result['succeeded'] > 0) {
+                update_post_meta($postId, '_sw_editor_broadcast_at', time());
+                return;
+            }
+
+            // No channels were enabled+configured — admin choice, not a failure.
+            if ($result['attempted'] === 0) {
+                return;
+            }
+
+            if ($result['retryable'] && $attempt < self::BROADCAST_MAX_ATTEMPTS) {
+                $delay = self::BROADCAST_RETRY_DELAYS[$attempt - 1] ?? 300;
+                wp_schedule_single_event(
+                    time() + $delay,
+                    'sw_retry_editor_broadcast',
+                    [$postId, $submittedAt, $attempt + 1]
+                );
+                return;
+            }
+
+            // Permanent failure or attempts exhausted.
+            update_post_meta($postId, '_sw_editor_broadcast_failed_at', time());
+            Logger::error('Notifications', 'Broadcast permanently failed', [
+                'postId'   => $postId,
+                'attempt'  => $attempt,
+                'failures' => $result['failures'],
+            ]);
+        } finally {
+            $this->releaseBroadcastLock($postId);
+        }
+    }
+
+    /**
+     * Rebuild a payload at retry time from current post state.
+     * Returns null if the post no longer exists or has changed type.
+     */
+    private function buildOpportunityPendingPayload(int $postId, int $submittedAt): ?OpportunityPendingPayload
+    {
+        $post = get_post($postId);
+        if (! $post || $post->post_type !== 'opportunity') {
+            return null;
+        }
+
+        $authorId  = (int) $post->post_author;
+        $actorUser = $authorId > 0 ? get_userdata($authorId) : null;
+        $actorName = $actorUser ? $actorUser->display_name : __('Someone', 'starwishx');
+
+        return new OpportunityPendingPayload(
+            postId: $postId,
+            submittedAt: $submittedAt,
+            postTitle: get_the_title($post),
+            postUrl: (string) get_permalink($post),
+            previewUrl: get_preview_post_link($postId),
+            editUrl: admin_url("post.php?post={$postId}&action=edit"),
+            actorDisplayName: $actorName,
+        );
+    }
+
+    /**
+     * Try to take the per-post broadcast lock. Returns false if another
+     * dispatch holds it. The TTL guarantees the lock auto-expires if a
+     * holder crashes mid-send.
+     */
+    private function acquireBroadcastLock(int $postId): bool
+    {
+        $key = 'sw_eb_lock_' . $postId;
+        if (get_transient($key) !== false) {
+            return false;
+        }
+        set_transient($key, time(), self::BROADCAST_LOCK_TTL);
+        return true;
+    }
+
+    private function releaseBroadcastLock(int $postId): void
+    {
+        delete_transient('sw_eb_lock_' . $postId);
     }
 
     /**
