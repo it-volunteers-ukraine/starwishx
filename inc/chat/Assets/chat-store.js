@@ -58,15 +58,26 @@ const { state } = store("chat", {
 
     /**
      * i18n action text for the current item in the data-wp-each loop.
-     * "left a review on" or "replied to your review on".
+     * Maps notification type to a translated phrase that sits between the
+     * actor name (if any) and the post-title link in the template.
      */
     get currentItemAction() {
       const { state } = store("chat");
       const ctx = getContext();
       const type = ctx?.item?.type;
-      if (type === "comment_reply")
-        return state.config?.messages?.commentReply || "";
-      return state.config?.messages?.newComment || "";
+      const msgs = state.config?.messages || {};
+      switch (type) {
+        case "comment_reply":
+          return msgs.commentReply || "";
+        case "opportunity_pending":
+          return msgs.opportunityPending || "";
+        case "opportunity_published":
+          return msgs.opportunityPublished || "";
+        case "opportunity_returned_to_draft":
+          return msgs.opportunityReturnedToDraft || "";
+        default:
+          return msgs.newComment || "";
+      }
     },
 
     /**
