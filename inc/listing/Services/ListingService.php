@@ -110,7 +110,7 @@ class ListingService
             // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
             $wpdb->prepare(
                 "SELECT post_id, code, name_category_oblast AS name, level, category
-             FROM {$wpdb->prefix}v_opportunity_search
+             FROM wp_v_opportunity_search
              WHERE post_id IN ($placeholders)",
                 ...$postIds
             ),
@@ -379,7 +379,7 @@ class ListingService
                      name_category_oblast   AS label,
                      level,
                      category
-                 FROM {$wpdb->prefix}v_opportunity_search
+                 FROM wp_v_opportunity_search
                  WHERE name LIKE %s
                  ORDER BY level ASC, name ASC
                  LIMIT 20",
