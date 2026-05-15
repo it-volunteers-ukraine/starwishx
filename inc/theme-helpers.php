@@ -604,7 +604,7 @@ function sw_get_opportunity_view_data(int $post_id): array
 
     $locations = $wpdb->get_results($wpdb->prepare(
         "SELECT code, name_category_oblast as name, level, category
-         FROM {$wpdb->prefix}v_opportunity_search
+         FROM wp_v_opportunity_search
          WHERE post_id = %d
          ORDER BY level ASC, name ASC",
         $post_id
