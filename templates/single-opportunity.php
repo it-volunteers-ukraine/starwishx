@@ -105,7 +105,7 @@ if (function_exists('render_block')) {
                     <dl class="opportunity-article-meta">
                         <!-- 2. Dates -->
                         <?php if (
-                            ($data['date_start']['iso'] ?? '') !== '' &&
+                            ($data['date_start']['iso'] ?? '') !== '' or
                             ($data['date_end']['iso'] ?? '') !== ''
                         ) : ?>
                             <div class="info-card info-card--dates">
@@ -116,13 +116,19 @@ if (function_exists('render_block')) {
                                     <?php esc_html_e('Dates', 'starwishx'); ?>
                                 </dt>
                                 <div class="date-row">
-                                    <time class="btn-text-medium" datetime="<?php echo esc_attr($data['date_start']['iso']); ?>">
-                                        <?php echo esc_html($data['date_start']['display']); ?>
-                                    </time>
-                                    —
-                                    <time class="btn-text-medium" datetime="<?php echo esc_attr($data['date_end']['iso']); ?>">
-                                        <?php echo esc_html($data['date_end']['display']); ?>
-                                    </time>
+                                    <span><?= esc_html__('Lasts', 'starwishx') ?> </span>
+                                    <?php if (($data['date_start']['iso'] ?? '') !== '') : ?>
+                                        <span><?= esc_html__('from', 'starwishx') ?> </span>
+                                        <time class="btn-text-medium" datetime="<?php echo esc_attr($data['date_start']['iso']); ?>">
+                                            <?php echo esc_html($data['date_start']['display']); ?>
+                                        </time>
+                                    <?php endif; ?>
+                                    <?php if (($data['date_end']['iso'] ?? '') !== '') : ?>
+                                        <span> <?= esc_html__('to', 'starwishx') ?> </span>
+                                        <time class="btn-text-medium" datetime="<?php echo esc_attr($data['date_end']['iso']); ?>">
+                                            <?php echo esc_html($data['date_end']['display']); ?>
+                                        </time>
+                                    <?php endif; ?>
                                 </div>
                             </div>
                         <?php endif; ?>
