@@ -208,6 +208,42 @@ export const opportunitiesGetters = {
     return !!sel && parseInt(sel) === id;
   },
 
+  /**
+   * Country list driving the dropdown UI. Pure composition over the
+   * cached options.countries:
+   *   - When a search query is active, filter case-insensitively and
+   *     keep the natural alphabetical order — the previously-selected
+   *     country is NOT pinned, so filter results behave intuitively.
+   *   - When the query is empty, pin the selected country to the top
+   *     so returning users see their previous choice without scrolling.
+   */
+  get countriesDisplayList() {
+    const p = this.panels.opportunities;
+    const all = p?.options?.countries || [];
+    const q = (p?.countrySearch || "").toLowerCase().trim();
+
+    if (q) {
+      return all.filter((c) => c.name.toLowerCase().includes(q));
+    }
+
+    const selectedId = parseInt(p?.formData?.country) || null;
+    if (!selectedId) return all;
+
+    const idx = all.findIndex((c) => c.id === selectedId);
+    if (idx <= 0) return all;
+    return [all[idx], ...all.slice(0, idx), ...all.slice(idx + 1)];
+  },
+
+  /**
+   * True when the user typed a query and nothing matches — drives the
+   * "No countries match" row inside the dropdown.
+   */
+  get hasNoCountryResults() {
+    const p = this.panels.opportunities;
+    const q = (p?.countrySearch || "").trim();
+    return !!q && this.countriesDisplayList.length === 0;
+  },
+
   get isUkraineSelected() {
     const p = this.panels.opportunities;
     if (!p || !p.formData || !p.formData.country) return false;

@@ -159,6 +159,7 @@ class OpportunitiesPanel extends AbstractPanel
                 'document'    => __('File is too large. Max 5MB.', 'starwishx'),
             ],
             'isCountryDropdownOpen' => false,
+            'countrySearch' => '',
             'confirmPopup' => [
                 'isOpen'  => false,
                 'itemId'  => null,
@@ -634,7 +635,30 @@ class OpportunitiesPanel extends AbstractPanel
                                             </button>
                                             <ul class="lp-dropdown__list" role="listbox" hidden
                                                 data-wp-bind--hidden="!state.isCountryDropdownOpen">
-                                                <template data-wp-each="<?= $optPath ?>.countries">
+                                                <li class="lp-dropdown__search" role="presentation">
+                                                    <input type="text"
+                                                        placeholder="<?php esc_attr_e('Search country...', 'starwishx'); ?>"
+                                                        aria-label="<?php esc_attr_e('Search country', 'starwishx'); ?>"
+                                                        autocomplete="off"
+                                                        data-wp-bind--value="state.panels.opportunities.countrySearch"
+                                                        data-wp-on--input="actions.opportunities.searchCountries">
+                                                </li>
+                                                <!--
+                                                    Placed BEFORE the data-wp-each template on purpose: any static <li>
+                                                    AFTER the template gets stolen by Preact's reconciler as the first
+                                                    iteration slot (it look-aheads past <template> for the next matching
+                                                    tag and reuses it), causing the first country to inherit this row's
+                                                    `hidden` attribute and visually disappear.
+                                                -->
+                                                <li class="lp-dropdown__no-results"
+                                                    role="status"
+                                                    aria-live="polite"
+                                                    hidden
+                                                    data-wp-bind--hidden="!state.hasNoCountryResults">
+                                                    <?php esc_html_e('No countries match your search.', 'starwishx'); ?>
+                                                </li>
+                                                <template data-wp-each="state.countriesDisplayList"
+                                                    data-wp-each-key="context.item.id">
                                                     <li class="lp-dropdown__item"
                                                         data-wp-on--click="actions.opportunities.selectCountry"
                                                         data-wp-on--keydown="actions.opportunities.dropdownItemKeydown"
