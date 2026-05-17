@@ -1893,7 +1893,7 @@
         transition: $animations;
         cursor: pointer;
         border-radius: $radius-input;
-        background-color: $surface-primary;
+        // background-color: $surface-primary;
         padding: 10px 4px;
 
         &::not(:first-child) {
@@ -1915,7 +1915,51 @@
             align-items: center;
             color: $icon-color-accent;
             font-weight: 600;
+            margin-bottom: 4px;
         }
+    }
+
+    // Sticky search header — pinned to the top edge of the scrollable
+    // list so the input stays visible as the user scrolls results.
+    // Negative margins span the parent's 8px padding for a flush look.
+    &__search {
+        position: sticky;
+        top: -8px;
+        z-index: 2;
+        margin: -8px -8px 4px;
+        background: $surface-primary;
+        padding: 8px;
+        list-style: none;
+
+        input[type="text"] {
+            transition: border-color $animations;
+            border: 1px solid $input-color-border-filled;
+            border-radius: $radius-input;
+            background: $input-color-surface-default;
+            padding: 8px 12px;
+            width: 100%;
+            color: $text-dark;
+            font-size: 0.9rem;
+
+            &::placeholder {
+                color: $input-color-text-default;
+            }
+
+            &:focus {
+                outline: none;
+                box-shadow: 0 0 0 1px $input-color-border-active;
+                border-color: $input-color-border-active;
+            }
+        }
+    }
+
+    &__no-results {
+        padding: 12px 4px;
+        color: $text-light;
+        font-style: italic;
+        font-size: 0.9rem;
+        text-align: center;
+        list-style: none;
     }
 }
 .lp-dropdown--toggleable {

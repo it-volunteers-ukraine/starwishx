@@ -523,6 +523,8 @@ export const opportunitiesActions = {
     const { state } = store("launchpad");
     const p = state.panels.opportunities;
     p.isCountryDropdownOpen = !p.isCountryDropdownOpen;
+    // Reset search on close so the next open starts from the full list
+    if (!p.isCountryDropdownOpen) p.countrySearch = "";
   },
 
   selectCountry() {
@@ -533,14 +535,23 @@ export const opportunitiesActions = {
     p.formData.country =
       parseInt(p.formData.country) === item.id ? "" : item.id;
     p.isCountryDropdownOpen = false;
+    p.countrySearch = "";
     if (p.fieldErrors?.country) p.fieldErrors.country = null;
+  },
+
+  searchCountries() {
+    const { state } = store("launchpad");
+    const { ref } = getElement();
+    state.panels.opportunities.countrySearch = ref.value;
   },
 
   countryFocusout(event) {
     const { state } = store("launchpad");
     const wrapper = event.currentTarget;
     if (wrapper.contains(event.relatedTarget)) return;
-    state.panels.opportunities.isCountryDropdownOpen = false;
+    const p = state.panels.opportunities;
+    p.isCountryDropdownOpen = false;
+    p.countrySearch = "";
   },
 
   countryKeydown(event) {
@@ -549,7 +560,15 @@ export const opportunitiesActions = {
 
     if (event.key === "Escape") {
       p.isCountryDropdownOpen = false;
+      p.countrySearch = "";
       event.currentTarget.querySelector(".lp-dropdown__trigger")?.focus();
+      return;
+    }
+    // Enter inside the search row would submit the surrounding <form>;
+    // intercept it and move focus to the first result instead.
+    if (event.key === "Enter" && event.target.closest(".lp-dropdown__search")) {
+      event.preventDefault();
+      event.currentTarget.querySelector(".lp-dropdown__item")?.focus();
       return;
     }
     if (event.key === "ArrowDown" && p.isCountryDropdownOpen) {
@@ -579,7 +598,18 @@ export const opportunitiesActions = {
     }
     if (event.key === "ArrowUp") {
       event.preventDefault();
-      const prev = li.previousElementSibling;
+      // Walk backward over non-focusable header rows (no-results, search
+      // wrapper) until we hit something focusable. The first focusable
+      // thing going up is the search input inside .lp-dropdown__search.
+      let prev = li.previousElementSibling;
+      while (prev && !prev.matches(".lp-dropdown__item")) {
+        const input = prev.querySelector?.("input");
+        if (input) {
+          input.focus();
+          return;
+        }
+        prev = prev.previousElementSibling;
+      }
       if (prev) {
         prev.focus();
       } else {

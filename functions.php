@@ -450,3 +450,5 @@ if (defined('RANK_MATH_VERSION')) {
 add_filter('wp_omit_loading_attr_threshold', function ($omit_threshold) {
   return 0;
 });
+
+add_filter('wp_is_application_passwords_available', '__return_false');
