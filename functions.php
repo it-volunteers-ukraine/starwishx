@@ -452,3 +452,7 @@ add_filter('wp_omit_loading_attr_threshold', function ($omit_threshold) {
 });
 
 add_filter('wp_is_application_passwords_available', '__return_false');
+
+if (defined('WP_ENVIRONMENT_TYPE') && WP_ENVIRONMENT_TYPE === 'local') {
+  add_filter('acf/settings/enable_acf_ai', '__return_true');
+}
