@@ -255,6 +255,9 @@ require_once get_template_directory() . '/inc/contact/setup.php';
 // init for Social Share - share popover for single CPT pages
 require_once get_template_directory() . '/inc/social-share/setup.php';
 
+// init for News - /news/{category}/ routing and archive queries
+require_once get_template_directory() . '/inc/news/setup.php';
+
 require_once get_template_directory() . '/inc/news-taxonomy-metabox.php';
 
 
@@ -297,8 +300,9 @@ add_filter('single_template', function ($template) {
   return $template;
 });
 
-// Для пагинации и фильтров
-require_once get_template_directory() . '/inc/rewrites.php';
+// Rewrite-правила для /news/{category}/ живут в inc/news/Core/NewsCore.php
+// (файл inc/rewrites.php удалён: правило news-by-category заменено,
+// правило search никогда не срабатывало из-за ведущего слеша)
 
 // для загрузки AJAX обработчиков
 require get_template_directory() . '/inc/ajax.php';

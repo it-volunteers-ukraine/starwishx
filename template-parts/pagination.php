@@ -1,0 +1,113 @@
+<?php
+
+/**
+ * Pagination — shared across news, news-by-category and search.
+ *
+ * Reads the query it is paginating instead of running its own: the ACF
+ * pagination block it replaces ran a second, differently-built query, which
+ * is why its counts disagreed with the list on screen.
+ *
+ * Pretty URLs (/page/2/) come from paginate_links(); per_page, sortby and
+ * order ride along as query args so the choice survives a page change.
+ *
+ * @var array $args {
+ *     @type WP_Query $query     Query to paginate. Defaults to the main query.
+ *     @type bool     $show_per_page  Render the items-per-page select. Default true.
+ * }
+ */
+
+declare(strict_types=1);
+
+$args  = $args ?? [];
+$query = $args['query'] ?? $GLOBALS['wp_query'];
+
+$show_per_page = $args['show_per_page'] ?? true;
+
+$total_pages = (int) $query->max_num_pages;
+$current     = max(1, (int) ($query->get('paged') ?: 1));
+
+$allowed_per_page = sw_get_allowed_per_page();
+$per_page         = sw_get_per_page();
+$sort             = sw_get_sort_params();
+
+// Query args that must survive a page change
+$add_args = ['per_page' => $per_page];
+
+if ($sort['orderby'] !== null) {
+    $add_args['sortby'] = $sort['orderby'];
+}
+if ($sort['order'] !== null) {
+    $add_args['order'] = $sort['order'];
+}
+if (is_search()) {
+    $add_args['s'] = get_search_query();
+}
+
+$sprite = get_template_directory_uri() . '/assets/img/sprites.svg';
+
+$arrow = static fn(string $extra): string => sprintf(
+    '<svg class="sw-pagination__icon %s" aria-hidden="true" focusable="false"><use href="%s#icon-arrow"></use></svg>',
+    esc_attr($extra),
+    esc_url($sprite)
+);
+
+$links = $total_pages > 1
+    ? paginate_links([
+        'current'   => $current,
+        'total'     => $total_pages,
+        'mid_size'  => 1,
+        'end_size'  => 1,
+        'add_args'  => $add_args,
+        'type'      => 'plain',
+        'prev_text' => $arrow('sw-pagination__icon--prev'),
+        'next_text' => $arrow(''),
+    ])
+    : '';
+
+if (!$links && !$show_per_page) {
+    return;
+}
+?>
+
+<section class="section sw-pagination-section">
+    <div class="container">
+        <nav class="sw-pagination" aria-label="<?php esc_attr_e('Pagination', 'starwishx'); ?>">
+
+            <?php if ($links) : ?>
+                <div class="btn-text-medium sw-pagination__pages">
+                    <?php
+                    // paginate_links() escapes its own URLs and page numbers;
+                    // prev/next markup is built above from theme constants.
+                    echo $links; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+                    ?>
+                </div>
+            <?php endif; ?>
+
+            <?php if ($show_per_page && count($allowed_per_page) > 1) : ?>
+                <form method="get" class="sw-pagination__perpage">
+                    <?php if (is_search()) : ?>
+                        <input type="hidden" name="s" value="<?php echo esc_attr(get_search_query()); ?>">
+                    <?php endif; ?>
+                    <?php if ($sort['orderby'] !== null) : ?>
+                        <input type="hidden" name="sortby" value="<?php echo esc_attr($sort['orderby']); ?>">
+                    <?php endif; ?>
+                    <?php if ($sort['order'] !== null) : ?>
+                        <input type="hidden" name="order" value="<?php echo esc_attr($sort['order']); ?>">
+                    <?php endif; ?>
+
+                    <label class="screen-reader-text" for="sw-per-page">
+                        <?php esc_html_e('Items per page', 'starwishx'); ?>
+                    </label>
+                    <select id="sw-per-page" name="per_page" class="btn-text-medium sw-pagination__select" onchange="this.form.submit()">
+                        <?php foreach ($allowed_per_page as $value) : ?>
+                            <option value="<?php echo (int) $value; ?>" <?php selected($per_page, $value); ?>>
+                                <?php echo (int) $value; ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                </form>
+            <?php endif; ?>
+
+        </nav>
+    </div>
+</section>

@@ -1,0 +1,54 @@
+@use "../variables" as *;
+@use "../mixins/media" as *;
+
+/*
+ * News filtered by category — templates/archive-news-category.php.
+ *
+ * Ported from inc/acf/blocks/news-page-category/news-page-category.module.scss.
+ * The grid gets its own class rather than reusing `.newscards`: that one is
+ * archive-specific (hidden on mobile, `display: contents` on desktop).
+ */
+
+.newscat-section {
+  padding: 16px 0 54px;
+
+  @include min-tablet {
+    padding-bottom: 40px;
+  }
+
+  @include min-laptop {
+    padding-top: 32px;
+  }
+}
+
+.newscat-title {
+  margin-bottom: 16px;
+  color: $text-dark;
+
+  @include min-laptop {
+    margin-bottom: 32px;
+  }
+}
+
+.newscat-grid {
+  display: grid;
+  gap: 30px;
+
+  @include min-tablet {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 40px 16px;
+  }
+
+  @media screen and (min-width: 992px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  @include min-laptop {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 36px 20px;
+  }
+}
+
+.newscat-empty {
+  color: $text-dark;
+}

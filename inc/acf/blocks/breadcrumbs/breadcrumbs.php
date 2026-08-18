@@ -76,15 +76,27 @@ if (is_post_type_archive()) {
         $archive_pt = reset($archive_pt);
     }
     $pt_object = get_post_type_object($archive_pt);
-    // echo '<pre>';
-    // var_dump($archive_pt, $pt_object);
-    // echo '</pre>';
 
     if ($pt_object) {
+        // On /news/{category}/ the archive becomes a link and the category
+        // is the current crumb: Home > News > Category
+        $archive_url = $category_slug ? get_post_type_archive_link($archive_pt) : '';
+
         $breadcrumbs[] = [
             'title' => $pt_object->labels->name,
-            'link'  => null, // current page
+            'link'  => $archive_url ?: null, // null = current page
         ];
+
+        if ($category_slug) {
+            $term = get_term_by('slug', $category_slug, 'category-oportunities');
+
+            if ($term && !is_wp_error($term)) {
+                $breadcrumbs[] = [
+                    'title' => $term->name,
+                    'link'  => null,
+                ];
+            }
+        }
     }
 
     // B) Regular post / page / CPT single
