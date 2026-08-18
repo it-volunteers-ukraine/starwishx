@@ -304,10 +304,9 @@ add_filter('single_template', function ($template) {
 // (файл inc/rewrites.php удалён: правило news-by-category заменено,
 // правило search никогда не срабатывало из-за ведущего слеша)
 
-// для загрузки AJAX обработчиков
-require get_template_directory() . '/inc/ajax.php';
+// "Показати більше" переехало с admin-ajax на REST: news/v1/posts
+// (inc/news/Api/ArchiveController.php)
 
-require_once get_template_directory() . '/inc/helpers.php';
 
 require_once get_template_directory() . '/inc/theme-helpers.php';
 

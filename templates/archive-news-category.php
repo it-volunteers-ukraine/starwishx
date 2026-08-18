@@ -75,7 +75,7 @@ if (function_exists('render_block')) {
         </h1>
 
         <?php if (have_posts()) : ?>
-            <div class="cards-list newscat-grid">
+            <div id="sw-results" class="cards-list sw-cards-grid">
                 <?php while (have_posts()) : the_post(); ?>
                     <?php
                     $post_item            = get_post();

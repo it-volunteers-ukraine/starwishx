@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace News\Core;
 
+use News\Api\ArchiveController;
 use WP_Query;
 
 final class NewsCore
@@ -60,8 +61,77 @@ final class NewsCore
         // Priority 1: must beat the 404 template for retired URLs
         add_action('template_redirect', [$this, 'redirectLegacyCategoryUrls'], 1);
 
+        add_action('rest_api_init',      [$this, 'registerRestRoutes']);
+        add_action('wp_enqueue_scripts', [$this, 'enqueueAssets']);
+
         // Canonical / title / rel prev-next for the category archive
         (new NewsSeoProvider())->register();
+
+        // Site-wide search on WordPress's own search query
+        (new SiteSearchProvider())->register();
+    }
+
+    public function registerRestRoutes(): void
+    {
+        (new ArchiveController())->registerRoutes();
+    }
+
+    /**
+     * Load-more module — only on pages that can paginate a card list.
+     */
+    public function enqueueAssets(): void
+    {
+        if (!$this->isPaginatedContext() || !function_exists('wp_register_script_module')) {
+            return;
+        }
+
+        wp_register_script_module(
+            '@starwishx/news',
+            get_template_directory_uri() . '/assets/js/news-store.module.js',
+            ['@wordpress/interactivity']
+        );
+        wp_enqueue_script_module('@starwishx/news');
+
+        $this->hydrateState();
+    }
+
+    /**
+     * Infrastructure state for the load-more store.
+     *
+     * PHP stays the single i18n authority: every string the store can render
+     * is hydrated here rather than hardcoded in JS.
+     */
+    private function hydrateState(): void
+    {
+        wp_interactivity_state('news', [
+            'restUrl' => rest_url('news/v1/posts'),
+            'source'  => $this->currentSource(),
+            'i18n'    => [
+                'loadMore' => __('Show more', 'starwishx'),
+                'loading'  => __('Loading…', 'starwishx'),
+                'error'    => __('Could not load more items. Please try again.', 'starwishx'),
+            ],
+        ]);
+    }
+
+    /**
+     * True where a paginated card list is rendered.
+     *
+     * /news/ is excluded on purpose: archive-news.php is a curated
+     * per-category layout, not a paginated list, so there is nothing there
+     * to load more of.
+     */
+    public function isPaginatedContext(): bool
+    {
+        return is_search() || (string) get_query_var(self::QUERY_VAR) !== '';
+    }
+
+    /**
+     * Source key the REST route expects for the current page.
+     */
+    public function currentSource(): string
+    {
+        return is_search() ? 'search' : 'news_category';
     }
 
     /**

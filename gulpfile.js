@@ -303,6 +303,8 @@ export const moduleScripts = () => {
       "inc/tour/Assets/*.mjs",
       "inc/social-share/Assets/*.js",
       "inc/social-share/Assets/*.mjs",
+      "inc/news/Assets/*.js",
+      "inc/news/Assets/*.mjs",
     ],
     {
       allowEmpty: true,
@@ -412,6 +414,7 @@ export const watchForChanges = () => {
   watch("inc/listing/Assets/**/*.{js,mjs}", moduleScripts);
   watch("inc/contact/Assets/**/*.{js,mjs}", moduleScripts);
   watch("inc/chat/Assets/**/*.{js,mjs}", moduleScripts);
+  watch("inc/news/Assets/**/*.{js,mjs}", moduleScripts);
   watch("inc/tour/Assets/**/*.{js,mjs}", moduleScripts);
   watch("inc/social-share/Assets/**/*.{js,mjs}", moduleScripts);
   watch("inc/acf/blocks/**/*.module.scss", blockStyles);

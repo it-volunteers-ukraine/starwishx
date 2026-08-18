@@ -119,3 +119,40 @@
   background: transparent;
   color: inherit;
 }
+
+.sw-pagination__load-more {
+  @include min-tablet {
+    margin-left: auto;
+  }
+
+  &[hidden] {
+    display: none;
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    pointer-events: none;
+  }
+}
+
+.sw-pagination__alert {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
+  font-size: 16px;
+  color: $text-dark;
+
+  &[hidden] {
+    display: none;
+  }
+}
+
+.sw-pagination__alert-close {
+  border: none;
+  background: none;
+  color: $icon-color-accent;
+  cursor: pointer;
+  text-decoration: underline;
+}

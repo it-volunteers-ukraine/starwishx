@@ -2,14 +2,16 @@
 @use "../mixins/media" as *;
 
 /*
- * News filtered by category — templates/archive-news-category.php.
+ * Card grid shared by the news category archive and search results, plus
+ * the section chrome for both.
  *
  * Ported from inc/acf/blocks/news-page-category/news-page-category.module.scss.
  * The grid gets its own class rather than reusing `.newscards`: that one is
  * archive-specific (hidden on mobile, `display: contents` on desktop).
  */
 
-.newscat-section {
+.newscat-section,
+.search-section {
   padding: 16px 0 54px;
 
   @include min-tablet {
@@ -21,7 +23,8 @@
   }
 }
 
-.newscat-title {
+.newscat-title,
+.search-title {
   margin-bottom: 16px;
   color: $text-dark;
 
@@ -30,7 +33,7 @@
   }
 }
 
-.newscat-grid {
+.sw-cards-grid {
   display: grid;
   gap: 30px;
 
@@ -49,6 +52,7 @@
   }
 }
 
-.newscat-empty {
+.newscat-empty,
+.search-empty {
   color: $text-dark;
 }
