@@ -8,7 +8,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2026-02-25 10:47+0000\n"
-"PO-Revision-Date: 2026-08-18 22:40+0000\n"
+"PO-Revision-Date: 2026-08-18 23:18+0000\n"
 "Language: uk\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
 "X-Generator: Loco https://localise.biz/\n"
@@ -2665,7 +2665,7 @@ msgstr "Не вдалося завантажити більше елементі
 #: search.php:61
 #, php-format
 msgid "Search results \"%s\""
-msgstr ""
+msgstr "Результати пошуку \"%s\""
 
 #: search.php:94
 msgid "Nothing found. Try a different search term."
@@ -2703,7 +2703,7 @@ msgstr "Порядок сортування"
 #: templates/archive-news-category.php:71
 #, php-format
 msgid "News \"%s\""
-msgstr ""
+msgstr "Новини \"%s\""
 
 #: templates/archive-news-category.php:93
 msgid "No news in this category yet."
