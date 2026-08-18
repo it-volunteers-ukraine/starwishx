@@ -22,5 +22,9 @@ production/
 launch.json
 docs/
 .docs
+
+.agents
 .claude
+skills-lock.json
+
 /languages/*.po~
