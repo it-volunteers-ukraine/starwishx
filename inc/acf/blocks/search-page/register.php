@@ -5,7 +5,7 @@ acf_register_block_type([
     'render_callback' => function($block, $content = '', $is_preview = false, $post_id = 0) {
 
         // Подключаем CSS/JS для блока
-        wp_enqueue_style('new-card-css', get_template_directory_uri() . '/assets/css/template-parts/new-card.css');
+        // Стили карточки живут в app.css (src/scss/components/_news-card.scss)
         wp_enqueue_style('sortby-css', get_template_directory_uri() . '/assets/css/template-parts/sortby-and-result-posts.css');
         // wp_enqueue_style('custom-select-css', get_template_directory_uri() . '/assets/css/custom-select.css');
         wp_enqueue_style('search-page-css', get_template_directory_uri() . '/assets/css/blocks/search-page/search-page.module.css');

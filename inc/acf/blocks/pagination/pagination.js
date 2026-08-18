@@ -7,31 +7,31 @@ if (btn && container) {
         const perPage = btn.dataset.perPage;
         const category = btn.dataset.category;
         const categorySlug = btn.dataset.categorySlug;
-        const postType = btn.dataset.postType;
         const searchTerm = btn.dataset.search || '';
         const textLoadMore = btn.dataset.textLoadmore || 'Load more';
         const textLoading = btn.dataset.textLoading || 'Loading...';
-        const noDesc = Boolean(btn.dataset.nodesc) || false;
+        // dataset values are strings — Boolean('0') is true, so compare explicitly
+        const noDesc = btn.dataset.nodesc === '1';
         const cardVersion = btn.dataset.cardVersion || '1';
-        // console.log('search: ', searchTerm);
-        // console.log('noDesc: ', noDesc);
 
         btn.disabled = true;
         btn.textContent = textLoading;
 
+        // post_type is derived server-side from current_path — never sent by the client
         const params = new URLSearchParams({
             action: 'load_news',
+            _wpnonce: btn.dataset.nonce || '',
             page_num: page,
             per_page: perPage,
-            post_type: postType,
             category: category,
             category_slug: categorySlug,
             search: searchTerm,
-            nodesc: noDesc,  //в карточках может не быть описания
-            current_url: window.location.href,        // 👈 добавили
-            current_path: window.location.pathname,   // 👈 можно только путь
+            nodesc: noDesc ? '1' : '0',  //в карточках может не быть описания
+            card_version: cardVersion,
+            current_path: window.location.pathname,
+            sortby: new URL(window.location).searchParams.get('sortby') || '',
+            order: new URL(window.location).searchParams.get('order') || '',
         });
-        console.log('Request params__:', params.toString());
 
         fetch(THEME_AJAX.url + '?' + params.toString())
             .then(r => r.json())
@@ -49,9 +49,9 @@ if (btn && container) {
                 btn.disabled = false;
                 btn.textContent = textLoadMore;
 
-                // Если достигли конца
+                // Если достигли конца — прячем так же, как при первом рендере
                 if (resPage >= resTotalPage) {
-                    btn.classList.add('hidden');
+                    btn.style.display = 'none';
                 }
 
                 // -----------------------------
@@ -62,9 +62,7 @@ if (btn && container) {
 
                 if (prevLink) {
                     prevLink.href = updateQueryString(prevLink.href, 'page_num', resPage - 1);
-                    prevLink.setAttribute('data-link-disabled', resPage > 1 ? 0 : 1);
-                    console.log('resPage', resPage, typeof resPage);
-                    // prevLink.classList.toggle('link-disabled', page < 1);
+                    prevLink.setAttribute('data-link-disabled', resPage > 1 ? '0' : '1');
                 }
 
                 if (nextLink) {

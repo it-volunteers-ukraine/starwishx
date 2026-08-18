@@ -8,21 +8,26 @@
  * sw_get_taxonomy_top_level_colors_styles() in the parent template.
  *
  * @var array $args {
- *     @type WP_Post $post         Post object with ->term_name, ->term_slug attached.
- *     @type bool    $show_image   Show post thumbnail. Default true.
- *     @type bool    $show_excerpt Show post excerpt. Default false.
- *     @type bool    $is_large     Large card variant (bycat featured). Default false.
- *     @type bool    $is_swiper    Wrap as swiper slide. Default false.
+ *     @type WP_Post $post            Post object with ->term_name, ->term_slug attached.
+ *     @type bool    $show_image      Show post thumbnail. Default true.
+ *     @type bool    $show_excerpt    Show post excerpt. Default false.
+ *     @type bool    $is_large        Large card variant (bycat featured). Default false.
+ *     @type bool    $is_swiper       Wrap as swiper slide. Default false.
+ *     @type string  $post_type_label Post type name, shown next to the date. Used on
+ *                                    mixed-post-type result lists (search). Default ''.
+ *     @type int     $card_version    Visual variant; emits `card-version-{n}`. Default 1.
  * }
  */
 
 declare(strict_types=1);
 
-$post_item    = $args['post'];
-$show_image   = $args['show_image'] ?? true;
-$show_excerpt = $args['show_excerpt'] ?? false;
-$is_large     = $args['is_large'] ?? false;
-$is_swiper    = $args['is_swiper'] ?? false;
+$post_item       = $args['post'];
+$show_image      = $args['show_image'] ?? true;
+$show_excerpt    = $args['show_excerpt'] ?? false;
+$is_large        = $args['is_large'] ?? false;
+$is_swiper       = $args['is_swiper'] ?? false;
+$post_type_label = $args['post_type_label'] ?? '';
+$card_version    = (int) ($args['card_version'] ?? 1);
 
 $post_id   = $post_item->ID;
 $title     = get_the_title($post_item);
@@ -44,7 +49,7 @@ if ($has_thumb) {
 $excerpt = $show_excerpt ? get_the_excerpt($post_item) : '';
 
 // CSS classes
-$classes = ['newcard-content'];
+$classes = ['newcard-content', 'card-version-' . $card_version];
 if ($is_large)  $classes[] = 'newcard-lg';
 if ($is_swiper) $classes[] = 'swiper-slide';
 
@@ -71,12 +76,18 @@ if ($is_swiper) $classes[] = 'swiper-slide';
     <?php endif; ?>
 
     <div class="newcard-info">
+        <?php if ($post_type_label) : ?>
+            <div class="text-small newcard-post-type">
+                <?php echo esc_html($post_type_label); ?>
+            </div>
+        <?php endif; ?>
+
         <time class="text-small newcard-date" datetime="<?php echo esc_attr(get_the_date('Y-m-d', $post_item)); ?>">
             <?php echo esc_html(get_the_date('d.m.Y', $post_item)); ?>
         </time>
     </div>
 
-    <div class="subtitle-text-m newcard-title">
+    <div class="<?php echo $card_version === 2 ? 'big-text-semibold' : 'subtitle-text-m'; ?> newcard-title">
         <?php echo esc_html($title); ?>
     </div>
 

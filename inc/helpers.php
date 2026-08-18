@@ -85,12 +85,16 @@ function my_add_category_post($post_item)
     if (!empty($terms) && !is_wp_error($terms)) {
         $term_id = $terms[0]->term_id;
         $term_name = $terms[0]->name;
+        $term_slug = $terms[0]->slug;
     } else {
         $term_id = null;
         $term_name = null;
+        $term_slug = null;
     }
     $post_item->term_id = $term_id;
     $post_item->term_name = $term_name;
+    // template-parts/news-card.php keys its label colour off the slug
+    $post_item->term_slug = $term_slug;
 
     return $post_item;
 }
@@ -114,6 +118,8 @@ function my_iter_posts_add_category($query)
 }
 
 // добавляет к URL пагинации параметры page_num и per_page
+// sortby/order пробрасываются из текущего запроса, иначе сортировка
+// сбрасывалась при каждом переходе по страницам
 if (!function_exists('pagination_url')) {
     function pagination_url($base_url, $page, $per_page, $search = '')
     {
@@ -125,7 +131,109 @@ if (!function_exists('pagination_url')) {
             $args['search'] = $search;
         }
 
+        $sort = sw_get_sort_params();
+        if ($sort['orderby'] !== null) {
+            $args['sortby'] = $sort['orderby'];
+        }
+        if ($sort['order'] !== null) {
+            $args['order'] = $sort['order'];
+        }
+
         return esc_url(add_query_arg($args, $base_url));
+    }
+}
+
+/**
+ * Допустимые значения posts_per_page.
+ *
+ * Единственный источник правды: и слой запроса, и блок пагинации берут
+ * список отсюда, иначе счётчик страниц расходится с выдачей.
+ */
+if (!function_exists('sw_get_allowed_per_page')) {
+    function sw_get_allowed_per_page(): array
+    {
+        $allowed = apply_filters('sw_allowed_per_page', [4, 8, 12]);
+        $allowed = array_values(array_unique(array_filter(array_map('intval', (array) $allowed))));
+
+        return $allowed ?: [12];
+    }
+}
+
+/**
+ * Значение per_page из запроса, приведённое к белому списку.
+ */
+if (!function_exists('sw_get_per_page')) {
+    function sw_get_per_page(): int
+    {
+        $allowed = sw_get_allowed_per_page();
+        $default = in_array(12, $allowed, true) ? 12 : end($allowed);
+
+        if (!isset($_GET['per_page'])) {
+            return $default;
+        }
+
+        $per_page = (int) sanitize_text_field(wp_unslash($_GET['per_page']));
+
+        return in_array($per_page, $allowed, true) ? $per_page : $default;
+    }
+}
+
+/**
+ * sortby/order из запроса, приведённые к белому списку.
+ *
+ * WP_Query ждёт orderby/order — старый код писал в args ключ `sortby`,
+ * поэтому сортировка не работала вообще.
+ *
+ * @return array{orderby: ?string, order: ?string}
+ */
+if (!function_exists('sw_get_sort_params')) {
+    function sw_get_sort_params(): array
+    {
+        $allowed_orderby = ['date', 'title', 'modified', 'relevance'];
+
+        $orderby = null;
+        if (isset($_GET['sortby'])) {
+            $candidate = strtolower(sanitize_text_field(wp_unslash($_GET['sortby'])));
+            if (in_array($candidate, $allowed_orderby, true)) {
+                $orderby = $candidate;
+            }
+        }
+
+        $order = null;
+        if (isset($_GET['order'])) {
+            $candidate = strtoupper(sanitize_text_field(wp_unslash($_GET['order'])));
+            if (in_array($candidate, ['ASC', 'DESC'], true)) {
+                $order = $candidate;
+            }
+        }
+
+        return ['orderby' => $orderby, 'order' => $order];
+    }
+}
+
+/**
+ * Мост между блоком, который отрисовал список, и блоком пагинации.
+ *
+ * Блок пагинации раньше выполнял собственный WP_Query с другими
+ * аргументами, из-за чего счётчик страниц не совпадал с выдачей.
+ * Теперь список публикует свой запрос, а пагинация его читает.
+ *
+ * @internal Временное решение: уходит вместе с блоком пагинации.
+ */
+if (!function_exists('sw_set_pagination_context')) {
+    function sw_set_pagination_context(WP_Query $query, int $per_page): void
+    {
+        $GLOBALS['sw_pagination_context'] = [
+            'query'    => $query,
+            'per_page' => $per_page,
+        ];
+    }
+}
+
+if (!function_exists('sw_get_pagination_context')) {
+    function sw_get_pagination_context(): ?array
+    {
+        return $GLOBALS['sw_pagination_context'] ?? null;
     }
 }
 
@@ -180,67 +288,62 @@ if (!function_exists('my_query_args_prepare')) {
 
     function my_query_args_prepare($args)
     {
-        // $list_args = ['post_type', 's', 'sortby', 'order', 'posts_per_page', 'paged'];
-
+        $args     = is_array($args) ? $args : [];
         $new_args = [];
-        $blocks = parse_blocks(get_the_content());
-        // echo 'blocks: ' . '<br>';
-        // echo '<pre>';
-        // print_r($blocks);
-        // echo '</pre>';
 
-        $block_params = seach_params_from_blocks($blocks, ['sortby', 'order', 'default_per_page']);
+        $block_params = seach_params_from_blocks(
+            sw_get_current_content_blocks(),
+            ['sortby', 'order', 'default_per_page']
+        );
 
-        $args['no_found_rows'] = false; // нужно для pagination
+        $new_args['post_status']   = 'publish';
+        $new_args['no_found_rows'] = false; // нужно для pagination
 
-        //post_type
+        // post_type
         $new_args['post_type'] = $args['post_type'] ?? my_post_type();
 
         // search
-        if (isset($args->s)) {
-            $new_args['s'] = $args->s;
+        if (isset($args['s'])) {
+            $new_args['s'] = sanitize_text_field((string) $args['s']);
         } elseif (isset($_GET['search'])) {
-            $new_args['s'] = sanitize_text_field($_GET['search']);
+            $new_args['s'] = sanitize_text_field(wp_unslash($_GET['search']));
         }
 
-        // sortby
-        if (isset($args->sortby)) {
-            $new_args['sortby'] = $args->sortby;
-        } elseif (isset($_GET['sortby'])) {
-            $new_args['sortby'] = sanitize_text_field($_GET['sortby']);
-        } else {
-            if (isset($block_params['sortby'])) {
-                $new_args['sortby'] = $block_params['sortby'];
-            }
+        // orderby / order — WP_Query ждёт именно эти ключи
+        $sort = sw_get_sort_params();
+
+        $orderby = $args['orderby'] ?? $sort['orderby'] ?? $block_params['sortby'] ?? null;
+        if ($orderby !== null && in_array($orderby, ['date', 'title', 'modified', 'relevance'], true)) {
+            $new_args['orderby'] = $orderby;
         }
 
-        // order
-        if (isset($args->order)) {
-            $new_args['order'] = $args->order;
-        } elseif (isset($_GET['order'])) {
-            $new_args['order'] = sanitize_text_field($_GET['order']);
-        } else {
-            if (isset($block_params['order'])) {
-                $new_args['order'] = $block_params['order'];
-            }
+        $order = $args['order'] ?? $sort['order'] ?? $block_params['order'] ?? null;
+        if ($order !== null && in_array(strtoupper((string) $order), ['ASC', 'DESC'], true)) {
+            $new_args['order'] = strtoupper((string) $order);
         }
 
-        // per_page
-        if (isset($args->per_page)) {
-            $new_args['per_page'] = $args->per_page;
+        // posts_per_page
+        $allowed_per_page = sw_get_allowed_per_page();
+
+        if (isset($args['posts_per_page'])) {
+            $per_page = (int) $args['posts_per_page'];
         } elseif (isset($_GET['per_page'])) {
-            $new_args['posts_per_page'] = (int) sanitize_text_field($_GET['per_page']);
+            $per_page = sw_get_per_page();
+        } elseif (isset($block_params['default_per_page'])) {
+            $per_page = (int) $block_params['default_per_page'];
         } else {
-            if (isset($block_params['default_per_page'])) {
-                $new_args['posts_per_page'] = (int) $block_params['default_per_page'];
-            }
+            $per_page = sw_get_per_page();
         }
+
+        $new_args['posts_per_page'] = in_array($per_page, $allowed_per_page, true)
+            ? $per_page
+            : sw_get_per_page();
 
         // paged
-        if (isset($args->paged)) {
-            $new_args['paged'] = $args->paged;
+        if (isset($args['paged'])) {
+            $new_args['paged'] = max(1, (int) $args['paged']);
         } elseif (isset($_GET['page_num'])) {
-            $new_args['paged'] = (int) sanitize_text_field($_GET['page_num']);
+            $new_args['paged'] = max(1, (int) sanitize_text_field(wp_unslash($_GET['page_num'])));
         } else {
             $new_args['paged'] = 1;
         }
@@ -250,11 +353,30 @@ if (!function_exists('my_query_args_prepare')) {
             $new_args['tax_query'] = [$tax_query];
         }
 
-        // echo '<pre>';
-        // print_r($new_args);
-        // echo '</pre>';
-
         return $new_args;
+    }
+}
+
+/**
+ * Блоки текущей записи, разобранные один раз за запрос.
+ *
+ * my_query_args_prepare() вызывается и блоком списка, и блоком пагинации,
+ * поэтому parse_blocks() без кеша выполнялся дважды на страницу.
+ */
+if (!function_exists('sw_get_current_content_blocks')) {
+    function sw_get_current_content_blocks(): array
+    {
+        static $cache = [];
+
+        $post_id = get_the_ID();
+        $key     = $post_id ? (int) $post_id : 0;
+
+        if (!array_key_exists($key, $cache)) {
+            $content      = $key ? (string) get_post_field('post_content', $key) : '';
+            $cache[$key]  = $content !== '' ? parse_blocks($content) : [];
+        }
+
+        return $cache[$key];
     }
 }
 
@@ -263,18 +385,21 @@ if (!function_exists('seach_params_from_blocks')) {
     function seach_params_from_blocks($blocks, $search_params = [])
     {
         $result = [];
-        foreach ($search_params as $param) {
-            foreach ($blocks as $block) {
-                // if ($block['blockName'] === 'acf/search-page') {
-                if (isset($block['attrs']['data'][$param])) {
+
+        foreach ((array) $blocks as $block) {
+            foreach ($search_params as $param) {
+                // Первое совпадение выигрывает: раньше цикл шёл до конца,
+                // и значение перетирал последний блок на странице
+                if (!isset($result[$param]) && isset($block['attrs']['data'][$param])) {
                     $result[$param] = $block['attrs']['data'][$param];
-                    // return $block['attrs']['data'][$param];
                 }
-                // }
+            }
+
+            if (!empty($block['innerBlocks'])) {
+                $result += seach_params_from_blocks($block['innerBlocks'], $search_params);
             }
         }
-        // echo 'search: ' . $_GET['search'] . '<br>';
-        // echo '$_SERVER[REQUEST_URI]' . $_SERVER['REQUEST_URI'] . '<br>';
+
         return $result;
     }
 }
@@ -307,31 +432,41 @@ if (!function_exists('my_taxonomy')) {
 }
 
 
-if (!function_exists('my_post_type')) {
-    function my_post_type($url = null)
+// типы записей, участвующие в поиске по сайту
+if (!function_exists('my_searchable_post_types')) {
+    function my_searchable_post_types(): array
     {
-        if ($url === null) {
-            $request_path = trim($_SERVER['REQUEST_URI'], '/');
-        } else {
-            $request_path = trim($url, '/');
-        }
-        $request_path = $request_path ? $request_path : $_GET('current_path', '');
+        return ['news', 'opportunity', 'project'];
+    }
+}
 
-        // echo 'request_path=' . esc_url($request_path) . '<br>';
-        // print_r($request_path);
-        // echo '<br>';
+/**
+ * Определяет post_type по первому сегменту пути.
+ *
+ * Всегда возвращает массив: раньше при неизвестном сегменте возвращалась
+ * неинициализированная переменная, а при пустом пути вызывался $_GET(...)
+ * — обращение к массиву как к функции, то есть фатальная ошибка.
+ */
+if (!function_exists('my_post_type')) {
+    function my_post_type($url = null): array
+    {
+        $raw = $url === null
+            ? ($_SERVER['REQUEST_URI'] ?? '')
+            : $url;
 
-        $parent  = explode('/', $request_path)[0];
+        $path         = (string) (wp_parse_url((string) $raw, PHP_URL_PATH) ?? '');
+        $request_path = trim($path, '/');
+        $parent       = $request_path === '' ? '' : explode('/', $request_path)[0];
+
         if ($parent === 'news') {
-            $res = ['news'];
-        } elseif ($parent === my_category()) {
-            $res = ['news'];
-            $res = ['opportunity'];
-        } elseif ($parent === 'search') {
-            $res = ['news', 'opportunity', 'project'];
+            return ['news'];
         }
-        return $res;
-        // return $request_path;
+
+        if ($parent === my_category()) {
+            return ['opportunity'];
+        }
+
+        return my_searchable_post_types();
     }
 }
 

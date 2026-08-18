@@ -1,150 +1,85 @@
 <?php
 
+/**
+ * "Load more" endpoint for the legacy pagination block.
+ *
+ * Заменяется REST-маршрутом news/v1/posts в PR 3. Здесь закрыты дыры,
+ * из-за которых обработчик принимал post_type от клиента и отдавал
+ * страницы с другой сортировкой, чем первая.
+ */
+
+if (!defined('ABSPATH')) exit;
+
 add_action('wp_ajax_load_news', 'ajax_load_news');
 add_action('wp_ajax_nopriv_load_news', 'ajax_load_news');
 
-
-
 function ajax_load_news()
 {
-    // 💥 убираем ВСЁ, что вывелось до нас
-    while (ob_get_level()) {
-        ob_end_clean();
-    }
+    check_ajax_referer('sw_load_news');
 
-    // $taxonomy = 'category-oportunities';
-    // $taxonomy = my_category();
+    $current_path = isset($_GET['current_path'])
+        ? sanitize_text_field(wp_unslash($_GET['current_path']))
+        : '';
 
-    // $post_type = $_GET['post_type'] ?? 'news';
-    $current_path = trim($_GET['current_path'] ?? '', '/');
+    // post_type выводится из пути, а не из запроса: раньше сюда приходил
+    // json_decode($_GET['post_type']) и уходил прямо в WP_Query
     $post_type = my_post_type($current_path);
-    $post_type_request =  json_decode(stripslashes($_GET['post_type']), true);
-    // $post_type = my_post_type();
 
-    $page      = max(1, (int) ($_GET['page_num'] ?? 1));
-    $per_page = in_array((int) ($_GET['per_page'] ?? 12), [4, 8, 12])
-        ? (int) $_GET['per_page']
-        : 12;
-    // if (isset($args[]))
+    $taxonomy      = my_category();
+    $category_slug = isset($_GET['category_slug'])
+        ? sanitize_title(wp_unslash($_GET['category_slug']))
+        : '';
 
+    $no_desc      = isset($_GET['nodesc']) && $_GET['nodesc'] === '1';
+    $card_version = isset($_GET['card_version']) ? (int) $_GET['card_version'] : 1;
 
-    // $category = sanitize_text_field($_GET['category'] ?? '');    
-    $category = 'category-oportunities';    
-    $category_slug = sanitize_text_field($_GET['category_slug'] ?? '');
+    // Те же аргументы, что и у первой страницы: $_GET несёт search,
+    // sortby, order, per_page и page_num
+    $args = my_query_args_prepare(['post_type' => $post_type]);
 
-    $search = sanitize_text_field($_GET['search'] ?? '');
-    $nodesc = isset($_GET['nodesc']) ? filter_var($_GET['nodesc'], FILTER_VALIDATE_BOOLEAN) : false;
-    $card_version = isset($_GET['card_version']) ? sanitize_text_field($_GET['card_version']) : '1';
-
-    $term = get_term_by('slug', $category_slug, $category);
-    if ($term && !is_wp_error($term)) {
-        $term_id   = $term->term_id; // ID категории
-        $term_name = $term->name;    // Название категории
-    }
-
-    // if (!$category_slug) {
-    //     wp_send_json_error('No category');
-    // }
-
-    // Параметры для запроса
-    if ($category && $category_slug) {
-        $tax = [
-            'taxonomy' => $category,
+    if ($category_slug !== '') {
+        $args['tax_query'] = [[
+            'taxonomy' => $taxonomy,
             'field'    => 'slug',
             'terms'    => $category_slug,
-        ];
-    } else {
-        $tax = null;
+        ]];
     }
 
-    // echo 'search: ' . ($_GET['search'] ?? '') . '<br>';
-    // echo 'search2: ' . get_query_var('s') . '<br>';
-    // echo 'search3: ' . get_query_var('search') . '<br>';
+    $query = my_query_search($args);
 
-    $args = [
-        'post_type'      => $post_type_request,
-        'paged'          => $page,
-        'posts_per_page' => $per_page,
-        's'             => $search,
-        'post_status'   => 'publish',
-        // 'fields'         => 'ids', // важно!
-        'no_found_rows'  => false, // нужно для pagination
-    ];
-    if ($tax) {
-        $args['tax_query'] = [$tax];
-    }
+    $term      = $category_slug !== '' ? my_category_by_slug($category_slug) : null;
+    $term_id   = $term ? (int) $term->term_id : null;
+    $term_name = $term ? $term->name : null;
 
-    $query = new WP_Query($args);
-
-    $query = my_iter_posts_add_category($query);
-
-    // if ($query->have_posts()) {
-    //     // создаём массив для этой категории
-    //     $res_by_cat[$term->term_id] = [
-    //         'term_id'   => $term->term_id,
-    //         'term_name' => $term->name,
-    //         'posts'     => []
-    //     ];
-
-    //     foreach ($query->posts as $post_item) {
-    //         // можно добавить данные категории внутрь поста
-    //         $post_item->term_id   = $term_id;
-    //         $post_item->term_name = $term_name;
-
-    //         $res_by_cat[$term->term_id]['posts'][] = $post_item;
-    //     }
-    // }
-
-    // $query = my_query_search($args);
-    
     $total_posts = (int) $query->found_posts;
-    $total_pages = (int) ceil($total_posts / $per_page);
-    $post_count = $query->post_count;
+    $total_pages = (int) $query->max_num_pages;
 
-    // $query_args = my_query_args_prepare(['post_type' => $post_type_request]);
-
-    // $query = my_query_search($query_args);
-    wp_reset_postdata();
+    update_post_thumbnail_cache($query);
 
     ob_start();
-    $posts = $query->posts;
-    $count = 0;
 
-    foreach ($posts as $item) {
-        $count++;
-        get_template_part(
-            'template-parts/new-card',
-            null,
-            [
-                'item' => $item,
-                'no_desc' => $nodesc,
-                'card_version' => $card_version,
-            ]
-        );
+    foreach ($query->posts as $post_item) {
+        get_template_part('template-parts/news-card', null, [
+            'post'            => $post_item,
+            'show_excerpt'    => !$no_desc,
+            'post_type_label' => $post_item->post_type_name ?? '',
+            'card_version'    => $card_version,
+        ]);
     }
-
-    // wp_reset_postdata();
 
     $html = ob_get_clean();
 
     wp_send_json_success([
-        'html'        => $html,
-        'post_type'  => $post_type,
-        'category'   => $category,
-        'category_slug'  => $category_slug,
-        'total_posts' => $total_posts,
-        'total_pages' => $total_pages,
-        'post_count'  => $post_count,
-        'page'        => $page,
-        'term_id'    => $term_id,
-        'term_name'  => $term_name,
-        'count'       => $count,
-        'search'      => $search,
-        // 'args'      => $args,
-        // 'post_type_request' => $post_type_request,
-        // 'request_path' => $request_path,
-        // 'query' => $query,
-
+        'html'          => $html,
+        'post_type'     => $post_type,
+        'category'      => $taxonomy,
+        'category_slug' => $category_slug,
+        'total_posts'   => $total_posts,
+        'total_pages'   => $total_pages,
+        'post_count'    => (int) $query->post_count,
+        'page'          => (int) ($args['paged'] ?? 1),
+        'term_id'       => $term_id,
+        'term_name'     => $term_name,
+        'search'        => $args['s'] ?? '',
     ]);
-    wp_die();
 }
