@@ -25,6 +25,7 @@
   align-items: center;
   gap: 24px;
   font-weight: 500;
+
   @include min-desktop {
     font-size: 18px;
   }
@@ -68,7 +69,13 @@
   }
 }
 
-.sw-pagination__pages .page-numbers.current {
+/*
+ * .is-loaded marks every page appended by "Show more", so the reader can see
+ * how much of the list is on screen. A plain page-number click highlights
+ * only .current, because only that page is shown.
+ */
+.sw-pagination__pages .page-numbers.current,
+.sw-pagination__pages .page-numbers.is-loaded {
   background: $buttons-color-background-primary-default;
   color: $text-white;
 }

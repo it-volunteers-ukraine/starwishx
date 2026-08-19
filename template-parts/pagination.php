@@ -30,6 +30,13 @@ $show_load_more = $args['show_load_more'] ?? true;
 $total_pages = (int) $query->max_num_pages;
 $current     = max(1, (int) ($query->get('paged') ?: 1));
 
+// Everything here paginates something. With a single page there is nothing to
+// page through and nothing to load, and an items-per-page pill sitting alone
+// under a short list just raises a question it cannot answer.
+if ($total_pages <= 1) {
+    return;
+}
+
 $allowed_per_page = sw_get_allowed_per_page();
 $per_page         = sw_get_per_page();
 $sort             = sw_get_sort_params();
@@ -61,26 +68,20 @@ $arrow = static fn(string $extra): string => sprintf(
     esc_url($sprite)
 );
 
-$links = $total_pages > 1
-    ? paginate_links([
-        'current'   => $current,
-        'total'     => $total_pages,
-        'mid_size'  => 1,
-        'end_size'  => 1,
-        'add_args'  => $add_args,
-        'type'      => 'plain',
-        'prev_text' => $arrow('sw-pagination__icon--prev'),
-        'next_text' => $arrow(''),
-    ])
-    : '';
-
-if (!$links && !$show_per_page) {
-    return;
-}
+$links = paginate_links([
+    'current'   => $current,
+    'total'     => $total_pages,
+    'mid_size'  => 1,
+    'end_size'  => 1,
+    'add_args'  => $add_args,
+    'type'      => 'plain',
+    'prev_text' => $arrow('sw-pagination__icon--prev'),
+    'next_text' => $arrow(''),
+]);
 
 // Application state for the load-more store. Infrastructure state
 // (restUrl, context, i18n) is hydrated by NewsCore::hydrateState().
-$load_more = $show_load_more && $total_pages > 1 && function_exists('wp_interactivity_state');
+$load_more = $show_load_more && function_exists('wp_interactivity_state');
 
 if ($load_more) {
     wp_interactivity_state('news', [

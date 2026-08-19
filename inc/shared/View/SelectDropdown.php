@@ -74,8 +74,11 @@ class SelectDropdown
                         '<span class="sw-select__option is-current" aria-current="true">%s</span>',
                         esc_html((string) $option['label'])
                     )
+                    // nofollow: these are display controls, not content links.
+                    // Without it a crawler walks the whole per_page × sort ×
+                    // page grid and reports every combination as a new URL.
                     : sprintf(
-                        '<a class="sw-select__option" href="%s">%s</a>',
+                        '<a class="sw-select__option" href="%s" rel="nofollow">%s</a>',
                         esc_url((string) ($option['url'] ?? '#')),
                         esc_html((string) $option['label'])
                     )

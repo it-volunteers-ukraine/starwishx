@@ -78,6 +78,7 @@ const { state, actions } = store("news", {
                 state.page = data.page;
                 state.maxPages = data.max_pages;
 
+                markPagesLoaded(data.page);
                 syncUrl(data.page);
             } catch (e) {
                 state.error = state.i18n.error;
@@ -108,6 +109,29 @@ function appendCards(html) {
     }
 
     container.insertAdjacentHTML("beforeend", html);
+}
+
+/**
+ * Highlight every page number now on screen, not just the last one.
+ *
+ * After three clicks of "Show more" the reader is looking at pages 1-3 at
+ * once, so 1, 2 and 3 all read as active. Arrows and the ellipsis carry no
+ * number and are skipped.
+ */
+function markPagesLoaded(page) {
+    const nav = document.querySelector(".sw-pagination__pages");
+
+    if (!nav) {
+        return;
+    }
+
+    for (const link of nav.querySelectorAll(".page-numbers")) {
+        const number = parseInt(link.textContent.trim(), 10);
+
+        if (!Number.isNaN(number)) {
+            link.classList.toggle("is-loaded", number <= page);
+        }
+    }
 }
 
 /**

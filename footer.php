@@ -104,6 +104,14 @@ $linkedin_link = esc_html(get_field('linkedin_link', 'options'));
     </div>
 </footer>
 
+<button
+    type="button"
+    id="scroll-top"
+    class="scroll-top"
+    aria-label="<?php esc_attr_e('Back to top', 'starwishx'); ?>">
+    <?php sw_svg_e('icon-arrow_down', 24, null, 'scroll-top__icon'); ?>
+</button>
+
 <?php wp_footer(); ?>
 
 </body>

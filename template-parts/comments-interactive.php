@@ -89,7 +89,7 @@ wp_interactivity_state('comments', [
                 <?php esc_html_e('Add review', 'starwishx'); ?>
             </button>
         <?php else: ?>
-            <a href="<?php echo wp_login_url(get_permalink()); ?>" class="btn__small">
+            <a href="<?php echo wp_login_url(get_permalink()); ?>" class="btn__small" rel="nofollow">
                 <?php esc_html_e('Enter to comment', 'starwishx'); ?>
             </a>
         <?php endif; ?>

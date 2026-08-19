@@ -53,16 +53,20 @@ $order_options = [
         <?php echo (int) $total_posts; ?>
     </p>
 
-    <div class="sortby filter">
-        <div class="sortby-title filter-title">
-            <?php echo esc_html($select_title ?: __('Sorting', 'starwishx')); ?>:
-        </div>
+    <?php // Nothing to order when nothing was found
+    ?>
+    <?php if ($total_posts > 0) : ?>
+        <div class="sortby filter">
+            <div class="sortby-title filter-title">
+                <?php echo esc_html($select_title ?: __('Sorting', 'starwishx')); ?>:
+            </div>
 
-        <?php
-        echo \Shared\View\SelectDropdown::render($order_options, [
-            'label' => $select_title ?: __('Sorting', 'starwishx'),
-            'class' => 'sw-select--sort',
-        ]);
-        ?>
-    </div>
+            <?php
+            echo \Shared\View\SelectDropdown::render($order_options, [
+                'label' => $select_title ?: __('Sorting', 'starwishx'),
+                'class' => 'sw-select--sort',
+            ]);
+            ?>
+        </div>
+    <?php endif; ?>
 </div>

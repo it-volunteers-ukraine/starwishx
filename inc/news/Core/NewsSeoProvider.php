@@ -31,8 +31,16 @@ final class NewsSeoProvider
      * template_redirect, so a late-attached filter never runs.
      * Each callback checks the context itself.
      */
+    /** Query args that only change how a result set is displayed. */
+    private const DISPLAY_PARAMS = ['per_page', 'sortby', 'order'];
+
     public function register(): void
     {
+        // Display-parameter URLs are the same posts in a different slice or
+        // order. Applies to every archive here, not just category pages.
+        add_filter('rank_math/frontend/robots', [$this, 'filterRobots']);
+        add_filter('wp_robots',                 [$this, 'filterCoreRobots']);
+
         if (defined('RANK_MATH_VERSION')) {
             add_filter('rank_math/frontend/title',       [$this, 'filterRankMathTitle']);
             add_filter('rank_math/frontend/description', [$this, 'getDescription']);
@@ -159,11 +167,101 @@ final class NewsSeoProvider
 
     public function getCanonical(string $canonical = ''): string
     {
+        // A per_page or sort variant is not the same content as the clean URL —
+        // page 2 of 8-per-page holds different posts than page 2 of 12. Pointing
+        // one at the other would be a false canonical, and pairing a cross
+        // canonical with noindex is the combination Google warns about. These
+        // URLs canonicalise to themselves and rely on noindex instead.
+        if ($this->hasDisplayParams()) {
+            return $this->currentUrl();
+        }
+
         if (!$this->term()) {
             return $canonical;
         }
 
         return $this->categoryUrl($this->currentPage());
+    }
+
+    // ── Robots ───────────────────────────────────────────────────────
+
+    /**
+     * noindex, follow for display-parameter URLs.
+     *
+     * `follow` on purpose: the posts linked from these pages should still be
+     * crawled, it is only the slice-and-sort permutations that should not
+     * compete with the clean archive.
+     *
+     * @param array $robots Directive map, e.g. ['index' => 'index'].
+     */
+    public function filterRobots(array $robots): array
+    {
+        if (!$this->isParameterisedArchive()) {
+            return $robots;
+        }
+
+        $robots['index']  = 'noindex';
+        $robots['follow'] = 'follow';
+
+        return $robots;
+    }
+
+    /**
+     * Same directive through core's wp_robots, for when Rank Math is inactive.
+     */
+    public function filterCoreRobots(array $robots): array
+    {
+        if (!$this->isParameterisedArchive()) {
+            return $robots;
+        }
+
+        $robots['noindex'] = true;
+        $robots['follow']  = true;
+
+        return $robots;
+    }
+
+    private function isParameterisedArchive(): bool
+    {
+        if (!did_action('wp')) {
+            return false;
+        }
+
+        if (!is_post_type_archive(NewsCore::POST_TYPE) && !is_search()) {
+            return false;
+        }
+
+        return $this->hasDisplayParams();
+    }
+
+    private function hasDisplayParams(): bool
+    {
+        foreach (self::DISPLAY_PARAMS as $key) {
+            if (isset($_GET[$key])) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Self-referential canonical: current path plus the display params only,
+     * so stray tracking arguments never reach the tag.
+     */
+    private function currentUrl(): string
+    {
+        $path = (string) (wp_parse_url((string) ($_SERVER['REQUEST_URI'] ?? ''), PHP_URL_PATH) ?? '');
+        $url  = home_url($path);
+
+        $params = [];
+        foreach (self::DISPLAY_PARAMS as $key) {
+            if (isset($_GET[$key])) {
+                $params[$key] = sanitize_text_field(wp_unslash($_GET[$key]));
+            }
+        }
+
+        return $params ? add_query_arg($params, $url) : $url;
     }
 
     // ── Renderers ────────────────────────────────────────────────────

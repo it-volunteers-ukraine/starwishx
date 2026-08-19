@@ -104,9 +104,52 @@ final class GatewayCore
         // Register default forms at priority 5 (before third-party)
         add_action('gateway_register_forms', [$this, 'registerDefaultForms'], 5);
 
-        // prevent WP sending registration emails to new users 
+        // prevent WP sending registration emails to new users
         // we do it manually with sendActivationEmail()
         add_filter('wp_send_new_user_notification_to_user', '__return_false');
+
+        // SEO — keep the auth page out of search results
+        add_filter('rank_math/frontend/robots', [$this, 'filterRobots']);
+        add_filter('wp_robots', [$this, 'filterCoreRobots']);
+    }
+
+    /**
+     * True on the Gateway page in any of its states.
+     */
+    private function isGatewayPage(): bool
+    {
+        return is_page_template('templates/page-gateway.php');
+    }
+
+    /**
+     * Rank Math robots directives for the auth page.
+     *
+     * A login screen has nothing to rank for, and every inbound link carries a
+     * different ?redirect_to=, so crawling it only burns budget on duplicates.
+     * rel="nofollow" on those links is a hint the crawler may ignore — noindex
+     * on the page itself is the directive that settles it.
+     *
+     * @param array $robots Directive map, e.g. ['index' => 'index'].
+     */
+    public function filterRobots(array $robots): array
+    {
+        if (!$this->isGatewayPage()) {
+            return $robots;
+        }
+
+        return ['index' => 'noindex', 'follow' => 'nofollow'];
+    }
+
+    /**
+     * Same directive through core's wp_robots, for when Rank Math is inactive.
+     */
+    public function filterCoreRobots(array $robots): array
+    {
+        if (!$this->isGatewayPage()) {
+            return $robots;
+        }
+
+        return wp_robots_no_robots($robots);
     }
 
     /**
