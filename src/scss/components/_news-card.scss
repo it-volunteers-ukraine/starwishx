@@ -1,6 +1,5 @@
 @use "../variables" as *;
 @use "../mixins/media" as *;
-@use "../mixins/label";
 
 .newcard-img-wrap {
   position: relative;
@@ -80,10 +79,16 @@
   padding: 4px 8px;
   font-size: 14px;
 }
-.cards-list {
-  .newcard-label {
-    @include label.label(var(--label-color), var(--label-bg), var(--label-border));
-  }
+/*
+ * Category colour comes from the term-slug class emitted by
+ * sw_get_taxonomy_top_level_colors_styles(). Nothing sets --label-* any more —
+ * those were inline styles on the removed new-card.php — and a `.cards-list
+ * .newcard-label` rule outscored the slug rules, leaving labels colourless.
+ */
+.newcard-label--none {
+  background-color: $element-block-fill;
+  color: $element-block-text;
+  border: 1px solid $element-block-fill;
 }
 
 .newcard-info {

@@ -12,14 +12,20 @@
 import { store } from "@wordpress/interactivity";
 
 const { state, actions } = store("news", {
+    // `page` and `maxPages` are deliberately NOT declared here. The runtime
+    // populates server state first with a non-overriding merge, then store()
+    // merges this object over it *with* override — so redeclaring a hydrated
+    // key resets it. Declaring maxPages: 1 made hasMore permanently false and
+    // hid the button the moment the page hydrated.
+    // See wp-includes/js/dist/script-modules/interactivity/index.js:
+    //   populateServerData → deepMerge(st.state, state, false)
+    //   store              → deepMerge(target.state, state)
     state: {
-        page: 1,
-        maxPages: 1,
         loading: false,
         error: null,
 
         get hasMore() {
-            return state.page < state.maxPages;
+            return (state.page ?? 1) < (state.maxPages ?? 1);
         },
 
         get buttonLabel() {

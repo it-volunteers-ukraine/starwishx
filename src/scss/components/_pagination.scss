@@ -97,27 +97,14 @@
   transform: rotate(180deg);
 }
 
+/* Pill styling lives with the component in _select.scss; this only places it */
 .sw-pagination__perpage {
   display: none;
-  justify-content: center;
-  align-items: center;
-  padding: 14px 24px;
-  border-radius: $btn-radius;
-  background-color: $buttons-color-background-primary-default;
-  color: $text-white;
-  line-height: 1;
 
   @include min-tablet {
-    display: flex;
+    display: block;
     margin-left: 12px;
   }
-}
-
-.sw-pagination__select {
-  border: none;
-  line-height: inherit;
-  background: transparent;
-  color: inherit;
 }
 
 .sw-pagination__load-more {

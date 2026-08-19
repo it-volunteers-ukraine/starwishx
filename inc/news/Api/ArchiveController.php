@@ -198,16 +198,11 @@ final class ArchiveController extends AbstractApiController
     {
         $show_type = $source === 'search';
 
+        sw_attach_card_terms($query->posts, NewsCore::TAXONOMY);
+
         ob_start();
 
         foreach ($query->posts as $post_item) {
-            $terms = get_the_terms($post_item->ID, NewsCore::TAXONOMY);
-
-            if (!empty($terms) && !is_wp_error($terms)) {
-                $post_item->term_name = $terms[0]->name;
-                $post_item->term_slug = $terms[0]->slug;
-            }
-
             $label = '';
 
             if ($show_type) {

@@ -30,6 +30,7 @@ if (!empty($css)) {
 }
 
 update_post_thumbnail_cache($GLOBALS['wp_query']);
+sw_attach_card_terms($GLOBALS['wp_query']->posts);
 
 get_header();
 ?>
@@ -69,17 +70,12 @@ if (function_exists('render_block')) {
             ]); ?>
 
             <?php if (have_posts()) : ?>
-                <div id="sw-results" class="cards-list sw-cards-grid">
+                <div id="sw-results" class="sw-cards-grid">
                     <?php while (have_posts()) : the_post(); ?>
                         <?php
+                        // Root terms already attached above by sw_attach_card_terms()
                         $post_item   = get_post();
-                        $post_terms  = get_the_terms($post_item->ID, \News\Core\NewsCore::TAXONOMY);
                         $type_object = get_post_type_object($post_item->post_type);
-
-                        if (!empty($post_terms) && !is_wp_error($post_terms)) {
-                            $post_item->term_name = $post_terms[0]->name;
-                            $post_item->term_slug = $post_terms[0]->slug;
-                        }
 
                         get_template_part('template-parts/news-card', null, [
                             'post'            => $post_item,

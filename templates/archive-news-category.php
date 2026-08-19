@@ -42,6 +42,10 @@ if (!empty($css)) {
 // Batch-load thumbnail metadata for the whole page of results
 update_post_thumbnail_cache($GLOBALS['wp_query']);
 
+// Label with the root term, not the URL's term: a child-category URL would
+// otherwise render a label the colour stylesheet has no rule for.
+sw_attach_card_terms($GLOBALS['wp_query']->posts, $taxonomy);
+
 get_header();
 ?>
 
@@ -75,12 +79,11 @@ if (function_exists('render_block')) {
         </h1>
 
         <?php if (have_posts()) : ?>
-            <div id="sw-results" class="cards-list sw-cards-grid">
+            <div id="sw-results" class="sw-cards-grid">
                 <?php while (have_posts()) : the_post(); ?>
                     <?php
-                    $post_item            = get_post();
-                    $post_item->term_name = $term->name;
-                    $post_item->term_slug = $term->slug;
+                    // Root terms already attached above by sw_attach_card_terms()
+                    $post_item = get_post();
 
                     get_template_part('template-parts/news-card', null, [
                         'post'         => $post_item,

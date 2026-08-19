@@ -300,11 +300,11 @@ add_filter('single_template', function ($template) {
   return $template;
 });
 
-// Rewrite-правила для /news/{category}/ живут в inc/news/Core/NewsCore.php
-// (файл inc/rewrites.php удалён: правило news-by-category заменено,
-// правило search никогда не срабатывало из-за ведущего слеша)
+// Rewrite rules for /news/{category}/ live in inc/news/Core/NewsCore.php.
+// inc/rewrites.php was removed: its news-by-category rule is superseded, and
+// its search rule never matched because the regex carried a leading slash.
 
-// "Показати більше" переехало с admin-ajax на REST: news/v1/posts
+// "Load more" moved off admin-ajax onto REST: news/v1/posts
 // (inc/news/Api/ArchiveController.php)
 
 

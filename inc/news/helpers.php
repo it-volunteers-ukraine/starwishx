@@ -72,6 +72,113 @@ if (! function_exists('sw_get_per_page')) {
     }
 }
 
+if (! function_exists('sw_attach_card_terms')) {
+    /**
+     * Attach the *root* category term to each post, for news-card.php.
+     *
+     * Root, not the post's own term: sw_get_taxonomy_top_level_colors_styles()
+     * only emits colour rules for top-level terms, so a card labelled with a
+     * child term ("Коучинг") renders with no colour at all.
+     *
+     * Two queries for the whole page — the taxonomy's id=>parent map and one
+     * bulk hydration of the roots actually used. sw_get_root_terms() in
+     * inc/theme-helpers.php does the same walk but costs those two queries
+     * *per post*, which is too much for a results grid.
+     *
+     * @param \WP_Post[] $posts Modified in place.
+     */
+    function sw_attach_card_terms(array $posts, string $taxonomy = 'category-oportunities'): void
+    {
+        if (! $posts) {
+            return;
+        }
+
+        $parents = get_terms([
+            'taxonomy'   => $taxonomy,
+            'hide_empty' => false,
+            'fields'     => 'id=>parent',
+        ]);
+
+        if (is_wp_error($parents)) {
+            return;
+        }
+
+        $root_id_by_post = [];
+        $root_ids        = [];
+
+        foreach ($posts as $post_item) {
+            // Term cache is primed by WP_Query — no query per post here
+            $terms = get_the_terms($post_item->ID, $taxonomy);
+
+            if (empty($terms) || is_wp_error($terms)) {
+                continue;
+            }
+
+            $term_id = (int) $terms[0]->term_id;
+
+            while (! empty($parents[$term_id])) {
+                $term_id = (int) $parents[$term_id];
+            }
+
+            $root_id_by_post[$post_item->ID] = $term_id;
+            $root_ids[$term_id]              = true;
+        }
+
+        if (! $root_ids) {
+            return;
+        }
+
+        $roots = get_terms([
+            'taxonomy'   => $taxonomy,
+            'include'    => array_keys($root_ids),
+            'hide_empty' => false,
+        ]);
+
+        if (is_wp_error($roots)) {
+            return;
+        }
+
+        $by_id = [];
+        foreach ($roots as $term) {
+            $by_id[(int) $term->term_id] = $term;
+        }
+
+        foreach ($posts as $post_item) {
+            $root_id = $root_id_by_post[$post_item->ID] ?? null;
+
+            if ($root_id !== null && isset($by_id[$root_id])) {
+                $post_item->term_name = $by_id[$root_id]->name;
+                $post_item->term_slug = $by_id[$root_id]->slug;
+            }
+        }
+    }
+}
+
+if (! function_exists('sw_archive_url')) {
+    /**
+     * The current archive URL at page 1, with $args merged into the query.
+     *
+     * Always page 1 on purpose: a reader on page 3 who switches to 4 items per
+     * page or flips the sort order does not want page 3 of a different list.
+     * The old markup got this from a hidden `page_num=1` form field.
+     *
+     * Pass null as a value to drop that argument from the URL.
+     */
+    function sw_archive_url(array $args = []): string
+    {
+        $url = get_pagenum_link(1, false);
+
+        $drop = array_keys(array_filter($args, static fn($value): bool => $value === null));
+        $keep = array_filter($args, static fn($value): bool => $value !== null);
+
+        if ($drop) {
+            $url = remove_query_arg($drop, $url);
+        }
+
+        return $keep ? add_query_arg($keep, $url) : $url;
+    }
+}
+
 if (! function_exists('sw_get_sort_params')) {
     /**
      * sortby/order from the request, clamped to a whitelist.

@@ -67,11 +67,18 @@ if ($is_swiper) $classes[] = 'swiper-slide';
                 class="newcard-img"
                 alt="<?php echo esc_attr($thumb_alt); ?>"
                 loading="lazy">
-            <?php if ($term_name) : ?>
-                <span class="newcard-label <?php echo esc_attr($term_slug); ?>">
-                    <?php echo esc_html($term_name); ?>
-                </span>
-            <?php endif; ?>
+            <?php
+            // Search mixes post types; `project` results carry no
+            // category-oportunities term, so they fall back to a neutral chip
+            // rather than rendering a card with a gap where the label sits.
+            ?>
+            <span class="newcard-label <?php echo $term_slug !== ''
+                                            ? esc_attr($term_slug)
+                                            : 'newcard-label--none'; ?>">
+                <?php echo $term_name !== ''
+                    ? esc_html($term_name)
+                    : esc_html__('No category', 'starwishx'); ?>
+            </span>
         </div>
     <?php endif; ?>
 

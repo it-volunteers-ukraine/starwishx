@@ -34,16 +34,22 @@ $allowed_per_page = sw_get_allowed_per_page();
 $per_page         = sw_get_per_page();
 $sort             = sw_get_sort_params();
 
-// Query args that must survive a page change
-$add_args = ['per_page' => $per_page];
+// Query args that must survive a page change.
+// Only what the reader actually chose: the default per_page would otherwise
+// show up in every URL, and on pretty permalinks the search term is already
+// in the path (/search/a/page/2/).
+$add_args = [];
 
+if (isset($_GET['per_page'])) {
+    $add_args['per_page'] = $per_page;
+}
 if ($sort['orderby'] !== null) {
     $add_args['sortby'] = $sort['orderby'];
 }
 if ($sort['order'] !== null) {
     $add_args['order'] = $sort['order'];
 }
-if (is_search()) {
+if (is_search() && !$GLOBALS['wp_rewrite']->using_permalinks()) {
     $add_args['s'] = get_search_query();
 }
 
@@ -125,30 +131,23 @@ if ($load_more) {
                 </button>
             <?php endif; ?>
 
-            <?php if ($show_per_page && count($allowed_per_page) > 1) : ?>
-                <form method="get" class="sw-pagination__perpage">
-                    <?php if (is_search()) : ?>
-                        <input type="hidden" name="s" value="<?php echo esc_attr(get_search_query()); ?>">
-                    <?php endif; ?>
-                    <?php if ($sort['orderby'] !== null) : ?>
-                        <input type="hidden" name="sortby" value="<?php echo esc_attr($sort['orderby']); ?>">
-                    <?php endif; ?>
-                    <?php if ($sort['order'] !== null) : ?>
-                        <input type="hidden" name="order" value="<?php echo esc_attr($sort['order']); ?>">
-                    <?php endif; ?>
+            <?php
+            if ($show_per_page) {
+                $per_page_options = array_map(
+                    static fn(int $value): array => [
+                        'label'      => (string) $value,
+                        'url'        => sw_archive_url(['per_page' => $value]),
+                        'is_current' => $value === $per_page,
+                    ],
+                    $allowed_per_page
+                );
 
-                    <label class="screen-reader-text" for="sw-per-page">
-                        <?php esc_html_e('Items per page', 'starwishx'); ?>
-                    </label>
-                    <select id="sw-per-page" name="per_page" class="btn-text-medium sw-pagination__select" onchange="this.form.submit()">
-                        <?php foreach ($allowed_per_page as $value) : ?>
-                            <option value="<?php echo (int) $value; ?>" <?php selected($per_page, $value); ?>>
-                                <?php echo (int) $value; ?>
-                            </option>
-                        <?php endforeach; ?>
-                    </select>
-                </form>
-            <?php endif; ?>
+                echo \Shared\View\SelectDropdown::render($per_page_options, [
+                    'label' => __('Items per page', 'starwishx'),
+                    'class' => 'sw-select--perpage sw-pagination__perpage',
+                ]);
+            }
+            ?>
 
         </nav>
     </div>
