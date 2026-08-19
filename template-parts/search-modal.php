@@ -1,29 +1,45 @@
 <?php
-$sortby_list = get_field('sortby_list', 'options');
-$sortby      = isset($_GET['sortby']) ? $_GET['sortby'] : '';
-$order       = isset($_GET['order']) ? $_GET['order'] : '';
 
-// $sortby = isset($sortby_list['sortby']) ? $sortby_list['sortby'] : 'date';
+/**
+ * Site search modal.
+ *
+ * Submits `s` to the home URL so WordPress handles the request natively and
+ * canonicalises it to /search/{term}/. It used to post `search` to a WP page,
+ * which meant is_search() was never true.
+ */
+
+$sort = sw_get_sort_params();
 ?>
 <div id="searchModal" class="modal" tabindex="-1">
     <div class="modal-content modal-main">
-        <form id="form-search" role="search" class="search-form" method="get" action="<?= home_url('/search'); ?>">
-            <input type="text" name="search" class="search-input" placeholder="<?= __('Enter a search term', 'starwishx'); ?>">
-            <?php if ($sortby) : ?>
-                <input type="hidden" name="sortby" value="<?= esc_attr($sortby); ?>">
+        <form id="form-search" role="search" class="search-form" method="get" action="<?php echo esc_url(home_url('/')); ?>">
+            <label class="screen-reader-text" for="search-input">
+                <?php esc_html_e('Search the site', 'starwishx'); ?>
+            </label>
+            <input
+                type="search"
+                id="search-input"
+                name="s"
+                class="search-input"
+                value="<?php echo esc_attr(get_search_query()); ?>"
+                placeholder="<?php esc_attr_e('Enter a search term', 'starwishx'); ?>">
+
+            <?php if ($sort['orderby'] !== null) : ?>
+                <input type="hidden" name="sortby" value="<?php echo esc_attr($sort['orderby']); ?>">
             <?php endif; ?>
-            <?php if ($order) : ?>
-                <input type="hidden" name="order" value="<?= esc_attr($order); ?>">
+            <?php if ($sort['order'] !== null) : ?>
+                <input type="hidden" name="order" value="<?php echo esc_attr($sort['order']); ?>">
             <?php endif; ?>
-            <!-- <span id="clear-form" class="clear-form-icon">&times;</span> -->
+
             <div id="clear-form" class="form-clear-btn">
                 <svg class="form-clear-icon">
-                    <use href="<?= esc_url(get_template_directory_uri() . '/assets/img/sprites.svg#icon-close'); ?>"></use>
+                    <use href="<?php echo esc_url(get_template_directory_uri() . '/assets/img/sprites.svg#icon-close'); ?>"></use>
                 </svg>
             </div>
             <button type="submit" class="search-submit-bth">
+                <span class="screen-reader-text"><?php esc_html_e('Search', 'starwishx'); ?></span>
                 <svg class="search-submit-icon">
-                    <use href="<?= esc_url(get_template_directory_uri() . '/assets/img/sprites.svg#icon-find'); ?>"></use>
+                    <use href="<?php echo esc_url(get_template_directory_uri() . '/assets/img/sprites.svg#icon-find'); ?>"></use>
                 </svg>
             </button>
         </form>

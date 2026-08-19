@@ -87,12 +87,10 @@
 
 .item-title {
   /* @extend .btn-text-medium; */
-
-  display: box;
+  display: flex;
   min-height: calc(1.2em * 3);
-  -webkit-box-orient: vertical;
+  flex-direction: column;
   line-clamp: 3;
-  -webkit-line-clamp: 3;
   overflow: hidden;
   color: $text-basic;
 }

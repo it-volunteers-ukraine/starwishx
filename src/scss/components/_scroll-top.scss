@@ -1,0 +1,62 @@
+@use "../variables" as *;
+@use "../mixins/media" as *;
+
+/*
+ * Back-to-top control — rendered in footer.php, toggled by src/js/_scroll-top.js.
+ *
+ * Hidden with visibility rather than display so the fade can play, and kept
+ * out of the tab order while hidden.
+ */
+
+.scroll-top {
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  z-index: 50;
+  display: flex;
+  visibility: hidden;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  transform: translateY(8px);
+  transition:
+    opacity $animations,
+    visibility $animations,
+    transform $animations,
+    background-color $animations;
+  cursor: pointer;
+  border: none;
+  border-radius: 50%;
+  background-color: $buttons-color-background-primary-default;
+  width: 48px;
+  height: 48px;
+  color: $text-white;
+
+  &:hover {
+    background-color: $buttons-color-background-primary-hover;
+  }
+
+  &.is-visible {
+    visibility: visible;
+    opacity: 1;
+    transform: none;
+  }
+
+  @include min-tablet {
+    right: 32px;
+    bottom: 32px;
+  }
+}
+
+.scroll-top__icon {
+  transform: rotate(180deg);
+  width: 24px;
+  height: 24px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scroll-top {
+    transition: none;
+    transform: none;
+  }
+}

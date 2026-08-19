@@ -749,3 +749,36 @@ img {
     color: $icon-color-secondary;
   }
 }
+
+/*
+ * Visually hidden, still read by assistive tech.
+ * The theme used .screen-reader-text in markup without ever defining it, so
+ * every such label rendered as visible text next to its control.
+ */
+.screen-reader-text {
+  position: absolute !important;
+  clip-path: inset(50%);
+  margin: -1px;
+  border: 0;
+  padding: 0;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  overflow-wrap: normal !important;
+
+  &:focus {
+    display: block;
+    position: fixed !important;
+    top: 8px;
+    left: 8px;
+    z-index: 100000;
+    clip-path: none;
+    border-radius: 4px;
+    background-color: white;
+    padding: 12px 24px;
+    width: auto;
+    height: auto;
+    color: $text-dark;
+    text-decoration: none;
+  }
+}

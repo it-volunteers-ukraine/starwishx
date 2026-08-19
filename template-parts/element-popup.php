@@ -55,10 +55,10 @@ $register_url = home_url('/gateway/?view=register');
         </div>
 
         <div class="popup__footer">
-            <a href="<?php echo esc_url($login_url); ?>" class="btn popup__footer--button">
+            <a href="<?php echo esc_url($login_url); ?>" class="btn popup__footer--button" rel="nofollow">
                 <?php esc_html_e('Login', 'starwishx'); ?>
             </a>
-            <a href="<?php echo esc_url($register_url); ?>" class="btn-secondary popup__footer--button">
+            <a href="<?php echo esc_url($register_url); ?>" class="btn-secondary popup__footer--button" rel="nofollow">
                 <?php esc_html_e('Register', 'starwishx'); ?>
             </a>
         </div>

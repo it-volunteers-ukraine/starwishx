@@ -91,7 +91,7 @@ foreach ($terms as $term) {
     $by_category[] = [
         'term'  => $term,
         'posts' => $cat_query->posts,
-        'url'   => home_url("news/news-by-category/{$term->slug}/"),
+        'url'   => sw_news()->categoryUrl($term->slug),
     ];
 
     wp_reset_postdata();

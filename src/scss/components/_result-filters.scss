@@ -1,0 +1,47 @@
+@use "../variables" as *;
+@use "../mixins/media" as *;
+
+/*
+ * Result count + sort row — template-parts/sortby-and-result-posts.php.
+ *
+ * Moved from src/scss/template-parts/sortby-and-result-posts.scss, which was
+ * enqueued by the search-page block's register.php. That block is gone, so the
+ * stylesheet was orphaned and the row rendered unstyled.
+ */
+
+.block-filter {
+  display: flex;
+  margin-bottom: 16px;
+  padding: 12px 0;
+  flex-direction: row-reverse;
+  justify-content: space-between;
+  align-items: center;
+  color: $text-light;
+
+  @include min-tablet {
+    padding: 12px 40px;
+    flex-direction: row;
+  }
+
+  @include min-laptop {
+    margin-bottom: 24px;
+  }
+}
+
+.filter {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.filter-title {
+  display: none;
+
+  @include min-tablet {
+    display: inline;
+  }
+}
+
+.filter-data {
+  color: $text-dark;
+}

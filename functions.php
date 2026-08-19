@@ -255,6 +255,9 @@ require_once get_template_directory() . '/inc/contact/setup.php';
 // init for Social Share - share popover for single CPT pages
 require_once get_template_directory() . '/inc/social-share/setup.php';
 
+// init for News - /news/{category}/ routing and archive queries
+require_once get_template_directory() . '/inc/news/setup.php';
+
 require_once get_template_directory() . '/inc/news-taxonomy-metabox.php';
 
 
@@ -297,13 +300,13 @@ add_filter('single_template', function ($template) {
   return $template;
 });
 
-// Для пагинации и фильтров
-require_once get_template_directory() . '/inc/rewrites.php';
+// Rewrite rules for /news/{category}/ live in inc/news/Core/NewsCore.php.
+// inc/rewrites.php was removed: its news-by-category rule is superseded, and
+// its search rule never matched because the regex carried a leading slash.
 
-// для загрузки AJAX обработчиков
-require get_template_directory() . '/inc/ajax.php';
+// "Load more" moved off admin-ajax onto REST: news/v1/posts
+// (inc/news/Api/ArchiveController.php)
 
-require_once get_template_directory() . '/inc/helpers.php';
 
 require_once get_template_directory() . '/inc/theme-helpers.php';
 

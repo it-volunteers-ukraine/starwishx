@@ -1,0 +1,155 @@
+@use "../variables" as *;
+@use "../mixins/media" as *;
+
+/*
+ * Pagination for template-parts/pagination.php.
+ *
+ * Plain class names, not CSS modules: the part is included by templates,
+ * not rendered as an ACF block, so hashed module classes never reach it.
+ * Ported from inc/acf/blocks/pagination/pagination.module.scss.
+ */
+
+.sw-pagination-section {
+  padding-top: 16px;
+  padding-bottom: 80px;
+
+  @include min-laptop {
+    padding-top: 32px;
+  }
+}
+
+.sw-pagination {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+  font-weight: 500;
+
+  @include min-desktop {
+    font-size: 18px;
+  }
+
+  @include min-tablet {
+    flex-direction: row;
+  }
+}
+
+.sw-pagination__pages {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  color: $buttons-color-text-secondary-default;
+}
+
+/* paginate_links() emits .page-numbers on every item */
+.sw-pagination__pages .page-numbers {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all $animations;
+  border-radius: 50%;
+  width: 44px;
+  height: 44px;
+  color: inherit;
+
+  &:hover {
+    background-color: $buttons-color-background-secondary-hover;
+  }
+
+  &:active {
+    box-shadow:
+      inset 1px 1px 2px 1px $buttons-color-background-primary-pressed,
+      inset -1px -1px 1px 1px $buttons-color-background-primary-hover;
+    border: 1px solid $buttons-color-background-secondary-pressed;
+    background-color: $buttons-color-background-secondary-pressed;
+    color: $buttons-color-text-secondary-pressed;
+  }
+}
+
+/*
+ * .is-loaded marks every page appended by "Show more", so the reader can see
+ * how much of the list is on screen. A plain page-number click highlights
+ * only .current, because only that page is shown.
+ */
+.sw-pagination__pages .page-numbers.current,
+.sw-pagination__pages .page-numbers.is-loaded {
+  background: $buttons-color-background-primary-default;
+  color: $text-white;
+}
+
+.sw-pagination__pages .page-numbers.dots {
+  pointer-events: none;
+
+  &:hover {
+    background-color: transparent;
+  }
+}
+
+.sw-pagination__pages .prev,
+.sw-pagination__pages .next {
+  color: $icon-color-accent;
+
+  &:hover {
+    color: $icon-color-primary;
+  }
+}
+
+.sw-pagination__icon {
+  transition: color $animations;
+  width: 18px;
+  height: 18px;
+}
+
+.sw-pagination__icon--prev {
+  transform: rotate(180deg);
+}
+
+/* Pill styling lives with the component in _select.scss; this only places it */
+.sw-pagination__perpage {
+  display: none;
+
+  @include min-tablet {
+    display: block;
+    margin-left: 12px;
+  }
+}
+
+.sw-pagination__load-more {
+  @include min-tablet {
+    margin-left: auto;
+  }
+
+  &[hidden] {
+    display: none;
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    pointer-events: none;
+  }
+}
+
+.sw-pagination__alert {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+  color: $text-dark;
+  font-size: 16px;
+
+  &[hidden] {
+    display: none;
+  }
+}
+
+.sw-pagination__alert-close {
+  cursor: pointer;
+  border: none;
+  background: none;
+  color: $icon-color-accent;
+  text-decoration: underline;
+}

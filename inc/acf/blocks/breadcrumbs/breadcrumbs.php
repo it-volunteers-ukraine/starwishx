@@ -4,10 +4,11 @@
  * Breadcrumbs block — universal, CPT-aware.
  *
  * Contexts supported:
+ *   - Search results       → Home > Search
  *   - CPT archive pages    → Home > Archive Label
  *   - CPT singles          → Home > Archive Label > Post Title
  *   - Pages with hierarchy → Home > Parent > … > Page Title
- *   - News-by-category     → Home > News > Category Name
+ *   - News by category     → Home > News > Category Name
  *
  * Last crumb is never a link (current page). Toggle its visibility
  * via $block['data']['show_last_item'] (default true).
@@ -67,27 +68,48 @@ $category_slug = get_query_var('news_cat');
 
 global $post;
 
-// A) Post-type archive page (archive-news.php, archive-opportunity.php)
-//    The global $post here is the first post in the query — not what we want.
-//    We only need the archive label from the post type object.
-if (is_post_type_archive()) {
+// A) Search results
+//    Must come before the $post branch: on an archive the global $post is the
+//    first result, so search used to render that post's title as the crumb.
+if (is_search()) {
+    $breadcrumbs[] = [
+        'title' => __('Search', 'starwishx'),
+        'link'  => null, // current page
+    ];
+
+    // B) Post-type archive page (archive-news.php, archive-opportunity.php)
+    //    The global $post here is the first post in the query — not what we want.
+    //    We only need the archive label from the post type object.
+} elseif (is_post_type_archive()) {
     $archive_pt = get_query_var('post_type');
     if (is_array($archive_pt)) {
         $archive_pt = reset($archive_pt);
     }
     $pt_object = get_post_type_object($archive_pt);
-    // echo '<pre>';
-    // var_dump($archive_pt, $pt_object);
-    // echo '</pre>';
 
     if ($pt_object) {
+        // On /news/{category}/ the archive becomes a link and the category
+        // is the current crumb: Home > News > Category
+        $archive_url = $category_slug ? get_post_type_archive_link($archive_pt) : '';
+
         $breadcrumbs[] = [
             'title' => $pt_object->labels->name,
-            'link'  => null, // current page
+            'link'  => $archive_url ?: null, // null = current page
         ];
+
+        if ($category_slug) {
+            $term = get_term_by('slug', $category_slug, 'category-oportunities');
+
+            if ($term && !is_wp_error($term)) {
+                $breadcrumbs[] = [
+                    'title' => $term->name,
+                    'link'  => null,
+                ];
+            }
+        }
     }
 
-    // B) Regular post / page / CPT single
+    // C) Regular post / page / CPT single
 } elseif ($post) {
     $post_type = get_post_type($post);
     $is_cpt    = !in_array($post_type, ['page', 'post'], true);

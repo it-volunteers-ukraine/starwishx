@@ -1,0 +1,111 @@
+@use "../variables" as *;
+@use "../mixins/media" as *;
+
+/*
+ * Dropdown of option links — Shared\View\SelectDropdown.
+ *
+ * Replaces the .custom-select markup the deleted search-page block used to
+ * build in JavaScript. Open/close is <details>, so there is nothing to script.
+ */
+
+.sw-select {
+  position: relative;
+}
+
+.sw-select__summary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  list-style: none;
+  user-select: none;
+
+  /* Suppress the native disclosure triangle in every engine */
+  &::-webkit-details-marker {
+    display: none;
+  }
+
+  &::marker {
+    content: "";
+  }
+}
+
+.sw-select__chevron {
+  flex-shrink: 0;
+  transition: transform $animations;
+  width: 24px;
+  height: 24px;
+}
+
+.sw-select[open] .sw-select__chevron {
+  transform: rotateX(180deg);
+}
+
+.sw-select__list {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  z-index: 10;
+  margin: 0;
+  box-shadow:
+    0 0 0 1px rgb(0 0 0 / 4%),
+    0 8px 24px rgb(0 0 0 / 10%);
+  border-radius: 12px;
+  background-color: $dropdown-surface-color-default;
+  padding: 0;
+  min-width: 100%;
+  overflow: hidden;
+  list-style: none;
+}
+
+.sw-select__option {
+  display: block;
+  transition: background-color $animations;
+  padding: 12px 24px;
+  color: $text-dark;
+  text-align: center;
+  white-space: nowrap;
+
+  &:hover {
+    background-color: $dropdown-surface-color-hover;
+  }
+}
+
+.sw-select__option.is-current {
+  background-color: $dropdown-surface-color-selected;
+  color: $text-accent;
+}
+
+/* Items per page — the purple pill from docs/pagination/ */
+.sw-select--perpage {
+  .sw-select__summary {
+    border-radius: $btn-radius;
+    background-color: $buttons-color-background-primary-default;
+    padding: 12.5px 24px;
+    color: $text-white;
+    line-height: 1;
+  }
+
+  .sw-select__chevron {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+/* Sort order — plain text trigger next to its label */
+.sw-select--sort {
+  .sw-select__summary {
+    border-radius: 12px;
+    background-color: white;
+    padding: 8px 12px;
+    color: $text-dark;
+  }
+
+  .sw-select__list {
+    text-align: left;
+  }
+
+  .sw-select__option {
+    text-align: left;
+  }
+}
