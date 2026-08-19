@@ -8,7 +8,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2026-02-25 10:47+0000\n"
-"PO-Revision-Date: 2026-08-18 23:18+0000\n"
+"PO-Revision-Date: 2026-08-19 01:13+0000\n"
 "Language: uk\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
 "X-Generator: Loco https://localise.biz/\n"
@@ -839,7 +839,7 @@ msgstr "Показати ще 1"
 
 #: inc/news/Core/NewsCore.php:110
 #: template-parts/comments-interactive.php:393
-#: template-parts/pagination.php:124
+#: template-parts/pagination.php:130
 msgid "Show more"
 msgstr "Показати ще"
 
@@ -1337,7 +1337,7 @@ msgid "An error occurred while posting."
 msgstr "Під час публікації сталася помилка."
 
 #: archive-opportunity.php:143
-#: template-parts/sortby-and-result-posts.php:36
+#: template-parts/sortby-and-result-posts.php:52
 #: templates/page-listing-oportunities.php:81
 msgid "Found"
 msgstr "Знайдено"
@@ -1346,11 +1346,11 @@ msgstr "Знайдено"
 msgid "View all"
 msgstr "Переглянути всі"
 
-#: inc/acf/blocks/breadcrumbs/breadcrumbs.php:58
+#: inc/acf/blocks/breadcrumbs/breadcrumbs.php:59
 msgid "Home"
 msgstr "Додому"
 
-#: inc/acf/blocks/breadcrumbs/breadcrumbs.php:175
+#: inc/acf/blocks/breadcrumbs/breadcrumbs.php:185
 msgid "Breadcrumbs"
 msgstr "Хлібні кріхти"
 
@@ -2143,7 +2143,7 @@ msgstr "Коментар"
 
 #: inc/comments/Api/CommentsController.php:64
 #: inc/launchpad/Api/OpportunitiesController.php:184
-#: template-parts/pagination.php:141
+#: template-parts/pagination.php:146
 msgid "Items per page"
 msgstr "Елементів на сторінці"
 
@@ -2356,7 +2356,7 @@ msgstr ""
 
 #: inc/chat/Api/ActivityController.php:178
 msgid "Activity feed"
-msgstr ""
+msgstr "Стрічка активності"
 
 #: inc/launchpad/Api/OpportunitiesController.php:82
 msgid "Start date"
@@ -2366,6 +2366,7 @@ msgstr "Дата початку"
 msgid "End date"
 msgstr "Дата завершення"
 
+#: inc/acf/blocks/breadcrumbs/breadcrumbs.php:76
 #: inc/listing/Api/MainController.php:92
 #: inc/listing/Api/MainController.php:199
 #: template-parts/search-modal.php:40
@@ -2643,7 +2644,7 @@ msgstr "Немає країн, що відповідають вашому пош
 
 #: inc/news/Api/ArchiveController.php:151
 msgid "Unknown category."
-msgstr ""
+msgstr "Невідома категорія."
 
 #: inc/news/Api/ArchiveController.php:170
 msgid "A search term is required."
@@ -2651,60 +2652,61 @@ msgstr "Потрібно ввести пошуковий термін."
 
 #: inc/news/Api/ArchiveController.php:184
 msgid "Unknown source."
-msgstr ""
+msgstr "Невідоме джерело."
 
 #: inc/news/Core/NewsCore.php:111
 msgid "Loading…"
-msgstr ""
+msgstr "Завантаження…"
 
 #: inc/news/Core/NewsCore.php:112
 msgid "Could not load more items. Please try again."
 msgstr "Не вдалося завантажити більше елементів. Спробуйте ще раз."
 
 #. translators: %s: search query.
-#: search.php:61
+#: search.php:62
 #, php-format
 msgid "Search results \"%s\""
 msgstr "Результати пошуку \"%s\""
 
-#: search.php:94
+#: search.php:90
 msgid "Nothing found. Try a different search term."
 msgstr "Нічого не знайдено. Спробуйте інший пошуковий термін."
 
-#: template-parts/pagination.php:99
+#: template-parts/pagination.php:105
 msgid "Dismiss"
-msgstr ""
+msgstr "Відхилити"
 
-#: template-parts/pagination.php:104
+#: template-parts/pagination.php:110
 msgid "Pagination"
-msgstr ""
+msgstr "Пагінація"
 
 #: template-parts/search-modal.php:17
 msgid "Search the site"
 msgstr "Пошук на сайті"
 
-#: template-parts/sortby-and-result-posts.php:25
+#: template-parts/sortby-and-result-posts.php:28
 msgid "Newest first"
 msgstr "Спочатку новіші"
 
-#: template-parts/sortby-and-result-posts.php:26
+#: template-parts/sortby-and-result-posts.php:29
 msgid "Oldest first"
 msgstr "Спочатку найстаріші"
 
-#: template-parts/sortby-and-result-posts.php:42
+#: template-parts/sortby-and-result-posts.php:58
+#: template-parts/sortby-and-result-posts.php:63
 msgid "Sorting"
 msgstr "Сортування"
 
-#: template-parts/sortby-and-result-posts.php:56
-msgid "Sort order"
-msgstr "Порядок сортування"
-
 #. translators: %s: news category name.
-#: templates/archive-news-category.php:71
+#: templates/archive-news-category.php:75
 #, php-format
 msgid "News \"%s\""
 msgstr "Новини \"%s\""
 
-#: templates/archive-news-category.php:93
+#: templates/archive-news-category.php:96
 msgid "No news in this category yet."
 msgstr "У цій категорії поки що немає новин."
+
+#: template-parts/news-card.php:80
+msgid "No category"
+msgstr "Без категорії"

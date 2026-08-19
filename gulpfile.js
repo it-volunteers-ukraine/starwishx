@@ -61,21 +61,21 @@ export const styles = () => {
     .pipe(browserSync.stream());
 };
 
-export const templatesStyles = () => {
-  return src(["src/scss/template-parts/*.scss"])
-    .pipe(
-      stylelint({
-        fix: true,
-        reporters: [{ formatter: "string", console: true }],
-      }),
-    )
-    .pipe(gulpif(!PRODUCTION, sourcemaps.init()))
-    .pipe(SASS().on("error", SASS.logError))
-    .pipe(gulpif(PRODUCTION, postcss([autoprefixer, cssnano])))
-    .pipe(gulpif(!PRODUCTION, sourcemaps.write()))
-    .pipe(dest("assets/css/template-parts"))
-    .pipe(browserSync.stream());
-};
+// export const templatesStyles = () => {
+//   return src(["src/scss/template-parts/*.scss"])
+//     .pipe(
+//       stylelint({
+//         fix: true,
+//         reporters: [{ formatter: "string", console: true }],
+//       }),
+//     )
+//     .pipe(gulpif(!PRODUCTION, sourcemaps.init()))
+//     .pipe(SASS().on("error", SASS.logError))
+//     .pipe(gulpif(PRODUCTION, postcss([autoprefixer, cssnano])))
+//     .pipe(gulpif(!PRODUCTION, sourcemaps.write()))
+//     .pipe(dest("assets/css/template-parts"))
+//     .pipe(browserSync.stream());
+// };
 
 export const blockStyles = () => {
   return src(["inc/acf/blocks/**/*.module.scss"])
@@ -396,7 +396,7 @@ export const copyBinariesToProduction = () => {
 
 export const watchForChanges = () => {
   watch("src/scss/**/*.scss", styles);
-  watch("src/scss/template-parts/*.scss", templatesStyles);
+  // watch("src/scss/template-parts/*.scss", templatesStyles);
   watch("src/img/**/*.{jpg,jpeg,png,gif,webp,avif}", images);
   watch("src/img/**/*.svg", svgs);
   watch(
@@ -425,7 +425,7 @@ export const dev = series(
   clean,
   parallel(
     styles,
-    templatesStyles,
+    // templatesStyles,
     fonts,
     images,
     svgs,
@@ -443,7 +443,7 @@ export const build = series(
   clean,
   parallel(
     styles,
-    templatesStyles,
+    // templatesStyles,
     fonts,
     images,
     svgs,

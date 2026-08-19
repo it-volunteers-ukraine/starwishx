@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-08-18T23:19:02+00:00\n"
+"POT-Creation-Date: 2026-08-19T01:13:59+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: starwishx\n"
@@ -89,7 +89,7 @@ msgid "Refine Search"
 msgstr ""
 
 #: archive-opportunity.php:143
-#: template-parts/sortby-and-result-posts.php:36
+#: template-parts/sortby-and-result-posts.php:52
 #: templates/page-listing-oportunities.php:81
 msgid "Found"
 msgstr ""
@@ -194,11 +194,18 @@ msgstr ""
 msgid "Block accordion opportunities"
 msgstr ""
 
-#: inc/acf/blocks/breadcrumbs/breadcrumbs.php:58
+#: inc/acf/blocks/breadcrumbs/breadcrumbs.php:59
 msgid "Home"
 msgstr ""
 
-#: inc/acf/blocks/breadcrumbs/breadcrumbs.php:175
+#: inc/acf/blocks/breadcrumbs/breadcrumbs.php:76
+#: inc/listing/Api/MainController.php:92
+#: inc/listing/Api/MainController.php:199
+#: template-parts/search-modal.php:40
+msgid "Search"
+msgstr ""
+
+#: inc/acf/blocks/breadcrumbs/breadcrumbs.php:185
 msgid "Breadcrumbs"
 msgstr ""
 
@@ -369,7 +376,7 @@ msgstr ""
 
 #: inc/comments/Api/CommentsController.php:64
 #: inc/launchpad/Api/OpportunitiesController.php:184
-#: template-parts/pagination.php:141
+#: template-parts/pagination.php:146
 msgid "Items per page"
 msgstr ""
 
@@ -1761,12 +1768,6 @@ msgstr ""
 msgid "Location"
 msgstr ""
 
-#: inc/listing/Api/MainController.php:92
-#: inc/listing/Api/MainController.php:199
-#: template-parts/search-modal.php:40
-msgid "Search"
-msgstr ""
-
 #: inc/listing/Api/MainController.php:111
 msgid "Search query"
 msgstr ""
@@ -1876,7 +1877,7 @@ msgstr ""
 
 #: inc/news/Core/NewsCore.php:110
 #: template-parts/comments-interactive.php:393
-#: template-parts/pagination.php:124
+#: template-parts/pagination.php:130
 msgid "Show more"
 msgstr ""
 
@@ -2375,12 +2376,12 @@ msgid "Contact Us"
 msgstr ""
 
 #. translators: %s: search query.
-#: search.php:61
+#: search.php:62
 #, php-format
 msgid "Search results \"%s\""
 msgstr ""
 
-#: search.php:94
+#: search.php:90
 msgid "Nothing found. Try a different search term."
 msgstr ""
 
@@ -2519,11 +2520,15 @@ msgstr ""
 msgid "You have new notifications, please check them in your personal account"
 msgstr ""
 
-#: template-parts/pagination.php:99
+#: template-parts/news-card.php:80
+msgid "No category"
+msgstr ""
+
+#: template-parts/pagination.php:105
 msgid "Dismiss"
 msgstr ""
 
-#: template-parts/pagination.php:104
+#: template-parts/pagination.php:110
 msgid "Pagination"
 msgstr ""
 
@@ -2584,29 +2589,26 @@ msgstr ""
 msgid "X"
 msgstr ""
 
-#: template-parts/sortby-and-result-posts.php:25
+#: template-parts/sortby-and-result-posts.php:28
 msgid "Newest first"
 msgstr ""
 
-#: template-parts/sortby-and-result-posts.php:26
+#: template-parts/sortby-and-result-posts.php:29
 msgid "Oldest first"
 msgstr ""
 
-#: template-parts/sortby-and-result-posts.php:42
+#: template-parts/sortby-and-result-posts.php:58
+#: template-parts/sortby-and-result-posts.php:63
 msgid "Sorting"
 msgstr ""
 
-#: template-parts/sortby-and-result-posts.php:56
-msgid "Sort order"
-msgstr ""
-
 #. translators: %s: news category name.
-#: templates/archive-news-category.php:71
+#: templates/archive-news-category.php:75
 #, php-format
 msgid "News \"%s\""
 msgstr ""
 
-#: templates/archive-news-category.php:93
+#: templates/archive-news-category.php:96
 msgid "No news in this category yet."
 msgstr ""
 
