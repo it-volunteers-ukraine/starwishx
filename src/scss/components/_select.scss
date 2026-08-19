@@ -14,8 +14,8 @@
 
 .sw-select__summary {
   display: inline-flex;
-  gap: 8px;
   align-items: center;
+  gap: 8px;
   cursor: pointer;
   list-style: none;
   user-select: none;
@@ -32,9 +32,9 @@
 
 .sw-select__chevron {
   flex-shrink: 0;
+  transition: transform $animations;
   width: 24px;
   height: 24px;
-  transition: transform $animations;
 }
 
 .sw-select[open] .sw-select__chevron {
@@ -43,36 +43,36 @@
 
 .sw-select__list {
   position: absolute;
-  right: 0;
   top: calc(100% + 8px);
+  right: 0;
   z-index: 10;
   margin: 0;
-  padding: 0;
-  min-width: 100%;
-  border-radius: 12px;
-  background-color: white;
   box-shadow:
     0 0 0 1px rgb(0 0 0 / 4%),
     0 8px 24px rgb(0 0 0 / 10%);
+  border-radius: 12px;
+  background-color: $dropdown-surface-color-default;
+  padding: 0;
+  min-width: 100%;
   overflow: hidden;
   list-style: none;
 }
 
 .sw-select__option {
   display: block;
+  transition: background-color $animations;
   padding: 12px 24px;
   color: $text-dark;
   text-align: center;
   white-space: nowrap;
-  transition: background-color $animations;
 
   &:hover {
-    background-color: $element-block-fill;
+    background-color: $dropdown-surface-color-hover;
   }
 }
 
 .sw-select__option.is-current {
-  background-color: $element-block-fill;
+  background-color: $dropdown-surface-color-selected;
   color: $text-accent;
 }
 
@@ -81,7 +81,7 @@
   .sw-select__summary {
     border-radius: $btn-radius;
     background-color: $buttons-color-background-primary-default;
-    padding: 14px 24px;
+    padding: 12.5px 24px;
     color: $text-white;
     line-height: 1;
   }
