@@ -32,6 +32,9 @@ use Shared\Http\QueryStringParser;
  */
 final class ListingCore
 {
+    /** Bump to trigger a one-shot rewrite flush after deploy. */
+    private const REWRITE_VERSION = '1';
+
     private static ?self $instance = null;
 
     private FilterRegistry $registry;
@@ -136,6 +139,7 @@ final class ListingCore
         // SEO-friendly category URLs: /opportunities/{slug}/
         if (defined('LISTING_PRETTY_CATEGORY_URLS') && LISTING_PRETTY_CATEGORY_URLS) {
             add_action('init', [$this, 'registerCategoryRewrites'], 5);
+            add_action('init', [$this, 'maybeFlushRewrites'], 20);
             add_filter('query_vars', fn(array $vars) => array_merge($vars, ['listing_cat']));
             add_filter('request', [$this, 'disambiguateCategoryUrl'], 20);
         }
@@ -177,6 +181,23 @@ final class ListingCore
             'index.php?post_type=opportunity&listing_cat=$matches[1]&paged=$matches[2]',
             'top'
         );
+    }
+
+    /**
+     * Flush rewrites once per REWRITE_VERSION.
+     *
+     * Without this the rules above exist in memory but not in the stored
+     * rewrite array, so /opportunities/{slug}/ 404s on a fresh clone until
+     * someone opens Settings -> Permalinks. Same approach as NewsCore.
+     */
+    public function maybeFlushRewrites(): void
+    {
+        if (get_option('sw_listing_rewrites_version') === self::REWRITE_VERSION) {
+            return;
+        }
+
+        flush_rewrite_rules(false);
+        update_option('sw_listing_rewrites_version', self::REWRITE_VERSION, false);
     }
 
     /**
@@ -315,10 +336,10 @@ final class ListingCore
      */
     public function enqueueAssets(): void
     {
-        // Depends on where to place Listing App: page or archive
-        // if (!is_page('listing')) {
-        // if (!is_page('opportunities')) {
-        if (!is_archive('opportunities')) {
+        // is_archive() takes no arguments - PHP discards the extra one, so the
+        // old is_archive('opportunities') was plain is_archive() and shipped
+        // this whole store on /news/, category, author and date archives too.
+        if (!is_post_type_archive('opportunity')) {
             return;
         }
 

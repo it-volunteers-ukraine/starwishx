@@ -39,28 +39,18 @@ spl_autoload_register(function ($class) {
 // Primary trigger: Theme Activation
 // Runs ONCE when admin activates the theme
 add_action('after_switch_theme', function () {
-
     \Launchpad\Data\Migrations\MigrationManager::maybeRunMigrations();
-    // Also create the Launchpad page
-    $launchpad_page = get_page_by_path('launchpad');
-    if (!$launchpad_page) {
-        $page_id = wp_insert_post([
-            'post_title'   => __('Launchpad', 'starwishx'),
-            'post_name'    => 'launchpad',
-            'post_status'  => 'publish',
-            'post_type'    => 'page',
-            'post_content' => '',
-            'post_author'  => 1,
-            'meta_input'   => [
-                '_wp_page_template' => 'templates/page-launchpad.php',
-            ],
-        ]);
-
-        if ($page_id && !is_wp_error($page_id)) {
-            update_option('launchpad_page_id', $page_id);
-        }
-    }
 });
+
+// The Launchpad page: created on activation, protected from deletion.
+// ManagedPage handles both, plus the case where the theme is deployed over
+// Git or FTP and after_switch_theme never fires.
+\Shared\Core\ManagedPage::register([
+    'option'   => 'launchpad_page_id',
+    'slug'     => 'launchpad',
+    'title'    => static fn(): string => __('Launchpad', 'starwishx'),
+    'template' => 'templates/page-launchpad.php',
+]);
 
 // Self healing trigger: Admin Pages Only
 // Catches deployments via FTP/Git where theme wasn't switched
@@ -75,20 +65,6 @@ add_action('admin_init', function () {
 //         \Launchpad\Data\Migrations\CreateLaunchpadTables::run();
 //     }
 // });
-
-// Prevent deletion of Launchpad page
-add_action('before_delete_post', function ($post_id) {
-    if ($post_id == get_option('launchpad_page_id')) {
-        wp_die(__('The Launchpad page cannot be deleted.', 'starwishx'));
-    }
-});
-
-// Prevent trashing of Launchpad page
-add_action('wp_trash_post', function ($post_id) {
-    if ($post_id == get_option('launchpad_page_id')) {
-        wp_die(__('The Launchpad page cannot be trashed.', 'starwishx'));
-    }
-});
 
 // Initialize Launchpad
 add_action('after_setup_theme', function () {

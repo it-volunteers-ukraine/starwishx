@@ -89,12 +89,12 @@ final class FavoritesCore
      */
     public function enqueueAssets(): void
     {
+        // is_post_type_archive(), not is_archive('opportunities'): is_archive()
+        // takes no arguments, so that call matched every archive on the site and
+        // pulled this store onto /news/ and the taxonomy archives.
         $needsFavorites = is_page('launchpad')
-            // || is_page('listing') // if listing in page Listing
-            // || is_page('opportunities') // if listing in page Opportunities
-            || is_archive('opportunities') // if listing is archive Opportunities
+            || is_post_type_archive('opportunity')
             || is_singular('opportunity')
-            // || is_singular('news')
             || is_singular('project');
 
         if (!$needsFavorites) {

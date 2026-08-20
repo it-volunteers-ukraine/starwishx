@@ -236,8 +236,9 @@ require_once get_template_directory() . '/inc/chat/setup.php';
 // init for Launchpad - user's dashboard
 require_once get_template_directory() . '/inc/launchpad/setup.php';
 
-// Feature flag: SEO-friendly category URLs for Listing (/opportunities/{slug}/)s
-// After toggling, flush rewrite rules via Settings → Permalinks.
+// Feature flag: SEO-friendly category URLs for Listing (/opportunities/{slug}/)
+// Toggling this changes the rewrite rules, so bump ListingCore::REWRITE_VERSION
+// alongside it to flush them on the next request.
 define('LISTING_PRETTY_CATEGORY_URLS', true);
 
 // init for Tour — guided onboarding with shepherd.js
