@@ -50,7 +50,12 @@ $date = sw_format_date_for_ui($policy_date_raw, 'j F Y', true);
 // $date['iso']     — ISO 8601 for <time datetime="...">
 // $date['display'] — localized human-readable string
 
-$pdf_title = $pdf_title_override ? $pdf_title_override : $doc['title'];
+// sw_prepare_document() returns null for an empty field or a deleted
+// attachment, so the fallback has to survive $doc being null - indexing it
+// raised "Trying to access array offset on null" on every policy page with no
+// PDF. ?: rather than ??, so an override saved as an empty string still falls
+// through to the attachment title.
+$pdf_title = $pdf_title_override ?: ($doc['title'] ?? '');
 
 get_header();
 ?>
@@ -117,7 +122,13 @@ if (function_exists('render_block')) {
 
                         <span class="policy-pdf-info" id="policy-pdf-meta-<?php echo esc_attr($post_id); ?>">
                             <span class="policy-pdf-title text-small">
-                                <?php esc_html_e($pdf_title); ?>
+                                <?php
+                                // echo esc_html(), not esc_html_e(): the title is
+                                // a runtime value, and esc_html_e() would look it
+                                // up in the 'default' text domain and offer it to
+                                // string extraction as a translatable literal.
+                                echo esc_html($pdf_title);
+                                ?>
                             </span>
                             <span class="policy-pdf-meta text-small">
                                 <?php
