@@ -31,7 +31,7 @@
         <path d="M17.5 12L26.5 22L17.5 32" stroke="currentColor" stroke-linecap="round"/>
     </symbol>
     <symbol id="icon-arrow_down" viewBox="0 0 24 24" fill="none">
-        <path d="M7 10L12 15L17 10" stroke="#292929" stroke-linecap="round"/>
+        <path d="M7 10L12 15L17 10" stroke="currentColor" stroke-linecap="round"/>
     </symbol>
     <symbol id="icon-selected" viewBox="0 0 18 18" fill="none">
         <path d="M13.5 5.25L7.2 12.75L4.5 9.75" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/>

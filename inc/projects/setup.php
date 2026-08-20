@@ -13,13 +13,15 @@
  * require_once get_template_directory() . '/inc/projects/setup.php';
  */
 
+declare(strict_types=1);
+
 namespace Projects;
 
 // Load helper functions first
 require_once __DIR__ . '/helpers.php';
 
-// Autoloader
-spl_autoload_register(function ($class) {
+// PSR-4 style autoloader for Projects namespace
+spl_autoload_register(function (string $class): void {
     $prefix = 'Projects\\';
     $base_dir = __DIR__ . '/';
 
@@ -36,7 +38,10 @@ spl_autoload_register(function ($class) {
     }
 });
 
+// Projects owns no page and registers no rewrites - /projects/ is the CPT
+// archive, served by archive-project.php through the template hierarchy.
+
 // Initialize Projects
-add_action('after_setup_theme', function () {
+add_action('after_setup_theme', static function (): void {
     \projects();
 }, 20);

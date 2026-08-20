@@ -90,7 +90,7 @@ if ($items) {
                                 <div class="<?= esc_attr($classes['count']); ?>"><?= sprintf("%02d", $count); ?></div>
                                 <!-- < ?= esc_attr($item_slug); ?>  -->
                                 <h3 class="h5 <?= esc_attr($classes['item-title']); ?>">
-                                    <a href="<?= esc_url(home_url($base_url_opportunities . $item_slug)) ?>">
+                                    <a href="<?= esc_url(home_url($base_url_opportunities . $item_slug . '/')) ?>">
                                         <?= esc_html($item_title); ?>
                                     </a>
                                 </h3>

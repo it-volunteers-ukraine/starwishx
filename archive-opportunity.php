@@ -151,11 +151,20 @@ if (function_exists('render_block')) {
 
 
             <div class="listing-filters">
+                <?php
+                // Keyword search is the one filter group written by hand rather
+                // than rendered from the registry, so it has no filter object to
+                // take an id from. It used to interpolate $id, which is not a
+                // template variable at all - load_template() globalises $id, so
+                // it silently picked up WordPress's current-post id and the two
+                // callbacks below never resolved. 's' is the key the input binds
+                // to on state.query.
+                ?>
                 <details
                     class="listing-filter-group"
-                    id="filter-group-<?php echo esc_attr($id); ?>"
+                    id="filter-group-s"
                     data-wp-interactive="listing"
-                    data-wp-context='{ "filterId": "<?php echo esc_attr($id); ?>" }'
+                    data-wp-context='{ "filterId": "s" }'
                     data-wp-class--has-selection="callbacks.hasActiveFilter"
                     open>
 
