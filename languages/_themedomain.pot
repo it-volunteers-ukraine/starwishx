@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-08-20T06:45:21+00:00\n"
+"POT-Creation-Date: 2026-08-26T05:48:55+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: starwishx\n"
@@ -193,8 +193,8 @@ msgstr ""
 msgid "No projects found."
 msgstr ""
 
-#: footer.php:111
-#: production/footer.php:111
+#: footer.php:120
+#: production/footer.php:120
 msgid "Back to top"
 msgstr ""
 
@@ -3389,29 +3389,29 @@ msgstr ""
 msgid "Policy Page"
 msgstr ""
 
-#: production/templates/page-policy.php:100
-#: templates/page-policy.php:100
+#: production/templates/page-policy.php:105
+#: templates/page-policy.php:105
 msgid "Policy document download"
 msgstr ""
 
-#: production/templates/page-policy.php:127
-#: templates/page-policy.php:127
+#: production/templates/page-policy.php:138
+#: templates/page-policy.php:138
 #, php-format
 msgid "%1$s, %2$s"
 msgstr ""
 
-#: production/templates/page-policy.php:132
-#: templates/page-policy.php:132
+#: production/templates/page-policy.php:143
+#: templates/page-policy.php:143
 msgid "PDF"
 msgstr ""
 
-#: production/templates/page-policy.php:141
-#: templates/page-policy.php:141
+#: production/templates/page-policy.php:152
+#: templates/page-policy.php:152
 msgid "No PDF uploaded"
 msgstr ""
 
-#: production/templates/page-policy.php:155
-#: templates/page-policy.php:155
+#: production/templates/page-policy.php:166
+#: templates/page-policy.php:166
 msgid "Дата набуття чинності:"
 msgstr ""
 
