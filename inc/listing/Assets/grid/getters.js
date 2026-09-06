@@ -7,7 +7,7 @@
  * File: inc/listing/Assets/grid/getters.js
  */
 import { getContext, store } from "@wordpress/interactivity";
-import { __, _n, sprintf } from "@wordpress/i18n";
+// import { __, _n, sprintf } from "@wordpress/i18n";
 
 export const gridGetters = {
   /**
