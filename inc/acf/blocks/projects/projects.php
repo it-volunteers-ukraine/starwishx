@@ -53,12 +53,12 @@ $query = new WP_Query($query_args);
             <!-- Swiper navigation buttons -->
             <button type="button" class="arrow-left <?= $classes['arrow'] ?> <?= $classes['arrow-left'] ?>" aria-label="Previous projects">
                 <svg width="40" height="40" focusable="false" tabindex="-1" aria-hidden="true">
-                    <use href="<?= get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-arrow_left"></use>
+                    <use href="<?= get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-arrow-left"></use>
                 </svg>
             </button>
             <button type="button" class="arrow-right <?= $classes['arrow'] ?> <?= $classes['arrow-right'] ?>" aria-label="Next projects">
                 <svg width="40" height="40" focusable="false" tabindex="-1" aria-hidden="true">
-                    <use href="<?= get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-arrow_right"></use>
+                    <use href="<?= get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-arrow-right"></use>
                 </svg>
             </button>
         </div>

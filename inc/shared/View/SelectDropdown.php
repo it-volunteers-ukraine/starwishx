@@ -96,7 +96,7 @@ class SelectDropdown
             esc_attr($extra),
             esc_attr(trim($label . ': ' . $summary, ': ')),
             esc_html($summary),
-            sw_svg('icon-arrow_down', 24, null, 'sw-select__chevron'),
+            sw_svg('icon-arrow-down', 24, null, 'sw-select__chevron'),
             esc_attr($id),
             $items
         );

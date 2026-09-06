@@ -12,8 +12,8 @@ require_once __DIR__ . '/contact-handler.php';
 
 acf_register_block_type([
     'name'            => 'contact_form',
-    'title'           => __('Contact Form', '_themedomain'),
-    'description'     => __('Контактний блок з формою і контактною інформацією', '_themedomain'),
+    'title'           => __('Contact Form', 'starwishx'),
+    'description'     => __('Контактний блок з формою і контактною інформацією', 'starwishx'),
     'render_template' => __DIR__ . '/contact.php',
     'category'        => 'custom-blocks',
     'icon'            => 'email',

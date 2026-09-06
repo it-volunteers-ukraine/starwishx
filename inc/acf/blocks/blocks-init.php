@@ -8,7 +8,7 @@ function gt_block_category_init( $categories, $post ) {
     return array_merge([
             [
                 'slug' => 'custom-blocks',
-                'title' => __('Custom Blocks', '_themedomain'),
+                'title' => __('Custom Blocks', 'starwishx'),
             ],
             [
                 'slug' => 'posts-blocks',
@@ -16,7 +16,7 @@ function gt_block_category_init( $categories, $post ) {
             ],
             [
                 'slug' => 'ccc-blocks',
-                'title' => __('CCC Blocks', '_themedomain'),
+                'title' => __('CCC Blocks', 'starwishx'),
             ],
         ],
         $categories
@@ -40,8 +40,8 @@ function _themeprefix_acf_init_block_types() {
 
         // acf_register_block_type(array(
         //     'name'  =>  'hero1',
-        //     'title' =>  __('Hero1', '_themedomain'),
-        //     'description'   =>  __('Block Hero1', '_themedomain'),
+        //     'title' =>  __('Hero1', 'starwishx'),
+        //     'description'   =>  __('Block Hero1', 'starwishx'),
         //     'render_template'   =>  acf_theme_blocks_path('hero1/hero1.php'),
         //     'category'  =>  'ccc-blocks',
         //     'icon'  =>  'format-image',
@@ -50,8 +50,8 @@ function _themeprefix_acf_init_block_types() {
 
         // acf_register_block_type(array(
         //     'name'  =>  'hero2',
-        //     'title' =>  __('Hero2', '_themedomain'),
-        //     'description'   =>  __('Block Hero2', '_themedomain'),
+        //     'title' =>  __('Hero2', 'starwishx'),
+        //     'description'   =>  __('Block Hero2', 'starwishx'),
         //     'render_template'   =>  acf_theme_blocks_path('hero2/hero2.php'),
         //     'category'  =>  'ccc-blocks',
         //     'icon'  =>  'format-image',
@@ -61,8 +61,8 @@ function _themeprefix_acf_init_block_types() {
 
         // acf_register_block_type(array(
         //     'name'  =>  'hero3',
-        //     'title' =>  __('Hero3', '_themedomain'),
-        //     'description'   =>  __('Block Hero3', '_themedomain'),
+        //     'title' =>  __('Hero3', 'starwishx'),
+        //     'description'   =>  __('Block Hero3', 'starwishx'),
         //     'render_template'   =>  acf_theme_blocks_path('hero3/hero3.php'),
         //     'category'  =>  'ccc-blocks',
         //     'icon'  =>  'format-image',
@@ -71,8 +71,8 @@ function _themeprefix_acf_init_block_types() {
 
         // acf_register_block_type(array(
         //     'name'  =>  'counter1',
-        //     'title' =>  __('counter1', '_themedomain'),
-        //     'description'   =>  __('Block counter1', '_themedomain'),
+        //     'title' =>  __('counter1', 'starwishx'),
+        //     'description'   =>  __('Block counter1', 'starwishx'),
         //     'render_template'   =>  acf_theme_blocks_path('counter1/counter1.php'),
         //     'category'  =>  'ccc-blocks',
         //     'icon'  =>  'format-image',
@@ -82,8 +82,8 @@ function _themeprefix_acf_init_block_types() {
 
         // acf_register_block_type(array(
         //     'name'  =>  'counter2',
-        //     'title' =>  __('counter2', '_themedomain'),
-        //     'description'   =>  __('Block counter2', '_themedomain'),
+        //     'title' =>  __('counter2', 'starwishx'),
+        //     'description'   =>  __('Block counter2', 'starwishx'),
         //     'render_template'   =>  acf_theme_blocks_path('counter2/counter2.php'),
         //     'category'  =>  'ccc-blocks',
         //     'icon'  =>  'format-image',
@@ -93,8 +93,8 @@ function _themeprefix_acf_init_block_types() {
 
         // acf_register_block_type(array(
         //     'name'  =>  'counter3',
-        //     'title' =>  __('counter3', '_themedomain'),
-        //     'description'   =>  __('Block counter3', '_themedomain'),
+        //     'title' =>  __('counter3', 'starwishx'),
+        //     'description'   =>  __('Block counter3', 'starwishx'),
         //     'render_template'   =>  acf_theme_blocks_path('counter3/counter3.php'),
         //     'category'  =>  'ccc-blocks',
         //     'icon'  =>  'format-image',
@@ -104,8 +104,8 @@ function _themeprefix_acf_init_block_types() {
 
         // acf_register_block_type(array(
         //     'name'  =>  'testimonials1',
-        //     'title' =>  __('testimonials1', '_themedomain'),
-        //     'description'   =>  __('Block testimonials1', '_themedomain'),
+        //     'title' =>  __('testimonials1', 'starwishx'),
+        //     'description'   =>  __('Block testimonials1', 'starwishx'),
         //     'render_template'   =>  acf_theme_blocks_path('testimonials1/testimonials1.php'),
         //     'category'  =>  'ccc-blocks',
         //     'icon'  =>  'format-image',
@@ -115,8 +115,8 @@ function _themeprefix_acf_init_block_types() {
 
         // acf_register_block_type(array(
         //     'name'  =>  'gallery1',
-        //     'title' =>  __('gallery1', '_themedomain'),
-        //     'description'   =>  __('Block gallery1', '_themedomain'),
+        //     'title' =>  __('gallery1', 'starwishx'),
+        //     'description'   =>  __('Block gallery1', 'starwishx'),
         //     'render_template'   =>  acf_theme_blocks_path('gallery1/gallery1.php'),
         //     'category'  =>  'ccc-blocks',
         //     'icon'  =>  'format-image',
@@ -126,8 +126,8 @@ function _themeprefix_acf_init_block_types() {
 
         // acf_register_block_type(array(
         //     'name'  =>  'faq',
-        //     'title' =>  __('faq', '_themedomain'),
-        //     'description'   =>  __('Block faq', '_themedomain'),
+        //     'title' =>  __('faq', 'starwishx'),
+        //     'description'   =>  __('Block faq', 'starwishx'),
         //     'render_template'   =>  acf_theme_blocks_path('faq/faq.php'),
         //     'category'  =>  'ccc-blocks',
         //     'icon'  =>  'format-image',
@@ -137,8 +137,8 @@ function _themeprefix_acf_init_block_types() {
 
         // acf_register_block_type(array(
         //     'name'  =>  'google-maps1',
-        //     'title' =>  __('google-maps1', '_themedomain'),
-        //     'description'   =>  __('Block google-maps1', '_themedomain'),
+        //     'title' =>  __('google-maps1', 'starwishx'),
+        //     'description'   =>  __('Block google-maps1', 'starwishx'),
         //     'render_template'   =>  acf_theme_blocks_path('google-maps1/google-maps1.php'),
         //     'category'  =>  'ccc-blocks',
         //     'icon'  =>  'format-image',
@@ -148,8 +148,8 @@ function _themeprefix_acf_init_block_types() {
 
         // acf_register_block_type(array(
         //     'name'  =>  'google-maps2',
-        //     'title' =>  __('google-maps2', '_themedomain'),
-        //     'description'   =>  __('Block google-maps2', '_themedomain'),
+        //     'title' =>  __('google-maps2', 'starwishx'),
+        //     'description'   =>  __('Block google-maps2', 'starwishx'),
         //     'render_template'   =>  acf_theme_blocks_path('google-maps2/google-maps2.php'),
         //     'category'  =>  'ccc-blocks',
         //     'icon'  =>  'format-image',
@@ -159,8 +159,8 @@ function _themeprefix_acf_init_block_types() {
 
         // acf_register_block_type(array(
         //     'name'  =>  'google-maps3',
-        //     'title' =>  __('google-maps3', '_themedomain'),
-        //     'description'   =>  __('Block google-maps3', '_themedomain'),
+        //     'title' =>  __('google-maps3', 'starwishx'),
+        //     'description'   =>  __('Block google-maps3', 'starwishx'),
         //     'render_template'   =>  acf_theme_blocks_path('google-maps3/google-maps3.php'),
         //     'category'  =>  'ccc-blocks',
         //     'icon'  =>  'format-image',

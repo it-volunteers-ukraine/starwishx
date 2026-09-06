@@ -48,7 +48,7 @@ if (function_exists('render_block')) {
 /* <nav class="opportunity-breadcrumbs container" aria-label="< ?php esc_attr_e('Breadcrumb', 'starwishx'); ?>">
 <a href="< ?php echo esc_url($back_url); ?>" class="btn-back">
 <svg width="13" height="16" class="icon-arrow-left">
-<use xlink:href="< ?php echo get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-long_arrow_left"></use>
+<use xlink:href="< ?php echo get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-long-arrow-left"></use>
 </svg>
 <span>< ?php esc_html_e('Opportunities', 'starwishx'); ?></span>
 </a>
