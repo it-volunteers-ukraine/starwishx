@@ -144,7 +144,7 @@ $back_url = $referer ? $referer : home_url();
     <nav class="gateway-breadcrumbs">
         <a href="<?php echo esc_url($back_url); ?>" class="gateway-breadcrumbs-back">
             <svg width="13" height="16" class="icon-arrow-left">
-                <use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-long_arrow_left"></use>
+                <use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-long-arrow-left"></use>
             </svg> <span><?php echo esc_html($back_label); ?></span></a>
     </nav>
     <div class="gateway-layout">

@@ -511,7 +511,7 @@ class OpportunitiesPanel extends AbstractPanel
                     <h2 data-wp-text="state.opportunityFormHeaders"></h2>
                     <button class="btn-secondary__small" type="button" data-wp-on--click="actions.opportunities.cancel">
                         <svg class="btn-secondary__small--icon arrow-left">
-                            <use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-long_arrow_left"></use>
+                            <use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-long-arrow-left"></use>
                         </svg>
                         <?php esc_html_e('Back', 'starwishx'); ?>
                     </button>
@@ -1010,7 +1010,7 @@ class OpportunitiesPanel extends AbstractPanel
                         <!-- Back to list -->
                         <button class="btn-secondary__small" type="button" data-wp-on--click="actions.opportunities.cancel">
                             <svg class="btn-secondary__small--icon arrow-left">
-                                <use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-long_arrow_left"></use>
+                                <use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-long-arrow-left"></use>
                             </svg>
                             <?php esc_html_e('Back', 'starwishx'); ?>
                         </button>

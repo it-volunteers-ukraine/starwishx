@@ -1371,7 +1371,7 @@ msgstr "Зареєструйтесь, або увійдіть в акаунт д
 msgid "Enter a search term"
 msgstr "Напишіть слово для пошуку"
 
-#: functions.php:170
+#: functions.php:162
 msgid "Language"
 msgstr "Мова"
 
@@ -1411,7 +1411,7 @@ msgstr "Будь ласка, введіть дійсний номер телеф
 msgid "It seems the page you are looking for does not exist."
 msgstr "Схоже сторінка, яку Ви шукаєте, не існує."
 
-#: 404.php:30
+#: 404.php:23
 msgid "To the main page"
 msgstr "На головну сторінку"
 
