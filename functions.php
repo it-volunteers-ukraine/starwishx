@@ -14,9 +14,9 @@ function _themeprefix_theme_setup()
 
   register_nav_menus(
     array(
-      'menu-1' => esc_html__('Primary', '_themedomain'),
-      'menu-header' => esc_html__('Header', '_themedomain'),
-      'menu-footer' => esc_html__('Footer', '_themedomain'),
+      'menu-1' => esc_html__('Primary', 'starwishx'),
+      'menu-header' => esc_html__('Header', 'starwishx'),
+      'menu-footer' => esc_html__('Footer', 'starwishx'),
     )
   );
 
@@ -146,7 +146,7 @@ if (! function_exists('yourtheme_search_trigger')) {
   function yourtheme_search_trigger()
   {
 ?>
-    <div class="menu-item menu-item-search" role="button" tabindex="0" aria-label="<?php esc_attr_e('Пошук', '_themedomain'); ?>">
+    <div class="menu-item menu-item-search" role="button" tabindex="0" aria-label="<?php esc_attr_e('Пошук', 'starwishx'); ?>">
       <svg class="search-icon" width="16" height="16" aria-hidden="true">
         <use xlink:href="<?php echo esc_url(get_template_directory_uri() . '/assets/img/sprites.svg#icon-find'); ?>"></use>
       </svg>

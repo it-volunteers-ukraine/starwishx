@@ -5,11 +5,18 @@
   "main": "gulpfile.js",
   "type": "module",
   "scripts": {
+    "start": "gulp",
     "dev": "gulp",
-    "start": "gulp --gulpfile gulpfile.nobs.js",
     "build": "gulp build --prod",
+    "clean": "gulp clean",
+    "sprite": "node tools/build-sprite.mjs",
     "style:lint": "stylelint 'src/**/*.scss' --customSyntax postcss-scss",
-    "style:fix": "stylelint 'src/**/*.scss' --customSyntax postcss-scss --fix"
+    "style:fix": "stylelint 'src/**/*.scss' --customSyntax postcss-scss --fix",
+    "i18n": "npm run i18n:pot && npm run i18n:po && npm run i18n:php && npm run i18n:mo",
+    "i18n:pot": "wp i18n make-pot . languages/_themedomain.pot --domain=starwishx --exclude=production,.void",
+    "i18n:po": "wp i18n update-po languages/_themedomain.pot languages/uk.po",
+    "i18n:php": "wp i18n make-php languages/uk.po languages",
+    "i18n:mo": "wp i18n make-mo languages/uk.po languages"
   },
   "repository": {
     "type": "git",
@@ -23,7 +30,6 @@
     "@babel/preset-env": "^8.0.2",
     "autoprefixer": "^10.5.5",
     "babel-loader": "^10.1.1",
-    "browser-sync": "^3.0.4",
     "cssnano": "^9.0.3",
     "del": "^8.0.1",
     "git-rev-sync": "^3.0.2",
@@ -32,20 +38,18 @@
     "gulp-cli": "^3.1.0",
     "gulp-fonter-fix": "^0.0.1",
     "gulp-if": "^3.0.0",
-    "gulp-imagemin": "^9.2.0",
     "gulp-postcss": "^10.0.0",
     "gulp-rename": "^2.1.0",
     "gulp-replace": "^1.1.4",
     "gulp-sass": "^6.0.1",
     "gulp-sourcemaps": "^3.0.0",
     "gulp-stylelint-esm": "^4.0.0",
-    "gulp-wp-pot": "^2.5.0",
-    "gulp-zip": "^6.1.0",
     "postcss-modules": "^9.0.1",
     "sass": "^1.104.0",
     "stylelint": "^17.15.0",
     "stylelint-config-standard": "^40.0.0",
     "stylelint-config-standard-scss": "^17.0.0",
+    "svgo": "^4.1.0",
     "ttf2woff2": "^8.0.1",
     "vinyl-named": "^1.1.0",
     "webpack-stream": "^7.0.0",
@@ -54,9 +58,6 @@
   "allowScripts": {
     "@parcel/watcher@2.5.1": true,
     "es5-ext@0.10.64": true,
-    "gifsicle@5.3.0": true,
-    "mozjpeg@8.0.0": true,
-    "optipng-bin@7.0.1": true,
     "ttf2woff2@8.0.1": true
   }
 }

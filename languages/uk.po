@@ -377,7 +377,7 @@ msgid "Generating..."
 msgstr "Генерується..."
 
 #. Author URI of the theme
-#: style.css
+#: production
 msgid "https://it-volunteers.com/"
 msgstr "https://it-volunteers.com/"
 
@@ -408,7 +408,7 @@ msgid "Invalid username or password."
 msgstr "Невірне ім'я користувача або пароль."
 
 #. Author of the theme
-#: style.css
+#: production
 msgid "it-volunteers"
 msgstr "it-volunteers"
 
@@ -855,12 +855,12 @@ msgid "Start Date"
 msgstr "Дата початку"
 
 #. Theme Name of the theme
-#: style.css
+#: production
 msgid "StarWishX"
 msgstr "StarWishX"
 
 #. Description of the theme
-#: style.css
+#: production
 msgid "starwishx - A modern and responsive WordPress theme designed for bloggers and creatives who want to showcase their content with style and elegance."
 msgstr "starwishx — сучасна та адаптивна тема WordPress, розроблена для блогерів і творчих людей, які хочуть стильно й елегантно демонструвати свій контент."
 
@@ -1031,7 +1031,7 @@ msgid "Назад"
 msgstr "Назад"
 
 #. Theme URI of the theme
-#: style.css
+#: production
 msgid "_themeuri"
 msgstr ""
 
@@ -1314,6 +1314,7 @@ msgid "Home"
 msgstr "Додому"
 
 #: inc/acf/blocks/breadcrumbs/breadcrumbs.php:185
+#: inc/acf/blocks/breadcrumbs/register.php:4
 msgid "Breadcrumbs"
 msgstr "Хлібні кріхти"
 
@@ -2677,3 +2678,131 @@ msgstr "Без категорії"
 #: footer.php:120
 msgid "Back to top"
 msgstr "Нагору"
+
+#: functions.php:17
+msgid "Primary"
+msgstr ""
+
+#: functions.php:18
+msgid "Header"
+msgstr ""
+
+#: functions.php:19
+msgid "Footer"
+msgstr ""
+
+#: functions.php:149
+msgid "Пошук"
+msgstr ""
+
+#: inc/acf/blocks/accordion-one-photo/register.php:4
+msgid "Block accordion one photo"
+msgstr ""
+
+#: inc/acf/blocks/accordion-one-photo/register.php:5
+msgid "Block accordion with one photo"
+msgstr ""
+
+#: inc/acf/blocks/accordion-two-photo-compact/register.php:4
+msgid "Block accordion two photo compact"
+msgstr ""
+
+#: inc/acf/blocks/accordion-two-photo-compact/register.php:5
+msgid "Block accordion with two photo compact"
+msgstr ""
+
+#: inc/acf/blocks/accordion-two-photo/register.php:4
+msgid "Block accordion two photo"
+msgstr ""
+
+#: inc/acf/blocks/accordion-two-photo/register.php:5
+msgid "Block accordion with two photo"
+msgstr ""
+
+#: inc/acf/blocks/animated-text/register.php:4
+msgid "Animated Text"
+msgstr ""
+
+#: inc/acf/blocks/animated-text/register.php:5
+msgid "Block for displaying animated text on the homepage"
+msgstr ""
+
+#: inc/acf/blocks/blocks-init.php:11
+msgid "Custom Blocks"
+msgstr ""
+
+#: inc/acf/blocks/blocks-init.php:19
+msgid "CCC Blocks"
+msgstr ""
+
+#: inc/acf/blocks/breadcrumbs/register.php:5
+msgid "Block breadcrumbs"
+msgstr ""
+
+#: inc/acf/blocks/christmas-tree/register.php:4
+#: inc/acf/blocks/christmas-tree/register.php:5
+msgid "ChristmasTree"
+msgstr ""
+
+#: inc/acf/blocks/contact_form/register.php:15
+msgid "Contact Form"
+msgstr ""
+
+#: inc/acf/blocks/contact_form/register.php:16
+msgid "Контактний блок з формою і контактною інформацією"
+msgstr ""
+
+#: inc/acf/blocks/contact_page/register.php:5
+msgid "Contact Promo Card"
+msgstr ""
+
+#: inc/acf/blocks/contact_page/register.php:6
+msgid "Картка з фото, текстом та контактами"
+msgstr ""
+
+#: inc/acf/blocks/hero/register.php:4
+msgid "Hero"
+msgstr ""
+
+#: inc/acf/blocks/hero/register.php:5
+msgid "Block Hero"
+msgstr ""
+
+#: inc/acf/blocks/news/register.php:4
+#: inc/acf/blocks/news/register.php:5
+msgid "Block News"
+msgstr ""
+
+#: inc/acf/blocks/photo-text/register.php:4
+msgid "Block1 Photo & Text & Contacts"
+msgstr ""
+
+#: inc/acf/blocks/photo-text/register.php:5
+msgid "Block with title, photo, text and contact"
+msgstr ""
+
+#: inc/acf/blocks/title-page/register.php:4
+msgid "Title Page"
+msgstr ""
+
+#: inc/acf/blocks/title-page/register.php:5
+msgid "Block Title Page"
+msgstr ""
+
+#: template-parts/content-none.php:4
+msgid "Nothing Found"
+msgstr ""
+
+#: template-parts/content-none.php:27
+msgid "Sorry, but nothing matched your search terms. Please try again with some different keywords."
+msgstr ""
+
+#: template-parts/content-none.php:34
+msgid "It seems we can&rsquo;t find what you&rsquo;re looking for. Perhaps searching can help."
+msgstr ""
+
+#. translators: %s: Name of current post. Only visible to screen readers
+#: template-parts/content.php:18
+#, php-format
+msgid "Continue reading<span class=\"screen-reader-text\"> \"%s\"</span>"
+msgstr ""

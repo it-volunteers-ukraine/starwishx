@@ -1,3 +1,13 @@
+/**
+ * Theme build pipeline.
+ *
+ * Tasks: `gulp` (dev + watch), `gulp build --prod` (production bundle),
+ * `gulp clean`, `gulp sprite`. Translations are not built here - they need
+ * wp-cli; see the i18n:* scripts in package.json.
+ *
+ * File: gulpfile.js
+ */
+
 import pkg from "gulp";
 import postcss from "gulp-postcss";
 import sourcemaps from "gulp-sourcemaps";
@@ -8,13 +18,10 @@ import { hideBin } from "yargs/helpers";
 import gulpSass from "gulp-sass";
 import * as sass from "sass";
 import gulpif from "gulp-if";
-import imagemin from "gulp-imagemin";
 import { deleteAsync } from "del";
 import webpack from "webpack-stream";
 import named from "vinyl-named";
 import replace from "gulp-replace";
-import wpPot from "gulp-wp-pot";
-import browserSync from "browser-sync";
 import config from "./config.js";
 import fs from "fs";
 import fonter from "gulp-fonter-fix";
@@ -26,6 +33,7 @@ import changed from "gulp-changed";
 import stylelint from "gulp-stylelint-esm";
 import postcssModules from "postcss-modules";
 import rename from "gulp-rename";
+import { buildSprite } from "./tools/build-sprite.mjs";
 
 const { src, dest, watch, series, parallel } = pkg;
 const SASS = gulpSass(sass);
@@ -33,16 +41,6 @@ const argv = yargs(hideBin(process.argv)).argv;
 const PRODUCTION = !!argv.prod;
 
 let cssModulesJSON = {};
-
-// BrowserSync
-export const sync = () => {
-  browserSync.init(config.localhost);
-};
-
-export const reload = (done) => {
-  browserSync.reload();
-  return done();
-};
 
 // Styles
 export const styles = () => {
@@ -57,25 +55,8 @@ export const styles = () => {
     .pipe(SASS().on("error", SASS.logError))
     .pipe(gulpif(PRODUCTION, postcss([autoprefixer, cssnano])))
     .pipe(gulpif(!PRODUCTION, sourcemaps.write()))
-    .pipe(dest("assets/css"))
-    .pipe(browserSync.stream());
+    .pipe(dest("assets/css"));
 };
-
-// export const templatesStyles = () => {
-//   return src(["src/scss/template-parts/*.scss"])
-//     .pipe(
-//       stylelint({
-//         fix: true,
-//         reporters: [{ formatter: "string", console: true }],
-//       }),
-//     )
-//     .pipe(gulpif(!PRODUCTION, sourcemaps.init()))
-//     .pipe(SASS().on("error", SASS.logError))
-//     .pipe(gulpif(PRODUCTION, postcss([autoprefixer, cssnano])))
-//     .pipe(gulpif(!PRODUCTION, sourcemaps.write()))
-//     .pipe(dest("assets/css/template-parts"))
-//     .pipe(browserSync.stream());
-// };
 
 export const blockStyles = () => {
   return src(["inc/acf/blocks/**/*.module.scss"])
@@ -105,8 +86,7 @@ export const blockStyles = () => {
     .pipe(SASS().on("error", SASS.logError))
     .pipe(gulpif(PRODUCTION, postcss([autoprefixer, cssnano])))
     .pipe(gulpif(!PRODUCTION, sourcemaps.write()))
-    .pipe(dest("assets/css/blocks"))
-    .pipe(browserSync.stream());
+    .pipe(dest("assets/css/blocks"));
 };
 
 // Fonts logic remains similar but wrapped for stability
@@ -179,23 +159,29 @@ export const fontsStyle = (done) => {
 
 const fonts = series(otfToTtf, ttfToWoff, fontsStyle);
 
-// Optimized Images with 'changed'
+// Raster images are copied as-is; changed() skips untouched files.
 export const images = () => {
-  return (
-    src(["src/img/**/*.{jpg,jpeg,png,gif,webp,avif}"], {
-      allowEmpty: true,
-      encoding: false,
-    })
-      .pipe(changed("assets/img")) // Skip if file hasn't changed
-      // .pipe(gulpif(PRODUCTION, imagemin()))
-      .pipe(dest("assets/img"))
-  );
+  return src(["src/img/**/*.{jpg,jpeg,png,gif,webp,avif}"], {
+    allowEmpty: true,
+    encoding: false,
+  })
+    .pipe(changed("assets/img"))
+    .pipe(dest("assets/img"));
 };
 
-// for now just copy svgs
-// .pipe(gulpif(PRODUCTION, imagemin()))
+// Rebuilds src/img/sprites.svg from the icons in src/img/sprites-svgs/.
+export const sprite = () => buildSprite();
+
+// sprites-svgs/ is sprite input, and bak/ plus sprites-manual.svg are the
+// superseded hand-built sprite kept for reference. None of them belong in the
+// shipped theme - only the generated sprites.svg does.
 export const svgs = () => {
-  return src("src/img/**/*.svg")
+  return src([
+    "src/img/**/*.svg",
+    "!src/img/sprites-svgs/**",
+    "!src/img/bak/**",
+    "!src/img/sprites-manual.svg",
+  ])
     .pipe(changed("assets/img"))
     .pipe(dest("assets/img"));
 };
@@ -256,8 +242,7 @@ export const scripts = () => {
   return src(["src/js/*.js"], { allowEmpty: true })
     .pipe(named())
     .pipe(webpack(webpackConfig(PRODUCTION)))
-    .pipe(dest("assets/js"))
-    .pipe(browserSync.stream());
+    .pipe(dest("assets/js"));
 };
 
 export const vendorScripts = () => {
@@ -266,7 +251,6 @@ export const vendorScripts = () => {
       // .pipe(named())
       // .pipe(webpack(webpackConfig(PRODUCTION)))
       .pipe(dest("assets/js/vendor"))
-      .pipe(browserSync.stream())
   );
 };
 
@@ -274,57 +258,24 @@ export const blockScripts = () => {
   return src(["inc/acf/blocks/**/*.js"], { allowEmpty: true })
     .pipe(named())
     .pipe(webpack(webpackConfig(PRODUCTION)))
-    .pipe(dest("assets/js"))
-    .pipe(browserSync.stream());
+    .pipe(dest("assets/js"));
 };
 
 export const moduleScripts = () => {
-  return src(
-    [
-      "inc/menu/Assets/*.js",
-      "inc/menu/Assets/*.mjs",
-      "inc/favorites/Assets/*.js",
-      "inc/favorites/Assets/*.mjs",
-      "inc/comments/Assets/*.js",
-      "inc/comments/Assets/*.mjs",
-      "inc/launchpad/Assets/*.js",
-      "inc/launchpad/Assets/*.mjs",
-      "inc/gateway/Assets/*.js",
-      "inc/gateway/Assets/*.mjs",
-      "inc/listing/Assets/*.js",
-      "inc/listing/Assets/*.mjs",
-      "inc/projects/Assets/*.js",
-      "inc/projects/Assets/*.mjs",
-      "inc/contact/Assets/*.js",
-      "inc/contact/Assets/*.mjs",
-      "inc/chat/Assets/*.js",
-      "inc/chat/Assets/*.mjs",
-      "inc/tour/Assets/*.js",
-      "inc/tour/Assets/*.mjs",
-      "inc/social-share/Assets/*.js",
-      "inc/social-share/Assets/*.mjs",
-      "inc/news/Assets/*.js",
-      "inc/news/Assets/*.mjs",
-    ],
-    {
-      allowEmpty: true,
-    },
-  )
+  // Entry points follow the *-store.js convention, one bundle per module.
+  // Everything else under Assets/ (utils.js, tour-manager.js, and all of
+  // inc/shared/) is imported by a store and bundled into it by webpack.
+  return src(["inc/*/Assets/*-store.{js,mjs}", "!inc/shared/Assets/**"], {
+    allowEmpty: true,
+  })
     .pipe(named())
     .pipe(webpack(webpackConfig(PRODUCTION, true))) // true = ESM mode
     .pipe(rename({ suffix: ".module" }))
-    .pipe(dest("assets/js"))
-    .pipe(browserSync.stream());
-};
-
-export const pot = () => {
-  return src("**/*.php", { allowEmpty: true })
-    .pipe(wpPot({ domain: "_themedomain", package: config.theme.domain }))
-    .pipe(dest(`languages/${config.theme.domain}.pot`));
+    .pipe(dest("assets/js"));
 };
 
 export const production = () => {
-  let version = "1.0.0"; // Default fallback
+  let version = "1.0.0";
 
   try {
     // Check if .git directory exists before calling git-rev-sync
@@ -344,8 +295,9 @@ export const production = () => {
       "!src{,/**}",
       "!production{,/**}", // Prevent copying the production folder into itself
       "!assets/css/blocks/modules.json", // Optional: clean up build
-      "!assets/img{,/**}", // Exclude images
-      "!assets/fonts{,/**}", // Exclude fonts (if binary)
+      "!languages/*.po~", // Translation editor backups
+      "!assets/img{,/**}",
+      "!assets/fonts{,/**}",
       "!.babelrc",
       "!.gitignore",
       "!gulpfile*.js",
@@ -396,36 +348,41 @@ export const copyBinariesToProduction = () => {
 
 export const watchForChanges = () => {
   watch("src/scss/**/*.scss", styles);
-  // watch("src/scss/template-parts/*.scss", templatesStyles);
   watch("src/img/**/*.{jpg,jpeg,png,gif,webp,avif}", images);
-  watch("src/img/**/*.svg", svgs);
+  watch("src/img/sprites-svgs/*.svg", series(sprite, svgs));
+  // sprites.svg is excluded here because the line above already copies it;
+  // watching it too would run svgs twice on every icon edit.
   watch(
-    ["src/**/*", "!src/{images,js,scss}", "!src/{images,js,scss}/**/*"],
+    [
+      "src/img/**/*.svg",
+      "!src/img/sprites-svgs/**",
+      "!src/img/bak/**",
+      "!src/img/sprites.svg",
+    ],
+    svgs,
+  );
+  // These negations must match the copy task's own globs - "images" was a
+  // typo for "img", so every image edit needlessly re-ran copy.
+  watch(
+    ["src/**/*", "!src/{img,js,scss}", "!src/{img,js,scss}/**/*"],
     copy,
   );
   watch("src/js/**/*.js", scripts);
   watch("src/js/vendor/*.js", vendorScripts);
   watch("inc/acf/blocks/**/*.js", blockScripts);
-  watch("inc/menu/Assets/**/*.{js,mjs}", moduleScripts);
-  watch("inc/favorites/Assets/**/*.{js,mjs}", moduleScripts);
-  watch("inc/comments/Assets/**/*.{js,mjs}", moduleScripts);
-  watch("inc/launchpad/Assets/**/*.{js,mjs}", moduleScripts);
-  watch("inc/gateway/Assets/**/*.{js,mjs}", moduleScripts);
-  watch("inc/listing/Assets/**/*.{js,mjs}", moduleScripts);
-  watch("inc/contact/Assets/**/*.{js,mjs}", moduleScripts);
-  watch("inc/chat/Assets/**/*.{js,mjs}", moduleScripts);
-  watch("inc/news/Assets/**/*.{js,mjs}", moduleScripts);
-  watch("inc/tour/Assets/**/*.{js,mjs}", moduleScripts);
-  watch("inc/social-share/Assets/**/*.{js,mjs}", moduleScripts);
+  // Watch every file a store can import, not just the store entry points,
+  // so editing a helper or anything under inc/shared/ rebuilds its bundles.
+  watch("inc/*/Assets/**/*.{js,mjs}", moduleScripts);
   watch("inc/acf/blocks/**/*.module.scss", blockStyles);
-  watch("**/*.php", reload);
 };
 
+// No clean() here on purpose: it would wipe assets/ on every start and
+// defeat the gulp-changed caching on images/copy. Run `gulp clean` when a
+// fresh slate is actually wanted.
 export const dev = series(
-  clean,
+  sprite,
   parallel(
     styles,
-    // templatesStyles,
     fonts,
     images,
     svgs,
@@ -433,17 +390,17 @@ export const dev = series(
     scripts,
     vendorScripts,
     blockScripts,
-    moduleScripts, // New task
+    moduleScripts,
     blockStyles,
   ),
-  parallel(sync, watchForChanges),
+  watchForChanges,
 );
 
 export const build = series(
   clean,
+  sprite,
   parallel(
     styles,
-    // templatesStyles,
     fonts,
     images,
     svgs,
@@ -451,10 +408,9 @@ export const build = series(
     scripts,
     vendorScripts,
     blockScripts,
-    moduleScripts, // New task
+    moduleScripts,
     blockStyles,
   ),
-  pot,
   production,
   copyBinariesToProduction,
 );
