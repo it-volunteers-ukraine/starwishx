@@ -21,13 +21,10 @@ import gulpif from "gulp-if";
 import { deleteAsync } from "del";
 import webpack from "webpack-stream";
 import named from "vinyl-named";
-import replace from "gulp-replace";
-import config from "./config.js";
 import fs from "fs";
 import fonter from "gulp-fonter-fix";
 import ttf2woff2 from "ttf2woff2";
 import { Transform } from "stream";
-import git from "git-rev-sync";
 import path from "path";
 import changed from "gulp-changed";
 import stylelint from "gulp-stylelint-esm";
@@ -274,36 +271,19 @@ export const moduleScripts = () => {
     .pipe(dest("assets/js"));
 };
 
-// Binaries must skip the production text pipeline below: src() reads them as
-// UTF-8 and replace() re-encodes, which corrupts them (screenshot.png grew
-// 583 KB -> 1 MB). copyBinariesToProduction byte-copies them instead.
-const BINARY_FILES =
-  "**/*.{png,jpg,jpeg,gif,webp,avif,ico,woff,woff2,ttf,otf,eot,mp4,webm,mp3,zip,pdf,mo}";
-
+// Copies the theme into production/ for deployment. encoding: false makes this
+// a byte-faithful copy - without it gulp reads every file as UTF-8 and re-encodes
+// it, which silently corrupts binaries (screenshot.png grew 583 KB -> 1 MB).
 export const production = () => {
-  let version = "1.0.0";
-
-  try {
-    // Check if .git directory exists before calling git-rev-sync
-    if (fs.existsSync(path.resolve(process.cwd(), ".git"))) {
-      version = git.short();
-    } else {
-      console.warn("Git not found, using default version 1.0.0");
-    }
-  } catch (e) {
-    console.warn("Could not get git version, using default 1.0.0");
-  }
-
   return src(
     [
       "**/*",
       "!node_modules{,/**}",
       "!src{,/**}",
       "!production{,/**}", // Prevent copying the production folder into itself
-      "!" + BINARY_FILES, // Byte-copied by copyBinariesToProduction
       "!languages/*.po~", // Translation editor backups
-      "!assets/img{,/**}",
-      "!assets/fonts{,/**}",
+      "!assets/img{,/**}", // Copied by copyBinariesToProduction
+      "!assets/fonts{,/**}", // Copied by copyBinariesToProduction
       // Build tooling and package manager metadata - not needed at runtime.
       "!tools{,/**}",
       "!docs{,/**}",
@@ -323,17 +303,8 @@ export const production = () => {
       // ACF block templates read it at runtime to resolve their hashed CSS
       // module class names, and fail silently (unstyled) without it.
     ],
-    { allowEmpty: true },
-  )
-    .pipe(replace("_themename", config.theme.name))
-    .pipe(replace("_themeuri", config.theme.uri))
-    .pipe(replace("_themedomain", config.theme.domain))
-    .pipe(replace("_themeprefix", config.theme.prefix))
-    .pipe(replace("_themeauthor", config.theme.author))
-    .pipe(replace("_themeauthoruri", config.theme.authoruri))
-    .pipe(replace("_themeversion", version))
-    .pipe(replace("_themedescription", config.theme.description))
-    .pipe(dest("./production"));
+    { allowEmpty: true, encoding: false },
+  ).pipe(dest("./production"));
 };
 
 export const copyBinariesToProduction = () => {
@@ -358,26 +329,6 @@ export const copyBinariesToProduction = () => {
       ),
     );
   }
-
-  // Everything else the production task had to skip - screenshot.png today,
-  // any binary added later automatically. assets/ is already handled above.
-  promises.push(
-    new Promise((resolve) =>
-      src(
-        [
-          BINARY_FILES,
-          "!node_modules{,/**}",
-          "!src{,/**}",
-          "!production{,/**}",
-          "!assets{,/**}",
-          "!docs{,/**}",
-        ],
-        { allowEmpty: true, encoding: false },
-      )
-        .pipe(dest("production"))
-        .on("end", resolve),
-    ),
-  );
 
   return Promise.all(promises);
 };
