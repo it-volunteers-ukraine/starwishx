@@ -274,6 +274,12 @@ export const moduleScripts = () => {
     .pipe(dest("assets/js"));
 };
 
+// Binaries must skip the production text pipeline below: src() reads them as
+// UTF-8 and replace() re-encodes, which corrupts them (screenshot.png grew
+// 583 KB -> 1 MB). copyBinariesToProduction byte-copies them instead.
+const BINARY_FILES =
+  "**/*.{png,jpg,jpeg,gif,webp,avif,ico,woff,woff2,ttf,otf,eot,mp4,webm,mp3,zip,pdf,mo}";
+
 export const production = () => {
   let version = "1.0.0";
 
@@ -294,18 +300,28 @@ export const production = () => {
       "!node_modules{,/**}",
       "!src{,/**}",
       "!production{,/**}", // Prevent copying the production folder into itself
-      "!assets/css/blocks/modules.json", // Optional: clean up build
+      "!" + BINARY_FILES, // Byte-copied by copyBinariesToProduction
       "!languages/*.po~", // Translation editor backups
       "!assets/img{,/**}",
       "!assets/fonts{,/**}",
+      // Build tooling and package manager metadata - not needed at runtime.
+      "!tools{,/**}",
+      "!docs{,/**}",
+      "!composer.{json,lock}", // vendor/ ships prebuilt; nothing runs composer
+      "!pnpm-lock.yaml",
+      "!pnpm-workspace.yaml",
+      "!bitbucket-pipelines.yml",
+      "!skills-lock.json",
       "!.babelrc",
       "!.gitignore",
       "!gulpfile*.js",
       "!package*.json",
-      "!package-lock.json",
       "!README.md",
       "!config.js",
       "!.stylelintrc",
+      // NOTE: assets/css/blocks/modules.json must NOT be excluded here - the
+      // ACF block templates read it at runtime to resolve their hashed CSS
+      // module class names, and fail silently (unstyled) without it.
     ],
     { allowEmpty: true },
   )
@@ -343,6 +359,26 @@ export const copyBinariesToProduction = () => {
     );
   }
 
+  // Everything else the production task had to skip - screenshot.png today,
+  // any binary added later automatically. assets/ is already handled above.
+  promises.push(
+    new Promise((resolve) =>
+      src(
+        [
+          BINARY_FILES,
+          "!node_modules{,/**}",
+          "!src{,/**}",
+          "!production{,/**}",
+          "!assets{,/**}",
+          "!docs{,/**}",
+        ],
+        { allowEmpty: true, encoding: false },
+      )
+        .pipe(dest("production"))
+        .on("end", resolve),
+    ),
+  );
+
   return Promise.all(promises);
 };
 
@@ -363,10 +399,7 @@ export const watchForChanges = () => {
   );
   // These negations must match the copy task's own globs - "images" was a
   // typo for "img", so every image edit needlessly re-ran copy.
-  watch(
-    ["src/**/*", "!src/{img,js,scss}", "!src/{img,js,scss}/**/*"],
-    copy,
-  );
+  watch(["src/**/*", "!src/{img,js,scss}", "!src/{img,js,scss}/**/*"], copy);
   watch("src/js/**/*.js", scripts);
   watch("src/js/vendor/*.js", vendorScripts);
   watch("inc/acf/blocks/**/*.js", blockScripts);
