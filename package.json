@@ -10,10 +10,10 @@
     "build": "gulp build --prod",
     "clean": "gulp clean",
     "sprite": "node tools/build-sprite.mjs",
-    "style:lint": "stylelint 'src/**/*.scss' --customSyntax postcss-scss",
-    "style:fix": "stylelint 'src/**/*.scss' --customSyntax postcss-scss --fix",
+    "style:lint": "stylelint '{src,inc/blocks}/**/*.scss' --customSyntax postcss-scss",
+    "style:fix": "stylelint '{src,inc/blocks}/**/*.scss' --customSyntax postcss-scss --fix",
     "i18n": "npm run i18n:pot && npm run i18n:po && npm run i18n:php && npm run i18n:mo",
-    "i18n:pot": "wp i18n make-pot . languages/_themedomain.pot --domain=starwishx --exclude=production,.void",
+    "i18n:pot": "wp i18n make-pot . languages/_themedomain.pot --domain=starwishx --exclude=production,.void,inc/blocks/*/build",
     "i18n:po": "wp i18n update-po languages/_themedomain.pot languages/uk.po",
     "i18n:php": "wp i18n make-php languages/uk.po languages",
     "i18n:mo": "wp i18n make-mo languages/uk.po languages"

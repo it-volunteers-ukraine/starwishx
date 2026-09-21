@@ -1,7 +1,7 @@
 <?php
 acf_register_block_type(array(
     'name'            => 'video-text',
-    'title'           => __('Video & Text', 'starwishx'),
+    'title'           => __('Video & Text (legacy)', 'starwishx'), // replaced by starwishx/video-text (inc/blocks/video-text)
     'description'     => __('Block with title, video & text', 'starwishx'),
     'render_template' => acf_theme_blocks_path('video-text/video-text.php'),
     'enqueue_style'   => get_template_directory_uri() . '/assets/css/blocks/video-text/video-text.module.css',

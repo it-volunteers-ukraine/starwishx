@@ -86,6 +86,61 @@ export const blockStyles = () => {
     .pipe(dest("assets/css/blocks"));
 };
 
+// ---------------------------------------------------------------------------
+// Native (block.json) blocks: inc/blocks/{slug}/
+// Sources sit next to the runtime files (block.json, render.php); gulp compiles
+// style.scss / view.js into inc/blocks/{slug}/build/, which block.json
+// references as "file:./build/style.css" / "file:./build/view.js".
+// ---------------------------------------------------------------------------
+
+// loadPaths lets block SCSS write `@use "variables" as *;` /
+// `@use "mixins/media" as *;` instead of ../../../../src/scss chains.
+const NATIVE_BLOCK_SASS_OPTIONS = { loadPaths: [path.resolve("src/scss")] };
+
+export const nativeBlockStyles = () => {
+  return (
+    src(["inc/blocks/*/style.scss"], { allowEmpty: true })
+      .pipe(
+        stylelint({
+          fix: true,
+          reporters: [{ formatter: "string", console: true }],
+        }),
+      )
+      .pipe(gulpif(!PRODUCTION, sourcemaps.init()))
+      .pipe(SASS(NATIVE_BLOCK_SASS_OPTIONS).on("error", SASS.logError))
+      .pipe(gulpif(PRODUCTION, postcss([autoprefixer, cssnano])))
+      .pipe(gulpif(!PRODUCTION, sourcemaps.write()))
+      // file.relative is "video-text/style.css" (base = inc/blocks); injecting
+      // build/ into dirname makes dest("inc/blocks") write
+      // inc/blocks/video-text/build/style.css. dest(fn) can't do this - it
+      // appends file.relative to whatever fn returns.
+      .pipe(
+        rename((p) => {
+          p.dirname = path.join(p.dirname, "build");
+        }),
+      )
+      .pipe(dest("inc/blocks"))
+  );
+};
+
+export const nativeBlockScripts = () => {
+  return (
+    src(["inc/blocks/*/view.js"], { allowEmpty: true })
+      // The entry name carries slug + build/ so several blocks can each ship a
+      // view.js: webpack-stream merges same-named entries ("view") into ONE
+      // bundle otherwise.
+      .pipe(
+        named((file) => {
+          const slug = path.basename(path.dirname(file.path));
+          return `${slug}/build/${path.basename(file.path, ".js")}`;
+        }),
+      )
+      // ESM output: block.json viewScriptModule loads it as <script type="module">.
+      .pipe(webpack(webpackConfig(PRODUCTION, true)))
+      .pipe(dest("inc/blocks"))
+  );
+};
+
 // Fonts logic remains similar but wrapped for stability
 export const otfToTtf = () => {
   const srcDir = "./src/fonts";
@@ -200,7 +255,8 @@ export const copy = () => {
     .pipe(dest("assets"));
 };
 
-export const clean = () => deleteAsync(["assets", "production"]);
+export const clean = () =>
+  deleteAsync(["assets", "production", "inc/blocks/*/build"]);
 
 const webpackConfig = (prod, isModule = false) => {
   const baseConfig = {
@@ -280,6 +336,8 @@ export const production = () => {
       "**/*",
       "!node_modules{,/**}",
       "!src{,/**}",
+      "!inc/blocks/**/*.scss", // compiled into inc/blocks/*/build/ by nativeBlockStyles
+      "!inc/blocks/*/view.js", // source; block.json loads build/view.js
       "!production{,/**}", // Prevent copying the production folder into itself
       "!languages/*.po~", // Translation editor backups
       "!assets/img{,/**}", // Copied by copyBinariesToProduction
@@ -356,8 +414,19 @@ export const watchForChanges = () => {
   watch("inc/acf/blocks/**/*.js", blockScripts);
   // Watch every file a store can import, not just the store entry points,
   // so editing a helper or anything under inc/shared/ rebuilds its bundles.
-  watch("inc/*/Assets/**/*.{js,mjs}", moduleScripts);
+  // inc/blocks/Assets/ holds the editor helper (served from source), not a store.
+  watch(["inc/*/Assets/**/*.{js,mjs}", "!inc/blocks/Assets/**"], moduleScripts);
   watch("inc/acf/blocks/**/*.module.scss", blockStyles);
+  // Block SCSS @use's the theme variables/mixins, so rebuild on those too.
+  watch(
+    [
+      "inc/blocks/*/style.scss",
+      "src/scss/_variables.scss",
+      "src/scss/mixins/**/*.scss",
+    ],
+    nativeBlockStyles,
+  );
+  watch("inc/blocks/*/view.js", nativeBlockScripts);
 };
 
 // No clean() here on purpose: it would wipe assets/ on every start and
@@ -376,6 +445,8 @@ export const dev = series(
     blockScripts,
     moduleScripts,
     blockStyles,
+    nativeBlockStyles,
+    nativeBlockScripts,
   ),
   watchForChanges,
 );
@@ -394,6 +465,8 @@ export const build = series(
     blockScripts,
     moduleScripts,
     blockStyles,
+    nativeBlockStyles,
+    nativeBlockScripts,
   ),
   production,
   copyBinariesToProduction,

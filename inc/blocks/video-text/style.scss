@@ -1,0 +1,177 @@
+// starwishx/video-text - block styles (front end + editor), compiled by gulp
+// (nativeBlockStyles) into build/style.css. "variables" and "mixins/media"
+// resolve through the sass loadPaths option (src/scss).
+
+// Root markup: <section class="wp-block-starwishx-video-text section video-text">.
+// The global .section / .container / .h3 utilities come from assets/css/app.css
+// and supply section padding, gutters and the heading sizes; this sheet only
+// adds what the block needs on top. It is hoisted into <head> BEFORE app.css,
+// so never rely on source order to beat a global class - use a second class.
+
+// File: inc/blocks/video-text/style.scss
+
+@use "variables" as *;
+@use "mixins/media" as *;
+
+.video-text__container {
+  @include min-laptop {
+    max-width: $width-laptop;
+  }
+}
+
+.video-text__title {
+  margin-bottom: 40px;
+  color: $text-dark;
+  text-align: center;
+
+  @include min-tablet {
+    margin-bottom: 28px;
+  }
+}
+
+.video-text__content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: stretch;
+  justify-content: center;
+
+  @include min-tablet {
+    flex-direction: row;
+  }
+
+  @include min-laptop {
+    gap: 26px;
+  }
+
+  @include min-desktop {
+    gap: 20px;
+  }
+}
+
+.video-text__media {
+  align-self: center;
+  width: 100%;
+
+  @include min-tablet {
+    flex: 1;
+    margin-bottom: 0;
+  }
+
+  // The injected player and the WP_Embed fallback markup (no class of its own).
+  iframe,
+  video {
+    display: block;
+    aspect-ratio: 16 / 9;
+    border-radius: 12px;
+    width: 100%;
+    height: 100%;
+  }
+}
+
+.video-text__cover {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.video-text__play {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  transition: opacity 0.2s ease;
+  opacity: 0.85;
+  filter: drop-shadow(0 2px 8px rgb(0 0 0 / 30%));
+  width: 68px;
+  height: 48px;
+  pointer-events: none;
+  color: $icon-color-accent;
+}
+
+// A real <button>: reset the UA box, keep the old facade look.
+.video-text__facade {
+  display: block;
+  position: relative;
+  aspect-ratio: 16 / 9;
+  cursor: pointer;
+  border: 0;
+  border-radius: 12px;
+  background: none;
+  padding: 0;
+  width: 100%;
+  overflow: hidden;
+
+  &:hover .video-text__play,
+  &:focus-visible .video-text__play {
+    opacity: 1;
+  }
+
+  &:focus-visible {
+    outline: 2px solid $icon-color-accent;
+    outline-offset: 2px;
+  }
+}
+
+.video-text__body {
+  position: relative;
+  padding-bottom: 96px;
+  min-height: 448px;
+  color: $text-dark;
+
+  @include min-tablet {
+    flex: 1;
+    min-height: unset;
+  }
+}
+
+.video-text__text {
+  font-weight: 500;
+  font-size: 24px;
+
+  @include min-desktop {
+    font-size: 36px;
+  }
+}
+
+// Decorative spinning planet (aria-hidden in the markup).
+.video-text__icon {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 80px;
+  height: 80px;
+
+  @include min-desktop {
+    width: 96px;
+    height: 96px;
+  }
+}
+
+.video-text__icon-bg,
+.video-text__icon-mask {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+.video-text__icon-bg {
+  animation: video-text-spin 4s linear infinite;
+  border: 2px solid $icon-color-secondary;
+  border-radius: 50%;
+
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
+}
+
+@keyframes video-text-spin {
+  from {
+    rotate: 0deg;
+  }
+
+  to {
+    rotate: 360deg;
+  }
+}

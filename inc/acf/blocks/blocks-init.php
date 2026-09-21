@@ -4,25 +4,8 @@ function acf_theme_blocks_path($path) {
     return get_template_directory() . '/inc/acf/blocks/' . $path;
 }
 
-function gt_block_category_init( $categories, $post ) {
-    return array_merge([
-            [
-                'slug' => 'custom-blocks',
-                'title' => __('Custom Blocks', 'starwishx'),
-            ],
-            [
-                'slug' => 'posts-blocks',
-                'title' => __('Posts Blocks', 'it_volunteers_blocks_theme'),
-            ],
-            [
-                'slug' => 'ccc-blocks',
-                'title' => __('CCC Blocks', 'starwishx'),
-            ],
-        ],
-        $categories
-    );
-}
-add_filter( 'block_categories', 'gt_block_category_init', 10, 2 );
+// Block categories: the 'custom-blocks' category is registered by the Blocks module
+// (inc/blocks/Core/BlocksCore.php) via block_categories_all, shared with the native blocks.
 
 function _themeprefix_acf_init_block_types() {
     if(function_exists('acf_register_block_type')) {

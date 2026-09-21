@@ -251,6 +251,9 @@ require_once get_template_directory() . '/inc/social-share/setup.php';
 // init for News - /news/{category}/ routing and archive queries
 require_once get_template_directory() . '/inc/news/setup.php';
 
+// init for Blocks - native block.json blocks (inc/blocks/{slug}/), coexisting with inc/acf/blocks
+require_once get_template_directory() . '/inc/blocks/setup.php';
+
 require_once get_template_directory() . '/inc/news-taxonomy-metabox.php';
 
 
