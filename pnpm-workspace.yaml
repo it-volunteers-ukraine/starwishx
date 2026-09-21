@@ -34,3 +34,4 @@ minimumReleaseAgeExclude:
   - postcss-unique-selectors@9.0.2 || 9.0.3
   - stylehacks@9.0.3 || 9.0.4
   - postcss-calc@11.2.0
+  - yargs@18.2.0

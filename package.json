@@ -26,8 +26,8 @@
   "license": "ISC",
   "homepage": "onpoint.studio",
   "devDependencies": {
-    "@babel/core": "^8.0.5",
-    "@babel/preset-env": "^8.0.5",
+    "@babel/core": "^8.0.6",
+    "@babel/preset-env": "^8.0.6",
     "autoprefixer": "^10.6.1",
     "babel-loader": "^10.1.1",
     "cssnano": "^9.0.5",
@@ -51,7 +51,7 @@
     "ttf2woff2": "^8.0.1",
     "vinyl-named": "^1.1.0",
     "webpack-stream": "^7.0.0",
-    "yargs": "^18.1.0"
+    "yargs": "^18.2.0"
   },
   "allowScripts": {
     "@parcel/watcher@2.5.1": true,
