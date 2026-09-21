@@ -1,7 +1,7 @@
 <?php
 acf_register_block_type(array(
     'name' => 'photo-text',
-    'title' => __('Block1 Photo & Text & Contacts', 'starwishx'),
+    'title' => __('Block Photo & Text & Contacts (legacy)', 'starwishx'), // replaced by starwishx/photo-text (inc/blocks/photo-text)
     'description' => __('Block with title, photo, text and contact', 'starwishx'),
     'render_template' => acf_theme_blocks_path('photo-text/photo-text.php'),
     'enqueue_style' => get_template_directory_uri() . '/assets/css/blocks/photo-text/photo-text.module.css',

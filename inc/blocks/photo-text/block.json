@@ -1,0 +1,29 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "starwishx/photo-text",
+  "version": "1.0.0",
+  "title": "Photo & Text",
+  "category": "custom-blocks",
+  "icon": "format-image",
+  "description": "Section with a title, a photo and a text column.",
+  "keywords": ["photo", "image", "text"],
+  "textdomain": "starwishx",
+  "attributes": {
+    "title": { "type": "string", "default": "" },
+    "photoId": { "type": "integer", "default": 0, "control": "media" },
+    "text": { "type": "string", "default": "" }
+  },
+  "supports": {
+    "autoRegister": true,
+    "html": false
+  },
+  "example": {
+    "attributes": {
+      "title": "Photo & Text",
+      "text": "Short supporting paragraph shown next to the photo."
+    }
+  },
+  "render": "file:./render.php",
+  "style": "file:./build/style.css"
+}

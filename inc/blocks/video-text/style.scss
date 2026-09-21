@@ -1,6 +1,6 @@
 // starwishx/video-text - block styles (front end + editor), compiled by gulp
-// (nativeBlockStyles) into build/style.css. "variables" and "mixins/media"
-// resolve through the sass loadPaths option (src/scss).
+// (nativeBlockStyles) into build/style.css. "variables", "mixins/media" and
+// "blocks/media-section" resolve through the sass loadPaths option (src/scss).
 
 // Root markup: <section class="wp-block-starwishx-video-text section video-text">.
 // The global .section / .container / .h3 utilities come from assets/css/app.css
@@ -12,6 +12,7 @@
 
 @use "variables" as *;
 @use "mixins/media" as *;
+@use "blocks/media-section" as *;
 
 .video-text__container {
   @include min-laptop {
@@ -30,23 +31,7 @@
 }
 
 .video-text__content {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  align-items: stretch;
-  justify-content: center;
-
-  @include min-tablet {
-    flex-direction: row;
-  }
-
-  @include min-laptop {
-    gap: 26px;
-  }
-
-  @include min-desktop {
-    gap: 20px;
-  }
+  @include media-section-content;
 }
 
 .video-text__media {
@@ -115,63 +100,21 @@
 }
 
 .video-text__body {
-  position: relative;
-  padding-bottom: 96px;
-  min-height: 448px;
-  color: $text-dark;
-
-  @include min-tablet {
-    flex: 1;
-    min-height: unset;
-  }
+  @include media-section-body;
 }
 
 .video-text__text {
-  font-weight: 500;
-  font-size: 24px;
-
-  @include min-desktop {
-    font-size: 36px;
-  }
+  @include media-section-text;
 }
 
 // Decorative spinning planet (aria-hidden in the markup).
 .video-text__icon {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 80px;
-  height: 80px;
-
-  @include min-desktop {
-    width: 96px;
-    height: 96px;
-  }
-}
-
-.video-text__icon-bg,
-.video-text__icon-mask {
-  position: absolute;
-  width: 100%;
-  height: 100%;
+  @include media-section-icon("video-text");
 }
 
 .video-text__icon-bg {
-  animation: video-text-spin 4s linear infinite;
   border: 2px solid $icon-color-secondary;
   border-radius: 50%;
-
-  @media (prefers-reduced-motion: reduce) {
-    animation: none;
-  }
 }
 
-@keyframes video-text-spin {
-  from {
-    rotate: 0deg;
-  }
-
-  to {
-    rotate: 360deg;
-  }
-}
+@include media-section-spin("video-text");

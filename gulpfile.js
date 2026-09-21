@@ -417,12 +417,14 @@ export const watchForChanges = () => {
   // inc/blocks/Assets/ holds the editor helper (served from source), not a store.
   watch(["inc/*/Assets/**/*.{js,mjs}", "!inc/blocks/Assets/**"], moduleScripts);
   watch("inc/acf/blocks/**/*.module.scss", blockStyles);
-  // Block SCSS @use's the theme variables/mixins, so rebuild on those too.
+  // Block SCSS @use's the theme variables/mixins and the shared block partials
+  // (src/scss/blocks/), so rebuild on those too.
   watch(
     [
       "inc/blocks/*/style.scss",
       "src/scss/_variables.scss",
       "src/scss/mixins/**/*.scss",
+      "src/scss/blocks/**/*.scss",
     ],
     nativeBlockStyles,
   );

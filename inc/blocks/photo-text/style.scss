@@ -1,0 +1,74 @@
+// starwishx/photo-text - block styles (front end + editor), compiled by gulp
+// (nativeBlockStyles) into build/style.css. "variables", "mixins/media" and
+// "blocks/media-section" resolve through the sass loadPaths option (src/scss).
+
+// Root markup: <section class="wp-block-starwishx-photo-text section photo-text">.
+// The global .section / .container / .h3 utilities come from assets/css/app.css
+// and supply section padding, gutters and the heading sizes; this sheet only
+// adds what the block needs on top. It is hoisted into <head> BEFORE app.css,
+// so never rely on source order to beat a global class - use a second class.
+
+// File: inc/blocks/photo-text/style.scss
+
+@use "variables" as *;
+@use "mixins/media" as *;
+@use "blocks/media-section" as *;
+
+// Narrower than the page container, as designed.
+.photo-text__container {
+  @include min-tablet {
+    max-width: $width-tablet;
+  }
+
+  @include min-laptop {
+    max-width: 750px;
+  }
+
+  @include min-desktop {
+    max-width: 1030px;
+  }
+}
+
+.photo-text__title {
+  margin-bottom: 40px;
+  color: $text-dark;
+  text-align: center;
+
+  @include min-tablet {
+    margin-bottom: 28px;
+  }
+}
+
+.photo-text__content {
+  @include media-section-content;
+}
+
+.photo-text__media {
+  align-self: center;
+  max-width: 544px;
+
+  @include min-tablet {
+    flex: 1;
+    margin-bottom: 0;
+  }
+}
+
+// width/height attributes + the reset's `block-size: auto` keep the ratio.
+.photo-text__image {
+  border-radius: 12px;
+}
+
+.photo-text__body {
+  @include media-section-body;
+}
+
+.photo-text__text {
+  @include media-section-text;
+}
+
+// Decorative spinning star (aria-hidden in the markup).
+.photo-text__icon {
+  @include media-section-icon("photo-text");
+}
+
+@include media-section-spin("photo-text");
