@@ -128,6 +128,35 @@ export const nativeBlockStyles = () => {
   );
 };
 
+// Block view modules (block.json viewScriptModule): inc/blocks/{slug}/view.js
+// -> build/view.js + build/view.asset.php. ESM output; the WordPress
+// dependency-extraction plugin keeps @wordpress/interactivity external and
+// writes the asset manifest (dependencies + type => 'module'). Without that
+// manifest core registers the module with no dependencies, and a bare
+// `import "@wordpress/interactivity"` only works when some other store
+// happened to put the runtime into the import map.
+const viewWebpackConfig = (prod) => ({
+  module: {
+    rules: [
+      {
+        test: /\.(js|mjs)$/,
+        use: {
+          loader: "babel-loader",
+          options: { presets: ["@babel/preset-env"] },
+        },
+      },
+    ],
+  },
+  mode: prod ? "production" : "development",
+  devtool: !prod ? "eval-source-map" : false,
+  experiments: { outputModule: true },
+  // output.module (not just library.type) is what switches the plugin to
+  // module mode: "@wordpress/interactivity" then stays an ESM import resolved
+  // by WordPress' import map, and the manifest gets type => 'module'.
+  output: { filename: "[name].js", module: true, library: { type: "module" } },
+  plugins: [new DependencyExtractionWebpackPlugin()],
+});
+
 export const nativeBlockScripts = () => {
   return (
     src(["inc/blocks/*/view.js"], { allowEmpty: true })
@@ -140,8 +169,7 @@ export const nativeBlockScripts = () => {
           return `${slug}/build/${path.basename(file.path, ".js")}`;
         }),
       )
-      // ESM output: block.json viewScriptModule loads it as <script type="module">.
-      .pipe(webpack(webpackConfig(PRODUCTION, true)))
+      .pipe(webpack(viewWebpackConfig(PRODUCTION), webpackModule))
       .pipe(dest("inc/blocks"))
   );
 };

@@ -6,8 +6,8 @@
  * Registers every inc/blocks/{slug}/block.json as a native block, supplies the
  * "Custom Blocks" inserter category (shared with the legacy ACF blocks), merges
  * translatable attribute labels (labels.php) into the block definitions, and
- * ships the editor helper that gives PHP-only (autoRegister) blocks a Media
- * Library picker.
+ * ships the editor helper that gives blocks a Media Library picker and a term
+ * select for attributes marked with a custom control.
  *
  * Block folders are source = runtime: block.json, render.php and labels.php
  * run in place; gulp compiles style.scss / view.js into {slug}/build/, which
@@ -35,6 +35,13 @@ final class BlocksCore
      * hidden from core's auto-generated inspector controls.
      */
     public const CONTROL_MEDIA = 'media';
+
+    /**
+     * block.json attribute marker: { "type": "integer", "control": "term",
+     * "taxonomy": "category-oportunities", "parentOnly": true }. The editor helper
+     * renders a select fed by termOptions() (no REST dependency).
+     */
+    public const CONTROL_TERM = 'term';
 
     private const EDITOR_SCRIPT = 'starwishx-block-editor-media';
 
@@ -74,9 +81,9 @@ final class BlocksCore
         add_filter('block_categories_all', [$this, 'registerCategory']);
         add_filter('block_type_metadata', [$this, 'prepareMetadata']);
         add_filter('block_type_metadata_settings', [$this, 'applyAttributeLabels'], 10, 2);
-        // Core marks autoGenerateControl at priority 5; strip it from media
+        // Core marks autoGenerateControl at priority 5; strip it from custom-control
         // attributes at 6 so the auto inspector doesn't also show an integer field.
-        add_filter('register_block_type_args', [$this, 'filterMediaAttributes'], 6, 2);
+        add_filter('register_block_type_args', [$this, 'filterCustomControlAttributes'], 6, 2);
         add_action('enqueue_block_editor_assets', [$this, 'enqueueEditorAssets']);
     }
 
@@ -195,17 +202,21 @@ final class BlocksCore
     }
 
     /**
+     * Attributes with a custom editor control ("control": "media" | "term")
+     * are handled by Assets/editor-media-attributes.js; strip core's marker so
+     * the auto-generated inspector doesn't also show a bare integer field.
+     *
      * @param array<string, mixed> $args
      * @return array<string, mixed>
      */
-    public function filterMediaAttributes(array $args, string $block_name): array
+    public function filterCustomControlAttributes(array $args, string $block_name): array
     {
         if (empty($args['supports']['autoRegister']) || empty($args['attributes']) || ! is_array($args['attributes'])) {
             return $args;
         }
 
         foreach ($args['attributes'] as $key => $schema) {
-            if (is_array($schema) && ($schema['control'] ?? null) === self::CONTROL_MEDIA) {
+            if (is_array($schema) && is_string($schema['control'] ?? null)) {
                 unset($args['attributes'][$key]['autoGenerateControl']);
             }
         }
@@ -236,18 +247,83 @@ final class BlocksCore
             self::EDITOR_SCRIPT,
             'window.starwishxBlockEditor = ' . wp_json_encode([
                 'mediaControl' => self::CONTROL_MEDIA,
+                'termControl'  => self::CONTROL_TERM,
                 // Lets editor scripts draw the same sprite icons render.php uses (sw_svg()).
                 'spriteUrl'    => apply_filters('sw_svg_sprite_url', get_template_directory_uri() . '/assets/img/sprites.svg'),
+                'terms'        => $this->termOptions(),
                 'i18n'         => [
-                    'panelTitle'   => __('Media', 'starwishx'),
-                    'select'       => __('Select image', 'starwishx'),
-                    'replace'      => __('Replace image', 'starwishx'),
-                    'remove'       => __('Remove image', 'starwishx'),
-                    'noPermission' => __('You do not have permission to upload media.', 'starwishx'),
+                    'panelTitle'      => __('Media', 'starwishx'),
+                    'select'          => __('Select image', 'starwishx'),
+                    'replace'         => __('Replace image', 'starwishx'),
+                    'remove'          => __('Remove image', 'starwishx'),
+                    'noPermission'    => __('You do not have permission to upload media.', 'starwishx'),
+                    'termsPanelTitle' => __('Category', 'starwishx'),
+                    'selectTerm'      => __('— Select —', 'starwishx'),
+                    'noTerms'         => __('No terms available.', 'starwishx'),
                 ],
             ], JSON_HEX_TAG | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE) . ';',
             'before'
         );
+    }
+
+    /**
+     * Term lists for every `"control": "term"` attribute of a registered block,
+     * keyed "{taxonomy}|parents" or "{taxonomy}|all" (see termOptionsKey()).
+     *
+     * Inlined rather than fetched from the REST API so the picker works for
+     * taxonomies without show_in_rest (category-oportunities is one), needs no
+     * async state, and keeps PHP the authority over what editors can pick.
+     *
+     * @return array<string, array<int, array{id: int, name: string, slug: string}>>
+     */
+    private function termOptions(): array
+    {
+        $options = [];
+
+        foreach (\WP_Block_Type_Registry::get_instance()->get_all_registered() as $block_type) {
+            foreach ((array) $block_type->attributes as $schema) {
+                if (! is_array($schema) || ($schema['control'] ?? null) !== self::CONTROL_TERM) {
+                    continue;
+                }
+
+                $taxonomy = (string) ($schema['taxonomy'] ?? '');
+                if ($taxonomy === '' || ! taxonomy_exists($taxonomy)) {
+                    continue;
+                }
+
+                $parent_only = ! empty($schema['parentOnly']);
+                $key         = self::termOptionsKey($taxonomy, $parent_only);
+                if (isset($options[$key])) {
+                    continue;
+                }
+
+                $args = ['taxonomy' => $taxonomy, 'hide_empty' => false];
+                if ($parent_only) {
+                    $args['parent'] = 0;
+                }
+
+                $terms = get_terms($args);
+                $options[$key] = [];
+
+                if (! is_wp_error($terms)) {
+                    foreach ($terms as $term) {
+                        $options[$key][] = [
+                            'id'   => (int) $term->term_id,
+                            'name' => $term->name,
+                            'slug' => $term->slug,
+                        ];
+                    }
+                }
+            }
+        }
+
+        return $options;
+    }
+
+    /** Key of a term list in the inline config; mirrored in the editor helper. */
+    public static function termOptionsKey(string $taxonomy, bool $parent_only): string
+    {
+        return $taxonomy . '|' . ($parent_only ? 'parents' : 'all');
     }
 
     /**

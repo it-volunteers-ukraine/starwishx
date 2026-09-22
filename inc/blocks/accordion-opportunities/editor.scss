@@ -1,0 +1,31 @@
+// starwishx/accordion-opportunities - editor-only styles, compiled by gulp
+// (nativeBlockStyles) into build/editor.css (block.json "editorStyle").
+// The canvas shows every item open with its photo in the flow, so editors see
+// what they type; the front-end reveal logic stays in style.scss.
+
+// File: inc/blocks/accordion-opportunities/editor.scss
+
+.accordion-opportunities__content {
+  grid-template-rows: 1fr;
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.accordion-opportunities__photo {
+  display: block;
+  position: static;
+  opacity: 1;
+  margin-top: 16px;
+  width: 120px;
+}
+
+.accordion-opportunities__list > .block-list-appender {
+  margin: 16px 0;
+}
+
+.accordion-opportunities__content .components-placeholder {
+  margin-top: 16px;
+  min-height: 160px;
+  width: 120px;
+  min-width: 120px;
+}
