@@ -66,7 +66,8 @@ $wrapper = get_block_wrapper_attributes(['class' => 'accordion-two-photo__item']
         <?php endif; ?>
         <div class="accordion-two-photo__photos">
             <?php echo $photos_html; // escaped by wp_get_attachment_image() ?>
-            <?php sw_svg_e('icon-stars-gradient', 24, 24, 'accordion-two-photo__icon'); // kses-escaped, aria-hidden ?>
+            <!-- < ?php sw_svg_e('icon-stars-gradient', 24, 24, 'accordion-two-photo__icon'); // kses-escaped, aria-hidden ? > -->
+            <img class="accordion-two-photo__icon" width="24" height="24" aria-hidden="true" src="<?= get_template_directory_uri(); ?>/assets/img/icon-stars-gradient.svg" alt="icon stars" loading="lazy">
         </div>
     </div>
 </li>
