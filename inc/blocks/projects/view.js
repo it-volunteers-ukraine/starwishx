@@ -1,6 +1,6 @@
 /**
- * starwishx/projects — arrow buttons and mouse drag for the scroll-snap
- * carousel (front end).
+ * starwishx/projects — arrow buttons, mouse drag and easing for the
+ * scroll-snap carousel (front end).
  *
  * Registered through block.json "viewScriptModule", so WordPress loads the
  * compiled build/view.js as <script type="module"> only on pages where the
@@ -8,18 +8,21 @@
  * touch, trackpad, wheel and keyboard focus scroll it without any script.
  * This adds what a native scroller lacks:
  *
- *  - the two buttons scroll by one card and reflect the ends of the track
- *    with aria-disabled — not `disabled`, so a button that becomes inactive
- *    under the keyboard focus keeps it;
- *  - drag-to-scroll with a mouse (what Swiper calls simulateTouch). Touch
- *    pens keep the native gesture. Snapping is switched off while the pointer
- *    is down (every scrollLeft write would re-snap otherwise), the track then
- *    glides to the nearest card on release and snapping comes back once that
- *    scroll ends; the click that ends a drag is swallowed so a card link does
- *    not open.
+ *  - the two buttons move one card and reflect the ends of the track with
+ *    aria-disabled — not `disabled`, so a button that becomes inactive under
+ *    the keyboard focus keeps it;
+ *  - drag-to-scroll with a mouse (what Swiper called simulateTouch). Touch
+ *    and pens keep the native gesture. Snapping is off while the pointer is
+ *    down (every scrollLeft write would re-snap otherwise) and the click that
+ *    ends a drag is swallowed so a card link does not open;
+ *  - the motion: buttons and drag releases run through one small
+ *    requestAnimationFrame animator with an ease-out curve (the old slider's
+ *    600 ms), and a release with velocity flicks on to the card that motion
+ *    reaches, like a slider's momentum. Targets are always snap positions,
+ *    so restoring scroll-snap afterwards never moves anything. Users who
+ *    prefer reduced motion get instant jumps instead.
  *
- * No Interactivity API, no imports — well under a kilobyte for the whole
- * behaviour.
+ * No Interactivity API, no imports.
  *
  * File: inc/blocks/projects/view.js
  */
@@ -30,22 +33,105 @@ const SLIDE = ".projects__slide";
 const PREV = ".projects__arrow--prev";
 const NEXT = ".projects__arrow--next";
 const DRAGGING_CLASS = "is-dragging";
-const DRAG_THRESHOLD = 6; // px before a mousedown becomes a drag, not a click
-const SNAP_RESTORE_FALLBACK = 700; // ms, when the browser never fires scrollend
 
-function gapOf(track) {
-  return parseFloat(getComputedStyle(track).columnGap) || 0;
+const DRAG_THRESHOLD = 6; // px before a mousedown becomes a drag, not a click
+const SLIDE_DURATION = 600; // ms for a button step (the old slider's `speed`)
+const FLICK_MIN_DURATION = 250; // ms
+const VELOCITY_WINDOW = 100; // ms of pointer history the release velocity is read from
+const FLICK_PROJECTION = 220; // ms the release velocity is projected forward
+
+const easeOutCubic = (t) => 1 - (1 - t) ** 3;
+const prefersReducedMotion = () =>
+  window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
+
+/**
+ * Snap geometry of a track: the scroll positions its slides align at.
+ */
+function geometry(track) {
+  const trackLeft = track.getBoundingClientRect().left;
+  const pad = parseFloat(getComputedStyle(track).paddingLeft) || 0;
+  const maxLeft = Math.max(0, track.scrollWidth - track.clientWidth);
+  const positions = Array.from(track.querySelectorAll(SLIDE), (slide) =>
+    clamp(
+      slide.getBoundingClientRect().left - trackLeft + track.scrollLeft - pad,
+      0,
+      maxLeft,
+    ),
+  );
+
+  const nearestIndex = (x) => {
+    let index = 0;
+    positions.forEach((position, i) => {
+      if (Math.abs(position - x) < Math.abs(positions[index] - x)) index = i;
+    });
+    return index;
+  };
+
+  return { positions, maxLeft, nearestIndex };
 }
 
-function setupArrows(root, track) {
+/**
+ * Animates track.scrollLeft to a target with snapping suspended, then hands
+ * control back to CSS.
+ */
+function createAnimator(track) {
+  let frame = 0;
+
+  const suspendSnap = () => {
+    track.style.scrollSnapType = "none";
+    track.style.scrollBehavior = "auto";
+  };
+  const restoreSnap = () => {
+    track.style.scrollSnapType = "";
+    track.style.scrollBehavior = "";
+  };
+  /** Stops a running slide; true when one was in flight (snap is then still suspended). */
+  const cancel = () => {
+    const wasRunning = frame !== 0;
+    if (frame) cancelAnimationFrame(frame);
+    frame = 0;
+    return wasRunning;
+  };
+
+  const to = (target, duration = SLIDE_DURATION) => {
+    cancel();
+    const start = track.scrollLeft;
+    const distance = target - start;
+
+    if (Math.abs(distance) < 1) {
+      restoreSnap();
+      return;
+    }
+    if (prefersReducedMotion()) {
+      suspendSnap();
+      track.scrollLeft = target;
+      restoreSnap();
+      return;
+    }
+
+    suspendSnap();
+    const startedAt = performance.now();
+    const tick = (now) => {
+      const progress = Math.min(1, (now - startedAt) / duration);
+      track.scrollLeft = start + distance * easeOutCubic(progress);
+      if (progress < 1) {
+        frame = requestAnimationFrame(tick);
+      } else {
+        frame = 0;
+        restoreSnap();
+      }
+    };
+    frame = requestAnimationFrame(tick);
+  };
+
+  return { to, cancel, suspendSnap, restoreSnap };
+}
+
+function setupArrows(root, track, animator) {
   const prev = root.querySelector(PREV);
   const next = root.querySelector(NEXT);
   if (!prev || !next) return () => {};
-
-  const step = () => {
-    const slide = track.querySelector(SLIDE);
-    return slide ? slide.offsetWidth + gapOf(track) : track.clientWidth;
-  };
 
   const setDisabled = (button, disabled) => {
     button.setAttribute("aria-disabled", disabled ? "true" : "false");
@@ -57,68 +143,68 @@ function setupArrows(root, track) {
     setDisabled(next, track.scrollLeft >= maxLeft - 1);
   };
 
-  const scroll = (direction) => (event) => {
+  const step = (direction) => (event) => {
     if (event.currentTarget.getAttribute("aria-disabled") === "true") return;
-    track.scrollBy({ left: direction * step() }); // behavior comes from CSS scroll-behavior
+    const { positions, nearestIndex } = geometry(track);
+    if (!positions.length) return;
+    const index = clamp(
+      nearestIndex(track.scrollLeft) + direction,
+      0,
+      positions.length - 1,
+    );
+    animator.to(positions[index]);
   };
 
-  prev.addEventListener("click", scroll(-1));
-  next.addEventListener("click", scroll(1));
+  prev.addEventListener("click", step(-1));
+  next.addEventListener("click", step(1));
 
   return update;
 }
 
-function setupMouseDrag(track) {
+function setupMouseDrag(track, animator) {
   let pointerId = null;
   let startX = 0;
   let startLeft = 0;
   let moved = false;
+  let interrupted = false; // the press stopped a running slide
   let suppressClick = false;
-  let restoreTimer = 0;
+  let samples = []; // recent { time, x } for the release velocity
 
-  // Left edge of each slide in the track's scroll coordinates, minus the
-  // scroll padding — the positions the snap points sit at.
-  const snapPositions = () => {
-    const trackLeft = track.getBoundingClientRect().left;
-    const pad = parseFloat(getComputedStyle(track).paddingLeft) || 0;
-    return Array.from(track.querySelectorAll(SLIDE), (slide) => {
-      return slide.getBoundingClientRect().left - trackLeft + track.scrollLeft - pad;
-    });
-  };
+  const flick = () => {
+    const now = performance.now();
+    const recent = samples.filter((sample) => now - sample.time <= VELOCITY_WINDOW);
+    const first = recent[0];
+    const last = recent[recent.length - 1];
+    // Pointer velocity (px/ms); the content moves the other way.
+    const velocity =
+      first && last && last.time > first.time
+        ? (last.x - first.x) / (last.time - first.time)
+        : 0;
 
-  const restoreSnap = () => {
-    clearTimeout(restoreTimer);
-    track.removeEventListener("scrollend", restoreSnap);
-    track.style.scrollSnapType = "";
-    track.style.scrollBehavior = "";
-  };
-
-  const settle = () => {
-    const current = track.scrollLeft;
-    const target = snapPositions().reduce(
-      (best, position) =>
-        Math.abs(position - current) < Math.abs(best - current) ? position : best,
-      current,
-    );
-    // Glide there with snapping still off; put it back when the glide ends.
-    track.style.scrollBehavior = "smooth";
-    track.addEventListener("scrollend", restoreSnap, { once: true });
-    restoreTimer = setTimeout(restoreSnap, SNAP_RESTORE_FALLBACK);
-    if (Math.abs(target - current) < 1) {
-      restoreSnap();
-    } else {
-      track.scrollTo({ left: target });
+    const { positions, maxLeft, nearestIndex } = geometry(track);
+    if (!positions.length) {
+      animator.restoreSnap();
+      return;
     }
+    const current = track.scrollLeft;
+    const projected = clamp(current - velocity * FLICK_PROJECTION, 0, maxLeft);
+    const target = positions[nearestIndex(projected)];
+    const duration = clamp(
+      Math.abs(target - current) / Math.max(Math.abs(velocity), 0.5),
+      FLICK_MIN_DURATION,
+      SLIDE_DURATION,
+    );
+    animator.to(target, duration);
   };
 
   track.addEventListener("pointerdown", (event) => {
     if (event.pointerType !== "mouse" || event.button !== 0) return;
-    clearTimeout(restoreTimer);
-    track.removeEventListener("scrollend", restoreSnap);
+    interrupted = animator.cancel(); // a press interrupts any running slide
     pointerId = event.pointerId;
     startX = event.clientX;
     startLeft = track.scrollLeft;
     moved = false;
+    samples = [{ time: performance.now(), x: event.clientX }];
     // Capture is taken only once this becomes a drag: with capture on, the
     // click that follows a plain press would be dispatched to the track
     // instead of the card link under the cursor.
@@ -132,9 +218,11 @@ function setupMouseDrag(track) {
       moved = true;
       track.setPointerCapture(pointerId);
       track.classList.add(DRAGGING_CLASS);
-      track.style.scrollSnapType = "none";
-      track.style.scrollBehavior = "auto";
+      animator.suspendSnap();
     }
+    const now = performance.now();
+    samples.push({ time: now, x: event.clientX });
+    samples = samples.filter((sample) => now - sample.time <= VELOCITY_WINDOW);
     track.scrollLeft = startLeft - delta;
   });
 
@@ -144,7 +232,11 @@ function setupMouseDrag(track) {
       track.releasePointerCapture(pointerId);
     }
     pointerId = null;
-    if (!moved) return;
+    if (!moved) {
+      // A plain press that stopped a slide mid-way: finish settling on a card.
+      if (interrupted) flick();
+      return;
+    }
     moved = false;
     track.classList.remove(DRAGGING_CLASS);
     // The click that follows this pointerup belongs to the drag, not to the
@@ -154,7 +246,7 @@ function setupMouseDrag(track) {
     setTimeout(() => {
       suppressClick = false;
     }, 0);
-    settle();
+    flick();
   };
 
   track.addEventListener("pointerup", end);
@@ -179,8 +271,9 @@ function setup(root) {
   const track = root.querySelector(TRACK);
   if (!track) return;
 
-  const update = setupArrows(root, track);
-  setupMouseDrag(track);
+  const animator = createAnimator(track);
+  const update = setupArrows(root, track, animator);
+  setupMouseDrag(track, animator);
 
   let frame = 0;
   const scheduleUpdate = () => {
