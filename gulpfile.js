@@ -20,6 +20,11 @@ import * as sass from "sass";
 import gulpif from "gulp-if";
 import { deleteAsync } from "del";
 import webpack from "webpack-stream";
+// The block editor lane hands webpack-stream this instance so the WordPress
+// dependency-extraction plugin (which requires webpack itself) and the
+// compiler share one webpack module.
+import webpackModule from "webpack";
+import DependencyExtractionWebpackPlugin from "@wordpress/dependency-extraction-webpack-plugin";
 import named from "vinyl-named";
 import fs from "fs";
 import fonter from "gulp-fonter-fix";
@@ -99,7 +104,7 @@ const NATIVE_BLOCK_SASS_OPTIONS = { loadPaths: [path.resolve("src/scss")] };
 
 export const nativeBlockStyles = () => {
   return (
-    src(["inc/blocks/*/style.scss"], { allowEmpty: true })
+    src(["inc/blocks/*/{style,editor}.scss"], { allowEmpty: true })
       .pipe(
         stylelint({
           fix: true,
@@ -139,6 +144,52 @@ export const nativeBlockScripts = () => {
       .pipe(webpack(webpackConfig(PRODUCTION, true)))
       .pipe(dest("inc/blocks"))
   );
+};
+
+// Block editor scripts (JSX, InnerBlocks, RichText...): inc/blocks/{slug}/editor.js
+// -> build/editor.js + build/editor.asset.php. block.json "editorScript" points
+// at the bundle; core reads the .asset.php for dependencies and version.
+// @wordpress/* imports stay external (wp.* globals via WordPress' own script
+// handles), so the bundle only carries the block's own code.
+const editorWebpackConfig = (prod) => ({
+  module: {
+    rules: [
+      {
+        test: /\.(js|mjs)$/,
+        use: {
+          loader: "babel-loader",
+          options: {
+            presets: [
+              "@babel/preset-env",
+              // development: false even in dev builds - the dev JSX runtime would
+              // put "react/jsx-dev-runtime" into editor.asset.php, a dependency
+              // WordPress has no script handle for, and the editor script would
+              // silently never load.
+              ["@babel/preset-react", { runtime: "automatic", development: false }],
+            ],
+          },
+        },
+      },
+    ],
+  },
+  mode: prod ? "production" : "development",
+  // No eval-style devtool here: the editor runs under wp-admin, keep the
+  // bundle plain so a CSP never has to allow unsafe-eval for it.
+  devtool: prod ? false : "cheap-module-source-map",
+  output: { filename: "[name].js" },
+  plugins: [new DependencyExtractionWebpackPlugin()],
+});
+
+export const nativeBlockEditorScripts = () => {
+  return src(["inc/blocks/*/editor.js"], { allowEmpty: true })
+    .pipe(
+      named((file) => {
+        const slug = path.basename(path.dirname(file.path));
+        return `${slug}/build/${path.basename(file.path, ".js")}`;
+      }),
+    )
+    .pipe(webpack(editorWebpackConfig(PRODUCTION), webpackModule))
+    .pipe(dest("inc/blocks"));
 };
 
 // Fonts logic remains similar but wrapped for stability
@@ -338,6 +389,8 @@ export const production = () => {
       "!src{,/**}",
       "!inc/blocks/**/*.scss", // compiled into inc/blocks/*/build/ by nativeBlockStyles
       "!inc/blocks/*/view.js", // source; block.json loads build/view.js
+      "!inc/blocks/*/editor.js", // source; block.json loads build/editor.js
+      "!inc/blocks/*/editor{,/**}",
       "!production{,/**}", // Prevent copying the production folder into itself
       "!languages/*.po~", // Translation editor backups
       "!assets/img{,/**}", // Copied by copyBinariesToProduction
@@ -421,7 +474,7 @@ export const watchForChanges = () => {
   // (src/scss/blocks/), so rebuild on those too.
   watch(
     [
-      "inc/blocks/*/style.scss",
+      "inc/blocks/*/{style,editor}.scss",
       "src/scss/_variables.scss",
       "src/scss/mixins/**/*.scss",
       "src/scss/blocks/**/*.scss",
@@ -429,6 +482,10 @@ export const watchForChanges = () => {
     nativeBlockStyles,
   );
   watch("inc/blocks/*/view.js", nativeBlockScripts);
+  watch(
+    ["inc/blocks/*/editor.js", "inc/blocks/*/editor/**/*.js"],
+    nativeBlockEditorScripts,
+  );
 };
 
 // No clean() here on purpose: it would wipe assets/ on every start and
@@ -449,6 +506,7 @@ export const dev = series(
     blockStyles,
     nativeBlockStyles,
     nativeBlockScripts,
+    nativeBlockEditorScripts,
   ),
   watchForChanges,
 );
@@ -469,6 +527,7 @@ export const build = series(
     blockStyles,
     nativeBlockStyles,
     nativeBlockScripts,
+    nativeBlockEditorScripts,
   ),
   production,
   copyBinariesToProduction,

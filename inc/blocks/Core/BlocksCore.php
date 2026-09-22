@@ -236,6 +236,8 @@ final class BlocksCore
             self::EDITOR_SCRIPT,
             'window.starwishxBlockEditor = ' . wp_json_encode([
                 'mediaControl' => self::CONTROL_MEDIA,
+                // Lets editor scripts draw the same sprite icons render.php uses (sw_svg()).
+                'spriteUrl'    => apply_filters('sw_svg_sprite_url', get_template_directory_uri() . '/assets/img/sprites.svg'),
                 'i18n'         => [
                     'panelTitle'   => __('Media', 'starwishx'),
                     'select'       => __('Select image', 'starwishx'),

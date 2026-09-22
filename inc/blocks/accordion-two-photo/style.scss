@@ -1,0 +1,205 @@
+// starwishx/accordion-two-photo - block styles (front end + editor), compiled
+// by gulp (nativeBlockStyles) into build/style.css; covers the item block too
+// (items only exist inside this block). "variables" resolves through the sass
+// loadPaths option (src/scss).
+
+// Root markup: <section class="wp-block-starwishx-accordion-two-photo section
+// accordion-two-photo"> > .container > ol.accordion-two-photo__list >
+// li.accordion-two-photo__item. .section / .container / .h2-big come from
+// assets/css/app.css. The "01, 02…" numbering is a CSS counter on the sticky
+// heading, so the list stays a plain <ol> for assistive technology. Values are
+// the ACF "compact" variant's (raw px breakpoints kept for parity). This sheet
+// is hoisted into <head> BEFORE app.css - never rely on source order to beat a
+// global class.
+
+// File: inc/blocks/accordion-two-photo/style.scss
+
+@use "variables" as *;
+
+.accordion-two-photo__list {
+  counter-reset: accordion-item;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.accordion-two-photo__item {
+  counter-increment: accordion-item;
+  position: relative;
+  border-top: 1px solid rgba($text-light, 0.5);
+  padding: 24px;
+
+  // last-of-type, not last-child: the editor appends its "+" button to the list.
+  &:last-of-type {
+    border-bottom: 1px solid rgba($text-light, 0.5);
+  }
+
+  @media screen and (min-width: 768px) {
+    padding: 40px 28px 24px;
+  }
+
+  @media screen and (min-width: 1440px) {
+    height: 399px;
+  }
+
+  @media screen and (min-width: 1920px) {
+    height: 516px;
+  }
+}
+
+// Sticky numbered heading; the counter is the old .count element.
+.accordion-two-photo__heading {
+  display: flex;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background-color: white;
+
+  @media screen and (min-width: 601px) {
+    /* stylelint-disable-next-line custom-property-pattern */
+    top: var(--wp-admin--admin-bar--height, 0);
+  }
+
+  &::before {
+    min-width: 30px;
+    color: $text-accent;
+    font-weight: 500;
+    font-size: 16px;
+    content: counter(accordion-item, decimal-leading-zero);
+
+    @media screen and (min-width: 768px) {
+      min-width: 38px;
+    }
+
+    @media screen and (min-width: 1920px) {
+      width: 40px;
+      font-size: 18px;
+    }
+  }
+}
+
+.accordion-two-photo__title {
+  background-color: white;
+  text-transform: uppercase;
+
+  @media screen and (min-width: 1440px) {
+    width: 55%;
+  }
+}
+
+.accordion-two-photo__content {
+  position: relative;
+  margin-left: 30px;
+  padding-top: 12px;
+
+  @media screen and (min-width: 768px) {
+    margin-left: 38px;
+  }
+
+  @media screen and (min-width: 1440px) {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+  }
+
+  @media screen and (min-width: 1920px) {
+    margin-left: 40px;
+  }
+}
+
+.accordion-two-photo__text {
+  margin-bottom: 42px;
+  min-height: 126px;
+  line-height: 1.3;
+  color: $text-light;
+  font-size: 16px;
+
+  @media screen and (min-width: 768px) {
+    margin-bottom: 0;
+    min-height: 63px;
+  }
+
+  @media screen and (min-width: 1440px) {
+    width: 55%;
+  }
+
+  @media screen and (min-width: 1920px) {
+    font-size: 18px;
+  }
+}
+
+.accordion-two-photo__photos {
+  display: flex;
+  position: relative;
+  justify-content: flex-end;
+  gap: 7px;
+  padding-top: 14px;
+
+  @media screen and (min-width: 768px) {
+    gap: 12px;
+    padding-top: 18px;
+  }
+
+  @media screen and (min-width: 1440px) {
+    z-index: 2;
+    justify-content: start;
+    gap: 16px;
+    margin-top: -84px;
+    padding-top: 0;
+    width: 578px;
+  }
+
+  @media screen and (min-width: 1920px) {
+    gap: 20px;
+    margin-top: -105px;
+    padding-top: 48px;
+    width: 716px;
+  }
+}
+
+// Portrait 3:4 is enforced here (object-fit) instead of by an editor note.
+.accordion-two-photo__photo {
+  border-radius: 12px;
+  aspect-ratio: 3 / 4;
+  width: 120px;
+  object-fit: cover;
+
+  @media screen and (min-width: 768px) {
+    width: 14.583vw;
+  }
+
+  @media screen and (min-width: 1440px) {
+    width: 225px;
+  }
+
+  @media screen and (min-width: 1920px) {
+    width: 240px;
+  }
+}
+
+.accordion-two-photo__photo--2 {
+  margin-top: 52px;
+
+  @media screen and (min-width: 768px) {
+    margin-top: 32px;
+  }
+
+  @media screen and (min-width: 1440px) {
+    margin-top: 55px;
+  }
+}
+
+// Decorative stars (aria-hidden in the markup).
+.accordion-two-photo__icon {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 1;
+  width: 50px;
+  height: 42px;
+
+  @media screen and (min-width: 1440px) {
+    width: 80px;
+    height: 68px;
+  }
+}

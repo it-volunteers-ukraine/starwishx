@@ -28,6 +28,8 @@
   "devDependencies": {
     "@babel/core": "^8.0.6",
     "@babel/preset-env": "^8.0.6",
+    "@babel/preset-react": "^8.0.1",
+    "@wordpress/dependency-extraction-webpack-plugin": "^6.55.0",
     "autoprefixer": "^10.6.1",
     "babel-loader": "^10.1.1",
     "cssnano": "^9.0.5",
@@ -50,6 +52,7 @@
     "svgo": "^4.1.0",
     "ttf2woff2": "^8.0.1",
     "vinyl-named": "^1.1.0",
+    "webpack": "^5.111.1",
     "webpack-stream": "^7.0.0",
     "yargs": "^18.2.0"
   },

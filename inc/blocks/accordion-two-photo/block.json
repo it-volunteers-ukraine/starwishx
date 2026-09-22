@@ -1,0 +1,20 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "starwishx/accordion-two-photo",
+  "version": "1.0.0",
+  "title": "Accordion two photo",
+  "category": "custom-blocks",
+  "icon": "excerpt-view",
+  "description": "Numbered stack of sections, each with a title, a text and two photos.",
+  "keywords": ["accordion", "steps", "photos", "stack"],
+  "textdomain": "starwishx",
+  "supports": {
+    "html": false,
+    "anchor": true
+  },
+  "editorScript": "file:./build/editor.js",
+  "editorStyle": "file:./build/editor.css",
+  "style": "file:./build/style.css",
+  "render": "file:./render.php"
+}
