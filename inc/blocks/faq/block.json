@@ -1,0 +1,50 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "starwishx/faq",
+  "version": "1.0.0",
+  "title": "FAQ",
+  "category": "custom-blocks",
+  "icon": "editor-help",
+  "description": "Frequently asked questions as a native accordion (one open at a time) with FAQPage structured data.",
+  "keywords": ["faq", "questions", "accordion"],
+  "textdomain": "starwishx",
+  "attributes": {
+    "suptitle": { "type": "string", "default": "FAQ" },
+    "title": { "type": "string", "default": "" },
+    "openFirst": { "type": "boolean", "default": true }
+  },
+  "providesContext": {
+    "starwishx/faqOpenFirst": "openFirst"
+  },
+  "supports": {
+    "html": false,
+    "anchor": true
+  },
+  "example": {
+    "attributes": {
+      "suptitle": "FAQ",
+      "title": "Frequently asked questions"
+    },
+    "innerBlocks": [
+      {
+        "name": "starwishx/faq-item",
+        "attributes": { "question": "How does it work?" },
+        "innerBlocks": [
+          { "name": "core/paragraph", "attributes": { "content": "Pick a category, browse the opportunities and apply." } }
+        ]
+      },
+      {
+        "name": "starwishx/faq-item",
+        "attributes": { "question": "Is it free?" },
+        "innerBlocks": [
+          { "name": "core/paragraph", "attributes": { "content": "Yes." } }
+        ]
+      }
+    ]
+  },
+  "editorScript": "file:./build/editor.js",
+  "editorStyle": "file:./build/editor.css",
+  "style": "file:./build/style.css",
+  "render": "file:./render.php"
+}

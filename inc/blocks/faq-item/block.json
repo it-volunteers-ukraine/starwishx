@@ -1,0 +1,21 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "starwishx/faq-item",
+  "version": "1.0.0",
+  "title": "Question",
+  "category": "custom-blocks",
+  "icon": "editor-help",
+  "description": "One question with its answer.",
+  "textdomain": "starwishx",
+  "parent": ["starwishx/faq"],
+  "usesContext": ["starwishx/parentId", "starwishx/childIndex", "starwishx/faqOpenFirst"],
+  "supports": {
+    "html": false,
+    "reusable": false
+  },
+  "attributes": {
+    "question": { "type": "string", "default": "" }
+  },
+  "render": "file:./render.php"
+}

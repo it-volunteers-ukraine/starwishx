@@ -1,0 +1,22 @@
+// starwishx/faq - editor-only styles, compiled by gulp (nativeBlockStyles)
+// into build/editor.css (block.json "editorStyle"). The canvas renders plain
+// divs instead of <details> so every answer stays open while editing; the
+// shared look lives in style.scss.
+
+// File: inc/blocks/faq/editor.scss
+
+.faq__summary {
+  cursor: text;
+}
+
+.faq__question:empty::before {
+  opacity: 0.6;
+}
+
+.faq__list > .block-list-appender {
+  margin: 16px 0;
+}
+
+.faq__answer > .block-list-appender {
+  margin-top: 8px;
+}

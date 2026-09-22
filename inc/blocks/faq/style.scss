@@ -1,0 +1,159 @@
+// starwishx/faq - block styles (front end + editor), compiled by gulp
+// (nativeBlockStyles) into build/style.css; covers the item block too.
+// "variables" and "mixins/media" resolve through the sass loadPaths option.
+
+// Root markup: <section class="wp-block-starwishx-faq section faq"> >
+// .container > .faq__inner > p.faq__suptitle + h2.faq__title + ol.faq__list >
+// li.faq__item > details.faq__details[name] > summary.faq__summary(h3 + icon)
+// + div.faq__answer. .section / .container / .h2-big come from app.css.
+
+// The accordion is the browser's: <details name> makes the group exclusive,
+// <summary> is the button. Opening/closing animates through ::details-content
+// as a grid track (0fr -> 1fr) with the answer clipped inside; browsers without
+// ::details-content (pre-2025) just toggle. No JavaScript.
+
+// File: inc/blocks/faq/style.scss
+
+@use "variables" as *;
+@use "mixins/media";
+
+.faq__suptitle {
+  display: inline-block;
+  position: relative;
+  border-radius: $radius-element;
+  background-color: $surface-violet;
+  padding: 8px 12px 8px 24px;
+  line-height: 1.2;
+  color: $element-block-text;
+  font-size: 14px;
+  text-transform: uppercase;
+
+  &::before {
+    position: absolute;
+    top: 46%;
+    left: 8px;
+    transform: translateY(-50%);
+    content: "•";
+  }
+
+  @include media.max-laptop {
+    padding: 6px 10px 6px 18px;
+  }
+
+  @include media.min-desktop {
+    font-size: 16px;
+  }
+}
+
+.faq__title {
+  margin-top: clamp(8px, 3vw, 20px);
+  text-transform: uppercase;
+}
+
+.faq__list {
+  counter-reset: faq-item;
+  margin: clamp(16px, 3vw, 32px) auto 0;
+  border-top: 1px solid $stroke-default;
+  padding: 0;
+  max-width: 1464px;
+  list-style: none;
+}
+
+.faq__item {
+  counter-increment: faq-item;
+  position: relative;
+  padding: 16px clamp(32px, 3vw, 109px) 16px clamp(46px, 3vw, 52px);
+
+  &:not(:first-child) {
+    border-top: 1px solid $surface-violet;
+  }
+
+  // The "01" number.
+  &::before {
+    position: absolute;
+    top: 20px;
+    left: 0;
+    color: $text-accent;
+    font-weight: 500;
+    content: counter(faq-item, decimal-leading-zero) " ";
+  }
+}
+
+// <summary>: the disclosure button. The UA marker goes; the sprite "+" is the
+// affordance and turns into "x" when open.
+.faq__summary {
+  display: block;
+  cursor: pointer;
+  color: $text-dark;
+  list-style: none;
+
+  &::-webkit-details-marker {
+    display: none;
+  }
+
+  &:focus-visible {
+    outline: 2px solid $primary-hover;
+    outline-offset: 2px;
+    border-radius: $radius-badge;
+  }
+}
+
+.faq__question {
+  margin: 0;
+  text-align: left;
+  font-weight: 500;
+  font-size: 24px;
+
+  @include media.desktop {
+    font-size: 36px;
+  }
+}
+
+.faq__icon {
+  position: absolute;
+  top: 20px;
+  right: 0;
+  transition: transform 0.3s ease-in-out;
+  width: 24px;
+  height: 24px;
+}
+
+.faq__details[open] .faq__icon {
+  transform: rotate(45deg);
+}
+
+// Answer: clipped inside the animated track (min-height: 0 lets the grid
+// row shrink it to nothing).
+.faq__answer {
+  padding-top: 16px;
+  min-height: 0;
+  overflow: hidden;
+  font-size: 14px;
+
+  @include media.min-desktop {
+    font-size: 16px;
+  }
+}
+
+// Height animation without measuring: ::details-content is the wrapper the
+// browser puts around everything but the summary. content-visibility joins
+// the transition (allow-discrete) so the closing content stays painted
+// while its track collapses.
+.faq__details::details-content {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition:
+    grid-template-rows 0.4s ease-in-out,
+    content-visibility 0.4s allow-discrete;
+}
+
+.faq__details[open]::details-content {
+  grid-template-rows: 1fr;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .faq__details::details-content,
+  .faq__icon {
+    transition: none;
+  }
+}

@@ -85,6 +85,11 @@ final class BlocksCore
         // attributes at 6 so the auto inspector doesn't also show an integer field.
         add_filter('register_block_type_args', [$this, 'filterCustomControlAttributes'], 6, 2);
         add_action('enqueue_block_editor_assets', [$this, 'enqueueEditorAssets']);
+
+        // Cross-block services: parent/child render context (ids, order) and the
+        // FAQPage structured data for starwishx/faq.
+        (new \Blocks\Support\InnerBlockContext())->register();
+        (new \Blocks\Support\FaqSchema())->register();
     }
 
     /** Absolute, forward-slash path of inc/blocks (no trailing slash). */
