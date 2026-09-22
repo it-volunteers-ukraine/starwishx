@@ -7,12 +7,12 @@
  * The gettext context keeps short generic words ("Title") from inheriting
  * unrelated translations elsewhere in the theme.
  *
- * File: inc/blocks/video-text/labels.php
+ * File: inc/blocks/news/labels.php
  */
 
 return [
-    'title'    => _x('Title', 'block attribute label', 'starwishx'),
-    'videoUrl' => _x('Video URL (YouTube or Vimeo)', 'block attribute label', 'starwishx'),
-    'text'     => _x('Text', 'block attribute label', 'starwishx'),
-    'coverId'  => _x('Cover image', 'block attribute label', 'starwishx'),
+    'label'      => _x('Label', 'block attribute label', 'starwishx'),
+    'title'      => _x('Title', 'block attribute label', 'starwishx'),
+    'buttonText' => _x('Button text', 'block attribute label', 'starwishx'),
+    'buttonUrl'  => _x('Button URL (empty = news archive)', 'block attribute label', 'starwishx'),
 ];

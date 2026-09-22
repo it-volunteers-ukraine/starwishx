@@ -1,0 +1,223 @@
+// starwishx/news - block styles (front end + editor), compiled by gulp
+// (nativeBlockStyles) into build/style.css. "variables" and the mixins resolve
+// through the sass loadPaths option (src/scss).
+
+// Root markup: <section class="wp-block-starwishx-news section news">.
+// .section / .container / .h2-big / .btn / .text-small / .btn-text-medium come
+// from assets/css/app.css. Category chip colours (background, text, border)
+// come from the taxonomy colour sheet (sw_get_taxonomy_top_level_colors_styles,
+// matched by data-slug) - .news__label declares shape only, so that sheet wins
+// regardless of cascade order. This sheet is hoisted into <head> BEFORE
+// app.css, so never rely on source order to beat a global class.
+
+// Breakpoints are the ones the ACF module used (raw px values, incl. 576 /
+// 992.9 / 1439.9) so the grid rhythm is identical.
+
+// File: inc/blocks/news/style.scss
+
+@use "variables" as *;
+@use "mixins/label";
+@use "mixins/indents";
+
+// Header ---------------------------------------------------------------------
+
+.news__subtitle {
+  @include label.label-dot;
+  @include indents.label-subtitle;
+}
+
+.news__heading {
+  margin-bottom: 32px;
+
+  @media screen and (min-width: 768px) {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  @media screen and (min-width: 1920px) {
+    margin-bottom: 40px;
+  }
+}
+
+.news__title {
+  color: $text-dark;
+  text-transform: uppercase;
+}
+
+// One button in the header on tablet and up, one under the grid on phones;
+// display: none keeps the inactive one out of the accessibility tree.
+.news__button {
+  &:focus-visible {
+    outline: 3px solid $primary-hover;
+    outline-offset: 4px;
+  }
+}
+
+.news__button--header {
+  display: none;
+
+  @media screen and (min-width: 768px) {
+    display: flex;
+  }
+}
+
+.news__button--footer {
+  display: flex;
+  margin: 0 auto;
+
+  @media screen and (min-width: 768px) {
+    display: none;
+  }
+}
+
+// Editor-only notice when there is nothing to show.
+.news__empty {
+  color: $text-light;
+}
+
+// Grid -----------------------------------------------------------------------
+
+.news__list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin: 0 0 30px;
+  padding: 0;
+  list-style: none;
+
+  @media screen and (min-width: 576px) {
+    flex-flow: row wrap;
+  }
+
+  @media screen and (min-width: 1440px) {
+    gap: 20px;
+  }
+}
+
+// Card. position: relative is the containing block of the stretched link.
+.news__item {
+  position: relative;
+  border-radius: 12px;
+  background-color: $surface-violet;
+  padding: 12px;
+  width: 100%;
+
+  // Phones show three cards; the rest stay in the DOM (lazy images never load).
+  @media screen and (max-width: 992.9px) {
+    &:nth-child(n + 4) {
+      display: none;
+    }
+  }
+
+  // Row rhythm per six cards: 1 and 6 wide, 2-5 half (tablet) / quarter (desktop).
+  @media screen and (min-width: 576px) and (max-width: 1439.9px) {
+    &:nth-child(6n + 1),
+    &:nth-child(6n + 6) {
+      width: 100%;
+    }
+
+    &:nth-child(6n + 2),
+    &:nth-child(6n + 3),
+    &:nth-child(6n + 4),
+    &:nth-child(6n + 5) {
+      width: calc(100% / 2 - 9px);
+    }
+  }
+
+  @media screen and (min-width: 1440px) {
+    display: block;
+
+    &:nth-child(6n + 1),
+    &:nth-child(6n + 6) {
+      width: calc(50% - 8px);
+    }
+
+    &:nth-child(6n + 2),
+    &:nth-child(6n + 3),
+    &:nth-child(6n + 4),
+    &:nth-child(6n + 5) {
+      width: calc(50% / 2 - 16px);
+    }
+  }
+
+  // Focus ring on the card while the (stretched) heading link has focus.
+  &:has(.news__link:focus-visible) {
+    outline: 3px solid $primary-hover;
+    outline-offset: 4px;
+  }
+}
+
+.news__media {
+  position: relative;
+  margin-bottom: 20px;
+  width: 100%;
+  height: 280px;
+
+  @media screen and (min-width: 1440px) {
+    height: calc(19.38vw + 1px);
+  }
+
+  @media screen and (min-width: 1920px) {
+    height: 19.429vw;
+  }
+}
+
+.news__image {
+  border-radius: 12px;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+// Category chip: shape only - colours arrive from the taxonomy colour sheet.
+.news__label {
+  display: inline-flex;
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  align-items: center;
+  border-radius: 40px;
+  padding: 6px 10px;
+  line-height: 1.2;
+  font-weight: 400;
+  font-size: 14px;
+}
+
+.news__date {
+  display: block;
+  margin-bottom: 20px;
+  color: $text-light;
+}
+
+.news__item-title {
+  display: flex;
+  flex-direction: column;
+  min-height: calc(1.2em * 3);
+  overflow: hidden;
+  line-clamp: 3;
+  color: $text-basic;
+
+  @media screen and (min-width: 1920px) {
+    min-height: calc(1.2em * 4);
+    line-clamp: 4;
+    -webkit-line-clamp: 4;
+  }
+}
+
+// Stretched link: the heading text is the accessible name, ::after makes the
+// whole card the hit area, and the ring is drawn on the card (see .news__item).
+.news__link {
+  color: inherit;
+  text-decoration: none;
+
+  &::after {
+    position: absolute;
+    inset: 0;
+    content: "";
+  }
+
+  &:focus-visible {
+    outline: none;
+  }
+}
