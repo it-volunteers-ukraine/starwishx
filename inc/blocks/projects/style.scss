@@ -204,6 +204,12 @@
   @media (prefers-reduced-motion: reduce) {
     scroll-behavior: auto;
   }
+
+  // Mouse drag in progress (view.js): no text selection under the pointer.
+  &.is-dragging {
+    cursor: grabbing;
+    user-select: none;
+  }
 }
 
 .projects__slide {
