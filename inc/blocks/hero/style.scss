@@ -1,0 +1,194 @@
+// starwishx/hero - block styles (front end + editor), compiled by gulp
+// (nativeBlockStyles) into build/style.css. "variables" and "mixins/media"
+// resolve through the sass loadPaths option (src/scss).
+
+// Root markup: <section class="wp-block-starwishx-hero section hero"> >
+// div.hero__media(picture/img) + div.container > div.hero__content(h1 + p +
+// div.hero__actions(a, a) + p). .section / .container / .h1 / .h4 /
+// .subtitle-text-r / .text-r come from app.css. This sheet is hoisted into
+// <head> BEFORE app.css, so the root rules use `.hero.section` to beat
+// .section's own margin/padding by specificity, not order.
+
+// Ported from the ACF module minus its background-image / parallax rules: the
+// --hero-bg variable they read was never defined anywhere.
+
+// File: inc/blocks/hero/style.scss
+
+@use "variables" as *;
+@use "mixins/media" as *;
+
+.hero.section {
+  display: flex;
+  position: relative;
+  margin-top: -88px; // sits under the transparent header
+  background-color: $surface-secondary; // keeps white text readable before/without the photo
+  padding-top: 1px;
+  padding-bottom: 24px;
+  height: 100vh;
+
+  // Contrast overlay for the text.
+  &::before {
+    position: absolute;
+    z-index: 1;
+    inset: 0;
+    background: linear-gradient(
+      0deg,
+      rgb(0 0 0 / 55%) 0%,
+      rgb(0 0 0 / 40%) 40%,
+      rgb(0 0 0 / 8%) 70%,
+      transparent 100%
+    );
+    pointer-events: none;
+    content: "";
+  }
+
+  @include min-tablet {
+    padding-bottom: 44px;
+  }
+
+  @media screen and (min-width: 1000px) {
+    margin-top: -94px;
+  }
+
+  @include min-laptop {
+    margin-top: -109px;
+    padding-bottom: 36px;
+  }
+
+  @include min-desktop {
+    padding-bottom: 64px;
+  }
+}
+
+.hero__media {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  overflow: hidden;
+}
+
+.hero__picture {
+  display: block;
+  height: 100%;
+}
+
+.hero__image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.hero__content {
+  display: flex;
+  position: relative;
+  z-index: 2;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  color: white;
+  text-align: center;
+}
+
+.hero__title {
+  margin: 19.55vh 0 0;
+  max-width: 512px;
+  overflow-wrap: anywhere;
+
+  @include min-tablet {
+    max-width: calc(30.95vw + 274.29px);
+  }
+
+  @include min-laptop {
+    margin-top: 29.11vh;
+    max-width: calc(92.5vw - 612px);
+  }
+
+  @include min-desktop {
+    margin-top: 28.8181vh;
+  }
+}
+
+.hero__subtitle {
+  margin-top: 2.22vh;
+  max-width: 512px;
+  text-align: center;
+
+  @include min-tablet {
+    max-width: calc(4.46vw + 477.71px);
+  }
+
+  @include min-laptop {
+    max-width: calc(25.83vw + 170px);
+  }
+}
+
+.hero__actions {
+  display: flex;
+  flex-direction: column;
+  margin-top: auto;
+  white-space: nowrap;
+
+  @media screen and (min-width: 1000px) {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+    width: 100%;
+  }
+
+  @include min-laptop {
+    justify-content: space-between;
+    padding: 0 117px;
+  }
+
+  @include min-desktop {
+    padding: 0 52px;
+  }
+}
+
+.hero__link {
+  color: white;
+
+  &:hover {
+    color: $buttons-color-background-secondary-hover;
+  }
+
+  &:active {
+    color: $buttons-color-border-secondary-pressed;
+  }
+
+  &:focus-visible {
+    outline: 2px solid white;
+    outline-offset: 4px;
+  }
+}
+
+.hero__link + .hero__link {
+  margin-top: 4vh;
+
+  @include min-tablet {
+    margin-top: 4.44vh;
+  }
+
+  @media screen and (min-width: 1000px) {
+    margin-top: 0;
+  }
+}
+
+.hero__text {
+  margin-top: 6vh;
+
+  @include min-tablet {
+    margin-top: 10.33vh;
+  }
+
+  @media screen and (min-width: 1000px) {
+    margin-top: 17vh;
+  }
+
+  @include min-desktop {
+    margin-top: 13.909vh;
+  }
+}

@@ -1,0 +1,10 @@
+// starwishx/hero - editor-only styles, compiled by gulp (nativeBlockStyles)
+// into build/editor.css (block.json "editorStyle"). The front end pulls the
+// section under the transparent site header with a negative margin; in the
+// canvas that would overlap the block above it.
+
+// File: inc/blocks/hero/editor.scss
+
+.hero.section {
+  margin-top: 0;
+}

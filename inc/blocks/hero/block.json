@@ -1,0 +1,38 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "starwishx/hero",
+  "version": "1.0.0",
+  "title": "Hero",
+  "category": "custom-blocks",
+  "icon": "cover-image",
+  "description": "Full-screen first section: heading, subtitle, two calls to action and a background photo, tuned for the fastest first paint.",
+  "keywords": ["hero", "cover", "first screen"],
+  "textdomain": "starwishx",
+  "attributes": {
+    "title": { "type": "string", "default": "" },
+    "subtitle": { "type": "string", "default": "" },
+    "browseText": { "type": "string", "default": "" },
+    "addText": { "type": "string", "default": "" },
+    "textBottom": { "type": "string", "default": "" },
+    "imageId": { "type": "integer", "default": 0, "control": "media" },
+    "imageMobileId": { "type": "integer", "default": 0, "control": "media" }
+  },
+  "supports": {
+    "autoRegister": true,
+    "html": false,
+    "anchor": true,
+    "multiple": false
+  },
+  "example": {
+    "attributes": {
+      "title": "Discover a boundless space of opportunities",
+      "subtitle": "A place to find, or to offer, a new opportunity.",
+      "browseText": "Get an opportunity",
+      "addText": "Give an opportunity"
+    }
+  },
+  "render": "file:./render.php",
+  "style": "file:./build/style.css",
+  "editorStyle": "file:./build/editor.css"
+}

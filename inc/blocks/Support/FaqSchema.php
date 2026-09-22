@@ -111,7 +111,7 @@ final class FaqSchema
         }
 
         $questions = [];
-        $this->collect(parse_blocks((string) $post->post_content), $questions);
+        $this->collect(PostBlocks::parsed($post), $questions);
 
         if (! $questions) {
             return null;
