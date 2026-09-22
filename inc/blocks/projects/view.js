@@ -36,7 +36,7 @@ const DRAGGING_CLASS = "is-dragging";
 
 const DRAG_THRESHOLD = 6; // px before a mousedown becomes a drag, not a click
 const SLIDE_DURATION = 600; // ms for a button step (the old slider's `speed`)
-const FLICK_MIN_DURATION = 250; // ms
+const FLICK_MIN_DURATION = 600; // ms (250 was in initial version)
 const VELOCITY_WINDOW = 100; // ms of pointer history the release velocity is read from
 const FLICK_PROJECTION = 220; // ms the release velocity is projected forward
 
