@@ -1,0 +1,290 @@
+// starwishx/projects - block styles (front end + editor), compiled by gulp
+// (nativeBlockStyles) into build/style.css. "variables" and "mixins/media"
+// resolve through the sass loadPaths option (src/scss).
+
+// Root markup: <section class="wp-block-starwishx-projects projects"> >
+// header.projects__header(p, h2, .projects__arrows > button x2) +
+// div.projects__viewport > ul.projects__track > li.projects__slide >
+// article.projects__card(figure > img, time, h3 > a). The section carries its
+// own vertical rhythm (the ACF block did not use the global .section).
+
+// The carousel is a scroll-snap track. The custom properties reproduce the
+// old Swiper settings exactly (slidesPerView / spaceBetween per breakpoint):
+// the fraction lets the next card peek in, the widths come from the same
+// formula Swiper used, (100% - gap * (n - 1)) / n.
+
+// File: inc/blocks/projects/style.scss
+
+@use "variables" as *;
+@use "mixins/media" as *;
+
+.projects {
+  --spv: 1.1;
+  --gap: 10px;
+  --pad: 40px;
+
+  display: flex;
+  position: relative;
+  flex-direction: column;
+  gap: 32px;
+  box-sizing: border-box;
+  margin: 0 auto;
+  padding: 200px 0 120px;
+  width: 100%;
+  max-width: $width-desktop;
+
+  @media (max-width: 420px) {
+    --pad: 10px;
+  }
+
+  @media (min-width: 420px) {
+    --spv: 1.2;
+  }
+
+  @media (min-width: 540px) {
+    --spv: 1.6;
+  }
+
+  @media (min-width: 768px) {
+    --spv: 2.1;
+    --gap: 15px;
+  }
+
+  @media (min-width: 1024px) {
+    --spv: 3.1;
+    --gap: 20px;
+  }
+
+  @media (min-width: 1350px) {
+    --spv: 4.1;
+  }
+}
+
+// Editor-only notice when there is nothing to show.
+.projects__empty {
+  padding: 0 var(--pad);
+  color: $text-light;
+}
+
+// Header -----------------------------------------------------------------------
+
+.projects__header {
+  display: flex;
+  position: relative;
+  flex-direction: column;
+  gap: clamp(16px, 1vw, 20px);
+  padding: 0 clamp(40px, 4vw, 90px);
+
+  @media (max-width: 420px) {
+    padding: 0 10px;
+  }
+}
+
+.projects__suptitle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(4px, 0.42vw, 8px);
+  border-radius: 40px;
+  background-color: $element-block-fill;
+  padding: clamp(6px, 0.42vw, 8px) clamp(10px, 0.63vw, 12px);
+  width: clamp(185px, 12vw, 213px);
+  height: clamp(29px, 1.82vw, 35px);
+  color: $element-block-text;
+  font-size: clamp(14px, 0.833vw, 16px);
+
+  &::before {
+    border-radius: 50%;
+    background: $element-block-text;
+    width: 4px;
+    height: 4px;
+    content: "";
+  }
+}
+
+.projects__title {
+  line-height: 120%;
+  color: $text-dark;
+  font-weight: 300;
+  font-size: clamp(48px, 3.33vw, 64px);
+
+  @include max-laptop {
+    font-weight: 400;
+  }
+
+  @media (max-width: 420px) {
+    font-size: 36px;
+  }
+}
+
+.projects__arrows {
+  display: flex;
+  position: absolute;
+  right: 40px;
+  bottom: 2px;
+  gap: 15px;
+
+  @media (max-width: 420px) {
+    display: none;
+  }
+}
+
+// Native <button> reset; the end-of-track state is aria-disabled (view.js).
+.projects__arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  appearance: none;
+  transition: opacity 0.2s;
+  opacity: 1;
+  cursor: pointer;
+  margin: 0;
+  border: none;
+  background: transparent;
+  padding: 0;
+  width: 44px;
+  height: 44px;
+  stroke: $text-dark;
+
+  // Keep the button the click target even if an ancestor ever sets
+  // pointer-events: none.
+  pointer-events: auto;
+
+  // The <use> shadow element must not intercept clicks meant for the
+  // <button> - unreliable on WebKit otherwise.
+  svg use {
+    pointer-events: none;
+  }
+
+  &:hover {
+    opacity: 0.7;
+  }
+
+  &:focus-visible {
+    outline: 3px solid $primary-hover;
+    outline-offset: 4px;
+    border-radius: $radius-badge;
+  }
+
+  &[aria-disabled="true"] {
+    opacity: 0.3;
+    cursor: not-allowed;
+
+    svg use {
+      stroke: $icon-color-selected-stroke;
+    }
+  }
+}
+
+// Track ------------------------------------------------------------------------
+
+.projects__viewport {
+  overflow: hidden;
+}
+
+// The scroller. scroll-padding keeps snap positions aligned with the padded
+// edge; the scrollbar is hidden as with the old slider (the arrows remain).
+.projects__track {
+  display: flex;
+  gap: var(--gap);
+  margin: 0;
+  padding: 0 var(--pad);
+  list-style: none;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  scroll-padding-inline: var(--pad);
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    scroll-behavior: auto;
+  }
+}
+
+.projects__slide {
+  display: flex;
+  flex: 0 0 calc((100% - var(--gap) * (var(--spv) - 1)) / var(--spv));
+  scroll-snap-align: start;
+}
+
+// Card -------------------------------------------------------------------------
+
+// position: relative is the containing block of the stretched link.
+.projects__card {
+  display: flex;
+  position: relative;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 20px;
+  box-sizing: border-box;
+  border-radius: 12px;
+  background: $surface-violet;
+  padding: 12px;
+  width: 100%;
+  color: $text-basic;
+
+  // Focus ring on the card while the (stretched) heading link has focus.
+  &:has(.projects__link:focus-visible) {
+    outline: 3px solid $primary-hover;
+    outline-offset: 4px;
+    border-radius: $radius-badge;
+  }
+}
+
+.projects__media {
+  position: relative;
+  margin: 0;
+  border-radius: 12px;
+  aspect-ratio: 401 / 373;
+  width: 100%;
+  min-height: 320px;
+  overflow: hidden;
+}
+
+.projects__image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.projects__date {
+  color: $text-light;
+  font-size: 14px;
+}
+
+.projects__card-title {
+  display: -webkit-box;
+  flex: 1 0 auto;
+  min-height: 2.4em;
+  line-height: 120%;
+  overflow: hidden;
+  color: $text-basic;
+  font-weight: 500;
+  font-size: 16px;
+  text-overflow: ellipsis;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+}
+
+// Stretched link: the heading text is the accessible name, ::after makes the
+// whole card the hit area, and the ring is drawn on the card (see above).
+.projects__link {
+  color: inherit;
+  text-decoration: none;
+
+  &::after {
+    position: absolute;
+    inset: 0;
+    content: "";
+  }
+
+  &:focus-visible {
+    outline: none;
+  }
+}
