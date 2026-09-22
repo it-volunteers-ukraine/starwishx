@@ -157,12 +157,13 @@
   }
 }
 
-// Portrait 3:4 is enforced here (object-fit) instead of by an editor note.
+// Each photo sits in a <figure> that owns the portrait 3:4 box, so both
+// photos render the same height whatever was uploaded; the image fills it.
 .accordion-two-photo__photo {
-  border-radius: 12px;
+  flex-shrink: 0;
+  margin: 0;
   aspect-ratio: 3 / 4;
   width: 120px;
-  object-fit: cover;
 
   @media screen and (min-width: 768px) {
     width: 14.583vw;
@@ -175,6 +176,14 @@
   @media screen and (min-width: 1920px) {
     width: 240px;
   }
+}
+
+.accordion-two-photo__image {
+  display: block;
+  border-radius: 12px;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .accordion-two-photo__photo--2 {

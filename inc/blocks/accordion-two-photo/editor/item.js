@@ -49,11 +49,15 @@ function Photo({ id, index, onSelect }) {
   }
 
   return (
-    <img
+    <figure
       className={`accordion-two-photo__photo accordion-two-photo__photo--${index}`}
-      src={src}
-      alt={media?.alt_text || ""}
-    />
+    >
+      <img
+        className="accordion-two-photo__image"
+        src={src}
+        alt={media?.alt_text || ""}
+      />
+    </figure>
   );
 }
 

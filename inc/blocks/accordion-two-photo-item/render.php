@@ -45,11 +45,16 @@ foreach ($photo_ids as $slot => $photo_id) {
         continue;
     }
     // '' when the attachment was deleted or is not an image → slot omitted.
-    $photos_html .= wp_get_attachment_image($photo_id, 'large', false, [
-        'class'   => 'accordion-two-photo__photo accordion-two-photo__photo--' . $slot,
+    $image = wp_get_attachment_image($photo_id, 'large', false, [
+        'class'   => 'accordion-two-photo__image',
         'loading' => 'lazy',
         'sizes'   => $sizes,
     ]);
+    if ($image === '') {
+        continue;
+    }
+    // The figure owns the 3:4 box (style.scss), so both photos share one height.
+    $photos_html .= sprintf('<figure class="accordion-two-photo__photo accordion-two-photo__photo--%d">%s</figure>', $slot, $image);
 }
 
 $wrapper = get_block_wrapper_attributes(['class' => 'accordion-two-photo__item']);

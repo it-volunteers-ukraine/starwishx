@@ -16,7 +16,8 @@
     "addText": { "type": "string", "default": "" },
     "textBottom": { "type": "string", "default": "" },
     "imageId": { "type": "integer", "default": 0, "control": "media" },
-    "imageMobileId": { "type": "integer", "default": 0, "control": "media" }
+    "sourceOneId": { "type": "integer", "default": 0, "control": "media" },
+    "sourceTwoId": { "type": "integer", "default": 0, "control": "media" }
   },
   "supports": {
     "autoRegister": true,

@@ -6,10 +6,11 @@
  * The first screen: page heading, subtitle, two calls to action and a
  * full-bleed background photo. The photo is the LCP element, so it is served
  * with fetchpriority="high" (core then omits lazy loading and keeps high
- * priority off every other image), an explicit sizes="100vw", and a
- * <picture> only when a portrait photo for phones exists. The same candidate
- * lists feed the <head> preload (Blocks\Support\HeroPreload via HeroMedia),
- * so the browser reuses what it already started downloading.
+ * priority off every other image), an explicit sizes="100vw", and — when
+ * AVIF/WebP versions were picked — a <picture> with type-based <source>s in
+ * front of the JPEG/PNG fallback <img>. The same candidate lists feed the
+ * <head> preload (Blocks\Support\HeroPreload via HeroMedia), so the browser
+ * reuses what it already started downloading.
  *
  * The photo is a decorative backdrop — the heading carries the message — so
  * it is hidden from assistive technology. Links are derived, as the ACF block
@@ -36,7 +37,9 @@ $browse_text = trim((string) ($attributes['browseText'] ?? ''));
 $add_text    = trim((string) ($attributes['addText'] ?? ''));
 $text_bottom = trim((string) ($attributes['textBottom'] ?? ''));
 
-$sources = HeroMedia::sources((int) ($attributes['imageId'] ?? 0), (int) ($attributes['imageMobileId'] ?? 0));
+$media    = HeroMedia::fromAttributes($attributes);
+$fallback = $media['fallback'];
+$sources  = $media['sources'];
 
 $browse_url = (string) (get_post_type_archive_link('opportunity') ?: home_url('/opportunities/'));
 $add_url    = home_url('/launchpad/?panel=opportunities&view=add');
@@ -48,7 +51,7 @@ $image_attrs = [
     'fetchpriority' => 'high',
 ];
 
-$is_empty = ! $sources && $title === '' && $subtitle === '' && $browse_text === '' && $add_text === '' && $text_bottom === '';
+$is_empty = $fallback === null && $title === '' && $subtitle === '' && $browse_text === '' && $add_text === '' && $text_bottom === '';
 $title_id = $title !== '' ? wp_unique_id('hero-title-') : '';
 
 $wrapper_args = ['class' => 'section hero'];
@@ -61,15 +64,17 @@ if ($is_empty && ! wp_is_serving_rest_request()) {
 $wrapper = get_block_wrapper_attributes($wrapper_args);
 ?>
 <section <?php echo $wrapper; // escaped by get_block_wrapper_attributes() ?>>
-    <?php if ($sources) : ?>
+    <?php if ($fallback !== null) : ?>
         <div class="hero__media" aria-hidden="true">
-            <?php if (count($sources) > 1) : ?>
+            <?php if ($sources) : ?>
                 <picture class="hero__picture">
-                    <source media="<?php echo esc_attr((string) $sources[0]['media']); ?>" srcset="<?php echo esc_attr($sources[0]['srcset']); ?>" sizes="<?php echo esc_attr(HeroMedia::SIZES); ?>">
-                    <?php echo wp_get_attachment_image($sources[1]['id'], 'large', false, $image_attrs); // escaped by wp_get_attachment_image() ?>
+                    <?php foreach ($sources as $source) : ?>
+                        <source type="<?php echo esc_attr($source['type']); ?>" srcset="<?php echo esc_attr($source['srcset']); ?>" sizes="<?php echo esc_attr(HeroMedia::SIZES); ?>">
+                    <?php endforeach; ?>
+                    <?php echo wp_get_attachment_image($fallback['id'], 'large', false, $image_attrs); // escaped by wp_get_attachment_image() ?>
                 </picture>
             <?php else : ?>
-                <?php echo wp_get_attachment_image($sources[0]['id'], 'large', false, $image_attrs); // escaped by wp_get_attachment_image() ?>
+                <?php echo wp_get_attachment_image($fallback['id'], 'large', false, $image_attrs); // escaped by wp_get_attachment_image() ?>
             <?php endif; ?>
         </div>
     <?php endif; ?>

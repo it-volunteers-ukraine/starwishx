@@ -16,6 +16,8 @@ return [
     'browseText'    => _x('Link: browse opportunities', 'block attribute label', 'starwishx'),
     'addText'       => _x('Link: add an opportunity', 'block attribute label', 'starwishx'),
     'textBottom'    => _x('Bottom text', 'block attribute label', 'starwishx'),
-    'imageId'       => _x('Photo', 'block attribute label', 'starwishx'),
-    'imageMobileId' => _x('Photo for phones (portrait, optional)', 'block attribute label', 'starwishx'),
+    'imageId'       => _x('Photo (fallback: JPEG or PNG)', 'block attribute label', 'starwishx'),
+    // Modern-format versions of the same photo, in browser preference order.
+    'sourceOneId'   => _x('Format source 1 (AVIF)', 'block attribute label', 'starwishx'),
+    'sourceTwoId'   => _x('Format source 2 (WebP)', 'block attribute label', 'starwishx'),
 ];

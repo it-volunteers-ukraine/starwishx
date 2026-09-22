@@ -123,12 +123,17 @@
 }
 
 // Answer: clipped inside the animated track (min-height: 0 lets the grid
-// row shrink it to nothing).
+// row shrink it to nothing). The gap above the text is a margin on the first
+// child, not padding: padding is part of the box and would keep the closed
+// row 16px tall, which reads as a jump at both ends of the transition.
 .faq__answer {
-  padding-top: 16px;
   min-height: 0;
   overflow: hidden;
   font-size: 14px;
+
+  > :first-child {
+    margin-top: 16px;
+  }
 
   @include media.min-desktop {
     font-size: 16px;
