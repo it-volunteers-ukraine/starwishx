@@ -370,8 +370,10 @@ const webpackConfig = (prod, isModule = false) => {
   return baseConfig;
 };
 
+// Entries only: `_*.js` are partials that app.js imports (one feature each),
+// the same convention as Sass partials.
 export const scripts = () => {
-  return src(["src/js/*.js"], { allowEmpty: true })
+  return src(["src/js/*.js", "!src/js/_*.js"], { allowEmpty: true })
     .pipe(named())
     .pipe(webpack(webpackConfig(PRODUCTION)))
     .pipe(dest("assets/js"));

@@ -140,17 +140,19 @@ function _themeprefix_acf_options_page()
 /**
  * UI helpers for header template.
  * These render search trigger, language switcher, and mobile variants.
+ * The search triggers open the #searchModal dialog (template-parts/search-modal.php)
+ * through src/js/_search-dialog.js, which finds them by aria-controls.
  * Phase 2 will migrate these into the Menu module's Interactivity API layer.
  */
 if (! function_exists('yourtheme_search_trigger')) {
   function yourtheme_search_trigger()
   {
 ?>
-    <div class="menu-item menu-item-search" role="button" tabindex="0" aria-label="<?php esc_attr_e('Пошук', 'starwishx'); ?>">
+    <button type="button" class="menu-item menu-item-search" aria-haspopup="dialog" aria-controls="searchModal" aria-label="<?php esc_attr_e('Search', 'starwishx'); ?>">
       <svg class="search-icon" width="16" height="16" aria-hidden="true">
         <use xlink:href="<?php echo esc_url(get_template_directory_uri() . '/assets/img/sprites.svg#icon-find'); ?>"></use>
       </svg>
-    </div>
+    </button>
   <?php
   }
 }
@@ -175,11 +177,11 @@ if (! function_exists('yourtheme_mobile_search_lang')) {
   {
   ?>
     <div class="search-language-container">
-      <div class="search-icon">
+      <button type="button" class="search-icon" aria-haspopup="dialog" aria-controls="searchModal" aria-label="<?php esc_attr_e('Search', 'starwishx'); ?>">
         <svg width="16" height="16" aria-hidden="true">
           <use xlink:href="<?php echo esc_url(get_template_directory_uri() . '/assets/img/sprites.svg#icon-find'); ?>"></use>
         </svg>
-      </div>
+      </button>
       <!-- <div class="language-switch">
         <button class="lang-btn">УКР</button>
         <span class="lang-separator">|</span>

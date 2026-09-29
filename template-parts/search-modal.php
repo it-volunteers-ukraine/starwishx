@@ -6,11 +6,15 @@
  * Submits `s` to the home URL so WordPress handles the request natively and
  * canonicalises it to /search/{term}/. It used to post `search` to a WP page,
  * which meant is_search() was never true.
+ *
+ * A native <dialog>, opened with showModal() by the header buttons that carry
+ * aria-controls="searchModal" (src/js/_search-dialog.js): focus containment,
+ * Escape, the inert page behind it and focus return come from the browser.
  */
 
 $sort = sw_get_sort_params();
 ?>
-<div id="searchModal" class="modal" tabindex="-1">
+<dialog id="searchModal" class="modal" aria-label="<?php esc_attr_e('Search the site', 'starwishx'); ?>">
     <div class="modal-content modal-main">
         <form id="form-search" role="search" class="search-form" method="get" action="<?php echo esc_url(home_url('/')); ?>">
             <label class="screen-reader-text" for="search-input">
@@ -31,17 +35,13 @@ $sort = sw_get_sort_params();
                 <input type="hidden" name="order" value="<?php echo esc_attr($sort['order']); ?>">
             <?php endif; ?>
 
-            <div id="clear-form" class="form-clear-btn">
-                <svg class="form-clear-icon">
-                    <use href="<?php echo esc_url(get_template_directory_uri() . '/assets/img/sprites.svg#icon-close'); ?>"></use>
-                </svg>
-            </div>
+            <button type="button" class="form-clear-btn" aria-label="<?php esc_attr_e('Clear', 'starwishx'); ?>">
+                <?php sw_svg_e('icon-close', 20, null, 'search-clear-icon'); ?>
+            </button>
             <button type="submit" class="search-submit-bth">
                 <span class="screen-reader-text"><?php esc_html_e('Search', 'starwishx'); ?></span>
-                <svg class="search-submit-icon">
-                    <use href="<?php echo esc_url(get_template_directory_uri() . '/assets/img/sprites.svg#icon-find'); ?>"></use>
-                </svg>
+                <?php sw_svg_e('icon-find', 20, null, 'search-submit-icon'); ?>
             </button>
         </form>
     </div>
-</div>
+</dialog>
