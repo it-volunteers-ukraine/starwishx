@@ -13,8 +13,9 @@ use Shared\Policy\RestApiAccessPolicy;
  *     these to `/author/<slug>/`, leaking the username in the Location header.
  *     Force a 404 at template_redirect priority 1; redirect_canonical (priority
  *     10) bails on is_404(), so the slug never reaches the wire. Gated by
- *     RestApiAccessPolicy::isPrivileged() so editorial roles keep the legit
- *     redirect, while subscribers and guests are blocked.
+ *     RestApiAccessPolicy::isPrivileged() so editorial staff keep the legit
+ *     redirect, while guests and Launchpad users (subscribers, contributors)
+ *     are blocked.
  *
  *  2. `/wp-sitemap-users-1.xml` — drop the sitemap provider AND 404 the URL.
  *     The provider drop removes `users` from the `wp-sitemap.xml` index, but

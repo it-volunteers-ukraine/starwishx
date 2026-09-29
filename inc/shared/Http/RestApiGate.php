@@ -12,8 +12,13 @@ use Shared\Policy\RestApiAccessPolicy;
  * Uses the `rest_endpoints` filter so matched routes never enter the
  * dispatcher — controllers respond with a clean 404, not a 401, and scrapers
  * get no signal that the route exists. Privilege threshold lives in
- * RestApiAccessPolicy::isPrivileged() — defaults to editorial roles, so
- * Gutenberg keeps working while subscribers and guests are gated.
+ * RestApiAccessPolicy::isPrivileged(): editorial staff (BackOfficePolicy) keep
+ * every route, so the block editor works; guests and Launchpad users
+ * (subscribers, contributors) are gated.
+ *
+ * WP_REST_Server::get_routes() applies the filter on every call, including the
+ * block editor's server-side preloads in wp-admin, so whatever is stripped here
+ * is missing there too.
  */
 final class RestApiGate
 {
