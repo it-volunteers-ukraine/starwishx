@@ -143,7 +143,7 @@ $render_label = static function (string $text, bool $is_required): string {
 
 <section class="contact-section"
     data-wp-interactive="contact"
-    aria-labelledby="contact-heading">
+    <?= $title_medium ? 'aria-labelledby="contact-heading"' : '' ?>>
 
     <div class="container contact-container">
 
@@ -151,13 +151,13 @@ $render_label = static function (string $text, bool $is_required): string {
         <div class="contact-block">
 
             <?php if ($title_small || $title_medium || $subtitle): ?>
-                <header id="contact-heading" class="contact-titles">
+                <header class="contact-titles">
                     <?php if ($title_small): ?>
                         <span class="contact-title-small"><?= esc_html($title_small) ?></span>
                     <?php endif; ?>
 
                     <?php if ($title_medium): ?>
-                        <h2 class="contact-title-medium"><?= esc_html($title_medium) ?></h2>
+                        <h2 id="contact-heading" class="contact-title-medium"><?= esc_html($title_medium) ?></h2>
                     <?php endif; ?>
 
                     <?php if ($subtitle): ?>
