@@ -99,7 +99,7 @@ $privacy_url     = $privacy_page_id ? get_permalink($privacy_page_id) : '';
 $data_policy_page = get_page_by_path('data-collection-policy');
 $data_policy_url   = $data_policy_page ? get_permalink($data_policy_page) : '';
 
-$privacy_html    = '';
+$policy_html = '';
 if ($privacy_url || $data_policy_url) {
     $parts = [];
 
