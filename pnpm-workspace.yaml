@@ -3,17 +3,17 @@ allowBuilds:
   es5-ext: true
   ttf2woff2: true
 minimumReleaseAgeExclude:
-  - cssnano-preset-default@9.0.3 || 9.0.5 || 9.1.0 || 9.1.1
+  - cssnano-preset-default@9.0.3 || 9.0.5 || 9.1.0 || 9.1.1 || 9.3.2
   - cssnano-utils@7.0.2 || 7.0.3 || 8.0.0 || 8.0.1
-  - cssnano@9.0.3 || 9.0.5 || 9.1.0 || 9.1.1
+  - cssnano@9.0.3 || 9.0.5 || 9.1.0 || 9.1.1 || 9.3.2
   - postcss-colormin@9.0.2 || 9.0.3 || 9.0.4
   - postcss-convert-values@9.0.2 || 9.0.3 || 9.0.4 || 9.0.5
   - postcss-discard-comments@9.0.2 || 9.0.3 || 9.0.4
   - postcss-discard-duplicates@9.0.2 || 9.0.3 || 9.0.4
   - postcss-discard-empty@9.0.2 || 9.0.3 || 9.0.4
   - postcss-discard-overridden@9.0.2 || 9.0.3 || 9.0.4
-  - postcss-merge-longhand@9.0.3 || 9.0.4 || 9.1.0
-  - postcss-merge-rules@9.0.3 || 9.0.4 || 9.0.5
+  - postcss-merge-longhand@9.0.3 || 9.0.4 || 9.1.0 || 9.2.1
+  - postcss-merge-rules@9.0.3 || 9.0.4 || 9.0.5 || 9.1.2
   - postcss-minify-font-values@9.0.2 || 9.0.3 || 9.0.4
   - postcss-minify-gradients@9.0.2 || 9.0.3 || 9.0.4
   - postcss-minify-params@9.0.2 || 9.0.3 || 9.0.4
@@ -27,7 +27,7 @@ minimumReleaseAgeExclude:
   - postcss-normalize-unicode@9.0.2 || 9.0.3 || 9.0.4
   - postcss-normalize-url@9.0.2 || 9.0.3 || 9.0.4
   - postcss-normalize-whitespace@9.0.2 || 9.0.3 || 9.0.4
-  - postcss-ordered-values@9.0.2 || 9.0.3 || 9.0.4
+  - postcss-ordered-values@9.0.2 || 9.0.3 || 9.0.4 || 9.0.7
   - postcss-reduce-initial@9.0.2 || 9.0.3 || 9.0.4
   - postcss-reduce-transforms@9.0.2 || 9.0.3 || 9.0.4
   - postcss-svgo@9.0.2 || 9.0.3 || 9.0.4
