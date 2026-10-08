@@ -3,7 +3,7 @@
 /**
  * Template Name: Contact Page
  *
- * File: page-contact.php
+ * File: templates/page-contact.php
  */
 
 get_header();
