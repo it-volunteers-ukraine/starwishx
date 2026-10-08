@@ -46,20 +46,45 @@ function _themeprefix_theme_setup()
       'flex-height' => true,
     )
   );
+
+  // Block editor canvas: base typography and the global utilities blocks rely
+  // on (src/scss/editor.scss), scoped by WordPress under .editor-styles-wrapper.
+  add_theme_support('editor-styles');
+  add_editor_style('assets/css/editor.css');
 }
 add_action('after_setup_theme', '_themeprefix_theme_setup');
 
+/**
+ * Keep build and archive folders out of theme file scans. WordPress looks for
+ * page templates one directory deep, so the gulp `production/` copy listed
+ * every root template twice - and the Contacts page ended up assigned a stale
+ * build copy. Core already excludes node_modules, vendor, CVS and
+ * bower_components.
+ */
+add_filter('theme_scandir_exclusions', function (array $exclusions): array {
+  return array_merge($exclusions, ['production', '.void', 'docs']);
+});
+
 /** add fonts */
+function sw_google_fonts_url(): string
+{
+  return 'https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Urbanist:wght@900&display=swap';
+}
+
 function add_google_fonts()
 {
-  wp_enqueue_style(
-    'google_web_fonts',
-    'https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Urbanist:wght@900&display=swap',
-    array(),
-    null
-  );
+  wp_enqueue_style('google_web_fonts', sw_google_fonts_url(), array(), null);
 }
 add_action('wp_enqueue_scripts', 'add_google_fonts');
+
+// The same fonts inside the block editor canvas (an iframe since WP 7.0;
+// enqueue_block_assets runs into it). Not via add_editor_style(): for a remote
+// URL core would wp_remote_get() Google Fonts on every editor load.
+add_action('enqueue_block_assets', function () {
+  if (is_admin()) {
+    add_google_fonts();
+  }
+});
 
 
 /**
@@ -74,13 +99,11 @@ function _themeprefix_theme_scripts()
 
 
   wp_register_style('_themeprefix-style', get_stylesheet_uri(), [], $version);
-  wp_register_style('swiper', get_stylesheet_directory_uri() . '/assets/css/swiper-bundle.min.css');
 
   wp_register_style('app', get_stylesheet_directory_uri() . '/assets/css/app.css', [], $version, 'all');
   wp_register_style('app-logged-in', get_stylesheet_directory_uri() . '/assets/css/app-logged-in.css', [], $version, 'all');
 
   wp_enqueue_style('_themeprefix-style');
-  wp_enqueue_style('swiper');
   wp_enqueue_style('app');
   if (is_user_logged_in()) {
     wp_enqueue_style('app-logged-in');
@@ -90,16 +113,42 @@ function _themeprefix_theme_scripts()
     'in_footer' => true,
     'strategy'   => 'defer',
   ]);
-  
-  wp_register_script('swiper', get_stylesheet_directory_uri() . '/assets/js/vendor/swiper-bundle.min.js', [], $version, [
-    'in_footer' => true,
-    'strategy'   => 'defer',
-  ]);
-  
-  wp_enqueue_script('swiper');
+
   wp_enqueue_script('app');
 }
 add_action('wp_enqueue_scripts', '_themeprefix_theme_scripts');
+
+/**
+ * Scripts and styles loaded only where they are used: registered once here,
+ * enqueued by their consumers.
+ *
+ * - swiper (152 KB JS + 15 KB CSS): only the legacy acf/projects block on the
+ *   home page uses it, until that page is swapped to the native
+ *   starwishx/projects - then Swiper can leave the theme.
+ * - sw-scroll-dots: position dots for native scroll-snap rows
+ *   (src/js/scroll-dots.js), used by archive-news.php.
+ *
+ * Registered on `init` rather than wp_enqueue_scripts so the handles exist
+ * wherever a consumer asks for them: at the top of a template (which runs
+ * before wp_head), or in an ACF block's enqueue_assets callback.
+ */
+function _themeprefix_register_ondemand_assets()
+{
+  $version = wp_get_theme()->get('Version');
+
+  wp_register_style('swiper', get_template_directory_uri() . '/assets/css/swiper-bundle.min.css', [], $version);
+  wp_register_script('swiper', get_template_directory_uri() . '/assets/js/vendor/swiper-bundle.min.js', [], $version, [
+    'in_footer' => true,
+    'strategy'  => 'defer',
+  ]);
+
+  $dots_path = get_template_directory() . '/assets/js/scroll-dots.js';
+  wp_register_script('sw-scroll-dots', get_template_directory_uri() . '/assets/js/scroll-dots.js', [], is_file($dots_path) ? (string) filemtime($dots_path) : $version, [
+    'in_footer' => true,
+    'strategy'  => 'defer',
+  ]);
+}
+add_action('init', '_themeprefix_register_ondemand_assets');
 
 
 require_once get_template_directory() . '/inc/acf/blocks/blocks-init.php';
@@ -140,17 +189,19 @@ function _themeprefix_acf_options_page()
 /**
  * UI helpers for header template.
  * These render search trigger, language switcher, and mobile variants.
+ * The search triggers open the #searchModal dialog (template-parts/search-modal.php)
+ * through src/js/_search-dialog.js, which finds them by aria-controls.
  * Phase 2 will migrate these into the Menu module's Interactivity API layer.
  */
 if (! function_exists('yourtheme_search_trigger')) {
   function yourtheme_search_trigger()
   {
 ?>
-    <div class="menu-item menu-item-search" role="button" tabindex="0" aria-label="<?php esc_attr_e('Пошук', 'starwishx'); ?>">
+    <button type="button" class="menu-item menu-item-search" aria-haspopup="dialog" aria-controls="searchModal" aria-label="<?php esc_attr_e('Search', 'starwishx'); ?>">
       <svg class="search-icon" width="16" height="16" aria-hidden="true">
         <use xlink:href="<?php echo esc_url(get_template_directory_uri() . '/assets/img/sprites.svg#icon-find'); ?>"></use>
       </svg>
-    </div>
+    </button>
   <?php
   }
 }
@@ -175,11 +226,11 @@ if (! function_exists('yourtheme_mobile_search_lang')) {
   {
   ?>
     <div class="search-language-container">
-      <div class="search-icon">
+      <button type="button" class="search-icon" aria-haspopup="dialog" aria-controls="searchModal" aria-label="<?php esc_attr_e('Search', 'starwishx'); ?>">
         <svg width="16" height="16" aria-hidden="true">
           <use xlink:href="<?php echo esc_url(get_template_directory_uri() . '/assets/img/sprites.svg#icon-find'); ?>"></use>
         </svg>
-      </div>
+      </button>
       <!-- <div class="language-switch">
         <button class="lang-btn">УКР</button>
         <span class="lang-separator">|</span>
@@ -250,6 +301,9 @@ require_once get_template_directory() . '/inc/social-share/setup.php';
 
 // init for News - /news/{category}/ routing and archive queries
 require_once get_template_directory() . '/inc/news/setup.php';
+
+// init for Blocks - native block.json blocks (inc/blocks/{slug}/), coexisting with inc/acf/blocks
+require_once get_template_directory() . '/inc/blocks/setup.php';
 
 require_once get_template_directory() . '/inc/news-taxonomy-metabox.php';
 

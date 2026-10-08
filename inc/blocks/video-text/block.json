@@ -1,0 +1,31 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "starwishx/video-text",
+  "version": "1.0.0",
+  "title": "Video & Text",
+  "category": "custom-blocks",
+  "icon": "format-video",
+  "description": "Section with a title, a click-to-play video and a text column.",
+  "keywords": ["video", "youtube", "vimeo"],
+  "textdomain": "starwishx",
+  "attributes": {
+    "title": { "type": "string", "default": "" },
+    "videoUrl": { "type": "string", "default": "" },
+    "text": { "type": "string", "default": "" },
+    "coverId": { "type": "integer", "default": 0, "control": "media" }
+  },
+  "supports": {
+    "autoRegister": true,
+    "html": false
+  },
+  "example": {
+    "attributes": {
+      "title": "Video & Text",
+      "text": "Short supporting paragraph shown next to the video."
+    }
+  },
+  "render": "file:./render.php",
+  "style": "file:./build/style.css",
+  "viewScriptModule": "file:./build/view.js"
+}

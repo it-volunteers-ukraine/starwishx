@@ -521,51 +521,6 @@ body {
   }
 }
 
-/* Basic styles for links */
-.link-bc {
-  position: relative;
-  color: $text-light;
-
-  &:not(.link-bc-selected):hover {
-    transition: $animations;
-    color: $input-color-border-pressed;
-  }
-
-  /* &:not(:first-child)::before {
-  } */
-}
-
-.link-bc-selected {
-  position: relative;
-  color: $text-accent;
-
-  &:not(:first-child) {
-    margin-left: 26px;
-
-    &::before {
-      display: inline-block;
-      position: absolute;
-      top: 50%;
-      left: -22px;
-      transform: translateY(-50%);
-      background: url("../img/arrow-right.svg") no-repeat center / contain;
-      width: 18px;
-      height: 18px;
-      content: "";
-    }
-  }
-
-  &::after {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    background-color: $text-accent;
-    width: 100%;
-    height: 1px;
-    content: "";
-  }
-}
-
 .link-def {
   transition: $animations;
 
@@ -644,49 +599,51 @@ img {
 
 /* ************************************************************** */
 
-/* Swiper */
-.swiper-paginations {
-  margin-top: 16px;
-  line-height: 0;
-  text-align: center;
-}
-
-.swiper-pagination-bullet {
-  opacity: 1;
-  border-radius: 2px;
-  background-color: $text-light;
-  width: 20px;
-  height: 4px;
-}
-
-/* active bullet */
-.swiper-pagination-bullet-active {
-  background-color: $icon-color-fill;
-
-  // background-image: url('icon-active.svg');
-}
-
-/* Modal */
+/*
+ * Site search dialog (template-parts/search-modal.php, src/js/_search-dialog.js).
+ *
+ * A <dialog> opened with showModal(): the element itself is the full-screen
+ * dimmed layer and .modal-content the panel. The UA hides a closed dialog, so
+ * no display value is set here; the fade uses @starting-style and a discrete
+ * display/overlay transition, and simply doesn't play where unsupported. The
+ * top layer replaces the old z-index.
+ */
 .modal {
   position: fixed;
-  top: 0;
-  left: 0;
-  visibility: hidden;
+  inset: 0;
   opacity: 0;
-  z-index: 1001;
-  transition: 0.3s;
+  transition:
+    opacity 0.3s,
+    overlay 0.3s allow-discrete,
+    display 0.3s allow-discrete;
+  margin: 0;
+  border: 0;
   background-color: $background-modal;
-  padding-top: 100px; /* Location of the box */
-  padding-right: 16px;
-  padding-left: 16px;
+  padding: 100px 16px 16px; /* 100px: where the panel sits */
   width: 100%;
+  max-width: none;
   height: 100%;
+  max-height: none;
   overflow: auto;
-}
+  overscroll-behavior: contain;
+  color: inherit;
 
-.modal.active {
-  visibility: visible;
-  opacity: 1;
+  &[open] {
+    opacity: 1;
+
+    @starting-style {
+      opacity: 0;
+    }
+  }
+
+  // The dialog paints the dim layer itself.
+  &::backdrop {
+    background: transparent;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+  }
 }
 
 .modal-content {

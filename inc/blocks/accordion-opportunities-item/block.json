@@ -1,0 +1,28 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "starwishx/accordion-opportunities-item",
+  "version": "1.0.0",
+  "title": "Opportunity category",
+  "category": "custom-blocks",
+  "icon": "list-view",
+  "description": "One category of the accordion: its name links to the listing, with a description and a photo.",
+  "textdomain": "starwishx",
+  "parent": ["starwishx/accordion-opportunities"],
+  "supports": {
+    "html": false,
+    "reusable": false
+  },
+  "attributes": {
+    "termId": {
+      "type": "integer",
+      "default": 0,
+      "control": "term",
+      "taxonomy": "category-oportunities",
+      "parentOnly": true
+    },
+    "description": { "type": "string", "default": "" },
+    "photoId": { "type": "integer", "default": 0, "control": "media" }
+  },
+  "render": "file:./render.php"
+}

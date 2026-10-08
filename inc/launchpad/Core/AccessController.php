@@ -5,6 +5,8 @@ declare(strict_types=1);
 
 namespace Launchpad\Core;
 
+use Shared\Policy\BackOfficePolicy;
+
 class AccessController
 {
 
@@ -30,14 +32,14 @@ class AccessController
             return false;
         }
 
-        $user_roles = $user->roles;
-        $has_admin_role = array_intersect($user_roles, ['administrator', 'editor']);
-
-        if (!empty($has_admin_role)) {
+        // Editorial staff work in wp-admin, whatever other roles they hold.
+        // Same predicate as the REST gate, so wp-admin access and the core
+        // routes the block editor needs cannot disagree.
+        if (BackOfficePolicy::allows($user)) {
             return false;
         }
 
-        return !empty(array_intersect($user_roles, self::LAUNCHPAD_ROLES));
+        return !empty(array_intersect($user->roles, self::LAUNCHPAD_ROLES));
     }
 
     public function blockAdminAccess(): void

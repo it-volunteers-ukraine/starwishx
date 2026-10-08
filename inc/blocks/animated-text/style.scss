@@ -1,0 +1,51 @@
+// starwishx/animated-text - block styles (front end + editor), compiled by
+// gulp (nativeBlockStyles) into build/style.css. "variables" and "mixins/media"
+// resolve through the sass loadPaths option (src/scss).
+
+// Root markup: <section class="wp-block-starwishx-animated-text section
+// animated-text"> > .container > .animated-text__content > core paragraphs /
+// headings. .section / .container come from app.css; this sheet is hoisted
+// into <head> BEFORE app.css, so the root uses `.animated-text.section` to
+// beat .section's own padding by specificity, not order.
+
+// File: inc/blocks/animated-text/style.scss
+
+@use "variables" as *;
+@use "mixins/media" as *;
+
+.animated-text.section {
+  border-radius: 48px;
+  background: $surface-violet;
+  padding: 120px 0;
+
+  @include min-desktop {
+    border-radius: 64px;
+    padding: 160px 0;
+  }
+}
+
+// The statement typography applies to whatever text blocks editors put inside.
+.animated-text__content > :is(p, h1, h2, h3, h4, h5) {
+  line-height: 120%;
+  letter-spacing: 1px;
+  color: $text-basic;
+  font-weight: 400;
+  font-size: 36px;
+  text-transform: uppercase;
+
+  @include min-tablet {
+    font-size: 48px;
+  }
+
+  @include min-laptop {
+    margin-right: auto;
+    margin-left: auto;
+    width: 900px;
+  }
+
+  @include min-desktop {
+    width: 1166px;
+    font-weight: 300;
+    font-size: 64px;
+  }
+}

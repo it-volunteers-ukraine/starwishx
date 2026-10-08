@@ -1,0 +1,80 @@
+@use "../variables" as *;
+@use "../mixins/media";
+
+// Site breadcrumb trail - template-parts/breadcrumbs.php, printed by
+// sw_breadcrumbs() right after the header on every template. Spacing lives
+// here once, so a new template gets it without a page-specific rule.
+
+// File: src/scss/components/_breadcrumbs.scss
+
+.breadcrumbs {
+  margin-top: 16px;
+  margin-bottom: 16px;
+
+  @include media.min-laptop {
+    margin-top: 32px;
+  }
+}
+
+.breadcrumbs__list {
+  display: inline-flex;
+  flex-flow: row wrap;
+  align-items: center;
+  gap: 4px;
+  height: 100%;
+}
+
+.breadcrumbs__item {
+  display: flex;
+  align-items: center;
+  align-self: stretch;
+}
+
+.breadcrumbs__link,
+.breadcrumbs__current {
+  position: relative;
+  color: $text-light;
+}
+
+.breadcrumbs__link {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid transparent;
+  height: 100%;
+  line-height: 1;
+
+  &:hover {
+    transition: $animations;
+    border-bottom-color: $buttons-color-background-primary-pressed;
+    color: $input-color-border-pressed;
+
+    svg {
+      fill: $input-color-border-pressed;
+    }
+  }
+}
+
+// A trail that ends on a link (single posts stop at their archive) underlines
+// that last link in the accent.
+.breadcrumbs__item:last-child .breadcrumbs__link {
+  border-top: 1px solid transparent;
+  border-bottom-color: $stroke-hover;
+  color: $stroke-hover;
+
+  &:hover {
+    color: $input-color-border-pressed;
+  }
+}
+
+.breadcrumbs__home-icon {
+  fill: $icon-color-default-stroke;
+  width: 24px;
+  height: 24px;
+}
+
+.breadcrumbs__sep {
+  fill: $text-accent;
+  margin-right: 4px;
+  width: 18px;
+  height: 18px;
+}

@@ -63,20 +63,7 @@ if (!empty($css)) {
 get_header();
 ?>
 <?php
-if (function_exists('render_block')) {
-    echo render_block([
-        'blockName'   => 'acf/breadcrumbs',
-        'attrs'       => [
-            'data'        => [
-                'show_last_item' => true,
-                'nowrap'         => true,
-                'nav_class'      => 'container',
-            ],
-        ],
-        'innerHTML'   => '',
-        'innerBlocks' => [],
-    ]);
-}
+sw_breadcrumbs();
 ?>
 <main id="primary" class="site-main listing-app container" data-wp-interactive="listing">
 

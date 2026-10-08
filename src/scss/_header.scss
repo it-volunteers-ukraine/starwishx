@@ -228,13 +228,18 @@
   align-items: center;
 }
 
+/* Search triggers are <button>s (functions.php); the reset covers background,
+   font and cursor but leaves the UA border. */
 .header .menu-item-search {
+  border: 0;
   padding: 0 6px;
 }
 
 .header .search-icon {
   transition: fill 0.2s ease;
   cursor: pointer;
+  border: 0;
+  padding: 0;
   width: 22px;
   height: 22px;
 }
@@ -270,7 +275,8 @@
   line-height: 1;
 }
 
-.header .menu > li > a.js-active {
+/* The current page's item, marked by WordPress (mobile uses the same class). */
+.header .menu > li.current-menu-item:not(.hide-mobile) > a {
   background: $buttons-color-background-secondary-default;
   color: $icon-color-primary;
 }
@@ -707,6 +713,8 @@
   justify-content: center;
   align-items: center;
   cursor: pointer;
+  border: 0;
+  padding: 0;
   width: 47px;
   height: 100%;
 }
@@ -714,10 +722,6 @@
 .form-clear-icon {
   width: 20px;
   height: 20px;
-}
-
-.speech {
-  right: 94px;
 }
 
 .search-submit-icon {

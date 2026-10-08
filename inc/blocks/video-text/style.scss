@@ -1,0 +1,120 @@
+// starwishx/video-text - block styles (front end + editor), compiled by gulp
+// (nativeBlockStyles) into build/style.css. "variables", "mixins/media" and
+// "blocks/media-section" resolve through the sass loadPaths option (src/scss).
+
+// Root markup: <section class="wp-block-starwishx-video-text section video-text">.
+// The global .section / .container / .h3 utilities come from assets/css/app.css
+// and supply section padding, gutters and the heading sizes; this sheet only
+// adds what the block needs on top. It is hoisted into <head> BEFORE app.css,
+// so never rely on source order to beat a global class - use a second class.
+
+// File: inc/blocks/video-text/style.scss
+
+@use "variables" as *;
+@use "mixins/media" as *;
+@use "blocks/media-section" as *;
+
+.video-text__container {
+  @include min-laptop {
+    max-width: $width-laptop;
+  }
+}
+
+.video-text__title {
+  margin-bottom: 40px;
+  color: $text-dark;
+  text-align: center;
+
+  @include min-tablet {
+    margin-bottom: 28px;
+  }
+}
+
+.video-text__content {
+  @include media-section-content;
+}
+
+.video-text__media {
+  align-self: center;
+  width: 100%;
+
+  @include min-tablet {
+    flex: 1;
+    margin-bottom: 0;
+  }
+
+  // The injected player and the WP_Embed fallback markup (no class of its own).
+  iframe,
+  video {
+    display: block;
+    aspect-ratio: 16 / 9;
+    border-radius: 12px;
+    width: 100%;
+    height: 100%;
+  }
+}
+
+.video-text__cover {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.video-text__play {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  transition: opacity 0.2s ease;
+  opacity: 0.85;
+  filter: drop-shadow(0 2px 8px rgb(0 0 0 / 30%));
+  width: 68px;
+  height: 48px;
+  pointer-events: none;
+  color: $icon-color-accent;
+}
+
+// A real <button>: reset the UA box, keep the old facade look.
+.video-text__facade {
+  display: block;
+  position: relative;
+  aspect-ratio: 16 / 9;
+  cursor: pointer;
+  border: 0;
+  border-radius: 12px;
+  background: none;
+  padding: 0;
+  width: 100%;
+  overflow: hidden;
+
+  &:hover .video-text__play,
+  &:focus-visible .video-text__play {
+    opacity: 1;
+  }
+
+  &:focus-visible {
+    outline: 2px solid $icon-color-accent;
+    outline-offset: 2px;
+  }
+}
+
+.video-text__body {
+  @include media-section-body;
+}
+
+.video-text__text {
+  @include media-section-text;
+}
+
+// Decorative spinning planet (aria-hidden in the markup).
+.video-text__icon {
+  @include media-section-icon("video-text");
+}
+
+.video-text__icon-bg {
+  border: 2px solid $icon-color-secondary;
+  border-radius: 50%;
+}
+
+@include media-section-spin("video-text");

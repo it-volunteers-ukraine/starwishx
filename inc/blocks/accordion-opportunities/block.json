@@ -1,0 +1,29 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "starwishx/accordion-opportunities",
+  "version": "1.0.0",
+  "title": "Accordion opportunities",
+  "category": "custom-blocks",
+  "icon": "list-view",
+  "description": "Opportunity categories as an expandable list: each item links to its category listing and reveals a description and a photo.",
+  "keywords": ["accordion", "opportunities", "categories"],
+  "textdomain": "starwishx",
+  "attributes": {
+    "suptitle": { "type": "string", "default": "" },
+    "header": { "type": "string", "default": "" },
+    "buttonText": { "type": "string", "default": "" },
+    "buttonUrl": { "type": "string", "default": "" },
+    "clickForTouch": { "type": "boolean", "default": true }
+  },
+  "supports": {
+    "html": false,
+    "anchor": true,
+    "interactivity": true
+  },
+  "editorScript": "file:./build/editor.js",
+  "editorStyle": "file:./build/editor.css",
+  "style": "file:./build/style.css",
+  "viewScriptModule": "file:./build/view.js",
+  "render": "file:./render.php"
+}

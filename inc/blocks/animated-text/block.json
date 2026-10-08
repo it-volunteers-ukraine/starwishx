@@ -1,0 +1,30 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "starwishx/animated-text",
+  "version": "1.0.0",
+  "title": "Animated text",
+  "category": "custom-blocks",
+  "icon": "editor-textcolor",
+  "description": "A large statement in a rounded tinted section — paragraphs and headings.",
+  "keywords": ["statement", "text", "animated"],
+  "textdomain": "starwishx",
+  "supports": {
+    "html": false,
+    "anchor": true
+  },
+  "example": {
+    "innerBlocks": [
+      {
+        "name": "core/paragraph",
+        "attributes": {
+          "align": "center",
+          "content": "Grow with us. Discover new opportunities and reach your goals."
+        }
+      }
+    ]
+  },
+  "editorScript": "file:./build/editor.js",
+  "style": "file:./build/style.css",
+  "render": "file:./render.php"
+}

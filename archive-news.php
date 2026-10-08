@@ -100,40 +100,17 @@ foreach ($terms as $term) {
 // "One per category" — first post from each group (for top-section cards)
 $one_per_category = array_map(fn($cat) => $cat['posts'][0], $by_category);
 
-$init = <<<'JS'
-(function(){
-    if ( typeof Swiper === 'undefined' ) {
-        console.error('Swiper not found — check that the bundle loaded.');
-        return;
-    }
-    new Swiper('.mySwiper', {
-        slidesPerView: 1,
-        spaceBetween: 20,
-        pagination: { el: '.swiper-paginations', clickable: true },
-        loop: true
-    });
-})();
-JS;
-
-wp_add_inline_script('swiper-js', $init);
+// On phones the cards form a native scroll-snap row (_page-news.scss); its
+// position dots need a few lines of JS, loaded only when there is a row.
+$card_count = count($one_per_category);
+if ($card_count > 1) {
+    wp_enqueue_script('sw-scroll-dots');
+}
 
 get_header();
 ?>
 <?php
-if (function_exists('render_block')) {
-    echo render_block([
-        'blockName'   => 'acf/breadcrumbs',
-        'attrs'       => [
-            'data'        => [
-                'show_last_item' => true,
-                'nowrap'         => true,
-                'nav_class'      => 'container',
-            ],
-        ],
-        'innerHTML'   => '',
-        'innerBlocks' => [],
-    ]);
-}
+sw_breadcrumbs();
 ?>
 <section class="news-archive">
     <div class="container">
@@ -147,30 +124,30 @@ if (function_exists('render_block')) {
             </div>
 
             <?php if ($one_per_category) : ?>
-                <div class="newscards">
+                <?php // One list for both layouts: a snap row on phones, grid items from 768px. role="list" keeps list semantics in Safari (list-style: none, display: contents). ?>
+                <ul class="newscards" id="newscards-track" role="list">
                     <?php foreach ($one_per_category as $item) : ?>
-                        <?php get_template_part('template-parts/news-card', null, [
-                            'post' => $item,
-                        ]); ?>
+                        <li class="newscards__item">
+                            <?php get_template_part('template-parts/news-card', null, [
+                                'post' => $item,
+                            ]); ?>
+                        </li>
                     <?php endforeach; ?>
-                </div>
+                </ul>
+                <?php if ($card_count > 1) : ?>
+                    <div class="newscards__dots" data-scroll-dots="newscards-track" role="group" aria-label="<?php esc_attr_e('News', 'starwishx'); ?>" hidden>
+                        <?php foreach ($one_per_category as $i => $item) : ?>
+                            <button type="button" class="newscards__dot" aria-label="<?php echo esc_attr(sprintf(
+                                /* translators: 1: card number, 2: number of cards */
+                                __('News %1$d of %2$d', 'starwishx'),
+                                $i + 1,
+                                $card_count
+                            )); ?>"<?php echo $i === 0 ? ' aria-current="true"' : ''; ?>></button>
+                        <?php endforeach; ?>
+                    </div>
+                <?php endif; ?>
             <?php endif; ?>
         </div>
-
-        <?php if ($one_per_category) : ?>
-            <!-- Mobile swiper -->
-            <div class="swiper mySwiper newscards-sw">
-                <div class="swiper-wrapper newscards-sw-wr">
-                    <?php foreach ($one_per_category as $item) : ?>
-                        <?php get_template_part('template-parts/news-card', null, [
-                            'post'      => $item,
-                            'is_swiper' => true,
-                        ]); ?>
-                    <?php endforeach; ?>
-                </div>
-                <div class="swiper-paginations"></div>
-            </div>
-        <?php endif; ?>
 
     </div>
 </section>
@@ -213,17 +190,4 @@ if (function_exists('render_block')) {
         <?php endforeach; ?>
     </div>
 <?php endif; ?>
-<script defer>
-    document.addEventListener("DOMContentLoaded", function() {
-        var swiper = new Swiper(".mySwiper", {
-            slidesPerView: 1,
-            spaceBetween: 20,
-            pagination: {
-                el: ".swiper-paginations",
-                clickable: true,
-            },
-            loop: true,
-        }, 100);
-    });
-</script>
 <?php get_footer(); ?>

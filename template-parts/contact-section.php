@@ -33,37 +33,11 @@ $title_medium = $args['title_medium'];
 $title_big = wp_kses($args['title_big'], ['br' => []]);
 $subtitle     = $args['subtitle'];
 /* ===========================
-   Contact info (ACF options)
+   Contact info (Theme Settings → Common Info)
    =========================== */
-$email_link    = get_field('email_link', 'option');
-$email_name    = get_field('email_name', 'option');
-$telegram_link = get_field('telegram_link', 'option');
-$telegram_name = get_field('telegram_name', 'option');
-$linkedin_link = get_field('linkedin_link', 'option');
-$linkedin_name = get_field('linkedin_name', 'option');
+// Normalised by the Contact module, shared with the starwishx/contact-card block.
+$contact_links = sw_contact_links();
 $avatars       = get_field('avatars', 'option');
-
-/* Clean telegram URL */
-$telegram_full_url = '';
-$clean_telegram    = '';
-if ($telegram_link) {
-    $clean_telegram    = trim($telegram_link);
-    $clean_telegram    = str_replace('https://t.me/', '', $clean_telegram);
-    $clean_telegram    = ltrim($clean_telegram, '@');
-    $telegram_full_url = 'https://t.me/' . $clean_telegram;
-}
-
-/* Clean linkedin URL */
-$linkedin_full_url = '';
-$clean_linkedin    = '';
-if ($linkedin_link) {
-    $clean_linkedin = trim($linkedin_link);
-    if (strpos($clean_linkedin, 'http') === 0) {
-        $linkedin_full_url = $clean_linkedin;
-    } else {
-        $linkedin_full_url = 'https://linkedin.com/in/' . $clean_linkedin;
-    }
-}
 
 /* ===========================
    Form config
@@ -99,7 +73,7 @@ $privacy_url     = $privacy_page_id ? get_permalink($privacy_page_id) : '';
 $data_policy_page = get_page_by_path('data-collection-policy');
 $data_policy_url   = $data_policy_page ? get_permalink($data_policy_page) : '';
 
-$privacy_html    = '';
+$policy_html = '';
 if ($privacy_url || $data_policy_url) {
     $parts = [];
 
@@ -143,7 +117,7 @@ $render_label = static function (string $text, bool $is_required): string {
 
 <section class="contact-section"
     data-wp-interactive="contact"
-    aria-labelledby="contact-heading">
+    <?= $title_medium ? 'aria-labelledby="contact-heading"' : '' ?>>
 
     <div class="container contact-container">
 
@@ -151,13 +125,13 @@ $render_label = static function (string $text, bool $is_required): string {
         <div class="contact-block">
 
             <?php if ($title_small || $title_medium || $subtitle): ?>
-                <header id="contact-heading" class="contact-titles">
+                <header class="contact-titles">
                     <?php if ($title_small): ?>
                         <span class="contact-title-small"><?= esc_html($title_small) ?></span>
                     <?php endif; ?>
 
                     <?php if ($title_medium): ?>
-                        <h2 class="contact-title-medium"><?= esc_html($title_medium) ?></h2>
+                        <h2 id="contact-heading" class="contact-title-medium"><?= esc_html($title_medium) ?></h2>
                     <?php endif; ?>
 
                     <?php if ($subtitle): ?>
@@ -172,35 +146,15 @@ $render_label = static function (string $text, bool $is_required): string {
                 <?php endif; ?>
 
                 <div class="contact-group">
-                    <?php if ($email_link): ?>
+                    <?php foreach ($contact_links as $link): ?>
                         <div class="contact-item">
-                            <?= sw_svg('icon-email', 24, null, 'icon') ?>
-                            <span class="contact-label"><?= esc_html__('Email:', 'starwishx') ?></span>
-                            <a href="mailto:<?= esc_attr($email_link) ?>" class="contact-value">
-                                <?= esc_html($email_name ?: $email_link) ?>
+                            <?= sw_svg($link['icon'], 24, null, 'icon') ?>
+                            <span class="contact-label"><?= esc_html($link['label']) ?></span>
+                            <a href="<?= esc_url($link['url']) ?>"<?= $link['external'] ? ' target="_blank" rel="noopener"' : '' ?> class="contact-value">
+                                <?= esc_html($link['text']) ?>
                             </a>
                         </div>
-                    <?php endif; ?>
-
-                    <?php if ($telegram_link): ?>
-                        <div class="contact-item">
-                            <?= sw_svg('icon-telegram', 24, null, 'icon') ?>
-                            <span class="contact-label"><?= esc_html__('Telegram:', 'starwishx') ?></span>
-                            <a href="<?= esc_url($telegram_full_url) ?>" target="_blank" rel="noopener" class="contact-value">
-                                @<?= esc_html($telegram_name ?: $clean_telegram) ?>
-                            </a>
-                        </div>
-                    <?php endif; ?>
-
-                    <?php if ($linkedin_link): ?>
-                        <div class="contact-item">
-                            <?= sw_svg('icon-linkedin', 24, null, 'icon') ?>
-                            <span class="contact-label"><?= esc_html__('LinkedIn:', 'starwishx') ?></span>
-                            <a href="<?= esc_url($linkedin_full_url) ?>" target="_blank" rel="noopener" class="contact-value">
-                                <?= esc_html($linkedin_name ?: $clean_linkedin) ?>
-                            </a>
-                        </div>
-                    <?php endif; ?>
+                    <?php endforeach; ?>
                 </div>
 
                 <?php if (! empty($avatars) && is_array($avatars)): ?>

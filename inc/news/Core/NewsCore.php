@@ -64,6 +64,9 @@ final class NewsCore
         add_action('rest_api_init',      [$this, 'registerRestRoutes']);
         add_action('wp_enqueue_scripts', [$this, 'enqueueAssets']);
 
+        // Breadcrumbs: Home › News › {category} on /news/{category}/
+        add_filter(\Shared\Breadcrumbs\Trail::FILTER, [$this, 'addCategoryCrumb']);
+
         // Canonical / title / rel prev-next for the category archive
         (new NewsSeoProvider())->register();
 
@@ -140,6 +143,33 @@ final class NewsCore
      * Derived from the post type archive link so a future change of the
      * `news` rewrite slug propagates here for free.
      */
+    /**
+     * Breadcrumbs on /news/{category}/: the archive crumb becomes a link and
+     * the category is the current page. Search scoped to news keeps its own
+     * trail.
+     *
+     * @param  list<array{label: string, url: ?string, home?: true}> $items
+     * @return list<array{label: string, url: ?string, home?: true}>
+     */
+    public function addCategoryCrumb(array $items): array
+    {
+        $slug = (string) get_query_var(self::QUERY_VAR);
+        if ($slug === '' || is_search() || ! is_post_type_archive(self::POST_TYPE)) {
+            return $items;
+        }
+
+        $term = get_term_by('slug', $slug, self::TAXONOMY);
+        if (! $term || is_wp_error($term)) {
+            return $items;
+        }
+
+        return \Shared\Breadcrumbs\Trail::appendToArchive(
+            $items,
+            (string) get_post_type_archive_link(self::POST_TYPE),
+            $term->name
+        );
+    }
+
     public function categoryUrl(string $slug): string
     {
         $base = get_post_type_archive_link(self::POST_TYPE);

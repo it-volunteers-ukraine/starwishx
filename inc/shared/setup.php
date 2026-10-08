@@ -31,9 +31,10 @@ spl_autoload_register(function (string $class): void {
 // the rewrite.
 add_action('rest_api_init', [\Shared\Core\AbstractApiController::class, 'bootErrorShapeFilter'], 0);
 
-// Block guest enumeration of users/media/site-topology via default WP REST
-// routes, the ?author=N redirect, and the wp-sitemap-users feed. Scoped to
-// unauthenticated requests; logged-in users (Gutenberg, admin tooling) are
-// unaffected. Rules live in Shared\Policy\RestApiAccessPolicy.
+// Block enumeration of users/media/site-topology via default WP REST routes,
+// the ?author=N redirect, and the wp-sitemap-users feed. Everyone below
+// editorial staff is gated — guests and Launchpad users (subscribers,
+// contributors); editors and admins keep the routes the block editor needs.
+// Rules live in Shared\Policy\RestApiAccessPolicy and BackOfficePolicy.
 \Shared\Http\RestApiGate::boot();
 \Shared\Http\UserEnumerationGate::boot();

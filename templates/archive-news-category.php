@@ -50,20 +50,7 @@ get_header();
 ?>
 
 <?php
-if (function_exists('render_block')) {
-    echo render_block([
-        'blockName'   => 'acf/breadcrumbs',
-        'attrs'       => [
-            'data' => [
-                'show_last_item' => true,
-                'nowrap'         => true,
-                'nav_class'      => 'container',
-            ],
-        ],
-        'innerHTML'   => '',
-        'innerBlocks' => [],
-    ]);
-}
+sw_breadcrumbs();
 ?>
 
 <section class="section newscat-section">

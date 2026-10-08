@@ -703,6 +703,38 @@ function sw_time_tag_e(string $iso, string $display): void
 }
 
 /**
+ * Echo the site breadcrumb trail.
+ *
+ * Templates call it right after get_header(): the trail (from
+ * Shared\Breadcrumbs\Trail, modules add their crumbs through its filter) is
+ * rendered by template-parts/breadcrumbs.php as <nav class="breadcrumbs
+ * container"> before <main>, with its BreadcrumbList JSON-LD.
+ *
+ * Renders once per request: a later call - e.g. the legacy acf/breadcrumbs
+ * block still embedded in some page content - prints nothing, so a page never
+ * shows two trails.
+ *
+ * @param bool $show_last_item Whether the visible trail ends with the current
+ *                             page (single posts end it at their archive).
+ */
+function sw_breadcrumbs(bool $show_last_item = true): void
+{
+    static $rendered = false;
+
+    if ($rendered) {
+        return;
+    }
+    $rendered = true;
+
+    $items = \Shared\Breadcrumbs\Trail::items();
+    if (! $show_last_item && count($items) > 1) {
+        array_pop($items);
+    }
+
+    get_template_part('template-parts/breadcrumbs', null, ['items' => $items]);
+}
+
+/**
  * Generate CSS rules for top-level terms of a given taxonomy.
  *
  * Without a persistent object cache (Redis/Memcached) each call hits the DB

@@ -1,6 +1,7 @@
 <?php
 
 get_header();
+sw_breadcrumbs();
 ?>
 
 	<main id="primary" class="site-main">

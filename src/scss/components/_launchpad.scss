@@ -1,16 +1,6 @@
 @use "../variables" as *;
 @use "../mixins/media" as *;
 
-.page-template-page-launchpad {
-    .breadcumbs-nav {
-        margin-top: 16px;
-        margin-bottom: 16px;
-        @include min-laptop {
-            margin-top: 32px;
-        }
-    }
-}
-
 /* ======================================
    1. CORE LAYOUT & CONTAINER
    ====================================== */

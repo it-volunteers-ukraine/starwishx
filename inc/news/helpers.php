@@ -211,3 +211,131 @@ if (! function_exists('sw_get_sort_params')) {
         return ['orderby' => $orderby, 'order' => $order];
     }
 }
+
+if (! function_exists('sw_news_latest_by_root_term')) {
+    /**
+     * The newest news post of every top-level term, in term (name) order.
+     *
+     * Backs the starwishx/news block on the home page. The ACF block it
+     * replaced ran a full WP_Query per term (include_children resolving the
+     * hierarchy again each time) and then paid two more queries per card for
+     * the thumbnail — 52 queries for six categories on a cold cache. Here the
+     * taxonomy is read once (hydrated, so the hierarchy and the
+     * term_taxonomy_ids come for free), the per-term lookups are id-only with
+     * every cache off, one WP_Query hydrates the winners and primes their meta,
+     * and update_post_thumbnail_cache() primes the thumbnails — N+8 queries,
+     * and every card render afterwards is cache-only. No transient on purpose:
+     * invalidating it correctly would mean watching posts, terms and Polylang
+     * languages to save a handful of tiny indexed queries.
+     *
+     * Root selection mirrors get_terms(parent => 0, hide_empty => true) for a
+     * hierarchical taxonomy: a root stays when it or any descendant has posts.
+     *
+     * WP_Query rather than get_posts(): get_posts() defaults to
+     * suppress_filters = true, which would bypass Polylang's language filter
+     * and mix languages into the grid.
+     *
+     * Same post shape as sw_attach_card_terms() produces (->term_name and
+     * ->term_slug of the root term), so template-parts/news-card.php can
+     * consume the result as well. A post that is the newest in two roots is
+     * listed once, under the first term.
+     *
+     * @return \WP_Post[] Posts with ->term_name / ->term_slug attached; thumbnail cache primed.
+     */
+    function sw_news_latest_by_root_term(string $taxonomy = 'category-oportunities'): array
+    {
+        $all_terms = get_terms([
+            'taxonomy'   => $taxonomy,
+            'hide_empty' => false,
+        ]);
+
+        if (is_wp_error($all_terms) || ! $all_terms) {
+            return [];
+        }
+
+        $by_id    = [];
+        $children = [];
+
+        foreach ($all_terms as $term) {
+            $by_id[(int) $term->term_id]        = $term;
+            $children[(int) $term->parent][]    = (int) $term->term_id;
+        }
+
+        $term_by_post = [];
+
+        foreach ($all_terms as $term) {
+            if ((int) $term->parent !== 0) {
+                continue;
+            }
+
+            // The root and all of its descendants, breadth-first.
+            $branch = [(int) $term->term_id];
+            for ($i = 0; $i < count($branch); $i++) {
+                foreach ($children[$branch[$i]] ?? [] as $child_id) {
+                    if (! in_array($child_id, $branch, true)) {
+                        $branch[] = $child_id;
+                    }
+                }
+            }
+
+            $tt_ids    = [];
+            $has_posts = false;
+            foreach ($branch as $branch_id) {
+                $tt_ids[] = (int) $by_id[$branch_id]->term_taxonomy_id;
+                if ((int) $by_id[$branch_id]->count > 0) {
+                    $has_posts = true;
+                }
+            }
+
+            if (! $has_posts) {
+                continue; // hide_empty: the whole branch is empty
+            }
+
+            // term_taxonomy_id: WP_Tax_Query then needs no lookup query.
+            $ids = (new \WP_Query([
+                'post_type'              => 'news',
+                'posts_per_page'         => 1,
+                'fields'                 => 'ids',
+                'orderby'                => 'date',
+                'order'                  => 'DESC',
+                'no_found_rows'          => true,
+                'update_post_meta_cache' => false,
+                'update_post_term_cache' => false,
+                'tax_query'              => [[
+                    'taxonomy'         => $taxonomy,
+                    'field'            => 'term_taxonomy_id',
+                    'terms'            => $tt_ids,
+                    'include_children' => false,
+                ]],
+            ]))->posts;
+
+            $post_id = (int) ($ids[0] ?? 0);
+
+            if ($post_id > 0 && ! isset($term_by_post[$post_id])) {
+                $term_by_post[$post_id] = $term;
+            }
+        }
+
+        if (! $term_by_post) {
+            return [];
+        }
+
+        $query = new \WP_Query([
+            'post_type'              => 'news',
+            'post__in'               => array_keys($term_by_post),
+            'orderby'                => 'post__in',
+            'posts_per_page'         => count($term_by_post),
+            'no_found_rows'          => true,
+            'update_post_term_cache' => false,
+        ]);
+
+        update_post_thumbnail_cache($query);
+
+        foreach ($query->posts as $post_item) {
+            $post_item->term_name = $term_by_post[$post_item->ID]->name;
+            $post_item->term_slug = $term_by_post[$post_item->ID]->slug;
+        }
+
+        return $query->posts;
+    }
+}

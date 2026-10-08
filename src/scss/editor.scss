@@ -1,0 +1,21 @@
+// Block editor canvas styles, compiled by gulp (styles lane) into
+// assets/css/editor.css and loaded through add_editor_style() in functions.php.
+
+// WordPress rewrites every rule here under .editor-styles-wrapper, so `body`
+// styles the canvas, not wp-admin. Only what blocks rely on to look as they do
+// on the front end: base typography and the global utilities from common
+// (.section, .container, .h1-.h5, buttons...) plus border-box sizing.
+
+// Not the reset (its `* { margin: 0; padding: 0 }` would also flatten the
+// editor's own placeholders and ACF forms inside the canvas), and not the
+// header, footer or page components.
+
+// File: src/scss/editor.scss
+
+@use "common";
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}

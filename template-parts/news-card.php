@@ -12,7 +12,6 @@
  *     @type bool    $show_image      Show post thumbnail. Default true.
  *     @type bool    $show_excerpt    Show post excerpt. Default false.
  *     @type bool    $is_large        Large card variant (bycat featured). Default false.
- *     @type bool    $is_swiper       Wrap as swiper slide. Default false.
  *     @type string  $post_type_label Post type name, shown next to the date. Used on
  *                                    mixed-post-type result lists (search). Default ''.
  *     @type int     $card_version    Visual variant; emits `card-version-{n}`. Default 1.
@@ -25,7 +24,6 @@ $post_item       = $args['post'];
 $show_image      = $args['show_image'] ?? true;
 $show_excerpt    = $args['show_excerpt'] ?? false;
 $is_large        = $args['is_large'] ?? false;
-$is_swiper       = $args['is_swiper'] ?? false;
 $post_type_label = $args['post_type_label'] ?? '';
 $card_version    = (int) ($args['card_version'] ?? 1);
 
@@ -51,7 +49,6 @@ $excerpt = $show_excerpt ? get_the_excerpt($post_item) : '';
 // CSS classes
 $classes = ['newcard-content', 'card-version-' . $card_version];
 if ($is_large)  $classes[] = 'newcard-lg';
-if ($is_swiper) $classes[] = 'swiper-slide';
 
 ?>
 

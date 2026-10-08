@@ -33,20 +33,7 @@ add_action('pre_get_posts', function (WP_Query $query) use ($post_type): void {
 get_header();
 ?>
 <?php
-if (function_exists('render_block')) {
-    echo render_block([
-        'blockName'   => 'acf/breadcrumbs',
-        'attrs'       => [
-            'data'        => [
-                'show_last_item' => true,
-                'nowrap'         => true,
-                'nav_class'      => 'container',
-            ],
-        ],
-        'innerHTML'   => '',
-        'innerBlocks' => [],
-    ]);
-}
+sw_breadcrumbs();
 ?>
 
 <main class="archive-projects">

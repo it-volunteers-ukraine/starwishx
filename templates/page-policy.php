@@ -60,20 +60,7 @@ $pdf_title = $pdf_title_override ?: ($doc['title'] ?? '');
 get_header();
 ?>
 <?php
-if (function_exists('render_block')) {
-    echo render_block([
-        'blockName'   => 'acf/breadcrumbs',
-        'attrs'       => [
-            'data'        => [
-                'show_last_item' => true,
-                'nowrap'         => true,
-                'nav_class'      => 'container',
-            ],
-        ],
-        'innerHTML'   => '',
-        'innerBlocks' => [],
-    ]);
-}
+sw_breadcrumbs();
 ?>
 <main id="main" class="site-main">
     <div class="container policy-page">

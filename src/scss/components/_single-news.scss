@@ -2,14 +2,6 @@
 @use "../mixins/media";
 
 .single-news {
-    .breadcumbs-nav {
-        margin-top: 16px;
-        margin-bottom: 16px;
-        @include media.min-laptop {
-            margin-top: 32px;
-        }
-    }
-
     // .news-breadcrumbs {
     //     margin-top: 32px;
     //     margin-bottom: 16px;

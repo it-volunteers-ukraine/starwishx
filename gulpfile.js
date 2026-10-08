@@ -20,6 +20,11 @@ import * as sass from "sass";
 import gulpif from "gulp-if";
 import { deleteAsync } from "del";
 import webpack from "webpack-stream";
+// The block editor lane hands webpack-stream this instance so the WordPress
+// dependency-extraction plugin (which requires webpack itself) and the
+// compiler share one webpack module.
+import webpackModule from "webpack";
+import DependencyExtractionWebpackPlugin from "@wordpress/dependency-extraction-webpack-plugin";
 import named from "vinyl-named";
 import fs from "fs";
 import fonter from "gulp-fonter-fix";
@@ -84,6 +89,135 @@ export const blockStyles = () => {
     .pipe(gulpif(PRODUCTION, postcss([autoprefixer, cssnano])))
     .pipe(gulpif(!PRODUCTION, sourcemaps.write()))
     .pipe(dest("assets/css/blocks"));
+};
+
+// ---------------------------------------------------------------------------
+// Native (block.json) blocks: inc/blocks/{slug}/
+// Sources sit next to the runtime files (block.json, render.php); gulp compiles
+// style.scss / view.js into inc/blocks/{slug}/build/, which block.json
+// references as "file:./build/style.css" / "file:./build/view.js".
+// ---------------------------------------------------------------------------
+
+// loadPaths lets block SCSS write `@use "variables" as *;` /
+// `@use "mixins/media" as *;` instead of ../../../../src/scss chains.
+const NATIVE_BLOCK_SASS_OPTIONS = { loadPaths: [path.resolve("src/scss")] };
+
+export const nativeBlockStyles = () => {
+  return (
+    src(["inc/blocks/*/{style,editor}.scss"], { allowEmpty: true })
+      .pipe(
+        stylelint({
+          fix: true,
+          reporters: [{ formatter: "string", console: true }],
+        }),
+      )
+      .pipe(gulpif(!PRODUCTION, sourcemaps.init()))
+      .pipe(SASS(NATIVE_BLOCK_SASS_OPTIONS).on("error", SASS.logError))
+      .pipe(gulpif(PRODUCTION, postcss([autoprefixer, cssnano])))
+      .pipe(gulpif(!PRODUCTION, sourcemaps.write()))
+      // file.relative is "video-text/style.css" (base = inc/blocks); injecting
+      // build/ into dirname makes dest("inc/blocks") write
+      // inc/blocks/video-text/build/style.css. dest(fn) can't do this - it
+      // appends file.relative to whatever fn returns.
+      .pipe(
+        rename((p) => {
+          p.dirname = path.join(p.dirname, "build");
+        }),
+      )
+      .pipe(dest("inc/blocks"))
+  );
+};
+
+// Block view modules (block.json viewScriptModule): inc/blocks/{slug}/view.js
+// -> build/view.js + build/view.asset.php. ESM output; the WordPress
+// dependency-extraction plugin keeps @wordpress/interactivity external and
+// writes the asset manifest (dependencies + type => 'module'). Without that
+// manifest core registers the module with no dependencies, and a bare
+// `import "@wordpress/interactivity"` only works when some other store
+// happened to put the runtime into the import map.
+const viewWebpackConfig = (prod) => ({
+  module: {
+    rules: [
+      {
+        test: /\.(js|mjs)$/,
+        use: {
+          loader: "babel-loader",
+          options: { presets: ["@babel/preset-env"] },
+        },
+      },
+    ],
+  },
+  mode: prod ? "production" : "development",
+  devtool: !prod ? "eval-source-map" : false,
+  experiments: { outputModule: true },
+  // output.module (not just library.type) is what switches the plugin to
+  // module mode: "@wordpress/interactivity" then stays an ESM import resolved
+  // by WordPress' import map, and the manifest gets type => 'module'.
+  output: { filename: "[name].js", module: true, library: { type: "module" } },
+  plugins: [new DependencyExtractionWebpackPlugin()],
+});
+
+export const nativeBlockScripts = () => {
+  return (
+    src(["inc/blocks/*/view.js"], { allowEmpty: true })
+      // The entry name carries slug + build/ so several blocks can each ship a
+      // view.js: webpack-stream merges same-named entries ("view") into ONE
+      // bundle otherwise.
+      .pipe(
+        named((file) => {
+          const slug = path.basename(path.dirname(file.path));
+          return `${slug}/build/${path.basename(file.path, ".js")}`;
+        }),
+      )
+      .pipe(webpack(viewWebpackConfig(PRODUCTION), webpackModule))
+      .pipe(dest("inc/blocks"))
+  );
+};
+
+// Block editor scripts (JSX, InnerBlocks, RichText...): inc/blocks/{slug}/editor.js
+// -> build/editor.js + build/editor.asset.php. block.json "editorScript" points
+// at the bundle; core reads the .asset.php for dependencies and version.
+// @wordpress/* imports stay external (wp.* globals via WordPress' own script
+// handles), so the bundle only carries the block's own code.
+const editorWebpackConfig = (prod) => ({
+  module: {
+    rules: [
+      {
+        test: /\.(js|mjs)$/,
+        use: {
+          loader: "babel-loader",
+          options: {
+            presets: [
+              "@babel/preset-env",
+              // development: false even in dev builds - the dev JSX runtime would
+              // put "react/jsx-dev-runtime" into editor.asset.php, a dependency
+              // WordPress has no script handle for, and the editor script would
+              // silently never load.
+              ["@babel/preset-react", { runtime: "automatic", development: false }],
+            ],
+          },
+        },
+      },
+    ],
+  },
+  mode: prod ? "production" : "development",
+  // No eval-style devtool here: the editor runs under wp-admin, keep the
+  // bundle plain so a CSP never has to allow unsafe-eval for it.
+  devtool: prod ? false : "cheap-module-source-map",
+  output: { filename: "[name].js" },
+  plugins: [new DependencyExtractionWebpackPlugin()],
+});
+
+export const nativeBlockEditorScripts = () => {
+  return src(["inc/blocks/*/editor.js"], { allowEmpty: true })
+    .pipe(
+      named((file) => {
+        const slug = path.basename(path.dirname(file.path));
+        return `${slug}/build/${path.basename(file.path, ".js")}`;
+      }),
+    )
+    .pipe(webpack(editorWebpackConfig(PRODUCTION), webpackModule))
+    .pipe(dest("inc/blocks"));
 };
 
 // Fonts logic remains similar but wrapped for stability
@@ -200,7 +334,8 @@ export const copy = () => {
     .pipe(dest("assets"));
 };
 
-export const clean = () => deleteAsync(["assets", "production"]);
+export const clean = () =>
+  deleteAsync(["assets", "production", "inc/blocks/*/build"]);
 
 const webpackConfig = (prod, isModule = false) => {
   const baseConfig = {
@@ -235,8 +370,10 @@ const webpackConfig = (prod, isModule = false) => {
   return baseConfig;
 };
 
+// Entries only: `_*.js` are partials that app.js imports (one feature each),
+// the same convention as Sass partials.
 export const scripts = () => {
-  return src(["src/js/*.js"], { allowEmpty: true })
+  return src(["src/js/*.js", "!src/js/_*.js"], { allowEmpty: true })
     .pipe(named())
     .pipe(webpack(webpackConfig(PRODUCTION)))
     .pipe(dest("assets/js"));
@@ -280,6 +417,10 @@ export const production = () => {
       "**/*",
       "!node_modules{,/**}",
       "!src{,/**}",
+      "!inc/blocks/**/*.scss", // compiled into inc/blocks/*/build/ by nativeBlockStyles
+      "!inc/blocks/*/view.js", // source; block.json loads build/view.js
+      "!inc/blocks/*/editor.js", // source; block.json loads build/editor.js
+      "!inc/blocks/*/editor{,/**}",
       "!production{,/**}", // Prevent copying the production folder into itself
       "!languages/*.po~", // Translation editor backups
       "!assets/img{,/**}", // Copied by copyBinariesToProduction
@@ -356,8 +497,25 @@ export const watchForChanges = () => {
   watch("inc/acf/blocks/**/*.js", blockScripts);
   // Watch every file a store can import, not just the store entry points,
   // so editing a helper or anything under inc/shared/ rebuilds its bundles.
-  watch("inc/*/Assets/**/*.{js,mjs}", moduleScripts);
+  // inc/blocks/Assets/ holds the editor helper (served from source), not a store.
+  watch(["inc/*/Assets/**/*.{js,mjs}", "!inc/blocks/Assets/**"], moduleScripts);
   watch("inc/acf/blocks/**/*.module.scss", blockStyles);
+  // Block SCSS @use's the theme variables/mixins and the shared block partials
+  // (src/scss/blocks/), so rebuild on those too.
+  watch(
+    [
+      "inc/blocks/*/{style,editor}.scss",
+      "src/scss/_variables.scss",
+      "src/scss/mixins/**/*.scss",
+      "src/scss/blocks/**/*.scss",
+    ],
+    nativeBlockStyles,
+  );
+  watch("inc/blocks/*/view.js", nativeBlockScripts);
+  watch(
+    ["inc/blocks/*/editor.js", "inc/blocks/*/editor/**/*.js"],
+    nativeBlockEditorScripts,
+  );
 };
 
 // No clean() here on purpose: it would wipe assets/ on every start and
@@ -376,6 +534,9 @@ export const dev = series(
     blockScripts,
     moduleScripts,
     blockStyles,
+    nativeBlockStyles,
+    nativeBlockScripts,
+    nativeBlockEditorScripts,
   ),
   watchForChanges,
 );
@@ -394,6 +555,9 @@ export const build = series(
     blockScripts,
     moduleScripts,
     blockStyles,
+    nativeBlockStyles,
+    nativeBlockScripts,
+    nativeBlockEditorScripts,
   ),
   production,
   copyBinariesToProduction,

@@ -31,20 +31,7 @@ if (!empty($css)) {
 get_header();
 ?>
 <?php
-if (function_exists('render_block')) {
-    echo render_block([
-        'blockName'   => 'acf/breadcrumbs',
-        'attrs'       => [
-            'data'        => [
-                'show_last_item' => false,
-                'nowrap'         => true,
-                'nav_class'      => 'container',
-            ],
-        ],
-        'innerHTML'   => '',
-        'innerBlocks' => [],
-    ]);
-}
+sw_breadcrumbs(false);
 /* <nav class="opportunity-breadcrumbs container" aria-label="< ?php esc_attr_e('Breadcrumb', 'starwishx'); ?>">
 <a href="< ?php echo esc_url($back_url); ?>" class="btn-back">
 <svg width="13" height="16" class="icon-arrow-left">

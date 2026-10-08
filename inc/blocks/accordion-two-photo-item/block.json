@@ -1,0 +1,23 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "starwishx/accordion-two-photo-item",
+  "version": "1.0.0",
+  "title": "Accordion item",
+  "category": "custom-blocks",
+  "icon": "excerpt-view",
+  "description": "One numbered section: title, text and two photos.",
+  "textdomain": "starwishx",
+  "parent": ["starwishx/accordion-two-photo"],
+  "supports": {
+    "html": false,
+    "reusable": false
+  },
+  "attributes": {
+    "title": { "type": "string", "default": "" },
+    "text": { "type": "string", "default": "" },
+    "photo1Id": { "type": "integer", "default": 0, "control": "media" },
+    "photo2Id": { "type": "integer", "default": 0, "control": "media" }
+  },
+  "render": "file:./render.php"
+}

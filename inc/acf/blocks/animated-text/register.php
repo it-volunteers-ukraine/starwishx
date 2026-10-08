@@ -1,10 +1,11 @@
 <?php
 acf_register_block_type([
     'name'              => 'animated-text',
-    'title'             => __('Animated Text', 'starwishx'),
+    'title'             => __('Animated Text (legacy)', 'starwishx'), // replaced by starwishx/animated-text (inc/blocks/animated-text)
     'description'       => __('Block for displaying animated text on the homepage', 'starwishx'),
     'render_template'   => acf_theme_blocks_path('animated-text/animated-text.php'),
     'enqueue_style'     => get_template_directory_uri() . '/assets/css/blocks/animated-text/animated-text.module.css',
     'icon'              => 'editor-textcolor',
     'category'          => 'custom-blocks',
+    'supports'          => ['inserter' => false], // replaced: still renders and edits where it exists, not offered for new content
 ]);

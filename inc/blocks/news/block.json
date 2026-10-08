@@ -1,0 +1,31 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "starwishx/news",
+  "version": "1.0.0",
+  "title": "News",
+  "category": "custom-blocks",
+  "icon": "admin-post",
+  "description": "Latest news post from every top-level category, with a link to the news archive.",
+  "keywords": ["news", "latest", "categories"],
+  "textdomain": "starwishx",
+  "attributes": {
+    "label": { "type": "string", "default": "" },
+    "title": { "type": "string", "default": "" },
+    "buttonText": { "type": "string", "default": "" },
+    "buttonUrl": { "type": "string", "default": "" }
+  },
+  "supports": {
+    "autoRegister": true,
+    "html": false
+  },
+  "example": {
+    "attributes": {
+      "label": "News",
+      "title": "Latest news",
+      "buttonText": "Show all"
+    }
+  },
+  "render": "file:./render.php",
+  "style": "file:./build/style.css"
+}

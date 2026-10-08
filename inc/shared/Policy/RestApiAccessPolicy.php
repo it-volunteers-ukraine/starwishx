@@ -5,20 +5,29 @@ declare(strict_types=1);
 namespace Shared\Policy;
 
 /**
- * Declarative list of REST API routes denied to unauthenticated visitors.
+ * Core REST API routes reserved for editorial staff (BackOfficePolicy).
  *
  * Pure data — no WP hooks. Consumed by Shared\Http\RestApiGate, which strips
- * matching routes from the registry for guests so the controller responds 404
- * (no auth fingerprint, no signal that the route exists on this install).
+ * matching routes from the registry for everyone below that threshold —
+ * guests and Launchpad users (subscribers, contributors) — so the controller
+ * responds 404 (no auth fingerprint, no signal that the route exists).
  *
- * Defaults target the well-known guest-enumeration vectors:
+ * Defaults target the well-known enumeration vectors:
  *   - /wp/v2/users      — username/ID enumeration (OWASP A01)
  *   - /wp/v2/media      — uploaded-file inventory
  *   - /wp/v2/comments   — superseded by inc/comments module
  *   - /wp/v2/{types,taxonomies,statuses,search} — site topology recon
  *
- * Logged-in users are unaffected — Gutenberg, admin tooling, and authenticated
- * integrations rely on these routes and keep working normally.
+ * Launchpad users are gated like guests. The app talks only to the theme's
+ * own namespaces (launchpad/v1, favorites/v1, comments/v1, …) and never needs
+ * these routes — but every front-end module hydrates a `wp_rest` nonce, and
+ * that nonce authenticates /wp/v2 too. Open to contributors, the gate would
+ * let any of them list every user who can author posts through
+ * `/wp/v2/users?who=authors`: core serves that to anyone with `edit_posts`
+ * and skips its "has published posts" restriction for it.
+ *
+ * "Guest" in the method and filter names means "below BackOfficePolicy"; the
+ * names stay because the hooks are a public contract.
  *
  * Extend via the `starwishx/rest_guest_denied_routes` filter (e.g. to add
  * routes from third-party plugins or carve exceptions for headless clients).
@@ -26,25 +35,26 @@ namespace Shared\Policy;
 final class RestApiAccessPolicy
 {
     /**
-     * Whether the current user has enough privilege to bypass the gate.
+     * Whether the current user may use the gated routes: editorial staff
+     * only (BackOfficePolicy — editors and administrators).
      *
-     * Default threshold: `edit_posts` capability — admits contributors,
-     * authors, editors, and admins (the roles that legitimately need REST
-     * access for editorial workflows like Gutenberg's author-picker).
-     * Guests and subscribers are gated.
+     * They need them because the block editor boots from these routes, not
+     * just its author dropdown: wp-admin preloads /wp/v2/types,
+     * /wp/v2/taxonomies, /wp/v2/types/{type} and /wp/v2/users/me, and
+     * core-data reads the post-type entity config from /wp/v2/types. The
+     * preloads pass through the same `rest_endpoints` filter, so a stripped
+     * route surfaces as "You attempted to edit an item that doesn't exist" on
+     * every show_in_rest post type (news, project, ngo, post, page).
      *
-     * Why not `list_users` (admin-only)? Gutenberg fetches `/wp/v2/users`
-     * for the author dropdown; stripping it for non-admins would break the
-     * block editor for contributors and editors.
-     *
-     * Override via the `starwishx/rest_gate_bypass` filter — useful for
-     * sites with custom roles or stricter requirements ("admins only").
+     * Override via the `starwishx/rest_gate_bypass` filter (e.g. to admit an
+     * integration's service account). Anything narrower than BackOfficePolicy
+     * breaks the block editor for the users it leaves out.
      */
     public static function isPrivileged(): bool
     {
         return (bool) apply_filters(
             'starwishx/rest_gate_bypass',
-            current_user_can('list_users')
+            BackOfficePolicy::allows()
         );
     }
 

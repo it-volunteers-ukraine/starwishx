@@ -4,25 +4,8 @@ function acf_theme_blocks_path($path) {
     return get_template_directory() . '/inc/acf/blocks/' . $path;
 }
 
-function gt_block_category_init( $categories, $post ) {
-    return array_merge([
-            [
-                'slug' => 'custom-blocks',
-                'title' => __('Custom Blocks', 'starwishx'),
-            ],
-            [
-                'slug' => 'posts-blocks',
-                'title' => __('Posts Blocks', 'it_volunteers_blocks_theme'),
-            ],
-            [
-                'slug' => 'ccc-blocks',
-                'title' => __('CCC Blocks', 'starwishx'),
-            ],
-        ],
-        $categories
-    );
-}
-add_filter( 'block_categories', 'gt_block_category_init', 10, 2 );
+// Block categories: the 'custom-blocks' category is registered by the Blocks module
+// (inc/blocks/Core/BlocksCore.php) via block_categories_all, shared with the native blocks.
 
 function _themeprefix_acf_init_block_types() {
     if(function_exists('acf_register_block_type')) {
@@ -170,3 +153,38 @@ function _themeprefix_acf_init_block_types() {
     }
 }
 add_action( 'acf/init', '_themeprefix_acf_init_block_types' );
+
+/**
+ * Legacy block CSS inside the block editor canvas.
+ *
+ * SCF enqueues each block's `enqueue_style` on enqueue_block_editor_assets,
+ * i.e. into the outer admin page. Since WP 7.0 the post editor canvas is
+ * always an iframe, and core copies outer stylesheets into it only when they
+ * target .wp-block or .editor-styles-wrapper - the hashed module CSS never
+ * does, so these blocks rendered unstyled in the editor. enqueue_block_assets
+ * runs into the iframe's own style queue. Admin-only: on the front end ACF
+ * keeps enqueueing the CSS when a block renders, unchanged.
+ *
+ * Goes away with the legacy blocks (their replacements live in inc/blocks/).
+ */
+function _themeprefix_acf_block_styles_in_editor_canvas(): void {
+    if ( ! is_admin() || ! function_exists( 'acf_get_block_types' ) ) {
+        return;
+    }
+
+    $theme_uri = get_template_directory_uri();
+    $theme_dir = get_template_directory();
+
+    foreach ( acf_get_block_types() as $name => $block_type ) {
+        $src = $block_type['enqueue_style'] ?? '';
+        if ( ! is_string( $src ) || $src === '' ) {
+            continue;
+        }
+
+        $path = str_replace( $theme_uri, $theme_dir, $src );
+        $ver  = is_file( $path ) ? (string) filemtime( $path ) : null;
+
+        wp_enqueue_style( 'starwishx-legacy-' . sanitize_key( str_replace( '/', '-', $name ) ), $src, array(), $ver );
+    }
+}
+add_action( 'enqueue_block_assets', '_themeprefix_acf_block_styles_in_editor_canvas' );
