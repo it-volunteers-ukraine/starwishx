@@ -26,10 +26,10 @@
   "license": "ISC",
   "homepage": "onpoint.studio",
   "devDependencies": {
-    "@babel/core": "^8.0.6",
-    "@babel/preset-env": "^8.0.6",
+    "@babel/core": "^8.0.7",
+    "@babel/preset-env": "^8.0.7",
     "@babel/preset-react": "^8.0.1",
-    "@wordpress/dependency-extraction-webpack-plugin": "^6.56.0",
+    "@wordpress/dependency-extraction-webpack-plugin": "^6.57.0",
     "autoprefixer": "^10.6.1",
     "babel-loader": "^10.1.1",
     "cssnano": "^9.3.2",

@@ -35,3 +35,12 @@ minimumReleaseAgeExclude:
   - stylehacks@9.0.3 || 9.0.4 || 9.0.5
   - postcss-calc@11.2.0
   - yargs@18.2.0
+  - '@babel/core@8.0.7'
+  - '@babel/helper-compilation-targets@8.0.7'
+  - '@babel/helpers@8.0.7'
+  - '@babel/parser@8.0.7'
+  - '@babel/plugin-transform-block-scoping@8.0.7'
+  - '@babel/plugin-transform-for-of@8.0.7'
+  - '@babel/preset-env@8.0.7'
+  - '@babel/traverse@8.0.7'
+  - '@wordpress/dependency-extraction-webpack-plugin@6.57.0'
