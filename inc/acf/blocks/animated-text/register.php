@@ -7,4 +7,5 @@ acf_register_block_type([
     'enqueue_style'     => get_template_directory_uri() . '/assets/css/blocks/animated-text/animated-text.module.css',
     'icon'              => 'editor-textcolor',
     'category'          => 'custom-blocks',
+    'supports'          => ['inserter' => false], // replaced: still renders and edits where it exists, not offered for new content
 ]);

@@ -8,6 +8,7 @@ acf_register_block_type(array(
     // 'enqueue_script'  => get_template_directory_uri() . '/assets/js/accordion-opportunities.js',
     'icon'            => 'format-image',
     'category'        => 'custom-blocks',
+    'supports'        => ['inserter' => false], // replaced: still renders and edits where it exists, not offered for new content
     'enqueue_assets'  => function () {
         wp_enqueue_script(
             'accordion-opportunities',

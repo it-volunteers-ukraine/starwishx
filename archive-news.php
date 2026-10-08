@@ -100,10 +100,18 @@ foreach ($terms as $term) {
 // "One per category" — first post from each group (for top-section cards)
 $one_per_category = array_map(fn($cat) => $cat['posts'][0], $by_category);
 
-$init = <<<'JS'
-(function(){
-    if ( typeof Swiper === 'undefined' ) {
-        console.error('Swiper not found — check that the bundle loaded.');
+// ── Mobile slider: Swiper only on this page, only when the slider renders ───
+// Enqueued before get_header() so the stylesheet lands in <head>. The init is
+// attached *before* the bundle and waits for DOMContentLoaded, which fires
+// after deferred scripts run: an 'after' inline script would make core drop
+// the bundle's `defer` (WP_Scripts: handles with 'after' inline scripts
+// cannot be delayed).
+if ($one_per_category) {
+    wp_enqueue_style('swiper');
+    wp_enqueue_script('swiper');
+    wp_add_inline_script('swiper', <<<'JS'
+document.addEventListener('DOMContentLoaded', function () {
+    if (typeof Swiper === 'undefined') {
         return;
     }
     new Swiper('.mySwiper', {
@@ -112,10 +120,9 @@ $init = <<<'JS'
         pagination: { el: '.swiper-paginations', clickable: true },
         loop: true
     });
-})();
-JS;
-
-wp_add_inline_script('swiper-js', $init);
+});
+JS, 'before');
+}
 
 get_header();
 ?>
@@ -213,17 +220,4 @@ if (function_exists('render_block')) {
         <?php endforeach; ?>
     </div>
 <?php endif; ?>
-<script defer>
-    document.addEventListener("DOMContentLoaded", function() {
-        var swiper = new Swiper(".mySwiper", {
-            slidesPerView: 1,
-            spaceBetween: 20,
-            pagination: {
-                el: ".swiper-paginations",
-                clickable: true,
-            },
-            loop: true,
-        }, 100);
-    });
-</script>
 <?php get_footer(); ?>

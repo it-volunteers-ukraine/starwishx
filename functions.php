@@ -46,20 +46,34 @@ function _themeprefix_theme_setup()
       'flex-height' => true,
     )
   );
+
+  // Block editor canvas: base typography and the global utilities blocks rely
+  // on (src/scss/editor.scss), scoped by WordPress under .editor-styles-wrapper.
+  add_theme_support('editor-styles');
+  add_editor_style('assets/css/editor.css');
 }
 add_action('after_setup_theme', '_themeprefix_theme_setup');
 
 /** add fonts */
+function sw_google_fonts_url(): string
+{
+  return 'https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Urbanist:wght@900&display=swap';
+}
+
 function add_google_fonts()
 {
-  wp_enqueue_style(
-    'google_web_fonts',
-    'https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Urbanist:wght@900&display=swap',
-    array(),
-    null
-  );
+  wp_enqueue_style('google_web_fonts', sw_google_fonts_url(), array(), null);
 }
 add_action('wp_enqueue_scripts', 'add_google_fonts');
+
+// The same fonts inside the block editor canvas (an iframe since WP 7.0;
+// enqueue_block_assets runs into it). Not via add_editor_style(): for a remote
+// URL core would wp_remote_get() Google Fonts on every editor load.
+add_action('enqueue_block_assets', function () {
+  if (is_admin()) {
+    add_google_fonts();
+  }
+});
 
 
 /**
@@ -74,13 +88,11 @@ function _themeprefix_theme_scripts()
 
 
   wp_register_style('_themeprefix-style', get_stylesheet_uri(), [], $version);
-  wp_register_style('swiper', get_stylesheet_directory_uri() . '/assets/css/swiper-bundle.min.css');
 
   wp_register_style('app', get_stylesheet_directory_uri() . '/assets/css/app.css', [], $version, 'all');
   wp_register_style('app-logged-in', get_stylesheet_directory_uri() . '/assets/css/app-logged-in.css', [], $version, 'all');
 
   wp_enqueue_style('_themeprefix-style');
-  wp_enqueue_style('swiper');
   wp_enqueue_style('app');
   if (is_user_logged_in()) {
     wp_enqueue_style('app-logged-in');
@@ -90,16 +102,31 @@ function _themeprefix_theme_scripts()
     'in_footer' => true,
     'strategy'   => 'defer',
   ]);
-  
-  wp_register_script('swiper', get_stylesheet_directory_uri() . '/assets/js/vendor/swiper-bundle.min.js', [], $version, [
-    'in_footer' => true,
-    'strategy'   => 'defer',
-  ]);
-  
-  wp_enqueue_script('swiper');
+
   wp_enqueue_script('app');
 }
 add_action('wp_enqueue_scripts', '_themeprefix_theme_scripts');
+
+/**
+ * Vendor libraries: registered once, enqueued only where they are used.
+ *
+ * Swiper (152 KB JS + 15 KB CSS) serves the mobile slider in archive-news.php
+ * and the legacy acf/projects block, which enqueue the `swiper` handles
+ * themselves. Registered on `init` rather than wp_enqueue_scripts so the
+ * handles exist wherever a consumer asks for them: at the top of a template
+ * (which runs before wp_head), or in an ACF block's enqueue_assets callback.
+ */
+function _themeprefix_register_vendor_assets()
+{
+  $version = wp_get_theme()->get('Version');
+
+  wp_register_style('swiper', get_template_directory_uri() . '/assets/css/swiper-bundle.min.css', [], $version);
+  wp_register_script('swiper', get_template_directory_uri() . '/assets/js/vendor/swiper-bundle.min.js', [], $version, [
+    'in_footer' => true,
+    'strategy'  => 'defer',
+  ]);
+}
+add_action('init', '_themeprefix_register_vendor_assets');
 
 
 require_once get_template_directory() . '/inc/acf/blocks/blocks-init.php';

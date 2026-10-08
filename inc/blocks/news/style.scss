@@ -54,7 +54,7 @@
   }
 }
 
-.news__button--header {
+.btn.news__button--header {
   display: none;
 
   @media screen and (min-width: 768px) {
@@ -62,7 +62,7 @@
   }
 }
 
-.news__button--footer {
+.btn.news__button--footer {
   display: flex;
   margin: 0 auto;
 
