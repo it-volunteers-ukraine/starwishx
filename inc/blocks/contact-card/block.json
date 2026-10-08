@@ -1,0 +1,30 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "starwishx/contact-card",
+  "version": "1.0.0",
+  "title": "Contact card",
+  "category": "custom-blocks",
+  "icon": "id-alt",
+  "description": "A photo, a heading and a short text next to the site's contact links from Theme Settings.",
+  "keywords": ["contact", "email", "telegram", "linkedin"],
+  "textdomain": "starwishx",
+  "attributes": {
+    "title": { "type": "string", "default": "" },
+    "text": { "type": "string", "default": "" },
+    "imageId": { "type": "integer", "default": 0, "control": "media" }
+  },
+  "supports": {
+    "autoRegister": true,
+    "html": false,
+    "anchor": true
+  },
+  "example": {
+    "attributes": {
+      "title": "Get in touch!",
+      "text": "Questions, ideas and feedback are always welcome."
+    }
+  },
+  "render": "file:./render.php",
+  "style": "file:./build/style.css"
+}

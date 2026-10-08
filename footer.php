@@ -2,34 +2,16 @@
 $footer_title = esc_html(get_field('title', 'options'));
 
 /*
- * Contact rows. On the options page *_title is the network name ("Telegram"),
- * *_name is the handle or address, and *_link is the URL.
+ * Contact rows from Theme Settings → Common Info, normalised by the Contact
+ * module (sw_contact_links(), shared with the contact section and the
+ * contact-card block); unconfigured channels are already left out. URLs are
+ * still escaped at the point of output.
  *
- * Each label falls back to the other field, and the guard below tests the
- * resolved label rather than a field that is never displayed. Telegram and
- * LinkedIn used to guard on *_name while printing *_title, so clearing the
- * title left a link holding an icon and no text at all.
- *
- * Email leads with the address rather than the word "Email" - the address is
- * the useful label there. The other two lead with the network name.
- *
- * Values are kept raw here and escaped at the point of output: esc_html() on a
- * URL cannot break out of an href, but it does not validate the protocol
- * either, so a javascript: value saved on the options page rendered live.
- * The (string) casts keep esc_url() and esc_html() off ACF's null for an
- * empty field, which PHP 8.1 deprecates.
+ * The label is the footer's own choice: email leads with the address - the
+ * useful label there - and the others with the network name ("Telegram"),
+ * falling back to the handle, so a row never holds an icon and no text.
  */
-$email_link     = (string) get_field('email_link', 'options');
-$email_label    = (string) get_field('email_name', 'options')
-    ?: (string) get_field('email_title', 'options');
-
-$telegram_link  = (string) get_field('telegram_link', 'options');
-$telegram_label = (string) get_field('telegram_title', 'options')
-    ?: (string) get_field('telegram_name', 'options');
-
-$linkedin_link  = (string) get_field('linkedin_link', 'options');
-$linkedin_label = (string) get_field('linkedin_title', 'options')
-    ?: (string) get_field('linkedin_name', 'options');
+$contact_links = sw_contact_links();
 
 ?>
 
@@ -39,38 +21,22 @@ $linkedin_label = (string) get_field('linkedin_title', 'options')
         <div class="footer-inner">
             <div class="footer-socwraper">
                 <h3 class="footer-title title-socblock"><?php echo $footer_title; ?></h3>
-                <ul class="socblock">
-                    <?php if ($email_label && $email_link): ?>
-                        <li class="socblock-item">
-                            <a href="<?php echo esc_url('mailto:' . $email_link); ?>" class="socblock-link socblock-link-email" target="_blank" rel="noopener noreferrer">
-                                <?php sw_svg_e('icon-email', 24, null, 'socblock-icon'); ?>
-                                <span>
-                                    <?php echo esc_html($email_label); ?>
-                                </span>
-                            </a>
-                        </li>
-                    <?php endif; ?>
-                    <?php if ($telegram_label && $telegram_link): ?>
-                        <li class="socblock-item">
-                            <a href="<?php echo esc_url($telegram_link); ?>" class="socblock-link socblock-link-telegram" target="_blank" rel="noopener noreferrer">
-                                <?php sw_svg_e('icon-telegram', 24, null, 'socblock-icon'); ?>
-                                <span>
-                                    <?php echo esc_html($telegram_label); ?>
-                                </span>
-                            </a>
-                        </li>
-                    <?php endif; ?>
-                    <?php if ($linkedin_label && $linkedin_link): ?>
-                        <li class="socblock-item">
-                            <a href="<?php echo esc_url($linkedin_link); ?>" class="socblock-link socblock-link-linkedin" target="_blank" rel="noopener noreferrer">
-                                <?php sw_svg_e('icon-linkedin', 24, null, 'socblock-icon'); ?>
-                                <span>
-                                    <?php echo esc_html($linkedin_label); ?>
-                                </span>
-                            </a>
-                        </li>
-                    <?php endif; ?>
-                </ul>
+                <?php if ($contact_links): ?>
+                    <ul class="socblock">
+                        <?php foreach ($contact_links as $link):
+                            $label = $link['key'] === 'email' ? $link['text'] : ($link['title'] ?: $link['text']);
+                        ?>
+                            <li class="socblock-item">
+                                <a href="<?php echo esc_url($link['url']); ?>" class="socblock-link socblock-link-<?php echo esc_attr($link['key']); ?>"<?php echo $link['external'] ? ' target="_blank" rel="noopener noreferrer"' : ''; ?>>
+                                    <?php sw_svg_e($link['icon'], 24, null, 'socblock-icon'); ?>
+                                    <span>
+                                        <?php echo esc_html($label); ?>
+                                    </span>
+                                </a>
+                            </li>
+                        <?php endforeach; ?>
+                    </ul>
+                <?php endif; ?>
             </div>
 
             <nav class="nav">
