@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-09-06T15:24:33+00:00\n"
+"POT-Creation-Date: 2026-10-08T10:37:04+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: starwishx\n"
@@ -47,7 +47,8 @@ msgstr ""
 msgid "To the main page"
 msgstr ""
 
-#: archive-news.php:140
+#: archive-news.php:130
+#: archive-news.php:151
 #: inc/favorites/Services/FavoritesService.php:21
 #: inc/news/Core/NewsSeoProvider.php:324
 #: templates/single-news.php:129
@@ -56,7 +57,13 @@ msgstr ""
 msgid "News"
 msgstr ""
 
-#: archive-news.php:209
+#. translators: 1: card number, 2: number of cards
+#: archive-news.php:155
+#, php-format
+msgid "News %1$d of %2$d"
+msgstr ""
+
+#: archive-news.php:199
 msgid "View all"
 msgstr ""
 
@@ -74,6 +81,7 @@ msgid "Opportunities"
 msgstr ""
 
 #: archive-opportunity.php:87
+#: inc/blocks/Core/BlocksCore.php:266
 #: inc/listing/Enums/Taxonomy.php:37
 #: inc/listing/Filters/CategoryFilter.php:31
 #: templates/single-opportunity.php:65
@@ -130,6 +138,7 @@ msgid "Add to favorites is only available for registered users."
 msgstr ""
 
 #: archive-project.php:54
+#: inc/blocks/projects/render.php:90
 msgid "Projects"
 msgstr ""
 
@@ -146,7 +155,42 @@ msgstr ""
 msgid "No projects found."
 msgstr ""
 
-#: footer.php:120
+#. Template Name of the theme
+msgid "about"
+msgstr ""
+
+#. Template Name of the theme
+msgid "blog"
+msgstr ""
+
+#. Template Name of the theme
+msgid "contact"
+msgstr ""
+
+#. Template Name of the theme
+msgid "home"
+msgstr ""
+
+#: docs/trident-bem/inc/breadcrumbs-sample.php:58
+#: inc/acf/blocks/breadcrumbs/breadcrumbs.php:59
+msgid "Home"
+msgstr ""
+
+#: docs/trident-bem/inc/breadcrumbs-sample.php:163
+#: inc/acf/blocks/breadcrumbs/breadcrumbs.php:185
+#: inc/acf/blocks/breadcrumbs/register.php:4
+msgid "Breadcrumbs"
+msgstr ""
+
+#. Template Name of the theme
+msgid "Legal"
+msgstr ""
+
+#. Template Name of the theme
+msgid "pricing"
+msgstr ""
+
+#: footer.php:86
 msgid "Back to top"
 msgstr ""
 
@@ -180,11 +224,16 @@ msgstr ""
 msgid "Footer"
 msgstr ""
 
-#: functions.php:149
-msgid "Пошук"
+#: functions.php:189
+#: functions.php:218
+#: inc/acf/blocks/breadcrumbs/breadcrumbs.php:76
+#: inc/listing/Api/MainController.php:92
+#: inc/listing/Api/MainController.php:199
+#: template-parts/search-modal.php:42
+msgid "Search"
 msgstr ""
 
-#: functions.php:162
+#: functions.php:202
 msgid "Language"
 msgstr ""
 
@@ -213,12 +262,15 @@ msgid "Block accordion with one photo"
 msgstr ""
 
 #: inc/acf/blocks/accordion-opportunities/register.php:4
+msgid "Block accordion opportunities (legacy)"
+msgstr ""
+
 #: inc/acf/blocks/accordion-opportunities/register.php:5
 msgid "Block accordion opportunities"
 msgstr ""
 
 #: inc/acf/blocks/accordion-two-photo-compact/register.php:4
-msgid "Block accordion two photo compact"
+msgid "Block accordion two photo compact (legacy)"
 msgstr ""
 
 #: inc/acf/blocks/accordion-two-photo-compact/register.php:5
@@ -234,35 +286,11 @@ msgid "Block accordion with two photo"
 msgstr ""
 
 #: inc/acf/blocks/animated-text/register.php:4
-msgid "Animated Text"
+msgid "Animated Text (legacy)"
 msgstr ""
 
 #: inc/acf/blocks/animated-text/register.php:5
 msgid "Block for displaying animated text on the homepage"
-msgstr ""
-
-#: inc/acf/blocks/blocks-init.php:11
-msgid "Custom Blocks"
-msgstr ""
-
-#: inc/acf/blocks/blocks-init.php:19
-msgid "CCC Blocks"
-msgstr ""
-
-#: inc/acf/blocks/breadcrumbs/breadcrumbs.php:59
-msgid "Home"
-msgstr ""
-
-#: inc/acf/blocks/breadcrumbs/breadcrumbs.php:76
-#: inc/listing/Api/MainController.php:92
-#: inc/listing/Api/MainController.php:199
-#: template-parts/search-modal.php:40
-msgid "Search"
-msgstr ""
-
-#: inc/acf/blocks/breadcrumbs/breadcrumbs.php:185
-#: inc/acf/blocks/breadcrumbs/register.php:4
-msgid "Breadcrumbs"
 msgstr ""
 
 #: inc/acf/blocks/breadcrumbs/register.php:5
@@ -283,7 +311,7 @@ msgid "Контактний блок з формою і контактною і�
 msgstr ""
 
 #: inc/acf/blocks/contact_page/register.php:5
-msgid "Contact Promo Card"
+msgid "Contact Promo Card (legacy)"
 msgstr ""
 
 #: inc/acf/blocks/contact_page/register.php:6
@@ -291,7 +319,7 @@ msgid "Картка з фото, текстом та контактами"
 msgstr ""
 
 #: inc/acf/blocks/faq/register.php:4
-msgid "FAQ Block"
+msgid "FAQ Block (legacy)"
 msgstr ""
 
 #: inc/acf/blocks/faq/register.php:5
@@ -299,7 +327,7 @@ msgid "Frequently Asked Questions Block"
 msgstr ""
 
 #: inc/acf/blocks/hero/register.php:4
-msgid "Hero"
+msgid "Hero (legacy)"
 msgstr ""
 
 #: inc/acf/blocks/hero/register.php:5
@@ -307,12 +335,15 @@ msgid "Block Hero"
 msgstr ""
 
 #: inc/acf/blocks/news/register.php:4
+msgid "Block News (legacy)"
+msgstr ""
+
 #: inc/acf/blocks/news/register.php:5
 msgid "Block News"
 msgstr ""
 
 #: inc/acf/blocks/photo-text/register.php:4
-msgid "Block1 Photo & Text & Contacts"
+msgid "Block Photo & Text & Contacts (legacy)"
 msgstr ""
 
 #: inc/acf/blocks/photo-text/register.php:5
@@ -320,7 +351,7 @@ msgid "Block with title, photo, text and contact"
 msgstr ""
 
 #: inc/acf/blocks/projects/register.php:4
-msgid "Projects Carousel"
+msgid "Projects Carousel (legacy)"
 msgstr ""
 
 #: inc/acf/blocks/projects/register.php:5
@@ -336,7 +367,7 @@ msgid "Block Title Page"
 msgstr ""
 
 #: inc/acf/blocks/video-text/register.php:4
-msgid "Video & Text"
+msgid "Video & Text (legacy)"
 msgstr ""
 
 #: inc/acf/blocks/video-text/register.php:5
@@ -344,11 +375,189 @@ msgid "Block with title, video & text"
 msgstr ""
 
 #: inc/acf/blocks/video-text/video-text.php:82
+#: inc/blocks/video-text/render.php:45
 msgid "Play video"
 msgstr ""
 
 #: inc/acf/blocks/video-text/video-text.php:86
 msgid "Video cover"
+msgstr ""
+
+#: inc/blocks/accordion-opportunities-item/labels.php:14
+msgctxt "block attribute label"
+msgid "Category"
+msgstr ""
+
+#: inc/blocks/accordion-opportunities-item/labels.php:15
+#: inc/blocks/contact-card/labels.php:15
+#: inc/blocks/photo-text/labels.php:15
+msgctxt "block attribute label"
+msgid "Photo"
+msgstr ""
+
+#. translators: %s: opportunity category name
+#: inc/blocks/accordion-opportunities-item/render.php:77
+#, php-format
+msgid "Show details: %s"
+msgstr ""
+
+#: inc/blocks/accordion-two-photo-item/labels.php:13
+msgctxt "block attribute label"
+msgid "Photo 1"
+msgstr ""
+
+#: inc/blocks/accordion-two-photo-item/labels.php:14
+msgctxt "block attribute label"
+msgid "Photo 2"
+msgstr ""
+
+#: inc/blocks/contact-card/labels.php:13
+#: inc/blocks/hero/labels.php:14
+#: inc/blocks/news/labels.php:15
+#: inc/blocks/photo-text/labels.php:14
+#: inc/blocks/projects/labels.php:14
+#: inc/blocks/video-text/labels.php:14
+msgctxt "block attribute label"
+msgid "Title"
+msgstr ""
+
+#: inc/blocks/contact-card/labels.php:14
+#: inc/blocks/photo-text/labels.php:16
+#: inc/blocks/video-text/labels.php:16
+msgctxt "block attribute label"
+msgid "Text"
+msgstr ""
+
+#: inc/blocks/contact-card/render.php:69
+msgid "Add a title, a text or a photo."
+msgstr ""
+
+#: inc/blocks/Core/BlocksCore.php:123
+msgid "Custom Blocks"
+msgstr ""
+
+#: inc/blocks/Core/BlocksCore.php:261
+msgid "Media"
+msgstr ""
+
+#: inc/blocks/Core/BlocksCore.php:262
+msgid "Select image"
+msgstr ""
+
+#: inc/blocks/Core/BlocksCore.php:263
+msgid "Replace image"
+msgstr ""
+
+#: inc/blocks/Core/BlocksCore.php:264
+msgid "Remove image"
+msgstr ""
+
+#: inc/blocks/Core/BlocksCore.php:265
+msgid "You do not have permission to upload media."
+msgstr ""
+
+#: inc/blocks/Core/BlocksCore.php:267
+msgid "— Select —"
+msgstr ""
+
+#: inc/blocks/Core/BlocksCore.php:268
+msgid "No terms available."
+msgstr ""
+
+#: inc/blocks/hero/labels.php:15
+msgctxt "block attribute label"
+msgid "Subtitle"
+msgstr ""
+
+#: inc/blocks/hero/labels.php:16
+msgctxt "block attribute label"
+msgid "Link: browse opportunities"
+msgstr ""
+
+#: inc/blocks/hero/labels.php:17
+msgctxt "block attribute label"
+msgid "Link: add an opportunity"
+msgstr ""
+
+#: inc/blocks/hero/labels.php:18
+msgctxt "block attribute label"
+msgid "Bottom text"
+msgstr ""
+
+#: inc/blocks/hero/labels.php:19
+msgctxt "block attribute label"
+msgid "Photo (fallback: JPEG or PNG)"
+msgstr ""
+
+#: inc/blocks/hero/labels.php:21
+msgctxt "block attribute label"
+msgid "Format source 1 (AVIF)"
+msgstr ""
+
+#: inc/blocks/hero/labels.php:22
+msgctxt "block attribute label"
+msgid "Format source 2 (WebP)"
+msgstr ""
+
+#: inc/blocks/news/labels.php:14
+#: inc/blocks/projects/labels.php:13
+msgctxt "block attribute label"
+msgid "Label"
+msgstr ""
+
+#: inc/blocks/news/labels.php:16
+msgctxt "block attribute label"
+msgid "Button text"
+msgstr ""
+
+#: inc/blocks/news/labels.php:17
+msgctxt "block attribute label"
+msgid "Button URL (empty = news archive)"
+msgstr ""
+
+#: inc/blocks/news/render.php:78
+msgid "No news to show yet."
+msgstr ""
+
+#: inc/blocks/projects/labels.php:15
+msgctxt "block attribute label"
+msgid "Number of projects"
+msgstr ""
+
+#: inc/blocks/projects/render.php:70
+msgid "No projects to show yet."
+msgstr ""
+
+#: inc/blocks/projects/render.php:81
+msgid "Previous projects"
+msgstr ""
+
+#: inc/blocks/projects/render.php:84
+msgid "Next projects"
+msgstr ""
+
+#: inc/blocks/projects/render.php:90
+msgid "carousel"
+msgstr ""
+
+#: inc/blocks/video-text/labels.php:15
+msgctxt "block attribute label"
+msgid "Video URL (YouTube or Vimeo)"
+msgstr ""
+
+#: inc/blocks/video-text/labels.php:17
+msgctxt "block attribute label"
+msgid "Cover image"
+msgstr ""
+
+#: inc/blocks/video-text/render.php:41
+msgid "Video"
+msgstr ""
+
+#. translators: %s: video title
+#: inc/blocks/video-text/render.php:44
+#, php-format
+msgid "Play video: %s"
 msgstr ""
 
 #: inc/chat/Api/ActivityController.php:56
@@ -612,7 +821,7 @@ msgstr ""
 #: inc/launchpad/Api/ProfileController.php:129
 #: inc/launchpad/Panels/ProfilePanel.php:180
 #: inc/launchpad/Panels/ProfilePanel.php:250
-#: template-parts/contact-section.php:76
+#: template-parts/contact-section.php:50
 msgid "Phone"
 msgstr ""
 
@@ -625,7 +834,7 @@ msgstr ""
 #: inc/contact/Channels/TelegramChannel.php:82
 #: inc/launchpad/Panels/ProfilePanel.php:148
 #: inc/launchpad/Panels/ProfilePanel.php:259
-#: template-parts/contact-section.php:77
+#: template-parts/contact-section.php:51
 msgid "Email"
 msgstr ""
 
@@ -655,17 +864,29 @@ msgid "Invalid phone number"
 msgstr ""
 
 #: inc/contact/Core/ContactCore.php:190
-#: template-parts/contact-section.php:367
+#: template-parts/contact-section.php:321
 msgid "Thank you!"
 msgstr ""
 
 #: inc/contact/Core/ContactCore.php:191
-#: template-parts/contact-section.php:371
+#: template-parts/contact-section.php:325
 msgid "Your message has been sent successfully."
 msgstr ""
 
 #: inc/contact/Core/ContactCore.php:192
 msgid "Something went wrong. Please try again later."
+msgstr ""
+
+#: inc/contact/Support/ContactLinks.php:76
+msgid "Email:"
+msgstr ""
+
+#: inc/contact/Support/ContactLinks.php:90
+msgid "Telegram:"
+msgstr ""
+
+#: inc/contact/Support/ContactLinks.php:103
+msgid "LinkedIn:"
 msgstr ""
 
 #: inc/favorites/Api/FavoritesController.php:42
@@ -1471,6 +1692,7 @@ msgstr ""
 #: inc/launchpad/Panels/OpportunitiesPanel.php:860
 #: inc/launchpad/Panels/ProfilePanel.php:398
 #: inc/tour/Scenarios/OpportunityFormScenario.php:109
+#: inc/blocks/accordion-opportunities/editor/item.js:96
 msgid "Description"
 msgstr ""
 
@@ -1934,6 +2156,7 @@ msgid "Find location..."
 msgstr ""
 
 #: inc/listing/Filters/LocationsFilter.php:111
+#: template-parts/search-modal.php:38
 msgid "Clear"
 msgstr ""
 
@@ -2402,6 +2625,9 @@ msgid "Ready to help? Click this button to create a new opportunity and share it
 msgstr ""
 
 #: inc/tour/Scenarios/OpportunityFormScenario.php:64
+#: inc/blocks/accordion-opportunities/editor.js:99
+#: inc/blocks/accordion-two-photo/editor/item.js:81
+#: inc/blocks/faq/editor.js:79
 msgid "Title"
 msgstr ""
 
@@ -2488,13 +2714,13 @@ msgid "Write your review here..."
 msgstr ""
 
 #: template-parts/comments-interactive.php:141
-#: template-parts/contact-section.php:345
+#: template-parts/contact-section.php:299
 msgid "Send"
 msgstr ""
 
 #: template-parts/comments-interactive.php:142
 #: template-parts/comments-interactive.php:376
-#: template-parts/contact-section.php:348
+#: template-parts/contact-section.php:302
 msgid "Sending..."
 msgstr ""
 
@@ -2529,63 +2755,51 @@ msgstr ""
 msgid "Open to dialogue"
 msgstr ""
 
-#: template-parts/contact-section.php:75
+#: template-parts/contact-section.php:49
 msgid "Your name"
 msgstr ""
 
-#: template-parts/contact-section.php:78
+#: template-parts/contact-section.php:52
 msgid "Your message"
 msgstr ""
 
-#: template-parts/contact-section.php:82
+#: template-parts/contact-section.php:56
 msgid "Enter your name"
 msgstr ""
 
-#: template-parts/contact-section.php:83
+#: template-parts/contact-section.php:57
 msgid "Enter your phone number"
 msgstr ""
 
-#: template-parts/contact-section.php:84
+#: template-parts/contact-section.php:58
 msgid "Enter your email"
 msgstr ""
 
-#: template-parts/contact-section.php:85
+#: template-parts/contact-section.php:59
 msgid "Enter your message"
 msgstr ""
 
-#: template-parts/contact-section.php:110
-#: template-parts/contact-section.php:113
+#: template-parts/contact-section.php:84
+#: template-parts/contact-section.php:87
 msgid "Privacy Policy"
 msgstr ""
 
-#: template-parts/contact-section.php:120
-#: template-parts/contact-section.php:123
+#: template-parts/contact-section.php:94
+#: template-parts/contact-section.php:97
 msgid "Data Collection Policy"
 msgstr ""
 
 #. translators: %s: policy links
-#: template-parts/contact-section.php:128
+#: template-parts/contact-section.php:102
 #, php-format
 msgid "By clicking the “Submit” button, you automatically agree to the %s."
 msgstr ""
 
-#: template-parts/contact-section.php:129
+#: template-parts/contact-section.php:103
 msgid " and "
 msgstr ""
 
-#: template-parts/contact-section.php:178
-msgid "Email:"
-msgstr ""
-
-#: template-parts/contact-section.php:188
-msgid "Telegram:"
-msgstr ""
-
-#: template-parts/contact-section.php:198
-msgid "LinkedIn:"
-msgstr ""
-
-#: template-parts/contact-section.php:360
+#: template-parts/contact-section.php:314
 msgid "Success"
 msgstr ""
 
@@ -2620,7 +2834,7 @@ msgstr ""
 msgid "You have new notifications, please check them in your personal account"
 msgstr ""
 
-#: template-parts/news-card.php:80
+#: template-parts/news-card.php:77
 msgid "No category"
 msgstr ""
 
@@ -2633,10 +2847,11 @@ msgid "Pagination"
 msgstr ""
 
 #: template-parts/search-modal.php:17
+#: template-parts/search-modal.php:21
 msgid "Search the site"
 msgstr ""
 
-#: template-parts/search-modal.php:25
+#: template-parts/search-modal.php:29
 msgid "Enter a search term"
 msgstr ""
 
@@ -2803,4 +3018,351 @@ msgstr ""
 
 #: templates/single-project.php:177
 msgid "This feature is only available for registered users."
+msgstr ""
+
+#: inc/blocks/accordion-opportunities/editor.js:44
+msgid "Button"
+msgstr ""
+
+#: inc/blocks/accordion-opportunities/editor.js:49
+#: inc/blocks/faq/editor.js:46
+msgid "Settings"
+msgstr ""
+
+#: inc/blocks/accordion-opportunities/editor.js:53
+msgid "Button text"
+msgstr ""
+
+#: inc/blocks/accordion-opportunities/editor.js:61
+msgid "Button URL"
+msgstr ""
+
+#: inc/blocks/accordion-opportunities/editor.js:62
+msgid "Empty: the opportunities archive."
+msgstr ""
+
+#: inc/blocks/accordion-opportunities/editor.js:68
+msgid "Click for touch"
+msgstr ""
+
+#: inc/blocks/accordion-opportunities/editor.js:69
+msgid "On: on touch screens an item opens when its number is tapped. Off: items open as they scroll into view."
+msgstr ""
+
+#: inc/blocks/accordion-opportunities/editor.js:89
+#: inc/blocks/faq/editor.js:70
+msgid "Label"
+msgstr ""
+
+#: inc/blocks/accordion-opportunities/editor/item.js:43
+msgid "Photo"
+msgstr ""
+
+#: inc/blocks/accordion-opportunities/editor/item.js:44
+#: inc/blocks/accordion-two-photo/editor/item.js:35
+msgid "Portrait photo, 3:4 works best."
+msgstr ""
+
+#: inc/blocks/accordion-opportunities/editor/item.js:84
+msgid "Choose a category in the sidebar"
+msgstr ""
+
+#. translators: %d: photo slot number
+#: inc/blocks/accordion-two-photo/editor/item.js:34
+#, js-format
+msgid "Photo %d"
+msgstr ""
+
+#: inc/blocks/accordion-two-photo/editor/item.js:91
+msgid "Text"
+msgstr ""
+
+#: inc/blocks/faq/editor.js:49
+msgid "Open the first question"
+msgstr ""
+
+#: inc/blocks/faq/editor.js:50
+msgid "The first answer is visible when the page loads; the others open one at a time."
+msgstr ""
+
+#: inc/blocks/faq/editor/item.js:29
+msgid "Answer"
+msgstr ""
+
+#: inc/blocks/faq/editor/item.js:47
+msgid "Question"
+msgstr ""
+
+#: inc/blocks/accordion-opportunities-item/block.json
+msgctxt "block title"
+msgid "Opportunity category"
+msgstr ""
+
+#: inc/blocks/accordion-opportunities-item/block.json
+msgctxt "block description"
+msgid "One category of the accordion: its name links to the listing, with a description and a photo."
+msgstr ""
+
+#: inc/blocks/accordion-opportunities/block.json
+msgctxt "block title"
+msgid "Accordion opportunities"
+msgstr ""
+
+#: inc/blocks/accordion-opportunities/block.json
+msgctxt "block description"
+msgid "Opportunity categories as an expandable list: each item links to its category listing and reveals a description and a photo."
+msgstr ""
+
+#: inc/blocks/accordion-opportunities/block.json
+#: inc/blocks/accordion-two-photo/block.json
+#: inc/blocks/faq/block.json
+msgctxt "block keyword"
+msgid "accordion"
+msgstr ""
+
+#: inc/blocks/accordion-opportunities/block.json
+msgctxt "block keyword"
+msgid "opportunities"
+msgstr ""
+
+#: inc/blocks/accordion-opportunities/block.json
+#: inc/blocks/news/block.json
+msgctxt "block keyword"
+msgid "categories"
+msgstr ""
+
+#: inc/blocks/accordion-two-photo-item/block.json
+msgctxt "block title"
+msgid "Accordion item"
+msgstr ""
+
+#: inc/blocks/accordion-two-photo-item/block.json
+msgctxt "block description"
+msgid "One numbered section: title, text and two photos."
+msgstr ""
+
+#: inc/blocks/accordion-two-photo/block.json
+msgctxt "block title"
+msgid "Accordion two photo"
+msgstr ""
+
+#: inc/blocks/accordion-two-photo/block.json
+msgctxt "block description"
+msgid "Numbered stack of sections, each with a title, a text and two photos."
+msgstr ""
+
+#: inc/blocks/accordion-two-photo/block.json
+msgctxt "block keyword"
+msgid "steps"
+msgstr ""
+
+#: inc/blocks/accordion-two-photo/block.json
+msgctxt "block keyword"
+msgid "photos"
+msgstr ""
+
+#: inc/blocks/accordion-two-photo/block.json
+msgctxt "block keyword"
+msgid "stack"
+msgstr ""
+
+#: inc/blocks/animated-text/block.json
+msgctxt "block title"
+msgid "Animated text"
+msgstr ""
+
+#: inc/blocks/animated-text/block.json
+msgctxt "block description"
+msgid "A large statement in a rounded tinted section — paragraphs and headings."
+msgstr ""
+
+#: inc/blocks/animated-text/block.json
+msgctxt "block keyword"
+msgid "statement"
+msgstr ""
+
+#: inc/blocks/animated-text/block.json
+#: inc/blocks/photo-text/block.json
+msgctxt "block keyword"
+msgid "text"
+msgstr ""
+
+#: inc/blocks/animated-text/block.json
+msgctxt "block keyword"
+msgid "animated"
+msgstr ""
+
+#: inc/blocks/contact-card/block.json
+msgctxt "block title"
+msgid "Contact card"
+msgstr ""
+
+#: inc/blocks/contact-card/block.json
+msgctxt "block description"
+msgid "A photo, a heading and a short text next to the site's contact links from Theme Settings."
+msgstr ""
+
+#: inc/blocks/contact-card/block.json
+msgctxt "block keyword"
+msgid "contact"
+msgstr ""
+
+#: inc/blocks/contact-card/block.json
+msgctxt "block keyword"
+msgid "email"
+msgstr ""
+
+#: inc/blocks/contact-card/block.json
+msgctxt "block keyword"
+msgid "telegram"
+msgstr ""
+
+#: inc/blocks/contact-card/block.json
+msgctxt "block keyword"
+msgid "linkedin"
+msgstr ""
+
+#: inc/blocks/faq-item/block.json
+msgctxt "block title"
+msgid "Question"
+msgstr ""
+
+#: inc/blocks/faq-item/block.json
+msgctxt "block description"
+msgid "One question with its answer."
+msgstr ""
+
+#: inc/blocks/faq/block.json
+msgctxt "block title"
+msgid "FAQ"
+msgstr ""
+
+#: inc/blocks/faq/block.json
+msgctxt "block description"
+msgid "Frequently asked questions as a native accordion (one open at a time) with FAQPage structured data."
+msgstr ""
+
+#: inc/blocks/faq/block.json
+msgctxt "block keyword"
+msgid "faq"
+msgstr ""
+
+#: inc/blocks/faq/block.json
+msgctxt "block keyword"
+msgid "questions"
+msgstr ""
+
+#: inc/blocks/hero/block.json
+msgctxt "block title"
+msgid "Hero"
+msgstr ""
+
+#: inc/blocks/hero/block.json
+msgctxt "block description"
+msgid "Full-screen first section: heading, subtitle, two calls to action and a background photo, tuned for the fastest first paint."
+msgstr ""
+
+#: inc/blocks/hero/block.json
+msgctxt "block keyword"
+msgid "hero"
+msgstr ""
+
+#: inc/blocks/hero/block.json
+msgctxt "block keyword"
+msgid "cover"
+msgstr ""
+
+#: inc/blocks/hero/block.json
+msgctxt "block keyword"
+msgid "first screen"
+msgstr ""
+
+#: inc/blocks/news/block.json
+msgctxt "block title"
+msgid "News"
+msgstr ""
+
+#: inc/blocks/news/block.json
+msgctxt "block description"
+msgid "Latest news post from every top-level category, with a link to the news archive."
+msgstr ""
+
+#: inc/blocks/news/block.json
+msgctxt "block keyword"
+msgid "news"
+msgstr ""
+
+#: inc/blocks/news/block.json
+msgctxt "block keyword"
+msgid "latest"
+msgstr ""
+
+#: inc/blocks/photo-text/block.json
+msgctxt "block title"
+msgid "Photo & Text"
+msgstr ""
+
+#: inc/blocks/photo-text/block.json
+msgctxt "block description"
+msgid "Section with a title, a photo and a text column."
+msgstr ""
+
+#: inc/blocks/photo-text/block.json
+msgctxt "block keyword"
+msgid "photo"
+msgstr ""
+
+#: inc/blocks/photo-text/block.json
+msgctxt "block keyword"
+msgid "image"
+msgstr ""
+
+#: inc/blocks/projects/block.json
+msgctxt "block title"
+msgid "Projects carousel"
+msgstr ""
+
+#: inc/blocks/projects/block.json
+msgctxt "block description"
+msgid "The latest projects as a horizontally scrolling row of cards with arrow buttons."
+msgstr ""
+
+#: inc/blocks/projects/block.json
+msgctxt "block keyword"
+msgid "projects"
+msgstr ""
+
+#: inc/blocks/projects/block.json
+msgctxt "block keyword"
+msgid "carousel"
+msgstr ""
+
+#: inc/blocks/projects/block.json
+msgctxt "block keyword"
+msgid "slider"
+msgstr ""
+
+#: inc/blocks/video-text/block.json
+msgctxt "block title"
+msgid "Video & Text"
+msgstr ""
+
+#: inc/blocks/video-text/block.json
+msgctxt "block description"
+msgid "Section with a title, a click-to-play video and a text column."
+msgstr ""
+
+#: inc/blocks/video-text/block.json
+msgctxt "block keyword"
+msgid "video"
+msgstr ""
+
+#: inc/blocks/video-text/block.json
+msgctxt "block keyword"
+msgid "youtube"
+msgstr ""
+
+#: inc/blocks/video-text/block.json
+msgctxt "block keyword"
+msgid "vimeo"
 msgstr ""
