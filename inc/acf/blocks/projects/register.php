@@ -10,7 +10,7 @@ acf_register_block_type([
     'supports'        => ['inserter' => false], // replaced: still renders and edits where it exists, not offered for new content
     'enqueue_assets'  => function () {
         // Swiper is registered on `init` (functions.php) and enqueued only by
-        // its consumers; this block needs its CSS as well as its JS.
+        // its consumers - by now just this block; it needs the CSS too.
         wp_enqueue_style('swiper');
         wp_enqueue_script(
             'projects-block-script',

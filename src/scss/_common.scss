@@ -644,28 +644,6 @@ img {
 
 /* ************************************************************** */
 
-/* Swiper */
-.swiper-paginations {
-  margin-top: 16px;
-  line-height: 0;
-  text-align: center;
-}
-
-.swiper-pagination-bullet {
-  opacity: 1;
-  border-radius: 2px;
-  background-color: $text-light;
-  width: 20px;
-  height: 4px;
-}
-
-/* active bullet */
-.swiper-pagination-bullet-active {
-  background-color: $icon-color-fill;
-
-  // background-image: url('icon-active.svg');
-}
-
 /*
  * Site search dialog (template-parts/search-modal.php, src/js/_search-dialog.js).
  *

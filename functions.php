@@ -108,15 +108,20 @@ function _themeprefix_theme_scripts()
 add_action('wp_enqueue_scripts', '_themeprefix_theme_scripts');
 
 /**
- * Vendor libraries: registered once, enqueued only where they are used.
+ * Scripts and styles loaded only where they are used: registered once here,
+ * enqueued by their consumers.
  *
- * Swiper (152 KB JS + 15 KB CSS) serves the mobile slider in archive-news.php
- * and the legacy acf/projects block, which enqueue the `swiper` handles
- * themselves. Registered on `init` rather than wp_enqueue_scripts so the
- * handles exist wherever a consumer asks for them: at the top of a template
- * (which runs before wp_head), or in an ACF block's enqueue_assets callback.
+ * - swiper (152 KB JS + 15 KB CSS): only the legacy acf/projects block on the
+ *   home page uses it, until that page is swapped to the native
+ *   starwishx/projects - then Swiper can leave the theme.
+ * - sw-scroll-dots: position dots for native scroll-snap rows
+ *   (src/js/scroll-dots.js), used by archive-news.php.
+ *
+ * Registered on `init` rather than wp_enqueue_scripts so the handles exist
+ * wherever a consumer asks for them: at the top of a template (which runs
+ * before wp_head), or in an ACF block's enqueue_assets callback.
  */
-function _themeprefix_register_vendor_assets()
+function _themeprefix_register_ondemand_assets()
 {
   $version = wp_get_theme()->get('Version');
 
@@ -125,8 +130,14 @@ function _themeprefix_register_vendor_assets()
     'in_footer' => true,
     'strategy'  => 'defer',
   ]);
+
+  $dots_path = get_template_directory() . '/assets/js/scroll-dots.js';
+  wp_register_script('sw-scroll-dots', get_template_directory_uri() . '/assets/js/scroll-dots.js', [], is_file($dots_path) ? (string) filemtime($dots_path) : $version, [
+    'in_footer' => true,
+    'strategy'  => 'defer',
+  ]);
 }
-add_action('init', '_themeprefix_register_vendor_assets');
+add_action('init', '_themeprefix_register_ondemand_assets');
 
 
 require_once get_template_directory() . '/inc/acf/blocks/blocks-init.php';
