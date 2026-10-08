@@ -142,6 +142,8 @@ final class ListingCore
             add_action('init', [$this, 'maybeFlushRewrites'], 20);
             add_filter('query_vars', fn(array $vars) => array_merge($vars, ['listing_cat']));
             add_filter('request', [$this, 'disambiguateCategoryUrl'], 20);
+            // Breadcrumbs: Home › Opportunities › {category}
+            add_filter(\Shared\Breadcrumbs\Trail::FILTER, [$this, 'addCategoryCrumb']);
         }
 
         // SEO meta for the opportunity archive (title, description, OG, canonical)
@@ -198,6 +200,32 @@ final class ListingCore
 
         flush_rewrite_rules(false);
         update_option('sw_listing_rewrites_version', self::REWRITE_VERSION, false);
+    }
+
+    /**
+     * Breadcrumbs on /opportunities/{category}/: the archive crumb becomes a
+     * link and the category is the current page. Search keeps its own trail.
+     *
+     * @param  list<array{label: string, url: ?string, home?: true}> $items
+     * @return list<array{label: string, url: ?string, home?: true}>
+     */
+    public function addCategoryCrumb(array $items): array
+    {
+        $slug = (string) get_query_var('listing_cat');
+        if ($slug === '' || is_search() || ! is_post_type_archive('opportunity')) {
+            return $items;
+        }
+
+        $term = get_term_by('slug', $slug, 'category-oportunities');
+        if (! $term || is_wp_error($term)) {
+            return $items;
+        }
+
+        return \Shared\Breadcrumbs\Trail::appendToArchive(
+            $items,
+            (string) get_post_type_archive_link('opportunity'),
+            $term->name
+        );
     }
 
     /**

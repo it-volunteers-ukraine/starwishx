@@ -2,13 +2,6 @@
 @use "../mixins/media";
 
 .post-type-archive-project {
-    .breadcumbs-nav {
-        margin-top: 16px;
-        margin-bottom: 16px;
-        @include media.min-laptop {
-            margin-top: 32px;
-        }
-    }
     .site-footer {
         margin-top: 80px;
     }

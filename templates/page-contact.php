@@ -3,10 +3,15 @@
 /**
  * Template Name: Contact Page
  *
+ * Breadcrumbs from the template (as on every other template - not a block in
+ * the page content), then the page content (contact card etc.) and the
+ * contact form section.
+ *
  * File: templates/page-contact.php
  */
 
 get_header();
+sw_breadcrumbs();
 ?>
 
 <main id="primary" class="site-main">

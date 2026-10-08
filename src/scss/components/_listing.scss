@@ -1,16 +1,6 @@
 @use "../variables" as *;
 @use "../mixins/media";
 
-.post-type-archive-opportunity {
-    .breadcumbs-nav {
-        margin-top: 16px;
-        margin-bottom: 16px;
-        @include media.min-laptop {
-            margin-top: 32px;
-        }
-    }
-}
-
 .listing-app {
     margin: 1rem 0 80px;
     &__header {

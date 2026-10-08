@@ -2,14 +2,6 @@
 @use "../mixins/media";
 
 .single-opportunity {
-    .breadcumbs-nav {
-        margin-top: 16px;
-        margin-bottom: 16px;
-        @include media.min-laptop {
-            margin-top: 32px;
-        }
-    }
-
     // section.section[class*="breadcrumbs-module__"],
     // .opportunity-breadcrumbs {
     //     margin-top: 32px;

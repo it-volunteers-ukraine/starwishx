@@ -3,16 +3,6 @@
 @use "../mixins/media" as *;
 @use "../mixins/indents";
 
-.post-type-archive-news {
-  .breadcumbs-nav {
-    margin-top: 16px;
-    margin-bottom: 16px;
-    @include min-laptop {
-      margin-top: 32px;
-    }
-  }
-}
-
 .single-news {
   &__layout {
     margin-top: 16px;
