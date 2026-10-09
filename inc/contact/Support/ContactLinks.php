@@ -109,6 +109,18 @@ final class ContactLinks
             ];
         }
 
+        $facebook = self::option('facebook_link');
+        if ($facebook !== '') {
+            $links[] = [
+                'key'      => 'facebook',
+                'label'    => __('Facebook:', 'starwishx'),
+                'url'      => str_starts_with($facebook, 'http') ? $facebook : 'https://facebook.com/' . $facebook,
+                'text'     => self::option('facebook_name') ?: $facebook,
+                'title'    => self::option('facebook_title'),
+                'icon'     => 'icon-facebook',
+                'external' => true,
+            ];
+        }
         return self::$links = $links;
     }
 
