@@ -976,11 +976,17 @@
         gap: 6px;
         margin-bottom: 1rem;
         width: 100%;
-        label {
+        label,
+        > legend {
             margin-left: 2px;
             color: $text-basic;
             // font-weight: 500;
             font-size: 0.85rem;
+        }
+
+        // A rendered legend is not a flex item, so the gap under it is its own.
+        > legend {
+            margin-bottom: 6px;
         }
         .label-required::after {
             margin-left: 3px;
@@ -995,6 +1001,12 @@
             background-color: rgba(122, 90, 228, 0.1);
             padding: 4px;
         }
+    }
+
+    // Checkbox groups are <fieldset class="form-field"> labelled by a <legend>.
+    // Undo the fieldset's min-content floor so their grids shrink on phones.
+    fieldset.form-field {
+        min-inline-size: 0;
     }
     .form-field__hint {
         color: $text-light;
@@ -1245,6 +1257,7 @@
     background: $surface-primary;
     pointer-events: none;
     label,
+    legend,
     h2,
     h3,
     .btn,
@@ -1400,30 +1413,105 @@
     // }
 }
 
+// Opportunity categories: one native disclosure per parent category —
+// details.category-group > summary + .category-group__panel (checkboxes).
+// Opening/closing animates like the FAQ block: ::details-content is a grid
+// track going 0fr -> 1fr with the panel clipped inside it; browsers without
+// ::details-content just toggle.
 .category-group-container {
     border: 1px solid $input-color-border-filled;
     border-radius: $radius-input;
     background: $input-color-surface-default;
-    padding: 12px;
+    padding: 0 12px;
 }
 
 .category-group {
-    margin-bottom: 16px;
-    border-bottom: 1px dashed $input-color-border-default;
-    padding-bottom: 16px;
-
-    &:last-child {
-        margin-bottom: 0;
-        border-bottom: none;
-        padding-bottom: 0;
+    &:not(:last-child) {
+        border-bottom: 1px dashed $input-color-border-default;
     }
 
-    .category-group-title {
-        margin-bottom: 8px;
-        color: $text-dark;
-        font-weight: 600;
-        // inline styles in PHP generally handle this, but adding backup
-        font-size: 0.9rem;
+    &::details-content {
+        display: grid;
+        grid-template-rows: 0fr;
+        transition:
+            grid-template-rows 0.25s ease-in-out,
+            content-visibility 0.25s allow-discrete;
+    }
+
+    &[open]::details-content {
+        grid-template-rows: 1fr;
+    }
+}
+
+// The summary is the whole row (44px+ touch target): title, "N selected"
+// badge, then the chevron pushed to the end. The UA marker goes.
+.category-group__summary {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    padding-block: 12px;
+    min-block-size: 44px;
+    color: $text-dark;
+    font-weight: 600;
+    font-size: 0.9rem;
+    list-style: none;
+
+    &::-webkit-details-marker {
+        display: none;
+    }
+
+    &:hover {
+        color: $primary-hover;
+    }
+
+    &:focus-visible {
+        outline: 2px solid $primary-hover;
+        outline-offset: 2px;
+        border-radius: $radius-badge;
+    }
+}
+
+// #6839c8 on #dedafa: 5.2:1 (AA for this small text).
+.category-group__count {
+    flex-shrink: 0;
+    border-radius: 10px;
+    background: $buttons-color-background-secondary-hover;
+    padding: 2px 8px;
+    color: $element-block-text;
+    font-weight: 500;
+    font-size: 0.75rem;
+    white-space: nowrap;
+}
+
+.category-group__chevron {
+    flex-shrink: 0;
+    transition: transform 0.2s ease;
+    margin-inline-start: auto;
+    color: $dropdown-icon-color;
+
+    .category-group[open] & {
+        transform: rotate(180deg);
+    }
+}
+
+// Clipped inside the animated track. Spacing lives on the inner grid, never
+// on the panel: the panel's own padding would leave a closed group that much
+// open. The 4px inline bleed keeps the checkboxes' focus ring unclipped.
+.category-group__panel {
+    margin-inline: -4px;
+    min-block-size: 0;
+    overflow: hidden;
+}
+
+.category-group__items {
+    padding: 4px 4px 12px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .category-group::details-content,
+    .category-group__chevron {
+        transition: none;
     }
 }
 
