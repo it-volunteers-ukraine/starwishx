@@ -32,7 +32,7 @@
     "@wordpress/dependency-extraction-webpack-plugin": "^6.57.0",
     "autoprefixer": "^10.6.1",
     "babel-loader": "^10.1.1",
-    "cssnano": "^9.4.0",
+    "cssnano": "^9.8.0",
     "del": "^9.0.1",
     "gulp": "^5.0.1",
     "gulp-changed": "^5.0.4",
