@@ -316,45 +316,43 @@ class OpportunitiesService
     }
 
     /**
-     * Get terms hierarchically (Parent -> Children).
+     * Get terms hierarchically (Parent -> Children), both levels sorted by name.
+     *
+     * One query for the whole taxonomy, grouped here (it used to be one query
+     * per parent). Only children are selectable in the form, so a parent
+     * without any is left out rather than rendered as an empty group.
      */
     private function getHierarchicalCategoryTerms(string $taxonomy): array
     {
-        // 1. Get Parents (Term ID 0)
-        $parents = get_terms([
+        $terms = get_terms([
             'taxonomy'   => $taxonomy,
             'hide_empty' => false,
-            'parent'     => 0,
             'orderby'    => 'name',
         ]);
 
-        if (is_wp_error($parents)) {
+        if (is_wp_error($terms)) {
             return [];
         }
 
-        $result = [];
-        foreach ($parents as $parent) {
-            // 2. Get Children for each parent
-            $children = get_terms([
-                'taxonomy'   => $taxonomy,
-                'hide_empty' => false,
-                'parent'     => $parent->term_id,
-                'orderby'    => 'name',
-            ]);
-
-            $childData = [];
-            if (!is_wp_error($children)) {
-                $childData = array_map(fn($c) => [
-                    'id'   => $c->term_id,
-                    'name' => html_entity_decode($c->name)
-                ], $children);
+        $children = [];
+        foreach ($terms as $term) {
+            if ($term->parent) {
+                $children[$term->parent][] = [
+                    'id'   => $term->term_id,
+                    'name' => html_entity_decode($term->name),
+                ];
             }
+        }
 
-            $result[] = [
-                'id'       => $parent->term_id,
-                'name'     => html_entity_decode($parent->name),
-                'children' => $childData,
-            ];
+        $result = [];
+        foreach ($terms as $term) {
+            if (!$term->parent && !empty($children[$term->term_id])) {
+                $result[] = [
+                    'id'       => $term->term_id,
+                    'name'     => html_entity_decode($term->name),
+                    'children' => $children[$term->term_id],
+                ];
+            }
         }
 
         return $result;

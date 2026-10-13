@@ -103,6 +103,33 @@ export const opportunitiesGetters = {
     return Array.isArray(selected) && selected.some((s) => s == id);
   },
 
+  // Category groups: one <details> per parent category, context.item = parent.
+
+  /**
+   * Id of the group's title — labels the group's checkboxes (aria-labelledby).
+   */
+  get categoryGroupTitleId() {
+    return `opp-category-group-${getContext()?.item?.id}`;
+  },
+
+  /**
+   * How many of the current group's categories are selected.
+   */
+  get categoryGroupSelectedCount() {
+    const children = getContext()?.item?.children || [];
+    const selected = this.panels.opportunities?.formData?.category;
+    if (!Array.isArray(selected) || !selected.length) return 0;
+    return children.filter((c) => selected.some((s) => s == c.id)).length;
+  },
+
+  /**
+   * "N selected" for the group's summary; the pattern is translated in PHP.
+   */
+  get categoryGroupCountLabel() {
+    const pattern = this.panels.opportunities?.categoryCountLabel || "%d";
+    return pattern.replace("%d", this.categoryGroupSelectedCount);
+  },
+
   /**
    * Can the current item/form be edited?
    */

@@ -172,6 +172,9 @@ class OpportunitiesPanel extends AbstractPanel
                 'newOpportunity'  => esc_html__('New Opportunity', 'starwishx'),
                 'editOpportunity' => esc_html__('Edit Opportunity', 'starwishx'),
             ],
+            // Badge in a collapsed category group's summary (state.categoryGroupCountLabel)
+            /* translators: %d: number of selected categories in one category group */
+            'categoryCountLabel' => __('%d selected', 'starwishx'),
             'layout'      => 'compact',
             'isLayoutCompact'  => ($currentLayout === 'compact'),
             'isLayoutCard'     => ($currentLayout === 'card'),
@@ -805,38 +808,52 @@ class OpportunitiesPanel extends AbstractPanel
                                         <?php esc_html_e('If you want you coud to select the required administrative level. If the opportunity is provided throughout the Oblast - select from (1) Oblast, if the opportunity is for a district or community - select from (2) District, if the opportunity concerns a city or village select the required City or Village from (3).', 'starwishx'); ?>
                                     </label>
                                 </div>
-                                <div class="form-field">
-                                    <label class="<?php echo $required['opportunity_category'] ? 'label-required' : ''; ?>"><?php echo esc_html($labels['opportunity_category'] ?? __('Opportunity Category', 'starwishx')); ?></label>
-                                    <!-- Hierarchical Checkboxes -->
+                                <fieldset class="form-field">
+                                    <legend class="<?php echo $required['opportunity_category'] ? 'label-required' : ''; ?>"><?php echo esc_html($labels['opportunity_category'] ?? __('Opportunity Category', 'starwishx')); ?></legend>
+                                    <!-- Hierarchical checkboxes: one native disclosure per parent category.
+                                         Groups open independently (no name attribute: picks span parents).
+                                         All start collapsed; callbacks.opportunities.syncCategoryGroupOpen
+                                         opens the ones holding a selection whenever another form loads.
+                                         The summary shows "N selected"; each set of checkboxes is a group
+                                         labelled by its title (a <details> alone is an unnamed group). -->
                                     <div class="category-group-container" data-field="category">
                                         <template data-wp-each="<?= $optPath ?>.categories">
-                                            <div class="category-group">
-                                                <!-- Parent Category Name (Header) -->
-                                                <h4 class="category-group-title"
-                                                    data-wp-text="context.item.name"></h4>
-
-                                                <!-- Checkboxes for Children -->
-                                                <div class="category-group-items launchpad-grid-3-col--sm">
-                                                    <template data-wp-each--child="context.item.children">
-                                                        <label class="launchpad-form__checkbox">
-                                                            <input type="checkbox"
-                                                                data-wp-bind--value="context.child.id"
-                                                                data-wp-bind--checked="state.isCategoryChecked"
-                                                                data-wp-on--change="actions.opportunities.toggleCategory">
-                                                            <span data-wp-text="context.child.name"></span>
-                                                        </label>
-                                                    </template>
+                                            <details class="category-group"
+                                                data-wp-watch="callbacks.opportunities.syncCategoryGroupOpen">
+                                                <summary class="category-group__summary">
+                                                    <span class="category-group__title"
+                                                        data-wp-bind--id="state.categoryGroupTitleId"
+                                                        data-wp-text="context.item.name"></span>
+                                                    <span class="category-group__count" hidden
+                                                        data-wp-bind--hidden="!state.categoryGroupSelectedCount"
+                                                        data-wp-text="state.categoryGroupCountLabel"></span>
+                                                    <?php sw_svg_e('icon-arrow-down', 11, 7, 'category-group__chevron'); ?>
+                                                </summary>
+                                                <div class="category-group__panel">
+                                                    <div class="category-group__items launchpad-grid-3-col--sm"
+                                                        role="group"
+                                                        data-wp-bind--aria-labelledby="state.categoryGroupTitleId">
+                                                        <template data-wp-each--child="context.item.children">
+                                                            <label class="launchpad-form__checkbox">
+                                                                <input type="checkbox"
+                                                                    data-wp-bind--value="context.child.id"
+                                                                    data-wp-bind--checked="state.isCategoryChecked"
+                                                                    data-wp-on--change="actions.opportunities.toggleCategory">
+                                                                <span data-wp-text="context.child.name"></span>
+                                                            </label>
+                                                        </template>
+                                                    </div>
                                                 </div>
-                                            </div>
+                                            </details>
                                         </template>
                                     </div>
                                     <label class="exclamation-circle__error" hidden
                                         data-wp-bind--hidden="!<?= $errPath ?>.category"
                                         data-wp-text="<?= $errPath ?>.category"></label>
-                                </div>
+                                </fieldset>
 
-                                <div class="form-field">
-                                    <label class="<?php echo $required['opportunity_beneficiaries'] ? 'label-required' : ''; ?>"><?php echo esc_html($labels['opportunity_beneficiaries'] ?? __('Beneficiaries', 'starwishx')); ?></label>
+                                <fieldset class="form-field">
+                                    <legend class="<?php echo $required['opportunity_beneficiaries'] ? 'label-required' : ''; ?>"><?php echo esc_html($labels['opportunity_beneficiaries'] ?? __('Beneficiaries', 'starwishx')); ?></legend>
                                     <div class="checkbox-group launchpad-grid-3-col" data-field="beneficiaries">
                                         <template data-wp-each="<?= $optPath ?>.beneficiaries">
                                             <label class="launchpad-form__checkbox">
@@ -851,7 +868,7 @@ class OpportunitiesPanel extends AbstractPanel
                                     <label class="exclamation-circle__error" hidden
                                         data-wp-bind--hidden="!<?= $errPath ?>.beneficiaries"
                                         data-wp-text="<?= $errPath ?>.beneficiaries"></label>
-                                </div>
+                                </fieldset>
                             </div>
                         </div>
 

@@ -17,6 +17,7 @@ import { coreActions } from "./core/actions.js";
 // Domain modules - plain objects
 import { opportunitiesActions } from "./opportunities/actions.js";
 import { opportunitiesGetters } from "./opportunities/getters.js";
+import { opportunitiesCallbacks } from "./opportunities/callbacks.js";
 import { favoritesActions } from "./favorites/actions.js";
 import { favoritesPanelGetters } from "./favorites/getters.js";
 // security actions & getters now in profile
@@ -65,6 +66,11 @@ const { actions } = store("launchpad", {
     // Favorites domain
     favorites: favoritesActions,
 
+  },
+
+  // Side effects for data-wp-watch / data-wp-init, by domain.
+  callbacks: {
+    opportunities: opportunitiesCallbacks,
   },
 });
 

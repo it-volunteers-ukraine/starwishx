@@ -70,7 +70,11 @@ $contact_links = sw_contact_links();
                 </div>
             </div>
             <div class="footer-copyright2">
-                <a href="<?php echo esc_url((string) get_field('privacy_policy_page', 'options')); ?>" class="copyright-link" target="_blank"><?php echo esc_html(get_field('privacy_policy_text', 'options')); ?></a>
+                <?php 
+                /*
+                    <a href="<?php echo esc_url((string) get_field('privacy_policy_page', 'options')); ?>" class="copyright-link" target="_blank"><?php echo esc_html(get_field('privacy_policy_text', 'options')); ?></a>
+                    */
+                ?>
                 <a href="<?php echo esc_url((string) get_field('privacy_data_protection_page', 'options')); ?>" class="copyright-link" target="_blank"><?php echo esc_html(get_field('privacy_data_protection_text', 'options')); ?></a>
             </div>
             <?php echo esc_html(get_field('copyright', 'options')); ?>
