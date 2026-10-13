@@ -127,6 +127,11 @@ class OpportunitiesPanel extends AbstractPanel
             'companyLimits' => [
                 'min' => OpportunitiesService::COMPANY_MIN_LENGTH,
             ],
+            // Multi-select limits keyed by formData field (counters, disabled options, validation)
+            'selectionLimits' => [
+                'category'      => OpportunitiesService::CATEGORY_MAX_ITEMS,
+                'beneficiaries' => OpportunitiesService::BENEFICIARIES_MAX_ITEMS,
+            ],
             'descriptionLimits' => [
                 'min' => OpportunitiesService::DESCRIPTION_MIN_LENGTH,
                 'max' => OpportunitiesService::DESCRIPTION_MAX_LENGTH,
@@ -155,6 +160,19 @@ class OpportunitiesPanel extends AbstractPanel
                 ),
                 'category'    => __('At least one category is required.', 'starwishx'),
                 'beneficiaries'     => __('At least one beneficiary type is required.', 'starwishx'),
+                // Same wording as the REST validator's 422 (RestArg::arrayMaxItems)
+                'categoryMax' => sprintf(
+                    /* translators: 1: field name, 2: maximum allowed item count */
+                    __('%1$s: maximum %2$d items allowed.', 'starwishx'),
+                    __('Categories', 'starwishx'),
+                    OpportunitiesService::CATEGORY_MAX_ITEMS
+                ),
+                'beneficiariesMax' => sprintf(
+                    /* translators: 1: field name, 2: maximum allowed item count */
+                    __('%1$s: maximum %2$d items allowed.', 'starwishx'),
+                    __('Beneficiaries', 'starwishx'),
+                    OpportunitiesService::BENEFICIARIES_MAX_ITEMS
+                ),
                 'dateRange'   => __('End date cannot be before start date.', 'starwishx'),
                 'document'    => __('File is too large. Max 5MB.', 'starwishx'),
             ],
@@ -212,6 +230,11 @@ class OpportunitiesPanel extends AbstractPanel
                 $required[$field['name']] = (bool) ($field['required'] ?? 0);
             }
         }
+
+        // "(max. N)" after the multi-select legends — inside the <legend>, so
+        // it is part of the group's accessible name.
+        /* translators: %d: maximum number of options that can be selected */
+        $maxHint = __('(max. %d)', 'starwishx');
 
         // Compute lock state for SSR — prevents flash of content before hydration
         $userId = get_current_user_id();
@@ -809,7 +832,7 @@ class OpportunitiesPanel extends AbstractPanel
                                     </label>
                                 </div>
                                 <fieldset class="form-field">
-                                    <legend class="<?php echo $required['opportunity_category'] ? 'label-required' : ''; ?>"><?php echo esc_html($labels['opportunity_category'] ?? __('Opportunity Category', 'starwishx')); ?></legend>
+                                    <legend class="<?php echo $required['opportunity_category'] ? 'label-required' : ''; ?>"><?php echo esc_html($labels['opportunity_category'] ?? __('Opportunity Category', 'starwishx')); ?> <span class="form-field__limit"><?php echo esc_html(sprintf($maxHint, OpportunitiesService::CATEGORY_MAX_ITEMS)); ?></span></legend>
                                     <!-- Hierarchical checkboxes: one native disclosure per parent category.
                                          Groups open independently (no name attribute: picks span parents).
                                          All start collapsed; callbacks.opportunities.syncCategoryGroupOpen
@@ -838,6 +861,7 @@ class OpportunitiesPanel extends AbstractPanel
                                                                 <input type="checkbox"
                                                                     data-wp-bind--value="context.child.id"
                                                                     data-wp-bind--checked="state.isCategoryChecked"
+                                                                    data-wp-bind--disabled="state.isCategoryOptionDisabled"
                                                                     data-wp-on--change="actions.opportunities.toggleCategory">
                                                                 <span data-wp-text="context.child.name"></span>
                                                             </label>
@@ -847,27 +871,38 @@ class OpportunitiesPanel extends AbstractPanel
                                             </details>
                                         </template>
                                     </div>
-                                    <label class="exclamation-circle__error" hidden
-                                        data-wp-bind--hidden="!<?= $errPath ?>.category"
-                                        data-wp-text="<?= $errPath ?>.category"></label>
+                                    <div class="form-field__footer">
+                                        <label class="exclamation-circle__error" hidden
+                                            data-wp-bind--hidden="!<?= $errPath ?>.category"
+                                            data-wp-text="<?= $errPath ?>.category"></label>
+                                        <span class="char-counter"
+                                            data-wp-class--char-counter--warn="state.isCategoryLimitReached"
+                                            data-wp-text="state.categoryCounterText"></span>
+                                    </div>
                                 </fieldset>
 
                                 <fieldset class="form-field">
-                                    <legend class="<?php echo $required['opportunity_beneficiaries'] ? 'label-required' : ''; ?>"><?php echo esc_html($labels['opportunity_beneficiaries'] ?? __('Beneficiaries', 'starwishx')); ?></legend>
+                                    <legend class="<?php echo $required['opportunity_beneficiaries'] ? 'label-required' : ''; ?>"><?php echo esc_html($labels['opportunity_beneficiaries'] ?? __('Beneficiaries', 'starwishx')); ?> <span class="form-field__limit"><?php echo esc_html(sprintf($maxHint, OpportunitiesService::BENEFICIARIES_MAX_ITEMS)); ?></span></legend>
                                     <div class="checkbox-group launchpad-grid-3-col" data-field="beneficiaries">
                                         <template data-wp-each="<?= $optPath ?>.beneficiaries">
                                             <label class="launchpad-form__checkbox">
                                                 <input type="checkbox"
                                                     data-wp-bind--value="context.item.id"
                                                     data-wp-bind--checked="state.isBeneficiaryChecked"
+                                                    data-wp-bind--disabled="state.isBeneficiaryOptionDisabled"
                                                     data-wp-on--change="actions.opportunities.toggleBeneficiary">
                                                 <span data-wp-text="context.item.name"></span>
                                             </label>
                                         </template>
                                     </div>
-                                    <label class="exclamation-circle__error" hidden
-                                        data-wp-bind--hidden="!<?= $errPath ?>.beneficiaries"
-                                        data-wp-text="<?= $errPath ?>.beneficiaries"></label>
+                                    <div class="form-field__footer">
+                                        <label class="exclamation-circle__error" hidden
+                                            data-wp-bind--hidden="!<?= $errPath ?>.beneficiaries"
+                                            data-wp-text="<?= $errPath ?>.beneficiaries"></label>
+                                        <span class="char-counter"
+                                            data-wp-class--char-counter--warn="state.isBeneficiariesLimitReached"
+                                            data-wp-text="state.beneficiariesCounterText"></span>
+                                    </div>
                                 </fieldset>
                             </div>
                         </div>

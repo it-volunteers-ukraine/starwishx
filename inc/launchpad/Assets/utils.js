@@ -197,6 +197,32 @@ export function normalizeUrl(value) {
 }
 
 /**
+ * Limit of a multi-select form field (category, beneficiaries).
+ * Hydrated from OpportunitiesService via state.panels.opportunities.selectionLimits —
+ * the same numbers the REST validators enforce.
+ *
+ * @param {Object} p     Opportunities panel state
+ * @param {string} field formData key
+ * @returns {number} Max selectable items, or 0 when no limit is known
+ */
+export function selectionLimit(p, field) {
+  return p?.selectionLimits?.[field] || 0;
+}
+
+/**
+ * How many items a multi-select form field holds — the whole array, which is
+ * what the REST validator counts (it can include ids without a checkbox).
+ *
+ * @param {Object} p     Opportunities panel state
+ * @param {string} field formData key
+ * @returns {number}
+ */
+export function selectionSize(p, field) {
+  const value = p?.formData?.[field];
+  return Array.isArray(value) ? value.length : 0;
+}
+
+/**
  * Validate a name field (mirrors backend ProfileService::validateNameField).
  *
  * Allowed: Unicode letters, spaces, hyphens, apostrophes (straight + curly), periods.
