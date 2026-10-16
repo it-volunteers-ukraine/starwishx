@@ -6,27 +6,33 @@
     background-color: $surface-violet;
     min-height: 100dvh;
 }
+
 .gateway-layout {
     margin: auto;
     border-radius: 40px;
     background: #fff;
     padding: 40px;
+
     @include media.max-tablet {
         // padding: 11px;
         padding: clamp(11px, 3vw, 20px);
     }
 }
+
 .gateway-card {
     @include media.min-tablet {
         min-width: clamp(500px, 40vw, 640px);
     }
+
     .btn {
         width: 100%;
     }
 }
+
 .gateway-header {
     display: flex;
     justify-content: center;
+
     .custom-logo-link,
     .gateway-logo {
         margin: 0 auto;
@@ -37,20 +43,25 @@
     margin: 0 auto;
     max-width: 320px;
 }
+
 .gateway-form-wrapper {
     animation: fadeIn 0.4s ease-in-out;
+
     &[hidden] {
         display: none !important;
     }
 }
+
 .gateway-form {
     display: flex;
     flex-direction: column;
     gap: 24px;
     margin-top: 32px;
+
     @include media.min-mobile {
         min-width: 320px;
     }
+
     // animation: fadeIn 0.3s ease-in-out;
     .gateway-alert--success,
     .gateway-alert--error,
@@ -60,14 +71,17 @@
         background-color: $surface-violet;
         padding: 12px;
     }
+
     .gateway-fields__container {
         display: flex;
         flex-flow: column wrap;
         gap: 24px;
     }
+
     .gateway-form__title {
         text-align: center;
     }
+
     // input,
     // textarea,
     // select {
@@ -88,6 +102,7 @@
         transition: border-color $animations;
         border: 1px solid $input-color-border-filled;
         border-radius: $radius-input;
+
         // background-color: $input-color-surface-default;
         padding: 12px;
         width: 100%;
@@ -110,21 +125,25 @@
             color: $input-color-text-disabled;
         }
     }
+
     .form-field {
         display: flex;
         flex-flow: column wrap;
         gap: 4px;
         width: 100%;
+
         // input {
         // }
         label {
             margin-left: 13px;
             font-size: 14px;
         }
+
         &--checkbox {
             flex-flow: row nowrap;
             align-items: center;
         }
+
         // Applied via data-wp-class--has-error when server (or client) sets
         // a fieldErrors entry. Mimics a focused state so the affected input
         // stands out alongside the inline message in .exclamation-circle__error.
@@ -136,6 +155,7 @@
             input[type="date"] {
                 border-color: $icon-color-error;
                 background-color: $input-color-surface-error;
+
                 &:focus {
                     box-shadow: 0 0 0 1px $icon-color-error;
                     border-color: $icon-color-error;
@@ -143,24 +163,29 @@
             }
         }
     }
+
     .buttons-group {
         display: flex;
         row-gap: 12px;
         flex-flow: column wrap;
     }
+
     .gateway-links {
         display: flex;
         flex-flow: row nowrap;
         font-weight: normal;
         font-size: 14px;
         line-height: 1.2;
+
         @include media.max-tablet {
             margin-bottom: 20px;
         }
+
         a {
             color: $text-accent;
         }
     }
+
     .gateway-link__password {
         white-space: nowrap;
     }
@@ -168,19 +193,24 @@
 
 .gateway-breadcrumbs {
     position: absolute;
+
     .gateway-breadcrumbs-back {
         margin-top: 40px;
         margin-left: 40px;
+
         @include media.min-laptop {
             margin-top: 60px;
             margin-left: 80px;
         }
+
         display: flex;
         align-items: center;
         gap: 4px;
         color: $text-light;
+
         svg {
             height: 16px;
+
             @include media.min-desktop {
                 height: 18px;
             }
@@ -190,6 +220,7 @@
 
 .gateway-password-group {
     position: relative;
+
     .btn-hide-pw {
         position: absolute;
         top: 12px;

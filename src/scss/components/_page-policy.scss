@@ -10,9 +10,10 @@
 }
 
 .policy-title {
-   margin: 12px 0 16px 0;
+   margin: 12px 0 16px;
+
    @include media.min-laptop {
-      margin: 16px 0 32px 0;
+      margin: 16px 0 32px;
    }
 }
 
@@ -47,6 +48,7 @@
             display: block;
             color: $text-basic;
          }
+
          .policy-pdf-meta {
             display: block;
             color: $text-light;
@@ -64,10 +66,12 @@
    .policy-effective-date,
    .policy-intro {
       margin-bottom: 24px;
+
       @include media.min-laptop {
          margin-bottom: 32px;
       }
    }
+
    .policy-content {
       // content typography
       h2 {
@@ -80,16 +84,20 @@
             font-size: 20px;
          }
       }
+
       p {
          margin-top: 16px;
       }
+
       ul,
       ol {
          margin-bottom: 12px;
          margin-left: 1.5rem;
       }
+
       ul {
          list-style: disc;
+
          li {
             list-style: disc;
          }
@@ -98,6 +106,7 @@
       h2,
       h3 {
          margin-top: 24px;
+
          @include media.min-laptop {
             margin-top: 32px;
          }

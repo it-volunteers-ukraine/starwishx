@@ -169,9 +169,11 @@
                 // }
                 .news-content {
                     margin-top: 24px;
+
                     a {
                         color: $text-accent;
                     }
+
                     h2 {
                         color: $text-accent;
                         font-weight: 600;
@@ -182,23 +184,29 @@
                             font-size: 20px;
                         }
                     }
+
                     p {
                         margin-top: 16px;
                     }
+
                     ul,
                     ol {
                         margin-top: 16px;
                         margin-bottom: 12px;
                         margin-left: 1.5rem;
                     }
+
                     ul {
                         list-style: disc;
+
                         li {
                             list-style: disc;
                         }
                     }
+
                     ol.wp-block-list {
                         list-style: decimal;
+
                         li {
                             list-style: decimal;
                         }
@@ -207,46 +215,59 @@
                     h2,
                     h3 {
                         margin-top: 24px;
+
                         @include media.min-laptop {
                             margin-top: 32px;
                         }
                     }
+
                     .wp-block-embed {
                         margin-top: 16px;
+
                         // border-radius: $radius-image;
                         overflow: hidden;
+
                         iframe {
                             border-radius: $radius-image;
+
                             // height: 100%;
                             width: 100%;
                             min-height: 400px;
+
                             @include media.max-mobile {
                                 height: 281px;
                             }
                         }
                     }
+
                     .wp-block-gallery {
                         margin-top: 16px;
+
                         figure {
                             border-radius: $radius-image;
                             overflow: hidden;
                         }
                     }
+
                     .wp-block-image {
                         margin-top: 16px;
                         overflow: hidden;
+
                         img {
                             border-radius: $radius-image;
                             max-width: 100%;
                             height: auto;
                         }
                     }
+
                     .section {
                         padding: 0;
+
                         .container {
                             padding: 0;
                         }
                     }
+
                     .faq-inner {
                         @include media.max-tabland {
                             .accordion {
@@ -306,6 +327,7 @@
     .info-card__categories {
         position: relative;
         z-index: 2;
+
         // margin: 10px;
     }
 }

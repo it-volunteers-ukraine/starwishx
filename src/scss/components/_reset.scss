@@ -13,7 +13,6 @@
     scroll-behavior: smooth;
     scrollbar-gutter: stable;
     text-size-adjust: none;
-    -webkit-text-size-adjust: none;
     -webkit-tap-highlight-color: transparent;
     -webkit-font-smoothing: antialiased;
 }
@@ -43,9 +42,11 @@
 :where(button, input, progress, select, textarea) {
     appearance: none;
     background: transparent;
+
     // text-align: start;
     touch-action: manipulation;
     hanging-punctuation: none;
+
     // border: none;
     color: inherit;
     font: inherit;
@@ -94,6 +95,7 @@
 :where(dialog, [popover]) {
     position: fixed;
     margin: auto;
+
     // background: transparent;
     border: none;
     max-inline-size: none;
