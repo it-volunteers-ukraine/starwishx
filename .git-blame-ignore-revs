@@ -1,0 +1,8 @@
+# Bulk reformatting commits that `git blame` should look through.
+# GitHub reads this file automatically; locally run once:
+#   git config blame.ignoreRevsFile .git-blame-ignore-revs
+
+# style: format JS, JSON, YAML and Markdown with Oxfmt
+dff2c02bc67c8c6fdb2c42afcd65a69734581798
+# style(scss): apply stylelint autofixes
+8bbad896d6a43e183bb8f03a4a672cf8ddc537ad
