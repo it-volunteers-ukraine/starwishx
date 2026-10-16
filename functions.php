@@ -100,8 +100,11 @@ function _themeprefix_theme_scripts()
 
   wp_register_style('_themeprefix-style', get_stylesheet_uri(), [], $version);
 
-  wp_register_style('app', get_stylesheet_directory_uri() . '/assets/css/app.css', [], $version, 'all');
-  wp_register_style('app-logged-in', get_stylesheet_directory_uri() . '/assets/css/app-logged-in.css', [], $version, 'all');
+  // Built assets carry a content-hash version from their .asset.php.
+  $app_css       = \Shared\Build\AssetFile::read('assets/css/app.css');
+  $logged_in_css = \Shared\Build\AssetFile::read('assets/css/app-logged-in.css');
+  wp_register_style('app', $app_css['url'], [], $app_css['version'], 'all');
+  wp_register_style('app-logged-in', $logged_in_css['url'], [], $logged_in_css['version'], 'all');
 
   wp_enqueue_style('_themeprefix-style');
   wp_enqueue_style('app');
@@ -109,7 +112,8 @@ function _themeprefix_theme_scripts()
     wp_enqueue_style('app-logged-in');
   }
 
-  wp_register_script('app', get_stylesheet_directory_uri() . '/assets/js/app.js', [], $version, [
+  $app_js = \Shared\Build\AssetFile::read('assets/js/app.js');
+  wp_register_script('app', $app_js['url'], $app_js['dependencies'], $app_js['version'], [
     'in_footer' => true,
     'strategy'   => 'defer',
   ]);
@@ -142,8 +146,8 @@ function _themeprefix_register_ondemand_assets()
     'strategy'  => 'defer',
   ]);
 
-  $dots_path = get_template_directory() . '/assets/js/scroll-dots.js';
-  wp_register_script('sw-scroll-dots', get_template_directory_uri() . '/assets/js/scroll-dots.js', [], is_file($dots_path) ? (string) filemtime($dots_path) : $version, [
+  $dots = \Shared\Build\AssetFile::read('assets/js/scroll-dots.js');
+  wp_register_script('sw-scroll-dots', $dots['url'], $dots['dependencies'], $dots['version'], [
     'in_footer' => true,
     'strategy'  => 'defer',
   ]);

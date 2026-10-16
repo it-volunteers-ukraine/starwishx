@@ -12,7 +12,10 @@
  *                     script handles (block editor scripts)
  *     asset: true   - also write {name}.asset.php: dependencies + content-hash
  *                     version, the manifest core reads for block.json assets
- * type "css"  - sass-embedded, then Lightning CSS (prefixes, minify, modules).
+ *                     and Shared\Build\AssetFile reads for the theme's own
+ *                     enqueues
+ * type "css"  - sass-embedded, then Lightning CSS (prefixes, minify, modules);
+ *   asset: true writes the same manifest (no dependencies).
  * type "sprite" - tools/build-sprite.mjs, before the files lane copies it.
  * type "copy" - static files copied as-is, only when changed.
  *
@@ -39,6 +42,7 @@ export const lanes = [
     out: (file) => `assets/js/${name(file)}.module.js`,
     format: "es",
     wp: "modules",
+    asset: true,
     // TourCore registers Shepherd from its CDN as the script module "shepherd".
     external: { "shepherd.js": "shepherd" },
   },
@@ -51,6 +55,7 @@ export const lanes = [
     exclude: ["src/js/_*.js"],
     out: (file) => `assets/js/${name(file)}.js`,
     format: "iife",
+    asset: true,
   },
   {
     id: "block-view",
@@ -91,6 +96,7 @@ export const lanes = [
     include: ["src/scss/*.scss"],
     exclude: ["src/scss/_*.scss"],
     out: (file) => `assets/css/${name(file)}.css`,
+    asset: true,
   },
   {
     id: "block-styles",

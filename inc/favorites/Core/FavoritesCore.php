@@ -23,6 +23,7 @@ namespace Favorites\Core;
 use Favorites\Data\FavoritesRepository;
 use Favorites\Services\FavoritesService;
 use Favorites\Api\FavoritesController;
+use Shared\Build\AssetFile;
 
 final class FavoritesCore
 {
@@ -103,10 +104,12 @@ final class FavoritesCore
 
         // Register the script module
         if (function_exists('wp_register_script_module')) {
+            $asset = AssetFile::read('assets/js/favorites-store.module.js', ['@wordpress/interactivity']);
             wp_register_script_module(
                 '@starwishx/favorites',
-                get_template_directory_uri() . '/assets/js/favorites-store.module.js',
-                ['@wordpress/interactivity']
+                $asset['url'],
+                $asset['dependencies'],
+                $asset['version']
             );
             wp_enqueue_script_module('@starwishx/favorites');
         }

@@ -15,6 +15,7 @@ import { initAsyncCompiler } from "sass-embedded";
 import {
   ROOT,
   abs,
+  contentHash,
   fail,
   find,
   log,
@@ -23,6 +24,7 @@ import {
   warn,
   writeIfChanged,
 } from "./files.mjs";
+import { assetPhp } from "./wp.mjs";
 
 const targets = browserslistToTargets(browserslist(undefined, { path: ROOT }));
 
@@ -125,6 +127,14 @@ async function compile(lane, entry, { prod }) {
     code += `\n/*# sourceMappingURL=${path.basename(out)}.map */\n`;
   }
   await writeIfChanged(out, code);
+  if (lane.asset) {
+    // Same manifest as the JS bundles; PHP passes the version to
+    // wp_register_style() (Shared\Build\AssetFile).
+    await writeIfChanged(
+      out.replace(/\.css$/, ".asset.php"),
+      assetPhp({ dependencies: [], version: contentHash(code) }),
+    );
+  }
 
   if (lane.cssModules) {
     const map = moduleMaps.get(lane.cssModules) ?? new Map();

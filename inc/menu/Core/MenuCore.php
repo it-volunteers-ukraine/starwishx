@@ -16,6 +16,8 @@ declare(strict_types=1);
 
 namespace Menu\Core;
 
+use Shared\Build\AssetFile;
+
 final class MenuCore
 {
     private static ?self $instance = null;
@@ -64,10 +66,12 @@ final class MenuCore
         }
 
         if (function_exists('wp_register_script_module')) {
+            $asset = AssetFile::read('assets/js/menu-store.module.js', ['@wordpress/interactivity']);
             wp_register_script_module(
                 '@starwishx/menu',
-                get_template_directory_uri() . '/assets/js/menu-store.module.js',
-                ['@wordpress/interactivity']
+                $asset['url'],
+                $asset['dependencies'],
+                $asset['version']
             );
             wp_enqueue_script_module('@starwishx/menu');
         }

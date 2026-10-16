@@ -27,8 +27,11 @@ without changing it.
 
 - `pnpm clean` removes all build output.
 - `node tools/build.mjs --only=styles,stores` runs only some lanes.
-- Block scripts get a `.asset.php` next to the bundle (dependencies + content
-  hash), the same manifest `@wordpress/scripts` writes.
+- Every script, script module and stylesheet the theme enqueues gets a
+  `.asset.php` next to it (dependencies + content hash), the manifest
+  `@wordpress/scripts` writes. Core reads it for block.json assets; the theme's
+  own enqueues read it through `Shared\Build\AssetFile`, so a deploy busts
+  exactly the files that changed.
 
 ## Checks
 

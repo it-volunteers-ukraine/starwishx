@@ -25,6 +25,7 @@ use Listing\Filters\BeneficiariesFilter;
 use Listing\Services\TermCountingService;
 use Favorites\Services\FavoritesService;
 use Shared\Http\QueryStringParser;
+use Shared\Build\AssetFile;
 
 /**
  * Main Listing singleton.
@@ -371,13 +372,10 @@ final class ListingCore
             return;
         }
 
-        $asset_path = get_template_directory() . '/inc/listing/Assets/listing-store.asset.php';
-        $asset = file_exists($asset_path)
-            ? include $asset_path
-            : ['dependencies' => [], 'version' => '1.0.0'];
+        $asset = AssetFile::read('assets/js/listing-store.module.js', ['@wordpress/interactivity']);
 
         // Favorites store is enqueued by the independent FavoritesCore module
-        $listingDeps = ['@wordpress/interactivity'];
+        $listingDeps = $asset['dependencies'];
         if (is_user_logged_in()) {
             $listingDeps[] = '@starwishx/favorites';
         }
@@ -385,8 +383,8 @@ final class ListingCore
         if (function_exists('wp_register_script_module')) {
             wp_register_script_module(
                 '@starwishx/listing',
-                get_template_directory_uri() . '/assets/js/listing-store.module.js',
-                array_merge($listingDeps, $asset['dependencies']),
+                $asset['url'],
+                $listingDeps,
                 $asset['version']
             );
             wp_enqueue_script_module('@starwishx/listing');

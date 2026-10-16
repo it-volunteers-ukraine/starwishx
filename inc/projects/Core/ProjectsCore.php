@@ -17,6 +17,7 @@ declare(strict_types=1);
 namespace Projects\Core;
 
 use Projects\Services\ProjectsService;
+use Shared\Build\AssetFile;
 
 final class ProjectsCore
 {
@@ -79,12 +80,8 @@ final class ProjectsCore
             return;
         }
 
-        $asset_path = get_template_directory() . '/inc/projects/Assets/store.asset.php';
-        $asset = file_exists($asset_path)
-            ? include $asset_path
-            : ['dependencies' => [], 'version' => '0.1.0'];
-
-        $deps = ['@wordpress/interactivity'];
+        $asset = AssetFile::read('assets/js/projects-store.module.js', ['@wordpress/interactivity']);
+        $deps  = $asset['dependencies'];
 
         if (is_user_logged_in()) {
             // Favorites store is enqueued by the independent FavoritesCore module
@@ -94,8 +91,8 @@ final class ProjectsCore
         if (function_exists('wp_register_script_module')) {
             wp_register_script_module(
                 '@starwishx/projects',
-                get_template_directory_uri() . '/assets/js/projects-store.module.js',
-                array_merge($deps, $asset['dependencies']),
+                $asset['url'],
+                $deps,
                 $asset['version']
             );
             wp_enqueue_script_module('@starwishx/projects');

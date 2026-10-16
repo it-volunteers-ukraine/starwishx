@@ -78,6 +78,9 @@ function php(value, depth = 0) {
   return `'${String(value).replace(/\\/g, "\\\\").replace(/'/g, "\\'")}'`;
 }
 
+/** The .asset.php source for { dependencies, version[, type] }. */
+export const assetPhp = (asset) => `<?php return ${php(asset)};\n`;
+
 /**
  * Dependencies of one entry chunk. Imports that aren't another chunk of
  * this build are externals - exactly the ids resolveId() kept out.
@@ -144,7 +147,7 @@ export function wordpress(lane, onWrite) {
         this.emitFile({
           type: "asset",
           fileName: chunk.fileName.replace(/\.js$/, ".asset.php"),
-          source: `<?php return ${php(asset)};\n`,
+          source: assetPhp(asset),
         });
       }
     },

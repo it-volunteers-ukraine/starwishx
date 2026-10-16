@@ -24,6 +24,7 @@ use Launchpad\Services\MediaService;
 use Shared\Policy\MessengerPolicy;
 use Shared\Policy\PasswordPolicy;
 use Shared\Policy\UsernamePolicy;
+use Shared\Build\AssetFile;
 
 final class LaunchpadCore
 {
@@ -229,15 +230,13 @@ final class LaunchpadCore
                 ]
             );
 
-            $asset_path = get_template_directory() . '/inc/launchpad/Assets/store.asset.php';
-            $asset = file_exists($asset_path) ? include $asset_path : ['dependencies' => [], 'version' => '1.0.0'];
+            $asset = AssetFile::read('assets/js/launchpad-store.module.js', ['@wordpress/interactivity']);
 
             if (function_exists('wp_register_script_module')) {
                 wp_register_script_module(
                     '@starwishx/launchpad',
-                    // get_template_directory_uri() . '/inc/launchpad/Assets/launchpad-store.js', //for debugging
-                    get_template_directory_uri() . '/assets/js/launchpad-store.module.js',
-                    array_merge(['@wordpress/interactivity'], $asset['dependencies']),
+                    $asset['url'],
+                    $asset['dependencies'],
                     $asset['version']
                 );
                 wp_enqueue_script_module('@starwishx/launchpad');
@@ -297,14 +296,14 @@ final class LaunchpadCore
     private function enqueueFrontendStore(int $userId): void
     {
         // 1. Register Script
-        $asset_path = get_template_directory() . '/inc/launchpad/Assets/store.asset.php';
-        $asset = file_exists($asset_path) ? include $asset_path : ['dependencies' => [], 'version' => '1.0.0'];
+        $asset = AssetFile::read('assets/js/single-opportunity-store.module.js', ['@wordpress/interactivity']);
 
         if (function_exists('wp_register_script_module')) {
             wp_register_script_module(
                 '@starwishx/frontend-opportunities',
-                get_template_directory_uri() . '/assets/js/single-opportunity-store.module.js',
-                array_merge(['@wordpress/interactivity', '@starwishx/favorites'], $asset['dependencies']),
+                $asset['url'],
+                // The favorites store is a runtime dependency (store("favorites")), not an import.
+                array_merge($asset['dependencies'], ['@starwishx/favorites']),
                 $asset['version']
             );
             wp_enqueue_script_module('@starwishx/frontend-opportunities');
