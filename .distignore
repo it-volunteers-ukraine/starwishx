@@ -27,7 +27,6 @@
 /pnpm-lock.yaml
 /pnpm-workspace.yaml
 /skills-lock.json
-/bitbucket-pipelines.yml
 /vite.config.ts
 /stylelint.config.mjs
 /README.md

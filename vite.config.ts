@@ -57,7 +57,6 @@ export default defineConfig({
       "pnpm-lock.yaml",
       "composer.json",
       "composer.lock",
-      "bitbucket-pipelines.yml",
     ],
   },
 
