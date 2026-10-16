@@ -27,6 +27,18 @@ without changing it.
 - Block scripts get a `.asset.php` next to the bundle (dependencies + content
   hash), the same manifest `@wordpress/scripts` writes.
 
+## Checks
+
+[Vite+](https://viteplus.dev) (`vite.config.ts`) lints the JS with Oxlint and
+formats JS, JSON, YAML and Markdown with Oxfmt; stylelint
+(`stylelint.config.mjs`) checks the SCSS.
+
+- `pnpm check` - format + lint check; `pnpm exec vp check --fix` applies fixes.
+- `pnpm lint` - `pnpm check` plus stylelint.
+- Before each commit, `vp staged` fixes and checks the staged files. The hook
+  is installed by `pnpm install` (`vp config`); skip it once with
+  `VP_GIT_HOOKS=0 git commit ...`.
+
 ## Icons
 
 `src/img/sprites.svg` is generated - do not edit it by hand. Drop an icon into

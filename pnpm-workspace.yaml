@@ -1,0 +1,17 @@
+# Vite+ installed as a project-local CLI (devDependency vite-plus): its own
+# tree (vitest -> vite peer) must resolve "vite" to Vite+'s core and use the
+# Vitest it bundles. Keep both in step with the installed vite-plus version
+# (`pnpm exec vp toolchain`). See https://viteplus.dev/guide/local-cli
+overrides:
+  vite@*: npm:@voidzero-dev/vite-plus-core@1.2.0
+  vitest@*: 5.0.4
+
+peerDependencyRules:
+  allowedVersions:
+    # vite-plus-core is Vite 8 under Vite+'s own version number.
+    vite: "*"
+
+allowBuilds:
+  # Pulled in through vite-plus-core's sass. Its install script only builds
+  # from source when no prebuilt binary matches - the prebuilt one is used.
+  "@parcel/watcher": false

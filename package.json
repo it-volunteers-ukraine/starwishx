@@ -10,13 +10,16 @@
     "build": "node tools/build.mjs --prod && node tools/package.mjs",
     "clean": "node tools/build.mjs --clean",
     "sprite": "node tools/build-sprite.mjs",
+    "check": "vp check",
+    "lint": "vp check && pnpm style:lint",
     "style:lint": "stylelint '{src,inc/blocks}/**/*.scss'",
     "style:fix": "stylelint '{src,inc/blocks}/**/*.scss' --fix",
     "i18n": "npm run i18n:pot && npm run i18n:po && npm run i18n:php && npm run i18n:mo",
     "i18n:pot": "wp i18n make-pot . languages/_themedomain.pot --domain=starwishx --exclude=production,.void,inc/blocks/*/build",
     "i18n:po": "wp i18n update-po languages/_themedomain.pot languages/uk.po",
     "i18n:php": "wp i18n make-php languages/uk.po languages",
-    "i18n:mo": "wp i18n make-mo languages/uk.po languages"
+    "i18n:mo": "wp i18n make-mo languages/uk.po languages",
+    "prepare": "vp config --no-agent"
   },
   "repository": {
     "type": "git",
@@ -39,6 +42,7 @@
     "sass-embedded": "^1.105.1",
     "stylelint": "^17.16.0",
     "stylelint-config-standard-scss": "^17.0.0",
-    "svgo": "^4.1.0"
+    "svgo": "^4.1.0",
+    "vite-plus": "^1.2.0"
   }
 }

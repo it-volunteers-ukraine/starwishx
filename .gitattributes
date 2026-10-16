@@ -1,0 +1,4 @@
+# Text files are stored and checked out with LF. The repository already
+# stores LF only; this keeps Windows checkouts (core.autocrlf=true) in LF
+# too - the line ending Oxfmt (`pnpm check`) enforces.
+* text=auto eol=lf
