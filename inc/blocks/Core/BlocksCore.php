@@ -10,8 +10,8 @@
  * select for attributes marked with a custom control.
  *
  * Block folders are source = runtime: block.json, render.php and labels.php
- * run in place; gulp compiles style.scss / view.js into {slug}/build/, which
- * block.json references as "file:./build/…".
+ * run in place; tools/build.mjs compiles style.scss / view.js / editor.js
+ * into {slug}/build/, which block.json references as "file:./build/…".
  *
  * Author: DevFrappe
  * Email: dev.frappe@proton.me
@@ -45,7 +45,7 @@ final class BlocksCore
 
     private const EDITOR_SCRIPT = 'starwishx-block-editor-media';
 
-    /** block.json fields whose "file:" paths point at gulp output in build/. */
+    /** block.json fields whose "file:" paths point at build output in build/. */
     private const ASSET_FIELDS = [
         'style',
         'editorStyle',
@@ -128,7 +128,7 @@ final class BlocksCore
     }
 
     /**
-     * Guard and version the gulp-built assets of our own blocks.
+     * Guard and version the built assets of our own blocks.
      *
      * A "file:" asset whose build output is missing would still be registered
      * by core (a style with no src, a script module with an empty URL that

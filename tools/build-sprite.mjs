@@ -8,7 +8,7 @@
  * id="a" would collide once concatenated into a single document.
  *
  * Usage: node tools/build-sprite.mjs
- *        (also invoked by the `sprite` gulp task and `npm run sprite`)
+ *        (also run by every tools/build.mjs build, and by `npm run sprite`)
  *
  * File: tools/build-sprite.mjs
  */

@@ -1,7 +1,7 @@
 /**
  * starwishx/animated-text — editor script.
  *
- * Compiled by gulp (nativeBlockEditorScripts) into build/editor.js (+ the
+ * Compiled by Rolldown (block-editor lane) into build/editor.js (+ the
  * .asset.php manifest); block.json "editorScript" points at the bundle. The
  * block is registered server-side from block.json; this adds the InnerBlocks
  * edit/save (paragraphs and headings inside the tinted section) and the

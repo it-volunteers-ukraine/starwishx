@@ -6,9 +6,26 @@
 - MySQL 5.7
 
 ## To start using the theme:
-1. `npm i`
-2. `npm run dev` to start working
-3. `npm run build` to build production version of the theme, mostly used for BitBucket pipeline.
+1. `pnpm install` (Node 24.11+ and pnpm 12, see `engines` and `packageManager`
+   in package.json)
+2. `pnpm dev` builds everything, then rebuilds whatever changes
+3. `pnpm build` makes a clean production build and copies the deployable theme
+   into `production/` (everything except what `.distignore` lists)
+
+## Build
+
+`tools/build.mjs` builds all assets: the Interactivity API stores and block
+scripts with Rolldown, the SCSS with Sass and then Lightning CSS (vendor
+prefixes for the `browserslist` targets in package.json; minified by
+`pnpm build`), plus the icon sprite and static files. Every output is declared
+in `tools/build/lanes.mjs` - a new store (`inc/<module>/Assets/<name>-store.js`)
+or block (`inc/blocks/<slug>/view.js`, `editor.js`, `style.scss`) is picked up
+without changing it.
+
+- `pnpm clean` removes all build output.
+- `node tools/build.mjs --only=styles,stores` runs only some lanes.
+- Block scripts get a `.asset.php` next to the bundle (dependencies + content
+  hash), the same manifest `@wordpress/scripts` writes.
 
 ## Icons
 

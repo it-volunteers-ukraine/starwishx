@@ -56,7 +56,7 @@ add_action('after_setup_theme', '_themeprefix_theme_setup');
 
 /**
  * Keep build and archive folders out of theme file scans. WordPress looks for
- * page templates one directory deep, so the gulp `production/` copy listed
+ * page templates one directory deep, so the build's `production/` copy listed
  * every root template twice - and the Contacts page ended up assigned a stale
  * build copy. Core already excludes node_modules, vendor, CVS and
  * bower_components.

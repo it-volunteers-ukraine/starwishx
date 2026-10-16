@@ -5,9 +5,10 @@
  *
  * Native (block.json) Gutenberg blocks. Every inc/blocks/{slug}/ folder that
  * contains a block.json is registered by BlocksCore. The folder is both source
- * and runtime: block.json, render.php and labels.php run in place, while gulp
- * compiles style.scss / view.js into inc/blocks/{slug}/build/ (gitignored),
- * which block.json references as "file:./build/…".
+ * and runtime: block.json, render.php and labels.php run in place, while
+ * tools/build.mjs compiles style.scss / view.js / editor.js into
+ * inc/blocks/{slug}/build/ (gitignored), which block.json references as
+ * "file:./build/…".
  *
  * Author: DevFrappe
  * Email: dev.frappe@proton.me
