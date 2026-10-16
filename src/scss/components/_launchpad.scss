@@ -1990,7 +1990,9 @@
         // background-color: $surface-primary;
         padding: 10px 4px;
 
-        &::not(:first-child) {
+        // Between items only: a list's first child is its search row or the
+        // data-wp-each <template>, never an item.
+        & + & {
             margin-top: 2px;
         }
         &:hover {
