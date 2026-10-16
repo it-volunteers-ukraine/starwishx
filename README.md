@@ -27,6 +27,8 @@ without changing it.
 
 - `pnpm clean` removes all build output.
 - `node tools/build.mjs --only=styles,stores` runs only some lanes.
+- `pnpm dev` reads `tools/build/lanes.mjs` and the `browserslist` once, at
+  start: restart it after changing either.
 - Every script, script module and stylesheet the theme enqueues gets a
   `.asset.php` next to it (dependencies + content hash), the manifest
   `@wordpress/scripts` writes. Core reads it for block.json assets; the theme's
