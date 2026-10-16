@@ -28,14 +28,13 @@ class OpportunitiesController extends AbstractLaunchpadController
     private const SEARCH_RATE_LIMIT_MAX    = 60;
     private const SEARCH_RATE_LIMIT_WINDOW = MINUTE_IN_SECONDS;
 
-    private const PER_PAGE_MAX          = 50;
-    private const SEARCH_MAX_LENGTH     = 100;
-    private const CATEGORY_MAX_ITEMS    = 10;
-    private const SUBCATEGORY_MAX_ITEMS = 30;
-    private const BENEFICIARIES_MAX_ITEMS     = 10;
-    private const LOCATIONS_MAX_ITEMS   = 20;
-    private const STATUSES_MAX_ITEMS    = 3;
-    private const LEVELS_MAX_ITEMS      = 4;
+    private const PER_PAGE_MAX             = 50;
+    private const SEARCH_MAX_LENGTH        = 100;
+    // Category and beneficiary limits live in OpportunitiesService (the form shows them too).
+    private const SUBCATEGORY_MAX_ITEMS    = 30;
+    private const LOCATIONS_MAX_ITEMS      = 20;
+    private const STATUSES_MAX_ITEMS       = 3;
+    private const LEVELS_MAX_ITEMS         = 4;
 
     private OpportunitiesService $service;
     private ProfileService $profileService;
@@ -89,7 +88,7 @@ class OpportunitiesController extends AbstractLaunchpadController
                 'type'              => 'array',
                 'items'             => ['type' => 'integer'],
                 'validate_callback' => RestArg::arrayMaxItems(
-                    self::CATEGORY_MAX_ITEMS,
+                    OpportunitiesService::CATEGORY_MAX_ITEMS,
                     __('Categories', 'starwishx')
                 ),
             ],
@@ -128,7 +127,7 @@ class OpportunitiesController extends AbstractLaunchpadController
                 'type'              => 'array',
                 'items'             => ['type' => 'integer'],
                 'validate_callback' => RestArg::arrayMaxItems(
-                    self::BENEFICIARIES_MAX_ITEMS,
+                    OpportunitiesService::BENEFICIARIES_MAX_ITEMS,
                     __('Beneficiaries', 'starwishx')
                 ),
             ],

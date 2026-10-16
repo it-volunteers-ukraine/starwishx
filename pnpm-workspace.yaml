@@ -45,3 +45,5 @@ minimumReleaseAgeExclude:
   - '@babel/traverse@8.0.7'
   - '@wordpress/dependency-extraction-webpack-plugin@6.57.0'
   - del@9.0.1
+  - sass@1.105.2
+  - webpack@5.112.0

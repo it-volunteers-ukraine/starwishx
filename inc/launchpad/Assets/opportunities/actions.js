@@ -15,10 +15,28 @@ import {
   normalizeUrl,
   scrollToFirstError,
   scrollToPageTop,
+  selectionLimit,
+  selectionSize,
 } from "../utils.js";
 
 let locationSearchTimeout = null;
 let _pendingUploadFile = null;
+
+/**
+ * Selections over a field's limit (data saved before the limits existed) block
+ * Save with the REST validator's own message. An "at least one" error already
+ * set for the field wins.
+ */
+function overSelectionLimitErrors(p) {
+  const vm = p.validationMessages || {};
+  const messages = { category: vm.categoryMax, beneficiaries: vm.beneficiariesMax };
+  for (const [field, message] of Object.entries(messages)) {
+    const max = selectionLimit(p, field);
+    if (!p.fieldErrors[field] && max > 0 && selectionSize(p, field) > max) {
+      p.fieldErrors[field] = message;
+    }
+  }
+}
 
 /**
  * Opportunity actions.
@@ -180,6 +198,7 @@ export const opportunitiesActions = {
     }
     if (!p.formData.category?.length) p.fieldErrors.category = vm.category;
     if (!p.formData.beneficiaries?.length) p.fieldErrors.beneficiaries = vm.beneficiaries;
+    overSelectionLimitErrors(p);
     if (
       p.formData.date_starts &&
       p.formData.date_ends &&
@@ -384,6 +403,10 @@ export const opportunitiesActions = {
     const { state } = store("launchpad");
     const { ref } = getElement();
     const p = state.panels.opportunities;
+    if (ref.checked && state.isBeneficiariesLimitReached) {
+      ref.checked = false; // guard behind state.isBeneficiaryOptionDisabled
+      return;
+    }
     const val = Number(ref.value);
     let s = Array.isArray(p.formData.beneficiaries) ? [...p.formData.beneficiaries] : [];
     p.formData.beneficiaries = ref.checked
@@ -396,6 +419,10 @@ export const opportunitiesActions = {
     const { state } = store("launchpad");
     const { ref } = getElement();
     const p = state.panels.opportunities;
+    if (ref.checked && state.isCategoryLimitReached) {
+      ref.checked = false; // guard behind state.isCategoryOptionDisabled
+      return;
+    }
     const val = Number(ref.value);
     let c = Array.isArray(p.formData.category) ? [...p.formData.category] : [];
     p.formData.category = ref.checked
@@ -964,6 +991,7 @@ export const opportunitiesActions = {
     if (!p.formData.beneficiaries?.length) {
       p.fieldErrors.beneficiaries = p.validationMessages?.beneficiaries;
     }
+    overSelectionLimitErrors(p);
     if (
       p.formData.date_starts &&
       p.formData.date_ends &&

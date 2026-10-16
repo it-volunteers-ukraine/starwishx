@@ -20,6 +20,11 @@ class OpportunitiesService
     public const COMPANY_MIN_LENGTH     = 2;
     public const DESCRIPTION_MIN_LENGTH = 50;
 
+    // Multi-select limits: the REST validators (OpportunitiesController) and
+    // the form's counters / disabled options (OpportunitiesPanel) both read these.
+    public const CATEGORY_MAX_ITEMS      = 10;
+    public const BENEFICIARIES_MAX_ITEMS = 10;
+
     private OpportunityDetailsRepository $detailsRepository;
     private OpportunityCountriesRepository $countriesRepository;
     private CountriesRepository $countriesDictionary;

@@ -8,6 +8,7 @@
  */
 
 import { getContext } from "@wordpress/interactivity";
+import { selectionLimit, selectionSize } from "../utils.js";
 
 /**
  * Opportunity getters - plain object to be spread into state.
@@ -90,6 +91,47 @@ export const opportunitiesGetters = {
     const id = getContext()?.item?.id;
     const selected = this.panels.opportunities?.formData?.beneficiaries;
     return Array.isArray(selected) && selected.some((s) => s == id);
+  },
+
+  // --- Selection limits (selectionLimits from PHP; same as the REST validators) ---
+  // Counter "n / max" like the char counters; at the limit the unticked
+  // options are disabled (ticked ones stay enabled, so over-limit data saved
+  // before the limit existed can be unticked back down).
+
+  get beneficiariesCounterText() {
+    const p = this.panels.opportunities;
+    return `${selectionSize(p, "beneficiaries")} / ${selectionLimit(p, "beneficiaries")}`;
+  },
+
+  get isBeneficiariesLimitReached() {
+    const p = this.panels.opportunities;
+    const max = selectionLimit(p, "beneficiaries");
+    return max > 0 && selectionSize(p, "beneficiaries") >= max;
+  },
+
+  /**
+   * Used in: data-wp-bind--disabled="state.isBeneficiaryOptionDisabled"
+   */
+  get isBeneficiaryOptionDisabled() {
+    return this.isBeneficiariesLimitReached && !this.isBeneficiaryChecked;
+  },
+
+  get categoryCounterText() {
+    const p = this.panels.opportunities;
+    return `${selectionSize(p, "category")} / ${selectionLimit(p, "category")}`;
+  },
+
+  get isCategoryLimitReached() {
+    const p = this.panels.opportunities;
+    const max = selectionLimit(p, "category");
+    return max > 0 && selectionSize(p, "category") >= max;
+  },
+
+  /**
+   * Used in: data-wp-bind--disabled="state.isCategoryOptionDisabled"
+   */
+  get isCategoryOptionDisabled() {
+    return this.isCategoryLimitReached && !this.isCategoryChecked;
   },
 
   /**

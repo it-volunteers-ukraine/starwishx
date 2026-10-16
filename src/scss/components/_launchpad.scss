@@ -1008,6 +1008,11 @@
     fieldset.form-field {
         min-inline-size: 0;
     }
+
+    // "(max. N)" in a multi-select legend; keeps the legend's colour.
+    .form-field__limit {
+        white-space: nowrap;
+    }
     .form-field__hint {
         color: $text-light;
         font-size: 0.95rem;
@@ -1403,6 +1408,17 @@
             outline: 2px solid $primary-hover;
             outline-offset: 2px;
         }
+
+        &:disabled {
+            cursor: not-allowed;
+        }
+    }
+
+    // Disabled, e.g. an option past a selection limit (state.is…OptionDisabled).
+    // Inactive controls are exempt from the contrast minimum (WCAG 1.4.3).
+    &:has(input:disabled) {
+        cursor: not-allowed;
+        opacity: 0.5;
     }
 
     // span {
