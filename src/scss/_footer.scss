@@ -248,7 +248,10 @@
       #4c9cc6 100%
     ); */
 
-  background: conic-gradient(
+  // background-image, not the shorthand: Lightning CSS would fold the
+  // background-clip below into `background: ... text`, a form some baseline
+  // targets may not parse - and the transparent text would vanish with it.
+  background-image: conic-gradient(
     from 90deg at 50% 50%,
     #b6d0f7 0deg,
     #eef4e1 15deg,
