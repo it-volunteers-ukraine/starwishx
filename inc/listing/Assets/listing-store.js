@@ -354,7 +354,7 @@ store("listing", {
         if (excerptOut) {
           excerptOut.innerHTML = highlightTerms(rawExcerpt, terms, "mark");
         }
-      } catch (err) {
+      } catch {
         // swallow to avoid breaking iAPI runtime; optionally log in dev
         // console.error("renderCardHighlight error", err);
       }

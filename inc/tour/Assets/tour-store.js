@@ -133,7 +133,7 @@ const { state } = store("tour", {
           method: "POST",
           body: { tourId },
         });
-      } catch (_) {
+      } catch {
         // Silent — completion is already in client state
       }
     },
@@ -156,7 +156,7 @@ const { state } = store("tour", {
           method: "POST",
           body: { tourId },
         });
-      } catch (_) {
+      } catch {
         // Silent
       }
     },
@@ -175,7 +175,7 @@ const { state } = store("tour", {
           // Replace scenarios entirely — old role's tours removed, new role's added
           state.scenarios = data.scenarios;
         }
-      } catch (_) {
+      } catch {
         // Silent — stale scenarios are acceptable fallback
       }
     },
@@ -199,7 +199,7 @@ const { state } = store("tour", {
           method: "POST",
           body: { tourId },
         });
-      } catch (_) {}
+      } catch {}
 
       // Start immediately after reset
       // Set tourId on ref for startTour to read

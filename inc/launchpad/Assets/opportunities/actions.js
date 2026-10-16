@@ -594,7 +594,7 @@ export const opportunitiesActions = {
   },
 
   countryKeydown(event) {
-    const { state, actions } = store("launchpad");
+    const { state } = store("launchpad");
     const p = state.panels.opportunities;
 
     if (event.key === "Escape") {
@@ -778,7 +778,7 @@ export const opportunitiesActions = {
    * Add Location: Works for ALL 3 boxes.
    * We need to identify WHICH box triggered it to clear that specific input.
    */
-  addLocation(event) {
+  addLocation() {
     const { state } = store("launchpad");
     const { item } = getContext(); // The result item clicked
     const p = state.panels.opportunities;
@@ -932,7 +932,7 @@ export const opportunitiesActions = {
       try {
         dateInput.showPicker();
         return;
-      } catch (err) {
+      } catch {
         // Fallback if showPicker fails (e.g. prevented by browser security)
       }
     }

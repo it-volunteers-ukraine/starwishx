@@ -49,7 +49,7 @@ export const filterActions = {
    * Global search input handler.
    */
   updateSearch: debounce((event) => {
-    const { state, actions } = store("listing");
+    const { state } = store("listing");
     state.query.s = event.target.value;
     refreshResults();
   }, 400),
@@ -205,7 +205,6 @@ export const filterActions = {
   toggleChild() {
     const { state, actions } = store("listing");
     const { ref } = getElement();
-    const context = getContext();
     // In the inner loop, context.item is the CHILD.
     // But we need access to the PARENT context to know siblings.
     // Interactivity API exposes parent context automatically via prototype chain

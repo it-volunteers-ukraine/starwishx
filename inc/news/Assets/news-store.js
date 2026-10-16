@@ -11,7 +11,7 @@
 
 import { store } from "@wordpress/interactivity";
 
-const { state, actions } = store("news", {
+const { state } = store("news", {
   // `page` and `maxPages` are deliberately NOT declared here. The runtime
   // populates server state first with a non-overriding merge, then store()
   // merges this object over it *with* override — so redeclaring a hydrated
@@ -80,7 +80,7 @@ const { state, actions } = store("news", {
 
         markPagesLoaded(data.page);
         syncUrl(data.page);
-      } catch (e) {
+      } catch {
         state.error = state.i18n.error;
       } finally {
         state.loading = false;

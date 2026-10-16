@@ -160,7 +160,6 @@ const { state } = store("chat", {
      */
     async markItemRead() {
       const { state } = store("chat");
-      const panel = store("launchpad").state.panels?.chat;
       const ctx = getContext();
       const item = ctx?.item;
 
@@ -179,7 +178,7 @@ const { state } = store("chat", {
         if (data?.unreadCount !== undefined) {
           state.unreadCount = data.unreadCount;
         }
-      } catch (err) {
+      } catch {
         // Revert on failure
         item.isRead = false;
         state.unreadCount = (state.unreadCount || 0) + 1;

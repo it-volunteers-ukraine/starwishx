@@ -100,7 +100,6 @@ export const gridActions = {
    * Main entry point for updating results (Resetting to page 1).
    */
   async updateResults() {
-    const { state } = store("listing");
     await fetchResults({ append: false });
   },
 

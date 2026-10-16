@@ -76,7 +76,7 @@ export async function fetchJson(
       try {
         const error = await response.json();
         if (error?.message) message = error.message;
-      } catch (_) {}
+      } catch {}
       const err = new Error(message);
       err.status = response.status;
       throw err;
@@ -155,7 +155,7 @@ export function syncStateToUrl(query) {
   if (config.prettyCategoryUrls) {
     const catParams = params.getAll("category");
     if (catParams.length === 1 && isNaN(catParams[0])) {
-      const otherKeys = [...new Set([...params.keys()])].filter(
+      const otherKeys = [...new Set(params.keys())].filter(
         (k) => k !== "category",
       );
       if (

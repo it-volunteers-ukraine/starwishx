@@ -51,7 +51,7 @@ export async function fetchJson(
     try {
       const error = await response.json();
       if (error?.message) message = error.message;
-    } catch (_) {}
+    } catch {}
     const err = new Error(message);
     err.status = response.status;
     throw err;

@@ -118,7 +118,7 @@ export async function fetchJson(
       // `data.field_errors` routes to inline slots, top-level `message` to banner.
       if (errorData?.data?.field_errors)
         fieldErrors = errorData.data.field_errors;
-    } catch (_) {
+    } catch {
       // Non-JSON body — keep the HTTP status message
     }
 

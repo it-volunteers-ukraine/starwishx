@@ -76,7 +76,7 @@ const { state } = store("social-share", {
       try {
         await writeToClipboard(url);
         label = state.i18n?.copiedLabel || "Link copied!";
-      } catch (_) {
+      } catch {
         label = state.i18n?.copyFailed || "Copy failed";
       }
 
