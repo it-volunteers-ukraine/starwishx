@@ -1,6 +1,6 @@
 {
   "name": "starwishx",
-  "version": "0.2.1",
+  "version": "0.3.1",
   "description": "",
   "private": true,
   "type": "module",
@@ -25,9 +25,9 @@
     "type": "git",
     "url": ""
   },
-  "author": "onpoint.studio",
+  "author": "it-volunteers.com",
   "license": "ISC",
-  "homepage": "onpoint.studio",
+  "homepage": "it-volunteers.com",
   "browserslist": [
     "baseline widely available"
   ],
@@ -39,10 +39,10 @@
     "browserslist": "^4.29.3",
     "lightningcss": "^1.33.0",
     "rolldown": "^1.2.14",
-    "sass-embedded": "^1.105.1",
+    "sass-embedded": "^1.105.2",
     "stylelint": "^17.16.0",
     "stylelint-config-standard-scss": "^17.0.0",
     "svgo": "^4.1.0",
-    "vite-plus": "^1.2.0"
+    "vite-plus": "^1.3.0"
   }
 }

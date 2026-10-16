@@ -77,17 +77,17 @@ final class TourCore
         // Shepherd.js CSS from CDN
         wp_enqueue_style(
             'shepherd',
-            'https://cdn.jsdelivr.net/npm/shepherd.js@15.2.2/dist/css/shepherd.css',
+            'https://cdn.jsdelivr.net/npm/shepherd.js@15.3.0/dist/css/shepherd.css',
             [],
-            '15.2.2'
+            '15.3.0'
         );
 
         // Shepherd.js ESM from CDN — registered as WP script module
         wp_enqueue_script_module(
             'shepherd',
-            'https://cdn.jsdelivr.net/npm/shepherd.js@15.2.2/dist/js/shepherd.mjs',
+            'https://cdn.jsdelivr.net/npm/shepherd.js@15.3.0/dist/js/shepherd.mjs',
             array(),
-            '15.2.2'
+            '15.3.0'
         );
 
         // Tour store module
