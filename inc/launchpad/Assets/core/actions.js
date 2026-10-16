@@ -119,7 +119,7 @@ export const coreActions = {
       const data = await fetchJson(
         state,
         `${state.launchpadSettings.restUrl}panel/${panelId}/state`,
-        { panelId }
+        { panelId },
       );
       if (data) {
         Object.assign(panel, data, { _loaded: true, isLoading: false });

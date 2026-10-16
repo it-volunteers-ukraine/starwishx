@@ -1,7 +1,7 @@
 /**
  * starwishx/accordion-opportunities — editor script (parent + item).
  *
- * Compiled by gulp (nativeBlockEditorScripts) into build/editor.js (+ the
+ * Compiled by Rolldown (block-editor lane) into build/editor.js (+ the
  * .asset.php manifest); block.json "editorScript" points at the bundle. Both
  * blocks are registered server-side from their block.json, so this file only
  * adds what needs JavaScript: the edit components, the InnerBlocks save and

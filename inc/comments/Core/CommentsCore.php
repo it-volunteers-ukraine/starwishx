@@ -21,6 +21,7 @@ namespace Comments\Core;
 
 use Comments\Services\CommentsService;
 use Comments\Api\CommentsController;
+use Shared\Build\AssetFile;
 
 final class CommentsCore
 {
@@ -78,10 +79,12 @@ final class CommentsCore
 
         // Register the script module
         if (function_exists('wp_register_script_module')) {
+            $asset = AssetFile::read('assets/js/comments-store.module.js', ['@wordpress/interactivity']);
             wp_register_script_module(
                 '@starwishx/comments',
-                get_template_directory_uri() . '/assets/js/comments-store.module.js',
-                ['@wordpress/interactivity']
+                $asset['url'],
+                $asset['dependencies'],
+                $asset['version']
             );
             wp_enqueue_script_module('@starwishx/comments');
         }

@@ -22,7 +22,7 @@ const gatewayState = {
   get resetPasswordInputType() {
     return this.forms?.resetPassword?.isPasswordVisible ? "text" : "password";
   },
-  
+
   get loginPasswordInputType() {
     return this.forms?.login?.isPasswordVisible ? "text" : "password";
   },

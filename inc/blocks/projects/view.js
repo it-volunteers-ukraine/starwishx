@@ -172,7 +172,9 @@ function setupMouseDrag(track, animator) {
 
   const flick = () => {
     const now = performance.now();
-    const recent = samples.filter((sample) => now - sample.time <= VELOCITY_WINDOW);
+    const recent = samples.filter(
+      (sample) => now - sample.time <= VELOCITY_WINDOW,
+    );
     const first = recent[0];
     const last = recent[recent.length - 1];
     // Pointer velocity (px/ms); the content moves the other way.

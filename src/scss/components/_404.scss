@@ -1,6 +1,7 @@
 @use "../variables" as *;
 @use "../mixins/media" as *;
 @use "../mixins/utlis" as *;
+
 /*
 section margins on Figma from desctop to mobile
 177 - 152
@@ -9,10 +10,12 @@ section margins on Figma from desctop to mobile
 100 - 74
 */
 .section-404 {
-   padding: 0 0 74px 0;
+   padding: 0 0 74px;
+
    @include min-desktop {
-      padding: 0 0 152px 0;
+      padding: 0 0 152px;
    }
+
    .container {
       padding: 0 40px;
       max-width: 621px;
@@ -23,32 +26,39 @@ section margins on Figma from desctop to mobile
          margin: 0 auto;
       }
    }
+
    .info-404 {
       position: relative;
    }
+
    .icon-satellite {
       position: absolute;
       top: -6px;
       right: 0;
       width: 32px;
       height: 50px;
+
       @include min-tablet {
          width: 48px;
          height: 76px;
       }
+
       @include max-laptop {
          top: -10px;
          right: -16px;
       }
+
       @include max-tablet {
          top: -4px;
          right: 8px;
       }
+
       @include max-mobile {
          top: -4px;
          right: -8px;
       }
    }
+
    .heading-404 {
       display: flex;
       justify-content: center;
@@ -56,11 +66,11 @@ section margins on Figma from desctop to mobile
       gap: 4px;
       margin: 16px 0;
       font-weight: 300;
-      font-size: toRem(100);
+      font-size: to-rem(100);
       line-height: 1;
 
       @include min-desktop {
-         font-size: toRem(140);
+         font-size: to-rem(140);
       }
 
       // .heading-404__logo {
@@ -97,6 +107,7 @@ section margins on Figma from desctop to mobile
             animation: icon-spin 4s linear infinite;
             border: 2px solid $icon-color-secondary;
             border-radius: 50%;
+
             @keyframes icon-spin {
                0% {
                   rotate: 0deg;

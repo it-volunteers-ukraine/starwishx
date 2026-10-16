@@ -15,6 +15,7 @@ namespace News\Core;
 
 use News\Api\ArchiveController;
 use WP_Query;
+use Shared\Build\AssetFile;
 
 final class NewsCore
 {
@@ -88,10 +89,12 @@ final class NewsCore
             return;
         }
 
+        $asset = AssetFile::read('assets/js/news-store.module.js', ['@wordpress/interactivity']);
         wp_register_script_module(
             '@starwishx/news',
-            get_template_directory_uri() . '/assets/js/news-store.module.js',
-            ['@wordpress/interactivity']
+            $asset['url'],
+            $asset['dependencies'],
+            $asset['version']
         );
         wp_enqueue_script_module('@starwishx/news');
 

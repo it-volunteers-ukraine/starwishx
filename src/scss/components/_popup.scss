@@ -32,22 +32,28 @@
     padding: 32px 24px 24px;
     width: min(360px, calc(100vw - 32px));
     min-width: 534px;
+
     @include max-tablet {
         min-width: unset;
     }
+
     input {
         background: $input-color-surface-default;
     }
+
     .btn-secondary__small,
     .btn-secondary {
         background: $input-color-surface-default;
+
         &:hover {
             background-color: $buttons-color-background-secondary-hover;
         }
     }
+
     .btn--danger {
         border-color: $icon-color-error;
     }
+
     .gateway-form {
         min-width: unset;
     }
@@ -64,6 +70,7 @@
     padding: 4px;
     color: $text-dark;
     line-height: 0;
+
     &:hover {
         transform: rotate(180deg);
         color: $text-accent;
@@ -95,14 +102,17 @@
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 8px;
+
     @include max-tablet {
         grid-template-columns: 1fr;
     }
+
     & > :only-child {
         grid-column: 1 / -1;
         justify-self: center;
         max-width: 320px;
     }
+
     &--button {
         width: 100%;
     }
@@ -132,10 +142,12 @@
         transform: scale(0);
         opacity: 0;
     }
+
     60% {
         transform: scale(1.05);
         opacity: 1;
     }
+
     100% {
         transform: scale(1);
         opacity: 1;
@@ -146,6 +158,7 @@
     from {
         opacity: 0;
     }
+
     to {
         opacity: 1;
     }
@@ -162,6 +175,7 @@
         transform: none;
         opacity: 1;
     }
+
     .popup:not([hidden]) .popup__backdrop {
         opacity: 1;
     }

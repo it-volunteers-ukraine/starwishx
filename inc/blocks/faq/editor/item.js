@@ -26,7 +26,9 @@ export default function ItemEdit({ attributes, setAttributes }) {
     { className: "faq__answer" },
     {
       allowedBlocks: ANSWER_BLOCKS,
-      template: [["core/paragraph", { placeholder: __("Answer", "starwishx") }]],
+      template: [
+        ["core/paragraph", { placeholder: __("Answer", "starwishx") }],
+      ],
     },
   );
   // Provided by BlocksCore (inline data of the shared editor helper); read at

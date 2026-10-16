@@ -16,6 +16,8 @@ declare(strict_types=1);
 
 namespace Contact\Core;
 
+use Shared\Build\AssetFile;
+
 final class ContactCore
 {
     public const NAME_MAX_LENGTH    = 100;
@@ -132,10 +134,12 @@ final class ContactCore
         $this->enqueuePhoneAssets();
 
         if (function_exists('wp_register_script_module')) {
+            $asset = AssetFile::read('assets/js/contact-store.module.js', ['@wordpress/interactivity']);
             wp_register_script_module(
                 '@starwishx/contact',
-                get_template_directory_uri() . '/assets/js/contact-store.module.js',
-                ['@wordpress/interactivity']
+                $asset['url'],
+                $asset['dependencies'],
+                $asset['version']
             );
             wp_enqueue_script_module('@starwishx/contact');
         }

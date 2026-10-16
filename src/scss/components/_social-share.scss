@@ -46,6 +46,7 @@
         font-size: 1.125rem;
         font-weight: 500;
         line-height: 1.2;
+
         @include max-tablet {
             font-size: 1rem;
         }
@@ -69,12 +70,15 @@
             padding $animations,
             gap $animations,
             box-shadow $animations;
+
         @include max-tabland {
             left: 0;
         }
+
         @include max-tablet {
             max-width: min(176px, calc(100vw - 24px));
         }
+
         &.has-status {
             gap: 8px;
             padding-bottom: 10px;
@@ -86,6 +90,7 @@
         align-items: center;
         justify-content: center;
         gap: 12px;
+
         @include max-tablet {
             flex-wrap: wrap;
         }

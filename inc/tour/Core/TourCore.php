@@ -18,6 +18,7 @@ namespace Tour\Core;
 
 use Tour\Registry\ScenarioRegistry;
 use Tour\Api\TourController;
+use Shared\Build\AssetFile;
 
 final class TourCore
 {
@@ -91,11 +92,12 @@ final class TourCore
 
         // Tour store module
         if (function_exists('wp_register_script_module')) {
+            $asset = AssetFile::read('assets/js/tour-store.module.js', ['@wordpress/interactivity', 'shepherd']);
             wp_register_script_module(
                 '@starwishx/tour',
-                get_template_directory_uri() . '/assets/js/tour-store.module.js',
-                ['@wordpress/interactivity', 'shepherd'],
-                '1.0.0'
+                $asset['url'],
+                $asset['dependencies'],
+                $asset['version']
             );
             wp_enqueue_script_module('@starwishx/tour');
         }

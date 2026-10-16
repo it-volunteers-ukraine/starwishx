@@ -143,7 +143,7 @@ export async function fetchJson(
         const error = await response.json();
         if (error?.message) message = error.message;
         if (error?.data?.field_errors) fieldErrors = error.data.field_errors;
-      } catch (_) {}
+      } catch {}
       const err = new Error(message);
       err.status = response.status;
       err.fieldErrors = fieldErrors;

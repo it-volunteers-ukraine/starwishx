@@ -1,7 +1,7 @@
 /**
  * starwishx/accordion-opportunities — Interactivity API store (front end).
  *
- * Compiled by gulp (nativeBlockScripts) into build/view.js and loaded through
+ * Compiled by Rolldown (block-view lane) into build/view.js and loaded through
  * block.json "viewScriptModule" only on pages where the block renders.
  *
  * State lives in the block's context (render.php): `activeIds` on the
@@ -62,7 +62,9 @@ store("starwishx/accordion-opportunities", {
               }
             } else if (entry.boundingClientRect.top >= 0) {
               // Still below the line: collapse. Above it: already passed, stays open.
-              ctx.activeIds = ctx.activeIds.filter((activeId) => activeId !== id);
+              ctx.activeIds = ctx.activeIds.filter(
+                (activeId) => activeId !== id,
+              );
             }
           }
         },

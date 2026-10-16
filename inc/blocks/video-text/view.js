@@ -20,7 +20,8 @@ function play(facade) {
   const iframe = document.createElement("iframe");
   iframe.className = "video-text__player";
   iframe.src = src; // carries autoplay=1; the user gesture precedes creation
-  iframe.title = facade.dataset.title || facade.getAttribute("aria-label") || "";
+  iframe.title =
+    facade.dataset.title || facade.getAttribute("aria-label") || "";
   iframe.allow =
     "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
   iframe.allowFullscreen = true;

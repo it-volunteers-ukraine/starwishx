@@ -16,32 +16,33 @@
  * File: src/js/scroll-dots.js
  */
 
-const reducedMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const reducedMotion = () =>
+  window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 function setup(nav) {
   const track = document.getElementById(nav.dataset.scrollDots);
   if (!track) return;
 
   const items = Array.from(track.children);
-  const buttons = Array.from(nav.querySelectorAll('button'));
+  const buttons = Array.from(nav.querySelectorAll("button"));
   if (items.length < 2 || items.length !== buttons.length) return;
 
   const setCurrent = (index) => {
     buttons.forEach((button, i) => {
       if (i === index) {
-        button.setAttribute('aria-current', 'true');
+        button.setAttribute("aria-current", "true");
       } else {
-        button.removeAttribute('aria-current');
+        button.removeAttribute("aria-current");
       }
     });
   };
 
   buttons.forEach((button, i) => {
-    button.addEventListener('click', () => {
+    button.addEventListener("click", () => {
       items[i].scrollIntoView({
-        behavior: reducedMotion() ? 'auto' : 'smooth',
-        block: 'nearest',
-        inline: 'start',
+        behavior: reducedMotion() ? "auto" : "smooth",
+        block: "nearest",
+        inline: "start",
       });
     });
   });
@@ -53,13 +54,13 @@ function setup(nav) {
         if (entry.isIntersecting) setCurrent(items.indexOf(entry.target));
       });
     },
-    { root: track, threshold: 0.6 }
+    { root: track, threshold: 0.6 },
   );
   items.forEach((item) => observer.observe(item));
 
   nav.hidden = false;
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-  document.querySelectorAll('[data-scroll-dots]').forEach(setup);
+document.addEventListener("DOMContentLoaded", () => {
+  document.querySelectorAll("[data-scroll-dots]").forEach(setup);
 });

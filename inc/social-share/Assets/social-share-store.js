@@ -26,7 +26,9 @@ function copyWithFallback(text) {
 
 function writeToClipboard(text) {
   if (navigator.clipboard && window.isSecureContext) {
-    return navigator.clipboard.writeText(text).catch(() => copyWithFallback(text));
+    return navigator.clipboard
+      .writeText(text)
+      .catch(() => copyWithFallback(text));
   }
   return new Promise((resolve, reject) => {
     try {
@@ -74,7 +76,7 @@ const { state } = store("social-share", {
       try {
         await writeToClipboard(url);
         label = state.i18n?.copiedLabel || "Link copied!";
-      } catch (_) {
+      } catch {
         label = state.i18n?.copyFailed || "Copy failed";
       }
 

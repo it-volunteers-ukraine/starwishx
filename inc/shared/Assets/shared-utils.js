@@ -14,17 +14,6 @@ export function deepClone(obj) {
 }
 
 /**
- * Convert panel-id (e.g., 'opportunities') to PascalCase (e.g., 'Opportunities')
- * *deprecated
- */
-function idToPascal(id) {
-  return String(id)
-    .split(/[-_]/)
-    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
-    .join("");
-}
-
-/**
  * Centralized fetch with WP nonce and error handling.
  * @param {Object} settings - Must contain { nonce, restUrl }
  * @param {string} url - Full API URL
@@ -73,7 +62,7 @@ export async function fetchJson(settings, url, options = {}) {
          */
         message = "A server-side error occurred. Please try again later.";
       }
-    } catch (_) {
+    } catch {
       // Silent catch: use the default technical message defined above
     }
 

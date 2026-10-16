@@ -11,30 +11,30 @@
  * Pages without the site header (/gateway/) have no toggle; nothing runs.
  */
 
-document.addEventListener('DOMContentLoaded', () => {
-  const toggle = document.getElementById('mobile-menu-toggle');
+document.addEventListener("DOMContentLoaded", () => {
+  const toggle = document.getElementById("mobile-menu-toggle");
   if (!toggle) return;
 
   const close = () => {
     toggle.checked = false;
-    document.body.classList.remove('menu-open');
+    document.body.classList.remove("menu-open");
   };
 
-  toggle.addEventListener('change', () => {
-    document.body.classList.toggle('menu-open', toggle.checked);
+  toggle.addEventListener("change", () => {
+    document.body.classList.toggle("menu-open", toggle.checked);
   });
 
-  document.addEventListener('click', (event) => {
-    if (!toggle.checked || event.target.closest('dialog')) return;
+  document.addEventListener("click", (event) => {
+    if (!toggle.checked || event.target.closest("dialog")) return;
     const inside = event.target.closest(
-      '.burger-menu, .burger-menu-button, .mobile-header-buttons, #mobile-menu-toggle'
+      ".burger-menu, .burger-menu-button, .mobile-header-buttons, #mobile-menu-toggle",
     );
     if (!inside) close();
   });
 
-  document.addEventListener('keydown', (event) => {
-    if (event.key !== 'Escape' || !toggle.checked) return;
-    if (event.target.closest('dialog')) return;
+  document.addEventListener("keydown", (event) => {
+    if (event.key !== "Escape" || !toggle.checked) return;
+    if (event.target.closest("dialog")) return;
     close();
   });
 });

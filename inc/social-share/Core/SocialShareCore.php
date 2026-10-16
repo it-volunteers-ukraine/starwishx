@@ -14,6 +14,8 @@ declare(strict_types=1);
 
 namespace SocialShare\Core;
 
+use Shared\Build\AssetFile;
+
 final class SocialShareCore
 {
     public const STATUS_TIMEOUT_MS = 2500;
@@ -62,10 +64,12 @@ final class SocialShareCore
         $this->assetsLoaded = true;
 
         if (function_exists('wp_register_script_module')) {
+            $asset = AssetFile::read('assets/js/social-share-store.module.js', ['@wordpress/interactivity']);
             wp_register_script_module(
                 '@starwishx/social-share',
-                get_template_directory_uri() . '/assets/js/social-share-store.module.js',
-                ['@wordpress/interactivity']
+                $asset['url'],
+                $asset['dependencies'],
+                $asset['version']
             );
             wp_enqueue_script_module('@starwishx/social-share');
         }

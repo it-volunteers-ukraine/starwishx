@@ -76,7 +76,8 @@
       },
       [id],
     );
-    var sizes = (media && media.media_details && media.media_details.sizes) || {};
+    var sizes =
+      (media && media.media_details && media.media_details.sizes) || {};
     var thumb =
       (sizes.medium && sizes.medium.source_url) ||
       (sizes.thumbnail && sizes.thumbnail.source_url) ||
@@ -127,7 +128,11 @@
                   null,
                   el(
                     Button,
-                    { variant: "secondary", size: "compact", onClick: renderProps.open },
+                    {
+                      variant: "secondary",
+                      size: "compact",
+                      onClick: renderProps.open,
+                    },
                     id ? i18n.replace : i18n.select,
                   ),
                 ),
@@ -207,7 +212,10 @@
             controlled.term.length
               ? el(
                   PanelBody,
-                  { title: i18n.termsPanelTitle || "Category", initialOpen: true },
+                  {
+                    title: i18n.termsPanelTitle || "Category",
+                    initialOpen: true,
+                  },
                   controlled.term.map(function (entry) {
                     return el(TermAttributeControl, {
                       key: entry[0],
@@ -239,5 +247,9 @@
     };
   }, "withCustomControls");
 
-  addFilter("editor.BlockEdit", "starwishx/custom-controls", withCustomControls);
+  addFilter(
+    "editor.BlockEdit",
+    "starwishx/custom-controls",
+    withCustomControls,
+  );
 })(window.wp);

@@ -6,8 +6,8 @@
  * loading a store on pages that otherwise ship no module.
  */
 
-document.addEventListener('DOMContentLoaded', () => {
-  const button = document.getElementById('scroll-top');
+document.addEventListener("DOMContentLoaded", () => {
+  const button = document.getElementById("scroll-top");
   if (!button) return;
 
   // Roughly one viewport — far enough that "back to top" is worth offering
@@ -16,25 +16,27 @@ document.addEventListener('DOMContentLoaded', () => {
   let ticking = false;
 
   const sync = () => {
-    button.classList.toggle('is-visible', window.scrollY > threshold());
+    button.classList.toggle("is-visible", window.scrollY > threshold());
     ticking = false;
   };
 
   // rAF-throttled: scroll fires far more often than the class can change
   window.addEventListener(
-    'scroll',
+    "scroll",
     () => {
       if (!ticking) {
         ticking = true;
         window.requestAnimationFrame(sync);
       }
     },
-    { passive: true }
+    { passive: true },
   );
 
-  button.addEventListener('click', () => {
-    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    window.scrollTo({ top: 0, behavior: reduced ? 'auto' : 'smooth' });
+  button.addEventListener("click", () => {
+    const reduced = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+    window.scrollTo({ top: 0, behavior: reduced ? "auto" : "smooth" });
   });
 
   sync();

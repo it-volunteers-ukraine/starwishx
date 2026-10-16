@@ -4,6 +4,7 @@
 .comments-area {
     margin: 80px 0;
     padding: 0;
+
     // max-width: 1024px;
 
     // @include media.min-tablet {
@@ -22,15 +23,17 @@
     justify-content: space-between;
     align-items: flex-start;
     gap: 16px;
+
     // margin-bottom: 32px;
     // padding-bottom: 24px;
     // border-bottom: 1px solid $input-color-border-default;
     &__button {
         svg {
-            fill: currentColor;
+            fill: currentcolor;
             margin-right: 8px;
         }
     }
+
     &__info {
         display: flex;
         flex-flow: column wrap;
@@ -42,6 +45,7 @@
 
         .rating-badge {
             gap: 4px;
+
             // border-radius: 12px;
             // padding: 4px 8px;
             color: $text-accent;
@@ -49,6 +53,7 @@
             .count {
                 // margin-left: 4px;
                 color: $text-light;
+
                 // font-weight: 400;
             }
 
@@ -103,6 +108,7 @@
         justify-content: flex-end;
         gap: 12px;
     }
+
     .form-rating-input {
         display: flex;
         align-items: center;
@@ -128,7 +134,7 @@
             color: $stroke-default;
 
             svg {
-                fill: currentColor;
+                fill: currentcolor;
                 width: 24px;
                 height: 24px;
             }
@@ -208,22 +214,25 @@
         margin: 0;
     }
 }
+
 .rating-badge,
 .comment-rating {
     display: flex;
     align-items: center;
+
     .stars {
         color: $icon-color-fill;
         font-size: 14px;
         letter-spacing: 2px;
     }
+
     .stars-display {
         display: flex;
         gap: 2px;
         color: $stroke-default;
 
         svg {
-            fill: currentColor;
+            fill: currentcolor;
             width: 16px;
             height: 16px;
         }
@@ -276,6 +285,7 @@
 
 .comments-pagination {
     display: flex;
+
     .comments-pagination__button {
         margin-left: auto;
     }
@@ -288,6 +298,7 @@
     background-color: $element-card-tech-fill;
     padding: 2px 8px;
     color: $element-card-tech-text;
+
     // font-weight: 500;
     font-size: 12px;
     line-height: 1;
@@ -317,6 +328,7 @@
         gap: 8px;
         margin-bottom: 4px;
         font-size: 14px;
+
         .comment-author {
             display: flex;
             align-items: center;
@@ -341,8 +353,10 @@
             font-size: 14px;
         }
     }
+
     .reply-footer {
         display: flex;
+
         .comment-actions {
             margin-left: auto;
         }
@@ -356,6 +370,7 @@
 
 .btn-link-reply {
     @extend .btn-link-edit;
+
     color: $primary-hover;
 }
 
@@ -381,6 +396,7 @@
         transform: translateY(-10px);
         opacity: 0;
     }
+
     to {
         transform: translateY(0);
         opacity: 1;
@@ -400,6 +416,7 @@
 .stars-input .star-btn {
     /* Transition for smoother feel */
     transition: color 0.2s;
+
     // color: var(--color-star-inactive, #ccc);
     color: $icon-color-fill;
 }
@@ -434,9 +451,11 @@ fieldset[disabled] {
         gap: 6px;
         color: $icon-color-done;
     }
+
     .error-message {
         color: $icon-color-error;
     }
+
     .sending-message {
         color: $text-accent;
         font-style: italic;

@@ -20,6 +20,7 @@ use Gateway\Api\RegisterController;
 use Gateway\Api\PasswordController;
 use Shared\Policy\PasswordPolicy;
 use Shared\Policy\UsernamePolicy;
+use Shared\Build\AssetFile;
 
 /**
  * Main Gateway singleton.
@@ -173,16 +174,13 @@ final class GatewayCore
             return;
         }
 
-        $asset_path = get_template_directory() . '/inc/gateway/Assets/gateway-store.asset.php';
-        $asset = file_exists($asset_path)
-            ? include $asset_path
-            : ['dependencies' => [], 'version' => '1.0.0'];
+        $asset = AssetFile::read('assets/js/gateway-store.module.js', ['@wordpress/interactivity']);
 
         if (function_exists('wp_register_script_module')) {
             wp_register_script_module(
                 '@starwishx/gateway',
-                get_template_directory_uri() . '/assets/js/gateway-store.module.js',
-                array_merge(['@wordpress/interactivity'], $asset['dependencies']),
+                $asset['url'],
+                $asset['dependencies'],
                 $asset['version']
             );
             wp_enqueue_script_module('@starwishx/gateway');

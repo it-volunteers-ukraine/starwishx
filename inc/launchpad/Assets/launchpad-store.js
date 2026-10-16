@@ -65,7 +65,6 @@ const { actions } = store("launchpad", {
 
     // Favorites domain
     favorites: favoritesActions,
-
   },
 
   // Side effects for data-wp-watch / data-wp-init, by domain.

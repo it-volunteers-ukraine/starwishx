@@ -119,20 +119,16 @@ const { state } = store("contact", {
       state.showSuccess = false;
 
       try {
-        const data = await fetchJson(
-          state.config,
-          `${state.config.restUrl}send`,
-          {
-            method: "POST",
-            body: {
-              name: state.fields.name,
-              phone: state.fields.phone,
-              email: state.fields.email,
-              message: state.fields.message,
-              honeypot: form.querySelector('[name="honeypot"]')?.value || "",
-            },
+        await fetchJson(state.config, `${state.config.restUrl}send`, {
+          method: "POST",
+          body: {
+            name: state.fields.name,
+            phone: state.fields.phone,
+            email: state.fields.email,
+            message: state.fields.message,
+            honeypot: form.querySelector('[name="honeypot"]')?.value || "",
           },
-        );
+        });
 
         // Success — show popup, reset form
         state.showSuccess = true;
@@ -196,7 +192,7 @@ const { state } = store("contact", {
             ref.value = full;
             state.fields.phone = full;
           }
-        } catch (_) {
+        } catch {
           /* intlTelInput may throw if destroyed */
         }
 

@@ -2,6 +2,7 @@
 
 // $heart-off: lightpink;
 $heart-off: $buttons-color-background-primary-disabled;
+
 // $heart-off: $buttons-color-text-secondary-pressed;
 $heart-on: $icon-color-error;
 $transition-duration: 200ms;
@@ -13,13 +14,17 @@ $transition-ease: ease;
 
 .heart {
     position: relative;
+
     --size: 11px;
+
     cursor: pointer;
     margin-right: 4px;
     width: var(--size);
     height: var(--size);
+
     &--img {
         --size-img: 24px;
+
         position: relative;
         cursor: pointer;
         margin-right: 4px;
@@ -49,18 +54,23 @@ $transition-ease: ease;
     &__line:nth-child(1) {
         --angle: 0deg;
     }
+
     &__line:nth-child(2) {
         --angle: 60deg;
     }
+
     &__line:nth-child(3) {
         --angle: 120deg;
     }
+
     &__line:nth-child(4) {
         --angle: 180deg;
     }
+
     &__line:nth-child(5) {
         --angle: 240deg;
     }
+
     &__line:nth-child(6) {
         --angle: 300deg;
     }
@@ -74,7 +84,9 @@ $transition-ease: ease;
         cursor: pointer;
         width: calc(var(--size) * 1.5);
         height: calc(var(--size) * 1.5);
+
         @include transform;
+
         &--img {
             position: absolute;
             top: calc(var(--size-img) * -1.2);
@@ -85,6 +97,7 @@ $transition-ease: ease;
             width: calc(var(--size-img) * 2.5);
             height: calc(var(--size-img) * 2.5);
         }
+
         &:focus {
             outline: none;
         }
@@ -101,6 +114,7 @@ $transition-ease: ease;
             animation: heartLines 800ms ease-out forwards;
         }
     }
+
     &__image {
         position: absolute;
         top: 0;
@@ -108,11 +122,14 @@ $transition-ease: ease;
         width: 24px;
         height: 24px;
     }
+
     &__icon {
         background: $heart-off;
         width: var(--size);
         height: var(--size);
+
         @include transform;
+
         position: absolute;
         top: 0;
         left: 0;
@@ -152,16 +169,19 @@ $transition-ease: ease;
 
     45% {
         @include transform($scale: 1.4);
+
         background: $heart-on;
     }
 
     70% {
         @include transform($scale: 1);
+
         background: $heart-on;
     }
 
     100% {
         @include transform($scale: 1.1);
+
         background: $heart-on;
     }
 }
@@ -187,6 +207,7 @@ $transition-ease: ease;
         opacity $transition-duration $transition-ease,
         transform $transition-duration $transition-ease,
         visibility 0s linear $transition-duration; // visibility delayed
+
     will-change: opacity, transform;
     pointer-events: none; // prevent the hidden one from catching events
 }
@@ -234,10 +255,12 @@ $transition-ease: ease;
         transform: translate(-50%, -50%) rotate(var(--angle, 0deg)) scale(0);
         opacity: 0;
     }
+
     40% {
         transform: translate(-50%, -50%) rotate(var(--angle, 0deg)) scale(1);
         opacity: 1;
     }
+
     100% {
         transform: translate(-50%, -50%) rotate(var(--angle, 0deg)) scale(2);
         opacity: 0;

@@ -1,22 +1,25 @@
 {
-  "name": "wp-starter-theme",
+  "name": "starwishx",
   "version": "0.2.1",
   "description": "",
-  "main": "gulpfile.js",
+  "private": true,
   "type": "module",
   "scripts": {
-    "start": "gulp",
-    "dev": "gulp",
-    "build": "gulp build --prod",
-    "clean": "gulp clean",
+    "start": "node tools/build.mjs --watch",
+    "dev": "node tools/build.mjs --watch",
+    "build": "node tools/build.mjs --prod && node tools/package.mjs",
+    "clean": "node tools/build.mjs --clean",
     "sprite": "node tools/build-sprite.mjs",
-    "style:lint": "stylelint '{src,inc/blocks}/**/*.scss' --customSyntax postcss-scss",
-    "style:fix": "stylelint '{src,inc/blocks}/**/*.scss' --customSyntax postcss-scss --fix",
+    "check": "vp check",
+    "lint": "vp check && pnpm style:lint",
+    "style:lint": "stylelint '{src,inc/blocks}/**/*.scss'",
+    "style:fix": "stylelint '{src,inc/blocks}/**/*.scss' --fix",
     "i18n": "npm run i18n:pot && npm run i18n:po && npm run i18n:php && npm run i18n:mo",
     "i18n:pot": "wp i18n make-pot . languages/_themedomain.pot --domain=starwishx --exclude=production,.void,inc/blocks/*/build",
     "i18n:po": "wp i18n update-po languages/_themedomain.pot languages/uk.po",
     "i18n:php": "wp i18n make-php languages/uk.po languages",
-    "i18n:mo": "wp i18n make-mo languages/uk.po languages"
+    "i18n:mo": "wp i18n make-mo languages/uk.po languages",
+    "prepare": "vp config --no-agent"
   },
   "repository": {
     "type": "git",
@@ -25,40 +28,21 @@
   "author": "onpoint.studio",
   "license": "ISC",
   "homepage": "onpoint.studio",
+  "browserslist": [
+    "baseline widely available"
+  ],
+  "engines": {
+    "node": ">=24.11"
+  },
+  "packageManager": "pnpm@12.14.0",
   "devDependencies": {
-    "@babel/core": "^8.0.7",
-    "@babel/preset-env": "^8.0.7",
-    "@babel/preset-react": "^8.0.1",
-    "@wordpress/dependency-extraction-webpack-plugin": "^6.57.0",
-    "autoprefixer": "^10.6.1",
-    "babel-loader": "^10.1.1",
-    "cssnano": "^9.8.0",
-    "del": "^9.0.1",
-    "gulp": "^5.0.1",
-    "gulp-changed": "^5.0.4",
-    "gulp-cli": "^3.1.0",
-    "gulp-fonter-fix": "^0.0.1",
-    "gulp-if": "^3.0.0",
-    "gulp-postcss": "^10.0.0",
-    "gulp-rename": "^2.1.0",
-    "gulp-sass": "^6.0.1",
-    "gulp-sourcemaps": "^3.0.0",
-    "gulp-stylelint-esm": "^4.0.0",
-    "postcss-modules": "^9.0.1",
-    "sass": "^1.105.2",
+    "browserslist": "^4.29.3",
+    "lightningcss": "^1.33.0",
+    "rolldown": "^1.2.14",
+    "sass-embedded": "^1.105.1",
     "stylelint": "^17.16.0",
-    "stylelint-config-standard": "^40.0.0",
     "stylelint-config-standard-scss": "^17.0.0",
     "svgo": "^4.1.0",
-    "ttf2woff2": "^8.0.1",
-    "vinyl-named": "^1.1.0",
-    "webpack": "^5.112.0",
-    "webpack-stream": "^7.0.0",
-    "yargs": "^18.2.0"
-  },
-  "allowScripts": {
-    "@parcel/watcher@2.5.1": true,
-    "es5-ext@0.10.64": true,
-    "ttf2woff2@8.0.1": true
+    "vite-plus": "^1.2.0"
   }
 }

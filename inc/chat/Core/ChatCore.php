@@ -21,6 +21,7 @@ namespace Chat\Core;
 use Chat\Services\ActivityService;
 use Chat\Api\ActivityController;
 use Chat\Panels\ChatPanel;
+use Shared\Build\AssetFile;
 
 final class ChatCore
 {
@@ -76,11 +77,12 @@ final class ChatCore
 
         // Badge tier: all pages for logged-in users
         if (function_exists('wp_register_script_module')) {
+            $asset = AssetFile::read('assets/js/chat-store.module.js', ['@wordpress/interactivity']);
             wp_register_script_module(
                 '@starwishx/chat',
-                get_template_directory_uri() . '/assets/js/chat-store.module.js',
-                ['@wordpress/interactivity'],
-                '1.0.0'
+                $asset['url'],
+                $asset['dependencies'],
+                $asset['version']
             );
             wp_enqueue_script_module('@starwishx/chat');
         }

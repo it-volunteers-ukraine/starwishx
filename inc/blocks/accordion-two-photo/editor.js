@@ -1,7 +1,7 @@
 /**
  * starwishx/accordion-two-photo — editor script (parent + item).
  *
- * Compiled by gulp (nativeBlockEditorScripts) into build/editor.js with a
+ * Compiled by Rolldown (block-editor lane) into build/editor.js with a
  * build/editor.asset.php next to it; block.json "editorScript" points at the
  * bundle. @wordpress/* imports resolve to the wp.* globals WordPress already
  * loads in the editor. Both blocks are registered server-side from their
@@ -28,7 +28,9 @@ import ItemEdit from "./editor/item.js";
 import transforms from "./editor/transforms.js";
 
 function ParentEdit() {
-  const blockProps = useBlockProps({ className: "section accordion-two-photo" });
+  const blockProps = useBlockProps({
+    className: "section accordion-two-photo",
+  });
   const listProps = useInnerBlocksProps(
     { className: "accordion-two-photo__list" },
     {

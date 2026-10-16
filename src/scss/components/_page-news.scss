@@ -7,6 +7,7 @@
   &__layout {
     margin-top: 16px;
     margin-bottom: 80px;
+
     .section {
       padding: 16px 0 0;
 
@@ -16,12 +17,13 @@
     }
   }
 }
+
 .news-main {
   .news-article {
     .news-content {
       overflow-wrap: anywhere;
       overflow-wrap: hyphenate;
-      word-wrap: break-word;
+      overflow-wrap: break-word;
     }
   }
 }
@@ -293,10 +295,12 @@ a.lnew-item {
   color: inherit;
   text-decoration: none;
 }
+
 a.lnew-item .lnew-title,
 a.newcard-content .newcard-title {
   transition: all $animations;
 }
+
 a.lnew-item:hover .lnew-title {
   color: $buttons-color-background-primary-hover;
 }

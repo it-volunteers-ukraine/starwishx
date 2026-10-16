@@ -16,7 +16,9 @@
 
 @mixin label-dot($color: $element-block-text, $bg: $element-block-fill, $border: $element-block-fill) {
   @include label($color, $bg, $border);
+
   text-transform: uppercase;
+
   &::before {
     margin-right: 6px;
     border-radius: 50%;

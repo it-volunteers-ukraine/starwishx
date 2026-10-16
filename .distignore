@@ -1,0 +1,35 @@
+# Files and folders that are not part of the deployed theme.
+#
+# Read by tools/package.mjs (the last step of `npm run build`, which copies
+# the theme into production/), and by `wp dist-archive`, whose convention
+# this file follows. gitignore-style patterns: a leading "/" anchors to the
+# theme root, a trailing "/" matches a folder, a pattern without "/" matches
+# at any depth.
+
+# Dotfiles and dot-folders: .git, .github, .vscode, .claude, .void, .htaccess...
+.*
+
+# Sources that the build compiles; the theme ships their build output.
+/src/
+/inc/blocks/**/*.scss
+/inc/blocks/*/view.js
+/inc/blocks/*/editor.js
+/inc/blocks/*/editor/
+
+# Tooling, docs and package-manager metadata
+/node_modules/
+/production/
+/tools/
+/docs/
+/composer.json
+/composer.lock
+/package.json
+/pnpm-lock.yaml
+/pnpm-workspace.yaml
+/skills-lock.json
+/vite.config.ts
+/stylelint.config.mjs
+/README.md
+
+# Translation editor backups
+/languages/*.po~

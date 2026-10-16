@@ -1,6 +1,6 @@
 $width-desktop: 1920px;
 $width-laptop: 1440px;
-$width-tabland: 1024px; //tablet landscaspe
+$width-tabland: 1024px; // tablet landscaspe
 $width-tablet: 768px;
 $width-mobile: 375px;
 
@@ -9,21 +9,25 @@ $width-mobile: 375px;
       @content;
    }
 }
+
 @mixin min-laptop {
    @media only screen and (min-width: ($width-laptop)) {
       @content;
    }
 }
+
 @mixin min-tabland {
    @media only screen and (min-width: ($width-tabland)) {
       @content;
    }
 }
+
 @mixin min-tablet {
    @media only screen and (min-width: ($width-tablet)) {
       @content;
    }
 }
+
 @mixin min-mobile {
    @media only screen and (min-width: $width-mobile) {
       @content;
@@ -35,21 +39,25 @@ $width-mobile: 375px;
       @content;
    }
 }
+
 @mixin max-laptop {
    @media only screen and (max-width: ($width-laptop - 0.02px)) {
       @content;
    }
 }
+
 @mixin max-tabland {
    @media only screen and (max-width: ($width-tabland - 0.02px)) {
       @content;
    }
 }
+
 @mixin max-tablet {
    @media only screen and (max-width: ($width-tablet - 0.02px)) {
       @content;
    }
 }
+
 @mixin max-mobile {
    @media only screen and (max-width: ($width-mobile - 0.02px)) {
       @content;
@@ -65,26 +73,31 @@ not used dcurrently
       @content;
    }
 }
+
 @mixin desktop {
    @media only screen and (min-width: ($width-desktop)) {
       @content;
    }
 }
+
 @mixin laptop {
    @media only screen and (min-width: ($width-tablet + 1)) and (max-width: $width-laptop) {
       @content;
    }
 }
+
 @mixin tabland {
    @media only screen and (min-width: ($width-tablet + 1)) and (max-width: $width-tabland) {
       @content;
    }
 }
+
 @mixin tablet {
    @media only screen and (min-width: ($width-mobile + 1)) and (max-width: $width-tablet) {
       @content;
    }
 }
+
 @mixin mobile {
    @media only screen and (max-width: $width-mobile) {
       @content;

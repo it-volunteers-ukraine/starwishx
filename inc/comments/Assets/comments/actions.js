@@ -100,18 +100,14 @@ export const commentsActions = {
     try {
       // 5. API Call
       // API call returns { comment: {...}, aggregates: {...} }
-      const response = await fetchJson(
-        state,
-        `${config.restUrl}comments`,
-        {
-          method: "POST",
-          body: {
-            post_id: context.postId,
-            content: state.newContent,
-            rating: state.newRating,
-          },
+      const response = await fetchJson(state, `${config.restUrl}comments`, {
+        method: "POST",
+        body: {
+          post_id: context.postId,
+          content: state.newContent,
+          rating: state.newRating,
         },
-      );
+      });
 
       // 1. Add comment to list
       if (!Array.isArray(state.list)) state.list = [];
@@ -346,9 +342,7 @@ export const commentsActions = {
       // ARCHITECTURAL MAGIC:
       // We need to update a specific item inside a nested array.
       // 1. Find the Parent
-      const parentIndex = state.list.findIndex(
-        (c) => c.id === context.item.id,
-      );
+      const parentIndex = state.list.findIndex((c) => c.id === context.item.id);
 
       if (parentIndex !== -1) {
         const parent = state.list[parentIndex];
@@ -397,19 +391,15 @@ export const commentsActions = {
     state.error = null; // Clear previous errors
 
     try {
-      const response = await fetchJson(
-        state,
-        `${config.restUrl}comments`,
-        {
-          method: "POST",
-          body: {
-            post_id: context.postId, // Use cached context
-            parent_id: item.id,
-            content: state.replyDraft,
-            rating: 0, // Replies usually don't have ratings
-          },
+      const response = await fetchJson(state, `${config.restUrl}comments`, {
+        method: "POST",
+        body: {
+          post_id: context.postId, // Use cached context
+          parent_id: item.id,
+          content: state.replyDraft,
+          rating: 0, // Replies usually don't have ratings
         },
-      );
+      });
 
       // ARCHITECTURAL MAGIC:
       // We need to find the parent comment in the list and append the reply
