@@ -14,10 +14,14 @@ import { styleText } from "node:util";
 import { brotliCompressSync, constants as zlib } from "node:zlib";
 
 /** The theme directory - every path the build reports is relative to it. */
-export const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../..");
+export const ROOT = path.resolve(
+  path.dirname(fileURLToPath(import.meta.url)),
+  "../..",
+);
 
 /** Absolute path -> theme-relative POSIX path ("inc/blocks/faq/view.js"). */
-export const rel = (file) => path.relative(ROOT, file).split(path.sep).join("/");
+export const rel = (file) =>
+  path.relative(ROOT, file).split(path.sep).join("/");
 
 /** Theme-relative path -> absolute path. */
 export const abs = (file) => path.join(ROOT, file);
@@ -33,7 +37,10 @@ export const matches = (file, patterns = []) =>
  */
 export function find(include, exclude = []) {
   const found = new Set();
-  for (const entry of fs.globSync(include, { cwd: ROOT, withFileTypes: true })) {
+  for (const entry of fs.globSync(include, {
+    cwd: ROOT,
+    withFileTypes: true,
+  })) {
     if (!entry.isFile()) continue;
     const file = rel(path.join(entry.parentPath, entry.name));
     if (!matches(file, exclude)) found.add(file);
@@ -65,7 +72,11 @@ export async function copyIfChanged(from, to) {
   try {
     const target = await fsp.stat(abs(to));
     // mtimes round-trip through utimes with sub-millisecond loss.
-    if (target.size === source.size && Math.abs(target.mtimeMs - source.mtimeMs) < 2) return false;
+    if (
+      target.size === source.size &&
+      Math.abs(target.mtimeMs - source.mtimeMs) < 2
+    )
+      return false;
   } catch {
     // Not copied yet.
   }
@@ -98,16 +109,22 @@ const clock = () => new Date().toTimeString().slice(0, 8);
 
 /** "12:00:01 [lane] message" */
 export function log(lane, message) {
-  console.log(`${styleText("dim", clock())} ${styleText("cyan", `[${lane}]`)} ${message}`);
+  console.log(
+    `${styleText("dim", clock())} ${styleText("cyan", `[${lane}]`)} ${message}`,
+  );
 }
 
 export function warn(lane, message) {
-  console.warn(`${styleText("dim", clock())} ${styleText("yellow", `[${lane}] warning:`)} ${message}`);
+  console.warn(
+    `${styleText("dim", clock())} ${styleText("yellow", `[${lane}] warning:`)} ${message}`,
+  );
 }
 
 export function fail(lane, error) {
   const message = error?.message ?? String(error);
-  console.error(`${styleText("dim", clock())} ${styleText("red", `[${lane}] error:`)} ${message}`);
+  console.error(
+    `${styleText("dim", clock())} ${styleText("red", `[${lane}] error:`)} ${message}`,
+  );
 }
 
 /** Milliseconds since `start`, for log lines. */

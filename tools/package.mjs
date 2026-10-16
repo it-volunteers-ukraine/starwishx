@@ -42,7 +42,8 @@ function isIgnored(file, isDir, rules) {
   let ignored = false;
   for (const rule of rules) {
     if (rule.dirOnly && !isDir) continue;
-    if (path.matchesGlob(rule.anchored ? file : name, rule.pattern)) ignored = !rule.negate;
+    if (path.matchesGlob(rule.anchored ? file : name, rule.pattern))
+      ignored = !rule.negate;
   }
   return ignored;
 }
@@ -50,7 +51,9 @@ function isIgnored(file, isDir, rules) {
 /** Theme-relative paths of every file that ships. */
 function collect(rules, dir = "") {
   const files = [];
-  for (const entry of fs.readdirSync(abs(dir || "."), { withFileTypes: true })) {
+  for (const entry of fs.readdirSync(abs(dir || "."), {
+    withFileTypes: true,
+  })) {
     const file = dir ? `${dir}/${entry.name}` : entry.name;
     const isDir = entry.isDirectory();
     if (isIgnored(file, isDir, rules)) continue;
@@ -72,4 +75,7 @@ for (const file of files) {
   fs.utimesSync(target, atime, mtime);
   bytes += size;
 }
-log("package", `${files.length} files (${kb(bytes)}) -> ${OUT}/ ${since(start)}`);
+log(
+  "package",
+  `${files.length} files (${kb(bytes)}) -> ${OUT}/ ${since(start)}`,
+);

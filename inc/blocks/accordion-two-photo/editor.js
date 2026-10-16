@@ -28,7 +28,9 @@ import ItemEdit from "./editor/item.js";
 import transforms from "./editor/transforms.js";
 
 function ParentEdit() {
-  const blockProps = useBlockProps({ className: "section accordion-two-photo" });
+  const blockProps = useBlockProps({
+    className: "section accordion-two-photo",
+  });
   const listProps = useInnerBlocksProps(
     { className: "accordion-two-photo__list" },
     {

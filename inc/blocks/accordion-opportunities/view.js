@@ -62,7 +62,9 @@ store("starwishx/accordion-opportunities", {
               }
             } else if (entry.boundingClientRect.top >= 0) {
               // Still below the line: collapse. Above it: already passed, stays open.
-              ctx.activeIds = ctx.activeIds.filter((activeId) => activeId !== id);
+              ctx.activeIds = ctx.activeIds.filter(
+                (activeId) => activeId !== id,
+              );
             }
           }
         },

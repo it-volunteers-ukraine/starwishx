@@ -21,7 +21,18 @@ import path from "node:path";
 import { parseArgs } from "node:util";
 import { buildSprite } from "./build-sprite.mjs";
 import { buildCss, closeSass, rebuildCss } from "./build/css.mjs";
-import { abs, copyIfChanged, fail, find, kb, log, matches, rel, since, sizesOf } from "./build/files.mjs";
+import {
+  abs,
+  copyIfChanged,
+  fail,
+  find,
+  kb,
+  log,
+  matches,
+  rel,
+  since,
+  sizesOf,
+} from "./build/files.mjs";
 import { buildJs, jsEntries, watchJs } from "./build/js.mjs";
 import { lanes, outputDirs } from "./build/lanes.mjs";
 
@@ -41,7 +52,9 @@ function selectLanes() {
   const ids = args.only.split(",").map((id) => id.trim());
   const unknown = ids.filter((id) => !lanes.some((lane) => lane.id === id));
   if (unknown.length) {
-    throw new Error(`Unknown lane ${unknown.join(", ")} - lanes: ${lanes.map((lane) => lane.id).join(", ")}`);
+    throw new Error(
+      `Unknown lane ${unknown.join(", ")} - lanes: ${lanes.map((lane) => lane.id).join(", ")}`,
+    );
   }
   return lanes.filter((lane) => ids.includes(lane.id));
 }
@@ -92,19 +105,26 @@ function report(selected) {
     if (lane.type !== "js" && lane.type !== "css") continue;
     for (const entry of find(lane.include, lane.exclude)) {
       const out = lane.out(entry);
-      if (fs.existsSync(abs(out))) rows.push({ lane: lane.id, out, ...sizesOf(out) });
+      if (fs.existsSync(abs(out)))
+        rows.push({ lane: lane.id, out, ...sizesOf(out) });
     }
   }
   if (!rows.length) return;
   const width = Math.max(...rows.map((row) => row.out.length));
-  console.log(`\n${"output".padEnd(width)}  ${"raw".padStart(9)}  ${"brotli".padStart(9)}`);
+  console.log(
+    `\n${"output".padEnd(width)}  ${"raw".padStart(9)}  ${"brotli".padStart(9)}`,
+  );
   let lane;
   for (const row of rows) {
     if (row.lane !== lane) console.log(`-- ${(lane = row.lane)}`);
-    console.log(`${row.out.padEnd(width)}  ${kb(row.raw).padStart(9)}  ${kb(row.br).padStart(9)}`);
+    console.log(
+      `${row.out.padEnd(width)}  ${kb(row.raw).padStart(9)}  ${kb(row.br).padStart(9)}`,
+    );
   }
   const sum = (key) => rows.reduce((total, row) => total + row[key], 0);
-  console.log(`${"total".padEnd(width)}  ${kb(sum("raw")).padStart(9)}  ${kb(sum("br")).padStart(9)}\n`);
+  console.log(
+    `${"total".padEnd(width)}  ${kb(sum("raw")).padStart(9)}  ${kb(sum("br")).padStart(9)}\n`,
+  );
 }
 
 /** One pass over every lane; in watch mode Rolldown's watcher does the JS. */
@@ -114,8 +134,16 @@ async function buildOnce(selected) {
   // The sprite comes first: the files lane ships the sprites.svg it writes.
   if (sprite) await runSprite();
   const [jsFailures, cssFailures] = await Promise.all([
-    args.watch ? 0 : buildJs(selected.filter((lane) => lane.type === "js"), context),
-    buildCss(selected.filter((lane) => lane.type === "css"), context),
+    args.watch
+      ? 0
+      : buildJs(
+          selected.filter((lane) => lane.type === "js"),
+          context,
+        ),
+    buildCss(
+      selected.filter((lane) => lane.type === "css"),
+      context,
+    ),
     files ? copyAll(files) : null,
   ]);
   return jsFailures + cssFailures;
@@ -140,7 +168,8 @@ function watchAll(selected) {
 
   async function flush(batch) {
     for (const file of batch) {
-      if (file.endsWith(".scss") && cssLanes.length) await rebuildCss(cssLanes, file, context);
+      if (file.endsWith(".scss") && cssLanes.length)
+        await rebuildCss(cssLanes, file, context);
       if (sprite && matches(file, sprite.include)) {
         await runSprite().catch((error) => fail("sprite", error));
         if (files) await copyOne(files, "src/img/sprites.svg");
@@ -168,10 +197,14 @@ function watchAll(selected) {
     timer = setTimeout(() => {
       const batch = [...changed];
       changed.clear();
-      running = running.then(() => flush(batch)).catch((error) => fail("watch", error));
+      running = running
+        .then(() => flush(batch))
+        .catch((error) => fail("watch", error));
     }, 60);
   };
-  const watchers = ["src", "inc"].map((dir) => fs.watch(abs(dir), { recursive: true }, onEvent(dir)));
+  const watchers = ["src", "inc"].map((dir) =>
+    fs.watch(abs(dir), { recursive: true }, onEvent(dir)),
+  );
   log("watch", "watching src/ and inc/ - Ctrl+C to stop");
 
   process.once("SIGINT", async () => {
@@ -193,7 +226,10 @@ try {
     // outputs must survive, so nothing is cleaned.
     if (args.prod && !args.only) clean({ production: false });
     const failures = await buildOnce(selected);
-    log(args.prod ? "prod" : "dev", `${failures ? `${failures} failed` : "built"} in ${since(start)}`);
+    log(
+      args.prod ? "prod" : "dev",
+      `${failures ? `${failures} failed` : "built"} in ${since(start)}`,
+    );
     if (args.prod) report(selected);
     if (args.watch) watchAll(selected);
     else process.exitCode = failures ? 1 : 0;

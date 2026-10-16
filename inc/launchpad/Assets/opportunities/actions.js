@@ -29,7 +29,10 @@ let _pendingUploadFile = null;
  */
 function overSelectionLimitErrors(p) {
   const vm = p.validationMessages || {};
-  const messages = { category: vm.categoryMax, beneficiaries: vm.beneficiariesMax };
+  const messages = {
+    category: vm.categoryMax,
+    beneficiaries: vm.beneficiariesMax,
+  };
   for (const [field, message] of Object.entries(messages)) {
     const max = selectionLimit(p, field);
     if (!p.fieldErrors[field] && max > 0 && selectionSize(p, field) > max) {
@@ -51,7 +54,13 @@ export const opportunitiesActions = {
     const p = state.panels.opportunities;
     p.formData = p.emptyForm
       ? deepClone(p.emptyForm)
-      : { id: null, title: "", beneficiaries: [], subcategory: [], category: [] };
+      : {
+          id: null,
+          title: "",
+          beneficiaries: [],
+          subcategory: [],
+          category: [],
+        };
     p.error = null;
     p.fieldErrors = {};
   },
@@ -197,7 +206,8 @@ export const opportunitiesActions = {
       p.fieldErrors.description = vm.descriptionMinLength;
     }
     if (!p.formData.category?.length) p.fieldErrors.category = vm.category;
-    if (!p.formData.beneficiaries?.length) p.fieldErrors.beneficiaries = vm.beneficiaries;
+    if (!p.formData.beneficiaries?.length)
+      p.fieldErrors.beneficiaries = vm.beneficiaries;
     overSelectionLimitErrors(p);
     if (
       p.formData.date_starts &&
@@ -408,7 +418,9 @@ export const opportunitiesActions = {
       return;
     }
     const val = Number(ref.value);
-    let s = Array.isArray(p.formData.beneficiaries) ? [...p.formData.beneficiaries] : [];
+    let s = Array.isArray(p.formData.beneficiaries)
+      ? [...p.formData.beneficiaries]
+      : [];
     p.formData.beneficiaries = ref.checked
       ? [...new Set([...s, val])]
       : s.filter((id) => id !== val);

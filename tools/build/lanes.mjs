@@ -107,7 +107,8 @@ export const lanes = [
     type: "css",
     legacy: true,
     include: ["inc/acf/blocks/**/*.module.scss"],
-    out: (file) => `assets/css/blocks/${file.slice("inc/acf/blocks/".length).replace(/\.scss$/, ".css")}`,
+    out: (file) =>
+      `assets/css/blocks/${file.slice("inc/acf/blocks/".length).replace(/\.scss$/, ".css")}`,
     // The ACF block templates read this map at runtime to resolve their
     // hashed class names, and render unstyled without it.
     cssModules: "assets/css/blocks/modules.json",
@@ -127,7 +128,11 @@ export const lanes = [
         // the superseded hand-built sprite kept for reference. None of them
         // belong in the shipped theme - only the generated sprites.svg does.
         include: ["src/img/**/*.{jpg,jpeg,png,gif,webp,avif,svg}"],
-        exclude: ["src/img/sprites-svgs/**", "src/img/bak/**", "src/img/sprites-manual.svg"],
+        exclude: [
+          "src/img/sprites-svgs/**",
+          "src/img/bak/**",
+          "src/img/sprites-manual.svg",
+        ],
         to: (file) => file.replace(/^src\/img\//, "assets/img/"),
       },
       {

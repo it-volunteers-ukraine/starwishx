@@ -28,7 +28,11 @@ function options(lane, entry, { prod }, onWrite) {
       // WordPress has no script handle for, and the editor script would
       // silently never load.
       jsx: lane.jsx ? { runtime: "automatic", development: false } : undefined,
-      define: { "process.env.NODE_ENV": JSON.stringify(prod ? "production" : "development") },
+      define: {
+        "process.env.NODE_ENV": JSON.stringify(
+          prod ? "production" : "development",
+        ),
+      },
     },
     plugins: [wordpress(lane, onWrite)],
     onLog(level, entryLog) {
@@ -103,7 +107,8 @@ export function watchJs(lanes, context) {
       event.result.close();
     } else if (event.code === "ERROR") {
       // A deleted entry fails once before the watcher is restarted without it.
-      if (!/Cannot resolve entry module/.test(event.error?.message)) fail("js", event.error);
+      if (!/Cannot resolve entry module/.test(event.error?.message))
+        fail("js", event.error);
       event.result?.close();
     } else if (event.code === "END" && !watching) {
       watching = true;

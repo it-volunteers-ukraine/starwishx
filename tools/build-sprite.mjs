@@ -139,7 +139,10 @@ export async function buildSprite({ quiet = false } = {}) {
 }
 
 // Run directly: node tools/build-sprite.mjs
-if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+if (
+  process.argv[1] &&
+  path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)
+) {
   buildSprite().catch((err) => {
     console.error(`[sprite] ${err.message}`);
     process.exitCode = 1;

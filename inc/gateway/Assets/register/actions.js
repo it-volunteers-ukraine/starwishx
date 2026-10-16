@@ -42,7 +42,10 @@ export const registerActions = {
     if (!validators.required(form.username)) {
       errors.username = strings.usernameRequired ?? "";
     } else {
-      const usernameError = validateUsername(form.username, state.usernamePolicy);
+      const usernameError = validateUsername(
+        form.username,
+        state.usernamePolicy,
+      );
       if (usernameError) errors.username = usernameError;
     }
 

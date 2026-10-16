@@ -1,11 +1,14 @@
 # Project StarWishX
+
 ## WordPress theme
 
 ### Recommended to use:
+
 - PHP 8.2
 - MySQL 5.7
 
 ## To start using the theme:
+
 1. `pnpm install` (Node 24.11+ and pnpm 12, see `engines` and `packageManager`
    in package.json)
 2. `pnpm dev` builds everything, then rebuilds whatever changes

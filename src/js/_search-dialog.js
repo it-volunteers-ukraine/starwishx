@@ -10,41 +10,43 @@
  * Pages without the site header (/gateway/) have no dialog; nothing runs.
  */
 
-document.addEventListener('DOMContentLoaded', () => {
-  const dialog = document.getElementById('searchModal');
+document.addEventListener("DOMContentLoaded", () => {
+  const dialog = document.getElementById("searchModal");
   if (!(dialog instanceof HTMLDialogElement)) return;
 
-  const form = dialog.querySelector('form');
-  const input = dialog.querySelector('.search-input');
-  const clear = dialog.querySelector('.form-clear-btn');
+  const form = dialog.querySelector("form");
+  const input = dialog.querySelector(".search-input");
+  const clear = dialog.querySelector(".form-clear-btn");
 
-  document.querySelectorAll('[aria-controls="searchModal"]').forEach((trigger) => {
-    trigger.addEventListener('click', () => {
-      dialog.showModal();
-      input?.focus();
+  document
+    .querySelectorAll('[aria-controls="searchModal"]')
+    .forEach((trigger) => {
+      trigger.addEventListener("click", () => {
+        dialog.showModal();
+        input?.focus();
+      });
     });
-  });
 
-  clear?.addEventListener('click', () => {
+  clear?.addEventListener("click", () => {
     if (!input) return;
-    input.value = '';
+    input.value = "";
     input.focus();
   });
 
   // One Escape closes, as the dialog pattern expects. Left to the browser, the
   // first press in a non-empty type="search" field only clears the text.
-  dialog.addEventListener('keydown', (event) => {
-    if (event.key !== 'Escape' || event.isComposing) return;
+  dialog.addEventListener("keydown", (event) => {
+    if (event.key !== "Escape" || event.isComposing) return;
     event.preventDefault();
     dialog.close();
   });
 
   // The dialog box itself is the full-screen dimmed layer, so a click that
   // lands on it directly, not on the panel inside, is a click outside.
-  dialog.addEventListener('click', (event) => {
+  dialog.addEventListener("click", (event) => {
     if (event.target === dialog) dialog.close();
   });
 
   // Back to the server-rendered value: empty, or the query on a search page.
-  dialog.addEventListener('close', () => form?.reset());
+  dialog.addEventListener("close", () => form?.reset());
 });

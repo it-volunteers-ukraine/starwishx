@@ -31,7 +31,12 @@
         "name": "starwishx/faq-item",
         "attributes": { "question": "How does it work?" },
         "innerBlocks": [
-          { "name": "core/paragraph", "attributes": { "content": "Pick a category, browse the opportunities and apply." } }
+          {
+            "name": "core/paragraph",
+            "attributes": {
+              "content": "Pick a category, browse the opportunities and apply."
+            }
+          }
         ]
       },
       {

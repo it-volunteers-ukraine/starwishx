@@ -12,7 +12,17 @@ import { fileURLToPath } from "node:url";
 import browserslist from "browserslist";
 import { browserslistToTargets, transform } from "lightningcss";
 import { initAsyncCompiler } from "sass-embedded";
-import { ROOT, abs, fail, find, log, rel, since, warn, writeIfChanged } from "./files.mjs";
+import {
+  ROOT,
+  abs,
+  fail,
+  find,
+  log,
+  rel,
+  since,
+  warn,
+  writeIfChanged,
+} from "./files.mjs";
 
 const targets = browserslistToTargets(browserslist(undefined, { path: ROOT }));
 
@@ -38,7 +48,9 @@ function sassError(error) {
   if (!error?.sassMessage || !error.span?.url) return error;
   const { span } = error;
   const where = `${rel(fileURLToPath(span.url))}:${span.start.line + 1}:${span.start.column + 1}`;
-  return new Error(`${where}: ${error.sassMessage}\n  ${(span.context ?? span.text).trimEnd()}`);
+  return new Error(
+    `${where}: ${error.sassMessage}\n  ${(span.context ?? span.text).trimEnd()}`,
+  );
 }
 
 /** Sass source-map URLs -> paths relative to the .map file, for DevTools. */
@@ -55,7 +67,9 @@ function relativeSources(map, out) {
 
 async function compile(lane, entry, { prod }) {
   const out = lane.out(entry);
-  const result = await (await sass()).compileAsync(abs(entry), {
+  const result = await (
+    await sass()
+  ).compileAsync(abs(entry), {
     loadPaths: (lane.loadPaths ?? []).map(abs),
     sourceMap: !prod,
     sourceMapIncludeSources: !prod,
@@ -74,12 +88,16 @@ async function compile(lane, entry, { prod }) {
     // "contact-module.css" for contact.module.scss gives
     // contact-module__title___<hash>, the scheme postcss-modules used. The
     // path is theme-relative so the hash is the same on every machine.
-    filename: lane.cssModules ? entry.replace(/\.module\.scss$/, "-module.css") : out,
+    filename: lane.cssModules
+      ? entry.replace(/\.module\.scss$/, "-module.css")
+      : out,
     code: Buffer.from(result.css),
     targets,
     minify: prod,
     sourceMap: !prod,
-    inputSourceMap: result.sourceMap ? JSON.stringify(result.sourceMap) : undefined,
+    inputSourceMap: result.sourceMap
+      ? JSON.stringify(result.sourceMap)
+      : undefined,
     // Keep what it can't parse and say so, instead of failing the build.
     errorRecovery: true,
     // Classes, ids and keyframes are scoped, as postcss-modules did; grid
@@ -94,7 +112,10 @@ async function compile(lane, entry, { prod }) {
   for (const { message, loc } of css.warnings) {
     // loc points into the compiled CSS; quote its line to make it findable.
     const source = lines[loc.line - 1]?.trim();
-    warn(lane.id, `${entry}: ${message}${source ? ` in "${source.slice(0, 120)}"` : ""}`);
+    warn(
+      lane.id,
+      `${entry}: ${message}${source ? ` in "${source.slice(0, 120)}"` : ""}`,
+    );
   }
 
   let code = css.code.toString();
@@ -109,7 +130,10 @@ async function compile(lane, entry, { prod }) {
     const map = moduleMaps.get(lane.cssModules) ?? new Map();
     moduleMaps.set(lane.cssModules, map);
     const names = Object.fromEntries(
-      Object.entries(css.exports ?? {}).map(([local, { name }]) => [local, name]),
+      Object.entries(css.exports ?? {}).map(([local, { name }]) => [
+        local,
+        name,
+      ]),
     );
     map.set(path.basename(entry, ".module.scss"), names);
   }
@@ -119,7 +143,9 @@ async function compile(lane, entry, { prod }) {
 /** modules.json: { "<block>": { "<local class>": "<scoped class>" } } */
 async function writeModuleMaps() {
   for (const [file, map] of moduleMaps) {
-    const sorted = Object.fromEntries([...map].sort(([a], [b]) => a.localeCompare(b)));
+    const sorted = Object.fromEntries(
+      [...map].sort(([a], [b]) => a.localeCompare(b)),
+    );
     await writeIfChanged(file, `${JSON.stringify(sorted, null, 2)}\n`);
   }
 }

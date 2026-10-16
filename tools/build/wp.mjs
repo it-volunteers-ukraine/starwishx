@@ -34,19 +34,24 @@ const BUNDLED = new Set([
 const VENDOR = {
   react: { global: "React", handle: "react" },
   "react-dom": { global: "ReactDOM", handle: "react-dom" },
-  "react/jsx-runtime": { global: "ReactJSXRuntime", handle: "react-jsx-runtime" },
+  "react/jsx-runtime": {
+    global: "ReactJSXRuntime",
+    handle: "react-jsx-runtime",
+  },
   jquery: { global: "jQuery", handle: "jquery" },
   lodash: { global: "lodash", handle: "lodash" },
   "lodash-es": { global: "lodash", handle: "lodash" },
   moment: { global: "moment", handle: "moment" },
 };
 
-const camelCase = (name) => name.replace(/-([a-z])/g, (_, letter) => letter.toUpperCase());
+const camelCase = (name) =>
+  name.replace(/-([a-z])/g, (_, letter) => letter.toUpperCase());
 
 /** "@wordpress/block-editor" -> "wp.blockEditor"; undefined when bundled. */
 export function scriptGlobal(id) {
   if (Object.hasOwn(VENDOR, id)) return VENDOR[id].global;
-  if (id.startsWith(WP) && !BUNDLED.has(id)) return `wp.${camelCase(id.slice(WP.length))}`;
+  if (id.startsWith(WP) && !BUNDLED.has(id))
+    return `wp.${camelCase(id.slice(WP.length))}`;
   return undefined;
 }
 
@@ -65,7 +70,9 @@ function php(value, depth = 0) {
     return `array(\n${value.map((item) => pad + php(item, depth + 1)).join(",\n")}\n${end})`;
   }
   if (value && typeof value === "object") {
-    const pairs = Object.entries(value).map(([key, item]) => `${pad}${php(key)} => ${php(item, depth + 1)}`);
+    const pairs = Object.entries(value).map(
+      ([key, item]) => `${pad}${php(key)} => ${php(item, depth + 1)}`,
+    );
     return `array(\n${pairs.join(",\n")}\n${end})`;
   }
   return `'${String(value).replace(/\\/g, "\\\\").replace(/'/g, "\\'")}'`;
@@ -111,11 +118,17 @@ export function wordpress(lane, onWrite) {
     },
 
     resolveId(source) {
-      if (Object.hasOwn(externals, source)) return { id: externals[source], external: true };
-      if (lane.wp === "modules" && source.startsWith(WP) && !BUNDLED.has(source)) {
+      if (Object.hasOwn(externals, source))
+        return { id: externals[source], external: true };
+      if (
+        lane.wp === "modules" &&
+        source.startsWith(WP) &&
+        !BUNDLED.has(source)
+      ) {
         return { id: source, external: true };
       }
-      if (lane.wp === "scripts" && scriptGlobal(source)) return { id: source, external: true };
+      if (lane.wp === "scripts" && scriptGlobal(source))
+        return { id: source, external: true };
       return null;
     },
 

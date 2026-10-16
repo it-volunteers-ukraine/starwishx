@@ -28,7 +28,7 @@ export const favoritesPanelGetters = {
 
     return ids.includes(Number(id));
   },
-  
+
   /**
    * Safe check to hide the empty state.
    * 'this' refers to the global launchpad state.

@@ -9,7 +9,11 @@
   "description": "One question with its answer.",
   "textdomain": "starwishx",
   "parent": ["starwishx/faq"],
-  "usesContext": ["starwishx/parentId", "starwishx/childIndex", "starwishx/faqOpenFirst"],
+  "usesContext": [
+    "starwishx/parentId",
+    "starwishx/childIndex",
+    "starwishx/faqOpenFirst"
+  ],
   "supports": {
     "html": false,
     "reusable": false
