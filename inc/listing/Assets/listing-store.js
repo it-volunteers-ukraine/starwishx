@@ -5,7 +5,12 @@
  * File: inc/listing/Assets/listing-store.js
  */
 
-import { store, getContext, getElement } from "@wordpress/interactivity";
+import {
+  store,
+  getContext,
+  getElement,
+  withSyncEvent,
+} from "@wordpress/interactivity";
 import { extendState } from "./utils.js"; // or ../../shared/Assets/shared-utils.js
 import { filterActions } from "./filters/actions.js";
 import { gridActions } from "./grid/actions.js";
@@ -40,6 +45,22 @@ const listingState = {
 extendState(listingState, gridGetters);
 
 /**
+ * Controls Tab can land on inside the filter drawer (actions.trapSidebarFocus).
+ */
+const SIDEBAR_FOCUSABLE = [
+  "a[href]",
+  "button:not([disabled])",
+  "input:not([disabled])",
+  "select:not([disabled])",
+  "textarea:not([disabled])",
+  "summary",
+  '[tabindex]:not([tabindex="-1"])',
+].join(",");
+
+/** The drawer state callbacks.syncSidebarFocus last acted on. */
+let sidebarWasOpen = false;
+
+/**
  * STORE DEFINITION
  * Standardized registration pattern.
  */
@@ -60,6 +81,36 @@ store("listing", {
       state.isSidebarOpen = false;
       document.body.classList.remove("sidebar-open");
     },
+
+    /**
+     * Keeps Tab inside the open drawer: the page behind it sits under the
+     * backdrop, so focus that got there would be invisible. Bound with
+     * data-wp-on--keydown on the sidebar; withSyncEvent because it has to
+     * preventDefault() the keystroke it redirects.
+     */
+    trapSidebarFocus: withSyncEvent((event) => {
+      const { state } = store("listing");
+      if (event.key !== "Tab" || !state.isSidebarOpen) return;
+
+      const { ref } = getElement();
+      const focusable = [...ref.querySelectorAll(SIDEBAR_FOCUSABLE)].filter(
+        (el) => el.checkVisibility(),
+      );
+      if (focusable.length === 0) return;
+
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      const current = document.activeElement;
+      const outside = !ref.contains(current);
+
+      if (event.shiftKey && (outside || current === first)) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && (outside || current === last)) {
+        event.preventDefault();
+        first.focus();
+      }
+    }),
 
     init() {
       const { state, actions } = store("listing");
@@ -106,6 +157,32 @@ store("listing", {
     },
   },
   callbacks: {
+    /**
+     * data-wp-watch on the sidebar. Focus follows the drawer: into it when it
+     * opens (the close button, its first control) and back to the Filters
+     * button when it closes, unless focus has already moved elsewhere. Watch
+     * re-runs come after the next frame, so the open drawer is visible, and
+     * therefore focusable, by the time this runs. The first run, at
+     * hydration, sees no change and leaves focus alone.
+     */
+    syncSidebarFocus() {
+      const { state } = store("listing");
+      const { ref } = getElement();
+      const isOpen = state.isSidebarOpen;
+      if (isOpen === sidebarWasOpen) return;
+      sidebarWasOpen = isOpen;
+
+      if (isOpen) {
+        ref.querySelector(".listing-sidebar__close")?.focus();
+        return;
+      }
+
+      const current = document.activeElement;
+      if (!current || current === document.body || ref.contains(current)) {
+        document.querySelector(`[aria-controls="${ref.id}"]`)?.focus();
+      }
+    },
+
     /**
      * Dynamic parent count: when some children are selected, computes the
      * deduplicated post count across only the selected children's postId

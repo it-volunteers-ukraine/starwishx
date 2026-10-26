@@ -90,7 +90,13 @@ sw_breadcrumbs();
     </header>
 
     <div class="listing-controls">
-        <button class="btn-show-filters btn" data-wp-on--click="actions.toggleSidebar">
+        <button
+            type="button"
+            class="btn-show-filters btn"
+            aria-controls="listing-sidebar"
+            aria-expanded="false"
+            data-wp-bind--aria-expanded="state.isSidebarOpen"
+            data-wp-on--click="actions.toggleSidebar">
             <?= sw_svg('icon-filter', 16); ?>
             <?php esc_html_e('Filters', 'starwishx'); ?>
             <span
@@ -108,18 +114,29 @@ sw_breadcrumbs();
             data-wp-bind--hidden="!state.isSidebarOpen"
             data-wp-on--click="actions.closeSidebar"
             hidden></div>
-        <aside class="listing-sidebar" data-wp-class--is-open="state.isSidebarOpen">
+        <?php
+        // Below the laptop breakpoint this is an off-canvas drawer opened by
+        // .btn-show-filters (aria-controls). While it is open, Tab stays
+        // inside it, and focus moves to the close button on open and back to
+        // the toggle on close (actions.trapSidebarFocus,
+        // callbacks.syncSidebarFocus). The close button only shows there.
+        ?>
+        <aside
+            id="listing-sidebar"
+            class="listing-sidebar"
+            aria-labelledby="listing-sidebar-title"
+            data-wp-class--is-open="state.isSidebarOpen"
+            data-wp-on--keydown="actions.trapSidebarFocus"
+            data-wp-watch="callbacks.syncSidebarFocus">
             <div class="listing-sidebar__header">
-                <h2 class="sidebar-title"><?php esc_html_e('Refine Search', 'starwishx'); ?></h2>
-                <!-- <button
+                <h2 id="listing-sidebar-title" class="sidebar-title"><?php esc_html_e('Refine Search', 'starwishx'); ?></h2>
+                <button
                     type="button"
                     class="listing-sidebar__close"
                     data-wp-on--click="actions.closeSidebar"
-                    aria-label="< ?php esc_attr_e('Close filters', 'starwishx'); ?>">
-                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
-                        <path d="M15 5L5 15M5 5l10 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
-                    </svg>
-                </button> -->
+                    aria-label="<?php esc_attr_e('Close filters', 'starwishx'); ?>">
+                    <?= sw_svg('icon-close', 20); ?>
+                </button>
             </div>
             <div class="listing-status">
                 <span class="listing-status-label">

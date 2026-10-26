@@ -36,7 +36,7 @@
   },
   "packageManager": "pnpm@12.15.0",
   "devDependencies": {
-    "browserslist": "^4.29.4",
+    "browserslist": "^4.29.5",
     "lightningcss": "^1.33.0",
     "rolldown": "^1.2.15",
     "sass-embedded": "^1.106.1",

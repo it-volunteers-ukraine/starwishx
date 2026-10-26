@@ -743,7 +743,13 @@ body.sidebar-open {
         left: 0;
         transform: translateX(-100%);
         z-index: 10000;
-        transition: transform 0.3s ease;
+
+        // Closed means hidden, not just off-screen, so Tab and screen readers
+        // skip it. visibility flips only once the slide-out has played.
+        visibility: hidden;
+        transition:
+            transform 0.3s ease,
+            visibility 0s linear 0.3s;
         background: $surface-primary;
         padding: 12px;
 
@@ -752,11 +758,26 @@ body.sidebar-open {
         max-width: 360px;
         height: 100dvh;
 
-        // height: 100%;
-        overflow-y: auto;
-
         &.is-open {
             transform: translateX(0);
+            visibility: visible;
+            transition: transform 0.3s ease;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            &,
+            &.is-open {
+                transition: none;
+            }
+        }
+
+        // The filter list scrolls, not the panel: a scrolling panel would clip
+        // the close button that hangs over its edge.
+        .listing-filters {
+            flex: 1 1 auto;
+            min-height: 0;
+            overflow-y: auto;
+            overscroll-behavior: contain;
         }
     }
 
@@ -764,26 +785,47 @@ body.sidebar-open {
         display: flex;
         justify-content: space-between;
         align-items: center;
+
+        // As tall as the close button, so the title lines up with it, and
+        // clear of the half of it that sits inside the panel.
+        @include media.max-laptop {
+            padding-right: 12px;
+            min-height: 40px;
+        }
     }
 
+    // Drawer only. Straddles the panel's top-right edge: the outer half sits
+    // over the strip of backdrop the panel leaves (width: calc(100% - 40px)).
     .listing-sidebar__close {
-        @include media.min-laptop {
-            display: none;
-        }
+        display: none;
 
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        transition: background 0.2s;
-        cursor: pointer;
-        border: 1px solid $stroke-default;
-        border-radius: 50%;
-        background: transparent;
-        padding: 6px;
-        color: $text-basic;
+        @include media.max-laptop {
+            display: grid;
+            position: absolute;
+            top: 12px;
+            right: 0;
+            place-items: center;
+            transform: translateX(50%);
+            transition: background 0.2s;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgb(0 0 0 / 15%);
+            border: 1px solid $stroke-default;
+            border-radius: 50%;
+            background: $surface-primary;
+            padding: 0;
+            width: 40px;
+            height: 40px;
+            color: $text-basic;
+            stroke-width: 1.5; // icon-close draws a 1-unit stroke by default
 
-        &:hover {
-            background: $dropdown-surface-color-hover;
+            &:hover {
+                background: $dropdown-surface-color-hover;
+            }
+
+            &:focus-visible {
+                outline: 2px solid $primary-hover;
+                outline-offset: 2px;
+            }
         }
     }
 

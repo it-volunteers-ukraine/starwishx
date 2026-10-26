@@ -47,3 +47,4 @@ minimumReleaseAgeExclude:
   - sass-embedded@1.105.2
   - sass@1.105.2
   - vite-plus@1.3.0 || 1.4.0
+  - browserslist@4.29.5
