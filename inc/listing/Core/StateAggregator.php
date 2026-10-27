@@ -17,6 +17,12 @@ use Listing\Services\ListingService;
  */
 class StateAggregator
 {
+    /**
+     * Most result pages one page load renders for ?page=N. N multiplies a
+     * single query's LIMIT, so it is capped; Load more carries on from there.
+     */
+    private const MAX_SSR_PAGES = 5;
+
     private ListingService $service;
     private CountriesRepository $countriesRepository;
 
@@ -39,15 +45,25 @@ class StateAggregator
     {
         $filters = $this->sanitizeFilters($rawFilters);
 
-        $results = $this->service->search($filters);
+        // ?page=N is what Load more leaves in the URL (grid/actions.js).
+        // Render pages 1..N in one query, so a reload or a shared link shows
+        // the list the visitor had, and Load more continues after it.
+        $through = min(max(1, $filters['page']), self::MAX_SSR_PAGES);
+        $results = $this->service->search(
+            ['page' => 1] + $filters,
+            $through * QueryBuilder::ITEMS_PER_PAGE
+        );
         $facets  = $this->service->getFacets($filters);
+
+        $totalPages      = (int) ceil($results['total'] / QueryBuilder::ITEMS_PER_PAGE);
+        $filters['page'] = max(1, min($through, $totalPages));
 
         return [
             'query'      => $filters,
             'results'    => $results['items'],
             'facets'     => $facets,
             'totalFound' => $results['total'],
-            'totalPages' => $results['total_pages'],
+            'totalPages' => $totalPages,
             'isLoading'  => false,
             'layout'     => 'grid',
         ];

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Listing\Filters;
 
+use Listing\Services\ListingService;
 use Shared\Core\Traits\BufferedRenderTrait;
 
 /**
@@ -129,6 +130,7 @@ class LocationsFilterSimple extends AbstractFilter
             <input
                 type="search"
                 class="filter-search-input"
+                maxlength="<?php echo (int) ListingService::LOCATION_MAX_LENGTH; ?>"
                 placeholder="<?php esc_attr_e('City, Raion, Oblast...', 'starwishx'); ?>"
                 data-filter-id="<?php echo esc_attr($this->getId()); ?>"
                 data-wp-bind--value="state.query.location"

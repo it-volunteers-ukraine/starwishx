@@ -119,7 +119,10 @@ sw_breadcrumbs();
         // .btn-show-filters (aria-controls). While it is open, Tab stays
         // inside it, and focus moves to the close button on open and back to
         // the toggle on close (actions.trapSidebarFocus,
-        // callbacks.syncSidebarFocus). The close button only shows there.
+        // callbacks.syncSidebarFocus). The close button only shows there. It
+        // sits outside .listing-sidebar__body, the drawer's scroll container,
+        // so it can hang over the panel's edge and stays put while the rest
+        // scrolls.
         ?>
         <aside
             id="listing-sidebar"
@@ -128,86 +131,89 @@ sw_breadcrumbs();
             data-wp-class--is-open="state.isSidebarOpen"
             data-wp-on--keydown="actions.trapSidebarFocus"
             data-wp-watch="callbacks.syncSidebarFocus">
-            <div class="listing-sidebar__header">
-                <h2 id="listing-sidebar-title" class="sidebar-title"><?php esc_html_e('Refine Search', 'starwishx'); ?></h2>
-                <button
-                    type="button"
-                    class="listing-sidebar__close"
-                    data-wp-on--click="actions.closeSidebar"
-                    aria-label="<?php esc_attr_e('Close filters', 'starwishx'); ?>">
-                    <?= sw_svg('icon-close', 20); ?>
-                </button>
-            </div>
-            <div class="listing-status">
-                <span class="listing-status-label">
-                    <!-- < ?= sw_svg('icon-opportunities'); ?> -->
-                    <img width="20" height="20" src="<?= get_template_directory_uri(); ?>/assets/img/icon-opportunities-gradient.svg" alt="Icon star">
-
-                    <span class="status-label__title">
-                        <?= esc_html__('Found', 'starwishx'); ?>:
-                    </span>
-                    <span class="status-label__info" data-wp-text="state.resultsFoundLabel"></span>
-                </span>
-                <button class="btn-tertiary" data-wp-on--click="actions.filters.clearAll">
-                    <?php esc_html_e('Clear all', 'starwishx'); ?>
-                </button>
-            </div>
-
-
-            <div class="listing-filters">
-                <?php
-                // Keyword search is the one filter group written by hand rather
-                // than rendered from the registry, so it has no filter object to
-                // take an id from. It used to interpolate $id, which is not a
-                // template variable at all - load_template() globalises $id, so
-                // it silently picked up WordPress's current-post id and the two
-                // callbacks below never resolved. 's' is the key the input binds
-                // to on state.query.
-                ?>
-                <details
-                    class="listing-filter-group"
-                    id="filter-group-s"
-                    data-wp-interactive="listing"
-                    data-wp-context='{ "filterId": "s" }'
-                    data-wp-class--has-selection="callbacks.hasActiveFilter"
-                    open>
-
-                    <summary class="listing-filter-group__summary">
-                        <span class="listing-filter-group__title">
-                            <?php esc_html_e('Keyword search', 'starwishx'); ?>
-                            <span class="filter-count-badge" data-wp-text="callbacks.getActiveFilterCount"></span>
-                        </span>
-                        <svg class="icon-chevron">
-                            <use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-arrow-down"></use>
-                        </svg>
-                    </summary>
-
-                    <div class="listing-filter-group__content">
-                        <div class="listing-search-wrapper">
-                            <input
-                                type="search"
-                                class="listing-search-input"
-                                placeholder="<?php esc_attr_e('Search by keyword...', 'starwishx'); ?>"
-                                data-wp-bind--value="state.query.s"
-                                data-wp-on--input="actions.filters.updateSearch">
-                        </div>
-                    </div>
-                </details>
-                <?php
-                // Registry pattern: Iterate through registered filters
-                foreach ($listing->registry()->getAll() as $filter) {
-                    echo $filter->render();
-                }
-                ?>
-            </div>
-
             <button
                 type="button"
-                class="sidebar-btn__close btn-secondary__small"
+                class="listing-sidebar__close"
                 data-wp-on--click="actions.closeSidebar"
                 aria-label="<?php esc_attr_e('Close filters', 'starwishx'); ?>">
-                <?= esc_html__('Close', 'starwishx'); ?>
+                <?= sw_svg('icon-close', 20); ?>
             </button>
+            <div class="listing-sidebar__body">
+                <div class="listing-sidebar__header">
+                    <h2 id="listing-sidebar-title" class="sidebar-title"><?php esc_html_e('Refine Search', 'starwishx'); ?></h2>
+                </div>
+                <div class="listing-status">
+                    <span class="listing-status-label">
+                        <!-- < ?= sw_svg('icon-opportunities'); ?> -->
+                        <img width="20" height="20" src="<?= get_template_directory_uri(); ?>/assets/img/icon-opportunities-gradient.svg" alt="Icon star">
+
+                        <span class="status-label__title">
+                            <?= esc_html__('Found', 'starwishx'); ?>:
+                        </span>
+                        <span class="status-label__info" data-wp-text="state.resultsFoundLabel"></span>
+                    </span>
+                    <button class="btn-tertiary" data-wp-on--click="actions.filters.clearAll">
+                        <?php esc_html_e('Clear all', 'starwishx'); ?>
+                    </button>
+                </div>
+
+
+                <div class="listing-filters">
+                    <?php
+                    // Keyword search is the one filter group written by hand rather
+                    // than rendered from the registry, so it has no filter object to
+                    // take an id from. It used to interpolate $id, which is not a
+                    // template variable at all - load_template() globalises $id, so
+                    // it silently picked up WordPress's current-post id and the two
+                    // callbacks below never resolved. 's' is the key the input binds
+                    // to on state.query.
+                    ?>
+                    <details
+                        class="listing-filter-group"
+                        id="filter-group-s"
+                        data-wp-interactive="listing"
+                        data-wp-context='{ "filterId": "s" }'
+                        data-wp-class--has-selection="callbacks.hasActiveFilter"
+                        open>
+
+                        <summary class="listing-filter-group__summary">
+                            <span class="listing-filter-group__title">
+                                <?php esc_html_e('Keyword search', 'starwishx'); ?>
+                                <span class="filter-count-badge" data-wp-text="callbacks.getActiveFilterCount"></span>
+                            </span>
+                            <svg class="icon-chevron">
+                                <use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-arrow-down"></use>
+                            </svg>
+                        </summary>
+
+                        <div class="listing-filter-group__content">
+                            <div class="listing-search-wrapper">
+                                <input
+                                    type="search"
+                                    class="listing-search-input"
+                                    maxlength="<?php echo (int) \Listing\Services\ListingService::SEARCH_MAX_LENGTH; ?>"
+                                    placeholder="<?php esc_attr_e('Search by keyword...', 'starwishx'); ?>"
+                                    data-wp-bind--value="state.query.s"
+                                    data-wp-on--input="actions.filters.updateSearch">
+                            </div>
+                        </div>
+                    </details>
+                    <?php
+                    // Registry pattern: Iterate through registered filters
+                    foreach ($listing->registry()->getAll() as $filter) {
+                        echo $filter->render();
+                    }
+                    ?>
+                </div>
+
+                <button
+                    type="button"
+                    class="sidebar-btn__close btn-secondary__small"
+                    data-wp-on--click="actions.closeSidebar"
+                    aria-label="<?php esc_attr_e('Close filters', 'starwishx'); ?>">
+                    <?= esc_html__('Close', 'starwishx'); ?>
+                </button>
+            </div>
         </aside>
 
         <!-- CONTENT: Search Bar and Results Grid -->

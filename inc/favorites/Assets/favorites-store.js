@@ -24,7 +24,10 @@ const resolveId = () => {
 
 const { state } = store("favorites", {
   state: {
-    myFavoriteIds: [],
+    // No myFavoriteIds default: FavoritesCore hydrates it for logged-in
+    // visitors, and store() merges client state over server state, so an
+    // empty array here wiped their favorites on every page. Guests have
+    // none - read it as `state.myFavoriteIds ?? []`.
 
     config: {},
 
@@ -66,15 +69,16 @@ const { state } = store("favorites", {
 
       if (!id) return;
 
-      const isFav = state.myFavoriteIds.includes(id);
+      const favoriteIds = state.myFavoriteIds ?? [];
+      const isFav = favoriteIds.includes(id);
 
       // 1. Optimistic Update
       if (isFav) {
-        state.myFavoriteIds = state.myFavoriteIds.filter(
+        state.myFavoriteIds = favoriteIds.filter(
           (favId) => Number(favId) !== Number(id),
         );
       } else {
-        state.myFavoriteIds = [...state.myFavoriteIds, Number(id)];
+        state.myFavoriteIds = [...favoriteIds, Number(id)];
       }
 
       // 2. Background API call

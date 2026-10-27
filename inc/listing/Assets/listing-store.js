@@ -15,7 +15,7 @@ import { extendState } from "./utils.js"; // or ../../shared/Assets/shared-utils
 import { filterActions } from "./filters/actions.js";
 import { gridActions } from "./grid/actions.js";
 import { gridGetters } from "./grid/getters.js";
-import { syncUrlToState, highlightTerms } from "./utils.js";
+import { deepClone, highlightTerms } from "./utils.js";
 import "../../shared/Assets/popup-store.js";
 
 /**
@@ -33,6 +33,7 @@ const listingState = {
   // Client-only UI state
   isLoading: false,
   isSidebarOpen: false,
+  error: "", // message of the last failed request (grid/actions.js)
   ui: {
     isLoadingLocation: false, // Loading state for location autocomplete
   },
@@ -118,6 +119,11 @@ store("listing", {
       // SSR hydration is authoritative for the initial URL state.
       // Both clean URLs and filtered URLs (?category=..., /slug/)
       // are correctly hydrated by StateAggregator.
+
+      // Give the entry the page loaded into the same query snapshot that
+      // syncStateToUrl() stores, so Back to it restores filters the same
+      // way (filters.restoreFromHistory).
+      window.history.replaceState({ query: deepClone(state.query) }, "");
 
       // Close offcanvas sidebar on Escape key
       document.addEventListener("keydown", (e) => {
@@ -445,10 +451,8 @@ const { actions } = store("listing");
 /**
  * Event Listeners for Browser Navigation
  */
-window.addEventListener("popstate", () => {
-  const { state } = store("listing");
-  syncUrlToState(state.query);
-  actions.updateResults();
+window.addEventListener("popstate", (event) => {
+  actions.filters.restoreFromHistory(event.state?.query);
 });
 
 // Register keyboard listeners after store is ready

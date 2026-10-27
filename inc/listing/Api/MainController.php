@@ -16,14 +16,13 @@ class MainController extends AbstractListingController
 {
     private const Q_MIN_LENGTH = 2;
     private const Q_MAX_LENGTH = 100;
-    private const LOCATION_MAX_LENGTH = 100;
-    private const S_MAX_LENGTH = 200;
     private const PAGE_MAX = 1000;
 
     // Per-IP rate limits — anonymous endpoints must bucket by IP, not user.
     // Both /search and /sub-filter share the same ceiling; /search is more
-    // expensive (≈15 queries/call via getFacets), but /sub-filter is faster
-    // to spam, so the effective floor matches.
+    // expensive (about 50 queries/call on a small catalog, most of them in
+    // getFacets), but /sub-filter is faster to spam, so the effective floor
+    // matches.
     private const SEARCH_RATE_LIMIT_MAX    = 60;
     private const SEARCH_RATE_LIMIT_WINDOW = MINUTE_IN_SECONDS;
 
@@ -75,7 +74,7 @@ class MainController extends AbstractListingController
                     'sanitize_callback' => 'sanitize_text_field',
                     'validate_callback' => RestArg::stringLength(
                         0,
-                        self::LOCATION_MAX_LENGTH,
+                        ListingService::LOCATION_MAX_LENGTH,
                         __('Location', 'starwishx')
                     ),
                 ],
@@ -88,7 +87,7 @@ class MainController extends AbstractListingController
                     'sanitize_callback' => 'sanitize_text_field',
                     'validate_callback' => RestArg::stringLength(
                         0,
-                        self::S_MAX_LENGTH,
+                        ListingService::SEARCH_MAX_LENGTH,
                         __('Search', 'starwishx')
                     ),
                 ],
@@ -186,9 +185,9 @@ class MainController extends AbstractListingController
 
     /**
      * Per-IP rate limit — /search bucket.
-     * Each /search call runs ~15 DB queries (main WP_Query + getFacets
-     * re-runs the user's filter context once per taxonomy), so the ceiling
-     * is tuned to 1 req/s sustained.
+     * Each /search call runs some 50 DB queries (the page of results, then
+     * getFacets re-runs the user's filter context once per facet), so the
+     * ceiling is tuned to 1 req/s sustained.
      */
     private function applySearchRateLimit(): ?WP_Error
     {
@@ -224,6 +223,12 @@ class MainController extends AbstractListingController
      * falls back to REMOTE_ADDR. Wait duration is derived from the window
      * via human_time_diff() so wording tracks future tuning.
      *
+     * Fixed window: the key carries the window's number, so the count starts
+     * over every $window seconds. RateLimitPolicy::hit() pushes the expiry
+     * out on every hit - right for failure counters, but on a key of its own
+     * it would block a visitor who simply keeps browsing without a
+     * $window-long pause.
+     *
      * `mapServiceError()` translates the policy's `rate_limited` code into 429.
      */
     private function applyIpRateLimit(
@@ -232,7 +237,11 @@ class MainController extends AbstractListingController
         int $window,
         string $actionLabel
     ): ?WP_Error {
-        $key = RateLimitPolicy::key($action, ClientIp::resolve());
+        $key = RateLimitPolicy::key(
+            $action,
+            ClientIp::resolve(),
+            (string) intdiv(time(), $window)
+        );
 
         $message = sprintf(
             /* translators: 1: action name, 2: human-readable wait duration */

@@ -22,6 +22,16 @@ class ResultsGrid implements RenderableInterface
                 <span class="spinner is-active"></span>
             </div>
 
+            <!-- A failed search or Load more (grid/actions.js). The hidden
+                 attribute is for the server HTML, which these directives
+                 don't render. -->
+            <div class="listing-results__alert" role="alert" data-wp-bind--hidden="!state.error" hidden>
+                <span data-wp-text="state.error"></span>
+                <button type="button" class="btn-tertiary" data-wp-on--click="actions.retry">
+                    <?php esc_html_e('Try again', 'starwishx'); ?>
+                </button>
+            </div>
+
             <!-- Active Filter Chips -->
             <div class="listing-chips" data-wp-bind--hidden="!state.hasActiveFilters">
                 <template data-wp-each--item="state.activeFilterChips" data-wp-each-key="context.item.key">

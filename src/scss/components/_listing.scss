@@ -733,10 +733,6 @@ body.sidebar-open {
 }
 
 .listing-sidebar {
-    display: flex;
-    flex-flow: column nowrap;
-    gap: 12px;
-
     @include media.max-laptop {
         position: fixed;
         top: 0;
@@ -751,7 +747,6 @@ body.sidebar-open {
             transform 0.3s ease,
             visibility 0s linear 0.3s;
         background: $surface-primary;
-        padding: 12px;
 
         // width: min(320px, 85vw);
         width: calc(100% - 40px);
@@ -770,12 +765,18 @@ body.sidebar-open {
                 transition: none;
             }
         }
+    }
 
-        // The filter list scrolls, not the panel: a scrolling panel would clip
-        // the close button that hangs over its edge.
-        .listing-filters {
-            flex: 1 1 auto;
-            min-height: 0;
+    .listing-sidebar__body {
+        display: flex;
+        flex-flow: column nowrap;
+        gap: 12px;
+
+        // The drawer scrolls here, not on the aside: a scrolling aside would
+        // clip the close button that hangs over its edge.
+        @include media.max-laptop {
+            padding: 12px;
+            height: 100%;
             overflow-y: auto;
             overscroll-behavior: contain;
         }
@@ -796,6 +797,8 @@ body.sidebar-open {
 
     // Drawer only. Straddles the panel's top-right edge: the outer half sits
     // over the strip of backdrop the panel leaves (width: calc(100% - 40px)).
+    // Pinned while the body scrolls under it; z-index keeps it above rows
+    // that are themselves positioned (.filter-checkbox).
     .listing-sidebar__close {
         display: none;
 
@@ -806,6 +809,7 @@ body.sidebar-open {
             right: 0;
             place-items: center;
             transform: translateX(50%);
+            z-index: 1;
             transition: background 0.2s;
             cursor: pointer;
             box-shadow: 0 2px 8px rgb(0 0 0 / 15%);
@@ -884,6 +888,17 @@ mark {
     &__clear {
         margin-left: auto;
     }
+}
+
+// A failed search or Load more: the message plus "Try again"
+// (grid/actions.js). Same shape as .sw-pagination__alert.
+.listing-results__alert {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+    color: $text-dark;
 }
 
 .listing-results {

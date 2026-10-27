@@ -390,8 +390,9 @@ final class ListingCore
             wp_enqueue_script_module('@starwishx/listing');
         }
 
+        // No nonce: listing reads are anonymous, see fetchJson() in
+        // inc/listing/Assets/utils.js.
         $listingConfig = [
-            'nonce'   => wp_create_nonce('wp_rest'),
             'restUrl' => rest_url('listing/v1/'),
         ];
 
@@ -409,6 +410,10 @@ final class ListingCore
 
         wp_interactivity_state('listing', [
             'isUserLoggedIn' => is_user_logged_in(),
+            'i18n'           => [
+                // Shown when a search fails without a message of its own.
+                'loadError' => __('Something went wrong. Please try again later.', 'starwishx'),
+            ],
         ]);
     }
 

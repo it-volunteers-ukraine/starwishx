@@ -22,6 +22,15 @@ class ListingService
      */
     public const SUPPORTED_SUB_FILTERS = ['location'];
 
+    /**
+     * Longest keyword (`s`) and location query the listing accepts. The
+     * /search args in MainController validate against these and the sidebar
+     * inputs carry them as maxlength, so typing can't produce a request the
+     * API rejects.
+     */
+    public const SEARCH_MAX_LENGTH   = 200;
+    public const LOCATION_MAX_LENGTH = 100;
+
     private QueryBuilder $queryBuilder;
     private TermCountingService $termCounter;
     private FavoritesService $favoritesService;
@@ -40,10 +49,13 @@ class ListingService
     /**
      * Executes the main search and formats results for iAPI cards.
      * Post data is pre-loaded in bulk before formatting to avoid N+1 queries.
+     *
+     * @param int $perPage Page size. StateAggregator passes a multiple of
+     *                     ITEMS_PER_PAGE to render several pages at once.
      */
-    public function search(array $filters): array
+    public function search(array $filters, int $perPage = QueryBuilder::ITEMS_PER_PAGE): array
     {
-        $args  = $this->queryBuilder->build($filters);
+        $args  = $this->queryBuilder->build($filters, $perPage);
         $query = new WP_Query($args);
 
         if (empty($query->posts)) {

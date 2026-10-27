@@ -49,8 +49,11 @@ abstract class AbstractListingController extends AbstractApiController
 
     /**
      * Permission Callback: Allows public access to search.
-     * Even if public, WordPress handles nonces via 'X-WP-Nonce' to prevent CSRF
-     * if the user happens to be logged in.
+     *
+     * The listing client sends no nonce (fetchJson() in
+     * inc/listing/Assets/utils.js), so every request runs as a guest's: no
+     * per-user data in the response, and no 403 from core's nonce check when
+     * the page that made the request is a day old or came from a cache.
      */
     public function publicAccess(WP_REST_Request $request): bool
     {
