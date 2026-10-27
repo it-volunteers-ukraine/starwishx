@@ -51,7 +51,7 @@ if (! $show_label) {
         </span>
     </label>
 
-    <? if (is_user_logged_in()) : ?>
+    <?php if (is_user_logged_in()) : ?>
         <div class="heart" title="<?php esc_attr_e('Favorites', 'starwishx'); ?>">
             <input
                 type="checkbox"
@@ -70,7 +70,7 @@ if (! $show_label) {
                 <span class="heart__line"></span>
             </div>
         </div>
-    <? else : ?>
+    <?php else : ?>
         <div class="heart--img" title="<?php esc_attr_e('Favorites', 'starwishx'); ?>">
             <input
                 type="checkbox"
@@ -81,6 +81,6 @@ if (! $show_label) {
                 data-wp-on--change="actions.toggle"<?= $aria_label_attr ?>>
             <img class="heart__image" src="<?php echo get_template_directory_uri(); ?>/assets/img/icon-heart-gradient.svg" alt="">
         </div>
-    <? endif ?>
+    <?php endif ?>
 
 </div>

@@ -27,7 +27,7 @@ final class NewsCore
     private const LEGACY_BASE = 'news/news-by-category';
 
     /** Bump to trigger a one-shot rewrite flush after deploy. */
-    private const REWRITE_VERSION = '1';
+    private const REWRITE_VERSION = '2';
 
     private static ?self $instance = null;
 
@@ -187,18 +187,25 @@ final class NewsCore
     /**
      * Rewrite rules for /news/{category}/.
      *
-     * The negative lookahead keeps WordPress's own /news/page/N/ archive
-     * pagination working — otherwise `page` would be read as a category.
+     * The negative lookahead keeps WordPress's own archive URLs working —
+     * /news/page/N/ pagination and the feed (/news/feed/, /news/rss2/…) —
+     * otherwise `page` or `feed` would be read as a category. The post type's
+     * feed rules aren't always ahead of these: SCF re-adds them at the end
+     * when it saves the post type.
      */
     public function registerCategoryRewrites(): void
     {
+        global $wp_rewrite;
+        $reserved = implode('|', [$wp_rewrite->pagination_base, ...$wp_rewrite->feeds]);
+        $slug     = '(?!(?:' . $reserved . ')(?:/|$))([^/]+)';
+
         add_rewrite_rule(
-            self::POST_TYPE . '/(?!page/)([^/]+)/?$',
+            self::POST_TYPE . '/' . $slug . '/?$',
             'index.php?post_type=' . self::POST_TYPE . '&' . self::QUERY_VAR . '=$matches[1]',
             'top'
         );
         add_rewrite_rule(
-            self::POST_TYPE . '/(?!page/)([^/]+)/page/([0-9]+)/?$',
+            self::POST_TYPE . '/' . $slug . '/page/([0-9]+)/?$',
             'index.php?post_type=' . self::POST_TYPE . '&' . self::QUERY_VAR . '=$matches[1]&paged=$matches[2]',
             'top'
         );

@@ -13,17 +13,6 @@ use WP_Query;
 class ListingService
 {
     /**
-     * Single source of truth for which filter IDs the /sub-filter route
-     * supports. Consumed by:
-     *   - MainController route validate_callback (rejects unknown IDs early)
-     *   - searchFilterOptions() service-layer safety net
-     * Adding a new filter is a one-line change here.
-     *
-     * @var string[]
-     */
-    public const SUPPORTED_SUB_FILTERS = ['location'];
-
-    /**
      * Longest keyword (`s`) and location query the listing accepts. The
      * /search args in MainController validate against these and the sidebar
      * inputs carry them as maxlength, so typing can't produce a request the
@@ -302,52 +291,6 @@ class ListingService
                 : '';
         }
         unset($node);
-    }
-
-    /**
-     * Search location options for autocomplete dropdown.
-     * Uses the v_opportunity_search view for pre-formatted names.
-     */
-    public function searchFilterOptions(string $filterId, string $searchTerm): array|\WP_Error
-    {
-        global $wpdb;
-
-        // Safety net — the route's validate_callback should already have
-        // rejected unsupported filter IDs. Reads from the shared const so
-        // adding a filter is a one-line change in one place.
-        if (!in_array($filterId, self::SUPPORTED_SUB_FILTERS, true)) {
-            return new \WP_Error(
-                'unsupported_filter',
-                sprintf(__('Filter "%s" is not supported.', 'starwishx'), $filterId),
-                ['status' => 400]
-            );
-        }
-
-        $suppress = $wpdb->suppress_errors();
-
-        $results = $wpdb->get_results(
-            $wpdb->prepare(
-                "SELECT DISTINCT
-                     code                   AS id,
-                     name_category_oblast   AS label,
-                     level,
-                     category
-                 FROM wp_v_opportunity_search
-                 WHERE name LIKE %s
-                 ORDER BY level ASC, name ASC
-                 LIMIT 20",
-                '%' . $wpdb->esc_like($searchTerm) . '%'
-            ),
-            ARRAY_A
-        );
-
-        $wpdb->suppress_errors($suppress);
-
-        if ($wpdb->last_error) {
-            return new \WP_Error('db_error', __('Failed to fetch location options.', 'starwishx'));
-        }
-
-        return $results;
     }
 
     /**

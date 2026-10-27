@@ -17,6 +17,7 @@ import { gridActions } from "./grid/actions.js";
 import { gridGetters } from "./grid/getters.js";
 import { filterGetters } from "./filters/getters.js";
 import { deepClone, highlightTerms } from "./utils.js";
+import { keepTabInside } from "../../shared/Assets/shared-utils.js";
 import "../../shared/Assets/popup-store.js";
 
 /**
@@ -36,9 +37,6 @@ const listingState = {
   isSidebarOpen: false,
   error: "", // message of the last failed request (grid/actions.js)
   announcement: "", // "Found: N" for the results' role=status (grid/actions.js)
-  ui: {
-    isLoadingLocation: false, // Loading state for location autocomplete
-  },
 };
 
 /**
@@ -48,19 +46,6 @@ const listingState = {
  * render the page on the server.
  */
 extendState(listingState, gridGetters, filterGetters);
-
-/**
- * Controls Tab can land on inside the filter drawer (actions.trapSidebarFocus).
- */
-const SIDEBAR_FOCUSABLE = [
-  "a[href]",
-  "button:not([disabled])",
-  "input:not([disabled])",
-  "select:not([disabled])",
-  "textarea:not([disabled])",
-  "summary",
-  '[tabindex]:not([tabindex="-1"])',
-].join(",");
 
 /** The drawer state callbacks.syncSidebarFocus last acted on. */
 let sidebarWasOpen = false;
@@ -88,33 +73,14 @@ store("listing", {
     },
 
     /**
-     * Keeps Tab inside the open drawer: the page behind it sits under the
-     * backdrop, so focus that got there would be invisible. Bound with
-     * data-wp-on--keydown on the sidebar; withSyncEvent because it has to
-     * preventDefault() the keystroke it redirects.
+     * Keeps Tab inside the open drawer (keepTabInside, shared with the
+     * popup). Bound with data-wp-on--keydown on the sidebar; withSyncEvent
+     * because it has to preventDefault() the keystroke it redirects.
      */
     trapSidebarFocus: withSyncEvent((event) => {
       const { state } = store("listing");
       if (event.key !== "Tab" || !state.isSidebarOpen) return;
-
-      const { ref } = getElement();
-      const focusable = [...ref.querySelectorAll(SIDEBAR_FOCUSABLE)].filter(
-        (el) => el.checkVisibility(),
-      );
-      if (focusable.length === 0) return;
-
-      const first = focusable[0];
-      const last = focusable[focusable.length - 1];
-      const current = document.activeElement;
-      const outside = !ref.contains(current);
-
-      if (event.shiftKey && (outside || current === first)) {
-        event.preventDefault();
-        last.focus();
-      } else if (!event.shiftKey && (outside || current === last)) {
-        event.preventDefault();
-        first.focus();
-      }
+      keepTabInside(event, getElement().ref);
     }),
 
     init() {

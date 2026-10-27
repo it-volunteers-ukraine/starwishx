@@ -34,7 +34,7 @@ use Shared\Build\AssetFile;
 final class ListingCore
 {
     /** Bump to trigger a one-shot rewrite flush after deploy. */
-    private const REWRITE_VERSION = '1';
+    private const REWRITE_VERSION = '2';
 
     private static ?self $instance = null;
 
@@ -177,17 +177,25 @@ final class ListingCore
     /**
      * Register rewrite rules for SEO-friendly category URLs.
      * Maps /opportunities/{slug}/ to the archive template with listing_cat query var.
+     *
+     * The negative lookahead keeps the archive's own URLs working - WordPress
+     * pagination (/page/N/) and the feed (/feed/, /rss2/...) - which would
+     * otherwise read as categories. The post type's feed rules aren't always
+     * ahead of these: SCF re-adds them at the end when it saves the post type.
      */
     public function registerCategoryRewrites(): void
     {
-        // Negative lookahead excludes /page/ so default WP pagination still works
+        global $wp_rewrite;
+        $reserved = implode('|', [$wp_rewrite->pagination_base, ...$wp_rewrite->feeds]);
+        $slug     = '(?!(?:' . $reserved . ')(?:/|$))([^/]+)';
+
         add_rewrite_rule(
-            'opportunities/(?!page/)([^/]+)/?$',
+            'opportunities/' . $slug . '/?$',
             'index.php?post_type=opportunity&listing_cat=$matches[1]',
             'top'
         );
         add_rewrite_rule(
-            'opportunities/(?!page/)([^/]+)/page/([0-9]+)/?$',
+            'opportunities/' . $slug . '/page/([0-9]+)/?$',
             'index.php?post_type=opportunity&listing_cat=$matches[1]&paged=$matches[2]',
             'top'
         );

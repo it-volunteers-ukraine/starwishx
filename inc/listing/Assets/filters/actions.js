@@ -1,12 +1,12 @@
 /**
  * Listing Store — Filter Actions
  *
- * Handles interaction logic for checkboxes, radios, and sub-filter searching.
+ * Handles interaction logic for checkboxes, radios and the text filters.
  * File: inc/listing/Assets/filters/actions.js
  */
 
 import { getElement, store, getContext } from "@wordpress/interactivity";
-import { fetchJson, debounce, getRestUrl, syncUrlToState } from "../utils.js";
+import { debounce, syncUrlToState } from "../utils.js";
 
 /** The text field (s or location) of the typing run in progress, if any. */
 let typingField = null;
@@ -74,55 +74,6 @@ export const filterActions = {
     state.query.s = event.target.value;
     refreshFromTyping("s");
   }, 400),
-
-  /**
-   * Specialized Search inside a filter group (e.g., Location).
-   * Fetches matching options from the REST API without refreshing the grid.
-   */
-  searchSubFilter: debounce(async (event) => {
-    const { state } = store("listing");
-    const target = event.target;
-    const filterId = target.dataset.filterId;
-    const query = target.value;
-
-    if (query.length < 2 && query.length !== 0) return;
-
-    // UI Loading state specific to this filter
-    if (!state.ui) state.ui = {};
-    state.ui[
-      `isLoading${filterId.charAt(0).toUpperCase() + filterId.slice(1)}`
-    ] = true;
-
-    try {
-      const data = await fetchJson(
-        state,
-        `${getRestUrl()}sub-filter/${filterId}?q=${encodeURIComponent(query)}`,
-        { requestId: `subfilter-${filterId}` },
-      );
-
-      if (data) {
-        state.facets[filterId] = data;
-      }
-    } catch (e) {
-      if (e.name !== "AbortError") console.error("Sub-filter search failed", e);
-    } finally {
-      state.ui[
-        `isLoading${filterId.charAt(0).toUpperCase() + filterId.slice(1)}`
-      ] = false;
-    }
-  }, 300),
-
-  /**
-   * Select a location from the autocomplete dropdown.
-   */
-  selectLocation(event) {
-    const { state } = store("listing");
-    const target = event.target; // Use event.target
-    const value = target.value;
-
-    state.query.location = state.query.location === value ? "" : value;
-    refreshResults();
-  },
 
   /**
    * Reset the location filter.

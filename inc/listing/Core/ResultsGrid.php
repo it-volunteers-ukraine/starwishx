@@ -142,7 +142,7 @@ class ResultsGrid implements RenderableInterface
                                     </span>
                                 </span>
                             </span>
-                            <? if (is_user_logged_in()) : ?>
+                            <?php if (is_user_logged_in()) : ?>
                                 <span class="heart"
                                     title="<?php esc_attr_e('Favorites', 'starwishx'); ?>">
                                     <input
@@ -160,7 +160,7 @@ class ResultsGrid implements RenderableInterface
                                         <span class="heart__line"></span>
                                     </span>
                                 </span>
-                            <? else : ?>
+                            <?php else : ?>
                                 <span class="heart--img"
                                     title="<?php esc_attr_e('Favorites', 'starwishx'); ?>">
                                     <input
@@ -170,7 +170,7 @@ class ResultsGrid implements RenderableInterface
                                         data-wp-on--click="actions.toggleFavorite">
                                     <img class="heart__image" src="<?php echo get_template_directory_uri(); ?>/assets/img/icon-heart-gradient.svg" alt="">
                                 </span>
-                            <? endif ?>
+                            <?php endif ?>
                         </label>
                     </div>
                     <?php
@@ -314,7 +314,7 @@ class ResultsGrid implements RenderableInterface
                             </span>
                         </div>
 
-                        <? if (is_user_logged_in()) : ?>
+                        <?php if (is_user_logged_in()) : ?>
                             <div class="heart">
                                 <input
                                     type="checkbox"
@@ -332,7 +332,7 @@ class ResultsGrid implements RenderableInterface
                                     <span class="heart__line"></span>
                                 </div>
                             </div>
-                        <? else: ?>
+                        <?php else: ?>
                             <div class="heart--img">
                                 <input
                                     type="checkbox"
@@ -342,7 +342,7 @@ class ResultsGrid implements RenderableInterface
                                     aria-label="<?php esc_attr_e('Toggle Favorite', 'starwishx'); ?>">
                                 <img class="heart__image" src="<?php echo get_template_directory_uri(); ?>/assets/img/icon-heart-gradient.svg" alt="heart icon">
                             </div>
-                        <? endif; ?>
+                        <?php endif; ?>
                     </div>
 
                 </figure>

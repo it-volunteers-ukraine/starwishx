@@ -16,19 +16,11 @@ use WP_Error;
 
 class MainController extends AbstractListingController
 {
-    private const Q_MIN_LENGTH = 2;
-    private const Q_MAX_LENGTH = 100;
     private const PAGE_MAX = 1000;
 
-    // Per-IP rate limits — anonymous endpoints must bucket by IP, not user.
-    // Both /search and /sub-filter share the same ceiling; /search is more
-    // expensive (a page of results plus, on page 1, the facet counts), but
-    // /sub-filter is faster to spam, so the effective floor matches.
+    // Per-IP rate limit — an anonymous endpoint must bucket by IP, not user.
     private const SEARCH_RATE_LIMIT_MAX    = 60;
     private const SEARCH_RATE_LIMIT_WINDOW = MINUTE_IN_SECONDS;
-
-    private const SUB_FILTER_RATE_LIMIT_MAX    = 60;
-    private const SUB_FILTER_RATE_LIMIT_WINDOW = MINUTE_IN_SECONDS;
 
     private ListingService $service;
     private CountriesRepository $countries;
@@ -84,45 +76,6 @@ class MainController extends AbstractListingController
                 ],
             ],
         ]);
-
-        // GET /wp-json/listing/v1/sub-filter/{filter_id}
-        // Used for the "Search inside City" functionality
-        register_rest_route($this->namespace, '/sub-filter/(?P<filter_id>[a-zA-Z0-9-_]+)', [
-            'methods'             => 'GET',
-            'callback'            => [$this, 'searchSubFilter'],
-            'permission_callback' => [$this, 'publicAccess'],
-            'args'                => [
-                'q' => [
-                    'required'          => true,
-                    'sanitize_callback' => 'sanitize_text_field',
-                    'validate_callback' => RestArg::stringLength(
-                        self::Q_MIN_LENGTH,
-                        self::Q_MAX_LENGTH,
-                        __('Search query', 'starwishx')
-                    ),
-                ],
-                // Reject unsupported filter IDs before they reach the service.
-                // The whitelist is owned by ListingService::SUPPORTED_SUB_FILTERS
-                // so adding a new sub-filter is a one-line change.
-                'filter_id' => [
-                    'required'          => true,
-                    'validate_callback' => function ($value) {
-                        if (in_array($value, ListingService::SUPPORTED_SUB_FILTERS, true)) {
-                            return true;
-                        }
-                        return new WP_Error(
-                            'unsupported_filter',
-                            sprintf(
-                                /* translators: %s: filter identifier supplied by client */
-                                __('Filter "%s" is not supported.', 'starwishx'),
-                                (string) $value
-                            ),
-                            ['status' => 400]
-                        );
-                    },
-                ],
-            ],
-        ]);
     }
 
     /**
@@ -168,30 +121,6 @@ class MainController extends AbstractListingController
     }
 
     /**
-     * Specialized endpoint for high-cardinality meta fields (e.g. searching Cities).
-     * Invalid filter_id values are rejected by the route's validate_callback,
-     * so by the time this runs the value is always in the supported set.
-     */
-    public function searchSubFilter(WP_REST_Request $request): WP_REST_Response|WP_Error
-    {
-        $rateLimited = $this->applySubFilterRateLimit();
-        if ($rateLimited !== null) {
-            return $rateLimited;
-        }
-
-        $filterId   = $request->get_param('filter_id');
-        $searchTerm = $request->get_param('q');
-
-        $options = $this->service->searchFilterOptions($filterId, $searchTerm);
-
-        if (is_wp_error($options)) {
-            return $this->mapServiceError($options);
-        }
-
-        return $this->success($options);
-    }
-
-    /**
      * Per-IP rate limit — /search bucket.
      * A /search call runs a page of results plus, on page 1, one SQL per
      * facet over the shared filtered-ID subquery (TermCountingService), so the
@@ -204,22 +133,6 @@ class MainController extends AbstractListingController
             self::SEARCH_RATE_LIMIT_MAX,
             self::SEARCH_RATE_LIMIT_WINDOW,
             __('Search', 'starwishx')
-        );
-    }
-
-    /**
-     * Per-IP rate limit — /sub-filter bucket.
-     * Typeahead is burstier than /search but each call is a single LIKE
-     * query, so the ceiling matches. Separate bucket from /search so users
-     * browsing the catalog don't exhaust their autocomplete budget.
-     */
-    private function applySubFilterRateLimit(): ?WP_Error
-    {
-        return $this->applyIpRateLimit(
-            'listing_sub_filter',
-            self::SUB_FILTER_RATE_LIMIT_MAX,
-            self::SUB_FILTER_RATE_LIMIT_WINDOW,
-            __('Location search', 'starwishx')
         );
     }
 

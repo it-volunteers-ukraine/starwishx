@@ -33,26 +33,6 @@ if ($listingCat) {
 }
 wp_interactivity_state('listing', $listing->getState($filterOverrides));
 
-/**
- * ASSET FOUC PROTECTION
- * We use the same pattern as Launchpad/Gateway for immediate CSS hiding.
- */
-add_action('wp_head', function () {
-?>
-    <style id="listing-fouc-shield">
-        .listing-filter-group[hidden],
-        .listing-grid[hidden] {
-            display: none !important;
-        }
-
-        .popup[hidden],
-        .listing-backdrop[hidden] {
-            display: none !important;
-        }
-    </style>
-<?php
-}, 1);
-
 $css = sw_get_taxonomy_top_level_colors_styles('category-oportunities');
 if (!empty($css)) {
     wp_register_style('cat-oportunities-color-styles', false);

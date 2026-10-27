@@ -1,6 +1,6 @@
 /**
  * Shared utilities for Interactivity API stores.
- * Imported by both gateway-store.js and launchpad launchpad-store.js
+ * Imported by the contact, listing and popup stores.
  *
  * File: inc/shared/Assets/shared-utils.js
  */
@@ -78,4 +78,46 @@ export async function fetchJson(settings, url, options = {}) {
   if (!contentType.includes("application/json")) return {};
 
   return await response.json();
+}
+
+/**
+ * Controls Tab can land on (keepTabInside).
+ */
+export const FOCUSABLE = [
+  "a[href]",
+  "button:not([disabled])",
+  "input:not([disabled])",
+  "select:not([disabled])",
+  "textarea:not([disabled])",
+  "summary",
+  '[tabindex]:not([tabindex="-1"])',
+].join(",");
+
+/**
+ * Keeps Tab inside an open drawer or modal: past its last visible control
+ * Tab wraps to the first, Shift+Tab the other way round, and focus that is
+ * outside comes back in. The page behind sits under a backdrop, so focus that
+ * got there would be invisible. Call it from a withSyncEvent action - it
+ * preventDefault()s the keystroke it redirects.
+ *
+ * @param {KeyboardEvent} event - A Tab keydown.
+ * @param {Element} container - The drawer or dialog.
+ */
+export function keepTabInside(event, container) {
+  const candidates = [...container.querySelectorAll(FOCUSABLE)];
+  const focusable = candidates.filter((el) => el.checkVisibility());
+  if (focusable.length === 0) return;
+
+  const first = focusable[0];
+  const last = focusable[focusable.length - 1];
+  const current = document.activeElement;
+  const outside = !container.contains(current);
+
+  if (event.shiftKey && (outside || current === first)) {
+    event.preventDefault();
+    last.focus();
+  } else if (!event.shiftKey && (outside || current === last)) {
+    event.preventDefault();
+    first.focus();
+  }
 }

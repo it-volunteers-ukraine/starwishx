@@ -23,17 +23,27 @@ $id    = $args['id'] ?? 'site-popup';
 
 $login_url    = home_url('/gateway/?view=login');
 $register_url = home_url('/gateway/?view=register');
+
+// The dialog is named by its title and described by its text, when given.
+$labelled_by  = $title ? ' aria-labelledby="' . esc_attr($id . '-title') . '"' : '';
+$described_by = $text ? ' aria-describedby="' . esc_attr($id . '-text') . '"' : '';
 ?>
 <div
     id="<?php echo esc_attr($id); ?>"
     class="popup<?php echo $class; ?>"
     data-wp-interactive="popup"
     data-wp-bind--hidden="!state.isOpen"
+    data-wp-watch="callbacks.syncFocus"
+    data-wp-on-document--keydown="actions.closeOnEscape"
     hidden>
 
     <div class="popup__backdrop" data-wp-on--click="actions.close"></div>
 
-    <div class="popup__dialog" role="dialog" aria-modal="true" aria-labelledby="<?php echo esc_attr($id); ?>-title">
+    <div
+        class="popup__dialog"
+        role="dialog"
+        aria-modal="true"<?php echo $labelled_by . $described_by; ?>
+        data-wp-on--keydown="actions.trapFocus">
 
         <button
             type="button"
@@ -50,7 +60,7 @@ $register_url = home_url('/gateway/?view=register');
                 <h2 id="<?php echo esc_attr($id); ?>-title" class="popup__title"><?php echo esc_html($title); ?></h2>
             <?php endif; ?>
             <?php if ($text) : ?>
-                <p class="popup__text"><?php echo esc_html($text); ?></p>
+                <p id="<?php echo esc_attr($id); ?>-text" class="popup__text"><?php echo esc_html($text); ?></p>
             <?php endif; ?>
         </div>
 

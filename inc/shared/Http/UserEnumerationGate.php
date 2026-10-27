@@ -26,6 +26,12 @@ use Shared\Policy\RestApiAccessPolicy;
  *     post on a fresh install). The 404 here closes that fall-through. Applies
  *     to everyone — the URL genuinely does not exist.
  *
+ *  3. Feeds — RSS `dc:creator` and Atom `<author>` print each item's author
+ *     display name, which WordPress sets to the login at sign-up and many
+ *     users never change (most opportunity authors, the admin). Feeds name
+ *     the site instead. Comment feeds keep commenters' names, which the pages
+ *     show anyway.
+ *
  * Pretty `/author/<slug>/` archives are intentionally left alone — that is a
  * feature decision, not a security one; knowing a slug to type is not
  * enumeration.
@@ -36,6 +42,7 @@ final class UserEnumerationGate
     {
         add_action('template_redirect', [self::class, 'enforce'], 1);
         add_filter('wp_sitemaps_add_provider', [self::class, 'dropUsersSitemap'], 10, 2);
+        add_filter('the_author', [self::class, 'feedAuthor']);
     }
 
     public static function enforce(): void
@@ -68,5 +75,13 @@ final class UserEnumerationGate
     public static function dropUsersSitemap(mixed $provider, string $name): mixed
     {
         return $name === 'users' ? false : $provider;
+    }
+
+    /**
+     * the_author: in feeds the site stands in for the person (vector 3).
+     */
+    public static function feedAuthor(?string $name): ?string
+    {
+        return is_feed() ? get_bloginfo_rss('name') : $name;
     }
 }
