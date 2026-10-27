@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Listing\Api;
 
+use Launchpad\Data\Repositories\CountriesRepository;
+use Listing\Core\ListingQuery;
 use Listing\Services\ListingService;
 use Shared\Http\ClientIp;
 use Shared\Policy\RateLimitPolicy;
@@ -20,9 +22,8 @@ class MainController extends AbstractListingController
 
     // Per-IP rate limits — anonymous endpoints must bucket by IP, not user.
     // Both /search and /sub-filter share the same ceiling; /search is more
-    // expensive (about 50 queries/call on a small catalog, most of them in
-    // getFacets), but /sub-filter is faster to spam, so the effective floor
-    // matches.
+    // expensive (a page of results plus, on page 1, the facet counts), but
+    // /sub-filter is faster to spam, so the effective floor matches.
     private const SEARCH_RATE_LIMIT_MAX    = 60;
     private const SEARCH_RATE_LIMIT_WINDOW = MINUTE_IN_SECONDS;
 
@@ -30,21 +31,12 @@ class MainController extends AbstractListingController
     private const SUB_FILTER_RATE_LIMIT_WINDOW = MINUTE_IN_SECONDS;
 
     private ListingService $service;
+    private CountriesRepository $countries;
 
-    public function __construct(ListingService $service)
+    public function __construct(ListingService $service, CountriesRepository $countries)
     {
-        $this->service = $service;
-    }
-
-    /**
-     * Declare which params must always be arrays for the search route.
-     * Consumed by AbstractListingController::getFilterParams().
-     *
-     * @return string[]
-     */
-    protected function arrayParamKeys(): array
-    {
-        return ['beneficiaries', 'category', 'country'];
+        $this->service   = $service;
+        $this->countries = $countries;
     }
 
     public function registerRoutes(): void
@@ -58,8 +50,8 @@ class MainController extends AbstractListingController
                 // Scalar params validated at the WP layer.
                 // Array params (category, country, beneficiaries) are handled by
                 // QueryStringParser — they bypass WP's schema because WP
-                // cannot represent repeated keys without [] notation. Their
-                // length cap lives in AbstractListingController::getFilterParams.
+                // cannot represent repeated keys without [] notation.
+                // ListingQuery normalises and caps them.
                 'page'     => [
                     'type'              => 'integer',
                     'default'           => 1,
@@ -78,10 +70,9 @@ class MainController extends AbstractListingController
                         __('Location', 'starwishx')
                     ),
                 ],
-                // The `s` param is consumed by QueryBuilder via getFilterParams();
-                // declaring it here also runs sanitize+validate at the WP layer
-                // before it reaches the service. Without this entry the param
-                // would still be accepted (via raw QUERY_STRING) but unbounded.
+                // search() reads `s` (like `location` and `page`) back from these
+                // validated params, so the limits here hold for what is
+                // searched - not only for the last of a repeated key.
                 's' => [
                     'default'           => '',
                     'sanitize_callback' => 'sanitize_text_field',
@@ -137,6 +128,9 @@ class MainController extends AbstractListingController
     /**
      * The primary search endpoint.
      * Returns: { items: [], facets: {}, total: 0, total_pages: 0, page: 1 }
+     *
+     * `facets` only comes with page 1: Load more keeps the filters, so its
+     * pages can't change them, and the client keeps the facets it has.
      */
     public function search(WP_REST_Request $request): WP_REST_Response|WP_Error
     {
@@ -145,18 +139,32 @@ class MainController extends AbstractListingController
             return $rateLimited;
         }
 
-        $filters = $this->getFilterParams($request);
+        // Repeated keys (?category=1&category=2) only survive in the raw
+        // query string; the scalars come from WordPress' validated params,
+        // so what was validated is what gets searched.
+        $raw = $this->getFilterParams($request);
+        unset($raw['paged']);
+        $query = ListingQuery::fromRaw(
+            array_merge($raw, [
+                's'        => (string) $request->get_param('s'),
+                'location' => (string) $request->get_param('location'),
+                'page'     => (int) $request->get_param('page'),
+            ]),
+            $this->countries
+        );
 
-        $results = $this->service->search($filters);
-        $facets  = $this->service->getFacets($filters);
-
-        return $this->success([
+        $results = $this->service->search($query);
+        $data    = [
             'items'       => $results['items'],
-            'facets'      => $facets,
             'total'       => $results['total'],
             'total_pages' => $results['total_pages'],
             'page'        => $results['page'],
-        ]);
+        ];
+        if ($query->page === 1) {
+            $data['facets'] = $this->service->getFacets($query);
+        }
+
+        return $this->success($data);
     }
 
     /**
@@ -185,8 +193,8 @@ class MainController extends AbstractListingController
 
     /**
      * Per-IP rate limit — /search bucket.
-     * Each /search call runs some 50 DB queries (the page of results, then
-     * getFacets re-runs the user's filter context once per facet), so the
+     * A /search call runs a page of results plus, on page 1, one SQL per
+     * facet over the shared filtered-ID subquery (TermCountingService), so the
      * ceiling is tuned to 1 req/s sustained.
      */
     private function applySearchRateLimit(): ?WP_Error

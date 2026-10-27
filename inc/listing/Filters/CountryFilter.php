@@ -123,12 +123,15 @@ class CountryFilter extends AbstractFilter
         $this->startBuffer();
         $storePath = $this->getStorePath(); // state.query.country
 ?>
-        <div class="filter-list">
+        <?php
+        // Context on the wrapper, not the <template> - see
+        // AbstractTaxonomyFilter::renderContent().
+        ?>
+        <div class="filter-list" data-wp-context='{"filterField": "country"}'>
             <template
                 data-wp-each--item="state.facets.<?php echo self::FACET_KEY; ?>"
-                data-wp-key="context.item.id"
-                data-wp-context='{"filterField": "country"}'>
-                <label class="filter-checkbox" data-wp-context='{"filterField": "country"}'>
+                data-wp-key="context.item.id">
+                <label class="filter-checkbox">
                     <input
                         type="checkbox"
                         data-wp-on--change="actions.filters.toggle"

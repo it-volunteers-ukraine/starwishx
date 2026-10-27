@@ -64,6 +64,17 @@ get_header();
 ?>
 <?php
 sw_breadcrumbs();
+
+/**
+ * SERVER RENDER
+ * <main> goes through the Interactivity API on the server too: its
+ * directives are evaluated against the state hydrated above, including the
+ * PHP twins of the store's getters (Listing\Core\DerivedState), so the first
+ * paint already has the results, counts, chips and category header. Should
+ * the markup ever be unbalanced, core returns it unprocessed and the client
+ * renders it as before.
+ */
+ob_start();
 ?>
 <main id="primary" class="site-main listing-app container" data-wp-interactive="listing">
 
@@ -173,13 +184,13 @@ sw_breadcrumbs();
                         id="filter-group-s"
                         data-wp-interactive="listing"
                         data-wp-context='{ "filterId": "s" }'
-                        data-wp-class--has-selection="callbacks.hasActiveFilter"
+                        data-wp-class--has-selection="state.filterHasSelection"
                         open>
 
                         <summary class="listing-filter-group__summary">
                             <span class="listing-filter-group__title">
                                 <?php esc_html_e('Keyword search', 'starwishx'); ?>
-                                <span class="filter-count-badge" data-wp-text="callbacks.getActiveFilterCount"></span>
+                                <span class="filter-count-badge" data-wp-text="state.filterCountLabel"></span>
                             </span>
                             <svg class="icon-chevron">
                                 <use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-arrow-down"></use>
@@ -225,6 +236,8 @@ sw_breadcrumbs();
 </main>
 
 <?php
+echo wp_interactivity_process_directives(ob_get_clean());
+
 get_template_part('template-parts/element-popup', null, [
     'title' => __('Hi!', 'starwishx'),
     'text'  => __('Add to favorites is only available for registered users.', 'starwishx'),

@@ -37,7 +37,7 @@ abstract class AbstractFilter implements FilterInterface
             id="filter-group-<?php echo esc_attr($id); ?>"
             data-wp-interactive="listing"
             data-wp-context='{ "filterId": "<?php echo esc_attr($id); ?>" }'
-            data-wp-class--has-selection="callbacks.hasActiveFilter"
+            data-wp-class--has-selection="state.filterHasSelection"
             open>
 
             <summary class="listing-filter-group__summary">
@@ -45,7 +45,7 @@ abstract class AbstractFilter implements FilterInterface
                     <!-- The Count Badge -->
                     <span
                         class="filter-count-badge"
-                        data-wp-text="callbacks.getActiveFilterCount">
+                        data-wp-text="state.filterCountLabel">
                     </span></span>
                 <svg class="icon-chevron">
                     <use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-arrow-down"></use>

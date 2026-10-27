@@ -123,6 +123,13 @@ final class ListingCore
         add_action('wp_enqueue_scripts',  [$this, 'enqueueAssets']);
         add_action('rest_api_init',       [$this, 'registerRestRoutes']);
         add_action('template_redirect',   [$this, 'redirectNumericCountryParams']);
+        // Before redirect_canonical() (10), which would rebuild the query
+        // string first and keep only the last of each repeated key.
+        add_action('template_redirect',   [$this, 'redirectPagedArchive'], 9);
+        // Queries that are only built for their SQL (facet counting) and the
+        // archive's main query, which nothing renders, never hit the database.
+        add_filter('posts_pre_query', [TermCountingService::class, 'skipSqlOnly'], 10, 2);
+        add_filter('posts_pre_query', [$this, 'skipArchiveMainQuery'], 10, 2);
         add_action('init', fn() => do_action('listing_register_filters', $this->registry), 20);
         add_action('listing_register_filters', [$this, 'registerDefaultFilters'], 5);
         // Invalidate the category term map transient whenever a term is saved.
@@ -348,6 +355,55 @@ final class ListingCore
     }
 
     /**
+     * posts_pre_query: skip the archive's main query. WordPress would fetch a
+     * page of opportunities nothing renders - the template shows
+     * StateAggregator's results. Paged requests keep it, so WordPress can
+     * still tell an existing /page/N/ from a 404 before redirectPagedArchive()
+     * sends it on, and feeds keep it because they render it.
+     */
+    public function skipArchiveMainQuery(mixed $posts, \WP_Query $query): mixed
+    {
+        if (
+            $posts !== null
+            || is_admin()
+            || !$query->is_main_query()
+            || !$query->is_post_type_archive('opportunity')
+            || $query->is_paged()
+            || $query->is_feed()
+        ) {
+            return $posts;
+        }
+
+        return [];
+    }
+
+    /**
+     * 301 WordPress' pagination URLs of the archive (/opportunities/page/N/,
+     * /opportunities/{category}/page/N/) to ?page=N on the same list. The
+     * listing pages with Load more, which writes ?page=N, and StateAggregator
+     * renders pages 1..N for it; /page/N/ used to show page 1 under its own
+     * URL. Other params are kept as they came, repeated keys included.
+     */
+    public function redirectPagedArchive(): void
+    {
+        if (!is_post_type_archive('opportunity') || !is_paged()) {
+            return;
+        }
+
+        $path = (string) strtok($_SERVER['REQUEST_URI'] ?? '/', '?');
+        $path = (string) preg_replace('#/page/\d+/?$#', '/', $path);
+
+        $pairs   = array_filter(
+            explode('&', (string) ($_SERVER['QUERY_STRING'] ?? '')),
+            static fn(string $pair): bool => $pair !== '' && !preg_match('/^(page|paged)=/', $pair)
+        );
+        $pairs[] = 'page=' . (int) get_query_var('paged');
+
+        wp_safe_redirect(home_url($path . '?' . implode('&', $pairs)), 301);
+        exit;
+    }
+
+    /**
      * Register built-in sidebar filters.
      */
     public function registerDefaultFilters(FilterRegistry $registry): void
@@ -422,7 +478,7 @@ final class ListingCore
      */
     public function registerRestRoutes(): void
     {
-        (new MainController($this->service))->registerRoutes();
+        (new MainController($this->service, $this->countriesRepository))->registerRoutes();
     }
 
     /**
@@ -443,7 +499,11 @@ final class ListingCore
             $rawFilters = array_merge($rawFilters, $filterOverrides);
         }
 
-        return $this->stateAggregator->aggregate($this->registry, $rawFilters);
+        // The data plus the server-side twins of the store's getters, which
+        // let the template be rendered through the Interactivity API on the
+        // server (archive-opportunity.php).
+        return $this->stateAggregator->aggregate($this->registry, $rawFilters)
+            + DerivedState::closures();
     }
 
     /**

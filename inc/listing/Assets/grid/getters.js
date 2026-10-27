@@ -4,6 +4,10 @@
  * Computed properties for the results display.
  * 'this' refers to the state proxy.
  *
+ * The getters archive-opportunity.php binds have PHP twins in
+ * inc/listing/Core/DerivedState.php, which render the page on the server -
+ * keep the two in step.
+ *
  * File: inc/listing/Assets/grid/getters.js
  */
 import { getContext, store } from "@wordpress/interactivity";
@@ -210,15 +214,17 @@ export const gridGetters = {
 
   /**
    * Image URL for the selected single parent category (from ACF term field).
+   * null when there is none, so data-wp-bind--src drops the attribute rather
+   * than writing src="".
    */
   get selectedCategoryImageUrl() {
     const selected = this.query.category;
-    if (!Array.isArray(selected) || selected.length === 0) return "";
+    if (!Array.isArray(selected) || selected.length === 0) return null;
     const tree = this.facets["category-oportunities"] || [];
     const selectedParents = tree.filter((node) => selected.includes(node.id));
     return selectedParents.length === 1
-      ? selectedParents[0].imageUrl || ""
-      : "";
+      ? selectedParents[0].imageUrl || null
+      : null;
   },
 
   /**

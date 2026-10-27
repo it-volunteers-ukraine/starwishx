@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Listing\Services;
 
 use Favorites\Services\FavoritesService;
+use Listing\Core\ListingQuery;
 use Listing\Core\QueryBuilder;
 use Listing\Enums\Taxonomy;
 use WP_Query;
@@ -53,9 +54,9 @@ class ListingService
      * @param int $perPage Page size. StateAggregator passes a multiple of
      *                     ITEMS_PER_PAGE to render several pages at once.
      */
-    public function search(array $filters, int $perPage = QueryBuilder::ITEMS_PER_PAGE): array
+    public function search(ListingQuery $query, int $perPage = QueryBuilder::ITEMS_PER_PAGE): array
     {
-        $args  = $this->queryBuilder->build($filters, $perPage);
+        $args  = $this->queryBuilder->build($query->toArray(), $perPage);
         $query = new WP_Query($args);
 
         if (empty($query->posts)) {
@@ -67,8 +68,7 @@ class ListingService
             ];
         }
 
-        $postIds   = wp_list_pluck($query->posts, 'ID');
-        $preloaded = $this->preloadPostData($postIds);
+        $preloaded = $this->preloadPostData();
 
         $items = array_map(fn($post) => $this->formatOpportunityCard($post, $preloaded), $query->posts);
 
@@ -81,92 +81,25 @@ class ListingService
     }
 
     /**
-     * Batch-loads all per-post data needed by formatOpportunityCard() in as few
-     * queries as possible.
+     * Batch-loads what formatOpportunityCard() needs beyond the posts
+     * themselves, so formatting a page costs no per-card queries.
      *
-     * Term loading strategy — why update_object_term_cache() instead of wp_get_object_terms():
-     *
-     * wp_get_object_terms() with multiple object IDs returns each unique term only
-     * once, even when it is associated with several posts. The object_id property
-     * on the returned WP_Term reflects only one of the matching posts, making
-     * reliable post-keyed indexing impossible.
-     *
-     * update_object_term_cache() issues one query per taxonomy to prime WordPress's
-     * internal per-request object cache for every post in the set. Subsequent
-     * get_the_terms() calls in formatOpportunityCard() then hit the cache at zero
-     * DB cost, giving correct per-post results without any custom indexing logic.
-     * With a persistent cache (Redis / Memcached), the taxonomy queries are also
-     * skipped on warm requests.
+     * Terms and post meta are already cached: WP_Query primes both for the
+     * posts it returns (update_post_term_cache / update_post_meta_cache), so
+     * get_the_terms() and get_post_meta() in formatOpportunityCard() are
+     * cache hits.
      *
      * The full category term map (needed for parent-climbing) is stored in a WP
      * transient so it survives across requests without a persistent cache driver.
      * It is invalidated on the 'saved_term' hook — see ListingCore::bootstrap().
      *
-     * Queries per request for a page of N posts:
-     *   - 1 × location view      (all posts in one IN clause, always)
-     *   - 3 × taxonomy cache     (update_object_term_cache, one per taxonomy, always)
+     * Queries per request:
      *   - 1 × get_terms          (category map, only on transient cache miss)
-     *   - N × isFavorite         (logged-in users only; batch optimisation possible
-     *                              via FavoritesService::getFavoriteIds())
-     *
-     * @param int[] $postIds
+     *   - 1 × favorite ids       (logged-in page loads only - REST reads run
+     *                              as a guest, see fetchJson() in Assets/utils.js)
      */
-    private function preloadPostData(array $postIds): array
+    private function preloadPostData(): array
     {
-        global $wpdb;
-
-        // --- Locations (custom view) ----------------------------------------
-        $placeholders = implode(',', array_fill(0, count($postIds), '%d'));
-
-        $locationRows = $wpdb->get_results(
-            // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-            $wpdb->prepare(
-                "SELECT post_id, code, name_category_oblast AS name, level, category
-             FROM wp_v_opportunity_search
-             WHERE post_id IN ($placeholders)",
-                ...$postIds
-            ),
-            ARRAY_A
-        );
-
-        $locationsByPost = [];
-        foreach ($locationRows as $row) {
-            $pid = (int) $row['post_id'];
-            unset($row['post_id']);
-            $locationsByPost[$pid][] = $row;
-        }
-
-        // --- Taxonomy terms — prime the WP object cache in bulk -------------
-        // Two queries (one per taxonomy). Country is no longer a taxonomy —
-        // it's read from wp_opportunity_countries below, joined to the
-        // dictionary in a single batch query.
-        update_object_term_cache($postIds, ['category-oportunities', 'category-beneficiaries']);
-
-        // --- Countries (typed table) ----------------------------------------
-        // One query joining wp_opportunity_countries with wp_sw_countries to
-        // hydrate id + code + display name per post. Replaces the per-post
-        // get_the_terms('country') call previously satisfied by the cache prime.
-        $countriesByPost = [];
-        if (!empty($postIds)) {
-            $countryRows = $wpdb->get_results(
-                $wpdb->prepare(
-                    "SELECT oc.post_id, c.id, c.code, c.name
-                     FROM {$wpdb->prefix}opportunity_countries oc
-                     INNER JOIN {$wpdb->prefix}sw_countries c ON c.id = oc.country_id
-                     WHERE oc.post_id IN ($placeholders)",
-                    ...$postIds
-                ),
-                ARRAY_A
-            );
-            foreach ($countryRows ?: [] as $row) {
-                $countriesByPost[(int) $row['post_id']] = [
-                    'id'   => (int) $row['id'],
-                    'code' => (string) $row['code'],
-                    'name' => (string) $row['name'],
-                ];
-            }
-        }
-
         // --- Full category term map for parent-climbing ---------------------
         // Cached via transient so the get_terms() query is only paid once per hour
         // (or until a term is saved). Invalidated in ListingCore::bootstrap() via
@@ -187,22 +120,18 @@ class ListingService
         }
 
         // --- Favorites (current user only) ----------------------------------
+        // The user's ids in one query, not one isFavorite() query per card.
         $userId      = get_current_user_id();
-        $favoriteIds = [];
-
-        if ($userId > 0) {
-            foreach ($postIds as $postId) {
-                if ($this->favoritesService->isFavorite($userId, $postId)) {
-                    $favoriteIds[$postId] = true;
-                }
-            }
-        }
+        $favoriteIds = $userId > 0
+            ? array_fill_keys(
+                $this->favoritesService->getRepository()->getFavoriteIds($userId, 'post', 9999, 0),
+                true
+            )
+            : [];
 
         return [
-            'locations'       => $locationsByPost,
             'categoryTermMap' => $categoryTermMap,
             'favoriteIds'     => $favoriteIds,
-            'countriesByPost' => $countriesByPost,
         ];
     }
 
@@ -242,9 +171,10 @@ class ListingService
     /**
      * Calculates facet counts dynamically using the Taxonomy Enum.
      */
-    public function getFacets(array $filters): array
+    public function getFacets(ListingQuery $query): array
     {
-        $facets = [];
+        $filters = $query->toArray();
+        $facets  = [];
 
         foreach (Taxonomy::cases() as $taxonomy) {
             // "Exclude Self" Rule: do not filter by a taxonomy when counting its own facets
@@ -256,7 +186,8 @@ class ListingService
             if ($taxonomy === Taxonomy::CATEGORY) {
                 $facets[$taxonomy->value] = $this->termCounter->buildFacetedTree(
                     $taxonomy,
-                    $contextFilters
+                    $contextFilters,
+                    $query->category
                 );
                 $this->enrichCategoryNodes($facets[$taxonomy->value]);
                 continue;
@@ -300,19 +231,15 @@ class ListingService
      * wp_sw_countries, scoped to the post set produced by the current
      * filter context.
      *
-     * Mirrors TermCountingService's trick of embedding $query->request as
-     * a subquery — the post selection is computed by WP_Query once, then
-     * the count rolls up over the typed junction without re-executing.
+     * The post selection is TermCountingService::filteredIdsSql() - built,
+     * not run, and shared with any other facet on the same context - which
+     * MySQL evaluates once as the subquery here.
      */
     private function buildCountryFacets(array $contextFilters): array
     {
-        $args                  = $this->queryBuilder->build($contextFilters, -1);
-        $args['fields']        = 'ids';
-        $args['no_found_rows'] = true;
+        $ids = $this->termCounter->filteredIdsSql($contextFilters);
 
-        $query = new WP_Query($args);
-
-        if (empty($query->request)) {
+        if ($ids === '') {
             return [];
         }
 
@@ -328,7 +255,7 @@ class ListingService
             "SELECT c.id, c.code, c.name AS label, COUNT(DISTINCT oc.post_id) AS count
              FROM {$sw} c
              INNER JOIN {$oc} oc ON oc.country_id = c.id
-             WHERE oc.post_id IN ({$query->request})
+             WHERE oc.post_id IN ({$ids})
              GROUP BY c.id
              ORDER BY c.priority ASC, c.name ASC",
             ARRAY_A
@@ -344,21 +271,35 @@ class ListingService
 
     /**
      * Enrich top-level category nodes with display data for the archive header.
-     * Term objects are already in WP's object cache from buildFacetedTree(),
-     * so get_term() calls here are free (no extra DB queries).
+     * Term objects and their meta are already in WP's object cache from
+     * buildFacetedTree()'s get_terms(), so get_term() and get_term_meta() here
+     * are free.
+     *
+     * The image is the attachment id the ACF field `cat_opportunity_image`
+     * stores in term meta. All of them are primed in one go - ACF's
+     * get_field() loaded each attachment with two queries of its own.
      *
      * @param array &$nodes Top-level category tree nodes (modified in place).
      */
     private function enrichCategoryNodes(array &$nodes): void
     {
+        $imageIds = [];
+        foreach ($nodes as $node) {
+            $imageId = (int) get_term_meta($node['id'], 'cat_opportunity_image', true);
+            if ($imageId > 0) {
+                $imageIds[$node['id']] = $imageId;
+            }
+        }
+        if ($imageIds) {
+            _prime_post_caches(array_values($imageIds), false, true);
+        }
+
         foreach ($nodes as &$node) {
             $term = get_term($node['id'], 'category-oportunities');
             $node['description'] = ($term && !is_wp_error($term)) ? $term->description : '';
-            $node['imageUrl']    = '';
-            if (function_exists('get_field') && $term && !is_wp_error($term)) {
-                $image = get_field('cat_opportunity_image', $term->taxonomy . '_' . $term->term_id);
-                $node['imageUrl'] = !empty($image) ? ($image['sizes']['medium'] ?? $image['url'] ?? '') : '';
-            }
+            $node['imageUrl']    = isset($imageIds[$node['id']])
+                ? (wp_get_attachment_image_url($imageIds[$node['id']], 'medium') ?: '')
+                : '';
         }
         unset($node);
     }
@@ -413,9 +354,13 @@ class ListingService
      * Formats the CPT into a lean object for the iAPI Results Grid.
      * Relies on data pre-loaded by preloadPostData() to avoid N+1 queries.
      *
-     * Term data (country, categories, beneficiaries) is read via get_the_terms(), which
-     * resolves from the object cache primed by update_object_term_cache() — zero
-     * additional DB queries per post.
+     * Only what the card renders (ResultsGrid::renderCard()). The thumbnail,
+     * company, locations, country and beneficiaries it no longer shows were
+     * dropped here; a card design that brings one back should load it in
+     * bulk in preloadPostData(), not per card.
+     *
+     * Categories are read via get_the_terms(), which resolves from the term
+     * cache WP_Query primed — no extra DB queries per post.
      *
      * @param array $preloaded Indexed data produced by preloadPostData().
      */
@@ -423,23 +368,12 @@ class ListingService
     {
         $postId = $post->ID;
 
-        $locations = $preloaded['locations'][$postId] ?? [];
-
-        // Country — typed table, hydrated in bulk by preloadPostData().
-        $country = $preloaded['countriesByPost'][$postId]['name'] ?? '';
-
         // Categories — resolved to unique top-level ancestors
         $rawCategories = get_the_terms($postId, 'category-oportunities');
         $categories    = $this->resolveTopLevelCategories(
             (! empty($rawCategories) && ! is_wp_error($rawCategories)) ? $rawCategories : [],
             $preloaded['categoryTermMap']
         );
-
-        // Beneficiaries
-        $beneficiaryTerms = get_the_terms($postId, 'category-beneficiaries');
-        $beneficiaries     = (! empty($beneficiaryTerms) && ! is_wp_error($beneficiaryTerms))
-            ? array_map(fn($t) => ['name' => $t->name], $beneficiaryTerms)
-            : [];
 
         $isFavorite   = isset($preloaded['favoriteIds'][$postId]);
         // Rating & comment engagement data (post meta cache already primed by WP_Query)
@@ -451,12 +385,7 @@ class ListingService
             'id'            => $postId,
             'title'         => html_entity_decode(get_the_title($post)),
             'excerpt'       => wp_trim_words($post->post_content, 38, ' …'),
-            'thumbnail'     => get_the_post_thumbnail_url($post, 'medium') ?: null,
-            'company'       => get_post_meta($postId, 'opportunity_company', true),
-            'locations'     => $locations,
-            'country'       => $country,
             'categories'    => $categories,
-            'beneficiaries'       => $beneficiaries,
             'date_starts'   => $this->formatDateForUI(get_post_meta($postId, 'opportunity_date_starts', true)),
             'date_ends'     => $this->formatDateForUI(get_post_meta($postId, 'opportunity_date_ends', true)),
             'url'           => get_permalink($post),

@@ -15,6 +15,7 @@ import { extendState } from "./utils.js"; // or ../../shared/Assets/shared-utils
 import { filterActions } from "./filters/actions.js";
 import { gridActions } from "./grid/actions.js";
 import { gridGetters } from "./grid/getters.js";
+import { filterGetters } from "./filters/getters.js";
 import { deepClone, highlightTerms } from "./utils.js";
 import "../../shared/Assets/popup-store.js";
 
@@ -41,9 +42,11 @@ const listingState = {
 
 /**
  * Mixin Getters
- * Preserves getter descriptors so 'this' remains reactive.
+ * Preserves getter descriptors so 'this' remains reactive. The getters the
+ * markup uses have PHP twins in inc/listing/Core/DerivedState.php, which
+ * render the page on the server.
  */
-extendState(listingState, gridGetters);
+extendState(listingState, gridGetters, filterGetters);
 
 /**
  * Controls Tab can land on inside the filter drawer (actions.trapSidebarFocus).
@@ -190,59 +193,6 @@ store("listing", {
     },
 
     /**
-     * Dynamic parent count: when some children are selected, computes the
-     * deduplicated post count across only the selected children's postId
-     * sets (Set union). Falls back to server-provided total otherwise.
-     */
-    dynamicParentCount: () => {
-      const { state } = store("listing");
-      const context = getContext();
-      const item = context?.item;
-
-      if (!item || !item.children?.length) return item?.count ?? 0;
-
-      const selected = state.query.category || [];
-      if (selected.length === 0) return item.count;
-
-      // Parent selected → means "all children" → show total
-      if (selected.includes(item.id)) return item.count;
-
-      // Find which children of THIS parent are selected
-      const selectedChildren = item.children.filter((c) =>
-        selected.includes(c.id),
-      );
-      if (selectedChildren.length === 0) return item.count;
-
-      // Deduplicated union of selected children's post IDs
-      const unique = new Set();
-      for (const child of selectedChildren) {
-        if (child.postIds) {
-          for (const id of child.postIds) {
-            unique.add(id);
-          }
-        }
-      }
-      return unique.size;
-    },
-
-    isParentExpanded: () => {
-      const { state } = store("listing");
-      const context = getContext();
-      const item = context?.item;
-
-      // Expansion logic: Expand if Parent OR any child is selected
-      if (!item) return false;
-
-      const field = context?.filterField || "category";
-      const selected = state.query[field] || [];
-      const hasSelectedChild = item.children?.some((c) =>
-        selected.includes(c.id),
-      );
-      const isParentSelected = selected.includes(item.id);
-      return isParentSelected || hasSelectedChild;
-    },
-
-    /**
      * PROXY ACTION
      * When user clicks heart in grid, we call the Global Favorites store.
      */
@@ -295,109 +245,6 @@ store("listing", {
         selectedChildrenCount > 0 && selectedChildrenCount < childrenIds.length;
 
       ref.indeterminate = isPartiallyChecked;
-    },
-    /**
-     * Pure logic calculation. No DOM manipulation.
-     * Returns true if some, but not all, children are selected.
-     */
-    isIndeterminate: () => {
-      const { state } = store("listing");
-      const context = getContext();
-      const item = context?.item;
-
-      // Safety check
-      if (
-        !item ||
-        !Array.isArray(item.children) ||
-        item.children.length === 0
-      ) {
-        return false;
-      }
-
-      const selectedIds = state.query.category;
-      const childrenIds = item.children.map((c) => c.id);
-
-      // Count matches
-      const selectedCount = childrenIds.filter((id) =>
-        selectedIds.includes(id),
-      ).length;
-
-      // Logic: Indeterminate if SOME children checked, but NOT ALL
-      return selectedCount > 0 && selectedCount < childrenIds.length;
-    },
-
-    /**
-     * Calculates the "Human Readable" count of active filters.
-     * Usage: data-wp-text="callbacks.getActiveFilterCount"
-     */
-    getActiveFilterCount: () => {
-      const { state } = store("listing");
-      const context = getContext();
-      const filterId = context?.filterId;
-
-      if (!filterId) return "";
-
-      const value = state.query[filterId];
-
-      // 1. Handle Empty States
-      if (!value || (Array.isArray(value) && value.length === 0)) {
-        return "";
-      }
-
-      // 2. Handle Text/String Filters (like City or Search)
-      if (typeof value === "string") {
-        return "(1)";
-      }
-
-      // 3. Handle Hierarchical Filters (Category) - The "Smart Count"
-      // We assume 'category' is the ID for the hierarchical filter
-      if (filterId === "category") {
-        const tree = state.facets["category-oportunities"] || [];
-        let count = 0;
-        const selectedIds = value; // Array of IDs
-
-        // Iterate Top-Level Nodes only
-        for (const node of tree) {
-          // Scenario A: Parent is explicitly selected (User checked Parent)
-          if (selectedIds.includes(node.id)) {
-            count++;
-            // Architecturally: We ignore children because visually
-            // the Parent "contains" them.
-            continue;
-          }
-
-          // Scenario B: Parent NOT selected, but Children might be (Indeterminate)
-          if (node.children && node.children.length > 0) {
-            const activeChildren = node.children.filter((c) =>
-              selectedIds.includes(c.id),
-            );
-            count += activeChildren.length;
-          }
-        }
-
-        // Safety: If for some reason we have IDs not in the tree (ghosts), ignore them
-        // or fallback to simple length? For precise UI, tree logic is safer.
-        return count > 0 ? `(${count})` : "";
-      }
-
-      // 4. Handle Flat Arrays (Country, Beneficiaries)
-      return `(${value.length})`;
-    },
-
-    /**
-     * Returns true if the current filter group has ANY selection.
-     * Usage: data-wp-class--has-selection="callbacks.hasActiveFilter"
-     */
-    hasActiveFilter: () => {
-      const { state } = store("listing");
-      const context = getContext();
-      const filterId = context?.filterId;
-
-      if (!filterId) return false;
-      const value = state.query[filterId];
-
-      if (Array.isArray(value)) return value.length > 0;
-      return !!value;
     },
 
     // highlight card content

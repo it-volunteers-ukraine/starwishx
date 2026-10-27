@@ -55,38 +55,38 @@ class CategoryFilter extends AbstractTaxonomyFilter
         $taxKey = $this->getTaxonomy()->value;
 
         $this->startBuffer();
+        // Context on the wrapper, not the <template> - see
+        // AbstractTaxonomyFilter::renderContent(). The children inherit it.
 ?>
-        <div class="filter-list filter-list--hierarchical">
+        <div class="filter-list filter-list--hierarchical" data-wp-context='{"filterField": "category"}'>
             <template
                 data-wp-each--item="state.facets.<?php echo esc_attr($taxKey); ?>"
-                data-wp-key="context.item.id"
-                data-wp-context='{"filterField": "category"}'>
+                data-wp-key="context.item.id">
                 <div class="filter-group-item">
                     <label class="filter-checkbox parent-checkbox">
-                        <!-- 
-                                data-wp-watch: Handles the visual "Dash"
-                                toggleParent: Handles Select All / None
-                             -->
-                        <!-- data-wp-effect="callbacks.setIndeterminate" -->
-                        <!-- data-wp-watch="callbacks.setIndeterminate" -->
+                        <?php
+                        // PHP comments inside this template: the server renders it
+                        // once per category, HTML comments would ship each time.
+                        // state.isPartiallySelected: the visual "Dash";
+                        // toggleParent: Select All / None.
+                        ?>
                         <input
                             type="checkbox"
-                            data-wp-class--is-indeterminate="callbacks.isIndeterminate"
+                            data-wp-class--is-indeterminate="state.isPartiallySelected"
                             data-wp-on--change="actions.filters.toggleParent"
                             data-wp-bind--value="context.item.id"
                             data-wp-bind--checked="state.isFilterChecked"
                             data-field="category">
                         <span class="label-text" data-wp-text="context.item.label"></span>
-                        <data class="count" data-wp-text="callbacks.dynamicParentCount"></data>
+                        <data class="count" data-wp-text="state.parentCount"></data>
                     </label>
-                    <!-- Children Container -->
+                    <?php // Children Container ?>
                     <div
                         class="filter-sub-level"
-                        data-wp-bind--hidden="!callbacks.isParentExpanded">
+                        data-wp-bind--hidden="!state.isParentExpanded">
                         <template
                             data-wp-each--item="context.item.children"
-                            data-wp-key="context.item.id"
-                            data-wp-context='{"filterField": "category"}'>
+                            data-wp-key="context.item.id">
                             <label class="filter-checkbox child-checkbox">
                                 <input
                                     type="checkbox"

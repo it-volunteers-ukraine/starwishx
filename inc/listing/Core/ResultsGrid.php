@@ -159,7 +159,12 @@ class ResultsGrid implements RenderableInterface
                     </div>
                     <a class="listing-card__title--link" data-wp-bind--href="context.item.url">
                         <h3 class="listing-card__title" data-wp-text="context.item.title"></h3>
-                        <!-- </a> -->
+                        <?php
+                        // Notes and retired markup below are PHP comments, not HTML
+                        // ones: the server renders this template once per card, and
+                        // HTML comments would ship with every one of them.
+                        /* </a> */
+                        ?>
                         <div class="listing-card__dates">
                             <span data-wp-bind--hidden="!context.item.date_starts">
                                 <?php esc_html_e('From:', 'starwishx'); ?>
@@ -170,21 +175,23 @@ class ResultsGrid implements RenderableInterface
                                 <span data-wp-text="context.item.date_ends"></span>
                             </span>
                         </div>
-                        <!-- <a class="listing-card__excerpt--link" data-wp-bind--href="context.item.url"> -->
+                        <?php /* <a class="listing-card__excerpt--link" data-wp-bind--href="context.item.url"> */ ?>
                         <p class="listing-card__excerpt card-text" data-wp-text="context.item.excerpt"></p>
                     </a>
-                    <!-- <span>
+                    <?php
+                    /* <span>
                         < ?php esc_html_e('Donator', 'starwishx'); ?>:&nbsp;
                         <span class="company" data-wp-text="context.item.company"></span>
                     </span>
                     <span>
                         < ?php esc_html_e('Country', 'starwishx'); ?>:&nbsp;
                         <span class="country" data-wp-bind--hidden="!context.item.country" data-wp-text="context.item.country"></span>
-                    </span> -->
-                    <!-- <span data-wp-bind--hidden="!state.beneficiariesList">
+                    </span> */
+                    /* <span data-wp-bind--hidden="!state.beneficiariesList">
                         < ?php esc_html_e('Beneficiaries', 'starwishx'); ?>:&nbsp;
                         <span data-wp-text="state.beneficiariesList"></span>
-                    </span> -->
+                    </span> */
+                    ?>
                     <div class="listing-card__engage">
                         <span class="listing-card__rating rating-badge" data-wp-bind--hidden="!context.item.ratingCount">
                             <span class="stars-display"
@@ -203,28 +210,34 @@ class ResultsGrid implements RenderableInterface
                             data-wp-bind--href="context.item.commentsUrl">
                             <?= sw_svg('icon-write', 14); ?>
                             <?= __("Comments", 'starwishx') ?>:
-                            <!-- <svg width="14" height="14" aria-hidden="true">
+                            <?php
+                            /* <svg width="14" height="14" aria-hidden="true">
                                 <use href="< ?php echo get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-write"></use>
-                            </svg> -->
+                            </svg> */
+                            ?>
                             <span class="listing-card__comments--count" data-wp-text="context.item.commentCount"></span>
                         </a>
                     </div>
-                </div> <!-- Meta -->
+                </div><?php /* Meta */ ?>
 
-                <!-- <div class="beneficiaries" data-wp-bind--hidden="!context.item.beneficiaries.length">
+                <?php
+                /* <div class="beneficiaries" data-wp-bind--hidden="!context.item.beneficiaries.length">
                     <span class="beneficiaries__label">Beneficiaries:</span>
                     <template data-wp-each--beneficiary="context.item.beneficiaries">
                         <span class="beneficiary-chip" data-wp-text="context.beneficiary.name"></span>
                     </template>
-                </div> -->
+                </div> */
+                ?>
             </div>
-            <!-- <div class="listing-card__footer" data-wp-bind--hidden="!context.item.locations.length">
+            <?php
+            /* <div class="listing-card__footer" data-wp-bind--hidden="!context.item.locations.length">
                 <span class="location locations-chips locations-chips--listing">
                     <template data-wp-each--loc="context.item.locations">
                         <span class="location-chip1 btn-chip1" data-wp-text="context.loc.name"></span>&sol;
                     </template>
                 </span>
-            </div> -->
+            </div> */
+            ?>
         </article>
 <?php
         return $this->endBuffer();
