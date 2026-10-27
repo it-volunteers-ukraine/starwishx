@@ -35,6 +35,7 @@ const listingState = {
   isLoading: false,
   isSidebarOpen: false,
   error: "", // message of the last failed request (grid/actions.js)
+  announcement: "", // "Found: N" for the results' role=status (grid/actions.js)
   ui: {
     isLoadingLocation: false, // Loading state for location autocomplete
   },
@@ -138,32 +139,31 @@ store("listing", {
 
     /**
      * THE TRIGGER:
-     * When user clicks the checkbox OR the label text.
+     * A click on the card's favorites checkbox - directly, via its label
+     * text, or Space. withSyncEvent because a guest's click is cancelled:
+     * the box must not tick (nor be announced as checked) when nothing was
+     * saved - same as single-opportunity-store.js.
      */
-    async toggleFavorite(event) {
-      // 1. Prevent Browser Defaults (optional based on your HTML)
-      if (event && event.type === "click") {
-        // event.preventDefault(); // Uncomment if using <a> tag
-      }
+    toggleFavorite: withSyncEvent(async (event) => {
       const ctx = getContext();
       const item = ctx?.item;
       if (item && item.id) {
         // Guest guard: show auth popup instead of toggling
         if (!store("listing").state.isUserLoggedIn) {
+          event?.preventDefault();
           store("popup").actions.open();
           return;
         }
 
-        // 2. OPTIMISTIC UPDATE (Local Context)
-        // We MUST flip this boolean so the Fallback logic in the getter
-        // stays in sync with the user's intent.
+        // OPTIMISTIC UPDATE (Local Context): the browser has ticked the box;
+        // flip the item so state.isFavorited agrees with it.
         item.isFavorite = !item.isFavorite;
 
-        // 3. Call Global Store
+        // Call Global Store
         // This updates the Global Array, which triggers the getter again.
         await store("favorites").actions.toggle(item.id);
       }
-    },
+    }),
   },
   callbacks: {
     /**
@@ -216,35 +216,16 @@ store("listing", {
     },
 
     /**
-     * Sets the visual "Dash" on the parent checkbox
+     * data-wp-watch on a parent category checkbox: mirrors the partial
+     * selection into its indeterminate property, which is what screen readers
+     * announce as "mixed" (the .is-indeterminate class only draws the dash).
+     * A watch rather than data-wp-bind--indeterminate: indeterminate is a
+     * property without an attribute, and the server render would write it
+     * into the HTML as an invalid one.
      */
-    setIndeterminate: () => {
+    syncIndeterminate() {
       const { state } = store("listing");
-      const { ref } = getElement();
-      const context = getContext();
-      const item = context?.item;
-      if (
-        !item ||
-        !Array.isArray(item.children) ||
-        item.children.length === 0
-      ) {
-        ref.indeterminate = false;
-        return;
-      }
-
-      const selectedIds = state.query.category;
-
-      // Count how many children are currently selected
-      const childrenIds = item.children.map((c) => c.id);
-      const selectedChildrenCount = childrenIds.filter((id) =>
-        selectedIds.includes(id),
-      ).length;
-
-      // Logic: Indeterminate if SOME children are checked, but NOT ALL
-      const isPartiallyChecked =
-        selectedChildrenCount > 0 && selectedChildrenCount < childrenIds.length;
-
-      ref.indeterminate = isPartiallyChecked;
+      getElement().ref.indeterminate = state.isPartiallySelected;
     },
 
     // highlight card content

@@ -96,8 +96,14 @@ $transition-ease: ease;
             cursor: pointer;
             width: calc(var(--size-img) * 2.5);
             height: calc(var(--size-img) * 2.5);
+
+            &:focus {
+                outline: none;
+            }
         }
 
+        // Its own ring would trace the invisible, rotated overlay; the focus
+        // ring is on .control-favorites-wrapper (_control-favorites.scss).
         &:focus {
             outline: none;
         }

@@ -95,8 +95,8 @@ ob_start();
             hidden>
             <img class="listing-app__header--image"
                 width="100" height="70"
-                data-wp-bind--src="state.selectedCategoryImageUrl"
-                data-wp-bind--alt="state.selectedCategoryName">
+                alt=""
+                data-wp-bind--src="state.selectedCategoryImageUrl">
         </figure>
     </header>
 
@@ -156,14 +156,14 @@ ob_start();
                 <div class="listing-status">
                     <span class="listing-status-label">
                         <!-- < ?= sw_svg('icon-opportunities'); ?> -->
-                        <img width="20" height="20" src="<?= get_template_directory_uri(); ?>/assets/img/icon-opportunities-gradient.svg" alt="Icon star">
+                        <img width="20" height="20" src="<?= get_template_directory_uri(); ?>/assets/img/icon-opportunities-gradient.svg" alt="">
 
                         <span class="status-label__title">
                             <?= esc_html__('Found', 'starwishx'); ?>:
                         </span>
                         <span class="status-label__info" data-wp-text="state.resultsFoundLabel"></span>
                     </span>
-                    <button class="btn-tertiary" data-wp-on--click="actions.filters.clearAll">
+                    <button type="button" class="btn-tertiary" data-wp-on--click="actions.filters.clearAll">
                         <?php esc_html_e('Clear all', 'starwishx'); ?>
                     </button>
                 </div>
@@ -189,7 +189,7 @@ ob_start();
 
                         <summary class="listing-filter-group__summary">
                             <span class="listing-filter-group__title">
-                                <?php esc_html_e('Keyword search', 'starwishx'); ?>
+                                <span id="filter-title-s"><?php esc_html_e('Keyword search', 'starwishx'); ?></span>
                                 <span class="filter-count-badge" data-wp-text="state.filterCountLabel"></span>
                             </span>
                             <svg class="icon-chevron">
@@ -202,6 +202,7 @@ ob_start();
                                 <input
                                     type="search"
                                     class="listing-search-input"
+                                    aria-labelledby="filter-title-s"
                                     maxlength="<?php echo (int) \Listing\Services\ListingService::SEARCH_MAX_LENGTH; ?>"
                                     placeholder="<?php esc_attr_e('Search by keyword...', 'starwishx'); ?>"
                                     data-wp-bind--value="state.query.s"

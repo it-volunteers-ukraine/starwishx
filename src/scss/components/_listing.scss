@@ -504,8 +504,26 @@
                     }
                 }
 
+                // The title link holds just the title - its accessible name -
+                // and its ::after covers the body (title, dates, excerpt):
+                // the area the link used to wrap. fit-content only where the
+                // old link was a flex item and so took it.
+                .listing-card__body {
+                    position: relative;
+
+                    @include media.min-tablet {
+                        width: fit-content;
+                    }
+                }
+
                 .listing-card__title--link {
-                    width: fit-content;
+                    color: inherit;
+
+                    &::after {
+                        position: absolute;
+                        inset: 0;
+                        content: "";
+                    }
                 }
 
                 .listing-card__title {

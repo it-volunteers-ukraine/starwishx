@@ -5,6 +5,14 @@
 .control-favorites-wrapper {
     display: inline-flex;
     align-items: center;
+
+    // The checkboxes are invisible overlays on the heart (_heart.scss), so
+    // the keyboard focus ring goes on the whole control.
+    &:has(.heart__checkbox:focus-visible, .heart__checkbox--img:focus-visible) {
+        outline: 2px solid $primary-hover;
+        outline-offset: 2px;
+        border-radius: 4px;
+    }
 }
 
 .control-favorites-wrapper--icon-only {

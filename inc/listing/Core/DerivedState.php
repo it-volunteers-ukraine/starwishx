@@ -45,6 +45,7 @@ final class DerivedState
             'selectedCategoryImageUrl'    => static fn(): ?string => ((string) (self::selectedParent()['imageUrl'] ?? '')) ?: null,
             'selectedCategoryDescription' => static fn(): string => (string) (self::selectedParent()['description'] ?? ''),
             'activeFilterChips'           => static fn(): array => self::activeFilterChips(),
+            'chipRemoveLabel'             => static fn(): string => self::chipRemoveLabel(),
             // filters/getters.js
             'filterCountLabel'            => static fn(): string => self::filterCountLabel(),
             'filterHasSelection'          => static fn(): bool => self::filterHasSelection(),
@@ -221,6 +222,15 @@ final class DerivedState
             'slug'    => $slug,
             'isChild' => $isChild,
         ];
+    }
+
+    /** "Remove filter: {chip label}" - each chip's button says which filter it removes. */
+    private static function chipRemoveLabel(): string
+    {
+        $removeFilter = (string) (self::state()['i18n']['removeFilter'] ?? '');
+        $label        = (string) (wp_interactivity_get_context()['item']['label'] ?? '');
+
+        return $label !== '' ? "{$removeFilter}: {$label}" : $removeFilter;
     }
 
     /** Cut like the JS (which counts UTF-16 units - the same for Cyrillic). */

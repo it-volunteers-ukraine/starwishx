@@ -130,6 +130,7 @@ class LocationsFilterSimple extends AbstractFilter
             <input
                 type="search"
                 class="filter-search-input"
+                aria-labelledby="filter-title-<?php echo esc_attr($this->getId()); ?>"
                 maxlength="<?php echo (int) ListingService::LOCATION_MAX_LENGTH; ?>"
                 placeholder="<?php esc_attr_e('City, Raion, Oblast...', 'starwishx'); ?>"
                 data-filter-id="<?php echo esc_attr($this->getId()); ?>"

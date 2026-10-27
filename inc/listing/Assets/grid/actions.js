@@ -59,6 +59,8 @@ async function fetchResults({ append = false, history = "push" } = {}) {
   state.isLoading = true;
   state.error = "";
   failedRequest = null;
+  // Emptied first so the status region re-announces even an unchanged count.
+  if (!append) state.announcement = "";
 
   const params = new URLSearchParams();
   Object.entries(state.query).forEach(([key, value]) => {
@@ -99,6 +101,9 @@ async function fetchResults({ append = false, history = "push" } = {}) {
       }
       state.totalFound = data.total;
       state.totalPages = data.total_pages;
+      if (!append && state.i18n?.found) {
+        state.announcement = `${state.i18n.found}: ${data.total}`;
+      }
       if (data.facets) {
         cacheFacetLabels(state);
         state.facets = data.facets;
@@ -143,8 +148,21 @@ export const gridActions = {
     const { state } = store("listing");
     if (state.query.page >= state.totalPages) return;
 
+    const shown = state.results.length;
     state.query.page++;
     await fetchResults({ append: true, history: "replace" });
+
+    // Focus the first new card: keyboard and screen-reader users go on
+    // reading where the new items start, and focus isn't left on the button,
+    // which hides once the last page is in. Next frame: the cards render then.
+    if (state.results.length > shown) {
+      requestAnimationFrame(() => {
+        const cards = document.querySelectorAll(
+          ".listing-grid article.listing-card",
+        );
+        cards[shown]?.querySelector(".listing-card__title--link")?.focus();
+      });
+    }
   },
 
   /**

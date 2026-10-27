@@ -71,6 +71,7 @@ class StateAggregator
             // null, and core drops the attribute (the toggle's aria-expanded).
             'isSidebarOpen' => false,
             'error'         => '',
+            'announcement'  => '',
         ];
     }
 }

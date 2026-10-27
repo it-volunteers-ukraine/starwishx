@@ -16,7 +16,20 @@ class ResultsGrid implements RenderableInterface
     {
         $this->startBuffer();
 ?>
-        <section class="listing-results" data-wp-interactive="listing">
+        <section
+            class="listing-results"
+            aria-labelledby="listing-results-title"
+            data-wp-interactive="listing"
+            data-wp-bind--aria-busy="state.isLoading">
+            <!-- The cards (h3) sit under this heading rather than under the
+                 filter panel's h2, and it names the region. -->
+            <h2 id="listing-results-title" class="screen-reader-text">
+                <?php esc_html_e('Found', 'starwishx'); ?>: <span data-wp-text="state.resultsFoundLabel"></span>
+            </h2>
+            <!-- Announces the new count after each search (grid/actions.js);
+                 empty until then, so it adds nothing to the reading order. -->
+            <p class="screen-reader-text" role="status" data-wp-text="state.announcement"></p>
+
             <!-- Loading Overlay -->
             <div class="listing-results__loading" data-wp-bind--hidden="!state.isLoading">
                 <span class="spinner is-active"></span>
@@ -40,14 +53,15 @@ class ResultsGrid implements RenderableInterface
                         <button class="btn-chip__icon"
                             data-wp-on--click="actions.filters.removeChip"
                             type="button"
-                            aria-label="<?php esc_attr_e('Remove filter', 'starwishx'); ?>">
+                            aria-label="<?php esc_attr_e('Remove filter', 'starwishx'); ?>"
+                            data-wp-bind--aria-label="state.chipRemoveLabel">
                             <svg width="14" height="14" aria-hidden="true">
                                 <use href="<?php echo get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-plus-small"></use>
                             </svg>
                         </button>
                     </span>
                 </template>
-                <button class="btn-tertiary listing-chips__clear" data-wp-on--click="actions.filters.clearAll">
+                <button type="button" class="btn-tertiary listing-chips__clear" data-wp-on--click="actions.filters.clearAll">
                     <?php esc_html_e('Clear all', 'starwishx'); ?>
                 </button>
             </div>
@@ -55,7 +69,7 @@ class ResultsGrid implements RenderableInterface
             <!-- Empty State -->
             <div class="listing-results__empty" data-wp-bind--hidden="state.hasResults">
                 <p><?php esc_html_e('Nothing found matching your criteria', 'starwishx'); ?></p>
-                <button class="btn-tertiary" data-wp-on--click="actions.filters.clearAll">
+                <button type="button" class="btn-tertiary" data-wp-on--click="actions.filters.clearAll">
                     <?php esc_html_e('Clear all filters', 'starwishx'); ?>
                 </button>
             </div>
@@ -73,6 +87,7 @@ class ResultsGrid implements RenderableInterface
             <!-- Pagination / Load More -->
             <footer class="listing-results__footer" data-wp-bind--hidden="!state.hasMore">
                 <button
+                    type="button"
                     class="btn-tertiary btn-load-more"
                     data-wp-on--click="actions.loadMore"
                     data-wp-bind--disabled="state.isLoading">
@@ -105,14 +120,19 @@ class ResultsGrid implements RenderableInterface
                                 </span>
                             </template>
                         </span>
-                        <div class="control-favorites-wrapper">
-                            <div
-                                for="context.item.id"
-                                class="heart-label"
-                                data-wp-class--is-active="state.isFavorited"
-                                data-wp-on--click="actions.toggleFavorite"
-                                role="button"
-                                tabindex="0">
+                        <?php
+                        // One native control per card: the label wraps the checkbox,
+                        // so its visible text ("Add to favorites" / "In favorites" -
+                        // the hidden one is visibility:hidden) is the checkbox's name,
+                        // and clicking the text toggles it. Spans inside, because a
+                        // label holds phrasing content; they are flex items of the
+                        // wrapper, so the heart keeps its size and animation.
+                        // Notes and retired markup in this template are PHP comments,
+                        // not HTML ones: the server renders it once per card, and HTML
+                        // comments would ship with every one of them.
+                        ?>
+                        <label class="control-favorites-wrapper">
+                            <span class="heart-label" data-wp-class--is-active="state.isFavorited">
                                 <span class="heart-label__text">
                                     <span class="heart-label__text--inactive">
                                         <?php esc_html_e('Add to favorites', 'starwishx'); ?>
@@ -121,50 +141,50 @@ class ResultsGrid implements RenderableInterface
                                         <?php esc_html_e('In favorites', 'starwishx'); ?>
                                     </span>
                                 </span>
-                            </div>
+                            </span>
                             <? if (is_user_logged_in()) : ?>
-                                <div class="heart"
+                                <span class="heart"
                                     title="<?php esc_attr_e('Favorites', 'starwishx'); ?>">
                                     <input
-                                        id="context.item.id"
                                         type="checkbox"
                                         class="heart__checkbox"
                                         data-wp-bind--checked="state.isFavorited"
-                                        data-wp-on--change="actions.toggleFavorite"
-                                        aria-label="<?php esc_attr_e('Toggle Favorite', 'starwishx'); ?>">
-                                    <div class="heart__icon"></div>
-                                    <div class="heart__lines" aria-hidden="true">
+                                        data-wp-on--click="actions.toggleFavorite">
+                                    <span class="heart__icon"></span>
+                                    <span class="heart__lines" aria-hidden="true">
                                         <span class="heart__line"></span>
                                         <span class="heart__line"></span>
                                         <span class="heart__line"></span>
                                         <span class="heart__line"></span>
                                         <span class="heart__line"></span>
                                         <span class="heart__line"></span>
-                                    </div>
-                                </div>
+                                    </span>
+                                </span>
                             <? else : ?>
-                                <div class="heart--img"
+                                <span class="heart--img"
                                     title="<?php esc_attr_e('Favorites', 'starwishx'); ?>">
                                     <input
-                                        id="context.item.id"
                                         type="checkbox"
                                         class="heart__checkbox--img"
                                         data-wp-bind--checked="state.isFavorited"
-                                        data-wp-on--change="actions.toggleFavorite"
-                                        aria-label="<?php esc_attr_e('Toggle Favorite', 'starwishx'); ?>">
-                                    <img class="heart__image" src="<?php echo get_template_directory_uri(); ?>/assets/img/icon-heart-gradient.svg" alt="heart icon">
-                                </div>
+                                        data-wp-on--click="actions.toggleFavorite">
+                                    <img class="heart__image" src="<?php echo get_template_directory_uri(); ?>/assets/img/icon-heart-gradient.svg" alt="">
+                                </span>
                             <? endif ?>
-                        </div>
+                        </label>
                     </div>
-                    <a class="listing-card__title--link" data-wp-bind--href="context.item.url">
-                        <h3 class="listing-card__title" data-wp-text="context.item.title"></h3>
-                        <?php
-                        // Notes and retired markup below are PHP comments, not HTML
-                        // ones: the server renders this template once per card, and
-                        // HTML comments would ship with every one of them.
-                        /* </a> */
-                        ?>
+                    <?php
+                    // The link holds only the title, so that is its name; its
+                    // ::after covers the whole body, so title, dates and excerpt
+                    // stay clickable as when the link wrapped them all.
+                    ?>
+                    <div class="listing-card__body">
+                        <h3 class="listing-card__title">
+                            <a class="listing-card__title--link"
+                                data-wp-bind--href="context.item.url"
+                                data-wp-text="context.item.title"></a>
+                        </h3>
+                        <?php /* </a> */ ?>
                         <div class="listing-card__dates">
                             <span data-wp-bind--hidden="!context.item.date_starts">
                                 <?php esc_html_e('From:', 'starwishx'); ?>
@@ -177,7 +197,7 @@ class ResultsGrid implements RenderableInterface
                         </div>
                         <?php /* <a class="listing-card__excerpt--link" data-wp-bind--href="context.item.url"> */ ?>
                         <p class="listing-card__excerpt card-text" data-wp-text="context.item.excerpt"></p>
-                    </a>
+                    </div>
                     <?php
                     /* <span>
                         < ?php esc_html_e('Donator', 'starwishx'); ?>:&nbsp;

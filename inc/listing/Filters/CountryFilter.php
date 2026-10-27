@@ -127,7 +127,11 @@ class CountryFilter extends AbstractFilter
         // Context on the wrapper, not the <template> - see
         // AbstractTaxonomyFilter::renderContent().
         ?>
-        <div class="filter-list" data-wp-context='{"filterField": "country"}'>
+        <div
+            class="filter-list"
+            role="group"
+            aria-labelledby="filter-title-<?php echo esc_attr($this->getId()); ?>"
+            data-wp-context='{"filterField": "country"}'>
             <template
                 data-wp-each--item="state.facets.<?php echo self::FACET_KEY; ?>"
                 data-wp-key="context.item.id">
@@ -139,7 +143,7 @@ class CountryFilter extends AbstractFilter
                         data-wp-bind--checked="state.isFilterChecked"
                         data-field="country">
                     <span class="label-text" data-wp-text="context.item.label"></span>
-                    <data class="count" data-wp-bind--value="context.item.count" data-wp-text="context.item.count" aria-hidden="true"></data>
+                    <data class="count" data-wp-bind--value="context.item.count" data-wp-text="context.item.count"></data>
                 </label>
             </template>
         </div>

@@ -344,4 +344,14 @@ export const gridGetters = {
 
     return chips;
   },
+
+  /**
+   * "Remove filter: {chip label}" for a chip's button (context.item is the
+   * chip), so each button says which filter it removes.
+   */
+  get chipRemoveLabel() {
+    const removeFilter = this.i18n?.removeFilter ?? "";
+    const label = getContext()?.item?.label;
+    return label ? `${removeFilter}: ${label}` : removeFilter;
+  },
 };

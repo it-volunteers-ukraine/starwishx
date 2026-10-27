@@ -41,7 +41,10 @@ abstract class AbstractFilter implements FilterInterface
             open>
 
             <summary class="listing-filter-group__summary">
-                <span class="listing-filter-group__title"><?php echo esc_html($label); ?>
+                <span class="listing-filter-group__title">
+                    <!-- Its own id: the group's inputs and checkbox list are
+                         named by this text (aria-labelledby), without the badge. -->
+                    <span id="filter-title-<?php echo esc_attr($id); ?>"><?php echo esc_html($label); ?></span>
                     <!-- The Count Badge -->
                     <span
                         class="filter-count-badge"

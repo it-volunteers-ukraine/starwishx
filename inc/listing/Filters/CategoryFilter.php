@@ -58,7 +58,11 @@ class CategoryFilter extends AbstractTaxonomyFilter
         // Context on the wrapper, not the <template> - see
         // AbstractTaxonomyFilter::renderContent(). The children inherit it.
 ?>
-        <div class="filter-list filter-list--hierarchical" data-wp-context='{"filterField": "category"}'>
+        <div
+            class="filter-list filter-list--hierarchical"
+            role="group"
+            aria-labelledby="filter-title-<?php echo esc_attr($this->getId()); ?>"
+            data-wp-context='{"filterField": "category"}'>
             <template
                 data-wp-each--item="state.facets.<?php echo esc_attr($taxKey); ?>"
                 data-wp-key="context.item.id">
@@ -67,18 +71,21 @@ class CategoryFilter extends AbstractTaxonomyFilter
                         <?php
                         // PHP comments inside this template: the server renders it
                         // once per category, HTML comments would ship each time.
-                        // state.isPartiallySelected: the visual "Dash";
+                        // Partial selection: the .is-indeterminate class draws the
+                        // "Dash" (also on the server render), callbacks.syncIndeterminate
+                        // sets the property screen readers announce as "mixed".
                         // toggleParent: Select All / None.
                         ?>
                         <input
                             type="checkbox"
                             data-wp-class--is-indeterminate="state.isPartiallySelected"
+                            data-wp-watch="callbacks.syncIndeterminate"
                             data-wp-on--change="actions.filters.toggleParent"
                             data-wp-bind--value="context.item.id"
                             data-wp-bind--checked="state.isFilterChecked"
                             data-field="category">
                         <span class="label-text" data-wp-text="context.item.label"></span>
-                        <data class="count" data-wp-text="state.parentCount"></data>
+                        <data class="count" data-wp-bind--value="state.parentCount" data-wp-text="state.parentCount"></data>
                     </label>
                     <?php // Children Container ?>
                     <div
@@ -96,7 +103,7 @@ class CategoryFilter extends AbstractTaxonomyFilter
                                     data-field="category">
                                 <span>
                                     <span class="label-text" data-wp-text="context.item.label"></span>
-                                    <data class="count" data-wp-text="context.item.count"></data>
+                                    <data class="count" data-wp-bind--value="context.item.count" data-wp-text="context.item.count"></data>
                                 </span>
                             </label>
                         </template>

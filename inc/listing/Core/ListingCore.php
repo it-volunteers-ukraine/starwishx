@@ -468,7 +468,11 @@ final class ListingCore
             'isUserLoggedIn' => is_user_logged_in(),
             'i18n'           => [
                 // Shown when a search fails without a message of its own.
-                'loadError' => __('Something went wrong. Please try again later.', 'starwishx'),
+                'loadError'    => __('Something went wrong. Please try again later.', 'starwishx'),
+                // "Found: N", announced after each search (state.announcement).
+                'found'        => __('Found', 'starwishx'),
+                // "Remove filter: {label}" on each chip's button (state.chipRemoveLabel).
+                'removeFilter' => __('Remove filter', 'starwishx'),
             ],
         ]);
     }
