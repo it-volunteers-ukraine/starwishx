@@ -8,12 +8,12 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2026-02-25 10:47+0000\n"
-"PO-Revision-Date: 2026-10-13 16:34+0000\n"
+"PO-Revision-Date: 2026-10-28 12:55+0000\n"
 "Language: uk\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
 "X-Generator: Loco https://localise.biz/\n"
 "X-Domain: starwishx\n"
-"X-Loco-Version: 2.8.9; wp-7.1.3; php-8.4.16\n"
+"X-Loco-Version: 2.8.9; wp-7.1.3; php-8.5.12\n"
 
 #: production/templates/page-policy.php:125
 #: templates/page-policy.php:125
@@ -34,12 +34,12 @@ msgid "[%s] Password Reset"
 msgstr "[%s] Скидання пароля"
 
 #: inc/launchpad/Services/OpportunitiesService.php:747
-#: production/inc/launchpad/Services/OpportunitiesService.php:742
+#: production/inc/launchpad/Services/OpportunitiesService.php:747
 msgid "Access denied."
 msgstr "Доступ заборонено."
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:376
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:353
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:376
 msgid "Add New"
 msgstr "Додати"
 
@@ -48,12 +48,12 @@ msgstr "Додати"
 msgid "Add review"
 msgstr "Додати відгук"
 
-#: inc/listing/Core/ResultsGrid.php:108
+#: inc/listing/Core/ResultsGrid.php:138
 #: production/inc/listing/Core/ResultsGrid.php:108
 #: production/template-parts/control-favorites.php:42
 #: production/template-parts/project-card-opportunity.php:33
 #: production/template-parts/project-card-opportunity.php:89
-#: template-parts/control-favorites.php:42
+#: template-parts/control-favorites.php:49
 #: template-parts/project-card-opportunity.php:33
 #: template-parts/project-card-opportunity.php:89
 msgid "Add to favorites"
@@ -70,12 +70,12 @@ msgid "Application form"
 msgstr "Форма заявки"
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:632
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:609
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:632
 msgid "Application Form URL"
 msgstr "URL форми заявки"
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:979
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:944
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:979
 msgid "Attach File"
 msgstr "Додати файл"
 
@@ -105,7 +105,7 @@ msgstr "Кабінет"
 #: inc/launchpad/Panels/ProfilePanel.php:520
 #: inc/launchpad/Panels/ProfilePanel.php:622
 #: inc/launchpad/Panels/ProfilePanel.php:689
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:1076
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:1111
 #: production/inc/launchpad/Panels/ProfilePanel.php:440
 #: production/inc/launchpad/Panels/ProfilePanel.php:520
 #: production/inc/launchpad/Panels/ProfilePanel.php:622
@@ -121,7 +121,7 @@ msgstr "Кабінет"
 msgid "Cancel"
 msgstr "Скасувати"
 
-#: archive-opportunity.php:74
+#: archive-opportunity.php:65
 #: inc/blocks/Core/BlocksCore.php:266
 #: inc/listing/Enums/Taxonomy.php:37
 #: inc/listing/Filters/CategoryFilter.php:31
@@ -147,24 +147,21 @@ msgstr "Індекс категорій можливостей"
 msgid "Change Password"
 msgstr "Змінити пароль"
 
-#: inc/listing/Filters/CityFilter.php:18
 #: production/inc/listing/Filters/CityFilter.php:18
 msgid "City"
 msgstr "Місто"
 
-#: inc/listing/Filters/LocationsFilter.php:111
 #: production/inc/listing/Filters/LocationsFilter.php:111
 #: production/template-parts/search-modal.php:38
 #: template-parts/search-modal.php:38
 msgid "Clear"
 msgstr "Очистити"
 
-#: inc/listing/Core/ResultsGrid.php:49
+#: inc/listing/Core/ResultsGrid.php:73
 #: production/inc/listing/Core/ResultsGrid.php:49
 msgid "Clear all filters"
 msgstr "Очистити всі фільтри"
 
-#: inc/listing/Filters/CityFilter.php:111
 #: production/inc/listing/Filters/CityFilter.php:111
 msgid "Clear selection"
 msgstr "Очистити вибір"
@@ -176,15 +173,15 @@ msgstr "Коментар не знайдено."
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:468
 #: inc/launchpad/Panels/StatsPanel.php:66
-#: inc/listing/Core/ResultsGrid.php:195
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:445
+#: inc/listing/Core/ResultsGrid.php:232
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:468
 #: production/inc/launchpad/Panels/StatsPanel.php:66
 #: production/inc/listing/Core/ResultsGrid.php:195
 msgid "Comments"
 msgstr "Коментарі"
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:577
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:554
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:577
 msgid "Company"
 msgstr "Компанія"
 
@@ -195,7 +192,7 @@ msgstr "Підтвердьте пароль"
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:643
 #: inc/listing/Filters/CountryFilter.php:33
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:620
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:643
 #: production/inc/listing/Filters/CountryFilter.php:33
 msgid "Country"
 msgstr "Країна"
@@ -211,7 +208,7 @@ msgid "Create account"
 msgstr "Створити обліковий запис"
 
 #: inc/launchpad/Api/OpportunitiesController.php:425
-#: production/inc/launchpad/Api/OpportunitiesController.php:426
+#: production/inc/launchpad/Api/OpportunitiesController.php:425
 msgid "Created successfully"
 msgstr "Успішно створено"
 
@@ -232,35 +229,35 @@ msgstr "Дати"
 #: inc/launchpad/Panels/OpportunitiesPanel.php:912
 #: inc/launchpad/Panels/ProfilePanel.php:398
 #: inc/tour/Scenarios/OpportunityFormScenario.php:109
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:877
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:912
 #: production/inc/launchpad/Panels/ProfilePanel.php:398
 #: production/inc/tour/Scenarios/OpportunityFormScenario.php:109
-#: inc/blocks/accordion-opportunities/build/editor.js:174
+#: inc/blocks/accordion-opportunities/build/editor.js:87
 #: inc/blocks/accordion-opportunities/editor/item.js:96
 #: production/inc/blocks/accordion-opportunities/build/editor.js:1
-#: inc/blocks/accordion-opportunities/build/editor.js:102
+#: inc/blocks/accordion-opportunities/build/editor.js:110
 msgid "Description"
 msgstr "Опис"
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:943
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:908
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:943
 msgid "Details"
 msgstr "Деталі"
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:961
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:926
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:961
 #: production/templates/single-opportunity.php:233
 #: templates/single-opportunity.php:233
 msgid "Document"
 msgstr "Документ"
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:322
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:299
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:322
 msgid "Drafts"
 msgstr "Чернетки"
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:510
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:487
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:510
 #: production/template-parts/comments-interactive.php:208
 #: production/template-parts/comments-interactive.php:301
 #: template-parts/comments-interactive.php:208
@@ -269,7 +266,7 @@ msgid "Edit"
 msgstr "Редагувати"
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:191
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:173
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:191
 msgid "Edit Opportunity"
 msgstr "Редагувати можливість"
 
@@ -297,7 +294,7 @@ msgid "Email"
 msgstr "Електронна пошта"
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:603
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:580
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:603
 msgid "End Date"
 msgstr "Дата закінчення"
 
@@ -316,7 +313,6 @@ msgstr "Введіть свої дані, щоб отримати посилан
 msgid "Enter your login or email to receive a reset link."
 msgstr "Введіть свій логін або електронну пошту, щоб отримати посилання для скидання пароля."
 
-#: inc/listing/Services/ListingService.php:394
 #: production/inc/listing/Services/ListingService.php:394
 msgid "Failed to fetch location options."
 msgstr "Не вдалося отримати варіанти місць."
@@ -328,8 +324,8 @@ msgstr "Не вдалося опублікувати коментар."
 
 #: inc/launchpad/Panels/FavoritesPanel.php:28
 #: inc/launchpad/Panels/StatsPanel.php:61
-#: inc/listing/Core/ResultsGrid.php:117
-#: inc/listing/Core/ResultsGrid.php:137
+#: inc/listing/Core/ResultsGrid.php:147
+#: inc/listing/Core/ResultsGrid.php:165
 #: inc/tour/Scenarios/LaunchpadIntroScenario.php:79
 #: production/inc/launchpad/Panels/FavoritesPanel.php:28
 #: production/inc/launchpad/Panels/StatsPanel.php:61
@@ -343,9 +339,9 @@ msgstr "Не вдалося опублікувати коментар."
 #: production/template-parts/project-card-opportunity.php:60
 #: production/template-parts/project-card-opportunity.php:98
 #: production/template-parts/project-card-opportunity.php:118
-#: template-parts/control-favorites.php:43
-#: template-parts/control-favorites.php:48
-#: template-parts/control-favorites.php:68
+#: template-parts/control-favorites.php:50
+#: template-parts/control-favorites.php:55
+#: template-parts/control-favorites.php:74
 #: template-parts/project-card-opportunity.php:42
 #: template-parts/project-card-opportunity.php:60
 #: template-parts/project-card-opportunity.php:98
@@ -355,19 +351,17 @@ msgstr "Обране"
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:177
 #: inc/launchpad/Services/MediaService.php:26
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:159
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:177
 #: production/inc/launchpad/Services/MediaService.php:26
 msgid "File is too large. Max 5MB."
 msgstr "Файл занадто великий. Максимальний розмір — 5 МБ."
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:277
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:254
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:277
 msgid "Fill Profile"
 msgstr "Заповніть профіль"
 
 #. translators: %s: filter identifier supplied by client
-#: inc/listing/Api/MainController.php:127
-#: inc/listing/Services/ListingService.php:368
 #: production/inc/listing/Api/MainController.php:127
 #: production/inc/listing/Services/ListingService.php:368
 #, php-format
@@ -375,22 +369,20 @@ msgid "Filter \"%s\" is not supported."
 msgstr "Фільтр \"%s\" не підтримується."
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:318
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:295
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:318
 msgid "Filter by status:"
 msgstr "Фільтрувати за статусом:"
 
-#: inc/listing/Filters/CityFilter.php:78
 #: production/inc/listing/Filters/CityFilter.php:78
 msgid "Find city..."
 msgstr "Знайти місто..."
 
-#: inc/listing/Filters/LocationsFilter.php:101
 #: production/inc/listing/Filters/LocationsFilter.php:101
 msgid "Find location..."
 msgstr "Знайти місце..."
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:435
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:412
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:435
 msgid "Finished"
 msgstr "Завершено"
 
@@ -405,11 +397,11 @@ msgid "Forgot password?"
 msgstr "Забули пароль?"
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:1030
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:995
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:1030
 msgid "Format (PDF, DOCX). Max size 5Mb."
 msgstr "Формат (PDF, DOCX). Макс. розмір 5 МБ."
 
-#: inc/listing/Core/ResultsGrid.php:155
+#: inc/listing/Core/ResultsGrid.php:190
 #: production/inc/listing/Core/ResultsGrid.php:155
 msgid "From:"
 msgstr "З:"
@@ -525,7 +517,7 @@ msgstr "Якщо це помилка, ігноруйте цей електрон
 msgid "If you did not request this, please ignore this email."
 msgstr "Якщо ви цього не запитували, ігноруйте цей електронний лист."
 
-#: inc/listing/Core/ResultsGrid.php:111
+#: inc/listing/Core/ResultsGrid.php:141
 #: production/inc/listing/Core/ResultsGrid.php:111
 #: production/template-parts/project-card-opportunity.php:36
 #: production/template-parts/project-card-opportunity.php:92
@@ -549,13 +541,13 @@ msgstr "Невірне ім'я користувача або пароль."
 msgid "it-volunteers"
 msgstr "it-volunteers"
 
-#: archive-opportunity.php:160
+#: archive-opportunity.php:172
 #: production/archive-opportunity.php:160
 msgid "Keyword search"
 msgstr "Пошук за ключовими словами"
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:740
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:717
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:740
 msgid "Kyivska, Lvivska..."
 msgstr "Київська, Львівська..."
 
@@ -574,7 +566,7 @@ msgid "Launchpad Page"
 msgstr "Сторінка Launchpad"
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:622
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:599
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:622
 #: production/templates/single-opportunity.php:205
 #: production/templates/single-opportunity.php:214
 #: templates/single-opportunity.php:205
@@ -585,10 +577,10 @@ msgstr "Посилання"
 #: inc/chat/Panels/ChatPanel.php:136
 #: inc/launchpad/Panels/FavoritesPanel.php:134
 #: inc/launchpad/Panels/OpportunitiesPanel.php:522
-#: inc/listing/Core/ResultsGrid.php:69
+#: inc/listing/Core/ResultsGrid.php:94
 #: production/inc/chat/Panels/ChatPanel.php:136
 #: production/inc/launchpad/Panels/FavoritesPanel.php:134
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:499
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:522
 #: production/inc/listing/Core/ResultsGrid.php:69
 msgid "Load More"
 msgstr "Завантажити ще"
@@ -598,15 +590,14 @@ msgstr "Завантажити ще"
 #: inc/launchpad/Panels/OpportunitiesPanel.php:386
 #: production/inc/chat/Panels/ChatPanel.php:80
 #: production/inc/launchpad/Panels/FavoritesPanel.php:66
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:363
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:386
 #: production/template-parts/comments-interactive.php:394
 #: template-parts/comments-interactive.php:394
 msgid "Loading..."
 msgstr "Завантаження..."
 
-#: inc/listing/Api/MainController.php:79
-#: inc/listing/Filters/LocationsFilter.php:28
-#: inc/listing/Filters/LocationsFilterSimple.php:34
+#: inc/listing/Api/MainController.php:62
+#: inc/listing/Filters/LocationsFilterSimple.php:35
 #: production/inc/listing/Api/MainController.php:79
 #: production/inc/listing/Filters/LocationsFilter.php:28
 #: production/inc/listing/Filters/LocationsFilterSimple.php:34
@@ -632,7 +623,7 @@ msgstr "Вхід..."
 #: production/template-parts/control-header-auth.php:38
 #: production/template-parts/element-popup.php:59
 #: template-parts/control-header-auth.php:38
-#: template-parts/element-popup.php:59
+#: template-parts/element-popup.php:69
 msgid "Login"
 msgstr "Увійти"
 
@@ -658,7 +649,7 @@ msgid "My Favorites"
 msgstr "Моє обране"
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:190
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:172
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:190
 msgid "New Opportunity"
 msgstr "Нова можливість"
 
@@ -699,7 +690,7 @@ msgid "No favorites yet."
 msgstr "Поки що немає обраного."
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:391
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:368
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:391
 msgid "No opportunities yet."
 msgstr "Поки що немає можливостей."
 
@@ -708,13 +699,13 @@ msgstr "Поки що немає можливостей."
 msgid "No PDF uploaded"
 msgstr "PDF не завантажено"
 
-#: inc/listing/Core/ResultsGrid.php:47
+#: inc/listing/Core/ResultsGrid.php:71
 #: production/inc/listing/Core/ResultsGrid.php:47
 msgid "Nothing found matching your criteria"
 msgstr "Нічого не знайдено за вашими критеріями"
 
 #: inc/launchpad/Services/OpportunitiesService.php:753
-#: production/inc/launchpad/Services/OpportunitiesService.php:748
+#: production/inc/launchpad/Services/OpportunitiesService.php:753
 msgid "Only drafts can be submitted for review."
 msgstr "Лише чернетки можуть бути відправлені на перевірку."
 
@@ -724,14 +715,14 @@ msgstr "Тільки заголовок"
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:595
 #: inc/launchpad/Panels/OpportunitiesPanel.php:608
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:572
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:585
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:595
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:608
 msgid "Open calendar"
 msgstr "Відкрити календар"
 
-#: archive-opportunity.php:72
+#: archive-opportunity.php:63
 #: inc/launchpad/Panels/OpportunitiesPanel.php:29
-#: inc/listing/Core/ListingCore.php:160
+#: inc/listing/Core/ListingCore.php:168
 #: inc/listing/Core/ListingSeoProvider.php:81
 #: inc/listing/Core/ListingSeoProvider.php:101
 #: inc/listing/Core/ListingSeoProvider.php:233
@@ -740,7 +731,7 @@ msgstr "Відкрити календар"
 #: inc/tour/Scenarios/LaunchpadIntroScenario.php:70
 #: production/archive-opportunity.php:72
 #: production/inc/launchpad/Panels/OpportunitiesPanel.php:29
-#: production/inc/listing/Core/ListingCore.php:160
+#: production/inc/listing/Core/ListingCore.php:161
 #: production/inc/listing/Core/ListingSeoProvider.php:81
 #: production/inc/listing/Core/ListingSeoProvider.php:101
 #: production/inc/listing/Core/ListingSeoProvider.php:233
@@ -753,7 +744,7 @@ msgid "Opportunities"
 msgstr "Можливості"
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:299
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:276
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:299
 msgid "Opportunities List"
 msgstr "Список можливостей"
 
@@ -763,12 +754,12 @@ msgid "Opportunity"
 msgstr "Можливість"
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:835
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:812
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:835
 msgid "Opportunity Category"
 msgstr "Категорія можливості"
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:573
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:550
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:573
 msgid "Opportunity Info"
 msgstr "Інформація про можливість"
 
@@ -778,12 +769,12 @@ msgid "Opportunity not found or access denied."
 msgstr "Можливість не знайдена або доступ заборонено."
 
 #: inc/launchpad/Api/OpportunitiesController.php:348
-#: production/inc/launchpad/Api/OpportunitiesController.php:349
+#: production/inc/launchpad/Api/OpportunitiesController.php:348
 msgid "Opportunity not found."
 msgstr "Можливість не знайдена."
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:550
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:527
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:550
 msgid "Opportunity Title"
 msgstr "Назва можливості"
 
@@ -860,12 +851,12 @@ msgid "PDF"
 msgstr "PDF"
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:323
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:300
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:323
 msgid "Pending"
 msgstr "В очікуванні"
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:1011
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:976
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:1011
 msgid "Pending Save"
 msgstr "Очікує збереження"
 
@@ -885,7 +876,7 @@ msgid "Phone"
 msgstr "Телефон"
 
 #: inc/launchpad/Api/OpportunitiesController.php:436
-#: production/inc/launchpad/Api/OpportunitiesController.php:437
+#: production/inc/launchpad/Api/OpportunitiesController.php:436
 msgid "Please complete your profile (name and phone) before posting opportunities."
 msgstr "Будь ласка, заповніть свій профіль (ім'я та телефон) перед публікацією можливостей."
 
@@ -918,7 +909,7 @@ msgid "Policy Page"
 msgstr "Сторінка політики"
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:267
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:244
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:267
 msgid "Post an Opportunity"
 msgstr "Опублікувати можливість"
 
@@ -944,8 +935,8 @@ msgstr "Профіль оновлено."
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:324
 #: inc/launchpad/Services/OpportunitiesService.php:132
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:301
-#: production/inc/launchpad/Services/OpportunitiesService.php:127
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:324
+#: production/inc/launchpad/Services/OpportunitiesService.php:132
 msgid "Published"
 msgstr "Опубліковано"
 
@@ -960,8 +951,9 @@ msgstr "Публікується..."
 #: inc/listing/Enums/Taxonomy.php:38
 #: inc/listing/Filters/BeneficiariesFilter.php:23
 #: inc/tour/Scenarios/OpportunityFormScenario.php:100
-#: production/inc/launchpad/Api/OpportunitiesController.php:132
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:856
+#: production/inc/launchpad/Api/OpportunitiesController.php:131
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:173
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:885
 #: production/inc/listing/Enums/Taxonomy.php:38
 #: production/inc/listing/Filters/BeneficiariesFilter.php:23
 #: production/inc/tour/Scenarios/OpportunityFormScenario.php:100
@@ -975,7 +967,7 @@ msgstr "Набувачі"
 msgid "Recent Activity"
 msgstr "Остання активність"
 
-#: archive-opportunity.php:113
+#: archive-opportunity.php:134
 #: production/archive-opportunity.php:113
 msgid "Refine Search"
 msgstr "Уточнити пошук"
@@ -985,7 +977,7 @@ msgstr "Уточнити пошук"
 #: production/header.php:127
 #: production/inc/gateway/Forms/RegisterForm.php:77
 #: production/template-parts/element-popup.php:62
-#: template-parts/element-popup.php:62
+#: template-parts/element-popup.php:72
 msgid "Register"
 msgstr "Зареєструватись"
 
@@ -1019,7 +1011,7 @@ msgid "Reply"
 msgstr "Відповісти"
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:930
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:895
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:930
 #: production/templates/single-opportunity.php:194
 #: templates/single-opportunity.php:194
 msgid "Requirements"
@@ -1040,7 +1032,7 @@ msgid "Save"
 msgstr "Зберегти"
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:1048
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:1013
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:1048
 msgid "Save Draft"
 msgstr "Зберегти чернетку"
 
@@ -1056,7 +1048,7 @@ msgstr "Зберегти пароль"
 msgid "Saving..."
 msgstr "Збереження..."
 
-#: archive-opportunity.php:173
+#: archive-opportunity.php:187
 #: production/archive-opportunity.php:173
 msgid "Search by keyword..."
 msgstr "Шукати за ключовим словом..."
@@ -1072,7 +1064,7 @@ msgid "Security Settings"
 msgstr "Налаштування безпеки"
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:654
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:631
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:654
 msgid "Select Country"
 msgstr "Вибрати країну"
 
@@ -1115,8 +1107,8 @@ msgstr[2] "Показати ще %d"
 msgid "Show 1 more"
 msgstr "Показати ще 1"
 
-#: inc/news/Core/NewsCore.php:113
-#: production/inc/news/Core/NewsCore.php:113
+#: inc/news/Core/NewsCore.php:116
+#: production/inc/news/Core/NewsCore.php:116
 #: production/template-parts/comments-interactive.php:393
 #: production/template-parts/pagination.php:131
 #: template-parts/comments-interactive.php:393
@@ -1145,7 +1137,7 @@ msgid "Source"
 msgstr "Джерело"
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:590
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:567
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:590
 msgid "Start Date"
 msgstr "Дата початку"
 
@@ -1165,16 +1157,16 @@ msgid "Stats"
 msgstr "Статистика"
 
 #: inc/launchpad/Api/OpportunitiesController.php:305
-#: production/inc/launchpad/Api/OpportunitiesController.php:306
+#: production/inc/launchpad/Api/OpportunitiesController.php:305
 msgid "Status updated."
 msgstr "Статус оновлено."
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:502
 #: inc/launchpad/Panels/OpportunitiesPanel.php:1060
 #: inc/launchpad/Panels/OpportunitiesPanel.php:1096
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:479
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:1025
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:1061
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:502
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:1060
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:1096
 msgid "Submit for Review"
 msgstr "Відправити на перевірку"
 
@@ -1221,13 +1213,11 @@ msgstr "Щоб завершити реєстрацію та встановити
 msgid "To reset your password, visit the following address:"
 msgstr "Щоб скинути пароль, перейдіть за наступною адресою:"
 
-#: inc/listing/Core/ResultsGrid.php:159
+#: inc/listing/Core/ResultsGrid.php:194
 #: production/inc/listing/Core/ResultsGrid.php:159
 msgid "To:"
 msgstr "По:"
 
-#: inc/listing/Core/ResultsGrid.php:124
-#: inc/listing/Core/ResultsGrid.php:144
 #: production/inc/listing/Core/ResultsGrid.php:124
 #: production/inc/listing/Core/ResultsGrid.php:144
 #: production/template-parts/control-favorites.php:56
@@ -1236,8 +1226,7 @@ msgstr "По:"
 #: production/template-parts/project-card-opportunity.php:66
 #: production/template-parts/project-card-opportunity.php:105
 #: production/template-parts/project-card-opportunity.php:125
-#: template-parts/control-favorites.php:56
-#: template-parts/control-favorites.php:76
+#: template-parts/control-favorites.php:37
 #: template-parts/project-card-opportunity.php:48
 #: template-parts/project-card-opportunity.php:66
 #: template-parts/project-card-opportunity.php:105
@@ -1261,7 +1250,7 @@ msgid "Update Security Credentials"
 msgstr "Оновити облікові дані безпеки"
 
 #: inc/launchpad/Api/OpportunitiesController.php:425
-#: production/inc/launchpad/Api/OpportunitiesController.php:426
+#: production/inc/launchpad/Api/OpportunitiesController.php:425
 msgid "Updated successfully"
 msgstr "Успішно оновлено"
 
@@ -1334,7 +1323,7 @@ msgid "You are already logged in."
 msgstr "Ви вже увійшли в систему."
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:300
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:277
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:300
 msgid "You can add new opportunities, edit existing ones, and submit them for review. All opportunity data is reviewed and moderated by the site administration team before being approved for publication or rejected. Please contact the site staff if you have any questions."
 msgstr "Ви можете додавати нові можливості, редагувати існуючі та відправляти їх на перевірку. Усі дані про можливості переглядаються та модерується командою адміністраторів сайту перед затвердженням для публікації або відхиленням. Будь ласка, зверніться до адміністрації сайту, якщо у вас виникли питання."
 
@@ -1384,7 +1373,7 @@ msgid "_themeuri"
 msgstr ""
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:915
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:880
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:915
 msgid "Describe the opportunity"
 msgstr "Опишіть можливість."
 
@@ -1395,60 +1384,60 @@ msgstr "Поділитися"
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:542
 #: inc/launchpad/Panels/OpportunitiesPanel.php:1067
-#: inc/tour/Core/TourCore.php:161
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:519
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:1032
-#: production/inc/tour/Core/TourCore.php:161
+#: inc/tour/Core/TourCore.php:163
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:542
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:1067
+#: production/inc/tour/Core/TourCore.php:163
 msgid "Back"
 msgstr "Назад"
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:737
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:714
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:737
 msgid "if opportynity for Oblast"
 msgstr "якщо можливість для Області"
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:708
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:685
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:708
 msgid "Not necessary. Only if you want to point that your opportunity is available for particular locations: City, District, Hromada, etc."
 msgstr "Необов’язково. Тільки якщо ви хочете зазначити, що ваша можливість доступна для певних локацій: області, міста, району, громади тощо."
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:770
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:747
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:770
 msgid "if for Raion, District, Hromada"
 msgstr "якщо для Району, Громади"
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:773
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:750
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:773
 msgid "Buchanskyi r-n, Dolynska tg.."
 msgstr "Бучанський р-н, Долинська тг"
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:802
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:779
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:802
 msgid "if for City, Settlement, City district"
 msgstr "якщо для Міста, Селища, району міста"
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:805
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:782
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:805
 msgid "Bucha c., Vesele v., Obolon..."
 msgstr "Буча м, Веселе с, Оболонь..."
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:831
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:808
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:831
 msgid "If you want you coud to select the required administrative level. If the opportunity is provided throughout the Oblast - select from (1) Oblast, if the opportunity is for a district or community - select from (2) District, if the opportunity concerns a city or village select the required City or Village from (3)."
 msgstr "За бажанням, ви можете вибрати потрібний адміністративний рівень. Якщо можливість надається по всій Області – виберіть (1) Область, якщо можливість стосується району або громади – виберіть (2) Район, якщо можливість стосується міста або села, виберіть потрібне місто або село з (3)."
 
-#: archive-opportunity.php:192
+#: archive-opportunity.php:206
 #: header.php:107
 #: inc/launchpad/Panels/OpportunitiesPanel.php:1088
 #: production/archive-opportunity.php:192
 #: production/header.php:107
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:1053
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:1088
 #: production/template-parts/element-popup.php:42
-#: template-parts/element-popup.php:42
+#: template-parts/element-popup.php:52
 msgid "Close"
 msgstr "Закрити"
 
-#: archive-opportunity.php:206
+#: archive-opportunity.php:223
 #: header.php:115
 #: production/archive-opportunity.php:206
 #: production/header.php:115
@@ -1459,7 +1448,7 @@ msgstr "Закрити"
 msgid "Hi!"
 msgstr "Вітаємо!"
 
-#: archive-opportunity.php:207
+#: archive-opportunity.php:224
 #: production/archive-opportunity.php:207
 #: production/templates/single-opportunity.php:266
 #: templates/single-opportunity.php:266
@@ -1514,71 +1503,71 @@ msgstr "Ця функція доступна лише для зареєстро�
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:145
 #: inc/launchpad/Services/OpportunitiesService.php:795
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:140
-#: production/inc/launchpad/Services/OpportunitiesService.php:790
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:145
+#: production/inc/launchpad/Services/OpportunitiesService.php:795
 msgid "Title is required."
 msgstr "Назва обов'язкова."
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:150
 #: inc/launchpad/Services/OpportunitiesService.php:820
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:145
-#: production/inc/launchpad/Services/OpportunitiesService.php:815
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:150
+#: production/inc/launchpad/Services/OpportunitiesService.php:820
 msgid "Company is required."
 msgstr "Організація обов'язкова."
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:155
 #: inc/launchpad/Services/OpportunitiesService.php:828
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:150
-#: production/inc/launchpad/Services/OpportunitiesService.php:823
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:155
+#: production/inc/launchpad/Services/OpportunitiesService.php:828
 msgid "Source link is required."
 msgstr "Посилання на джерело обов'язкове."
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:156
 #: inc/launchpad/Services/OpportunitiesService.php:809
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:151
-#: production/inc/launchpad/Services/OpportunitiesService.php:804
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:156
+#: production/inc/launchpad/Services/OpportunitiesService.php:809
 msgid "Description is required."
 msgstr "Опис обов'язковий."
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:161
 #: inc/launchpad/Services/OpportunitiesService.php:834
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:156
-#: production/inc/launchpad/Services/OpportunitiesService.php:829
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:161
+#: production/inc/launchpad/Services/OpportunitiesService.php:834
 msgid "At least one category is required."
 msgstr "Треба обрати хоча б одну категорію."
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:162
 #: inc/launchpad/Services/OpportunitiesService.php:840
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:157
-#: production/inc/launchpad/Services/OpportunitiesService.php:835
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:162
+#: production/inc/launchpad/Services/OpportunitiesService.php:840
 msgid "At least one beneficiary type is required."
 msgstr "Треба обрати хоча б одного набувача"
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:1099
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:1064
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:1099
 msgid "Submit your changes and request a review from the moderation team?"
 msgstr "Відправити вашу публікацію можливості на перевірку до команди модераторів?"
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:1107
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:1072
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:1107
 msgid "Submit"
 msgstr "Надіслати"
 
 #: inc/launchpad/Services/OpportunitiesService.php:854
-#: production/inc/launchpad/Services/OpportunitiesService.php:849
+#: production/inc/launchpad/Services/OpportunitiesService.php:854
 msgid "Please fill in all required fields before submitting for review."
 msgstr "Будь ласка, заповніть усі обов'язкові поля, перш ніж надсилати на розгляд."
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:147
 #: inc/launchpad/Services/OpportunitiesService.php:798
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:142
-#: production/inc/launchpad/Services/OpportunitiesService.php:793
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:147
+#: production/inc/launchpad/Services/OpportunitiesService.php:798
 #, php-format
 msgid "Title must be at least %d characters."
 msgstr "Назва має містити щонайменше %d символів."
 
 #: inc/launchpad/Services/OpportunitiesService.php:803
-#: production/inc/launchpad/Services/OpportunitiesService.php:798
+#: production/inc/launchpad/Services/OpportunitiesService.php:803
 #, php-format
 msgid "Title must not exceed %d characters."
 msgstr "Назва не повинна перевищувати %d символів."
@@ -1630,17 +1619,17 @@ msgid "Administrator"
 msgstr "Адміністратор"
 
 #: inc/launchpad/Services/OpportunitiesService.php:130
-#: production/inc/launchpad/Services/OpportunitiesService.php:125
+#: production/inc/launchpad/Services/OpportunitiesService.php:130
 msgid "Draft"
 msgstr "Чернетка"
 
 #: inc/launchpad/Services/OpportunitiesService.php:131
-#: production/inc/launchpad/Services/OpportunitiesService.php:126
+#: production/inc/launchpad/Services/OpportunitiesService.php:131
 msgid "Pending Review"
 msgstr "Очікує розгляду"
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:553
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:530
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:553
 #, php-format
 msgid "Add title min %1$d, max %2$d characters"
 msgstr "Заголовок: від %1$d до %2$d символів"
@@ -1658,7 +1647,7 @@ msgstr "Допис"
 #: inc/chat/Api/ActivityController.php:56
 #: inc/favorites/Api/FavoritesController.php:58
 #: inc/favorites/Services/FavoritesService.php:20
-#: inc/listing/Api/MainController.php:70
+#: inc/listing/Api/MainController.php:53
 #: production/inc/chat/Api/ActivityController.php:56
 #: production/inc/favorites/Api/FavoritesController.php:58
 #: production/inc/favorites/Services/FavoritesService.php:20
@@ -1705,22 +1694,24 @@ msgstr "Будь ласка, введіть дійсну адресу елект
 msgid "Please enter your username or email"
 msgstr "Будь ласка, введіть електронну пошту або логін (ім'я для входу латиницею)"
 
-#: inc/comments/Core/CommentsCore.php:97
-#: production/inc/comments/Core/CommentsCore.php:97
+#: inc/comments/Core/CommentsCore.php:100
+#: production/inc/comments/Core/CommentsCore.php:100
 msgid "Review posted successfully!"
 msgstr "Відгук успішно опубліковано!"
 
-#: inc/comments/Core/CommentsCore.php:98
-#: production/inc/comments/Core/CommentsCore.php:98
+#: inc/comments/Core/CommentsCore.php:101
+#: production/inc/comments/Core/CommentsCore.php:101
 msgid "Update saved."
 msgstr "Оновлення збережено."
 
-#: inc/comments/Core/CommentsCore.php:99
-#: production/inc/comments/Core/CommentsCore.php:99
+#: inc/comments/Core/CommentsCore.php:102
+#: production/inc/comments/Core/CommentsCore.php:102
 msgid "An error occurred while posting."
 msgstr "Під час публікації сталася помилка."
 
-#: archive-opportunity.php:130
+#: archive-opportunity.php:142
+#: inc/listing/Core/ListingCore.php:481
+#: inc/listing/Core/ResultsGrid.php:27
 #: production/archive-opportunity.php:130
 #: production/template-parts/sortby-and-result-posts.php:52
 #: template-parts/sortby-and-result-posts.php:52
@@ -1761,9 +1752,9 @@ msgid "Previous"
 msgstr "Назад"
 
 #: archive-project.php:102
-#: inc/tour/Core/TourCore.php:160
+#: inc/tour/Core/TourCore.php:162
 #: production/archive-project.php:102
-#: production/inc/tour/Core/TourCore.php:160
+#: production/inc/tour/Core/TourCore.php:162
 msgid "Next"
 msgstr "Вперед"
 
@@ -1772,8 +1763,8 @@ msgstr "Вперед"
 msgid "No projects found."
 msgstr "Проєктів не знайдено."
 
-#: archive-opportunity.php:135
-#: inc/listing/Core/ResultsGrid.php:41
+#: archive-opportunity.php:147
+#: inc/listing/Core/ResultsGrid.php:65
 #: production/archive-opportunity.php:135
 #: production/inc/listing/Core/ResultsGrid.php:41
 msgid "Clear all"
@@ -1784,17 +1775,18 @@ msgstr "Очистити всі"
 msgid "Block with title, video & text"
 msgstr "Блок із заголовком, відео та текстом"
 
-#: archive-opportunity.php:95
+#: archive-opportunity.php:92
 #: production/archive-opportunity.php:95
 msgid "Filters"
 msgstr "Фільтри"
 
-#: archive-opportunity.php:191
+#: archive-opportunity.php:129
+#: archive-opportunity.php:205
 #: production/archive-opportunity.php:191
 msgid "Close filters"
 msgstr "Закрити фільтри"
 
-#: inc/listing/Filters/LocationsFilterSimple.php:132
+#: inc/listing/Filters/LocationsFilterSimple.php:135
 #: production/inc/listing/Filters/LocationsFilterSimple.php:132
 msgid "City, Raion, Oblast..."
 msgstr "Місто, район, область..."
@@ -1809,14 +1801,14 @@ msgstr "Зареєструйтесь, або увійдіть в акаунт д
 msgid "Enter a search term"
 msgstr "Напишіть слово для пошуку"
 
-#: functions.php:213
-#: production/functions.php:213
+#: functions.php:217
+#: production/functions.php:217
 msgid "Language"
 msgstr "Мова"
 
 #. translators: %avg% = average rating, %count% = number of reviews
-#: inc/comments/Core/CommentsCore.php:101
-#: production/inc/comments/Core/CommentsCore.php:101
+#: inc/comments/Core/CommentsCore.php:104
+#: production/inc/comments/Core/CommentsCore.php:104
 #, php-format
 msgid "Average rating: %avg% out of 5 based on %count% reviews"
 msgstr "Середній рейтинг: %avg% з 5 на основі %count% відгуків"
@@ -1828,13 +1820,14 @@ msgstr "Середній рейтинг: %avg% з 5 на основі %count% в
 msgid "Rating: %d out of 5 stars"
 msgstr "Рейтинг: %d з 5 зірок"
 
-#: inc/listing/Core/ResultsGrid.php:33
+#: inc/listing/Core/ListingCore.php:483
+#: inc/listing/Core/ResultsGrid.php:56
 #: production/inc/listing/Core/ResultsGrid.php:33
 msgid "Remove filter"
 msgstr "Видалити фільтр"
 
-#: inc/launchpad/Core/LaunchpadCore.php:267
-#: production/inc/launchpad/Core/LaunchpadCore.php:267
+#: inc/launchpad/Core/LaunchpadCore.php:266
+#: production/inc/launchpad/Core/LaunchpadCore.php:266
 msgid "Please enter a valid phone number."
 msgstr "Будь ласка, введіть дійсний номер телефону."
 
@@ -1920,37 +1913,38 @@ msgstr "Повідомлення"
 msgid "Server error. Please try again later."
 msgstr "Помилка сервера. Будь ласка, спробуйте пізніше."
 
-#: inc/contact/Core/ContactCore.php:187
-#: production/inc/contact/Core/ContactCore.php:187
+#: inc/contact/Core/ContactCore.php:191
+#: production/inc/contact/Core/ContactCore.php:191
 msgid "Please fill in this field"
 msgstr "Будь ласка, заповніть це поле"
 
-#: inc/contact/Core/ContactCore.php:188
-#: production/inc/contact/Core/ContactCore.php:188
+#: inc/contact/Core/ContactCore.php:192
+#: production/inc/contact/Core/ContactCore.php:192
 msgid "Invalid email address"
 msgstr "Недійсна адреса електронної пошти"
 
-#: inc/contact/Core/ContactCore.php:189
-#: production/inc/contact/Core/ContactCore.php:189
+#: inc/contact/Core/ContactCore.php:193
+#: production/inc/contact/Core/ContactCore.php:193
 msgid "Invalid phone number"
 msgstr "Недійсний номер телефону"
 
-#: inc/contact/Core/ContactCore.php:190
-#: production/inc/contact/Core/ContactCore.php:190
+#: inc/contact/Core/ContactCore.php:194
+#: production/inc/contact/Core/ContactCore.php:194
 #: production/template-parts/contact-section.php:321
 #: template-parts/contact-section.php:321
 msgid "Thank you!"
 msgstr "Вітаємо!"
 
-#: inc/contact/Core/ContactCore.php:191
-#: production/inc/contact/Core/ContactCore.php:191
+#: inc/contact/Core/ContactCore.php:195
+#: production/inc/contact/Core/ContactCore.php:195
 #: production/template-parts/contact-section.php:325
 #: template-parts/contact-section.php:325
 msgid "Your message has been sent successfully."
 msgstr "Ваше повідомлення успішно надіслано."
 
-#: inc/contact/Core/ContactCore.php:192
-#: production/inc/contact/Core/ContactCore.php:192
+#: inc/contact/Core/ContactCore.php:196
+#: inc/listing/Core/ListingCore.php:479
+#: production/inc/contact/Core/ContactCore.php:196
 msgid "Something went wrong. Please try again later."
 msgstr "Щось пішло не так. Спробуйте ще раз пізніше."
 
@@ -2085,7 +2079,7 @@ msgid "Video cover"
 msgstr "Обкладинка відео"
 
 #. translators: %d: minutes until rate limit resets
-#: inc/shared/Policy/RateLimitPolicy.php:59
+#: inc/shared/Policy/RateLimitPolicy.php:66
 #: production/inc/shared/Policy/RateLimitPolicy.php:59
 #, php-format
 msgid "Too many attempts. Please try again in %d minutes."
@@ -2261,50 +2255,50 @@ msgstr "Кожні п'ять хвилин"
 msgid "Notification not found."
 msgstr "Сповіщення не знайдено."
 
-#: inc/chat/Core/ChatCore.php:94
-#: production/inc/chat/Core/ChatCore.php:94
+#: inc/chat/Core/ChatCore.php:96
+#: production/inc/chat/Core/ChatCore.php:96
 msgid "Failed to load activity."
 msgstr "Не вдалося завантажити активність."
 
-#: inc/chat/Core/ChatCore.php:95
-#: production/inc/chat/Core/ChatCore.php:95
+#: inc/chat/Core/ChatCore.php:97
+#: production/inc/chat/Core/ChatCore.php:97
 msgid "Failed to mark as read."
 msgstr "Не вдалося позначити як прочитане."
 
-#: inc/chat/Core/ChatCore.php:96
-#: production/inc/chat/Core/ChatCore.php:96
+#: inc/chat/Core/ChatCore.php:98
+#: production/inc/chat/Core/ChatCore.php:98
 msgid "left a review on"
 msgstr "залишив відгук про"
 
-#: inc/chat/Core/ChatCore.php:97
-#: production/inc/chat/Core/ChatCore.php:97
+#: inc/chat/Core/ChatCore.php:99
+#: production/inc/chat/Core/ChatCore.php:99
 msgid "replied to your review on"
 msgstr "replied to your review on"
 
-#: inc/chat/Core/ChatCore.php:101
-#: production/inc/chat/Core/ChatCore.php:101
+#: inc/chat/Core/ChatCore.php:103
+#: production/inc/chat/Core/ChatCore.php:103
 msgid "No notifications yet."
 msgstr "Поки що немає сповіщень."
 
-#: inc/chat/Core/ChatCore.php:103
-#: production/inc/chat/Core/ChatCore.php:103
+#: inc/chat/Core/ChatCore.php:105
+#: production/inc/chat/Core/ChatCore.php:105
 msgid "just now"
 msgstr "щойно"
 
-#: inc/chat/Core/ChatCore.php:104
-#: production/inc/chat/Core/ChatCore.php:104
+#: inc/chat/Core/ChatCore.php:106
+#: production/inc/chat/Core/ChatCore.php:106
 #, php-format
 msgid "%d min ago"
 msgstr "%d хв тому"
 
-#: inc/chat/Core/ChatCore.php:105
-#: production/inc/chat/Core/ChatCore.php:105
+#: inc/chat/Core/ChatCore.php:107
+#: production/inc/chat/Core/ChatCore.php:107
 #, php-format
 msgid "%d hr ago"
 msgstr "%d год тому"
 
-#: inc/chat/Core/ChatCore.php:106
-#: production/inc/chat/Core/ChatCore.php:106
+#: inc/chat/Core/ChatCore.php:108
+#: production/inc/chat/Core/ChatCore.php:108
 #, php-format
 msgid "%d days ago"
 msgstr "%d днів тому"
@@ -2339,23 +2333,23 @@ msgstr "Отримувати сповіщення електронною пош�
 msgid "Get notified by email when someone comments on your content."
 msgstr "Отримуйте сповіщення електронною поштою, наприклад якщо хтось коментує ваш контент."
 
-#: inc/tour/Core/TourCore.php:162
-#: production/inc/tour/Core/TourCore.php:162
+#: inc/tour/Core/TourCore.php:164
+#: production/inc/tour/Core/TourCore.php:164
 msgid "Done"
 msgstr "Готово"
 
-#: inc/tour/Core/TourCore.php:163
-#: production/inc/tour/Core/TourCore.php:163
+#: inc/tour/Core/TourCore.php:165
+#: production/inc/tour/Core/TourCore.php:165
 msgid "Skip tour"
 msgstr "Пропустити тур"
 
-#: inc/tour/Core/TourCore.php:164
-#: production/inc/tour/Core/TourCore.php:164
+#: inc/tour/Core/TourCore.php:166
+#: production/inc/tour/Core/TourCore.php:166
 msgid "Take a Tour"
 msgstr "Здійсніть тур"
 
-#: inc/tour/Core/TourCore.php:165
-#: production/inc/tour/Core/TourCore.php:165
+#: inc/tour/Core/TourCore.php:167
+#: production/inc/tour/Core/TourCore.php:167
 msgid "Retake Tour"
 msgstr "Повторити тур"
 
@@ -2376,25 +2370,26 @@ msgstr ""
 
 #: inc/tour/Scenarios/OpportunityFormScenario.php:64
 #: production/inc/tour/Scenarios/OpportunityFormScenario.php:64
-#: inc/blocks/accordion-opportunities/build/editor.js:447
+#: inc/blocks/accordion-opportunities/build/editor.js:210
 #: inc/blocks/accordion-opportunities/editor.js:99
-#: inc/blocks/accordion-two-photo/build/editor.js:148
+#: inc/blocks/accordion-two-photo/build/editor.js:65
 #: inc/blocks/accordion-two-photo/editor/item.js:81
-#: inc/blocks/faq/build/editor.js:376
+#: inc/blocks/faq/build/editor.js:150
 #: inc/blocks/faq/editor.js:79
 #: production/inc/blocks/accordion-opportunities/build/editor.js:1
 #: production/inc/blocks/accordion-two-photo/build/editor.js:1
-#: production/inc/blocks/faq/build/editor.js:1
-#: inc/blocks/accordion-opportunities/build/editor.js:329
-#: inc/blocks/accordion-two-photo/build/editor.js:86
-#: inc/blocks/faq/build/editor.js:272
+#: production/inc/blocks/faq/build/editor.js:2
+#: inc/blocks/accordion-opportunities/build/editor.js:278
+#: inc/blocks/accordion-two-photo/build/editor.js:92
+#: inc/blocks/faq/build/editor.js:224
 msgid "Title"
 msgstr "Назва можливості"
 
 #: inc/launchpad/Api/OpportunitiesController.php:92
 #: inc/launchpad/Panels/OpportunitiesPanel.php:167
 #: inc/tour/Scenarios/OpportunityFormScenario.php:91
-#: production/inc/launchpad/Api/OpportunitiesController.php:93
+#: production/inc/launchpad/Api/OpportunitiesController.php:92
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:167
 #: production/inc/tour/Scenarios/OpportunityFormScenario.php:91
 msgid "Categories"
 msgstr "Категорії"
@@ -2545,7 +2540,7 @@ msgid "You have new notifications, please check them in your personal account"
 msgstr "У вас є нові сповіщення, будь ласка, перевірте їх у своєму особистому кабінеті."
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:176
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:158
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:176
 msgid "End date cannot be before start date."
 msgstr "Дата завершення не може бути раніше дати початку."
 
@@ -2580,16 +2575,16 @@ msgstr "Ви не можете оцінювати власну публікац�
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:152
 #: inc/launchpad/Services/OpportunitiesService.php:823
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:147
-#: production/inc/launchpad/Services/OpportunitiesService.php:818
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:152
+#: production/inc/launchpad/Services/OpportunitiesService.php:823
 #, php-format
 msgid "Company must be at least %d characters."
 msgstr "Назва надавача має містити щонайменше %d символів."
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:158
 #: inc/launchpad/Services/OpportunitiesService.php:812
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:153
-#: production/inc/launchpad/Services/OpportunitiesService.php:807
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:158
+#: production/inc/launchpad/Services/OpportunitiesService.php:812
 #, php-format
 msgid "Description must be at least %d characters."
 msgstr "Опис має містити щонайменше %d символів."
@@ -2618,7 +2613,7 @@ msgstr "Не повинно перевищувати %d символів."
 #: inc/launchpad/Services/OpportunitiesService.php:510
 #: inc/launchpad/Services/ProfileService.php:258
 #: inc/shared/Core/AbstractApiController.php:131
-#: production/inc/launchpad/Services/OpportunitiesService.php:505
+#: production/inc/launchpad/Services/OpportunitiesService.php:510
 #: production/inc/launchpad/Services/ProfileService.php:258
 #: production/inc/shared/Core/AbstractApiController.php:131
 msgid "Please correct the highlighted fields."
@@ -2667,7 +2662,7 @@ msgid "dou.ua, https://me.ua"
 msgstr ""
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:955
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:920
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:955
 msgid "required fields"
 msgstr "обов'язкові для заповнення поля"
 
@@ -2727,18 +2722,18 @@ msgstr "Будь ласка, введіть дійсну адресу елект
 msgid "This email address is already in use."
 msgstr "Ця адреса електронної пошти вже використовується."
 
-#: inc/launchpad/Core/LaunchpadCore.php:268
-#: production/inc/launchpad/Core/LaunchpadCore.php:268
+#: inc/launchpad/Core/LaunchpadCore.php:267
+#: production/inc/launchpad/Core/LaunchpadCore.php:267
 msgid "Please fill in all fields."
 msgstr "Будь ласка, заповніть усі поля."
 
-#: inc/launchpad/Core/LaunchpadCore.php:269
-#: production/inc/launchpad/Core/LaunchpadCore.php:269
+#: inc/launchpad/Core/LaunchpadCore.php:268
+#: production/inc/launchpad/Core/LaunchpadCore.php:268
 msgid "Please enter your password."
 msgstr "Будь ласка, введіть свій пароль."
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:918
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:883
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:918
 #, php-format
 msgid "Add information about the opportunity. Describe the essence. Min %1$d, max %2$d characters"
 msgstr "Додайте інформацію про можливість. Опишіть суть. Мінімум %1$d, максимум %2$d символів"
@@ -2756,7 +2751,7 @@ msgstr "Коментар"
 #: inc/comments/Api/CommentsController.php:64
 #: inc/launchpad/Api/OpportunitiesController.php:183
 #: production/inc/comments/Api/CommentsController.php:64
-#: production/inc/launchpad/Api/OpportunitiesController.php:184
+#: production/inc/launchpad/Api/OpportunitiesController.php:183
 #: production/template-parts/pagination.php:147
 #: template-parts/pagination.php:147
 msgid "Items per page"
@@ -2776,13 +2771,13 @@ msgstr "Елементів на сторінці"
 #: inc/launchpad/Api/OpportunitiesController.php:539
 #: inc/launchpad/Api/ProfileController.php:360
 #: inc/launchpad/Api/SecurityController.php:127
-#: inc/listing/Api/MainController.php:239
+#: inc/listing/Api/MainController.php:169
 #: inc/tour/Api/TourController.php:246
 #: production/inc/chat/Api/ActivityController.php:202
 #: production/inc/comments/Api/CommentsController.php:208
 #: production/inc/contact/Api/ContactController.php:52
 #: production/inc/launchpad/Api/MediaController.php:146
-#: production/inc/launchpad/Api/OpportunitiesController.php:540
+#: production/inc/launchpad/Api/OpportunitiesController.php:539
 #: production/inc/launchpad/Api/ProfileController.php:360
 #: production/inc/launchpad/Api/SecurityController.php:127
 #: production/inc/listing/Api/MainController.php:239
@@ -2863,38 +2858,37 @@ msgid "File upload"
 msgstr "Завантаження файлу"
 
 #: inc/launchpad/Api/OpportunitiesController.php:100
-#: production/inc/launchpad/Api/OpportunitiesController.php:101
+#: production/inc/launchpad/Api/OpportunitiesController.php:100
 msgid "Subcategories"
 msgstr "Підкатегорії"
 
 #: inc/launchpad/Api/OpportunitiesController.php:121
-#: production/inc/launchpad/Api/OpportunitiesController.php:122
+#: production/inc/launchpad/Api/OpportunitiesController.php:121
 msgid "Locations"
 msgstr "Локації"
 
 #: inc/launchpad/Api/OpportunitiesController.php:195
-#: production/inc/launchpad/Api/OpportunitiesController.php:196
+#: production/inc/launchpad/Api/OpportunitiesController.php:195
 msgid "Statuses filter"
 msgstr "Statuses filter"
 
 #: inc/launchpad/Api/OpportunitiesController.php:250
-#: production/inc/launchpad/Api/OpportunitiesController.php:251
+#: production/inc/launchpad/Api/OpportunitiesController.php:250
 msgid "Search term"
 msgstr "Пошуковий термін"
 
 #: inc/launchpad/Api/OpportunitiesController.php:262
-#: production/inc/launchpad/Api/OpportunitiesController.php:263
+#: production/inc/launchpad/Api/OpportunitiesController.php:262
 msgid "Levels filter"
 msgstr "Фільтр рівнів"
 
 #: inc/launchpad/Api/OpportunitiesController.php:496
-#: production/inc/launchpad/Api/OpportunitiesController.php:497
+#: production/inc/launchpad/Api/OpportunitiesController.php:496
 msgid "Opportunity changes"
 msgstr "Зміни можливостей"
 
 #: inc/launchpad/Api/OpportunitiesController.php:513
-#: inc/listing/Api/MainController.php:215
-#: production/inc/launchpad/Api/OpportunitiesController.php:514
+#: production/inc/launchpad/Api/OpportunitiesController.php:513
 #: production/inc/listing/Api/MainController.php:215
 msgid "Location search"
 msgstr ""
@@ -2955,7 +2949,7 @@ msgid "Password change"
 msgstr "Зміна пароля"
 
 #: inc/launchpad/Services/OpportunitiesService.php:732
-#: production/inc/launchpad/Services/OpportunitiesService.php:727
+#: production/inc/launchpad/Services/OpportunitiesService.php:732
 msgid "Could not save opportunity. Please try again."
 msgstr "Не вдалося зберегти можливість. Спробуйте ще раз."
 
@@ -2975,6 +2969,8 @@ msgstr "%s: очікувався масив."
 #: inc/launchpad/Panels/OpportunitiesPanel.php:166
 #: inc/launchpad/Panels/OpportunitiesPanel.php:172
 #: inc/shared/Validation/RestArg.php:59
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:166
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:172
 #: production/inc/shared/Validation/RestArg.php:59
 #, php-format
 msgid "%1$s: maximum %2$d items allowed."
@@ -3031,22 +3027,22 @@ msgid "Activity feed"
 msgstr "Стрічка активності"
 
 #: inc/launchpad/Api/OpportunitiesController.php:81
-#: production/inc/launchpad/Api/OpportunitiesController.php:82
+#: production/inc/launchpad/Api/OpportunitiesController.php:81
 msgid "Start date"
 msgstr "Дата початку"
 
 #: inc/launchpad/Api/OpportunitiesController.php:85
-#: production/inc/launchpad/Api/OpportunitiesController.php:86
+#: production/inc/launchpad/Api/OpportunitiesController.php:85
 msgid "End date"
 msgstr "Дата завершення"
 
-#: functions.php:200
-#: functions.php:229
-#: inc/listing/Api/MainController.php:92
-#: inc/listing/Api/MainController.php:199
+#: functions.php:204
+#: functions.php:233
+#: inc/listing/Api/MainController.php:74
+#: inc/listing/Api/MainController.php:135
 #: inc/shared/Breadcrumbs/Trail.php:80
-#: production/functions.php:200
-#: production/functions.php:229
+#: production/functions.php:204
+#: production/functions.php:233
 #: production/inc/listing/Api/MainController.php:92
 #: production/inc/listing/Api/MainController.php:199
 #: production/inc/shared/Breadcrumbs/Trail.php:80
@@ -3055,7 +3051,6 @@ msgstr "Дата завершення"
 msgid "Search"
 msgstr "Пошук"
 
-#: inc/listing/Api/MainController.php:111
 #: production/inc/listing/Api/MainController.php:111
 msgid "Search query"
 msgstr "Пошуковий запит"
@@ -3076,29 +3071,29 @@ msgstr "%s: недійсна дата."
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:426
 #: inc/launchpad/Panels/OpportunitiesPanel.php:429
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:403
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:406
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:426
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:429
 #: production/templates/single-opportunity.php:106
 #: templates/single-opportunity.php:106
 msgid "Lasts"
 msgstr "Триває"
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:427
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:404
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:427
 #: production/templates/single-opportunity.php:108
 #: templates/single-opportunity.php:108
 msgid "from"
 msgstr "з"
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:429
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:406
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:429
 #: production/templates/single-opportunity.php:114
 #: templates/single-opportunity.php:114
 msgid "to"
 msgstr "по"
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:446
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:423
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:446
 msgid "Created"
 msgstr "Створено"
 
@@ -3155,22 +3150,22 @@ msgid "Tour data"
 msgstr ""
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:269
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:246
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:269
 msgid "To publish an opportunity, we need a bit more information about you. Please complete your profile with your name and contact phone number."
 msgstr "Щоб опублікувати можливість, нам потрібно трохи більше інформації про вас. Будь ласка, заповніть профіль — вкажіть своє ім’я та контактний номер телефону."
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:270
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:247
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:270
 msgid "This helps keep the platform safe and easy to use for everyone, and it makes it easier for interested people to reach out to you about your opportunity."
 msgstr "Це допоможе зробити платформу більш безпечною та зручною для всіх користувачів, а також дозволить зацікавленим людям швидко зв’язатися з вами щодо вашої пропозиції."
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:271
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:248
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:271
 msgid "When you publish opportunities, you are doing more than sharing information — you are helping others find support, new chances, and a way through difficult times. Every action you take here can make a real difference for someone."
 msgstr "Публікуючи можливості, ви не просто ділитеся інформацією — ви реально допомагаєте іншим людям знаходити підтримку, нові шанси та вихід у складних ситуаціях. Кожна ваша дія тут може стати для когось важливим кроком вперед."
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:272
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:249
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:272
 msgid "It only takes a few minutes to complete your profile, but it can greatly increase trust in your opportunities and make them more effective."
 msgstr "Заповнення профілю займе лише кілька хвилин, але значно підвищить довіру до ваших можливостей і їхню ефективність."
 
@@ -3179,8 +3174,8 @@ msgstr "Заповнення профілю займе лише кілька х�
 msgid "Copy link"
 msgstr "Копіювати посилання"
 
-#: inc/social-share/Core/SocialShareCore.php:88
-#: production/inc/social-share/Core/SocialShareCore.php:88
+#: inc/social-share/Core/SocialShareCore.php:92
+#: production/inc/social-share/Core/SocialShareCore.php:92
 msgid "Link copied!"
 msgstr "Посилання скопійовано!"
 
@@ -3220,8 +3215,8 @@ msgstr ""
 msgid "LinkedIn"
 msgstr ""
 
-#: inc/social-share/Core/SocialShareCore.php:89
-#: production/inc/social-share/Core/SocialShareCore.php:89
+#: inc/social-share/Core/SocialShareCore.php:93
+#: production/inc/social-share/Core/SocialShareCore.php:93
 msgid "Copy failed"
 msgstr "Не вдалося скопіювати"
 
@@ -3329,18 +3324,18 @@ msgstr "Попередній перегляд"
 msgid "Edit in admin"
 msgstr "Редагувати в адмінці"
 
-#: inc/chat/Core/ChatCore.php:98
-#: production/inc/chat/Core/ChatCore.php:98
+#: inc/chat/Core/ChatCore.php:100
+#: production/inc/chat/Core/ChatCore.php:100
 msgid "submitted a new opportunity for review:"
 msgstr "надіслано нову можливість для перегляду:"
 
-#: inc/chat/Core/ChatCore.php:99
-#: production/inc/chat/Core/ChatCore.php:99
+#: inc/chat/Core/ChatCore.php:101
+#: production/inc/chat/Core/ChatCore.php:101
 msgid "Your opportunity has been published:"
 msgstr "Вашу можливість опубліковано:"
 
-#: inc/chat/Core/ChatCore.php:100
-#: production/inc/chat/Core/ChatCore.php:100
+#: inc/chat/Core/ChatCore.php:102
+#: production/inc/chat/Core/ChatCore.php:102
 msgid "Your opportunity needs revisions:"
 msgstr "Ваша можливість потребує виправлення:"
 
@@ -3383,17 +3378,17 @@ msgid "Edit your draft here:"
 msgstr ""
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:666
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:643
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:666
 msgid "Search country..."
 msgstr "Пошук країни..."
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:667
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:644
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:667
 msgid "Search country"
 msgstr "Пошук країни"
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:684
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:661
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:684
 msgid "No countries match your search."
 msgstr "Немає країн, що відповідають вашому пошуковому запиту."
 
@@ -3412,13 +3407,13 @@ msgstr "Потрібно ввести пошуковий термін."
 msgid "Unknown source."
 msgstr "Невідоме джерело."
 
-#: inc/news/Core/NewsCore.php:114
-#: production/inc/news/Core/NewsCore.php:114
+#: inc/news/Core/NewsCore.php:117
+#: production/inc/news/Core/NewsCore.php:117
 msgid "Loading…"
 msgstr "Завантаження…"
 
-#: inc/news/Core/NewsCore.php:115
-#: production/inc/news/Core/NewsCore.php:115
+#: inc/news/Core/NewsCore.php:118
+#: production/inc/news/Core/NewsCore.php:118
 msgid "Could not load more items. Please try again."
 msgstr "Не вдалося завантажити більше елементів. Спробуйте ще раз."
 
@@ -3600,7 +3595,7 @@ msgstr ""
 #: production/template-parts/content-none.php:27
 #: template-parts/content-none.php:27
 msgid "Sorry, but nothing matched your search terms. Please try again with some different keywords."
-msgstr ""
+msgstr "Вибачте, але нічого не знайдено за вашими пошуковими запитами. Спробуйте ще раз з іншими ключовими словами."
 
 #: production/template-parts/content-none.php:34
 #: template-parts/content-none.php:34
@@ -3784,7 +3779,7 @@ msgstr ""
 #: inc/blocks/Core/BlocksCore.php:265
 #: production/inc/blocks/Core/BlocksCore.php:265
 msgid "You do not have permission to upload media."
-msgstr ""
+msgstr "У вас немає дозволу на завантаження медіафайлів."
 
 #: inc/blocks/Core/BlocksCore.php:267
 #: production/inc/blocks/Core/BlocksCore.php:267
@@ -3913,136 +3908,136 @@ msgstr ""
 msgid "Play video: %s"
 msgstr ""
 
-#: inc/blocks/accordion-opportunities/build/editor.js:387
+#: inc/blocks/accordion-opportunities/build/editor.js:158
 #: inc/blocks/accordion-opportunities/editor.js:44
 #: production/inc/blocks/accordion-opportunities/build/editor.js:1
-#: inc/blocks/accordion-opportunities/build/editor.js:274
+#: inc/blocks/accordion-opportunities/build/editor.js:223
 msgid "Button"
 msgstr ""
 
-#: inc/blocks/accordion-opportunities/build/editor.js:391
+#: inc/blocks/accordion-opportunities/build/editor.js:160
 #: inc/blocks/accordion-opportunities/editor.js:49
-#: inc/blocks/faq/build/editor.js:340
+#: inc/blocks/faq/build/editor.js:119
 #: inc/blocks/faq/editor.js:46
 #: production/inc/blocks/accordion-opportunities/build/editor.js:1
-#: production/inc/blocks/faq/build/editor.js:1
-#: inc/blocks/accordion-opportunities/build/editor.js:279
-#: inc/blocks/faq/build/editor.js:239
+#: production/inc/blocks/faq/build/editor.js:2
+#: inc/blocks/accordion-opportunities/build/editor.js:228
+#: inc/blocks/faq/build/editor.js:191
 msgid "Settings"
 msgstr ""
 
-#: inc/blocks/accordion-opportunities/build/editor.js:395
+#: inc/blocks/accordion-opportunities/build/editor.js:165
 #: inc/blocks/accordion-opportunities/editor.js:53
 #: production/inc/blocks/accordion-opportunities/build/editor.js:1
-#: inc/blocks/accordion-opportunities/build/editor.js:283
+#: inc/blocks/accordion-opportunities/build/editor.js:232
 msgid "Button text"
 msgstr ""
 
-#: inc/blocks/accordion-opportunities/build/editor.js:404
+#: inc/blocks/accordion-opportunities/build/editor.js:173
 #: inc/blocks/accordion-opportunities/editor.js:61
 #: production/inc/blocks/accordion-opportunities/build/editor.js:1
-#: inc/blocks/accordion-opportunities/build/editor.js:291
+#: inc/blocks/accordion-opportunities/build/editor.js:240
 msgid "Button URL"
 msgstr ""
 
-#: inc/blocks/accordion-opportunities/build/editor.js:405
+#: inc/blocks/accordion-opportunities/build/editor.js:174
 #: inc/blocks/accordion-opportunities/editor.js:62
 #: production/inc/blocks/accordion-opportunities/build/editor.js:1
-#: inc/blocks/accordion-opportunities/build/editor.js:292
+#: inc/blocks/accordion-opportunities/build/editor.js:241
 msgid "Empty: the opportunities archive."
 msgstr ""
 
-#: inc/blocks/accordion-opportunities/build/editor.js:412
+#: inc/blocks/accordion-opportunities/build/editor.js:180
 #: inc/blocks/accordion-opportunities/editor.js:68
 #: production/inc/blocks/accordion-opportunities/build/editor.js:1
-#: inc/blocks/accordion-opportunities/build/editor.js:298
+#: inc/blocks/accordion-opportunities/build/editor.js:247
 msgid "Click for touch"
 msgstr ""
 
-#: inc/blocks/accordion-opportunities/build/editor.js:413
+#: inc/blocks/accordion-opportunities/build/editor.js:181
 #: inc/blocks/accordion-opportunities/editor.js:69
 #: production/inc/blocks/accordion-opportunities/build/editor.js:1
-#: inc/blocks/accordion-opportunities/build/editor.js:299
+#: inc/blocks/accordion-opportunities/build/editor.js:248
 msgid "On: on touch screens an item opens when its number is tapped. Off: items open as they scroll into view."
 msgstr ""
 
-#: inc/blocks/accordion-opportunities/build/editor.js:435
+#: inc/blocks/accordion-opportunities/build/editor.js:200
 #: inc/blocks/accordion-opportunities/editor.js:89
-#: inc/blocks/faq/build/editor.js:366
+#: inc/blocks/faq/build/editor.js:141
 #: inc/blocks/faq/editor.js:70
 #: production/inc/blocks/accordion-opportunities/build/editor.js:1
-#: production/inc/blocks/faq/build/editor.js:1
-#: inc/blocks/accordion-opportunities/build/editor.js:319
-#: inc/blocks/faq/build/editor.js:263
+#: production/inc/blocks/faq/build/editor.js:2
+#: inc/blocks/accordion-opportunities/build/editor.js:268
+#: inc/blocks/faq/build/editor.js:215
 msgid "Label"
 msgstr ""
 
-#: inc/blocks/accordion-opportunities/build/editor.js:114
+#: inc/blocks/accordion-opportunities/build/editor.js:40
 #: inc/blocks/accordion-opportunities/editor/item.js:43
 #: production/inc/blocks/accordion-opportunities/build/editor.js:1
-#: inc/blocks/accordion-opportunities/build/editor.js:49
+#: inc/blocks/accordion-opportunities/build/editor.js:57
 msgid "Photo"
 msgstr ""
 
-#: inc/blocks/accordion-opportunities/build/editor.js:115
+#: inc/blocks/accordion-opportunities/build/editor.js:41
 #: inc/blocks/accordion-opportunities/editor/item.js:44
-#: inc/blocks/accordion-two-photo/build/editor.js:98
+#: inc/blocks/accordion-two-photo/build/editor.js:33
 #: inc/blocks/accordion-two-photo/editor/item.js:35
 #: production/inc/blocks/accordion-opportunities/build/editor.js:1
 #: production/inc/blocks/accordion-two-photo/build/editor.js:1
-#: inc/blocks/accordion-opportunities/build/editor.js:50
-#: inc/blocks/accordion-two-photo/build/editor.js:40
+#: inc/blocks/accordion-opportunities/build/editor.js:58
+#: inc/blocks/accordion-two-photo/build/editor.js:46
 msgid "Portrait photo, 3:4 works best."
 msgstr ""
 
-#: inc/blocks/accordion-opportunities/build/editor.js:159
+#: inc/blocks/accordion-opportunities/build/editor.js:71
 #: inc/blocks/accordion-opportunities/editor/item.js:84
 #: production/inc/blocks/accordion-opportunities/build/editor.js:1
-#: inc/blocks/accordion-opportunities/build/editor.js:90
+#: inc/blocks/accordion-opportunities/build/editor.js:98
 msgid "Choose a category in the sidebar"
 msgstr ""
 
 #. translators: %d: photo slot number
-#: inc/blocks/accordion-two-photo/build/editor.js:97
+#: inc/blocks/accordion-two-photo/build/editor.js:32
 #: inc/blocks/accordion-two-photo/editor/item.js:34
 #: production/inc/blocks/accordion-two-photo/build/editor.js:1
-#: inc/blocks/accordion-two-photo/build/editor.js:39
+#: inc/blocks/accordion-two-photo/build/editor.js:45
 #, js-format
 msgid "Photo %d"
 msgstr ""
 
-#: inc/blocks/accordion-two-photo/build/editor.js:160
+#: inc/blocks/accordion-two-photo/build/editor.js:79
 #: inc/blocks/accordion-two-photo/editor/item.js:91
 #: production/inc/blocks/accordion-two-photo/build/editor.js:1
-#: inc/blocks/accordion-two-photo/build/editor.js:96
+#: inc/blocks/accordion-two-photo/build/editor.js:102
 msgid "Text"
 msgstr ""
 
-#: inc/blocks/faq/build/editor.js:343
+#: inc/blocks/faq/build/editor.js:122
 #: inc/blocks/faq/editor.js:49
-#: production/inc/blocks/faq/build/editor.js:1
-#: inc/blocks/faq/build/editor.js:242
+#: production/inc/blocks/faq/build/editor.js:2
+#: inc/blocks/faq/build/editor.js:194
 msgid "Open the first question"
 msgstr ""
 
-#: inc/blocks/faq/build/editor.js:344
+#: inc/blocks/faq/build/editor.js:123
 #: inc/blocks/faq/editor.js:50
-#: production/inc/blocks/faq/build/editor.js:1
-#: inc/blocks/faq/build/editor.js:243
+#: production/inc/blocks/faq/build/editor.js:2
+#: inc/blocks/faq/build/editor.js:195
 msgid "The first answer is visible when the page loads; the others open one at a time."
 msgstr ""
 
-#: inc/blocks/faq/build/editor.js:99
-#: inc/blocks/faq/editor/item.js:29
+#: inc/blocks/faq/build/editor.js:32
+#: inc/blocks/faq/editor/item.js:30
 #: production/inc/blocks/faq/build/editor.js:1
-#: inc/blocks/faq/build/editor.js:34
+#: inc/blocks/faq/build/editor.js:44
 msgid "Answer"
 msgstr ""
 
-#: inc/blocks/faq/build/editor.js:120
-#: inc/blocks/faq/editor/item.js:47
+#: inc/blocks/faq/build/editor.js:48
+#: inc/blocks/faq/editor/item.js:49
 #: production/inc/blocks/faq/build/editor.js:1
-#: inc/blocks/faq/build/editor.js:52
+#: inc/blocks/faq/build/editor.js:63
 msgid "Question"
 msgstr ""
 
@@ -4390,13 +4385,18 @@ msgstr ""
 
 #. translators: %d: number of selected categories in one category group
 #: inc/launchpad/Panels/OpportunitiesPanel.php:195
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:177
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:195
 #, php-format
 msgid "%d selected"
 msgstr "%d обрано"
 
 #. translators: %d: maximum number of options that can be selected
 #: inc/launchpad/Panels/OpportunitiesPanel.php:237
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:237
 #, php-format
 msgid "(max. %d)"
 msgstr "(макс. %d)"
+
+#: inc/listing/Core/ResultsGrid.php:44
+msgid "Try again"
+msgstr ""
