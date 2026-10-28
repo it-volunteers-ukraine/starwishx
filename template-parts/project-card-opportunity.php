@@ -37,7 +37,7 @@ defined('ABSPATH') || exit;
                         </span>
                     </span>
                 </div>
-                <? if (is_user_logged_in()) : ?>
+                <?php if (is_user_logged_in()) : ?>
                     <div class="heart"
                         title="<?php esc_attr_e('Favorites', 'starwishx'); ?>">
                         <input
@@ -56,7 +56,7 @@ defined('ABSPATH') || exit;
                             <span class="heart__line"></span>
                         </div>
                     </div>
-                <? else : ?>
+                <?php else : ?>
                     <div class="heart--img" title="<?php esc_attr_e('Favorites', 'starwishx'); ?>">
                         <input
                             type="checkbox"
@@ -66,7 +66,7 @@ defined('ABSPATH') || exit;
                             aria-label="<?php esc_attr_e('Toggle Favorite', 'starwishx'); ?>">
                         <img class="heart__image" src="<?php echo get_template_directory_uri(); ?>/assets/img/icon-heart-gradient.svg" alt="heart icon">
                     </div>
-                <? endif ?>
+                <?php endif ?>
             </div>
             <div class="project-card__image-placeholder" data-wp-bind--hidden="context.item.thumbnail">
                 <img class="project-card__fallback-icon" src="<?php echo get_template_directory_uri(); ?>/assets/img/icon-opportunities-gradient.svg" alt="">
@@ -93,7 +93,7 @@ defined('ABSPATH') || exit;
                         </span>
                     </span>
                 </label>
-                <? if (is_user_logged_in()) : ?>
+                <?php if (is_user_logged_in()) : ?>
                     <div class="heart"
                         title="<?php esc_attr_e('Favorites', 'starwishx'); ?>">
                         <input
@@ -113,7 +113,7 @@ defined('ABSPATH') || exit;
                             <span class="heart__line"></span>
                         </div>
                     </div>
-                <? else : ?>
+                <?php else : ?>
                     <div class="heart--img"
                         title="<?php esc_attr_e('Favorites', 'starwishx'); ?>">
                         <input
@@ -125,7 +125,7 @@ defined('ABSPATH') || exit;
                             aria-label="<?php esc_attr_e('Toggle Favorite', 'starwishx'); ?>">
                         <img class="heart__image" src="<?php echo get_template_directory_uri(); ?>/assets/img/icon-heart-gradient.svg" alt="heart icon">
                     </div>
-                <? endif ?>
+                <?php endif ?>
             </div>
         </div>
         <a data-wp-bind--href="context.item.url" class="project-card__link--title">

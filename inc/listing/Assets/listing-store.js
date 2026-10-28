@@ -5,12 +5,19 @@
  * File: inc/listing/Assets/listing-store.js
  */
 
-import { store, getContext, getElement } from "@wordpress/interactivity";
+import {
+  store,
+  getContext,
+  getElement,
+  withSyncEvent,
+} from "@wordpress/interactivity";
 import { extendState } from "./utils.js"; // or ../../shared/Assets/shared-utils.js
 import { filterActions } from "./filters/actions.js";
 import { gridActions } from "./grid/actions.js";
 import { gridGetters } from "./grid/getters.js";
-import { syncUrlToState, highlightTerms } from "./utils.js";
+import { filterGetters } from "./filters/getters.js";
+import { deepClone, highlightTerms } from "./utils.js";
+import { keepTabInside } from "../../shared/Assets/shared-utils.js";
 import "../../shared/Assets/popup-store.js";
 
 /**
@@ -28,16 +35,20 @@ const listingState = {
   // Client-only UI state
   isLoading: false,
   isSidebarOpen: false,
-  ui: {
-    isLoadingLocation: false, // Loading state for location autocomplete
-  },
+  error: "", // message of the last failed request (grid/actions.js)
+  announcement: "", // "Found: N" for the results' role=status (grid/actions.js)
 };
 
 /**
  * Mixin Getters
- * Preserves getter descriptors so 'this' remains reactive.
+ * Preserves getter descriptors so 'this' remains reactive. The getters the
+ * markup uses have PHP twins in inc/listing/Core/DerivedState.php, which
+ * render the page on the server.
  */
-extendState(listingState, gridGetters);
+extendState(listingState, gridGetters, filterGetters);
+
+/** The drawer state callbacks.syncSidebarFocus last acted on. */
+let sidebarWasOpen = false;
 
 /**
  * STORE DEFINITION
@@ -61,12 +72,28 @@ store("listing", {
       document.body.classList.remove("sidebar-open");
     },
 
+    /**
+     * Keeps Tab inside the open drawer (keepTabInside, shared with the
+     * popup). Bound with data-wp-on--keydown on the sidebar; withSyncEvent
+     * because it has to preventDefault() the keystroke it redirects.
+     */
+    trapSidebarFocus: withSyncEvent((event) => {
+      const { state } = store("listing");
+      if (event.key !== "Tab" || !state.isSidebarOpen) return;
+      keepTabInside(event, getElement().ref);
+    }),
+
     init() {
       const { state, actions } = store("listing");
 
       // SSR hydration is authoritative for the initial URL state.
       // Both clean URLs and filtered URLs (?category=..., /slug/)
       // are correctly hydrated by StateAggregator.
+
+      // Give the entry the page loaded into the same query snapshot that
+      // syncStateToUrl() stores, so Back to it restores filters the same
+      // way (filters.restoreFromHistory).
+      window.history.replaceState({ query: deepClone(state.query) }, "");
 
       // Close offcanvas sidebar on Escape key
       document.addEventListener("keydown", (e) => {
@@ -78,85 +105,57 @@ store("listing", {
 
     /**
      * THE TRIGGER:
-     * When user clicks the checkbox OR the label text.
+     * A click on the card's favorites checkbox - directly, via its label
+     * text, or Space. withSyncEvent because a guest's click is cancelled:
+     * the box must not tick (nor be announced as checked) when nothing was
+     * saved - same as single-opportunity-store.js.
      */
-    async toggleFavorite(event) {
-      // 1. Prevent Browser Defaults (optional based on your HTML)
-      if (event && event.type === "click") {
-        // event.preventDefault(); // Uncomment if using <a> tag
-      }
+    toggleFavorite: withSyncEvent(async (event) => {
       const ctx = getContext();
       const item = ctx?.item;
       if (item && item.id) {
         // Guest guard: show auth popup instead of toggling
         if (!store("listing").state.isUserLoggedIn) {
+          event?.preventDefault();
           store("popup").actions.open();
           return;
         }
 
-        // 2. OPTIMISTIC UPDATE (Local Context)
-        // We MUST flip this boolean so the Fallback logic in the getter
-        // stays in sync with the user's intent.
+        // OPTIMISTIC UPDATE (Local Context): the browser has ticked the box;
+        // flip the item so state.isFavorited agrees with it.
         item.isFavorite = !item.isFavorite;
 
-        // 3. Call Global Store
+        // Call Global Store
         // This updates the Global Array, which triggers the getter again.
         await store("favorites").actions.toggle(item.id);
       }
-    },
+    }),
   },
   callbacks: {
     /**
-     * Dynamic parent count: when some children are selected, computes the
-     * deduplicated post count across only the selected children's postId
-     * sets (Set union). Falls back to server-provided total otherwise.
+     * data-wp-watch on the sidebar. Focus follows the drawer: into it when it
+     * opens (the close button, its first control) and back to the Filters
+     * button when it closes, unless focus has already moved elsewhere. Watch
+     * re-runs come after the next frame, so the open drawer is visible, and
+     * therefore focusable, by the time this runs. The first run, at
+     * hydration, sees no change and leaves focus alone.
      */
-    dynamicParentCount: () => {
+    syncSidebarFocus() {
       const { state } = store("listing");
-      const context = getContext();
-      const item = context?.item;
+      const { ref } = getElement();
+      const isOpen = state.isSidebarOpen;
+      if (isOpen === sidebarWasOpen) return;
+      sidebarWasOpen = isOpen;
 
-      if (!item || !item.children?.length) return item?.count ?? 0;
-
-      const selected = state.query.category || [];
-      if (selected.length === 0) return item.count;
-
-      // Parent selected → means "all children" → show total
-      if (selected.includes(item.id)) return item.count;
-
-      // Find which children of THIS parent are selected
-      const selectedChildren = item.children.filter((c) =>
-        selected.includes(c.id),
-      );
-      if (selectedChildren.length === 0) return item.count;
-
-      // Deduplicated union of selected children's post IDs
-      const unique = new Set();
-      for (const child of selectedChildren) {
-        if (child.postIds) {
-          for (const id of child.postIds) {
-            unique.add(id);
-          }
-        }
+      if (isOpen) {
+        ref.querySelector(".listing-sidebar__close")?.focus();
+        return;
       }
-      return unique.size;
-    },
 
-    isParentExpanded: () => {
-      const { state } = store("listing");
-      const context = getContext();
-      const item = context?.item;
-
-      // Expansion logic: Expand if Parent OR any child is selected
-      if (!item) return false;
-
-      const field = context?.filterField || "category";
-      const selected = state.query[field] || [];
-      const hasSelectedChild = item.children?.some((c) =>
-        selected.includes(c.id),
-      );
-      const isParentSelected = selected.includes(item.id);
-      return isParentSelected || hasSelectedChild;
+      const current = document.activeElement;
+      if (!current || current === document.body || ref.contains(current)) {
+        document.querySelector(`[aria-controls="${ref.id}"]`)?.focus();
+      }
     },
 
     /**
@@ -183,138 +182,16 @@ store("listing", {
     },
 
     /**
-     * Sets the visual "Dash" on the parent checkbox
+     * data-wp-watch on a parent category checkbox: mirrors the partial
+     * selection into its indeterminate property, which is what screen readers
+     * announce as "mixed" (the .is-indeterminate class only draws the dash).
+     * A watch rather than data-wp-bind--indeterminate: indeterminate is a
+     * property without an attribute, and the server render would write it
+     * into the HTML as an invalid one.
      */
-    setIndeterminate: () => {
+    syncIndeterminate() {
       const { state } = store("listing");
-      const { ref } = getElement();
-      const context = getContext();
-      const item = context?.item;
-      if (
-        !item ||
-        !Array.isArray(item.children) ||
-        item.children.length === 0
-      ) {
-        ref.indeterminate = false;
-        return;
-      }
-
-      const selectedIds = state.query.category;
-
-      // Count how many children are currently selected
-      const childrenIds = item.children.map((c) => c.id);
-      const selectedChildrenCount = childrenIds.filter((id) =>
-        selectedIds.includes(id),
-      ).length;
-
-      // Logic: Indeterminate if SOME children are checked, but NOT ALL
-      const isPartiallyChecked =
-        selectedChildrenCount > 0 && selectedChildrenCount < childrenIds.length;
-
-      ref.indeterminate = isPartiallyChecked;
-    },
-    /**
-     * Pure logic calculation. No DOM manipulation.
-     * Returns true if some, but not all, children are selected.
-     */
-    isIndeterminate: () => {
-      const { state } = store("listing");
-      const context = getContext();
-      const item = context?.item;
-
-      // Safety check
-      if (
-        !item ||
-        !Array.isArray(item.children) ||
-        item.children.length === 0
-      ) {
-        return false;
-      }
-
-      const selectedIds = state.query.category;
-      const childrenIds = item.children.map((c) => c.id);
-
-      // Count matches
-      const selectedCount = childrenIds.filter((id) =>
-        selectedIds.includes(id),
-      ).length;
-
-      // Logic: Indeterminate if SOME children checked, but NOT ALL
-      return selectedCount > 0 && selectedCount < childrenIds.length;
-    },
-
-    /**
-     * Calculates the "Human Readable" count of active filters.
-     * Usage: data-wp-text="callbacks.getActiveFilterCount"
-     */
-    getActiveFilterCount: () => {
-      const { state } = store("listing");
-      const context = getContext();
-      const filterId = context?.filterId;
-
-      if (!filterId) return "";
-
-      const value = state.query[filterId];
-
-      // 1. Handle Empty States
-      if (!value || (Array.isArray(value) && value.length === 0)) {
-        return "";
-      }
-
-      // 2. Handle Text/String Filters (like City or Search)
-      if (typeof value === "string") {
-        return "(1)";
-      }
-
-      // 3. Handle Hierarchical Filters (Category) - The "Smart Count"
-      // We assume 'category' is the ID for the hierarchical filter
-      if (filterId === "category") {
-        const tree = state.facets["category-oportunities"] || [];
-        let count = 0;
-        const selectedIds = value; // Array of IDs
-
-        // Iterate Top-Level Nodes only
-        for (const node of tree) {
-          // Scenario A: Parent is explicitly selected (User checked Parent)
-          if (selectedIds.includes(node.id)) {
-            count++;
-            // Architecturally: We ignore children because visually
-            // the Parent "contains" them.
-            continue;
-          }
-
-          // Scenario B: Parent NOT selected, but Children might be (Indeterminate)
-          if (node.children && node.children.length > 0) {
-            const activeChildren = node.children.filter((c) =>
-              selectedIds.includes(c.id),
-            );
-            count += activeChildren.length;
-          }
-        }
-
-        // Safety: If for some reason we have IDs not in the tree (ghosts), ignore them
-        // or fallback to simple length? For precise UI, tree logic is safer.
-        return count > 0 ? `(${count})` : "";
-      }
-
-      // 4. Handle Flat Arrays (Country, Beneficiaries)
-      return `(${value.length})`;
-    },
-
-    /**
-     * Returns true if the current filter group has ANY selection.
-     * Usage: data-wp-class--has-selection="callbacks.hasActiveFilter"
-     */
-    hasActiveFilter: () => {
-      const { state } = store("listing");
-      const context = getContext();
-      const filterId = context?.filterId;
-
-      if (!filterId) return false;
-      const value = state.query[filterId];
-
-      if (Array.isArray(value)) return value.length > 0;
-      return !!value;
+      getElement().ref.indeterminate = state.isPartiallySelected;
     },
 
     // highlight card content
@@ -368,10 +245,8 @@ const { actions } = store("listing");
 /**
  * Event Listeners for Browser Navigation
  */
-window.addEventListener("popstate", () => {
-  const { state } = store("listing");
-  syncUrlToState(state.query);
-  actions.updateResults();
+window.addEventListener("popstate", (event) => {
+  actions.filters.restoreFromHistory(event.state?.query);
 });
 
 // Register keyboard listeners after store is ready

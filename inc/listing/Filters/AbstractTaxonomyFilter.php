@@ -77,12 +77,18 @@ abstract class AbstractTaxonomyFilter extends AbstractFilter
         $contextField = $this->getId();
 
         $this->startBuffer();
+        // The context sits on the wrapper, not the <template>: on the server,
+        // data-wp-each skips the template's closing tag, so a context set on
+        // the template would never be popped and leak into the rest of the page.
 ?>
-        <div class="<?php echo esc_attr($this->getListClass()); ?>">
+        <div
+            class="<?php echo esc_attr($this->getListClass()); ?>"
+            role="group"
+            aria-labelledby="filter-title-<?php echo esc_attr($contextField); ?>"
+            data-wp-context='{"filterField": "<?php echo esc_attr($contextField); ?>"}'>
             <template
                 data-wp-each--item="state.facets.<?php echo esc_attr($taxKey); ?>"
-                data-wp-key="context.item.id"
-                data-wp-context='{"filterField": "<?php echo esc_attr($contextField); ?>"}'>
+                data-wp-key="context.item.id">
 
                 <label class="filter-checkbox">
                     <input
@@ -93,7 +99,7 @@ abstract class AbstractTaxonomyFilter extends AbstractFilter
                         data-field="<?php echo esc_attr($contextField); ?>">
 
                     <span class="label-text" data-wp-text="context.item.label"></span>
-                    <data class="count" data-wp-bind--value="context.item.count" data-wp-text="context.item.count" aria-hidden="true"></data>
+                    <data class="count" data-wp-bind--value="context.item.count" data-wp-text="context.item.count"></data>
                 </label>
 
             </template>

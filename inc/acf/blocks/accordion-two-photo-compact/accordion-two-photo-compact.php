@@ -70,7 +70,7 @@ if (file_exists($modules_file)) {
                         </div>
 
                     </div>
-                <? endforeach; ?>
+                <?php endforeach; ?>
             </div>
         <?php endif; ?>
     </div>

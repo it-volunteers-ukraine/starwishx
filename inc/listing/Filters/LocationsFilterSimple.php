@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Listing\Filters;
 
+use Listing\Services\ListingService;
 use Shared\Core\Traits\BufferedRenderTrait;
 
 /**
@@ -119,7 +120,7 @@ class LocationsFilterSimple extends AbstractFilter
     }
 
     /**
-     * Renders the filter UI with autocomplete input.
+     * Renders the location search input; typing filters the results directly.
      */
     protected function renderContent(): string
     {
@@ -129,14 +130,11 @@ class LocationsFilterSimple extends AbstractFilter
             <input
                 type="search"
                 class="filter-search-input"
+                aria-labelledby="filter-title-<?php echo esc_attr($this->getId()); ?>"
+                maxlength="<?php echo (int) ListingService::LOCATION_MAX_LENGTH; ?>"
                 placeholder="<?php esc_attr_e('City, Raion, Oblast...', 'starwishx'); ?>"
-                data-filter-id="<?php echo esc_attr($this->getId()); ?>"
                 data-wp-bind--value="state.query.location"
                 data-wp-on--input="actions.filters.updateLocationSearch">
-            <span
-                class="spinner is-active"
-                data-wp-bind--hidden="!state.listing.ui.isLoadingLocation">
-            </span>
         </div>
 
         <!-- "Clear" button visible only when a location is selected -->

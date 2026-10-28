@@ -222,6 +222,14 @@
   font-size: 18px;
 }
 
+.header-addons {
+  @include min-tabland {
+    .prisna-gwt-flags-container {
+      width: 78px;
+    }
+  }
+}
+
 .header .menu-item-search,
 .header .menu-item-lang {
   display: flex;

@@ -1,10 +1,17 @@
 <?php
 
 /**
- * Rate limiting policy — transient-based sliding window.
+ * Rate limiting policy — transient-based attempt counter.
  *
  * Stateless static utility following the PhonePolicy / PasswordPolicy pattern.
  * Uses WordPress transients for storage — works with or without an object cache.
+ *
+ * Not a sliding window: every hit() pushes the expiry out again, so the count
+ * only resets after a full $windowSec without a hit and steady attempts keep
+ * adding up. That is the point for failure counters (a slow brute force
+ * still accumulates). For a plain fixed window - N requests per period, e.g.
+ * a browsing endpoint - put the period's number into the key:
+ *     RateLimitPolicy::key('search', $ip, (string) intdiv(time(), $windowSec));
  *
  * Two usage patterns:
  *

@@ -23,11 +23,18 @@ $show_label = isset($args['show_label']) ? (bool) $args['show_label'] : true;
 $is_favorite  = function_exists('favorites') && \favorites()->isUserFavorite($post_id);
 $nolabel_attr = "";
 
+// With the text shown, the <label for> below names the checkbox ("Add to
+// favorites" / "Favorites"); an aria-label would replace that visible wording.
+// The icon-only variant hides the text (display:none), so there the checkbox
+// keeps an aria-label of its own.
+$aria_label_attr = '';
+
 // Dynamic modifier class so CSS can adjust margins/gaps when the label is missing
 $wrapper_classes = ['control-favorites-wrapper'];
 if (! $show_label) {
     $wrapper_classes[] = 'control-favorites-wrapper--icon-only';
     $nolabel_attr = "-nolabel"; // in case 2 different kind controls of same id same time
+    $aria_label_attr = ' aria-label="' . esc_attr__('Toggle Favorite', 'starwishx') . '"';
 }
 ?>
 <div
@@ -44,7 +51,7 @@ if (! $show_label) {
         </span>
     </label>
 
-    <? if (is_user_logged_in()) : ?>
+    <?php if (is_user_logged_in()) : ?>
         <div class="heart" title="<?php esc_attr_e('Favorites', 'starwishx'); ?>">
             <input
                 type="checkbox"
@@ -52,8 +59,7 @@ if (! $show_label) {
                 id="favorite-<?= esc_attr($post_id) . $nolabel_attr ?>"
                 data-id="<?= esc_attr($post_id) ?>"
                 <?php if ($is_favorite) echo 'checked '; ?>data-wp-bind--checked="state.isFavorite"
-                data-wp-on--change="actions.toggle"
-                aria-label="<?php esc_attr_e('Toggle Favorite', 'starwishx'); ?>">
+                data-wp-on--change="actions.toggle"<?= $aria_label_attr ?>>
             <div class="heart__icon"></div>
             <div class="heart__lines" aria-hidden="true">
                 <span class="heart__line"></span>
@@ -64,7 +70,7 @@ if (! $show_label) {
                 <span class="heart__line"></span>
             </div>
         </div>
-    <? else : ?>
+    <?php else : ?>
         <div class="heart--img" title="<?php esc_attr_e('Favorites', 'starwishx'); ?>">
             <input
                 type="checkbox"
@@ -72,10 +78,9 @@ if (! $show_label) {
                 id="favorite-<?= esc_attr($post_id) . $nolabel_attr ?>"
                 data-id="<?= esc_attr($post_id) ?>"
                 <?php if ($is_favorite) echo 'checked '; ?>data-wp-bind--checked="state.isFavorite"
-                data-wp-on--change="actions.toggle"
-                aria-label="<?php esc_attr_e('Toggle Favorite', 'starwishx'); ?>">
-            <img class="heart__image" src="<?php echo get_template_directory_uri(); ?>/assets/img/icon-heart-gradient.svg" alt="heart icon">
+                data-wp-on--change="actions.toggle"<?= $aria_label_attr ?>>
+            <img class="heart__image" src="<?php echo get_template_directory_uri(); ?>/assets/img/icon-heart-gradient.svg" alt="">
         </div>
-    <? endif ?>
+    <?php endif ?>
 
 </div>

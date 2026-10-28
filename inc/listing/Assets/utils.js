@@ -36,6 +36,17 @@ export function debounce(func, wait) {
 /**
  * Standardized Fetch Helper for the Listing Module.
  *
+ * Listing reads are anonymous: no X-WP-Nonce. Core checks a nonce whenever
+ * one is sent, guests included, and answers a stale one (a tab left open
+ * overnight, a cached page) with a 403 - that is what used to freeze the
+ * filters. Without one the request runs as a guest's; the one per-user
+ * detail, favorites, comes from the favorites store (fetchResults in
+ * grid/actions.js).
+ *
+ * A failed response throws an Error that also carries `status`, the WP error
+ * `code`, the server's own (translated) `serverMessage` and its
+ * `fieldErrors` (`data.field_errors`, see AbstractApiController).
+ *
  * @param {Object} state - The 'listing' store state.
  * @param {string} url - API endpoint.
  * @param {Object} options - Fetch options (method, body, requestId).
@@ -53,18 +64,14 @@ export async function fetchJson(
   const controller = new AbortController();
   searchControllers.set(requestId, controller);
 
-  const { state: settingsState } = store("listingSettings");
-  const config = settingsState.config || {};
-
   try {
-    const headers = {
-      "X-WP-Nonce": config.nonce,
-      "X-Requested-With": "XMLHttpRequest",
-    };
+    const headers = { "X-Requested-With": "XMLHttpRequest" };
     if (body) headers["Content-Type"] = "application/json";
 
     const response = await fetch(url, {
       method,
+      // Cookies still go along (Polylang's language cookie); with no nonce
+      // core treats the request as a guest's.
       credentials: "same-origin",
       signal: controller.signal,
       headers,
@@ -72,19 +79,24 @@ export async function fetchJson(
     });
 
     if (!response.ok) {
-      let message = `${response.status} ${response.statusText}`;
+      const err = new Error(`${response.status} ${response.statusText}`);
+      err.status = response.status;
       try {
         const error = await response.json();
-        if (error?.message) message = error.message;
+        err.code = error?.code ?? "";
+        err.serverMessage = error?.message ?? "";
+        err.fieldErrors = error?.data?.field_errors ?? null;
       } catch {}
-      const err = new Error(message);
-      err.status = response.status;
       throw err;
     }
 
     return await response.json();
   } finally {
-    searchControllers.delete(requestId);
+    // An aborted request settles after its replacement has registered, so
+    // only remove this request's own controller.
+    if (searchControllers.get(requestId) === controller) {
+      searchControllers.delete(requestId);
+    }
   }
 }
 
@@ -92,10 +104,15 @@ export async function fetchJson(
  * Synchronize the Store State to the Browser URL.
  * Converts the 'query' object into URL Search Parameters.
  *
+ * Each call is one Back step (pushState) unless `replace` is set, which
+ * rewrites the current entry instead: Load more, typing that continues a
+ * search, and Back/Forward itself (see filters.restoreFromHistory).
+ *
  * @param {Object} query - The state.query object.
+ * @param {Object} [options]
+ * @param {boolean} [options.replace=false] - Rewrite the current entry.
  */
-// Around line ~107 - Update the URL sync function
-export function syncStateToUrl(query) {
+export function syncStateToUrl(query, { replace = false } = {}) {
   const params = new URLSearchParams();
 
   // Category facets tree for slug serialization
@@ -168,7 +185,7 @@ export function syncStateToUrl(query) {
         const prettyUrl = remaining
           ? `${basePath}${slug}/?${remaining}`
           : `${basePath}${slug}/`;
-        window.history.pushState({ query: deepClone(query) }, "", prettyUrl);
+        writeHistory(query, prettyUrl, replace);
         return;
       }
     }
@@ -178,7 +195,18 @@ export function syncStateToUrl(query) {
     ? `${basePath}?${params.toString()}`
     : basePath;
 
-  window.history.pushState({ query: deepClone(query) }, "", newUrl);
+  writeHistory(query, newUrl, replace);
+}
+
+/**
+ * Write `url` to history with a snapshot of the query, which Back/Forward
+ * restores. A URL equal to the current one rewrites the entry rather than
+ * adding a second, identical Back step.
+ */
+function writeHistory(query, url, replace) {
+  const unchanged = url === window.location.pathname + window.location.search;
+  const method = replace || unchanged ? "replaceState" : "pushState";
+  window.history[method]({ query: deepClone(query) }, "", url);
 }
 
 /**

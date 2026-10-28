@@ -1,22 +1,43 @@
 /**
  * Listing Store — Filter Actions
  *
- * Handles interaction logic for checkboxes, radios, and sub-filter searching.
+ * Handles interaction logic for checkboxes, radios and the text filters.
  * File: inc/listing/Assets/filters/actions.js
  */
 
 import { getElement, store, getContext } from "@wordpress/interactivity";
-import { fetchJson, debounce, getRestUrl } from "../utils.js";
+import { debounce, syncUrlToState } from "../utils.js";
+
+/** The text field (s or location) of the typing run in progress, if any. */
+let typingField = null;
 
 /**
  * Internal helper to update results.
- * Resets page to 1 whenever a filter is changed.
+ * Resets page to 1 whenever a filter is changed. A change is a new Back
+ * step, except while typing (refreshFromTyping) and on Back/Forward itself.
+ *
+ * @param {Object} [options]
+ * @param {"push"|"replace"} [options.history="push"] - See fetchResults().
+ * @param {string|null} [options.typing=null] - The text field being typed in.
  */
-const refreshResults = () => {
+const refreshResults = ({ history = "push", typing = null } = {}) => {
   const { state, actions } = store("listing");
+  typingField = typing;
   state.query.page = 1;
-  actions.updateResults();
+  actions.updateResults({ history });
 };
+
+/**
+ * Debounced keyword / location input. The first request of a typing run
+ * adds a Back step and the following ones in the same field rewrite it, so
+ * Back returns to the filters from before the search rather than to every
+ * half-typed word.
+ */
+const refreshFromTyping = (field) =>
+  refreshResults({
+    history: typingField === field ? "replace" : "push",
+    typing: field,
+  });
 
 export const filterActions = {
   /**
@@ -51,57 +72,8 @@ export const filterActions = {
   updateSearch: debounce((event) => {
     const { state } = store("listing");
     state.query.s = event.target.value;
-    refreshResults();
+    refreshFromTyping("s");
   }, 400),
-
-  /**
-   * Specialized Search inside a filter group (e.g., Location).
-   * Fetches matching options from the REST API without refreshing the grid.
-   */
-  searchSubFilter: debounce(async (event) => {
-    const { state } = store("listing");
-    const target = event.target;
-    const filterId = target.dataset.filterId;
-    const query = target.value;
-
-    if (query.length < 2 && query.length !== 0) return;
-
-    // UI Loading state specific to this filter
-    if (!state.ui) state.ui = {};
-    state.ui[
-      `isLoading${filterId.charAt(0).toUpperCase() + filterId.slice(1)}`
-    ] = true;
-
-    try {
-      const data = await fetchJson(
-        state,
-        `${getRestUrl()}sub-filter/${filterId}?q=${encodeURIComponent(query)}`,
-        { requestId: `subfilter-${filterId}` },
-      );
-
-      if (data) {
-        state.facets[filterId] = data;
-      }
-    } catch (e) {
-      if (e.name !== "AbortError") console.error("Sub-filter search failed", e);
-    } finally {
-      state.ui[
-        `isLoading${filterId.charAt(0).toUpperCase() + filterId.slice(1)}`
-      ] = false;
-    }
-  }, 300),
-
-  /**
-   * Select a location from the autocomplete dropdown.
-   */
-  selectLocation(event) {
-    const { state } = store("listing");
-    const target = event.target; // Use event.target
-    const value = target.value;
-
-    state.query.location = state.query.location === value ? "" : value;
-    refreshResults();
-  },
 
   /**
    * Reset the location filter.
@@ -165,7 +137,7 @@ export const filterActions = {
    * Logic: Select All OR Deselect All
    */
   toggleParent() {
-    const { state, actions } = store("listing");
+    const { state } = store("listing");
     const { ref } = getElement();
     const context = getContext();
     const item = context?.item;
@@ -194,8 +166,7 @@ export const filterActions = {
     }
 
     state.query.category = [...new Set(current)];
-    state.query.page = 1;
-    actions.updateResults();
+    refreshResults();
   },
 
   /**
@@ -203,7 +174,7 @@ export const filterActions = {
    * Logic: Toggle self. Then check if Parent should be added or removed.
    */
   toggleChild() {
-    const { state, actions } = store("listing");
+    const { state } = store("listing");
     const { ref } = getElement();
     // In the inner loop, context.item is the CHILD.
     // But we need access to the PARENT context to know siblings.
@@ -259,17 +230,35 @@ export const filterActions = {
     }
 
     state.query.category = [...new Set(current)];
-    state.query.page = 1;
-    actions.updateResults();
+    refreshResults();
   },
 
   /**
    * Immediate location search (no autocomplete dropdown).
    */
   updateLocationSearch: debounce((event) => {
-    const { state, actions } = store("listing");
+    const { state } = store("listing");
     state.query.location = event.target.value;
-    state.query.page = 1;
-    actions.updateResults();
+    refreshFromTyping("location");
   }, 300),
+
+  /**
+   * Back/Forward (popstate). Puts the entry's filters back and reloads the
+   * results without adding a Back step - pushing one here is what used to
+   * keep Back from ever leaving the page. Entries written by
+   * syncStateToUrl() carry the query; any other entry is read from its URL.
+   * Only the first page comes back (the API serves one page per call), so
+   * the entry's ?page is dropped.
+   *
+   * @param {Object|undefined} saved - The entry's history.state.query.
+   */
+  restoreFromHistory(saved) {
+    const { state } = store("listing");
+    if (saved) {
+      Object.assign(state.query, saved);
+    } else {
+      syncUrlToState(state.query);
+    }
+    refreshResults({ history: "replace" });
+  },
 };

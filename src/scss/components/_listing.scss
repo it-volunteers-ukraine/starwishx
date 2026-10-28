@@ -504,8 +504,26 @@
                     }
                 }
 
+                // The title link holds just the title - its accessible name -
+                // and its ::after covers the body (title, dates, excerpt):
+                // the area the link used to wrap. fit-content only where the
+                // old link was a flex item and so took it.
+                .listing-card__body {
+                    position: relative;
+
+                    @include media.min-tablet {
+                        width: fit-content;
+                    }
+                }
+
                 .listing-card__title--link {
-                    width: fit-content;
+                    color: inherit;
+
+                    &::after {
+                        position: absolute;
+                        inset: 0;
+                        content: "";
+                    }
                 }
 
                 .listing-card__title {
@@ -733,30 +751,52 @@ body.sidebar-open {
 }
 
 .listing-sidebar {
-    display: flex;
-    flex-flow: column nowrap;
-    gap: 12px;
-
     @include media.max-laptop {
         position: fixed;
         top: 0;
         left: 0;
         transform: translateX(-100%);
         z-index: 10000;
-        transition: transform 0.3s ease;
+
+        // Closed means hidden, not just off-screen, so Tab and screen readers
+        // skip it. visibility flips only once the slide-out has played.
+        visibility: hidden;
+        transition:
+            transform 0.3s ease,
+            visibility 0s linear 0.3s;
         background: $surface-primary;
-        padding: 12px;
 
         // width: min(320px, 85vw);
         width: calc(100% - 40px);
         max-width: 360px;
         height: 100dvh;
 
-        // height: 100%;
-        overflow-y: auto;
-
         &.is-open {
             transform: translateX(0);
+            visibility: visible;
+            transition: transform 0.3s ease;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            &,
+            &.is-open {
+                transition: none;
+            }
+        }
+    }
+
+    .listing-sidebar__body {
+        display: flex;
+        flex-flow: column nowrap;
+        gap: 12px;
+
+        // The drawer scrolls here, not on the aside: a scrolling aside would
+        // clip the close button that hangs over its edge.
+        @include media.max-laptop {
+            padding: 12px;
+            height: 100%;
+            overflow-y: auto;
+            overscroll-behavior: contain;
         }
     }
 
@@ -764,26 +804,50 @@ body.sidebar-open {
         display: flex;
         justify-content: space-between;
         align-items: center;
+
+        // As tall as the close button, so the title lines up with it, and
+        // clear of the half of it that sits inside the panel.
+        @include media.max-laptop {
+            padding-right: 12px;
+            min-height: 40px;
+        }
     }
 
+    // Drawer only. Straddles the panel's top-right edge: the outer half sits
+    // over the strip of backdrop the panel leaves (width: calc(100% - 40px)).
+    // Pinned while the body scrolls under it; z-index keeps it above rows
+    // that are themselves positioned (.filter-checkbox).
     .listing-sidebar__close {
-        @include media.min-laptop {
-            display: none;
-        }
+        display: none;
 
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        transition: background 0.2s;
-        cursor: pointer;
-        border: 1px solid $stroke-default;
-        border-radius: 50%;
-        background: transparent;
-        padding: 6px;
-        color: $text-basic;
+        @include media.max-laptop {
+            display: grid;
+            position: absolute;
+            top: 12px;
+            right: 0;
+            place-items: center;
+            transform: translateX(50%);
+            z-index: 1;
+            transition: background 0.2s;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgb(0 0 0 / 15%);
+            border: 1px solid $stroke-default;
+            border-radius: 50%;
+            background: $surface-primary;
+            padding: 0;
+            width: 40px;
+            height: 40px;
+            color: $text-basic;
+            stroke-width: 1.5; // icon-close draws a 1-unit stroke by default
 
-        &:hover {
-            background: $dropdown-surface-color-hover;
+            &:hover {
+                background: $dropdown-surface-color-hover;
+            }
+
+            &:focus-visible {
+                outline: 2px solid $primary-hover;
+                outline-offset: 2px;
+            }
         }
     }
 
@@ -842,6 +906,17 @@ mark {
     &__clear {
         margin-left: auto;
     }
+}
+
+// A failed search or Load more: the message plus "Try again"
+// (grid/actions.js). Same shape as .sw-pagination__alert.
+.listing-results__alert {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+    color: $text-dark;
 }
 
 .listing-results {
