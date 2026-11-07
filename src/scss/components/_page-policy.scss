@@ -85,8 +85,11 @@
          }
       }
 
-      p {
-         margin-top: 16px;
+      & > {
+         .wp-block-paragraph,
+         .wp-block-list {
+            margin-top: 1rem;
+         }
       }
 
       ul,
