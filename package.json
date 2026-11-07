@@ -5,8 +5,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "start": "node tools/build.ts --watch",
-    "dev": "node tools/build.ts --watch",
+    "start": "node --watch --watch-preserve-output tools/build.ts --watch",
+    "dev": "node --watch --watch-preserve-output tools/build.ts --watch",
     "build": "node tools/build.ts --prod && node tools/package.ts",
     "clean": "node tools/build.ts --clean",
     "sprite": "node tools/build-sprite.ts",
