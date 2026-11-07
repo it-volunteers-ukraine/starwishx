@@ -1,6 +1,8 @@
 <?php
 // File: inc/launchpad/Panels/StatsPanel.php
-
+/**
+ * This is outdated module not used currently.
+ */
 declare(strict_types=1);
 
 namespace Launchpad\Panels;

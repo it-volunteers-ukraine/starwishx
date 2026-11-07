@@ -83,9 +83,7 @@ class ChatPanel extends AbstractPanel
             <!-- Empty state -->
             <div class="chat-empty" data-wp-interactive="chat"
                 data-wp-bind--hidden="state.hasItems">
-                <svg width="24" height="24">
-                    <use xlink:href="<?= get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-email"></use>
-                </svg>
+                <?= sw_svg('icon-email', 24); ?>
                 <p data-wp-text="state.config.messages.noActivity"></p>
             </div>
 

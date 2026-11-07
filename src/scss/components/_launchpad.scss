@@ -220,6 +220,28 @@
         margin-top: 12px;
         text-align: right;
     }
+    .opportunities-empty {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 3rem 1rem;
+        text-align: center;
+
+        svg {
+            opacity: 0.2;
+            margin-bottom: 1rem;
+            width: 32px;
+            height: 32px;
+            font-size: 32px;
+        }
+
+        p {
+            margin: 0;
+            color: $text-light;
+            font-size: 1rem;
+        }
+    }
 }
 
 // Panel Content & Typography
@@ -1448,9 +1470,9 @@
 
     // 1. Hide the default ugly checkbox
     input[type="checkbox"] {
+        position: relative;
         flex: 0 0 20px;
         appearance: none;
-        position: relative;
         transition: all 0.2s ease-in-out;
         cursor: pointer;
         margin: 0;
@@ -1508,8 +1530,8 @@
     // Disabled, e.g. an option past a selection limit (state.is…OptionDisabled).
     // Inactive controls are exempt from the contrast minimum (WCAG 1.4.3).
     &:has(input:disabled) {
-        cursor: not-allowed;
         opacity: 0.5;
+        cursor: not-allowed;
     }
 
     // span {
@@ -1737,7 +1759,7 @@
             height: 32px;
         }
 
-        .dashicons {
+        svg {
             opacity: 0.3;
             width: 32px;
             height: 32px;
@@ -1862,12 +1884,12 @@
     padding: 3rem 1rem;
     text-align: center;
 
-    .dashicons {
+    svg {
         opacity: 0.2;
         margin-bottom: 1rem;
-        width: 64px;
-        height: 64px;
-        font-size: 64px;
+        width: 32px;
+        height: 32px;
+        font-size: 32px;
     }
 
     p {
@@ -2151,9 +2173,9 @@
         &--selected {
             display: flex;
             align-items: center;
+            margin-bottom: 4px;
             color: $icon-color-accent;
             font-weight: 600;
-            margin-bottom: 4px;
         }
     }
 
@@ -2196,8 +2218,8 @@
         color: $text-light;
         font-style: italic;
         font-size: 0.9rem;
-        text-align: center;
         list-style: none;
+        text-align: center;
     }
 }
 
@@ -2284,8 +2306,8 @@
     color: $icon-color-accent;
 
     input[type="date"] {
-        padding-right: 44px;
         appearance: textfield;
+        padding-right: 44px;
         height: 44px;
         min-height: 44px;
 
