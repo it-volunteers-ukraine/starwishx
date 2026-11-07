@@ -46,10 +46,8 @@ export default defineConfig({
     sortPackageJson: false,
     ignorePatterns: [
       ...notOurs,
-      // Mixed 2- and 4-space indentation.
       // Plain CSS is build output, vendored (src/css) or style.css, whose
       // header WordPress parses.
-      "**/*.scss",
       "**/*.css",
       // Written by ACF and wp-cli.
       "acf-json/**",
@@ -61,7 +59,7 @@ export default defineConfig({
   },
 
   staged: {
-    "*.{js,mjs,ts,json,jsonc,md,yml,yaml}": "vp check --fix",
+    "*.{js,mjs,ts,json,jsonc,md,yml,yaml,scss}": "vp check --fix",
     // No autofix: it should take a person to change the SCSS.
     "*.scss": "biome lint --error-on-warnings --no-errors-on-unmatched",
   },

@@ -1,7 +1,11 @@
 @use "../variables" as *;
 @use "./media";
 
-@mixin label($color: $element-block-text, $bg: $element-block-fill, $border: $element-block-fill){
+@mixin label(
+  $color: $element-block-text,
+  $bg: $element-block-fill,
+  $border: $element-block-fill
+) {
   display: inline-flex;
   align-items: center;
   border-radius: 40px;
@@ -14,7 +18,11 @@
   line-height: 1.2;
 }
 
-@mixin label-dot($color: $element-block-text, $bg: $element-block-fill, $border: $element-block-fill) {
+@mixin label-dot(
+  $color: $element-block-text,
+  $bg: $element-block-fill,
+  $border: $element-block-fill
+) {
   @include label($color, $bg, $border);
 
   text-transform: uppercase;

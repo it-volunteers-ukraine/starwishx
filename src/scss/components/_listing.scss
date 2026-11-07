@@ -2,928 +2,928 @@
 @use "../mixins/media";
 
 .listing-app {
-    margin: 1rem 0 80px;
+  margin: 1rem 0 80px;
 
-    &__header {
-        // display: flex;
-        // flex-flow: row wrap;
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        align-items: center;
-        gap: 40px;
+  &__header {
+    // display: flex;
+    // flex-flow: row wrap;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    gap: 40px;
 
-        &--figure {
-            margin-left: auto;
-        }
-
-        @include media.max-tabland {
-            display: flex;
-            flex-flow: column wrap;
-            justify-content: space-between;
-            gap: 8px;
-
-            &--figure {
-                display: none;
-            }
-
-            &--image {
-                width: 70px;
-                height: auto;
-            }
-        }
-
-        .page-subtitle--text {
-            color: $text-accent;
-        }
-
-        &--description {
-            margin: 0.5rem 0 0;
-            color: $text-light;
-            font-size: 0.9rem;
-            line-height: 1.5;
-        }
-
-        .page-subtitle,
-        &--figure:not([hidden]),
-        &--description:not([hidden]) {
-            animation: fadeIn 0.3s ease-in;
-        }
-
-        &--image {
-            border-radius: $radius-image;
-        }
+    &--figure {
+      margin-left: auto;
     }
+
+    @include media.max-tabland {
+      display: flex;
+      flex-flow: column wrap;
+      justify-content: space-between;
+      gap: 8px;
+
+      &--figure {
+        display: none;
+      }
+
+      &--image {
+        width: 70px;
+        height: auto;
+      }
+    }
+
+    .page-subtitle--text {
+      color: $text-accent;
+    }
+
+    &--description {
+      margin: 0.5rem 0 0;
+      color: $text-light;
+      font-size: 0.9rem;
+      line-height: 1.5;
+    }
+
+    .page-subtitle,
+    &--figure:not([hidden]),
+    &--description:not([hidden]) {
+      animation: fadeIn 0.3s ease-in;
+    }
+
+    &--image {
+      border-radius: $radius-image;
+    }
+  }
 }
 
 .listing-layout {
-    display: grid;
+  display: grid;
 
-    // grid-template-columns: minmax(280px, auto) 1fr;
-    grid-template-columns: 300px 1fr;
-    gap: 20px;
-    margin-top: 24px;
+  // grid-template-columns: minmax(280px, auto) 1fr;
+  grid-template-columns: 300px 1fr;
+  gap: 20px;
+  margin-top: 24px;
 
-    @include media.max-laptop {
-        grid-template-columns: 1fr;
-    }
+  @include media.max-laptop {
+    grid-template-columns: 1fr;
+  }
 }
 
 .listing-controls {
-    margin-top: 16px;
+  margin-top: 16px;
 
-    .btn-show-filters {
-        @include media.min-laptop {
-            display: none;
-        }
-
-        svg {
-            margin-right: 6px;
-        }
-
-        .filter-count-badge {
-            margin-left: 4px;
-        }
+  .btn-show-filters {
+    @include media.min-laptop {
+      display: none;
     }
+
+    svg {
+      margin-right: 6px;
+    }
+
+    .filter-count-badge {
+      margin-left: 4px;
+    }
+  }
 }
 
 .listing-filter-group {
-    line-height: 1;
+  line-height: 1;
 
-    // padding-bottom: 8px;
-    .count {
-        color: $text-light;
-        font-size: 14px;
+  // padding-bottom: 8px;
+  .count {
+    color: $text-light;
+    font-size: 14px;
 
-        &::before {
-            content: " (";
-        }
-
-        &::after {
-            content: ")";
-        }
+    &::before {
+      content: " (";
     }
+
+    &::after {
+      content: ")";
+    }
+  }
 }
 
 .listing-filter-group__content {
-    .filter-sub-level,
-    .filter-list {
-        display: flex;
-        row-gap: 8px;
-        flex-flow: column wrap;
+  .filter-sub-level,
+  .filter-list {
+    display: flex;
+    row-gap: 8px;
+    flex-flow: column wrap;
 
-        // margin: 8px 0 0 6px;
-        // margin: 0 6px 8px 10px;
-        margin: 0 6px 0 10px;
-    }
+    // margin: 8px 0 0 6px;
+    // margin: 0 6px 8px 10px;
+    margin: 0 6px 0 10px;
+  }
 
-    .filter-list {
-        .filter-checkbox:last-child {
-            margin-bottom: 10px;
-        }
+  .filter-list {
+    .filter-checkbox:last-child {
+      margin-bottom: 10px;
     }
+  }
 
-    .filter-sub-level {
-        .child-checkbox:first-child {
-            margin-top: 10px;
-        }
+  .filter-sub-level {
+    .child-checkbox:first-child {
+      margin-top: 10px;
     }
+  }
 
-    .filter-list.filter-list--hierarchical {
-        margin-bottom: 10px;
-    }
+  .filter-list.filter-list--hierarchical {
+    margin-bottom: 10px;
+  }
 }
 
 .filter-search-box {
-    margin: 0 10px 10px;
+  margin: 0 10px 10px;
 
-    .filter-search-input {
-        border: 1px solid $input-color-border-default;
-        border-radius: $radius-input;
-        background: $dropdown-surface-color-default;
-        padding: 10px;
-        width: 100%;
-        overflow: hidden;
-        color: $text-basic;
-        font-size: 14px;
-    }
+  .filter-search-input {
+    border: 1px solid $input-color-border-default;
+    border-radius: $radius-input;
+    background: $dropdown-surface-color-default;
+    padding: 10px;
+    width: 100%;
+    overflow: hidden;
+    color: $text-basic;
+    font-size: 14px;
+  }
 }
 
 // --- Filter group (summary/details) ---
 
 @mixin transition($prop: all, $time: $animations) {
-    transition: $prop $time;
+  transition: $prop $time;
 }
 
 @mixin transform($rotate: 0deg, $scale: 1) {
-    transform: rotate($rotate) scale($scale);
+  transform: rotate($rotate) scale($scale);
 }
 
 .listing-filter-group {
-    // border: 1px solid $input-color-border-default;
-    border: 1px solid $stroke-default;
-    border-radius: $radius-input;
-    background: $dropdown-surface-color-default;
-    overflow: hidden;
-    color: $text-basic;
-    font-size: 14px;
+  // border: 1px solid $input-color-border-default;
+  border: 1px solid $stroke-default;
+  border-radius: $radius-input;
+  background: $dropdown-surface-color-default;
+  overflow: hidden;
+  color: $text-basic;
+  font-size: 14px;
 
-    summary {
-        list-style: none;
-    }
+  summary {
+    list-style: none;
+  }
 
-    &__summary {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        gap: 8px;
-        cursor: pointer;
-        background: transparent;
-        padding: 14px;
-        user-select: none;
+  &__summary {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    background: transparent;
+    padding: 14px;
+    user-select: none;
 
-        @include transition(all);
-
-        @include media.min-tablet {
-            padding: 12px 12px 16px;
-        }
-
-        .listing-filter-group__title {
-            display: inline-flex;
-            align-items: baseline;
-            gap: 8px;
-            color: $text-dark;
-            font-weight: 500;
-        }
-
-        .filter-count-badge {
-            color: $text-accent;
-            font-weight: normal;
-        }
-
-        .icon-chevron {
-            display: inline-block;
-            flex: 0 0 14px;
-            width: 14px;
-            height: 14px;
-
-            @include transition(transform);
-
-            svg,
-            use {
-                display: block;
-                fill: none;
-                stroke: $dropdown-icon-color;
-                width: 100%;
-                height: 100%;
-            }
-        }
-    }
-
-    &[open] {
-        .icon-chevron {
-            @include transform(180deg);
-        }
-    }
-
-    &__content {
-        margin: 0;
-        padding: 0;
-    }
-
-    .listing-filter-items {
-        margin: 0;
-        padding: 6px 0;
-        list-style: none;
-
-        li {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            border-top: 1px solid $input-color-border-default;
-            padding: 10px 14px;
-
-            &:first-child {
-                border-top: none;
-            }
-
-            label {
-                display: inline-flex;
-                align-items: center;
-                gap: 10px;
-                cursor: pointer;
-                width: 100%;
-                color: $text-basic;
-                font-weight: 500;
-                user-select: none;
-
-                @include transition(background);
-
-                &:hover {
-                    background: $dropdown-surface-color-hover;
-                }
-            }
-
-            .option-count {
-                margin-left: auto;
-                color: $dropdown-text-secondary;
-                font-weight: 500;
-                font-size: 13px;
-            }
-
-            input[type="checkbox"] {
-                transform: translateY(-1px);
-                margin: 0;
-                border: 1px solid $input-color-border-default;
-                border-radius: 6px;
-                background: $input-color-surface-default;
-                padding: 0;
-                width: 18px;
-                height: 18px;
-                accent-color: $icon-color-accent;
-
-                &:focus {
-                    outline: 2px solid rgba($icon-color-accent, 0.14);
-                    outline-offset: 2px;
-                    border-radius: 6px;
-                }
-            }
-        }
-    }
-
-    // slight spacing when stacking multiple filter groups
-    + .listing-filter-group {
-        margin-top: 10px;
-    }
+    @include transition(all);
 
     @include media.min-tablet {
-        .listing-filter-items li {
-            padding: 8px 10px;
-        }
+      padding: 12px 12px 16px;
     }
+
+    .listing-filter-group__title {
+      display: inline-flex;
+      align-items: baseline;
+      gap: 8px;
+      color: $text-dark;
+      font-weight: 500;
+    }
+
+    .filter-count-badge {
+      color: $text-accent;
+      font-weight: normal;
+    }
+
+    .icon-chevron {
+      display: inline-block;
+      flex: 0 0 14px;
+      width: 14px;
+      height: 14px;
+
+      @include transition(transform);
+
+      svg,
+      use {
+        display: block;
+        fill: none;
+        stroke: $dropdown-icon-color;
+        width: 100%;
+        height: 100%;
+      }
+    }
+  }
+
+  &[open] {
+    .icon-chevron {
+      @include transform(180deg);
+    }
+  }
+
+  &__content {
+    margin: 0;
+    padding: 0;
+  }
+
+  .listing-filter-items {
+    margin: 0;
+    padding: 6px 0;
+    list-style: none;
+
+    li {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border-top: 1px solid $input-color-border-default;
+      padding: 10px 14px;
+
+      &:first-child {
+        border-top: none;
+      }
+
+      label {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        cursor: pointer;
+        width: 100%;
+        color: $text-basic;
+        font-weight: 500;
+        user-select: none;
+
+        @include transition(background);
+
+        &:hover {
+          background: $dropdown-surface-color-hover;
+        }
+      }
+
+      .option-count {
+        margin-left: auto;
+        color: $dropdown-text-secondary;
+        font-weight: 500;
+        font-size: 13px;
+      }
+
+      input[type="checkbox"] {
+        transform: translateY(-1px);
+        margin: 0;
+        border: 1px solid $input-color-border-default;
+        border-radius: 6px;
+        background: $input-color-surface-default;
+        padding: 0;
+        width: 18px;
+        height: 18px;
+        accent-color: $icon-color-accent;
+
+        &:focus {
+          outline: 2px solid rgba($icon-color-accent, 0.14);
+          outline-offset: 2px;
+          border-radius: 6px;
+        }
+      }
+    }
+  }
+
+  // slight spacing when stacking multiple filter groups
+  + .listing-filter-group {
+    margin-top: 10px;
+  }
+
+  @include media.min-tablet {
+    .listing-filter-items li {
+      padding: 8px 10px;
+    }
+  }
 }
 
 // --- checkbox ---
 .filter-checkbox {
-    display: inline-flex;
+  display: inline-flex;
+  position: relative;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  box-sizing: border-box;
+  user-select: none;
+
+  input[type="checkbox"] {
+    flex: 0 0 20px;
+    appearance: none;
     position: relative;
-    align-items: center;
-    gap: 8px;
+    transition: all 0.2s ease-in-out;
     cursor: pointer;
-    box-sizing: border-box;
-    user-select: none;
+    margin: 0;
+    border: 1px solid $stroke-default;
+    border-radius: 4px;
+    background-color: $surface-primary;
+    width: 20px;
+    height: 20px;
 
-    input[type="checkbox"] {
-        flex: 0 0 20px;
-        appearance: none;
-        position: relative;
-        transition: all 0.2s ease-in-out;
-        cursor: pointer;
-        margin: 0;
-        border: 1px solid $stroke-default;
-        border-radius: 4px;
-        background-color: $surface-primary;
-        width: 20px;
-        height: 20px;
-
-        &:hover {
-            border-color: $input-color-border-hover;
-        }
-
-        &:checked {
-            border-color: $icon-color-fill;
-            background-color: $icon-color-fill;
-        }
-
-        &::after {
-            position: absolute;
-            top: 0;
-            left: 5px;
-            transform: rotate(45deg) scale(0.8);
-            opacity: 0;
-            transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            border: solid $icon-color-primary;
-            border-width: 0 1px 1px 0;
-            width: 7px;
-            height: 13px;
-            content: "";
-        }
-
-        &:checked::after {
-            transform: rotate(45deg) scale(1);
-            opacity: 1;
-        }
-
-        // Indeterminate state (Dash)
-        &.is-indeterminate,
-        &:indeterminate {
-            border-color: $icon-color-fill;
-            background-color: $icon-color-fill;
-
-            &::after {
-                top: 50%;
-                left: 50%;
-                transform: translate(-50%, -50%);
-                opacity: 1;
-                border: none;
-                background-color: $icon-color-primary;
-                width: 10px;
-                height: 2px;
-            }
-        }
-
-        &:focus-visible {
-            outline: 2px solid $primary-hover;
-            outline-offset: 2px;
-        }
+    &:hover {
+      border-color: $input-color-border-hover;
     }
+
+    &:checked {
+      border-color: $icon-color-fill;
+      background-color: $icon-color-fill;
+    }
+
+    &::after {
+      position: absolute;
+      top: 0;
+      left: 5px;
+      transform: rotate(45deg) scale(0.8);
+      opacity: 0;
+      transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      border: solid $icon-color-primary;
+      border-width: 0 1px 1px 0;
+      width: 7px;
+      height: 13px;
+      content: "";
+    }
+
+    &:checked::after {
+      transform: rotate(45deg) scale(1);
+      opacity: 1;
+    }
+
+    // Indeterminate state (Dash)
+    &.is-indeterminate,
+    &:indeterminate {
+      border-color: $icon-color-fill;
+      background-color: $icon-color-fill;
+
+      &::after {
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        opacity: 1;
+        border: none;
+        background-color: $icon-color-primary;
+        width: 10px;
+        height: 2px;
+      }
+    }
+
+    &:focus-visible {
+      outline: 2px solid $primary-hover;
+      outline-offset: 2px;
+    }
+  }
 }
 
 .listing-grid {
-    display: grid;
+  display: grid;
 
-    @include media.min-tabland {
-        grid-template-columns: 1fr 1fr;
+  @include media.min-tabland {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  gap: 12px;
+
+  .locations-chips--listing {
+    margin: 0;
+  }
+
+  .listing-card {
+    display: flex;
+    flex-flow: column nowrap;
+
+    // align-items: flex-start !important;
+    animation: fadeIn 0.3s ease-in;
+    transition:
+      border-color 0.2s,
+      box-shadow 0.3s;
+    border: 1px solid $stroke-default;
+    border-radius: $radius-image;
+    padding: 12px;
+    overflow: hidden;
+
+    &:hover {
+      box-shadow: 4px 4px 8px 1px rgb(0 0 0 / 10%);
+
+      // border-color: $stroke-hover;
+      border-color: rgba($stroke-hover, 0.2);
+
+      // box-shadow: 4px 4px 8px 4px rgba($stroke-hover, 0.1);
     }
 
-    gap: 12px;
+    .listing-card__content {
+      display: flex;
+      flex-flow: column nowrap;
 
-    .locations-chips--listing {
-        margin: 0;
-    }
+      // display: grid;
+      // grid-template-columns: 180px auto;
+      gap: 10px;
+      height: 100%;
 
-    .listing-card {
+      .listing-card__categories {
         display: flex;
-        flex-flow: column nowrap;
+        flex-flow: row wrap;
+        gap: 4px;
+        line-clamp: 2;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+      }
 
-        // align-items: flex-start !important;
-        animation: fadeIn 0.3s ease-in;
-        transition:
-            border-color 0.2s,
-            box-shadow 0.3s;
-        border: 1px solid $stroke-default;
-        border-radius: $radius-image;
-        padding: 12px;
-        overflow: hidden;
+      .category-tag {
+        border-radius: $radius-element;
+        padding: 4px 8px;
+        font-size: 14px;
+      }
 
-        &:hover {
-            box-shadow: 4px 4px 8px 1px rgb(0 0 0 / 10%);
+      .listing-card__meta {
+        display: block;
 
-            // border-color: $stroke-hover;
-            border-color: rgba($stroke-hover, 0.2);
-
-            // box-shadow: 4px 4px 8px 4px rgba($stroke-hover, 0.1);
+        @include media.min-tablet {
+          display: flex;
+          flex-grow: 1;
+          flex-flow: column wrap;
+          gap: 3px;
         }
 
-        .listing-card__content {
-            display: flex;
-            flex-flow: column nowrap;
+        height: 100%;
 
-            // display: grid;
-            // grid-template-columns: 180px auto;
-            gap: 10px;
-            height: 100%;
+        .listing-card__suptitle {
+          display: flex;
+          flex-flow: row wrap;
+          justify-content: space-between;
+          align-items: flex-start;
+          gap: 8px;
+          margin-bottom: 1rem;
 
-            .listing-card__categories {
-                display: flex;
-                flex-flow: row wrap;
-                gap: 4px;
-                line-clamp: 2;
-                -webkit-line-clamp: 3;
-                -webkit-box-orient: vertical;
-            }
+          @include media.min-tablet {
+            flex-flow: row nowrap;
+            margin-bottom: 0.8rem;
+          }
 
-            .category-tag {
-                border-radius: $radius-element;
-                padding: 4px 8px;
-                font-size: 14px;
-            }
+          .control-favorites-wrapper {
+            margin-left: auto;
 
-            .listing-card__meta {
-                display: block;
+            .heart-label {
+              margin-right: 6px;
 
-                @include media.min-tablet {
-                    display: flex;
-                    flex-grow: 1;
-                    flex-flow: column wrap;
-                    gap: 3px;
-                }
-
-                height: 100%;
-
-                .listing-card__suptitle {
-                    display: flex;
-                    flex-flow: row wrap;
-                    justify-content: space-between;
-                    align-items: flex-start;
-                    gap: 8px;
-                    margin-bottom: 1rem;
-
-                    @include media.min-tablet {
-                        flex-flow: row nowrap;
-                        margin-bottom: 0.8rem;
-                    }
-
-                    .control-favorites-wrapper {
-                        margin-left: auto;
-
-                        .heart-label {
-                            margin-right: 6px;
-
-                            .heart-label__text {
-                                color: $text-light;
-                                font-size: 14px;
-                            }
-                        }
-
-                        .heart--img {
-                            --size-img: 18px;
-
-                            position: relative;
-                            cursor: pointer;
-                            margin-right: 4px;
-                            width: var(--size-img);
-                            height: var(--size-img);
-                        }
-
-                        .heart {
-                            position: relative;
-
-                            --size: 9px;
-
-                            cursor: pointer;
-                            margin-right: 4px;
-                            margin-left: 4px;
-                            width: var(--size);
-                            height: var(--size);
-
-                            .heart__icon {
-                                top: 2px;
-                            }
-                        }
-                    }
-                }
-
-                // The title link holds just the title - its accessible name -
-                // and its ::after covers the body (title, dates, excerpt):
-                // the area the link used to wrap. fit-content only where the
-                // old link was a flex item and so took it.
-                .listing-card__body {
-                    position: relative;
-
-                    @include media.min-tablet {
-                        width: fit-content;
-                    }
-                }
-
-                .listing-card__title--link {
-                    color: inherit;
-
-                    &::after {
-                        position: absolute;
-                        inset: 0;
-                        content: "";
-                    }
-                }
-
-                .listing-card__title {
-                    color: $text-basic;
-                }
-
-                .listing-card__dates {
-                    margin-top: 4px;
-                    color: $text-light;
-                    font-size: 0.9rem;
-                }
-
-                .listing-card__excerpt {
-                    color: $input-color-text-hover;
-                }
-            }
-        }
-
-        .listing-card__footer {
-            align-self: flex-start;
-            width: 100%;
-        }
-
-        .listing-card__engage {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 16px;
-
-            // margin-top: 4px;
-            margin-top: 1rem;
-
-            @include media.min-tablet {
-                margin-top: auto;
-            }
-        }
-
-        .listing-card__rating {
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-
-            .stars-display svg {
-                width: 14px;
-                height: 14px;
-            }
-        }
-
-        .listing-card__rating-avg {
-            color: $text-accent;
-            font-weight: 500;
-            font-size: 14px;
-        }
-
-        .listing-card__comments-link {
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            color: $text-light;
-            font-size: 14px;
-            text-decoration: none;
-
-            &:hover {
-                color: $text-accent;
-            }
-
-            svg {
-                color: $text-accent;
-            }
-
-            .listing-card__comments--count {
-                color: $text-accent;
-                font-weight: 500;
-            }
-        }
-
-        .listing-card__figure {
-            position: relative;
-            border-radius: $radius-image;
-
-            // background-color: $buttons-color-background-secondary-hover;
-            background-color: $dropdown-surface-color-hover;
-            width: 100%;
-            overflow: hidden;
-
-            @include media.max-tabland {
-                display: none;
-            }
-
-            .listing-card__figure--link {
-                position: absolute;
-
-                // z-index: 1;
-                width: 100%;
-                height: 100%;
-            }
-
-            .listing-card__figure--link:not(.placeholder) {
-                &::before {
-                    position: absolute;
-                    inset: 0;
-                    border-radius: $radius-image;
-                    background: linear-gradient(
-                        180deg,
-                        rgb(0 0 0 / 50%) 0%,
-                        rgb(0 0 0 / 25%) 10%,
-                        rgb(0 0 0 / 15%) 15%,
-                        rgb(0 0 0 / 7%) 25%,
-                        rgb(0 0 0 / 0.01%) 35%,
-                        rgb(0 0 0 / 0.01%) 65%,
-                        rgb(0 0 0 / 7%) 75%,
-                        rgb(0 0 0 / 15%) 85%,
-                        rgb(0 0 0 / 25%) 90%,
-                        rgb(0 0 0 / 50%) 100%
-                    );
-
-                    // background: linear-gradient(
-                    //     0deg,
-                    //     rgb(0 0 0 / 50%) 0%,
-                    //     rgb(0 0 0 / 25%) 10%,
-                    //     rgb(0 0 0 / 15%) 15%,
-                    //     rgb(0 0 0 / 7%) 25%,
-                    //     rgb(0 0 0 / 0.01%) 35%,
-                    //     rgba(0, 0, 0, 0) 100%
-                    // );
-                    pointer-events: none;
-                    content: "";
-
-                    // rgba(0, 0, 0, 0) 100%
-                }
-            }
-
-            .listing-card__image {
-                border-radius: $radius-image;
-                width: 100%;
-                height: 100%;
-                object-fit: cover;
-            }
-
-            .control-favorites-wrapper--icon-only {
-                position: absolute;
-                right: 0;
-                bottom: 0;
-                z-index: 2;
-                width: 40px;
-                height: 40px;
-
-                .heart-label {
-                    display: block;
-                    position: absolute;
-                    z-index: 3;
-                    cursor: pointer;
-                    inset: 0;
-                    background: transparent;
-                    width: 40px;
-                    height: 40px;
-                }
-
-                // .heart {
-                //     .heart__icon {
-                //         // background: $stroke-default;
-                //     }
-                // }
-            }
-
-            .listing-card__placeholder {
-                display: flex;
-                position: absolute;
-                justify-content: center;
-                align-items: center;
-                inset: 0;
+              .heart-label__text {
                 color: $text-light;
-
-                .card-image__fallback--icon {
-                    width: 42px;
-                    height: 42px;
-                }
+                font-size: 14px;
+              }
             }
+
+            .heart--img {
+              --size-img: 18px;
+
+              position: relative;
+              cursor: pointer;
+              margin-right: 4px;
+              width: var(--size-img);
+              height: var(--size-img);
+            }
+
+            .heart {
+              position: relative;
+
+              --size: 9px;
+
+              cursor: pointer;
+              margin-right: 4px;
+              margin-left: 4px;
+              width: var(--size);
+              height: var(--size);
+
+              .heart__icon {
+                top: 2px;
+              }
+            }
+          }
         }
+
+        // The title link holds just the title - its accessible name -
+        // and its ::after covers the body (title, dates, excerpt):
+        // the area the link used to wrap. fit-content only where the
+        // old link was a flex item and so took it.
+        .listing-card__body {
+          position: relative;
+
+          @include media.min-tablet {
+            width: fit-content;
+          }
+        }
+
+        .listing-card__title--link {
+          color: inherit;
+
+          &::after {
+            position: absolute;
+            inset: 0;
+            content: "";
+          }
+        }
+
+        .listing-card__title {
+          color: $text-basic;
+        }
+
+        .listing-card__dates {
+          margin-top: 4px;
+          color: $text-light;
+          font-size: 0.9rem;
+        }
+
+        .listing-card__excerpt {
+          color: $input-color-text-hover;
+        }
+      }
     }
+
+    .listing-card__footer {
+      align-self: flex-start;
+      width: 100%;
+    }
+
+    .listing-card__engage {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+
+      // margin-top: 4px;
+      margin-top: 1rem;
+
+      @include media.min-tablet {
+        margin-top: auto;
+      }
+    }
+
+    .listing-card__rating {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+
+      .stars-display svg {
+        width: 14px;
+        height: 14px;
+      }
+    }
+
+    .listing-card__rating-avg {
+      color: $text-accent;
+      font-weight: 500;
+      font-size: 14px;
+    }
+
+    .listing-card__comments-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      color: $text-light;
+      font-size: 14px;
+      text-decoration: none;
+
+      &:hover {
+        color: $text-accent;
+      }
+
+      svg {
+        color: $text-accent;
+      }
+
+      .listing-card__comments--count {
+        color: $text-accent;
+        font-weight: 500;
+      }
+    }
+
+    .listing-card__figure {
+      position: relative;
+      border-radius: $radius-image;
+
+      // background-color: $buttons-color-background-secondary-hover;
+      background-color: $dropdown-surface-color-hover;
+      width: 100%;
+      overflow: hidden;
+
+      @include media.max-tabland {
+        display: none;
+      }
+
+      .listing-card__figure--link {
+        position: absolute;
+
+        // z-index: 1;
+        width: 100%;
+        height: 100%;
+      }
+
+      .listing-card__figure--link:not(.placeholder) {
+        &::before {
+          position: absolute;
+          inset: 0;
+          border-radius: $radius-image;
+          background: linear-gradient(
+            180deg,
+            rgb(0 0 0 / 50%) 0%,
+            rgb(0 0 0 / 25%) 10%,
+            rgb(0 0 0 / 15%) 15%,
+            rgb(0 0 0 / 7%) 25%,
+            rgb(0 0 0 / 0.01%) 35%,
+            rgb(0 0 0 / 0.01%) 65%,
+            rgb(0 0 0 / 7%) 75%,
+            rgb(0 0 0 / 15%) 85%,
+            rgb(0 0 0 / 25%) 90%,
+            rgb(0 0 0 / 50%) 100%
+          );
+
+          // background: linear-gradient(
+          //     0deg,
+          //     rgb(0 0 0 / 50%) 0%,
+          //     rgb(0 0 0 / 25%) 10%,
+          //     rgb(0 0 0 / 15%) 15%,
+          //     rgb(0 0 0 / 7%) 25%,
+          //     rgb(0 0 0 / 0.01%) 35%,
+          //     rgba(0, 0, 0, 0) 100%
+          // );
+          pointer-events: none;
+          content: "";
+
+          // rgba(0, 0, 0, 0) 100%
+        }
+      }
+
+      .listing-card__image {
+        border-radius: $radius-image;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .control-favorites-wrapper--icon-only {
+        position: absolute;
+        right: 0;
+        bottom: 0;
+        z-index: 2;
+        width: 40px;
+        height: 40px;
+
+        .heart-label {
+          display: block;
+          position: absolute;
+          z-index: 3;
+          cursor: pointer;
+          inset: 0;
+          background: transparent;
+          width: 40px;
+          height: 40px;
+        }
+
+        // .heart {
+        //     .heart__icon {
+        //         // background: $stroke-default;
+        //     }
+        // }
+      }
+
+      .listing-card__placeholder {
+        display: flex;
+        position: absolute;
+        justify-content: center;
+        align-items: center;
+        inset: 0;
+        color: $text-light;
+
+        .card-image__fallback--icon {
+          width: 42px;
+          height: 42px;
+        }
+      }
+    }
+  }
 }
 
 .listing-search-wrapper {
-    .listing-search-input {
-        transition: border-color 250ms cubic-bezier(0.4, 0, 0.2, 1);
-        border: 1px solid #784cdb;
-        border-radius: 12px;
-        background: #fff;
-        padding: 12px;
-        width: 100%;
-        color: #292929;
-        font-size: 1rem;
-    }
+  .listing-search-input {
+    transition: border-color 250ms cubic-bezier(0.4, 0, 0.2, 1);
+    border: 1px solid #784cdb;
+    border-radius: 12px;
+    background: #fff;
+    padding: 12px;
+    width: 100%;
+    color: #292929;
+    font-size: 1rem;
+  }
 }
 
 .listing-search-input,
 .filter-search-input {
-    &:focus {
-        outline: 2px solid #784cdb;
+  &:focus {
+    outline: 2px solid #784cdb;
 
-        // outline-offset: 1px;
-    }
+    // outline-offset: 1px;
+  }
 }
 
 .listing-backdrop {
-    display: none;
+  display: none;
 
-    @include media.max-laptop {
-        position: fixed;
-        z-index: 9999;
-        inset: 0;
-        background: rgb(0 0 0 / 40%);
+  @include media.max-laptop {
+    position: fixed;
+    z-index: 9999;
+    inset: 0;
+    background: rgb(0 0 0 / 40%);
 
-        &:not([hidden]) {
-            display: block;
-        }
+    &:not([hidden]) {
+      display: block;
     }
+  }
 }
 
 body.sidebar-open {
-    @include media.max-laptop {
-        overflow: hidden;
-    }
+  @include media.max-laptop {
+    overflow: hidden;
+  }
 }
 
 .listing-sidebar {
+  @include media.max-laptop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    transform: translateX(-100%);
+    z-index: 10000;
+
+    // Closed means hidden, not just off-screen, so Tab and screen readers
+    // skip it. visibility flips only once the slide-out has played.
+    visibility: hidden;
+    transition:
+      transform 0.3s ease,
+      visibility 0s linear 0.3s;
+    background: $surface-primary;
+
+    // width: min(320px, 85vw);
+    width: calc(100% - 40px);
+    max-width: 360px;
+    height: 100dvh;
+
+    &.is-open {
+      transform: translateX(0);
+      visibility: visible;
+      transition: transform 0.3s ease;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      &,
+      &.is-open {
+        transition: none;
+      }
+    }
+  }
+
+  .listing-sidebar__body {
+    display: flex;
+    flex-flow: column nowrap;
+    gap: 12px;
+
+    // The drawer scrolls here, not on the aside: a scrolling aside would
+    // clip the close button that hangs over its edge.
     @include media.max-laptop {
-        position: fixed;
-        top: 0;
-        left: 0;
-        transform: translateX(-100%);
-        z-index: 10000;
-
-        // Closed means hidden, not just off-screen, so Tab and screen readers
-        // skip it. visibility flips only once the slide-out has played.
-        visibility: hidden;
-        transition:
-            transform 0.3s ease,
-            visibility 0s linear 0.3s;
-        background: $surface-primary;
-
-        // width: min(320px, 85vw);
-        width: calc(100% - 40px);
-        max-width: 360px;
-        height: 100dvh;
-
-        &.is-open {
-            transform: translateX(0);
-            visibility: visible;
-            transition: transform 0.3s ease;
-        }
-
-        @media (prefers-reduced-motion: reduce) {
-            &,
-            &.is-open {
-                transition: none;
-            }
-        }
+      padding: 12px;
+      height: 100%;
+      overflow-y: auto;
+      overscroll-behavior: contain;
     }
+  }
 
-    .listing-sidebar__body {
-        display: flex;
-        flex-flow: column nowrap;
-        gap: 12px;
+  .listing-sidebar__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 
-        // The drawer scrolls here, not on the aside: a scrolling aside would
-        // clip the close button that hangs over its edge.
-        @include media.max-laptop {
-            padding: 12px;
-            height: 100%;
-            overflow-y: auto;
-            overscroll-behavior: contain;
-        }
+    // As tall as the close button, so the title lines up with it, and
+    // clear of the half of it that sits inside the panel.
+    @include media.max-laptop {
+      padding-right: 12px;
+      min-height: 40px;
     }
+  }
 
-    .listing-sidebar__header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
+  // Drawer only. Straddles the panel's top-right edge: the outer half sits
+  // over the strip of backdrop the panel leaves (width: calc(100% - 40px)).
+  // Pinned while the body scrolls under it; z-index keeps it above rows
+  // that are themselves positioned (.filter-checkbox).
+  .listing-sidebar__close {
+    display: none;
 
-        // As tall as the close button, so the title lines up with it, and
-        // clear of the half of it that sits inside the panel.
-        @include media.max-laptop {
-            padding-right: 12px;
-            min-height: 40px;
-        }
+    @include media.max-laptop {
+      display: grid;
+      position: absolute;
+      top: 12px;
+      right: 0;
+      place-items: center;
+      transform: translateX(50%);
+      z-index: 1;
+      transition: background 0.2s;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgb(0 0 0 / 15%);
+      border: 1px solid $stroke-default;
+      border-radius: 50%;
+      background: $surface-primary;
+      padding: 0;
+      width: 40px;
+      height: 40px;
+      color: $text-basic;
+      stroke-width: 1.5; // icon-close draws a 1-unit stroke by default
+
+      &:hover {
+        background: $dropdown-surface-color-hover;
+      }
+
+      &:focus-visible {
+        outline: 2px solid $primary-hover;
+        outline-offset: 2px;
+      }
     }
+  }
 
-    // Drawer only. Straddles the panel's top-right edge: the outer half sits
-    // over the strip of backdrop the panel leaves (width: calc(100% - 40px)).
-    // Pinned while the body scrolls under it; z-index keeps it above rows
-    // that are themselves positioned (.filter-checkbox).
-    .listing-sidebar__close {
-        display: none;
+  .sidebar-btn__close {
+    width: 100%;
 
-        @include media.max-laptop {
-            display: grid;
-            position: absolute;
-            top: 12px;
-            right: 0;
-            place-items: center;
-            transform: translateX(50%);
-            z-index: 1;
-            transition: background 0.2s;
-            cursor: pointer;
-            box-shadow: 0 2px 8px rgb(0 0 0 / 15%);
-            border: 1px solid $stroke-default;
-            border-radius: 50%;
-            background: $surface-primary;
-            padding: 0;
-            width: 40px;
-            height: 40px;
-            color: $text-basic;
-            stroke-width: 1.5; // icon-close draws a 1-unit stroke by default
-
-            &:hover {
-                background: $dropdown-surface-color-hover;
-            }
-
-            &:focus-visible {
-                outline: 2px solid $primary-hover;
-                outline-offset: 2px;
-            }
-        }
+    @include media.min-laptop {
+      display: none;
     }
+  }
 
-    .sidebar-btn__close {
-        width: 100%;
+  .listing-status {
+    display: flex;
+    justify-content: space-between;
+    gap: 6px;
 
-        @include media.min-laptop {
-            display: none;
-        }
+    // margin-left: 12px;
+    .listing-status-label {
+      display: flex;
+      flex-flow: row nowrap;
+      align-items: center;
+      gap: 6px;
+
+      .status-label__title {
+        color: $text-light;
+      }
+
+      .status-label__info {
+        color: $text-accent;
+        font-weight: 600;
+
+        // font-size: 15px;
+      }
     }
-
-    .listing-status {
-        display: flex;
-        justify-content: space-between;
-        gap: 6px;
-
-        // margin-left: 12px;
-        .listing-status-label {
-            display: flex;
-            flex-flow: row nowrap;
-            align-items: center;
-            gap: 6px;
-
-            .status-label__title {
-                color: $text-light;
-            }
-
-            .status-label__info {
-                color: $text-accent;
-                font-weight: 600;
-
-                // font-size: 15px;
-            }
-        }
-    }
+  }
 }
 
 mark {
-    border-radius: 3px;
-    background: #ffea8a;
-    padding: 0 3px;
+  border-radius: 3px;
+  background: #ffea8a;
+  padding: 0 3px;
 }
 
 .listing-filter-group__content {
-    .listing-search-wrapper {
-        margin: 0 10px 10px;
-    }
+  .listing-search-wrapper {
+    margin: 0 10px 10px;
+  }
 }
 
 .listing-chips {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-    margin-bottom: 16px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 16px;
 
-    &__clear {
-        margin-left: auto;
-    }
+  &__clear {
+    margin-left: auto;
+  }
 }
 
 // A failed search or Load more: the message plus "Try again"
 // (grid/actions.js). Same shape as .sw-pagination__alert.
 .listing-results__alert {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 16px;
-    color: $text-dark;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+  color: $text-dark;
 }
 
 .listing-results {
-    .listing-results__footer {
-        display: flex;
+  .listing-results__footer {
+    display: flex;
 
-        .btn-load-more {
-            margin-top: 20px;
-            margin-left: auto;
-        }
+    .btn-load-more {
+      margin-top: 20px;
+      margin-left: auto;
     }
+  }
 }

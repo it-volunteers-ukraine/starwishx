@@ -5,63 +5,63 @@ $width-tablet: 768px;
 $width-mobile: 375px;
 
 @mixin min-desktop {
-   @media only screen and (min-width: ($width-desktop)) {
-      @content;
-   }
+  @media only screen and (min-width: ($width-desktop)) {
+    @content;
+  }
 }
 
 @mixin min-laptop {
-   @media only screen and (min-width: ($width-laptop)) {
-      @content;
-   }
+  @media only screen and (min-width: ($width-laptop)) {
+    @content;
+  }
 }
 
 @mixin min-tabland {
-   @media only screen and (min-width: ($width-tabland)) {
-      @content;
-   }
+  @media only screen and (min-width: ($width-tabland)) {
+    @content;
+  }
 }
 
 @mixin min-tablet {
-   @media only screen and (min-width: ($width-tablet)) {
-      @content;
-   }
+  @media only screen and (min-width: ($width-tablet)) {
+    @content;
+  }
 }
 
 @mixin min-mobile {
-   @media only screen and (min-width: $width-mobile) {
-      @content;
-   }
+  @media only screen and (min-width: $width-mobile) {
+    @content;
+  }
 }
 
 @mixin max-desktop {
-   @media only screen and (max-width: ($width-desktop - 0.02px)) {
-      @content;
-   }
+  @media only screen and (max-width: ($width-desktop - 0.02px)) {
+    @content;
+  }
 }
 
 @mixin max-laptop {
-   @media only screen and (max-width: ($width-laptop - 0.02px)) {
-      @content;
-   }
+  @media only screen and (max-width: ($width-laptop - 0.02px)) {
+    @content;
+  }
 }
 
 @mixin max-tabland {
-   @media only screen and (max-width: ($width-tabland - 0.02px)) {
-      @content;
-   }
+  @media only screen and (max-width: ($width-tabland - 0.02px)) {
+    @content;
+  }
 }
 
 @mixin max-tablet {
-   @media only screen and (max-width: ($width-tablet - 0.02px)) {
-      @content;
-   }
+  @media only screen and (max-width: ($width-tablet - 0.02px)) {
+    @content;
+  }
 }
 
 @mixin max-mobile {
-   @media only screen and (max-width: ($width-mobile - 0.02px)) {
-      @content;
-   }
+  @media only screen and (max-width: ($width-mobile - 0.02px)) {
+    @content;
+  }
 }
 
 /*
@@ -69,37 +69,43 @@ not used dcurrently
  for futrue use, just in case
 */
 @mixin hover-fine {
-   @media (hover: hover) and (pointer: fine) {
-      @content;
-   }
+  @media (hover: hover) and (pointer: fine) {
+    @content;
+  }
 }
 
 @mixin desktop {
-   @media only screen and (min-width: ($width-desktop)) {
-      @content;
-   }
+  @media only screen and (min-width: ($width-desktop)) {
+    @content;
+  }
 }
 
 @mixin laptop {
-   @media only screen and (min-width: ($width-tablet + 1)) and (max-width: $width-laptop) {
-      @content;
-   }
+  @media only screen and (min-width: (
+    $width-tablet + 1
+  )) and (max-width: $width-laptop) {
+    @content;
+  }
 }
 
 @mixin tabland {
-   @media only screen and (min-width: ($width-tablet + 1)) and (max-width: $width-tabland) {
-      @content;
-   }
+  @media only screen and (min-width: (
+    $width-tablet + 1
+  )) and (max-width: $width-tabland) {
+    @content;
+  }
 }
 
 @mixin tablet {
-   @media only screen and (min-width: ($width-mobile + 1)) and (max-width: $width-tablet) {
-      @content;
-   }
+  @media only screen and (min-width: (
+    $width-mobile + 1
+  )) and (max-width: $width-tablet) {
+    @content;
+  }
 }
 
 @mixin mobile {
-   @media only screen and (max-width: $width-mobile) {
-      @content;
-   }
+  @media only screen and (max-width: $width-mobile) {
+    @content;
+  }
 }
