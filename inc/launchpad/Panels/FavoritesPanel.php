@@ -68,15 +68,17 @@ class FavoritesPanel extends AbstractPanel
             <div
                 class="favorites-empty"
                 data-wp-bind--hidden="state.shouldHideFavoritesEmpty">
-                <span class="dashicons dashicons-heart"></span>
+                <?= sw_svg('icon-heart', 24); ?>
                 <p><?php esc_html_e('No favorites yet.', 'starwishx'); ?></p>
             </div>
             <!-- GRID -->
             <div class="favorites-grid" data-wp-bind--hidden="<?= $this->statePath('items') ?>.length === 0">
                 <template data-wp-each--item="<?= $this->statePath('items') ?>">
+                    <?php // Shown while favorited: Remove takes the ID out of myFavoriteIds, hiding the card. 
+                    ?>
                     <article
                         class="favorite-card"
-                        data-wp-bind--hidden="state.isCurrentItemFavorite">
+                        data-wp-bind--hidden="!state.isCurrentItemFavorite">
                         <!-- Thumbnail Figure -->
                         <div class="favorite-card__figure">
                             <a data-wp-bind--href="context.item.url" target="_blank">
@@ -89,7 +91,7 @@ class FavoritesPanel extends AbstractPanel
 
                                 <!-- Fallback Placeholder -->
                                 <div class="favorite-card__placeholder" data-wp-bind--hidden="context.item.thumbnail">
-                                    <span class="dashicons dashicons-heart"></span>
+                                    <?= sw_svg('icon-heart', 24); ?>
                                 </div>
                             </a>
                         </div>

@@ -37,18 +37,33 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
-      # Node, pnpm (packageManager) and Vite+ (the lockfile's vite-plus),
-      # then `vp install` with a dependency cache.
+      # Node (engines), pnpm (packageManager) and Vite+ (the lockfile's
+      # vite-plus), then `vp install` with a dependency cache.
       - uses: voidzero-dev/setup-vp@68f39c78aaf39be468cabd2afb09c162574c84af # v1.21.2
         with:
-          node-version: "24"
           cache: true
 
-      - name: Format and lint (Oxfmt, Oxlint)
+      - name: Format, lint and type-check (Oxfmt, Oxlint)
         run: vp check
 
-      - name: Stylelint
+      - name: Lint the SCSS (Biome)
         run: vpr style:lint
+
+      # The PHP the theme requires (composer.json): every file must parse on it.
+      - uses: shivammathur/setup-php@eb7c497e18156a6bbabfef1d3a82760b9eda3962 # 2.40.0
+        with:
+          php-version: "8.5"
+          coverage: none
+          tools: none
+
+      - name: Check PHP syntax
+        run: >-
+          git ls-files -z '*.php' ':!:vendor/**' ':!:.void/**'
+          | xargs -0 -n1 -P4 php -d display_errors=stderr -l > /dev/null
+
+      # UrlPolicy's parser ships with PHP: a new PHP can change what it accepts.
+      - name: Test the URL policy
+        run: php tests/url-policy.php
 
       - name: Build and package
         run: vpr build

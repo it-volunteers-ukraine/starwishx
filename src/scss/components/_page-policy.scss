@@ -4,112 +4,115 @@
 
 .privacy-policy,
 .page-template-page-policy {
-   .site-footer {
-      margin-top: 80px;
-   }
+    .site-footer {
+        margin-top: 80px;
+    }
 }
 
 .policy-title {
-   margin: 12px 0 16px;
+    margin: 12px 0 16px;
 
-   @include media.min-laptop {
-      margin: 16px 0 32px;
-   }
+    @include media.min-laptop {
+        margin: 16px 0 32px;
+    }
 }
 
 .policy-layout {
-   display: grid;
-   grid-template-columns: clamp(325px, 6.625rem + 15.208vw, 398px) 1fr;
-   align-items: start;
-   gap: 20px;
+    display: grid;
+    grid-template-columns: clamp(325px, 6.625rem + 15.208vw, 398px) 1fr;
+    align-items: start;
+    gap: 20px;
 
-   @include media.max-tablet {
-      grid-template-columns: 1fr;
-      gap: 20px;
-   }
+    @include media.max-tablet {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
 }
 
 .policy-left {
-   .policy-pdf-link {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      text-decoration: none;
+    .policy-pdf-link {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        text-decoration: none;
 
-      .policy-pdf-icon {
-         display: flex;
-         align-items: center;
-         max-width: 22px;
-         color: $icon-color-accent;
-      }
+        .policy-pdf-icon {
+            display: flex;
+            align-items: center;
+            max-width: 22px;
+            color: $icon-color-accent;
+        }
 
-      .policy-pdf-info {
-         .policy-pdf-title {
-            display: block;
-            color: $text-basic;
-         }
+        .policy-pdf-info {
+            .policy-pdf-title {
+                display: block;
+                color: $text-basic;
+            }
 
-         .policy-pdf-meta {
-            display: block;
-            color: $text-light;
-         }
-      }
-   }
+            .policy-pdf-meta {
+                display: block;
+                color: $text-light;
+            }
+        }
+    }
 
-   .policy-pdf-empty {
-      color: $icon-color-accent;
-      font-style: italic;
-   }
+    .policy-pdf-empty {
+        color: $icon-color-accent;
+        font-style: italic;
+    }
 }
 
 .policy-right {
-   .policy-effective-date,
-   .policy-intro {
-      margin-bottom: 24px;
+    .policy-effective-date,
+    .policy-intro {
+        margin-bottom: 24px;
 
-      @include media.min-laptop {
-         margin-bottom: 32px;
-      }
-   }
+        @include media.min-laptop {
+            margin-bottom: 32px;
+        }
+    }
 
-   .policy-content {
-      // content typography
-      h2 {
-         color: $text-accent;
-         font-weight: 600;
-         font-size: 18px;
-         line-height: 1.2;
+    .policy-content {
+        // content typography
+        h2 {
+            color: $text-accent;
+            font-weight: 600;
+            font-size: 18px;
+            line-height: 1.2;
 
-         @include media.min-desktop {
-            font-size: 20px;
-         }
-      }
+            @include media.min-desktop {
+                font-size: 20px;
+            }
+        }
 
-      p {
-         margin-top: 16px;
-      }
+        & > {
+            .wp-block-paragraph,
+            .wp-block-list {
+                margin-top: 1rem;
+            }
+        }
 
-      ul,
-      ol {
-         margin-bottom: 12px;
-         margin-left: 1.5rem;
-      }
+        ul,
+        ol {
+            margin-bottom: 12px;
+            margin-left: 1.5rem;
+        }
 
-      ul {
-         list-style: disc;
-
-         li {
+        ul {
             list-style: disc;
-         }
-      }
 
-      h2,
-      h3 {
-         margin-top: 24px;
+            li {
+                list-style: disc;
+            }
+        }
 
-         @include media.min-laptop {
-            margin-top: 32px;
-         }
-      }
-   }
+        h2,
+        h3 {
+            margin-top: 24px;
+
+            @include media.min-laptop {
+                margin-top: 32px;
+            }
+        }
+    }
 }

@@ -6,26 +6,26 @@
 // File: inc/blocks/accordion-opportunities/editor.scss
 
 .accordion-opportunities__content {
-  grid-template-rows: 1fr;
-  opacity: 1;
-  pointer-events: auto;
+    grid-template-rows: 1fr;
+    opacity: 1;
+    pointer-events: auto;
 }
 
 .accordion-opportunities__photo {
-  display: block;
-  position: static;
-  opacity: 1;
-  margin-top: 16px;
-  width: 120px;
+    display: block;
+    position: static;
+    opacity: 1;
+    margin-top: 16px;
+    width: 120px;
 }
 
 .accordion-opportunities__list > .block-list-appender {
-  margin: 16px 0;
+    margin: 16px 0;
 }
 
 .accordion-opportunities__content .components-placeholder {
-  margin-top: 16px;
-  min-height: 160px;
-  width: 120px;
-  min-width: 120px;
+    margin-top: 16px;
+    min-height: 160px;
+    width: 120px;
+    min-width: 120px;
 }

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Built asset file: URL, dependencies and version of a file tools/build.mjs
+ * Built asset file: URL, dependencies and version of a file tools/build.ts
  * wrote into the theme, read from the {name}.asset.php next to it - the
  * manifest @wordpress/scripts generates, whose version is a content hash.
  * Core reads these manifests for block.json assets on its own; this does the

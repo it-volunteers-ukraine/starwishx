@@ -6,17 +6,17 @@
 // File: inc/blocks/faq/editor.scss
 
 .faq__summary {
-  cursor: text;
+    cursor: text;
 }
 
 .faq__question:empty::before {
-  opacity: 0.6;
+    opacity: 0.6;
 }
 
 .faq__list > .block-list-appender {
-  margin: 16px 0;
+    margin: 16px 0;
 }
 
 .faq__answer > .block-list-appender {
-  margin-top: 8px;
+    margin-top: 8px;
 }

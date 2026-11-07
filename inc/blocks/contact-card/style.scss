@@ -19,130 +19,130 @@
 @use "blocks/media-section" as *;
 
 .contact-card__row {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 40px;
 
-  @include min-tablet {
-    flex-direction: row;
-    gap: 28px;
-  }
+    @include min-tablet {
+        flex-direction: row;
+        gap: 28px;
+    }
 }
 
 // The figure owns the box (full width x 440px on phones, 3:4 from tablet up);
 // the image covers it.
 .contact-card__media {
-  margin: 0;
-  border-radius: 12px;
-  height: 440px;
-  overflow: hidden;
+    margin: 0;
+    border-radius: 12px;
+    height: 440px;
+    overflow: hidden;
 
-  @include min-tablet {
-    flex: 0 1 336px;
-    aspect-ratio: 3 / 4;
-    height: auto;
-  }
+    @include min-tablet {
+        flex: 0 1 336px;
+        aspect-ratio: 3 / 4;
+        height: auto;
+    }
 
-  @include min-laptop {
-    flex-basis: 330px;
-  }
+    @include min-laptop {
+        flex-basis: 330px;
+    }
 
-  @include min-desktop {
-    flex-basis: 425px;
-  }
+    @include min-desktop {
+        flex-basis: 425px;
+    }
 }
 
 .contact-card__image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
 // Text column; the bottom padding keeps the text clear of the star.
 .contact-card__body {
-  @include media-section-body;
+    @include media-section-body;
 
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  min-height: 424px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    min-height: 424px;
 
-  // Shrinks with the photo when a tablet is narrower than both columns.
-  @include min-tablet {
-    flex: 0 1 330px;
-  }
+    // Shrinks with the photo when a tablet is narrower than both columns.
+    @include min-tablet {
+        flex: 0 1 330px;
+    }
 
-  @include min-desktop {
-    flex-basis: 417px;
-  }
+    @include min-desktop {
+        flex-basis: 417px;
+    }
 }
 
 .contact-card__title {
-  color: $text-dark;
+    color: $text-dark;
 }
 
 .contact-card__text,
 .contact-card__item {
-  font-size: 16px;
-  line-height: 1.3;
+    font-size: 16px;
+    line-height: 1.3;
 
-  @include min-desktop {
-    font-size: 18px;
-  }
+    @include min-desktop {
+        font-size: 18px;
+    }
 }
 
 // <address> is italic by default.
 .contact-card__contacts {
-  font-style: normal;
+    font-style: normal;
 }
 
 .contact-card__list {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  margin: 0;
-  padding: 0;
-  list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
 }
 
 .contact-card__item {
-  display: flex;
-  align-items: center;
-  gap: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
 .contact-card__item-icon {
-  flex-shrink: 0;
-  width: 24px;
-  height: 24px;
-  color: $icon-color-accent;
+    flex-shrink: 0;
+    width: 24px;
+    height: 24px;
+    color: $icon-color-accent;
 }
 
 .contact-card__link {
-  color: $text-accent;
-  text-decoration: none;
-  overflow-wrap: anywhere;
+    color: $text-accent;
+    text-decoration: none;
+    overflow-wrap: anywhere;
 
-  &:hover,
-  &:focus-visible {
-    text-decoration: underline;
-  }
+    &:hover,
+    &:focus-visible {
+        text-decoration: underline;
+    }
 }
 
 // Decorative spinning star (aria-hidden in the markup).
 .contact-card__icon {
-  @include media-section-icon("contact-card");
+    @include media-section-icon("contact-card");
 
-  &-bg {
-    border: 2px solid $icon-color-secondary;
-    border-radius: 50%;
-  }
+    &-bg {
+        border: 2px solid $icon-color-secondary;
+        border-radius: 50%;
+    }
 }
 
 @include media-section-spin("contact-card");
 
 // Editor-only notice when there is nothing to show.
 .contact-card__empty {
-  color: $text-light;
+    color: $text-light;
 }

@@ -1,0 +1,36 @@
+// Biome lints the theme's SCSS and nothing else: JS, TS, JSON, YAML and
+// Markdown belong to Oxlint and Oxfmt (vite.config.ts), which also formats
+// the SCSS. Runs on staged files before each commit and through
+// `pnpm style:lint` - not inside the build.
+{
+  "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
+  "files": {
+    "includes": ["src/scss/**/*.scss", "inc/blocks/**/*.scss"],
+  },
+  "formatter": { "enabled": false },
+  "assist": { "enabled": false },
+  "linter": {
+    "rules": {
+      "complexity": {
+        // Deliberate overrides of WordPress and third-party styles.
+        "noImportantStyles": "off",
+      },
+      "correctness": {
+        "noUnknownFunction": {
+          "level": "error",
+          // Functions from `@use "..." as *`: Biome doesn't follow @use
+          // across files, so these have to be named here.
+          "options": { "ignore": ["to-rem"] },
+        },
+      },
+      "nursery": {
+        // `--x: $y` reaches the browser as the literal text "$y".
+        "noMissingScssInterpolation": "error",
+      },
+      "style": {
+        // Reports the order of nested BEM partials, not bugs.
+        "noDescendingSpecificity": "off",
+      },
+    },
+  },
+}

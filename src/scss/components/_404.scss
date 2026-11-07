@@ -10,114 +10,114 @@ section margins on Figma from desctop to mobile
 100 - 74
 */
 .section-404 {
-   padding: 0 0 74px;
+    padding: 0 0 74px;
 
-   @include min-desktop {
-      padding: 0 0 152px;
-   }
+    @include min-desktop {
+        padding: 0 0 152px;
+    }
 
-   .container {
-      padding: 0 40px;
-      max-width: 621px;
-      color: $text-dark;
-      text-align: center;
+    .container {
+        padding: 0 40px;
+        max-width: 621px;
+        color: $text-dark;
+        text-align: center;
 
-      .btn {
-         margin: 0 auto;
-      }
-   }
+        .btn {
+            margin: 0 auto;
+        }
+    }
 
-   .info-404 {
-      position: relative;
-   }
+    .info-404 {
+        position: relative;
+    }
 
-   .icon-satellite {
-      position: absolute;
-      top: -6px;
-      right: 0;
-      width: 32px;
-      height: 50px;
+    .icon-satellite {
+        position: absolute;
+        top: -6px;
+        right: 0;
+        width: 32px;
+        height: 50px;
 
-      @include min-tablet {
-         width: 48px;
-         height: 76px;
-      }
+        @include min-tablet {
+            width: 48px;
+            height: 76px;
+        }
 
-      @include max-laptop {
-         top: -10px;
-         right: -16px;
-      }
+        @include max-laptop {
+            top: -10px;
+            right: -16px;
+        }
 
-      @include max-tablet {
-         top: -4px;
-         right: 8px;
-      }
+        @include max-tablet {
+            top: -4px;
+            right: 8px;
+        }
 
-      @include max-mobile {
-         top: -4px;
-         right: -8px;
-      }
-   }
+        @include max-mobile {
+            top: -4px;
+            right: -8px;
+        }
+    }
 
-   .heading-404 {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 4px;
-      margin: 16px 0;
-      font-weight: 300;
-      font-size: to-rem(100);
-      line-height: 1;
+    .heading-404 {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 4px;
+        margin: 16px 0;
+        font-weight: 300;
+        font-size: to-rem(100);
+        line-height: 1;
 
-      @include min-desktop {
-         font-size: to-rem(140);
-      }
+        @include min-desktop {
+            font-size: to-rem(140);
+        }
 
-      // .heading-404__logo {
-      //    width: 80px;
-      //    height: 80px;
+        // .heading-404__logo {
+        //    width: 80px;
+        //    height: 80px;
 
-      //    @include min-desktop {
-      //       width: 96px;
-      //       height: 96px;
-      //    }
-      // }
-      .figure-404__logo {
-         position: relative;
-         width: 80px;
-         height: 80px;
+        //    @include min-desktop {
+        //       width: 96px;
+        //       height: 96px;
+        //    }
+        // }
+        .figure-404__logo {
+            position: relative;
+            width: 80px;
+            height: 80px;
 
-         @include min-desktop {
-            width: 96px;
-            height: 96px;
-         }
-
-         .icon-bg,
-         .icon-mask {
-            width: 100%;
-            height: 100%;
-         }
-
-         .icon-mask {
-            position: absolute;
-         }
-
-         .icon-bg {
-            position: absolute;
-            animation: icon-spin 4s linear infinite;
-            border: 2px solid $icon-color-secondary;
-            border-radius: 50%;
-
-            @keyframes icon-spin {
-               0% {
-                  rotate: 0deg;
-               }
-
-               100% {
-                  rotate: 360deg;
-               }
+            @include min-desktop {
+                width: 96px;
+                height: 96px;
             }
-         }
-      }
-   }
+
+            .icon-bg,
+            .icon-mask {
+                width: 100%;
+                height: 100%;
+            }
+
+            .icon-mask {
+                position: absolute;
+            }
+
+            .icon-bg {
+                position: absolute;
+                animation: icon-spin 4s linear infinite;
+                border: 2px solid $icon-color-secondary;
+                border-radius: 50%;
+
+                @keyframes icon-spin {
+                    0% {
+                        rotate: 0deg;
+                    }
+
+                    100% {
+                        rotate: 360deg;
+                    }
+                }
+            }
+        }
+    }
 }

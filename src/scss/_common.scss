@@ -3,7 +3,7 @@
 @use "mixins/media";
 
 :root {
-  color-scheme: light;
+    color-scheme: light;
 }
 
 h1,
@@ -12,547 +12,546 @@ h3,
 h4,
 h5,
 h6 {
-  margin: 0;
-  padding: 0;
+    margin: 0;
+    padding: 0;
 }
 
 a {
-  cursor: pointer;
-  text-decoration: none;
+    cursor: pointer;
+    text-decoration: none;
 }
 
 body {
-  color: $text-basic;
-  font-style: normal;
-  font-size: 16px;
-  font-family: Inter, sans-serif;
+    color: $text-basic;
+    font-style: normal;
+    font-size: 16px;
+    font-family: Inter, sans-serif;
 
-  @include media.min-desktop {
-    font-size: 18px;
-  }
+    @include media.min-desktop {
+        font-size: 18px;
+    }
 }
 
 /* Helpers */
 .h-100 {
-  height: 100% !important;
+    height: 100% !important;
 }
 
 .d-none {
-  display: none !important;
+    display: none !important;
 }
 
 /* Basic styles (mobile, up to 768px) */
 .h1 {
-  font-weight: 300;
-  font-size: 54px;
-  line-height: 1;
+    font-weight: 300;
+    font-size: 54px;
+    line-height: 1;
 
-  @include media.min-tablet {
-    font-size: 64px;
-  }
+    @include media.min-tablet {
+        font-size: 64px;
+    }
 
-  @include media.min-desktop {
-    font-size: 88px;
-  }
+    @include media.min-desktop {
+        font-size: 88px;
+    }
 }
 
 .h2-big {
-  font-weight: 400;
-  font-size: 36px;
-  line-height: 1.2;
+    font-weight: 400;
+    font-size: 36px;
+    line-height: 1.2;
 
-  @include media.min-tablet {
-    color: $text-dark;
-    font-size: 48px;
-  }
+    @include media.min-tablet {
+        color: $text-dark;
+        font-size: 48px;
+    }
 
-  @include media.min-desktop {
-    font-weight: 300;
-    font-size: 64px;
-  }
+    @include media.min-desktop {
+        font-weight: 300;
+        font-size: 64px;
+    }
 }
 
 .h3 {
-  font-weight: 400;
-  font-size: 32px;
-  line-height: 1.2;
+    font-weight: 400;
+    font-size: 32px;
+    line-height: 1.2;
 
-  @include media.min-tablet {
-    font-size: 40px;
-  }
+    @include media.min-tablet {
+        font-size: 40px;
+    }
 
-  @include media.min-desktop {
-    font-size: 54px;
-  }
+    @include media.min-desktop {
+        font-size: 54px;
+    }
 }
 
 .h4 {
-  font-weight: 500;
-  font-size: 28px;
-  line-height: 1.2;
+    font-weight: 500;
+    font-size: 28px;
+    line-height: 1.2;
 
-  @include media.min-tablet {
-    font-size: 32px;
-  }
+    @include media.min-tablet {
+        font-size: 32px;
+    }
 
-  @include media.min-desktop {
-    font-size: 44px;
-  }
+    @include media.min-desktop {
+        font-size: 44px;
+    }
 }
 
 .h5 {
-  font-weight: 500;
-  font-size: 24px;
-  line-height: 1.2;
+    font-weight: 500;
+    font-size: 24px;
+    line-height: 1.2;
 
-  @include media.min-desktop {
-    font-size: 36px;
-  }
+    @include media.min-desktop {
+        font-size: 36px;
+    }
 }
 
 .label-subtitle {
-  display: inline-flex;
-  align-items: center;
-  border-radius: 40px;
-  background-color: $element-block-fill;
-  padding: 6px 10px;
-  color: $element-block-text;
-  font-weight: 400;
-  font-size: 14px;
-  line-height: 1.2;
-  text-transform: uppercase;
-
-  &::before {
-    margin-right: 6.5px;
-    border-radius: 50%;
-    background-color: $element-block-text;
-    width: 4px;
-    height: 4px;
-    content: "";
-  }
-
-  @include media.min-tablet {
-    margin-bottom: 10px;
-  }
-
-  @include media.min-laptop {
-    margin-bottom: 20px;
-  }
-
-  @include media.min-desktop {
-    padding: 8px 12px;
-    font-size: 16px;
+    display: inline-flex;
+    align-items: center;
+    border-radius: 40px;
+    background-color: $element-block-fill;
+    padding: 6px 10px;
+    color: $element-block-text;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 1.2;
+    text-transform: uppercase;
 
     &::before {
-      margin-right: 6px;
-      width: 6px;
-      height: 6px;
+        margin-right: 6.5px;
+        border-radius: 50%;
+        background-color: $element-block-text;
+        width: 4px;
+        height: 4px;
+        content: "";
     }
-  }
+
+    @include media.min-tablet {
+        margin-bottom: 10px;
+    }
+
+    @include media.min-laptop {
+        margin-bottom: 20px;
+    }
+
+    @include media.min-desktop {
+        padding: 8px 12px;
+        font-size: 16px;
+
+        &::before {
+            margin-right: 6px;
+            width: 6px;
+            height: 6px;
+        }
+    }
 }
 
 .subtitle-text-r {
-  font-weight: 400;
-  font-size: 20px;
-  line-height: 1.3;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 1.3;
 
-  @include media.min-desktop {
-    font-size: 24px;
-    line-height: 1.2;
-  }
+    @include media.min-desktop {
+        font-size: 24px;
+        line-height: 1.2;
+    }
 }
 
 .subtitle-text-m {
-  font-weight: 500;
-  font-size: 20px;
-  line-height: 1.2;
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 1.2;
 
-  @include media.min-desktop {
-    font-size: 24px;
-  }
+    @include media.min-desktop {
+        font-size: 24px;
+    }
 }
 
 .subtitle-text-semibold {
-  font-weight: 600;
-  font-size: 20px;
-  line-height: 1.2;
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 1.2;
 
-  @include media.min-desktop {
-    font-size: 24px;
-  }
+    @include media.min-desktop {
+        font-size: 24px;
+    }
 }
 
 .big-text-semibold {
-  font-weight: 600;
-  font-size: 18px;
-  line-height: 1.2;
+    font-weight: 600;
+    font-size: 18px;
+    line-height: 1.2;
 
-  @include media.min-desktop {
-    font-size: 20px;
-  }
+    @include media.min-desktop {
+        font-size: 20px;
+    }
 }
 
 .big-text-m {
-  font-weight: 500;
-  font-size: 18px;
-  line-height: 1.2;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 1.2;
 
-  @include media.min-desktop {
-    font-size: 20px;
-  }
+    @include media.min-desktop {
+        font-size: 20px;
+    }
 }
 
 .big-text-r {
-  font-weight: 400;
-  font-size: 18px;
-  line-height: 1.2;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 1.2;
 
-  @include media.min-desktop {
-    font-size: 20px;
-  }
+    @include media.min-desktop {
+        font-size: 20px;
+    }
 }
 
 .text-r {
-  font-weight: 400;
-  font-size: 16px;
-  line-height: 1.3;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 1.3;
 
-  @include media.min-desktop {
-    font-size: 18px;
-  }
+    @include media.min-desktop {
+        font-size: 18px;
+    }
 }
 
 .btn-text-medium {
-  font-weight: 500;
-  font-size: 16px;
-  line-height: 1.2;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 1.2;
 
-  @include media.min-desktop {
-    font-size: 18px;
-  }
+    @include media.min-desktop {
+        font-size: 18px;
+    }
 }
 
 .subtitle-big-r {
-  font-weight: 400;
-  font-size: 14px;
-  line-height: 1.2;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 1.2;
 
-  @include media.min-desktop {
-    font-size: 16px;
-  }
+    @include media.min-desktop {
+        font-size: 16px;
+    }
 }
 
 .subtitle-big-semi {
-  font-weight: 600;
-  font-size: 14px;
-  line-height: 1.2;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 1.2;
 
-  @include media.min-desktop {
-    font-size: 16px;
-  }
+    @include media.min-desktop {
+        font-size: 16px;
+    }
 }
 
 .text-small {
-  font-weight: 400;
-  font-size: 14px;
-  line-height: 1.2;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 1.2;
 
-  @include media.min-desktop {
-    font-size: 16px;
-  }
+    @include media.min-desktop {
+        font-size: 16px;
+    }
 }
 
 /* btns */
 .btn {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  transition: $animations;
-  cursor: pointer;
-  border: none;
-  border-radius: 40px;
-  background-color: $buttons-color-background-primary-default;
-  padding: 12.5px 24px;
-  width: fit-content;
-  color: $buttons-color-text-primary-default;
-  font-weight: 500;
-  font-size: 16px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: $animations;
+    cursor: pointer;
+    border: none;
+    border-radius: 40px;
+    background-color: $buttons-color-background-primary-default;
+    padding: 12.5px 24px;
+    width: fit-content;
+    color: $buttons-color-text-primary-default;
+    font-weight: 500;
+    font-size: 16px;
 
-  &:hover {
-    background-color: $buttons-color-background-primary-hover;
-  }
+    &:hover {
+        background-color: $buttons-color-background-primary-hover;
+    }
 
-  &:active,
-  &:active:hover {
-    background-color: $buttons-color-background-primary-pressed;
-  }
+    &:active,
+    &:active:hover {
+        background-color: $buttons-color-background-primary-pressed;
+    }
 
-  @include media.min-desktop {
-    font-size: 18px;
-  }
+    @include media.min-desktop {
+        font-size: 18px;
+    }
 }
 
 .btn__small {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  transition: $animations;
-  cursor: pointer;
-  border: none;
-  border-radius: 40px;
-  background-color: $buttons-color-background-primary-default;
-  padding: 6px 16px;
-  width: fit-content;
-  color: $buttons-color-text-primary-default;
-  font-weight: 500;
-  font-size: 16px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: $animations;
+    cursor: pointer;
+    border: none;
+    border-radius: 40px;
+    background-color: $buttons-color-background-primary-default;
+    padding: 6px 16px;
+    width: fit-content;
+    color: $buttons-color-text-primary-default;
+    font-weight: 500;
+    font-size: 16px;
 
-  &:hover {
-    background-color: $buttons-color-background-primary-hover;
-  }
+    &:hover {
+        background-color: $buttons-color-background-primary-hover;
+    }
 
-  &:active,
-  &:active:hover {
-    background-color: $buttons-color-background-primary-pressed;
-  }
+    &:active,
+    &:active:hover {
+        background-color: $buttons-color-background-primary-pressed;
+    }
 
-  @include media.min-desktop {
-    font-size: 18px;
-  }
+    @include media.min-desktop {
+        font-size: 18px;
+    }
 }
 
 .btn-secondary {
-  display: flex;
-  column-gap: 12px;
-  flex-flow: row nowrap;
-  justify-content: center;
-  align-items: center;
-  transition: $animations;
-  cursor: pointer;
-  border: 1px solid $buttons-color-border-secondary-default;
-  border-radius: 40px;
-  background-color: unset;
-  padding: 12.5px 24px;
-  width: fit-content;
-  color: $buttons-color-text-secondary-default;
-  font-weight: 500;
-  font-size: 16px;
+    display: flex;
+    column-gap: 12px;
+    flex-flow: row nowrap;
+    justify-content: center;
+    align-items: center;
+    transition: $animations;
+    cursor: pointer;
+    border: 1px solid $buttons-color-border-secondary-default;
+    border-radius: 40px;
+    background-color: unset;
+    padding: 12.5px 24px;
+    width: fit-content;
+    color: $buttons-color-text-secondary-default;
+    font-weight: 500;
+    font-size: 16px;
 
-  &:hover {
-    background-color: $buttons-color-background-secondary-hover;
-  }
+    &:hover {
+        background-color: $buttons-color-background-secondary-hover;
+    }
 
-  &__icon {
-    width: 17px;
-    height: 17px;
+    &__icon {
+        width: 17px;
+        height: 17px;
+
+        &:focus {
+            color: $buttons-color-text-secondary-pressed;
+        }
+    }
 
     &:focus {
-      color: $buttons-color-text-secondary-pressed;
+        border-color: $buttons-color-background-secondary-pressed;
+        background-color: $buttons-color-background-secondary-pressed;
+        color: $buttons-color-text-secondary-pressed;
+
+        .btn-secondary__icon {
+            color: $buttons-color-text-secondary-pressed;
+        }
     }
-  }
 
-  &:focus {
-    border-color: $buttons-color-background-secondary-pressed;
-    background-color: $buttons-color-background-secondary-pressed;
-    color: $buttons-color-text-secondary-pressed;
-
-    .btn-secondary__icon {
-      color: $buttons-color-text-secondary-pressed;
+    &:disabled {
+        cursor: not-allowed;
+        background: $buttons-color-background-secondary-disabled;
+        color: $buttons-color-text-secondary-disabled;
     }
-  }
 
-  &:disabled {
-    cursor: not-allowed;
-    background: $buttons-color-background-secondary-disabled;
-    color: $buttons-color-text-secondary-disabled;
-  }
+    &:active,
+    &:active:hover {
+        background-color: $buttons-color-background-secondary-pressed;
+    }
 
-  &:active,
-  &:active:hover {
-    background-color: $buttons-color-background-secondary-pressed;
-  }
-
-  @include media.min-desktop {
-    font-size: 18px;
-  }
+    @include media.min-desktop {
+        font-size: 18px;
+    }
 }
 
 .btn-secondary__small {
-  display: flex;
-  column-gap: 12px;
-  flex-flow: row nowrap;
-  justify-content: center;
-  align-items: center;
-  transition: $animations;
-  cursor: pointer;
-  border: 1px solid $buttons-color-border-secondary-default;
-  border-radius: 40px;
-  background-color: unset;
-  padding: 6px 16px;
-  width: fit-content;
-  min-width: 88px;
-  color: $buttons-color-text-secondary-default;
-  font-weight: 500;
-  font-size: 16px;
+    display: flex;
+    column-gap: 12px;
+    flex-flow: row nowrap;
+    justify-content: center;
+    align-items: center;
+    transition: $animations;
+    cursor: pointer;
+    border: 1px solid $buttons-color-border-secondary-default;
+    border-radius: 40px;
+    background-color: unset;
+    padding: 6px 16px;
+    width: fit-content;
+    min-width: 88px;
+    color: $buttons-color-text-secondary-default;
+    font-weight: 500;
+    font-size: 16px;
 
-  &[hidden] {
-    display: none;
-  }
-
-  &:hover {
-    background-color: $buttons-color-background-secondary-selected;
-  }
-
-  &:disabled {
-    cursor: not-allowed;
-    background: $buttons-color-background-secondary-disabled;
-    color: $buttons-color-text-secondary-disabled;
-  }
-
-  &--icon {
-    width: 14px;
-    height: 14px;
-    color: $icon-color-accent;
-
-    &:focus {
-      color: $buttons-color-text-secondary-pressed;
+    &[hidden] {
+        display: none;
     }
-  }
+
+    &:hover {
+        background-color: $buttons-color-background-secondary-selected;
+    }
+
+    &:disabled {
+        cursor: not-allowed;
+        background: $buttons-color-background-secondary-disabled;
+        color: $buttons-color-text-secondary-disabled;
+    }
+
+    &--icon {
+        width: 14px;
+        height: 14px;
+        color: $icon-color-accent;
+
+        &:focus {
+            color: $buttons-color-text-secondary-pressed;
+        }
+    }
 }
 
 .btn-tertiary {
-  transition: $animations;
-  cursor: pointer;
-  border: none;
-  background-color: unset;
-  color: $buttons-color-background-primary-default;
-  font-weight: 600;
-  font-size: 14px;
-  line-height: 1.2;
-  text-decoration: underline;
-  text-transform: uppercase;
-
-  &:disabled {
-    cursor: not-allowed;
+    transition: $animations;
+    cursor: pointer;
+    border: none;
     background-color: unset;
-    color: $buttons-color-background-secondary-disabled;
-  }
+    color: $buttons-color-background-primary-default;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 1.2;
+    text-decoration: underline;
+    text-transform: uppercase;
 
-  @media (hover: hover) and (pointer: fine) {
-    &:not(:disabled):hover {
-      color: $buttons-color-background-primary-hover;
+    &:disabled {
+        cursor: not-allowed;
+        background-color: unset;
+        color: $buttons-color-background-secondary-disabled;
     }
-  }
 
-  &:not(:disabled):active,
-  &:not(:disabled):active:hover {
-    background-color: $buttons-color-background-secondary-pressed;
-  }
+    @media (hover: hover) and (pointer: fine) {
+        &:not(:disabled):hover {
+            color: $buttons-color-background-primary-hover;
+        }
+    }
+
+    &:not(:disabled):active,
+    &:not(:disabled):active:hover {
+        background-color: $buttons-color-background-secondary-pressed;
+    }
 }
 
 .btn-chip {
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-  transition: $animations;
-  border-radius: $radius-xl;
-  padding: 6px 12px;
-  width: fit-content;
-  font-size: 14px;
-
-  // Default colors only for chips without a category slug.
-  // Category chips get their colors from generated [data-slug] rules.
-  &:not([data-slug]) {
-    border: 1px solid $buttons-color-border-secondary-default;
-    background-color: $buttons-color-background-secondary-default;
-    color: $text-dark;
-  }
-
-  &[data-child="true"] {
-    border-color: currentcolor;
-    background-color: $buttons-color-background-secondary-default;
-  }
-
-  &:hover {
-    background-color: $buttons-color-background-secondary-hover;
-    color: $text-accent;
-  }
-
-  &:active,
-  &:active:hover {
-    background-color: $buttons-color-background-secondary-selected;
-  }
-
-  @include media.min-desktop {
-    font-size: 0.9rem;
-  }
-
-  .btn-chip__icon {
     display: inline-flex;
-    position: relative;
     justify-content: center;
     align-items: center;
-    margin-left: 6px;
-    border: none;
-    border: 0;
-    background: transparent;
-    padding: 0;
-    min-width: 14px;
-    min-height: 14px;
+    transition: $animations;
+    border-radius: $radius-xl;
+    padding: 6px 12px;
+    width: fit-content;
     font-size: 14px;
 
-    &::before {
-      position: absolute;
-      inset: -10px;
-      content: "";
+    // Default colors only for chips without a category slug.
+    // Category chips get their colors from generated [data-slug] rules.
+    &:not([data-slug]) {
+        border: 1px solid $buttons-color-border-secondary-default;
+        background-color: $buttons-color-background-secondary-default;
+        color: $text-dark;
     }
 
-    &:focus-visible {
-      outline: 2px solid Highlight;
-      outline-offset: 2px;
-      border-radius: 50%;
+    &[data-child="true"] {
+        border-color: currentcolor;
+        background-color: $buttons-color-background-secondary-default;
     }
 
-    svg {
-      transform: rotate(45deg);
-      width: 14px;
-      height: 14px;
+    &:hover {
+        background-color: $buttons-color-background-secondary-hover;
+        color: $text-accent;
     }
-  }
+
+    &:active,
+    &:active:hover {
+        background-color: $buttons-color-background-secondary-selected;
+    }
+
+    @include media.min-desktop {
+        font-size: 0.9rem;
+    }
+
+    .btn-chip__icon {
+        display: inline-flex;
+        position: relative;
+        justify-content: center;
+        align-items: center;
+        margin-left: 6px;
+        border: 0;
+        background: transparent;
+        padding: 0;
+        min-width: 14px;
+        min-height: 14px;
+        font-size: 14px;
+
+        &::before {
+            position: absolute;
+            inset: -10px;
+            content: "";
+        }
+
+        &:focus-visible {
+            outline: 2px solid Highlight;
+            outline-offset: 2px;
+            border-radius: 50%;
+        }
+
+        svg {
+            transform: rotate(45deg);
+            width: 14px;
+            height: 14px;
+        }
+    }
 }
 
 .link-def {
-  transition: $animations;
+    transition: $animations;
 
-  &:hover {
-    color: $buttons-color-background-primary-hover;
-  }
+    &:hover {
+        color: $buttons-color-background-primary-hover;
+    }
 }
 
 .section {
-  padding: 80px 0;
+    padding: 80px 0;
 
-  @include media.min-desktop {
-    padding: 120px 0;
-  }
+    @include media.min-desktop {
+        padding: 120px 0;
+    }
 }
 
 .container {
-  margin: 0 auto;
-  padding: 0 16px;
-  width: 100%;
+    margin: 0 auto;
+    padding: 0 16px;
+    width: 100%;
 
-  @include media.min-tablet {
-    padding: 0 40px;
-  }
+    @include media.min-tablet {
+        padding: 0 40px;
+    }
 
-  @include media.min-desktop {
-    padding: 0 80px;
-  }
+    @include media.min-desktop {
+        padding: 0 80px;
+    }
 }
 
 img {
-  max-width: 100%;
+    max-width: 100%;
 }
 
 /*
@@ -609,101 +608,101 @@ img {
  * top layer replaces the old z-index.
  */
 .modal {
-  position: fixed;
-  inset: 0;
-  opacity: 0;
-  transition:
-    opacity 0.3s,
-    overlay 0.3s allow-discrete,
-    display 0.3s allow-discrete;
-  margin: 0;
-  border: 0;
-  background-color: $background-modal;
-  padding: 100px 16px 16px; /* 100px: where the panel sits */
-  width: 100%;
-  max-width: none;
-  height: 100%;
-  max-height: none;
-  overflow: auto;
-  overscroll-behavior: contain;
-  color: inherit;
+    position: fixed;
+    inset: 0;
+    opacity: 0;
+    transition:
+        opacity 0.3s,
+        overlay 0.3s allow-discrete,
+        display 0.3s allow-discrete;
+    margin: 0;
+    border: 0;
+    background-color: $background-modal;
+    padding: 100px 16px 16px; /* 100px: where the panel sits */
+    width: 100%;
+    max-width: none;
+    height: 100%;
+    max-height: none;
+    overflow: auto;
+    overscroll-behavior: contain;
+    color: inherit;
 
-  &[open] {
-    opacity: 1;
+    &[open] {
+        opacity: 1;
 
-    @starting-style {
-      opacity: 0;
+        @starting-style {
+            opacity: 0;
+        }
     }
-  }
 
-  // The dialog paints the dim layer itself.
-  &::backdrop {
-    background: transparent;
-  }
+    // The dialog paints the dim layer itself.
+    &::backdrop {
+        background: transparent;
+    }
 
-  @media (prefers-reduced-motion: reduce) {
-    transition: none;
-  }
+    @media (prefers-reduced-motion: reduce) {
+        transition: none;
+    }
 }
 
 .modal-content {
-  display: block;
-  margin: auto;
-  width: 80%;
-  max-width: 700px;
+    display: block;
+    margin: auto;
+    width: 80%;
+    max-width: 700px;
 }
 
 .modal-main {
-  margin-right: auto;
-  margin-left: auto;
-  border-radius: $modal-radius;
-  background-color: $surface-violet;
-  padding: 16px;
-  width: auto;
+    margin-right: auto;
+    margin-left: auto;
+    border-radius: $modal-radius;
+    background-color: $surface-violet;
+    padding: 16px;
+    width: auto;
 }
 
 .page-template-page-launchpad,
 .single-opportunity {
-  overflow-wrap: anywhere;
+    overflow-wrap: anywhere;
 }
 
 .label-info {
-  // display: flex;
-  // flex-flow: row nowrap;
-  // align-items: center;
-  // gap: 4px;
-  border-radius: $radius-badge;
-  background-color: rgb(122 90 228 / 10%);
-  padding: 4px;
-  color: $text-light;
-  font-size: 14px;
+    // display: flex;
+    // flex-flow: row nowrap;
+    // align-items: center;
+    // gap: 4px;
+    border-radius: $radius-badge;
+    background-color: rgb(122 90 228 / 10%);
+    padding: 4px;
+    color: $text-light;
+    font-size: 14px;
 }
 
 .exclamation-circle__error,
 .exclamation-circle {
-  &::before {
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    margin: 0 2px;
-    border: 1px solid $text-accent;
-    border-radius: 50%;
-    width: 18px;
-    min-width: 18px;
-    height: 18px;
-    min-height: 18px;
-    content: "!";
-    color: $text-accent;
-    font-weight: 500;
-  }
+    &::before {
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        margin: 0 2px;
+        border: 1px solid $text-accent;
+        border-radius: 50%;
+        width: 18px;
+        min-width: 18px;
+        height: 18px;
+        min-height: 18px;
+        content: "!";
+        color: $text-accent;
+        font-weight: 500;
+    }
 }
 
 .exclamation-circle__error {
-  &::before {
-    border: 1px solid $icon-color-error;
-    background-color: $icon-color-error;
-    color: $icon-color-secondary;
-  }
+    &::before {
+        border: 1px solid $icon-color-error;
+        background-color: $icon-color-error;
+        color: $icon-color-secondary;
+    }
 }
 
 /*
@@ -712,29 +711,29 @@ img {
  * every such label rendered as visible text next to its control.
  */
 .screen-reader-text {
-  position: absolute !important;
-  clip-path: inset(50%);
-  margin: -1px;
-  border: 0;
-  padding: 0;
-  width: 1px;
-  height: 1px;
-  overflow: hidden;
-  overflow-wrap: normal !important;
+    position: absolute !important;
+    clip-path: inset(50%);
+    margin: -1px;
+    border: 0;
+    padding: 0;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    overflow-wrap: normal !important;
 
-  &:focus {
-    display: block;
-    position: fixed !important;
-    top: 8px;
-    left: 8px;
-    z-index: 100000;
-    clip-path: none;
-    border-radius: 4px;
-    background-color: white;
-    padding: 12px 24px;
-    width: auto;
-    height: auto;
-    color: $text-dark;
-    text-decoration: none;
-  }
+    &:focus {
+        display: block;
+        position: fixed !important;
+        top: 8px;
+        left: 8px;
+        z-index: 100000;
+        clip-path: none;
+        border-radius: 4px;
+        background-color: white;
+        padding: 12px 24px;
+        width: auto;
+        height: auto;
+        color: $text-dark;
+        text-decoration: none;
+    }
 }

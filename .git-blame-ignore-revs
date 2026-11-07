@@ -6,3 +6,7 @@
 dff2c02bc67c8c6fdb2c42afcd65a69734581798
 # style(scss): apply stylelint autofixes
 8bbad896d6a43e183bb8f03a4a672cf8ddc537ad
+# style(scss): format with Oxfmt
+991599659af3e93d1005b468a09d97a64d7be42d
+# style(scss): indent with 4 spaces
+5f5e1287e32b04a26ac061d567ae9034be572f00

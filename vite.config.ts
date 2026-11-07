@@ -1,10 +1,10 @@
 /**
- * Vite+ (https://viteplus.dev): linting (Oxlint), formatting (Oxfmt) and the
- * pre-commit checks on staged files. Nothing here builds anything - the
- * theme build is tools/build.mjs, which doesn't depend on Vite+.
+ * Vite+ (https://viteplus.dev): linting and type-checking (Oxlint), formatting
+ * (Oxfmt) and the pre-commit checks on staged files. Nothing here builds anything - the
+ * theme build is tools/build.ts, which doesn't depend on Vite+.
  *
  *   pnpm check            format + lint check (`vp check --fix` to apply)
- *   pnpm lint             the above plus stylelint for the SCSS
+ *   pnpm lint             the above plus Biome for the SCSS (biome.jsonc)
  *
  * File: vite.config.ts
  */
@@ -27,6 +27,9 @@ const notOurs = [
 
 export default defineConfig({
   lint: {
+    // Type-checks what tsconfig.json includes (the build tools). Rules such as
+    // no-floating-promises also reach the theme's JS through inferred types.
+    options: { typeAware: true, typeCheck: true },
     ignorePatterns: notOurs,
     env: { browser: true, es2024: true },
     // inc/blocks/Assets/editor-media-attributes.js is a plain script on wp.*.
@@ -36,6 +39,16 @@ export default defineConfig({
         files: ["tools/**", "vite.config.ts"],
         env: { browser: false, node: true },
       },
+      {
+        // These read JSDoc as if it were real types, so in plain JS they
+        // report loose comments ({Object}, untyped packages), not bugs.
+        files: ["inc/**", "src/**"],
+        rules: {
+          "typescript/no-misused-spread": "off",
+          "typescript/no-redundant-type-constituents": "off",
+          "typescript/no-useless-default-assignment": "off",
+        },
+      },
     ],
   },
 
@@ -44,12 +57,17 @@ export default defineConfig({
     printWidth: 80,
     // package.json keeps its own key order.
     sortPackageJson: false,
+    overrides: [
+      {
+        // Nested up to nine levels deep: 4 spaces, and the width to fit them.
+        files: ["**/*.scss"],
+        options: { tabWidth: 4, printWidth: 100 },
+      },
+    ],
     ignorePatterns: [
       ...notOurs,
-      // Mixed 2- and 4-space indentation; stylelint covers the SCSS for now.
       // Plain CSS is build output, vendored (src/css) or style.css, whose
       // header WordPress parses.
-      "**/*.scss",
       "**/*.css",
       // Written by ACF and wp-cli.
       "acf-json/**",
@@ -61,7 +79,8 @@ export default defineConfig({
   },
 
   staged: {
-    "*.{js,mjs,ts,json,md,yml,yaml}": "vp check --fix",
-    "*.scss": "stylelint --fix",
+    "*.{js,mjs,ts,json,jsonc,md,yml,yaml,scss}": "vp check --fix",
+    // No autofix: it should take a person to change the SCSS.
+    "*.scss": "biome lint --error-on-warnings --no-errors-on-unmatched",
   },
 });

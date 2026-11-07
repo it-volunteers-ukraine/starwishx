@@ -1,174 +1,173 @@
 @use "variables" as *;
 
 .footer {
-  padding-top: 48px;
-  padding-bottom: 24px;
-  border-top-left-radius: 36px;
-  border-top-right-radius: 36px;
-  background: $surface-secondary;
-  color: $text-white;
-  font-size: 20px;
+    padding-top: 48px;
+    padding-bottom: 24px;
+    border-top-left-radius: 36px;
+    border-top-right-radius: 36px;
+    background: $surface-secondary;
+    color: $text-white;
+    font-size: 20px;
 }
 
 .footer a {
-  color: $text-white;
+    color: $text-white;
 }
 
 .footer-inner {
-  margin-bottom: 120px;
+    margin-bottom: 120px;
 }
 
 .footer-title {
-  margin-bottom: 24px;
-  color: $text-accent-2;
-  text-transform: uppercase;
-  font-weight: 500;
-  font-size: 24px;
-  line-height: 1.2;
+    margin-bottom: 24px;
+    color: $text-accent-2;
+    text-transform: uppercase;
+    font-weight: 500;
+    font-size: 24px;
+    line-height: 1.2;
 }
 
 .footer-title.title-socblock {
-  display: none;
+    display: none;
 }
 
 .footer .socblock {
-  display: inline-flex;
-  flex-direction: column;
-  gap: 16px;
-  line-height: 1.2;
-  margin-bottom: 40px;
+    display: inline-flex;
+    flex-direction: column;
+    gap: 16px;
+    line-height: 1.2;
+    margin-bottom: 40px;
 }
 
 .socblock-link {
-  display: flex;
-  align-items: center;
-  fill: $icon-color-accent;
-  transition: all $animations;
+    display: flex;
+    align-items: center;
+    fill: $icon-color-accent;
+    transition: all $animations;
 }
 
 .socblock-icon {
-  width: 24px;
-  height: 24px;
-  margin-right: 8px;
-  color: $icon-color-accent;
-  transition: color $animations;
+    width: 24px;
+    height: 24px;
+    margin-right: 8px;
+    color: $icon-color-accent;
+    transition: color $animations;
 
-  &:hover {
-    color: $primary-hover;
-  }
+    &:hover {
+        color: $primary-hover;
+    }
 }
 
 .footer .nav {
-  margin-top: 40px;
-  margin-bottom: 120px;
+    margin-top: 40px;
+    margin-bottom: 120px;
 }
 
 .footer_list {
-  display: grid;
-  align-items: start;
-  gap: 12px;
-  line-height: 1.3;
+    display: grid;
+    align-items: start;
+    gap: 12px;
+    line-height: 1.3;
 }
 
 .footer_list .menu-item a {
-  display: inline-block;
-  padding: 3px 12px;
-  line-height: 1.3;
-  transition: color $animations;
+    display: inline-block;
+    padding: 3px 12px;
+    line-height: 1.3;
+    transition: color $animations;
 
-  &:hover {
-    color: $buttons-color-background-secondary-hover;
-  }
+    &:hover {
+        color: $buttons-color-background-secondary-hover;
+    }
 }
 
 .socblock-link:hover {
-  color: $buttons-color-background-secondary-hover;
+    color: $buttons-color-background-secondary-hover;
 }
 
 .socblock-link:hover .socblock-icon {
-  color: $primary-hover;
+    color: $primary-hover;
 }
 
 .footer-logo-wrapper {
-  /* margin: 0 calc(0.045 * 100%); */
-  margin-bottom: 40px;
-  font-size: 12.8vw;
-  font-size: calc(13.23vw - 1.62px);
-  line-height: 1;
-  color: white;
-  font-weight: 900;
-  font-family: Urbanist, sans-serif;
-  text-align: center;
+    /* margin: 0 calc(0.045 * 100%); */
+    margin-bottom: 40px;
+    font-size: calc(13.23vw - 1.62px);
+    line-height: 1;
+    color: white;
+    font-weight: 900;
+    font-family: Urbanist, sans-serif;
+    text-align: center;
 }
 
 .hologram {
-  width: 100%;
-  height: 300px;
-  background-blend-mode: screen, difference;
-  background:
-    radial-gradient(
-      /*100% 126.92% at 0% 1.36%, */ 109.15% 174.82% at -4.74% -17%,
-      #2dbfbd 0%,
-      #cbdd57 24.33%,
-      #db97da 43.15%,
-      #9298d6 62.96%,
-      #49b8a8 82.52%,
-      #4c9cc6 100%
-    ),
-    conic-gradient(
-      from 180deg at 50% 50%,
-      #000 0deg,
-      #fff 43.53deg,
-      #000 90deg,
-      #fff 135deg,
-      #000 180deg,
-      #fff 223.7deg,
-      #000 270.1deg,
-      #fff 313.17deg,
-      #000 360deg
-    ),
-    conic-gradient(
-      from 180deg at 50% 50%,
-      #000 0deg,
-      #fff 43.53deg,
-      #000 90deg,
-      #fff 135deg,
-      #000 180deg,
-      #fff 223.7deg,
-      #000 270.1deg,
-      #fff 313.17deg,
-      #000 360deg
-    ),
-    rgb(255 255 255 / 64%);
+    width: 100%;
+    height: 300px;
+    background-blend-mode: screen, difference;
+    background:
+        radial-gradient(
+            /*100% 126.92% at 0% 1.36%, */ 109.15% 174.82% at -4.74% -17%,
+            #2dbfbd 0%,
+            #cbdd57 24.33%,
+            #db97da 43.15%,
+            #9298d6 62.96%,
+            #49b8a8 82.52%,
+            #4c9cc6 100%
+        ),
+        conic-gradient(
+            from 180deg at 50% 50%,
+            #000 0deg,
+            #fff 43.53deg,
+            #000 90deg,
+            #fff 135deg,
+            #000 180deg,
+            #fff 223.7deg,
+            #000 270.1deg,
+            #fff 313.17deg,
+            #000 360deg
+        ),
+        conic-gradient(
+            from 180deg at 50% 50%,
+            #000 0deg,
+            #fff 43.53deg,
+            #000 90deg,
+            #fff 135deg,
+            #000 180deg,
+            #fff 223.7deg,
+            #000 270.1deg,
+            #fff 313.17deg,
+            #000 360deg
+        ),
+        rgb(255 255 255 / 64%);
 }
 
 .footer-logo-container {
-  position: relative;
-  display: inline-flex;
+    position: relative;
+    display: inline-flex;
 }
 
 :root {
-  --ange: 0deg;
+    --ange: 0deg;
 }
 
 @keyframes spin {
-  0% {
-    --angle: 0deg;
-  }
+    0% {
+        --angle: 0deg;
+    }
 
-  100% {
-    --angle: 360deg;
-  }
+    100% {
+        --angle: 360deg;
+    }
 }
 
 .footer-logo {
-  position: relative;
-  width: 100%;
+    position: relative;
+    width: 100%;
 
-  /* margin: 4px 0; */
-  z-index: 1;
+    /* margin: 4px 0; */
+    z-index: 1;
 
-  /* background-blend-mode: screen, difference;
+    /* background-blend-mode: screen, difference;
   background:
     radial-gradient(
       100% 126.92% at 0% 1.36%,
@@ -208,7 +207,7 @@
   background-clip: text;
   -webkit-text-fill-color: transparent; */
 
-  /* background:
+    /* background:
     linear-gradient(
       0deg,
       rgb(255 255 255 / 64%),
@@ -248,26 +247,26 @@
       #4c9cc6 100%
     ); */
 
-  // background-image, not the shorthand: Lightning CSS would fold the
-  // background-clip below into `background: ... text`, a form some baseline
-  // targets may not parse - and the transparent text would vanish with it.
-  background-image: conic-gradient(
-    from 90deg at 50% 50%,
-    #b6d0f7 0deg,
-    #eef4e1 15deg,
-    #fafcfe 161deg,
-    #e2c1f9 171deg,
-    #bfd1f9 190.8deg,
-    #fafcfe 270deg,
-    #bae4e2 350deg,
-    #b6d0f7 360deg
-  );
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  color: transparent;
+    // background-image, not the shorthand: Lightning CSS would fold the
+    // background-clip below into `background: ... text`, a form some baseline
+    // targets may not parse - and the transparent text would vanish with it.
+    background-image: conic-gradient(
+        from 90deg at 50% 50%,
+        #b6d0f7 0deg,
+        #eef4e1 15deg,
+        #fafcfe 161deg,
+        #e2c1f9 171deg,
+        #bfd1f9 190.8deg,
+        #fafcfe 270deg,
+        #bae4e2 350deg,
+        #b6d0f7 360deg
+    );
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent;
 
-  /* background-blend-mode: screen; */
-  animation: spin 6s linear infinite;
+    /* background-blend-mode: screen; */
+    animation: spin 6s linear infinite;
 }
 
 /*
@@ -277,240 +276,237 @@
 } */
 
 .footer-logo-img {
-  margin: 6px 14px;
+    margin: 6px 14px;
 }
 
 .footer-logo-satellite {
-  position: absolute;
-  width: calc(100% * 0.05);
+    position: absolute;
+    width: calc(100% * 0.05);
 
-  /* top: calc(-100% * 0.11); */
+    /* top: calc(-100% * 0.11); */
 
-  /* right: calc(100% * 0.04); */
-  right: calc(6.62vw - 19.81px);
-  right: -1.7vw;
-  top: -0.5vw;
-  z-index: 0;
+    /* right: calc(100% * 0.04); */
+    right: -1.7vw;
+    top: -0.5vw;
+    z-index: 0;
 }
 
 .footer-copyright {
-  padding-top: 12px;
-  padding-bottom: 12px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 6px;
-  border-top: 1px solid $icon-color-default-stroke;
-  font-size: 12px;
+    padding-top: 12px;
+    padding-bottom: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    border-top: 1px solid $icon-color-default-stroke;
+    font-size: 12px;
 }
 
 .copyright-link {
-  border-bottom: 1px solid $text-white;
-  transition: color $animations;
+    border-bottom: 1px solid $text-white;
+    transition: color $animations;
 
-  &:hover {
-    color: $buttons-color-background-secondary-hover;
-  }
+    &:hover {
+        color: $buttons-color-background-secondary-hover;
+    }
 
-  .footer-copyright1,
-  .footer-copyright2 {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    align-items: center;
-  }
+    .footer-copyright1,
+    .footer-copyright2 {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        align-items: center;
+    }
 
-  .footer-copyright2 {
-    flex-direction: row;
-  }
+    .footer-copyright2 {
+        flex-direction: row;
+    }
 }
 
 @media screen and (min-width: 576px) {
-  .footer-inner {
-    display: flex;
-    justify-content: space-between;
-  }
+    .footer-inner {
+        display: flex;
+        justify-content: space-between;
+    }
 
-  .footer-socwraper {
-    width: 53%;
-    margin-bottom: 0;
-  }
+    .footer-socwraper {
+        width: 53%;
+        margin-bottom: 0;
+    }
 
-  .footer .nav {
-    // width: auto;
-    flex-grow: 1;
-    margin-bottom: 0;
-  }
+    .footer .nav {
+        // width: auto;
+        flex-grow: 1;
+        margin-bottom: 0;
+    }
 
-  .footer_list {
-    align-items: flex-start;
-  }
+    .footer_list {
+        align-items: flex-start;
+    }
 
-  .footer-copyright1,
-  .footer-copyright2 {
-    flex-direction: row;
-    align-items: center;
-  }
+    .footer-copyright1,
+    .footer-copyright2 {
+        flex-direction: row;
+        align-items: center;
+    }
 }
 
 @media screen and (min-width: 768px) {
-  .footer {
-    border-top-left-radius: 48px;
-    border-top-right-radius: 48px;
-  }
+    .footer {
+        border-top-left-radius: 48px;
+        border-top-right-radius: 48px;
+    }
 
-  .footer-inner {
-    margin-bottom: 140px;
-  }
+    .footer-inner {
+        margin-bottom: 140px;
+    }
 
-  .footer-title {
-    font-size: 32px;
-  }
+    .footer-title {
+        font-size: 32px;
+    }
 
-  .footer .socblock {
-    font-size: 18px;
-    margin-bottom: 48px;
-    gap: 16px;
-  }
+    .footer .socblock {
+        font-size: 18px;
+        margin-bottom: 48px;
+        gap: 16px;
+    }
 
-  .nav {
-    max-width: 336px;
-  }
+    .nav {
+        max-width: 336px;
+    }
 
-  .footer .nav {
-    margin-top: 0;
-  }
+    .footer .nav {
+        margin-top: 0;
+    }
 
-  .footer_list {
-    gap: 8px;
-  }
+    .footer_list {
+        gap: 8px;
+    }
 
-  .footer-logo-wrapper {
-    /* margin: 0 calc(0.062 * 100%); */
-    margin-bottom: 24px;
-    font-size: 13vw;
-    font-size: calc(14.88vw - 14.29px);
-  }
+    .footer-logo-wrapper {
+        /* margin: 0 calc(0.062 * 100%); */
+        margin-bottom: 24px;
+        font-size: calc(14.88vw - 14.29px);
+    }
 
-  /*
+    /*
   .footer-logo {
     margin: 13px 0;
   }
   */
 
-  .footer-logo-satellite {
-    /* top: calc(-100% * 0.13); */
-    right: calc(1.34vw - 4.29px);
-    right: -1.7vw;
-  }
+    .footer-logo-satellite {
+        /* top: calc(-100% * 0.13); */
+        right: -1.7vw;
+    }
 
-  .footer-copyright {
-    flex-direction: row;
-    justify-content: center;
-  }
+    .footer-copyright {
+        flex-direction: row;
+        justify-content: center;
+    }
 
-  .footer-copyright1 {
-    margin-right: auto;
-  }
+    .footer-copyright1 {
+        margin-right: auto;
+    }
 }
 
 @media screen and (min-width: 1440px) {
-  .nav {
-    max-width: 398px;
-  }
+    .nav {
+        max-width: 398px;
+    }
 
-  .footer_list {
-    gap: 12px;
-    grid-template-columns: auto auto;
-    grid-template-rows: auto auto;
-    justify-content: space-between;
-  }
+    .footer_list {
+        gap: 12px;
+        grid-template-columns: auto auto;
+        grid-template-rows: auto auto;
+        justify-content: space-between;
+    }
 
-  .footer_list .menu-item:last-child {
-    grid-column: 2;
-  }
+    .footer_list .menu-item:last-child {
+        grid-column: 2;
+    }
 
-  .footer-inner {
-    margin-bottom: 120px;
-  }
+    .footer-inner {
+        margin-bottom: 120px;
+    }
 
-  .footer-title {
-    display: none;
-    margin-bottom: 16px;
-  }
+    .footer-title {
+        display: none;
+        margin-bottom: 16px;
+    }
 
-  .footer .socblock {
-    margin-bottom: 40px;
-  }
+    .footer .socblock {
+        margin-bottom: 40px;
+    }
 
-  .footer-logo-wrapper {
-    /* margin: 0 calc(0.036 * 100%) 24px; */
-    font-size: calc(13.33vw + 8px);
-  }
+    .footer-logo-wrapper {
+        /* margin: 0 calc(0.036 * 100%) 24px; */
+        font-size: calc(13.33vw + 8px);
+    }
 
-  /*
+    /*
   .footer-logo {
     margin: 25px 0;
   }
     */
 
-  /*
+    /*
   .footer-logo-satellite {
     top: 0;
     right: calc(5.21vw - 60px);
   }
   */
 
-  .footer-title.title-socblock {
-    display: block;
-    margin-bottom: 16px;
+    .footer-title.title-socblock {
+        display: block;
+        margin-bottom: 16px;
 
-    // margin-bottom: 24px;
-  }
+        // margin-bottom: 24px;
+    }
 }
 
 @media screen and (min-width: 1920px) {
-  .footer {
-    padding-bottom: 20px;
-  }
+    .footer {
+        padding-bottom: 20px;
+    }
 
-  .footer-title {
-    font-size: 44px;
-    margin-bottom: 16px;
-  }
+    .footer-title {
+        font-size: 44px;
+        margin-bottom: 16px;
+    }
 
-  .footer-copyright {
-    padding: 17px 0;
-  }
+    .footer-copyright {
+        padding: 17px 0;
+    }
 
-  .footer .socblock {
-    font-size: 20px;
-    gap: 16px;
-  }
+    .footer .socblock {
+        font-size: 20px;
+        gap: 16px;
+    }
 
-  .footer-logo-wrapper {
-    /* margin: 0 calc(0.028 * 100%); */
-    margin-bottom: 40px;
+    .footer-logo-wrapper {
+        /* margin: 0 calc(0.028 * 100%); */
+        margin-bottom: 40px;
 
-    /* font-size: 264px; */
-    font-size: calc(13.75vw);
-  }
+        /* font-size: 264px; */
+        font-size: calc(13.75vw);
+    }
 
-  /*
+    /*
   .footer-logo-satellite {
     width: 88px;
   }
     */
 
-  .nav {
-    max-width: 443px;
-  }
+    .nav {
+        max-width: 443px;
+    }
 
-  .footer .menu {
-    font-size: 24px;
-  }
+    .footer .menu {
+        font-size: 24px;
+    }
 
-  /*
+    /*
   .footer-logo {
     margin: 33px 0;
   }

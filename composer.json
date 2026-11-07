@@ -1,7 +1,13 @@
 {
     "require": {
-        "league/uri": "^7.8",
         "egulias/email-validator": "^4.0",
-        "monolog/monolog": "^3.10"
+        "monolog/monolog": "^3.12.1",
+        "php": ">=8.5.12",
+        "symfony/polyfill-intl-idn": "^1.43"
+    },
+    "config": {
+        "platform": {
+            "php": "8.5.12"
+        }
     }
 }

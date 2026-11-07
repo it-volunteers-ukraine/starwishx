@@ -387,7 +387,7 @@ class OpportunitiesPanel extends AbstractPanel
                 </div>
 
                 <div class="opportunities-empty" data-wp-bind--hidden="!state.showOppEmpty">
-                    <span class="dashicons dashicons-megaphone"></span>
+                    <?= sw_svg('icon-doc', 32); ?>
                     <p><?php esc_html_e('No opportunities yet.', 'starwishx'); ?></p>
                 </div>
 
@@ -536,9 +536,7 @@ class OpportunitiesPanel extends AbstractPanel
                 <div class="launchpad-form-header" data-wp-bind--data-status="state.panels.opportunities.formData.status">
                     <h2 data-wp-text="state.opportunityFormHeaders"></h2>
                     <button class="btn-secondary__small" type="button" data-wp-on--click="actions.opportunities.cancel">
-                        <svg class="btn-secondary__small--icon arrow-left">
-                            <use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-long-arrow-left"></use>
-                        </svg>
+                        <?= sw_svg('icon-long-arrow-left', class:'btn-secondary__small--icon arrow-left'); ?>
                         <?php esc_html_e('Back', 'starwishx'); ?>
                     </button>
                 </div>
@@ -971,11 +969,7 @@ class OpportunitiesPanel extends AbstractPanel
                                         <button type="button" class="document-btn btn-chip"
                                             data-wp-on--click="actions.opportunities.triggerFileSelect"
                                             data-wp-bind--disabled="state.panels.opportunities.isSaving">
-                                            <!-- <span class="dashicons dashicons-paperclip"></span> -->
-                                            <svg width="18" height="18" aria-hidden="true" class="document-btn__icon">
-                                                <use href="<?php echo get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-clip"></use>
-                                            </svg>
-
+                                            <?= sw_svg('icon-clip', 18, class: 'document-btn__icon'); ?>
                                             <?php echo esc_html($instructions['opportunity_document'] ?? __('Attach File', 'starwishx')); ?>
                                             <!-- < ?php esc_html_e('Attach File', 'starwishx'); ?> -->
                                         </button>
@@ -1019,9 +1013,7 @@ class OpportunitiesPanel extends AbstractPanel
                                                 <button type="button" class="location-remove btn-chip__icon"
                                                     data-wp-on--click="actions.opportunities.removeDocument"
                                                     data-wp-bind--disabled="state.panels.opportunities.isSaving">
-                                                    <svg>
-                                                        <use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-plus-small"></use>
-                                                    </svg>
+                                                    <?= sw_svg('icon-plus-small'); ?>
                                                 </button>
                                             </span>
                                         </span>
@@ -1061,9 +1053,7 @@ class OpportunitiesPanel extends AbstractPanel
                         </button>
                         <!-- Back to list -->
                         <button class="btn-secondary__small" type="button" data-wp-on--click="actions.opportunities.cancel">
-                            <svg class="btn-secondary__small--icon arrow-left">
-                                <use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-long-arrow-left"></use>
-                            </svg>
+                            <?= sw_svg('icon-long-arrow-left', class:'btn-secondary__small--icon arrow-left'); ?>
                             <?php esc_html_e('Back', 'starwishx'); ?>
                         </button>
                         <!-- indicator for non-editable items -->
