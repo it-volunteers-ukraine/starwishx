@@ -139,11 +139,11 @@ async function compile(lane, entry, { prod }) {
   if (lane.cssModules) {
     const map = moduleMaps.get(lane.cssModules) ?? new Map();
     moduleMaps.set(lane.cssModules, map);
+    // Sorted: Lightning CSS returns the exports in a different order per run.
     const names = Object.fromEntries(
-      Object.entries(css.exports ?? {}).map(([local, { name }]) => [
-        local,
-        name,
-      ]),
+      Object.entries(css.exports ?? {})
+        .map(([local, { name }]) => [local, name])
+        .sort(([a], [b]) => a.localeCompare(b)),
     );
     map.set(path.basename(entry, ".module.scss"), names);
   }
