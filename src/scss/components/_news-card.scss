@@ -117,7 +117,6 @@
 }
 
 .newcard-title {
-  /* stylelint-disable-next-line value-no-vendor-prefix */
   display: -webkit-box;
   margin-bottom: 12px;
 
@@ -133,7 +132,6 @@
 
 /* autoprefixer: off */
 .newcard-text {
-  /* stylelint-disable-next-line value-no-vendor-prefix */
   display: -webkit-box;
   color: $text-light;
   -webkit-box-orient: vertical;
