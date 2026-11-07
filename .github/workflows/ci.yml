@@ -61,6 +61,10 @@ jobs:
           git ls-files -z '*.php' ':!:vendor/**' ':!:.void/**'
           | xargs -0 -n1 -P4 php -d display_errors=stderr -l > /dev/null
 
+      # UrlPolicy's parser ships with PHP: a new PHP can change what it accepts.
+      - name: Test the URL policy
+        run: php tests/url-policy.php
+
       - name: Build and package
         run: vpr build
 

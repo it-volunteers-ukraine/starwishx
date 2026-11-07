@@ -50,6 +50,8 @@ Oxfmt. Biome (`biome.jsonc`) lints the SCSS.
 - `pnpm check` - format, lint and type check; `pnpm exec vp check --fix` applies
   fixes.
 - `pnpm lint` - `pnpm check` plus Biome.
+- `pnpm test` - the regression table for `Shared\Policy\UrlPolicy`. Its URL
+  parser ships with PHP, so a PHP upgrade can change what it accepts.
 - Before each commit, `vp staged` fixes and checks the staged files. The hook
   is installed by `pnpm install` (`vp config`); skip it once with
   `VP_GIT_HOOKS=0 git commit ...`.

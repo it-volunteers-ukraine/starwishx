@@ -13,6 +13,7 @@
     "check": "vp check",
     "lint": "vp check && pnpm style:lint",
     "style:lint": "biome lint --error-on-warnings",
+    "test": "php tests/url-policy.php",
     "i18n": "npm run i18n:pot && npm run i18n:po && npm run i18n:php && npm run i18n:mo",
     "i18n:pot": "wp i18n make-pot . languages/_themedomain.pot --domain=starwishx --exclude=production,.void,inc/blocks/*/build",
     "i18n:po": "wp i18n update-po languages/_themedomain.pot languages/uk.po",

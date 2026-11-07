@@ -20,6 +20,7 @@
 /node_modules/
 /production/
 /tools/
+/tests/
 /docs/
 /composer.json
 /composer.lock
