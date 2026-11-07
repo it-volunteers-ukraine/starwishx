@@ -2,6 +2,12 @@
     "require": {
         "league/uri": "^7.10",
         "egulias/email-validator": "^4.0",
-        "monolog/monolog": "^3.12.1"
+        "monolog/monolog": "^3.12.1",
+        "php": ">=8.5.12"
+    },
+    "config": {
+        "platform": {
+            "php": "8.5.12"
+        }
     }
 }

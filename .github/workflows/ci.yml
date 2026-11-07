@@ -49,6 +49,18 @@ jobs:
       - name: Lint the SCSS (Biome)
         run: vpr style:lint
 
+      # The PHP the theme requires (composer.json): every file must parse on it.
+      - uses: shivammathur/setup-php@eb7c497e18156a6bbabfef1d3a82760b9eda3962 # 2.40.0
+        with:
+          php-version: "8.5"
+          coverage: none
+          tools: none
+
+      - name: Check PHP syntax
+        run: >-
+          git ls-files -z '*.php' ':!:vendor/**' ':!:.void/**'
+          | xargs -0 -n1 -P4 php -d display_errors=stderr -l > /dev/null
+
       - name: Build and package
         run: vpr build
 
