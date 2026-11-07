@@ -92,7 +92,6 @@
 .footer-logo-wrapper {
   /* margin: 0 calc(0.045 * 100%); */
   margin-bottom: 40px;
-  font-size: 12.8vw;
   font-size: calc(13.23vw - 1.62px);
   line-height: 1;
   color: white;
@@ -287,7 +286,6 @@
   /* top: calc(-100% * 0.11); */
 
   /* right: calc(100% * 0.04); */
-  right: calc(6.62vw - 19.81px);
   right: -1.7vw;
   top: -0.5vw;
   z-index: 0;
@@ -388,7 +386,6 @@
   .footer-logo-wrapper {
     /* margin: 0 calc(0.062 * 100%); */
     margin-bottom: 24px;
-    font-size: 13vw;
     font-size: calc(14.88vw - 14.29px);
   }
 
@@ -400,7 +397,6 @@
 
   .footer-logo-satellite {
     /* top: calc(-100% * 0.13); */
-    right: calc(1.34vw - 4.29px);
     right: -1.7vw;
   }
 
