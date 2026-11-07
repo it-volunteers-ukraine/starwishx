@@ -20,15 +20,10 @@ class ComposerStaticInitfeb7c198389c10d6222848451ed19cb5
         'P' =>
         array (
             'Psr\\Log\\' => 8,
-            'Psr\\Http\\Message\\' => 17,
         ),
         'M' =>
         array (
             'Monolog\\' => 8,
-        ),
-        'L' =>
-        array (
-            'League\\Uri\\' => 11,
         ),
         'E' =>
         array (
@@ -53,19 +48,9 @@ class ComposerStaticInitfeb7c198389c10d6222848451ed19cb5
         array (
             0 => __DIR__ . '/..' . '/psr/log/src',
         ),
-        'Psr\\Http\\Message\\' =>
-        array (
-            0 => __DIR__ . '/..' . '/psr/http-factory/src',
-            1 => __DIR__ . '/..' . '/psr/http-message/src',
-        ),
         'Monolog\\' =>
         array (
             0 => __DIR__ . '/..' . '/monolog/monolog/src/Monolog',
-        ),
-        'League\\Uri\\' =>
-        array (
-            0 => __DIR__ . '/..' . '/league/uri',
-            1 => __DIR__ . '/..' . '/league/uri-interfaces',
         ),
         'Egulias\\EmailValidator\\' =>
         array (

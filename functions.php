@@ -251,7 +251,7 @@ if (! function_exists('yourtheme_mobile_search_lang')) {
 //   echo '<meta name="color-scheme" content="light">';
 // });
 
-// Composer autoload (league/uri, etc.)
+// Composer autoload (email validation, logging, the IDN polyfill)
 require_once get_template_directory() . '/vendor/autoload.php';
 
 // init for Shared infrastructure
