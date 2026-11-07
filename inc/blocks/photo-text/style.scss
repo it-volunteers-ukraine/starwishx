@@ -16,59 +16,59 @@
 
 // Narrower than the page container, as designed.
 .photo-text__container {
-  @include min-tablet {
-    max-width: $width-tablet;
-  }
+    @include min-tablet {
+        max-width: $width-tablet;
+    }
 
-  @include min-laptop {
-    max-width: 750px;
-  }
+    @include min-laptop {
+        max-width: 750px;
+    }
 
-  @include min-desktop {
-    max-width: 1030px;
-  }
+    @include min-desktop {
+        max-width: 1030px;
+    }
 }
 
 .photo-text__title {
-  margin-bottom: 40px;
-  color: $text-dark;
-  text-align: center;
+    margin-bottom: 40px;
+    color: $text-dark;
+    text-align: center;
 
-  @include min-tablet {
-    margin-bottom: 28px;
-  }
+    @include min-tablet {
+        margin-bottom: 28px;
+    }
 }
 
 .photo-text__content {
-  @include media-section-content;
+    @include media-section-content;
 }
 
 .photo-text__media {
-  align-self: center;
-  max-width: 544px;
+    align-self: center;
+    max-width: 544px;
 
-  @include min-tablet {
-    flex: 1;
-    margin-bottom: 0;
-  }
+    @include min-tablet {
+        flex: 1;
+        margin-bottom: 0;
+    }
 }
 
 // width/height attributes + the reset's `block-size: auto` keep the ratio.
 .photo-text__image {
-  border-radius: 12px;
+    border-radius: 12px;
 }
 
 .photo-text__body {
-  @include media-section-body;
+    @include media-section-body;
 }
 
 .photo-text__text {
-  @include media-section-text;
+    @include media-section-text;
 }
 
 // Decorative spinning star (aria-hidden in the markup).
 .photo-text__icon {
-  @include media-section-icon("photo-text");
+    @include media-section-icon("photo-text");
 }
 
 @include media-section-spin("photo-text");

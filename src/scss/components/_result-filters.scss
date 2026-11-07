@@ -10,38 +10,38 @@
  */
 
 .block-filter {
-  display: flex;
-  margin-bottom: 16px;
-  padding: 12px 0;
-  flex-direction: row-reverse;
-  justify-content: space-between;
-  align-items: center;
-  color: $text-light;
+    display: flex;
+    margin-bottom: 16px;
+    padding: 12px 0;
+    flex-direction: row-reverse;
+    justify-content: space-between;
+    align-items: center;
+    color: $text-light;
 
-  @include min-tablet {
-    padding: 12px 40px;
-    flex-direction: row;
-  }
+    @include min-tablet {
+        padding: 12px 40px;
+        flex-direction: row;
+    }
 
-  @include min-laptop {
-    margin-bottom: 24px;
-  }
+    @include min-laptop {
+        margin-bottom: 24px;
+    }
 }
 
 .filter {
-  display: flex;
-  gap: 8px;
-  align-items: center;
+    display: flex;
+    gap: 8px;
+    align-items: center;
 }
 
 .filter-title {
-  display: none;
+    display: none;
 
-  @include min-tablet {
-    display: inline;
-  }
+    @include min-tablet {
+        display: inline;
+    }
 }
 
 .filter-data {
-  color: $text-dark;
+    color: $text-dark;
 }

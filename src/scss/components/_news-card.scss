@@ -2,40 +2,40 @@
 @use "../mixins/media" as *;
 
 .newcard-img-wrap {
-  position: relative;
-  margin-bottom: 24px;
-  border-radius: $radius-image;
-  width: 100%;
-  height: 250px;
-  overflow: hidden;
+    position: relative;
+    margin-bottom: 24px;
+    border-radius: $radius-image;
+    width: 100%;
+    height: 250px;
+    overflow: hidden;
 
-  &::before {
-    position: absolute;
-    z-index: 1;
-    inset: 0;
-    background: linear-gradient(
-      180deg,
-      rgb(0 0 0 / 50%) 0%,
-      rgb(0 0 0 / 25%) 9%,
-      rgb(0 0 0 / 15%) 12%,
-      rgb(0 0 0 / 7%) 15%,
-      rgb(0 0 0 / 0.01%) 18%,
-      rgb(0 0 0 / 0%) 100%
-    );
-    content: "";
-  }
+    &::before {
+        position: absolute;
+        z-index: 1;
+        inset: 0;
+        background: linear-gradient(
+            180deg,
+            rgb(0 0 0 / 50%) 0%,
+            rgb(0 0 0 / 25%) 9%,
+            rgb(0 0 0 / 15%) 12%,
+            rgb(0 0 0 / 7%) 15%,
+            rgb(0 0 0 / 0.01%) 18%,
+            rgb(0 0 0 / 0%) 100%
+        );
+        content: "";
+    }
 
-  // &::after {
-  //   position: absolute;
-  //   z-index: 4;
-  //   inset: 0;
-  //   content: "";
-  //   backdrop-filter: blur(2px);
-  //   mask-image: linear-gradient(0deg, #000 20%, #0000);
-  //   max-height: 40%;
-  //   pointer-events: none;
-  //   height: 19%;
-  // }
+    // &::after {
+    //   position: absolute;
+    //   z-index: 4;
+    //   inset: 0;
+    //   content: "";
+    //   backdrop-filter: blur(2px);
+    //   mask-image: linear-gradient(0deg, #000 20%, #0000);
+    //   max-height: 40%;
+    //   pointer-events: none;
+    //   height: 19%;
+    // }
 }
 
 /*
@@ -60,24 +60,24 @@
 */
 
 .card-version-2 .newcard-img-wrap {
-  height: 296px;
+    height: 296px;
 }
 
 .newcard-img {
-  border-radius: 12px;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+    border-radius: 12px;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
 .newcard-label {
-  position: absolute;
-  top: 8px;
-  left: 8px;
-  z-index: 5;
-  border-radius: $radius-element;
-  padding: 4px 8px;
-  font-size: 14px;
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    z-index: 5;
+    border-radius: $radius-element;
+    padding: 4px 8px;
+    font-size: 14px;
 }
 
 /*
@@ -87,81 +87,81 @@
  * .newcard-label` rule outscored the slug rules, leaving labels colourless.
  */
 .newcard-label--none {
-  background-color: $element-block-fill;
-  color: $element-block-text;
-  border: 1px solid $element-block-fill;
+    background-color: $element-block-fill;
+    color: $element-block-text;
+    border: 1px solid $element-block-fill;
 }
 
 .newcard-info {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
 }
 
 .newcard-info .comment-rating {
-  margin-top: 0;
+    margin-top: 0;
 }
 
 .newcard-date {
-  margin-left: auto;
-  color: $text-light;
+    margin-left: auto;
+    color: $text-light;
 }
 
 .card-version-2 .newcard-date {
-  color: $text-accent;
+    color: $text-accent;
 }
 
 .newcard-lg .newcard-date {
-  text-align: left;
+    text-align: left;
 }
 
 .newcard-title {
-  display: -webkit-box;
-  margin-bottom: 12px;
+    display: -webkit-box;
+    margin-bottom: 12px;
 
-  /* autoprefixer: ignore next */
-  min-height: calc(1.2em * 3);
-  color: $text-basic;
-  -webkit-box-orient: vertical;
-  line-clamp: 3;
-  -webkit-line-clamp: 3;
-  overflow: hidden;
-  overflow-wrap: anywhere;
+    /* autoprefixer: ignore next */
+    min-height: calc(1.2em * 3);
+    color: $text-basic;
+    -webkit-box-orient: vertical;
+    line-clamp: 3;
+    -webkit-line-clamp: 3;
+    overflow: hidden;
+    overflow-wrap: anywhere;
 }
 
 /* autoprefixer: off */
 .newcard-text {
-  display: -webkit-box;
-  color: $text-light;
-  -webkit-box-orient: vertical;
-  line-clamp: 4;
-  -webkit-line-clamp: 4;
-  overflow: hidden;
+    display: -webkit-box;
+    color: $text-light;
+    -webkit-box-orient: vertical;
+    line-clamp: 4;
+    -webkit-line-clamp: 4;
+    overflow: hidden;
 }
 
 @include min-tablet {
-  .card-version-2 .newcard-img-wrap {
-    height: 290px;
-  }
+    .card-version-2 .newcard-img-wrap {
+        height: 290px;
+    }
 }
 
 @include min-laptop {
-  .newcard-img-wrap {
-    height: calc(15.42vw + 18px);
-  }
+    .newcard-img-wrap {
+        height: calc(15.42vw + 18px);
+    }
 
-  .newcard-lg .newcard-img-wrap {
-    height: calc(24.17vw - 104px);
-  }
+    .newcard-lg .newcard-img-wrap {
+        height: calc(24.17vw - 104px);
+    }
 
-  .card-version-2 .newcard-img-wrap {
-    height: 280px;
-  }
+    .card-version-2 .newcard-img-wrap {
+        height: 280px;
+    }
 }
 
 @include min-desktop {
-  .card-version-2 .newcard-img-wrap {
-    height: 364px;
-  }
+    .card-version-2 .newcard-img-wrap {
+        height: 364px;
+    }
 }

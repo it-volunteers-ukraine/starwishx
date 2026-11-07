@@ -4,7 +4,7 @@
   Converts px value to rem
 */
 @function to-rem($px, $current: 16) {
-  $result: math.div($px, $current) + rem;
+    $result: math.div($px, $current) + rem;
 
-  @return $result;
+    @return $result;
 }

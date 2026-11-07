@@ -57,6 +57,13 @@ export default defineConfig({
     printWidth: 80,
     // package.json keeps its own key order.
     sortPackageJson: false,
+    overrides: [
+      {
+        // Nested up to nine levels deep: 4 spaces, and the width to fit them.
+        files: ["**/*.scss"],
+        options: { tabWidth: 4, printWidth: 100 },
+      },
+    ],
     ignorePatterns: [
       ...notOurs,
       // Plain CSS is build output, vendored (src/css) or style.css, whose

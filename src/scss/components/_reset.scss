@@ -1,116 +1,116 @@
 *,
 *::after,
 *::before {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
 
 :where(html) {
-  hanging-punctuation: first allow-end last;
-  color-scheme: light dark;
-  interpolate-size: allow-keywords;
-  scroll-behavior: smooth;
-  scrollbar-gutter: stable;
-  text-size-adjust: none;
-  -webkit-tap-highlight-color: transparent;
-  -webkit-font-smoothing: antialiased;
+    hanging-punctuation: first allow-end last;
+    color-scheme: light dark;
+    interpolate-size: allow-keywords;
+    scroll-behavior: smooth;
+    scrollbar-gutter: stable;
+    text-size-adjust: none;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-font-smoothing: antialiased;
 }
 
 :where(html.translated-rtl) {
-  direction: rtl;
+    direction: rtl;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  :where(html) {
-    scroll-behavior: auto;
-  }
+    :where(html) {
+        scroll-behavior: auto;
+    }
 }
 
 :where(body) {
-  min-inline-size: 300px;
-  min-block-size: 100svb;
+    min-inline-size: 300px;
+    min-block-size: 100svb;
 }
 
 :where(canvas, img, picture, svg, video) {
-  display: block;
-  border: none;
-  max-inline-size: 100%;
-  block-size: auto;
+    display: block;
+    border: none;
+    max-inline-size: 100%;
+    block-size: auto;
 }
 
 :where(button, input, progress, select, textarea) {
-  appearance: none;
-  background: transparent;
+    appearance: none;
+    background: transparent;
 
-  // text-align: start;
-  touch-action: manipulation;
-  hanging-punctuation: none;
+    // text-align: start;
+    touch-action: manipulation;
+    hanging-punctuation: none;
 
-  // border: none;
-  color: inherit;
-  font: inherit;
-  line-height: inherit;
+    // border: none;
+    color: inherit;
+    font: inherit;
+    line-height: inherit;
 }
 
 :where(button) {
-  cursor: pointer;
-  user-select: none;
+    cursor: pointer;
+    user-select: none;
 }
 
 :where(textarea) {
-  resize: vertical;
+    resize: vertical;
 }
 
 :where(textarea:not([rows])) {
-  field-sizing: content;
+    field-sizing: content;
 }
 
 :where(fieldset, iframe) {
-  border: none;
+    border: none;
 }
 
 :where(p, li, h1, h2, h3, h4, h5, h6) {
-  text-wrap: pretty;
-  overflow-wrap: break-word;
+    text-wrap: pretty;
+    overflow-wrap: break-word;
 }
 
 :where(abbr[title]) {
-  border: none;
-  text-decoration: none;
+    border: none;
+    text-decoration: none;
 }
 
 :where(cite) {
-  font-style: inherit;
+    font-style: inherit;
 }
 
 :where(small) {
-  font-size: inherit;
+    font-size: inherit;
 }
 
 :where(li, ol, ul) {
-  list-style: none;
+    list-style: none;
 }
 
 :where(dialog, [popover]) {
-  position: fixed;
-  margin: auto;
+    position: fixed;
+    margin: auto;
 
-  // background: transparent;
-  border: none;
-  max-inline-size: none;
-  max-block-size: none;
-  color: inherit;
+    // background: transparent;
+    border: none;
+    max-inline-size: none;
+    max-block-size: none;
+    color: inherit;
 }
 
 :where([popover]) {
-  inset: auto;
+    inset: auto;
 }
 
 :where(dialog:not([open], [popover]), [popover]:not(:popover-open)) {
-  display: none;
+    display: none;
 }
 
 :where([hidden]:not([hidden="until-found"])) {
-  display: none !important;
+    display: none !important;
 }

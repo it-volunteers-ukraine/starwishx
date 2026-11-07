@@ -6,20 +6,20 @@
 // File: inc/blocks/accordion-two-photo/editor.scss
 
 .accordion-two-photo__list > .block-list-appender {
-  margin: 16px 0;
+    margin: 16px 0;
 }
 
 // Empty photo slot: keep the placeholder inside the photo column's footprint.
 .accordion-two-photo__photos .components-placeholder {
-  min-height: 160px;
-  width: 120px;
-  min-width: 120px;
+    min-height: 160px;
+    width: 120px;
+    min-width: 120px;
 
-  @media screen and (min-width: 768px) {
-    width: 14.583vw;
-  }
+    @media screen and (min-width: 768px) {
+        width: 14.583vw;
+    }
 
-  @media screen and (min-width: 1440px) {
-    width: 225px;
-  }
+    @media screen and (min-width: 1440px) {
+        width: 225px;
+    }
 }

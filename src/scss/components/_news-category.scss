@@ -12,47 +12,47 @@
 
 .newscat-section,
 .search-section {
-  padding: 16px 0 54px;
+    padding: 16px 0 54px;
 
-  @include min-tablet {
-    padding-bottom: 40px;
-  }
+    @include min-tablet {
+        padding-bottom: 40px;
+    }
 
-  @include min-laptop {
-    padding-top: 32px;
-  }
+    @include min-laptop {
+        padding-top: 32px;
+    }
 }
 
 .newscat-title,
 .search-title {
-  margin-bottom: 16px;
-  color: $text-dark;
+    margin-bottom: 16px;
+    color: $text-dark;
 
-  @include min-laptop {
-    margin-bottom: 32px;
-  }
+    @include min-laptop {
+        margin-bottom: 32px;
+    }
 }
 
 .sw-cards-grid {
-  display: grid;
-  gap: 30px;
+    display: grid;
+    gap: 30px;
 
-  @include min-tablet {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 40px 16px;
-  }
+    @include min-tablet {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 40px 16px;
+    }
 
-  @media screen and (min-width: 992px) {
-    grid-template-columns: repeat(3, 1fr);
-  }
+    @media screen and (min-width: 992px) {
+        grid-template-columns: repeat(3, 1fr);
+    }
 
-  @include min-laptop {
-    grid-template-columns: repeat(4, 1fr);
-    gap: 36px 20px;
-  }
+    @include min-laptop {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 36px 20px;
+    }
 }
 
 .newscat-empty,
 .search-empty {
-  color: $text-dark;
+    color: $text-dark;
 }
