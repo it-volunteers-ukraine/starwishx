@@ -5,17 +5,25 @@
  * syntax floor. Script modules only run in browsers with import maps, which
  * already speak ES2022, so nothing below that is ever lowered or polyfilled.
  *
- * File: tools/build/js.mjs
+ * File: tools/build/js.ts
  */
 
 import { build, watch } from "rolldown";
-import { abs, fail, find, log, rel, since, warn } from "./files.mjs";
-import { scriptGlobal, wordpress } from "./wp.mjs";
+import type { BuildOptions, GlobalsFunction } from "rolldown";
+import { abs, fail, find, log, rel, since, warn } from "./files.ts";
+import type { BuildContext, JsLane } from "./lanes.ts";
+import { scriptGlobal, wordpress } from "./wp.ts";
+import type { OnWrite } from "./wp.ts";
 
 const TARGET = "es2022";
 
-/** Rolldown options for one entry of a lane (see tools/build/lanes.mjs). */
-function options(lane, entry, { prod }, onWrite) {
+/** Rolldown options for one entry of a lane (see tools/build/lanes.ts). */
+function options(
+  lane: JsLane,
+  entry: string,
+  { prod }: BuildContext,
+  onWrite?: OnWrite,
+): BuildOptions {
   return {
     input: abs(entry),
     platform: "browser",
@@ -46,13 +54,15 @@ function options(lane, entry, { prod }, onWrite) {
       sourcemap: !prod,
       // Minified output keeps no comments at all - no extracted LICENSE files.
       comments: prod ? false : undefined,
-      globals: lane.wp === "scripts" ? scriptGlobal : undefined,
+      // Only asked about externals, and wordpress() keeps only ids it maps.
+      globals:
+        lane.wp === "scripts" ? (scriptGlobal as GlobalsFunction) : undefined,
     },
   };
 }
 
 /** Builds every entry of the JS lanes once. Resolves to the failure count. */
-export async function buildJs(lanes, context) {
+export async function buildJs(lanes: JsLane[], context: BuildContext) {
   let failures = 0;
   await Promise.all(
     lanes.map(async (lane) => {
@@ -73,7 +83,7 @@ export async function buildJs(lanes, context) {
 }
 
 /** The entry files of the JS lanes, to notice when one is added or removed. */
-export const jsEntries = (lanes) =>
+export const jsEntries = (lanes: JsLane[]) =>
   lanes.flatMap((lane) => find(lane.include, lane.exclude)).join("\n");
 
 /**
@@ -82,14 +92,14 @@ export const jsEntries = (lanes) =>
  * summed up per lane, later rebuilds are logged one bundle at a time.
  * Returns the watcher.
  */
-export function watchJs(lanes, context) {
+export function watchJs(lanes: JsLane[], context: BuildContext) {
   const start = performance.now();
-  const firstRound = new Map();
+  const firstRound = new Map<string, number>();
   let watching = false;
 
   const all = lanes.flatMap((lane) =>
     find(lane.include, lane.exclude).map((entry) => {
-      const onWrite = (file, ms) => {
+      const onWrite: OnWrite = (file, ms) => {
         if (watching) log(lane.id, `${rel(file)} ${ms} ms`);
         else firstRound.set(lane.id, (firstRound.get(lane.id) ?? 0) + 1);
       };
@@ -104,12 +114,12 @@ export function watchJs(lanes, context) {
 
   watcher.on("event", (event) => {
     if (event.code === "BUNDLE_END") {
-      event.result.close();
+      event.result.close().catch((error) => fail("js", error));
     } else if (event.code === "ERROR") {
       // A deleted entry fails once before the watcher is restarted without it.
       if (!/Cannot resolve entry module/.test(event.error?.message))
         fail("js", event.error);
-      event.result?.close();
+      event.result?.close().catch((error) => fail("js", error));
     } else if (event.code === "END" && !watching) {
       watching = true;
       for (const [lane, count] of firstRound) log(lane, `${count} bundles`);

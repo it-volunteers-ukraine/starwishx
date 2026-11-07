@@ -1,7 +1,7 @@
 /**
- * Vite+ (https://viteplus.dev): linting (Oxlint), formatting (Oxfmt) and the
- * pre-commit checks on staged files. Nothing here builds anything - the
- * theme build is tools/build.mjs, which doesn't depend on Vite+.
+ * Vite+ (https://viteplus.dev): linting and type-checking (Oxlint), formatting
+ * (Oxfmt) and the pre-commit checks on staged files. Nothing here builds anything - the
+ * theme build is tools/build.ts, which doesn't depend on Vite+.
  *
  *   pnpm check            format + lint check (`vp check --fix` to apply)
  *   pnpm lint             the above plus Biome for the SCSS (biome.jsonc)
@@ -27,6 +27,9 @@ const notOurs = [
 
 export default defineConfig({
   lint: {
+    // Type-checks what tsconfig.json includes (the build tools). Rules such as
+    // no-floating-promises also reach the theme's JS through inferred types.
+    options: { typeAware: true, typeCheck: true },
     ignorePatterns: notOurs,
     env: { browser: true, es2024: true },
     // inc/blocks/Assets/editor-media-attributes.js is a plain script on wp.*.
@@ -35,6 +38,16 @@ export default defineConfig({
       {
         files: ["tools/**", "vite.config.ts"],
         env: { browser: false, node: true },
+      },
+      {
+        // These read JSDoc as if it were real types, so in plain JS they
+        // report loose comments ({Object}, untyped packages), not bugs.
+        files: ["inc/**", "src/**"],
+        rules: {
+          "typescript/no-misused-spread": "off",
+          "typescript/no-redundant-type-constituents": "off",
+          "typescript/no-useless-default-assignment": "off",
+        },
       },
     ],
   },

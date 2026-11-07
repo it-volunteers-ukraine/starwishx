@@ -1,6 +1,6 @@
 # Files and folders that are not part of the deployed theme.
 #
-# Read by tools/package.mjs (the last step of `npm run build`, which copies
+# Read by tools/package.ts (the last step of `npm run build`, which copies
 # the theme into production/), and by `wp dist-archive`, whose convention
 # this file follows. gitignore-style patterns: a leading "/" anchors to the
 # theme root, a trailing "/" matches a folder, a pattern without "/" matches
@@ -28,6 +28,7 @@
 /pnpm-workspace.yaml
 /skills-lock.json
 /vite.config.ts
+/tsconfig.json
 /biome.jsonc
 /README.md
 

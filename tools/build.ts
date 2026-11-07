@@ -1,26 +1,26 @@
 /**
  * Theme build: JS (Rolldown), CSS (sass-embedded -> Lightning CSS), the icon
  * sprite and static files. The outputs themselves are declared in
- * tools/build/lanes.mjs.
+ * tools/build/lanes.ts.
  *
- *   node tools/build.mjs            dev build: source maps, no minification
- *   node tools/build.mjs --watch    dev build, then rebuild whatever changes
- *   node tools/build.mjs --prod     clean production build + size report
- *   node tools/build.mjs --clean    remove all build output (and production/)
+ *   node tools/build.ts            dev build: source maps, no minification
+ *   node tools/build.ts --watch    dev build, then rebuild whatever changes
+ *   node tools/build.ts --prod     clean production build + size report
+ *   node tools/build.ts --clean    remove all build output (and production/)
  *   --only=styles,stores            limit the run to some lanes, by id
  *
  * `npm run build` also copies the deployable theme into production/
- * (tools/package.mjs). Translations are not built here - they need wp-cli;
+ * (tools/package.ts). Translations are not built here - they need wp-cli;
  * see the i18n:* scripts in package.json.
  *
- * File: tools/build.mjs
+ * File: tools/build.ts
  */
 
 import fs from "node:fs";
 import path from "node:path";
 import { parseArgs } from "node:util";
-import { buildSprite } from "./build-sprite.mjs";
-import { buildCss, closeSass, rebuildCss } from "./build/css.mjs";
+import { buildSprite } from "./build-sprite.ts";
+import { buildCss, closeSass, rebuildCss } from "./build/css.ts";
 import {
   abs,
   copyIfChanged,
@@ -32,9 +32,10 @@ import {
   rel,
   since,
   sizesOf,
-} from "./build/files.mjs";
-import { buildJs, jsEntries, watchJs } from "./build/js.mjs";
-import { lanes, outputDirs } from "./build/lanes.mjs";
+} from "./build/files.ts";
+import { buildJs, jsEntries, watchJs } from "./build/js.ts";
+import { lanes, outputDirs } from "./build/lanes.ts";
+import type { CopyLane, Lane } from "./build/lanes.ts";
 
 const { values: args } = parseArgs({
   options: {
@@ -59,7 +60,7 @@ function selectLanes() {
   return lanes.filter((lane) => ids.includes(lane.id));
 }
 
-function clean({ production }) {
+function clean({ production }: { production: boolean }) {
   const dirs = outputDirs.flatMap((pattern) =>
     pattern.includes("*") ? fs.globSync(pattern, { cwd: abs(".") }) : [pattern],
   );
@@ -75,7 +76,7 @@ async function runSprite() {
 }
 
 /** Copies one changed file if a copy set covers it; true when it did. */
-async function copyOne(lane, file) {
+async function copyOne(lane: CopyLane, file: string) {
   for (const set of lane.sets) {
     if (!matches(file, set.include) || matches(file, set.exclude)) continue;
     if (!fs.existsSync(abs(file))) return false;
@@ -85,7 +86,7 @@ async function copyOne(lane, file) {
   return false;
 }
 
-async function copyAll(lane) {
+async function copyAll(lane: CopyLane) {
   const start = performance.now();
   let copied = 0;
   let total = 0;
@@ -99,8 +100,8 @@ async function copyAll(lane) {
 }
 
 /** Raw and brotli sizes of every JS and CSS output, grouped by lane. */
-function report(selected) {
-  const rows = [];
+function report(selected: Lane[]) {
+  const rows: { lane: string; out: string; raw: number; br: number }[] = [];
   for (const lane of selected) {
     if (lane.type !== "js" && lane.type !== "css") continue;
     for (const entry of find(lane.include, lane.exclude)) {
@@ -114,21 +115,22 @@ function report(selected) {
   console.log(
     `\n${"output".padEnd(width)}  ${"raw".padStart(9)}  ${"brotli".padStart(9)}`,
   );
-  let lane;
+  let lane: string | undefined;
   for (const row of rows) {
     if (row.lane !== lane) console.log(`-- ${(lane = row.lane)}`);
     console.log(
       `${row.out.padEnd(width)}  ${kb(row.raw).padStart(9)}  ${kb(row.br).padStart(9)}`,
     );
   }
-  const sum = (key) => rows.reduce((total, row) => total + row[key], 0);
+  const sum = (key: "raw" | "br") =>
+    rows.reduce((total, row) => total + row[key], 0);
   console.log(
     `${"total".padEnd(width)}  ${kb(sum("raw")).padStart(9)}  ${kb(sum("br")).padStart(9)}\n`,
   );
 }
 
 /** One pass over every lane; in watch mode Rolldown's watcher does the JS. */
-async function buildOnce(selected) {
+async function buildOnce(selected: Lane[]) {
   const sprite = selected.find((lane) => lane.type === "sprite");
   const files = selected.find((lane) => lane.type === "copy");
   // The sprite comes first: the files lane ships the sprites.svg it writes.
@@ -154,7 +156,7 @@ async function buildOnce(selected) {
  * handles SCSS, the sprite, static files, and JS entries appearing or
  * disappearing, which need a new Rolldown watcher.
  */
-function watchAll(selected) {
+function watchAll(selected: Lane[]) {
   const jsLanes = selected.filter((lane) => lane.type === "js");
   const cssLanes = selected.filter((lane) => lane.type === "css");
   const sprite = selected.find((lane) => lane.type === "sprite");
@@ -162,11 +164,11 @@ function watchAll(selected) {
 
   let jsWatcher = jsLanes.length ? watchJs(jsLanes, context) : null;
   let entries = jsEntries(jsLanes);
-  const changed = new Set();
-  let timer;
+  const changed = new Set<string>();
+  let timer: NodeJS.Timeout | undefined;
   let running = Promise.resolve();
 
-  async function flush(batch) {
+  async function flush(batch: string[]) {
     for (const file of batch) {
       if (file.endsWith(".scss") && cssLanes.length)
         await rebuildCss(cssLanes, file, context);
@@ -187,7 +189,7 @@ function watchAll(selected) {
     }
   }
 
-  const onEvent = (dir) => (_event, name) => {
+  const onEvent = (dir: string) => (_event: string, name: string | null) => {
     if (!name) return;
     const file = rel(path.join(abs(dir), name));
     // Our own output (inc/blocks/*/build/) is not a source.

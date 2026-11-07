@@ -10,10 +10,24 @@
  *     array('dependencies' => array(...), 'version' => '<content hash>')
  *   Core reads it for block.json assets, PHP includes it for our own enqueues.
  *
- * File: tools/build/wp.mjs
+ * File: tools/build/wp.ts
  */
 
-import { contentHash } from "./files.mjs";
+import type { OutputBundle, OutputChunk, Plugin } from "rolldown";
+import { contentHash } from "./files.ts";
+import type { JsLane } from "./lanes.ts";
+
+/** A dynamic import() is a module dependency WordPress fetches on demand. */
+type Dependency = string | { id: string; import: "dynamic" };
+
+type Asset = {
+  dependencies: Dependency[];
+  version: string;
+  type?: "module";
+};
+
+/** Told about each bundle written, with how long it took. */
+export type OnWrite = (file: string, ms: number) => void;
 
 const WP = "@wordpress/";
 
@@ -31,7 +45,7 @@ const BUNDLED = new Set([
 ]);
 
 // Non-WordPress packages that core ships as script handles.
-const VENDOR = {
+const VENDOR: Record<string, { global: string; handle: string }> = {
   react: { global: "React", handle: "react" },
   "react-dom": { global: "ReactDOM", handle: "react-dom" },
   "react/jsx-runtime": {
@@ -44,11 +58,11 @@ const VENDOR = {
   moment: { global: "moment", handle: "moment" },
 };
 
-const camelCase = (name) =>
-  name.replace(/-([a-z])/g, (_, letter) => letter.toUpperCase());
+const camelCase = (name: string) =>
+  name.replace(/-([a-z])/g, (_, letter: string) => letter.toUpperCase());
 
 /** "@wordpress/block-editor" -> "wp.blockEditor"; undefined when bundled. */
-export function scriptGlobal(id) {
+export function scriptGlobal(id: string) {
   if (Object.hasOwn(VENDOR, id)) return VENDOR[id].global;
   if (id.startsWith(WP) && !BUNDLED.has(id))
     return `wp.${camelCase(id.slice(WP.length))}`;
@@ -56,13 +70,13 @@ export function scriptGlobal(id) {
 }
 
 /** "@wordpress/block-editor" -> "wp-block-editor" */
-function scriptHandle(id) {
+function scriptHandle(id: string) {
   if (Object.hasOwn(VENDOR, id)) return VENDOR[id].handle;
   return `wp-${id.slice(WP.length)}`;
 }
 
 /** PHP literal in the layout json2php gives the webpack plugin's files. */
-function php(value, depth = 0) {
+function php(value: unknown, depth = 0): string {
   const pad = "\t".repeat(depth + 1);
   const end = "\t".repeat(depth);
   if (Array.isArray(value)) {
@@ -79,15 +93,20 @@ function php(value, depth = 0) {
 }
 
 /** The .asset.php source for { dependencies, version[, type] }. */
-export const assetPhp = (asset) => `<?php return ${php(asset)};\n`;
+export const assetPhp = (asset: Asset) => `<?php return ${php(asset)};\n`;
 
 /**
  * Dependencies of one entry chunk. Imports that aren't another chunk of
  * this build are externals - exactly the ids resolveId() kept out.
  */
-function dependencies(lane, chunk, bundle) {
-  const external = (id) => !Object.hasOwn(bundle, id);
-  const byId = (a, b) => String(a.id ?? a).localeCompare(String(b.id ?? b));
+function dependencies(
+  lane: JsLane,
+  chunk: OutputChunk,
+  bundle: OutputBundle,
+): Dependency[] {
+  const external = (id: string) => !Object.hasOwn(bundle, id);
+  const idOf = (dependency: Dependency) =>
+    typeof dependency === "string" ? dependency : dependency.id;
 
   if (lane.wp === "modules") {
     const dynamic = chunk.dynamicImports.filter(external);
@@ -95,17 +114,17 @@ function dependencies(lane, chunk, bundle) {
       ...chunk.imports.filter(external).filter((id) => !dynamic.includes(id)),
       // A dynamic import() becomes a module dependency WordPress fetches
       // on demand instead of preloading.
-      ...dynamic.map((id) => ({ id, import: "dynamic" })),
-    ].sort(byId);
+      ...dynamic.map((id) => ({ id, import: "dynamic" as const })),
+    ].sort((a, b) => idOf(a).localeCompare(idOf(b)));
   }
   return [...new Set(chunk.imports.filter(external).map(scriptHandle))].sort();
 }
 
 /**
- * The plugin for one lane; see tools/build/lanes.mjs for the lane shape.
+ * The plugin for one lane; see tools/build/lanes.ts for the lane shape.
  * `onWrite(file, ms)` is told about every bundle written (watch logging).
  */
-export function wordpress(lane, onWrite) {
+export function wordpress(lane: JsLane, onWrite?: OnWrite): Plugin {
   const externals = lane.external ?? {};
   let started = 0;
 
@@ -117,7 +136,8 @@ export function wordpress(lane, onWrite) {
     },
 
     writeBundle(options) {
-      onWrite?.(options.file, Math.round(performance.now() - started));
+      // Every lane builds to a single `output.file`.
+      onWrite?.(options.file!, Math.round(performance.now() - started));
     },
 
     resolveId(source) {
@@ -139,10 +159,10 @@ export function wordpress(lane, onWrite) {
       if (!lane.asset) return;
       for (const chunk of Object.values(bundle)) {
         if (chunk.type !== "chunk" || !chunk.isEntry) continue;
-        const asset = {
+        const asset: Asset = {
           dependencies: dependencies(lane, chunk, bundle),
           version: contentHash(chunk.code),
-          ...(lane.wp === "modules" ? { type: "module" } : {}),
+          ...(lane.wp === "modules" ? { type: "module" as const } : {}),
         };
         this.emitFile({
           type: "asset",

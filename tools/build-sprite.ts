@@ -7,18 +7,18 @@
  * namespaced per icon, otherwise the several icons that all ship an
  * id="a" would collide once concatenated into a single document.
  *
- * Usage: node tools/build-sprite.mjs
- *        (also run by every tools/build.mjs build, and by `npm run sprite`)
+ * Usage: node tools/build-sprite.ts
+ *        (also run by every tools/build.ts build, and by `npm run sprite`)
  *
- * File: tools/build-sprite.mjs
+ * File: tools/build-sprite.ts
  */
 
 import fs from "node:fs/promises";
 import path from "node:path";
-import { fileURLToPath } from "node:url";
 import { optimize } from "svgo";
+import type { Config } from "svgo";
+import { ROOT } from "./build/files.ts";
 
-const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const SRC_DIR = path.join(ROOT, "src", "img", "sprites-svgs");
 const OUT_FILE = path.join(ROOT, "src", "img", "sprites.svg");
 
@@ -40,7 +40,7 @@ const KEEP_ATTRS = [
 // preset-default), which is what a <symbol> needs to scale. The buildSprite
 // loop asserts every icon still has one, so an svgo upgrade that changes
 // this fails the build instead of silently shipping broken icons.
-const svgoConfig = (prefix) => ({
+const svgoConfig = (prefix: string): Config => ({
   multipass: true,
   plugins: [
     "preset-default",
@@ -56,15 +56,15 @@ const svgoConfig = (prefix) => ({
 });
 
 /** Pull the root <svg ...> attributes and inner markup out of an SVG string. */
-const splitRoot = (svg) => {
+const splitRoot = (svg: string) => {
   const open = svg.indexOf("<svg");
   const gt = svg.indexOf(">", open);
   const close = svg.lastIndexOf("</svg>");
   if (open === -1 || gt === -1 || close === -1) return null;
 
-  const attrs = {};
+  const attrs: Record<string, string> = {};
   const attrRe = /([a-zA-Z_:][-a-zA-Z0-9_:.]*)\s*=\s*"([^"]*)"/g;
-  let m;
+  let m: RegExpExecArray | null;
   while ((m = attrRe.exec(svg.slice(open + 4, gt))) !== null) {
     attrs[m[1]] = m[2];
   }
@@ -72,7 +72,7 @@ const splitRoot = (svg) => {
   return { attrs, body: svg.slice(gt + 1, close).trim() };
 };
 
-export async function buildSprite({ quiet = false } = {}) {
+export async function buildSprite({ quiet = false }: { quiet?: boolean } = {}) {
   const files = (await fs.readdir(SRC_DIR))
     .filter((f) => f.toLowerCase().endsWith(".svg"))
     .sort();
@@ -127,7 +127,7 @@ export async function buildSprite({ quiet = false } = {}) {
   await fs.writeFile(OUT_FILE, out, "utf8");
 
   if (!quiet) {
-    const kb = (n) => `${(n / 1024).toFixed(1)} KB`;
+    const kb = (n: number) => `${(n / 1024).toFixed(1)} KB`;
     console.log(
       `[sprite] ${files.length} icons -> src/img/sprites.svg  ` +
         `${kb(rawBytes)} raw -> ${kb(Buffer.byteLength(out))}` +
@@ -138,11 +138,8 @@ export async function buildSprite({ quiet = false } = {}) {
   return { count: files.length, bytes: Buffer.byteLength(out) };
 }
 
-// Run directly: node tools/build-sprite.mjs
-if (
-  process.argv[1] &&
-  path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)
-) {
+// Run directly: node tools/build-sprite.ts
+if (import.meta.main) {
   buildSprite().catch((err) => {
     console.error(`[sprite] ${err.message}`);
     process.exitCode = 1;

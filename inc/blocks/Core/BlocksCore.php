@@ -10,7 +10,7 @@
  * select for attributes marked with a custom control.
  *
  * Block folders are source = runtime: block.json, render.php and labels.php
- * run in place; tools/build.mjs compiles style.scss / view.js / editor.js
+ * run in place; tools/build.ts compiles style.scss / view.js / editor.js
  * into {slug}/build/, which block.json references as "file:./build/…".
  *
  * Author: DevFrappe

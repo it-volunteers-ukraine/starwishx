@@ -4,7 +4,7 @@
  * need, lowers syntax they lack, minifies (prod) and scopes CSS modules
  * (legacy ACF lane) - what autoprefixer, cssnano and postcss-modules did.
  *
- * File: tools/build/css.mjs
+ * File: tools/build/css.ts
  */
 
 import path from "node:path";
@@ -12,6 +12,7 @@ import { fileURLToPath } from "node:url";
 import browserslist from "browserslist";
 import { browserslistToTargets, transform } from "lightningcss";
 import { initAsyncCompiler } from "sass-embedded";
+import type { AsyncCompiler, Exception } from "sass-embedded";
 import {
   ROOT,
   abs,
@@ -23,18 +24,19 @@ import {
   since,
   warn,
   writeIfChanged,
-} from "./files.mjs";
-import { assetPhp } from "./wp.mjs";
+} from "./files.ts";
+import type { BuildContext, CssLane } from "./lanes.ts";
+import { assetPhp } from "./wp.ts";
 
 const targets = browserslistToTargets(browserslist(undefined, { path: ROOT }));
 
 /** Every stylesheet an entry pulled in, itself included - drives watch. */
-const graph = new Map();
+const graph = new Map<string, Set<string>>();
 
 /** cssModules JSON file -> Map(module key -> { local: scoped name }). */
-const moduleMaps = new Map();
+const moduleMaps = new Map<string, Map<string, Record<string, string>>>();
 
-let compiler;
+let compiler: Promise<AsyncCompiler> | undefined;
 /** One long-lived Dart Sass process for the whole run. */
 const sass = () => (compiler ??= initAsyncCompiler());
 
@@ -46,17 +48,20 @@ export async function closeSass() {
  * A Sass error as "src/scss/x.scss:12:5: message" plus the offending line -
  * Sass' own message prints paths relative to its compiler's directory.
  */
-function sassError(error) {
-  if (!error?.sassMessage || !error.span?.url) return error;
-  const { span } = error;
+function sassError(error: unknown) {
+  const { sassMessage, span } = (error ?? {}) as Partial<Exception>;
+  if (!sassMessage || !span?.url) return error;
   const where = `${rel(fileURLToPath(span.url))}:${span.start.line + 1}:${span.start.column + 1}`;
   return new Error(
-    `${where}: ${error.sassMessage}\n  ${(span.context ?? span.text).trimEnd()}`,
+    `${where}: ${sassMessage}\n  ${(span.context ?? span.text).trimEnd()}`,
   );
 }
 
 /** Sass source-map URLs -> paths relative to the .map file, for DevTools. */
-function relativeSources(map, out) {
+function relativeSources(
+  map: { sources: string[]; file?: string },
+  out: string,
+) {
   const dir = path.dirname(abs(out));
   map.sources = map.sources.map((source) =>
     source.startsWith("file:")
@@ -67,7 +72,7 @@ function relativeSources(map, out) {
   return map;
 }
 
-async function compile(lane, entry, { prod }) {
+async function compile(lane: CssLane, entry: string, { prod }: BuildContext) {
   const out = lane.out(entry);
   const result = await (
     await sass()
@@ -161,7 +166,7 @@ async function writeModuleMaps() {
 }
 
 /** Compiles every entry of the CSS lanes. Resolves to the failure count. */
-export async function buildCss(lanes, context) {
+export async function buildCss(lanes: CssLane[], context: BuildContext) {
   let failures = 0;
   await Promise.all(
     lanes.map(async (lane) => {
@@ -187,8 +192,12 @@ export async function buildCss(lanes, context) {
  * every entry whose last compile loaded it, and entries that never compiled
  * (their imports are unknown). New entries are found by globbing again.
  */
-export async function rebuildCss(lanes, file, context) {
-  const jobs = [];
+export async function rebuildCss(
+  lanes: CssLane[],
+  file: string,
+  context: BuildContext,
+) {
+  const jobs: Promise<void>[] = [];
   for (const lane of lanes) {
     for (const entry of find(lane.include, lane.exclude)) {
       const deps = graph.get(entry);

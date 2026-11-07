@@ -1,5 +1,5 @@
 /**
- * Every output of the theme build, declared as data - tools/build.mjs runs
+ * Every output of the theme build, declared as data - tools/build.ts runs
  * them. A new store, block or stylesheet that follows the conventions below
  * is picked up without touching this file. Paths are theme-relative globs.
  *
@@ -16,21 +16,66 @@
  *                     enqueues
  * type "css"  - sass-embedded, then Lightning CSS (prefixes, minify, modules);
  *   asset: true writes the same manifest (no dependencies).
- * type "sprite" - tools/build-sprite.mjs, before the files lane copies it.
+ * type "sprite" - tools/build-sprite.ts, before the files lane copies it.
  * type "copy" - static files copied as-is, only when changed.
  *
  * legacy: true marks the ACF-era lanes and Swiper's vendor copies - delete
  * them once inc/acf/blocks and Swiper are gone.
  *
- * File: tools/build/lanes.mjs
+ * File: tools/build/lanes.ts
  */
 
 import path from "node:path";
 
-const name = (file) => path.basename(file, path.extname(file));
-const slug = (file) => path.basename(path.dirname(file));
+/** What changes between one run of the build and the next. */
+export type BuildContext = { prod: boolean };
 
-export const lanes = [
+/** A lane that builds each file its globs find. */
+type EntryLane = {
+  id: string;
+  include: string[];
+  exclude?: string[];
+  /** Theme-relative output path of an entry file. */
+  out: (file: string) => string;
+  asset?: boolean;
+  legacy?: boolean;
+};
+
+export type JsLane = EntryLane & {
+  type: "js";
+  format: "es" | "iife";
+  wp?: "modules" | "scripts";
+  jsx?: boolean;
+  /** Bare import -> script module id, kept out of the bundle. */
+  external?: Record<string, string>;
+};
+
+export type CssLane = EntryLane & {
+  type: "css";
+  loadPaths?: string[];
+  /** Where to write the map of scoped CSS module class names. */
+  cssModules?: string;
+};
+
+export type SpriteLane = { id: string; type: "sprite"; include: string[] };
+
+export type CopyLane = {
+  id: string;
+  type: "copy";
+  sets: {
+    include: string[];
+    exclude?: string[];
+    to: (file: string) => string;
+    legacy?: boolean;
+  }[];
+};
+
+export type Lane = JsLane | CssLane | SpriteLane | CopyLane;
+
+const name = (file: string) => path.basename(file, path.extname(file));
+const slug = (file: string) => path.basename(path.dirname(file));
+
+export const lanes: Lane[] = [
   {
     id: "stores",
     type: "js",

@@ -1,19 +1,26 @@
 /**
  * Copies the deployable theme into production/ - everything except what
  * .distignore lists. The last step of `npm run build`, after
- * `node tools/build.mjs --prod`; CI deploys the folder as it is.
+ * `node tools/build.ts --prod`; CI deploys the folder as it is.
  *
  * Byte-faithful copies (binaries included) that keep their mtimes, so
  * filemtime-based asset versions match the build.
  *
- * File: tools/package.mjs
+ * File: tools/package.ts
  */
 
 import fs from "node:fs";
 import path from "node:path";
-import { ROOT, abs, kb, log, since } from "./build/files.mjs";
+import { ROOT, abs, kb, log, since } from "./build/files.ts";
 
 const OUT = "production";
+
+type Rule = {
+  negate: boolean;
+  dirOnly: boolean;
+  anchored: boolean;
+  pattern: string;
+};
 
 /**
  * .distignore -> rules with gitignore semantics: "/" at the start anchors to
@@ -21,7 +28,7 @@ const OUT = "production";
  * only, "!" re-includes, and a pattern without "/" matches the name at any
  * depth.
  */
-function readRules() {
+function readRules(): Rule[] {
   return fs
     .readFileSync(abs(".distignore"), "utf8")
     .split(/\r?\n/)
@@ -37,7 +44,7 @@ function readRules() {
     });
 }
 
-function isIgnored(file, isDir, rules) {
+function isIgnored(file: string, isDir: boolean, rules: Rule[]) {
   const name = file.slice(file.lastIndexOf("/") + 1);
   let ignored = false;
   for (const rule of rules) {
@@ -49,8 +56,8 @@ function isIgnored(file, isDir, rules) {
 }
 
 /** Theme-relative paths of every file that ships. */
-function collect(rules, dir = "") {
-  const files = [];
+function collect(rules: Rule[], dir = ""): string[] {
+  const files: string[] = [];
   for (const entry of fs.readdirSync(abs(dir || "."), {
     withFileTypes: true,
   })) {
