@@ -47,7 +47,7 @@ jobs:
       - name: Format and lint (Oxfmt, Oxlint)
         run: vp check
 
-      - name: Stylelint
+      - name: Lint the SCSS (Biome)
         run: vpr style:lint
 
       - name: Build and package

@@ -4,7 +4,7 @@
  * theme build is tools/build.mjs, which doesn't depend on Vite+.
  *
  *   pnpm check            format + lint check (`vp check --fix` to apply)
- *   pnpm lint             the above plus stylelint for the SCSS
+ *   pnpm lint             the above plus Biome for the SCSS (biome.jsonc)
  *
  * File: vite.config.ts
  */
@@ -46,7 +46,7 @@ export default defineConfig({
     sortPackageJson: false,
     ignorePatterns: [
       ...notOurs,
-      // Mixed 2- and 4-space indentation; stylelint covers the SCSS for now.
+      // Mixed 2- and 4-space indentation.
       // Plain CSS is build output, vendored (src/css) or style.css, whose
       // header WordPress parses.
       "**/*.scss",
@@ -61,7 +61,8 @@ export default defineConfig({
   },
 
   staged: {
-    "*.{js,mjs,ts,json,md,yml,yaml}": "vp check --fix",
-    "*.scss": "stylelint --fix",
+    "*.{js,mjs,ts,json,jsonc,md,yml,yaml}": "vp check --fix",
+    // No autofix: it should take a person to change the SCSS.
+    "*.scss": "biome lint --error-on-warnings --no-errors-on-unmatched",
   },
 });

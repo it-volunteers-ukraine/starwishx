@@ -28,7 +28,7 @@
 /pnpm-workspace.yaml
 /skills-lock.json
 /vite.config.ts
-/stylelint.config.mjs
+/biome.jsonc
 /README.md
 
 # Translation editor backups
