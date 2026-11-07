@@ -4,8 +4,9 @@
  * Regression table for Shared\Policy\UrlPolicy.
  *
  * UrlPolicy's parser ships with PHP, so a PHP update can change what it accepts
- * without anything in the theme changing. This is what notices. Plain PHP, no
- * test framework:
+ * without anything in the theme changing. This is what notices. Its strict IDN
+ * tables come from composer.lock instead, so whether PHP has ext-intl (and
+ * which ICU) makes no difference. Plain PHP, no test framework:
  *
  *   pnpm test    (php tests/url-policy.php; also runs in CI)
  *
@@ -178,13 +179,21 @@ $rejected = [
         "https://exa\u{200C}mple.com",
         "https://exa\u{200D}mple.com",
         "https://\u{200D}.example",
-        "https://look\u{180E}out.net",
         "https://exa\u{202E}mple.com",
         "https://example.com\u{2100}.evil.com",
         "https://a\u{2020}--/x",
         "https://ab--c.\u{DF}/x",
         "https://\u{64A}a/x",
         "https://look\u{5BE}out.net",
+    ],
+    // Unicode 16 accepts these, and so does a recent ICU, such as CI's.
+    // UrlPolicy's IDN tables (symfony/polyfill-intl-idn, fixed by
+    // composer.lock) are older and refuse them. A composer update that brings
+    // newer tables flips these rows: decide then.
+    'newer Unicode than the pinned IDN tables' => [
+        "https://look\u{180E}out.net", // MONGOLIAN VOWEL SEPARATOR, invisible: now ignored
+        "https://examp\u{4C0}e.com",   // CYRILLIC LETTER PALOCHKA, looks like l: now mapped
+        "https://\u{10A0}.com",        // GEORGIAN CAPITAL LETTER AN: now mapped
     ],
 ];
 

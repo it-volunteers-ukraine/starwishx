@@ -13,6 +13,8 @@
  *
  * tests/url-policy.php pins the behaviour. The parser ships with PHP, so a PHP
  * update can change what it accepts without anything in the theme changing.
+ * The strict check of international hosts doesn't depend on the server: its
+ * tables come from composer.lock (symfony/polyfill-intl-idn), not from ICU.
  *
  * File: inc/shared/Policy/UrlPolicy.php
  */
@@ -21,6 +23,7 @@ declare(strict_types=1);
 
 namespace Shared\Policy;
 
+use Symfony\Polyfill\Intl\Idn\Idn;
 use Uri\WhatWg\Url;
 use Uri\WhatWg\UrlValidationErrorType;
 use WP_Error;
@@ -34,10 +37,10 @@ final class UrlPolicy
      * Strict IDNA2008. Browsers are lenient with international hosts, and an
      * invisible character can make a different domain that looks the same.
      */
-    private const IDNA_OPTIONS = IDNA_NONTRANSITIONAL_TO_ASCII
-        | IDNA_CHECK_BIDI
-        | IDNA_USE_STD3_RULES
-        | IDNA_CHECK_CONTEXTJ;
+    private const IDNA_OPTIONS = Idn::IDNA_NONTRANSITIONAL_TO_ASCII
+        | Idn::IDNA_CHECK_BIDI
+        | Idn::IDNA_USE_STD3_RULES
+        | Idn::IDNA_CHECK_CONTEXTJ;
 
     /**
      * Normalize and validate a URL string.
@@ -144,8 +147,12 @@ final class UrlPolicy
             return true;
         }
 
+        // Not idn_to_ascii(): wherever ext-intl is loaded that is ICU, whose
+        // tables follow the server (since Unicode 16 they accept U+180E, and
+        // thousands more). Idn is what the polyfill's idn_to_ascii() calls;
+        // it is marked @internal, but composer.lock fixes its version.
         $info = [];
-        $ascii = idn_to_ascii($typed, self::IDNA_OPTIONS, INTL_IDNA_VARIANT_UTS46, $info);
+        $ascii = Idn::idn_to_ascii($typed, self::IDNA_OPTIONS, Idn::INTL_IDNA_VARIANT_UTS46, $info);
 
         return $ascii === $host && ($info['errors'] ?? 0) === 0;
     }
