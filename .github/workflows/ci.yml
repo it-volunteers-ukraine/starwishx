@@ -43,7 +43,7 @@ jobs:
         with:
           cache: true
 
-      - name: Format and lint (Oxfmt, Oxlint)
+      - name: Format, lint and type-check (Oxfmt, Oxlint)
         run: vp check
 
       - name: Lint the SCSS (Biome)
