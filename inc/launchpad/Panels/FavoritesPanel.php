@@ -74,9 +74,10 @@ class FavoritesPanel extends AbstractPanel
             <!-- GRID -->
             <div class="favorites-grid" data-wp-bind--hidden="<?= $this->statePath('items') ?>.length === 0">
                 <template data-wp-each--item="<?= $this->statePath('items') ?>">
+                    <?php // Shown while favorited: Remove takes the ID out of myFavoriteIds, hiding the card. ?>
                     <article
                         class="favorite-card"
-                        data-wp-bind--hidden="state.isCurrentItemFavorite">
+                        data-wp-bind--hidden="!state.isCurrentItemFavorite">
                         <!-- Thumbnail Figure -->
                         <div class="favorite-card__figure">
                             <a data-wp-bind--href="context.item.url" target="_blank">
