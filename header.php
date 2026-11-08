@@ -59,7 +59,7 @@
                         <div class="header-addons">
                             <?php yourtheme_search_trigger(); ?>
                             <!-- < ?php yourtheme_language_switcher(); ?> -->
-                            <?php echo do_shortcode('[prisna-google-website-translator]'); ?>
+                            <?php get_template_part('template-parts/control-header-translate', null, ['variant' => 'desktop']); ?>
                         </div>
                     </div>
                 </div>

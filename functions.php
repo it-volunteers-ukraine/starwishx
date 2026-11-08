@@ -240,7 +240,7 @@ if (! function_exists('yourtheme_mobile_search_lang')) {
         <span class="lang-separator">|</span>
         <button class="lang-btn">ENG</button>
       </div> -->
-      <?php echo do_shortcode('[prisna-google-website-translator]'); ?>
+      <?php get_template_part('template-parts/control-header-translate', null, ['variant' => 'mobile']); ?>
     </div>
 <?php
   }

@@ -1,0 +1,55 @@
+@use "../variables" as *;
+
+// Flags that translate the page (template-parts/control-header-translate.php,
+// src/js/_translate.js). Each flag sits in a 24 px target, the WCAG minimum.
+.translate-switcher {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+}
+
+.translate-switcher--mobile {
+    gap: 12px;
+}
+
+.translate-switcher__button {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    border: 0;
+    padding: 0;
+    width: 24px;
+    height: 24px;
+
+    svg {
+        border-radius: 2px;
+    }
+
+    // Both header slots are on the violet pill, where the usual violet
+    // outline wouldn't show.
+    &:focus-visible {
+        outline: 2px solid $buttons-color-text-primary-default;
+        outline-offset: 2px;
+        border-radius: 3px;
+    }
+}
+
+// Google's own interface: the flags stand in for it, so it stays hidden.
+.skiptranslate, // its banner and its gadget
+#goog-gt-tt,
+.goog-tooltip,
+.goog-tooltip:hover {
+    display: none !important;
+}
+
+// The hidden banner would still push the page down.
+body {
+    top: 0 !important;
+}
+
+.goog-text-highlight,
+.translated-ltr font,
+.translated-rtl font {
+    box-shadow: none !important;
+    background-color: transparent !important;
+}
