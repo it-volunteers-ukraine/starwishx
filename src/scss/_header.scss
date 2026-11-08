@@ -222,12 +222,9 @@
     font-size: 18px;
 }
 
-.header-addons {
-    @include min-tabland {
-        .prisna-gwt-flags-container {
-            width: 78px;
-        }
-    }
+// As much room after the flags as before them, so the pill stays even.
+.header .header-addons .translate-switcher {
+    margin-inline-end: 12px;
 }
 
 .header .menu-item-search,
@@ -320,6 +317,10 @@
         gap: 8px;
         padding: 0 4px;
         font-size: 16px;
+    }
+
+    .header .header-addons .translate-switcher {
+        margin-inline-end: 8px;
     }
 
     .header .menu li a {
@@ -425,6 +426,11 @@
         background: $buttons-color-background-primary-default;
         padding: 12px 18px 12px 6px;
         height: 44px;
+    }
+
+    // 24 px from the search icon to the first flag.
+    .search-language-container .translate-switcher {
+        margin-inline-start: 11px;
     }
 
     .search-language-container .search-icon svg {
