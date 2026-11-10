@@ -226,9 +226,11 @@
     "label_placement": "top",
     "instruction_placement": "label",
     "hide_on_screen": "",
-    "active": true,
+    "active": false,
     "description": "",
     "show_in_rest": 0,
     "display_title": "",
-    "modified": 1773789045
+    "allow_ai_access": false,
+    "ai_description": "",
+    "modified": 1794289116
 }

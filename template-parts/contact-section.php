@@ -150,7 +150,7 @@ $render_label = static function (string $text, bool $is_required): string {
                         <div class="contact-item">
                             <?= sw_svg($link['icon'], 24, null, 'icon') ?>
                             <span class="contact-label"><?= esc_html($link['label']) ?></span>
-                            <a href="<?= esc_url($link['url']) ?>"<?= $link['external'] ? ' target="_blank" rel="noopener"' : '' ?> class="contact-value">
+                            <a href="<?= esc_url($link['url']) ?>" <?= $link['external'] ? ' target="_blank" rel="noopener"' : '' ?> class="contact-value">
                                 <?= esc_html($link['text']) ?>
                             </a>
                         </div>
