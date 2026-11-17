@@ -12,18 +12,41 @@
  * Pages without the site header (/gateway/) have no flags; nothing runs.
  */
 
+/** The part of Google's element.js this module uses. */
+type GoogleTranslate = {
+  TranslateElement: new (
+    options: {
+      pageLanguage: string;
+      includedLanguages: string;
+      autoDisplay: boolean;
+    },
+    elementId: string,
+  ) => unknown;
+};
+
+declare global {
+  interface Window {
+    /** Set by element.js once it has loaded. */
+    google?: { translate?: GoogleTranslate };
+    /** CALLBACK below: element.js calls it when it is ready. */
+    starwishTranslateInit?: () => void;
+  }
+}
+
 const COOKIE = "googtrans";
 const CALLBACK = "starwishTranslateInit";
 
 document.addEventListener("DOMContentLoaded", () => {
-  const buttons = [...document.querySelectorAll("[data-translate-lang]")];
+  const buttons = [
+    ...document.querySelectorAll("[data-translate-lang]"),
+  ].filter((element) => element instanceof HTMLButtonElement);
   const source = document
     .querySelector("[data-translate-source]")
     ?.getAttribute("data-translate-source");
   if (buttons.length === 0 || !source) return;
 
   const languages = [
-    ...new Set(buttons.map((button) => button.dataset.translateLang)),
+    ...new Set(buttons.flatMap((button) => button.dataset.translateLang ?? [])),
   ];
 
   /** The language Google's cookie asks for, or null for the page's own. */
@@ -39,7 +62,7 @@ document.addEventListener("DOMContentLoaded", () => {
     return target && target !== source ? target : null;
   };
 
-  const press = (lang) => {
+  const press = (lang: string) => {
     for (const button of buttons) {
       const pressed = button.dataset.translateLang === lang;
       button.setAttribute("aria-pressed", String(pressed));
@@ -55,8 +78,10 @@ document.addEventListener("DOMContentLoaded", () => {
     box.id = "google_translate_element";
     document.body.append(box);
 
-    window[CALLBACK] = () =>
-      new window.google.translate.TranslateElement(
+    window[CALLBACK] = () => {
+      const translate = window.google?.translate;
+      if (!translate) return;
+      new translate.TranslateElement(
         {
           pageLanguage: source,
           includedLanguages: languages.join(","),
@@ -64,6 +89,7 @@ document.addEventListener("DOMContentLoaded", () => {
         },
         box.id,
       );
+    };
 
     const script = document.createElement("script");
     script.src = `https://translate.google.com/translate_a/element.js?cb=${CALLBACK}`;
@@ -82,7 +108,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   };
 
-  const choose = (lang) => {
+  const choose = (lang: string) => {
     // Back to the original: Google can't undo itself in place, a reload can.
     if (lang === source) {
       if (active()) {
@@ -106,9 +132,8 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   for (const button of buttons) {
-    button.addEventListener("click", () =>
-      choose(button.dataset.translateLang),
-    );
+    const lang = button.dataset.translateLang;
+    if (lang) button.addEventListener("click", () => choose(lang));
   }
 
   const current = active();

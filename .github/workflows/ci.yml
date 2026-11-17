@@ -46,6 +46,10 @@ jobs:
       - name: Format, lint and type-check (Oxfmt, Oxlint)
         run: vp check
 
+      # The whole of each tsconfig program, by the pinned TypeScript compiler.
+      - name: Type-check (TypeScript 7)
+        run: vpr typecheck
+
       - name: Lint the SCSS (Biome)
         run: vpr style:lint
 

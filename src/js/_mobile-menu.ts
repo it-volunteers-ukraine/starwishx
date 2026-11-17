@@ -11,9 +11,13 @@
  * Pages without the site header (/gateway/) have no toggle; nothing runs.
  */
 
+/** The element an event happened on, or null (the document, a window). */
+const elementOf = (event: Event) =>
+  event.target instanceof Element ? event.target : null;
+
 document.addEventListener("DOMContentLoaded", () => {
   const toggle = document.getElementById("mobile-menu-toggle");
-  if (!toggle) return;
+  if (!(toggle instanceof HTMLInputElement)) return;
 
   const close = () => {
     toggle.checked = false;
@@ -25,8 +29,9 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   document.addEventListener("click", (event) => {
-    if (!toggle.checked || event.target.closest("dialog")) return;
-    const inside = event.target.closest(
+    const target = elementOf(event);
+    if (!toggle.checked || target?.closest("dialog")) return;
+    const inside = target?.closest(
       ".burger-menu, .burger-menu-button, .mobile-header-buttons, #mobile-menu-toggle",
     );
     if (!inside) close();
@@ -34,7 +39,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   document.addEventListener("keydown", (event) => {
     if (event.key !== "Escape" || !toggle.checked) return;
-    if (event.target.closest("dialog")) return;
+    if (elementOf(event)?.closest("dialog")) return;
     close();
   });
 });

@@ -15,7 +15,8 @@ document.addEventListener("DOMContentLoaded", () => {
   if (!(dialog instanceof HTMLDialogElement)) return;
 
   const form = dialog.querySelector("form");
-  const input = dialog.querySelector(".search-input");
+  const field = dialog.querySelector(".search-input");
+  const input = field instanceof HTMLInputElement ? field : null;
   const clear = dialog.querySelector(".form-clear-btn");
 
   document

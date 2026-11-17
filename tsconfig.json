@@ -1,15 +1,12 @@
 {
+  // The build tools, run by Node 26 straight from source (type stripping).
+  "extends": "./tsconfig.base.json",
   "compilerOptions": {
     "target": "esnext",
     "lib": ["esnext"],
     "module": "nodenext",
     "types": ["node"],
-    "strict": true,
-    "skipLibCheck": true,
-    "noEmit": true,
-    "rewriteRelativeImportExtensions": true,
-    "erasableSyntaxOnly": true,
-    "verbatimModuleSyntax": true
+    "rewriteRelativeImportExtensions": true
   },
   "include": ["tools", "vite.config.ts"]
 }

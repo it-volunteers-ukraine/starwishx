@@ -194,7 +194,7 @@ function _themeprefix_acf_options_page()
  * UI helpers for header template.
  * These render search trigger, language switcher, and mobile variants.
  * The search triggers open the #searchModal dialog (template-parts/search-modal.php)
- * through src/js/_search-dialog.js, which finds them by aria-controls.
+ * through src/js/_search-dialog.ts, which finds them by aria-controls.
  * Phase 2 will migrate these into the Menu module's Interactivity API layer.
  */
 if (! function_exists('yourtheme_search_trigger')) {

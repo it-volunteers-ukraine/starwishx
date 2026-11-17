@@ -94,10 +94,11 @@ export const lanes: Lane[] = [
   {
     id: "scripts",
     type: "js",
-    // Classic deferred scripts. `_*.js` are partials that app.js imports (one
-    // feature each), the same convention as Sass partials.
-    include: ["src/js/*.js"],
-    exclude: ["src/js/_*.js"],
+    // Classic deferred scripts, TypeScript (src/js/tsconfig.json) or plain JS
+    // until migrated. `_*` are partials that app.ts imports (one feature
+    // each), the same convention as Sass partials.
+    include: ["src/js/*.{ts,js}"],
+    exclude: ["src/js/_*", "src/js/*.d.ts"],
     out: (file) => `assets/js/${name(file)}.js`,
     format: "iife",
     asset: true,
