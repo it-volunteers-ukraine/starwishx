@@ -131,8 +131,6 @@ final class ListingCore
         // archive's main query, which nothing renders, never hit the database.
         add_filter('posts_pre_query', [TermCountingService::class, 'skipSqlOnly'], 10, 2);
         add_filter('posts_pre_query', [$this, 'skipArchiveMainQuery'], 10, 2);
-        // "Favorites": a no-op unless FavoritesFilter tagged the query.
-        add_filter('posts_where', [FavoritesFilter::class, 'where'], 10, 2);
         add_action('init', fn() => do_action('listing_register_filters', $this->registry), 20);
         add_action('listing_register_filters', [$this, 'registerDefaultFilters'], 5);
         // Invalidate the category term map transient whenever a term is saved.
@@ -422,8 +420,11 @@ final class ListingCore
         $categoryFilter = new CategoryFilter();
         $categoryFilter->setTermCounter($this->termCounter);
         $registry->register('category', $categoryFilter,              10);
-        // Logged-in users only (FavoritesFilter::render()).
-        $registry->register('favorites', new FavoritesFilter(),       15);
+        // Logged-in users only (FavoritesFilter::render()). Its posts_where
+        // restriction does nothing unless applyQuery() tagged the query.
+        $favoritesFilter = new FavoritesFilter(\favorites()->repository());
+        add_filter('posts_where', [$favoritesFilter, 'where'], 10, 2);
+        $registry->register('favorites', $favoritesFilter,             15);
         $registry->register('location', new LocationsFilterSimple(),  20);
         $registry->register('beneficiaries',  new BeneficiariesFilter(),          30);
         $registry->register('country',  new CountryFilter(),          40);
@@ -459,8 +460,9 @@ final class ListingCore
             wp_enqueue_script_module('@starwishx/listing');
         }
 
-        // No nonce: listing reads are anonymous, see fetchJson() in
-        // inc/listing/Assets/utils.js.
+        // No nonce of its own: guests' listing reads are anonymous, logged-in
+        // searches send the favorites store's - see fetchJson() in
+        // inc/listing/Assets/utils.ts.
         $listingConfig = [
             'restUrl' => rest_url('listing/v1/'),
         ];

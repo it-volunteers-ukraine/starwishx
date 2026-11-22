@@ -7,6 +7,7 @@
 
 import { getContext, getElement } from "@wordpress/interactivity";
 import { listingStore } from "../stores.ts";
+import type { HistoryMode } from "../grid/actions.ts";
 import type {
   CategoryNode,
   Chip,
@@ -30,7 +31,8 @@ const refreshResults = ({
   history = "push",
   typing = null,
 }: {
-  history?: "push" | "replace";
+  /** A filter change always writes the URL: a new Back step or this one. */
+  history?: Exclude<HistoryMode, "none">;
   typing?: TextField | null;
 } = {}): void => {
   const { state, actions } = listingStore();

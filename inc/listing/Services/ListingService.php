@@ -87,7 +87,7 @@ class ListingService
      *   - 1 × favorite ids       (logged-in page loads only - REST searches,
      *                              logged-in ones included, take isFavorite
      *                              from the favorites store, see fetchResults()
-     *                              in Assets/grid/actions.js)
+     *                              in Assets/grid/actions.ts)
      */
     private function preloadPostData(): array
     {

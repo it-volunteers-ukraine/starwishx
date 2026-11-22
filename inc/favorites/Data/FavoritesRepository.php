@@ -114,6 +114,23 @@ class FavoritesRepository
     }
 
     /**
+     * SQL selecting the user's favorite post ids, to embed as a subquery
+     * (`... IN (<sql>)`) - the listing's "Favorites" filter
+     * (Listing\Filters\FavoritesFilter). Prepared; the table stays this
+     * class's business.
+     */
+    public function postIdsSql(int $userId): string
+    {
+        global $wpdb;
+
+        return $wpdb->prepare(
+            "SELECT object_id FROM {$this->getTable()}
+             WHERE user_id = %d AND object_type = 'post'",
+            $userId
+        );
+    }
+
+    /**
      * How many of the user's favorite posts are among the ids $idsSql
      * selects - a subquery built elsewhere (the listing's filtered-ID SQL,
      * TermCountingService::filteredIdsSql()), embedded, never run alone.

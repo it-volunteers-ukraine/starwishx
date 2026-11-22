@@ -4,41 +4,49 @@ declare(strict_types=1);
 
 namespace Listing\Filters;
 
+use Favorites\Data\FavoritesRepository;
+
 /**
  * "Favorites" - a boolean filter, rendered for logged-in users only.
  *
  * Query: applyQuery() only tags the WP_Query args with the user id; the
- * restriction itself is where(), hooked once on posts_where by ListingCore.
- * No instance state (unlike LocationsFilterSimple's add/remove-hook pattern),
- * so it holds for every query built in a request - the results query and each
- * facet context's filtered-ID subquery (TermCountingService). The favorites
- * table stays in MySQL as a subquery: no id list in PHP, however long the
+ * restriction itself is where(), which ListingCore hooks on posts_where when
+ * it registers this filter. No per-query state (unlike LocationsFilterSimple's
+ * add/remove-hook pattern), so it holds for every query built in a request -
+ * the results query and each facet context's filtered-ID subquery
+ * (TermCountingService). The user's favorites stay in MySQL as a subquery
+ * (FavoritesRepository::postIdsSql()): no id list in PHP, however long the
  * user's list is.
  *
  * Logged-in users' REST searches send the favorites store's nonce, so the
- * server knows the user (fetchResults() in inc/listing/Assets/grid/actions.js;
+ * server knows the user (fetchResults() in inc/listing/Assets/grid/actions.ts;
  * an expired nonce with this filter on ends in a "reload" alert rather than an
  * unfiltered list). ListingQuery drops the flag for guests, so ?favorites=1
  * alone does nothing.
  *
  * Count: ListingService::getFacets() puts it in facets.favorites.
  */
-class FavoritesFilter extends AbstractFilter
+final class FavoritesFilter extends AbstractFilter
 {
     /** WP_Query var carrying the user whose favorites restrict the query. */
-    public const QUERY_VAR = 'listing_favorites_user';
+    public const string QUERY_VAR = 'listing_favorites_user';
 
+    public function __construct(private readonly FavoritesRepository $favorites) {}
+
+    #[\Override]
     public function getId(): string
     {
         return 'favorites';
     }
 
+    #[\Override]
     public function getLabel(): string
     {
         return __('Favorites', 'starwishx');
     }
 
-    public function applyQuery(array $args, $value): array
+    #[\Override]
+    public function applyQuery(array $args, mixed $value): array
     {
         $userId = get_current_user_id();
         if (!$value || $userId <= 0) {
@@ -53,7 +61,7 @@ class FavoritesFilter extends AbstractFilter
     /**
      * posts_where: keep only the tagged user's favorite posts.
      */
-    public static function where(string $where, \WP_Query $query): string
+    public function where(string $where, \WP_Query $query): string
     {
         $userId = (int) $query->get(self::QUERY_VAR);
         if ($userId <= 0) {
@@ -62,16 +70,11 @@ class FavoritesFilter extends AbstractFilter
 
         global $wpdb;
 
-        return $where . $wpdb->prepare(
-            " AND {$wpdb->posts}.ID IN (
-                SELECT object_id FROM {$wpdb->prefix}launchpad_favorites
-                WHERE user_id = %d AND object_type = 'post'
-            )",
-            $userId
-        );
+        return "{$where} AND {$wpdb->posts}.ID IN ({$this->favorites->postIdsSql($userId)})";
     }
 
     /** The count comes with the other facets (ListingService::getFacets()). */
+    #[\Override]
     public function getFacetData(array $current_query_results): array
     {
         return [];
@@ -82,6 +85,7 @@ class FavoritesFilter extends AbstractFilter
      * summary would be one more tab stop) and no role=group: the label names
      * the control. Guests get no markup at all.
      */
+    #[\Override]
     public function render(): string
     {
         if (!is_user_logged_in()) {
@@ -96,7 +100,7 @@ class FavoritesFilter extends AbstractFilter
             class="listing-filter-group listing-filter-group--single"
             id="filter-group-<?php echo esc_attr($id); ?>"
             data-wp-interactive="listing"
-            data-wp-context='{ "filterId": "<?php echo esc_attr($id); ?>" }'
+            <?php echo wp_interactivity_data_wp_context(['filterId' => $id]); ?>
             data-wp-class--has-selection="state.filterHasSelection">
             <?php echo $this->renderContent(); ?>
         </div>
@@ -104,6 +108,7 @@ class FavoritesFilter extends AbstractFilter
         return $this->endBuffer();
     }
 
+    #[\Override]
     protected function renderContent(): string
     {
         $this->startBuffer();

@@ -17,9 +17,10 @@ if (! function_exists('sw_listing_category_url')) {
      * Public URL of an opportunity category listing.
      *
      * One place for the URL scheme the Listing module owns, so templates and
-     * blocks stop hard-coding home_url('opportunities/…'). Mirrors buildUrl()
-     * in inc/listing/Assets/utils.js: with LISTING_PRETTY_CATEGORY_URLS the
-     * category lives at {archive}/{slug}/ (see ListingCore::registerCategoryRewrites),
+     * blocks stop hard-coding home_url('opportunities/…'). Mirrors the pretty
+     * URL branch of syncStateToUrl() in inc/listing/Assets/utils.ts: with
+     * LISTING_PRETTY_CATEGORY_URLS the category lives at {archive}/{slug}/
+     * (see ListingCore::registerCategoryRewrites),
      * otherwise it is the archive filtered by ?category={slug}.
      */
     function sw_listing_category_url(string $slug): string

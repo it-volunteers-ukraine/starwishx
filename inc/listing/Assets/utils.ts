@@ -15,7 +15,7 @@ import type {
 // --- Narrowing helpers --------------------------------------------------
 
 /** A non-null object whose properties can be read as unknown. */
-export function isRecord(value: unknown): value is Record<string, unknown> {
+function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null;
 }
 
@@ -24,7 +24,7 @@ function isNumberArray(value: unknown): value is number[] {
 }
 
 /** The query's id-list keys, in the order the URL writes them. */
-export const LIST_KEYS: readonly ListFilterKey[] = [
+const LIST_KEYS: readonly ListFilterKey[] = [
   "category",
   "country",
   "beneficiaries",
@@ -100,14 +100,15 @@ export function isSearchResponse(value: unknown): value is SearchResponse {
 const searchControllers = new Map<string, AbortController>();
 
 interface FetchOptions {
-  method?: string;
-  body?: unknown;
+  /** A newer request with the same id cancels this one. */
   requestId?: string;
+  /** Send the favorites store's nonce (logged-in users). */
   auth?: boolean;
 }
 
 /**
- * Standardized Fetch Helper for the Listing Module.
+ * Standardized Fetch Helper for the Listing Module: GET, the only method the
+ * listing's REST API has.
  *
  * Without `auth` the request is anonymous: no X-WP-Nonce, so it runs as a
  * guest's - every guest request does. Core checks a nonce whenever one is
@@ -127,12 +128,7 @@ interface FetchOptions {
 export async function fetchJson<T>(
   url: string,
   isValid: (data: unknown) => data is T,
-  {
-    method = "GET",
-    body = null,
-    requestId = "main",
-    auth = false,
-  }: FetchOptions = {},
+  { requestId = "main", auth = false }: FetchOptions = {},
 ): Promise<T> {
   // Cancel previous request with the same ID
   searchControllers.get(requestId)?.abort();
@@ -144,20 +140,17 @@ export async function fetchJson<T>(
     const headers: Record<string, string> = {
       "X-Requested-With": "XMLHttpRequest",
     };
-    if (body) headers["Content-Type"] = "application/json";
     if (auth) {
       const nonce = favoritesStore().state.config?.nonce;
       if (nonce) headers["X-WP-Nonce"] = nonce;
     }
 
     const response = await fetch(url, {
-      method,
       // Cookies still go along (Polylang's language cookie); with no nonce
       // core treats the request as a guest's.
       credentials: "same-origin",
       signal: controller.signal,
       headers,
-      body: body ? JSON.stringify(body) : null,
     });
 
     if (!response.ok) {

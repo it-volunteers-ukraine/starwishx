@@ -12,7 +12,9 @@ namespace Listing\Core;
  * paths were derived, and the store's own getters take over on hydration.
  *
  * Each closure mirrors the JS getter of the same name in
- * inc/listing/Assets/grid/getters.js or inc/listing/Assets/filters/getters.js.
+ * inc/listing/Assets/grid/getters.ts or inc/listing/Assets/filters/getters.ts
+ * (whose return types inc/listing/Assets/types.ts declares: GridGetters,
+ * FilterGetters).
  * Change them together: where they disagree, the page visibly changes when the
  * client hydrates.
  */
