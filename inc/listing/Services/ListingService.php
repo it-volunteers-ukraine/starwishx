@@ -212,7 +212,7 @@ class ListingService
         unset($contextForCountry['country']);
         $facets['country'] = $this->buildCountryFacets($contextForCountry);
 
-        // "Only my favorites" count, logged-in users only (the filter isn't
+        // "Favorites" count, logged-in users only (the filter isn't
         // rendered for guests, and they pay no query). Exclude Self as above:
         // the user's favorites among the posts the other filters leave.
         $userId = get_current_user_id();

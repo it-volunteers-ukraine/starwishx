@@ -136,7 +136,7 @@ export const filterActions = {
   },
 
   /**
-   * "Only my favorites" (logged-in users only). A boolean, so not toggle(),
+   * "Favorites" (logged-in users only). A boolean, so not toggle(),
    * which reads the input's value as an id.
    */
   toggleFavorites() {

@@ -43,7 +43,7 @@ export function debounce(func, wait) {
  * detail, favorites, comes from the favorites store (fetchResults in
  * grid/actions.js).
  *
- * The one exception is `auth`: the "Only my favorites" filter is the user's
+ * The one exception is `auth`: the "Favorites" filter is the user's
  * own list, so while it is on the request carries the nonce the favorites
  * store hydrates (FavoritesCore) - the server then knows the user
  * (FavoritesFilter), and core marks the response private / no-store. A stale

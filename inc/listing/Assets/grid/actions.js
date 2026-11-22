@@ -83,7 +83,7 @@ async function fetchResults({ append = false, history = "push" } = {}) {
     const data = await fetchJson(
       state,
       `${baseUrl}search?${params.toString()}`,
-      // "Only my favorites" needs to know the user: see fetchJson().
+      // "Favorites" needs to know the user: see fetchJson().
       { requestId: "main-search", auth: !!state.query.favorites },
     );
 

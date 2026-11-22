@@ -33,7 +33,7 @@ class FavoritesFilter extends AbstractFilter
 
     public function getLabel(): string
     {
-        return __('My favorites', 'starwishx');
+        return __('Favorites', 'starwishx');
     }
 
     public function applyQuery(array $args, $value): array

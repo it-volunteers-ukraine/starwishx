@@ -54,7 +54,7 @@ class FavoritesPanel extends AbstractPanel
 ?>
         <!-- Outer wrapper uses main launchpad store -->
         <div class="launchpad-panel launchpad-panel--favorites" data-wp-interactive="launchpad">
-            <h2 class="panel-title"><?php esc_html_e('My Favorites', 'starwishx'); ?></h2>
+            <h2 class="panel-title"><?php esc_html_e('Favorites', 'starwishx'); ?></h2>
             <div
                 class="launchpad-alert launchpad-alert--error"
                 data-wp-bind--hidden="!<?= $this->statePath('error') ?>"

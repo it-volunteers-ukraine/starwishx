@@ -131,7 +131,7 @@ final class ListingCore
         // archive's main query, which nothing renders, never hit the database.
         add_filter('posts_pre_query', [TermCountingService::class, 'skipSqlOnly'], 10, 2);
         add_filter('posts_pre_query', [$this, 'skipArchiveMainQuery'], 10, 2);
-        // "Only my favorites": a no-op unless FavoritesFilter tagged the query.
+        // "Favorites": a no-op unless FavoritesFilter tagged the query.
         add_filter('posts_where', [FavoritesFilter::class, 'where'], 10, 2);
         add_action('init', fn() => do_action('listing_register_filters', $this->registry), 20);
         add_action('listing_register_filters', [$this, 'registerDefaultFilters'], 5);
@@ -486,8 +486,8 @@ final class ListingCore
                 'found'        => __('Found', 'starwishx'),
                 // "Remove filter: {label}" on each chip's button (state.chipRemoveLabel).
                 'removeFilter' => __('Remove filter', 'starwishx'),
-                // The "Only my favorites" filter's chip.
-                'favoritesChip' => __('My favorites', 'starwishx'),
+                // The "Favorites" filter's chip.
+                'favoritesChip' => __('Favorites', 'starwishx'),
             ],
         ]);
     }
