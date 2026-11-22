@@ -14,7 +14,7 @@ import {
 } from "../utils.ts";
 
 /** The fields the login inputs write (data-field). */
-const FIELDS = [
+export const LOGIN_FIELDS = [
   "username",
   "password",
 ] as const satisfies readonly (keyof LoginForm)[];
@@ -22,7 +22,7 @@ const FIELDS = [
 const loginForm = () => gatewayStore().state.forms.login;
 
 export const loginActions = {
-  updateField: fieldUpdater(FIELDS, loginForm),
+  updateField: fieldUpdater(LOGIN_FIELDS, loginForm),
 
   toggleRemember(): void {
     const { ref } = getElement();
@@ -82,7 +82,7 @@ export const loginActions = {
       // Another tab logged in meanwhile: fetch's retry was blocked by
       // checkLoggedOut() (already_authenticated), or couldn't be made.
       if (reloadIfSessionChanged(error)) return;
-      showFailure(form, error, FIELDS);
+      showFailure(form, error, LOGIN_FIELDS);
     } finally {
       form.isSubmitting = false;
     }

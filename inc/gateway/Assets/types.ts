@@ -8,7 +8,7 @@
  * File: inc/gateway/Assets/types.ts
  */
 import type { loginActions } from "./auth/actions.ts";
-import type { gatewayActions } from "./gateway-store.ts";
+import type { gatewayActions } from "./views.ts";
 import type {
   lostPasswordActions,
   resetPasswordActions,

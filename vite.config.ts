@@ -20,6 +20,7 @@ const notOurs = [
   "inc/acf/**",
   "src/js/vendor/**",
   "vendor/**",
+  "tests/php/vendor/**",
   "node_modules/**",
   "docs/**",
   ".void/**",
@@ -76,10 +77,20 @@ export default defineConfig({
       // Written by ACF and wp-cli.
       "acf-json/**",
       "languages/**",
+      // Written by tests/php (UPDATE_FIXTURES=1).
+      "tests/fixtures/**",
       "pnpm-lock.yaml",
       "composer.json",
       "composer.lock",
     ],
+  },
+
+  // `vp test` (Vitest, bundled with Vite+): the TS unit tests. The stores
+  // run in Node against a stand-in Interactivity API (tests/ts/setup.ts).
+  test: {
+    include: ["tests/ts/**/*.test.ts"],
+    environment: "node",
+    setupFiles: ["tests/ts/setup.ts"],
   },
 
   staged: {

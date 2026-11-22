@@ -23,7 +23,7 @@ const RESET_REDIRECT_DELAY_MS = 2000;
 // Phase 1: Lost Password — request a reset link
 // ─────────────────────────────────────────────────────────────────────────────
 
-const LOST_FIELDS = [
+export const LOST_FIELDS = [
   "userLogin",
 ] as const satisfies readonly (keyof LostPasswordForm)[];
 
@@ -75,7 +75,7 @@ export const lostPasswordActions = {
 // Phase 2: Reset Password — the new password, with key + login from the URL
 // ─────────────────────────────────────────────────────────────────────────────
 
-const RESET_FIELDS = [
+export const RESET_FIELDS = [
   "newPassword",
 ] as const satisfies readonly (keyof ResetPasswordForm)[];
 

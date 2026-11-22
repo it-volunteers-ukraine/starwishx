@@ -46,8 +46,10 @@ final class EmailPolicy
             );
         }
 
-        // Optional DNS probe — verifies the domain has MX/A/AAAA records
-        if (self::DNS_CHECK_ENABLED) {
+        // Optional DNS probe — verifies the domain has MX/A/AAAA records.
+        // The filter lets the tests run without the network (and a site
+        // whose resolver is unreliable turn it off).
+        if ((bool) apply_filters('starwishx/email_dns_check', self::DNS_CHECK_ENABLED, $email)) {
             $dnsValidator = new EmailValidator();
             if (!$dnsValidator->isValid($email, new DNSCheckValidation())) {
                 return new WP_Error(

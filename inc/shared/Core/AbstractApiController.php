@@ -43,24 +43,19 @@ abstract class AbstractApiController extends WP_REST_Controller
     protected $namespace;
 
     /**
-     * Guard against double-registering the global error-shape filter when
-     * multiple controller subclasses boot in the same request.
-     */
-    private static bool $errorFilterRegistered = false;
-
-    /**
-     * Register the one-time global filter that normalises WordPress's
+     * Register the global filter that normalises WordPress's
      * `rest_invalid_param` error into our `field_errors` contract.
      *
-     * Called from `inc/shared/setup.php` on `rest_api_init`. Idempotent —
-     * the static flag makes repeated calls a no-op.
+     * Called from `inc/shared/setup.php` on `rest_api_init`. Idempotent: it
+     * asks WordPress whether the filter is there rather than remembering in
+     * a static flag, which would go stale when the hooks are reset (the WP
+     * test suite restores them after every test).
      */
     public static function bootErrorShapeFilter(): void
     {
-        if (self::$errorFilterRegistered) {
+        if (has_filter('rest_request_after_callbacks', [self::class, 'reshapeInvalidParamError'])) {
             return;
         }
-        self::$errorFilterRegistered = true;
 
         add_filter(
             'rest_request_after_callbacks',

@@ -1,0 +1,9 @@
+{
+  // The TS unit tests (Vitest, `vp test`): the stores' environment (inc/),
+  // plus Node's types for the fixture reads. Checked by `pnpm typecheck`.
+  "extends": "../../inc/tsconfig.json",
+  "compilerOptions": {
+    "types": ["node"]
+  },
+  "include": ["**/*.ts"]
+}

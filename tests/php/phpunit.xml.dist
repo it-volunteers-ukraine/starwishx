@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<!--
+    PHP integration tests: the WordPress test suite with this theme active.
+    pnpm test:php  (see tests/README.md)
+
+    PHPUnit 9.6: the WordPress 7.1 test suite still calls PHPUnit 9 APIs
+    (abstract-testcase.php). Move up when wp-phpunit does.
+-->
+<phpunit
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
+    bootstrap="bootstrap.php"
+    cacheResultFile=".phpunit.cache/test-results"
+    colors="true"
+    failOnWarning="true"
+    failOnRisky="true"
+    beStrictAboutOutputDuringTests="true"
+    convertDeprecationsToExceptions="true"
+>
+    <testsuites>
+        <testsuite name="gateway">
+            <directory suffix="Test.php">Gateway</directory>
+        </testsuite>
+    </testsuites>
+</phpunit>

@@ -1,5 +1,7 @@
-# Checks and builds the theme on every pull request and push to main, and
-# keeps the deployable copy (production/) as a workflow artifact.
+# Checks, tests and builds the theme on every pull request and push to main,
+# and keeps the deployable copy (production/) as a workflow artifact. The
+# tests: Vitest in the build job, the PHP integration tests in their own job
+# with a MySQL service (see tests/README.md).
 #
 # Deploying is manual: Actions -> CI -> Run workflow on main, tick "deploy".
 # It uploads production/ to the server with the FTP_* / REMOTE_HOST secrets.
@@ -50,6 +52,10 @@ jobs:
       - name: Type-check (TypeScript 7)
         run: vpr typecheck
 
+      # The stores' unit tests (Vitest, bundled with Vite+): tests/ts.
+      - name: Unit-test the TypeScript (Vitest)
+        run: vp test
+
       - name: Lint the SCSS (Biome)
         run: vpr style:lint
 
@@ -78,8 +84,57 @@ jobs:
           path: production/
           retention-days: 7
 
+  # The PHP integration tests (tests/php): the WordPress test suite with the
+  # theme active, against a throwaway MySQL. Each test runs in a transaction
+  # that is rolled back, so the REST endpoints are tested for real.
+  php-integration:
+    runs-on: ubuntu-latest
+    services:
+      mysql:
+        image: mysql:8.4
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: starwish_tests
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -proot"
+          --health-interval=5s --health-timeout=5s --health-retries=20
+    env:
+      # The core the site runs; wp-phpunit (tests/php/composer.lock) follows it.
+      WP_VERSION: "7.1.5"
+      WP_TESTS_DB_NAME: starwish_tests
+      WP_TESTS_DB_USER: root
+      WP_TESTS_DB_PASSWORD: root
+      WP_TESTS_DB_HOST: 127.0.0.1:3306
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - uses: shivammathur/setup-php@eb7c497e18156a6bbabfef1d3a82760b9eda3962 # 2.40.0
+        with:
+          php-version: "8.5"
+          extensions: mysqli
+          coverage: none
+          tools: composer
+
+      # Its own Composer project: test tooling never enters the deployed vendor/.
+      - name: Install the PHP test tools
+        run: composer install --no-interaction --no-progress --working-dir=tests/php
+
+      - name: Download WordPress ${{ env.WP_VERSION }}
+        run: |
+          mkdir -p "$RUNNER_TEMP/wordpress"
+          curl -fsSL "https://wordpress.org/wordpress-${WP_VERSION}.tar.gz" \
+            | tar -xz --strip-components=1 -C "$RUNNER_TEMP/wordpress"
+
+      - name: PHP integration tests (PHPUnit + WordPress test suite)
+        run: |
+          export WP_TESTS_ABSPATH="$RUNNER_TEMP/wordpress"
+          php tests/php/vendor/bin/phpunit -c tests/php/phpunit.xml.dist
+
   deploy:
-    needs: build
+    # Nothing ships unless both the build and the integration tests pass.
+    needs: [build, php-integration]
     if: github.event_name == 'workflow_dispatch' && inputs.deploy && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:

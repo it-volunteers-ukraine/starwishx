@@ -14,7 +14,7 @@ import {
 } from "../utils.ts";
 
 /** The fields the register inputs write (data-field). */
-const FIELDS = [
+export const REGISTER_FIELDS = [
   "username",
   "email",
 ] as const satisfies readonly (keyof RegisterForm)[];
@@ -22,7 +22,7 @@ const FIELDS = [
 const registerForm = () => gatewayStore().state.forms.register;
 
 export const registerActions = {
-  updateField: fieldUpdater(FIELDS, registerForm),
+  updateField: fieldUpdater(REGISTER_FIELDS, registerForm),
 
   /** withSyncEvent: it cancels the native submit. */
   submit: withSyncEvent(async (event: Event): Promise<void> => {
@@ -68,7 +68,7 @@ export const registerActions = {
     } catch (error) {
       // Same race as login: /register is guest-only too.
       if (reloadIfSessionChanged(error)) return;
-      showFailure(form, error, FIELDS);
+      showFailure(form, error, REGISTER_FIELDS);
     } finally {
       form.isSubmitting = false;
     }

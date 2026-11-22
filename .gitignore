@@ -29,3 +29,7 @@ docs/
 skills-lock.json
 
 /languages/*.po~
+# PHP test tooling (tests/php): its own Composer install and local DB settings
+/tests/php/vendor/
+/tests/php/.env.local.php
+/tests/php/.phpunit.cache/
