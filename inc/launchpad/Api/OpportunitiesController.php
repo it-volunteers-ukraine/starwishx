@@ -5,6 +5,7 @@ declare(strict_types=1);
 
 namespace Launchpad\Api;
 
+use Launchpad\Enums\OpportunityStatus;
 use Launchpad\Services\OpportunitiesService;
 use Launchpad\Services\ProfileService;
 use Shared\Policy\RateLimitPolicy;
@@ -23,35 +24,35 @@ use WP_Error;
  */
 class OpportunitiesController extends AbstractLaunchpadController
 {
-    private const WRITE_RATE_LIMIT_MAX     = 30;
-    private const WRITE_RATE_LIMIT_WINDOW  = HOUR_IN_SECONDS;
-    private const SEARCH_RATE_LIMIT_MAX    = 60;
-    private const SEARCH_RATE_LIMIT_WINDOW = MINUTE_IN_SECONDS;
+    private const int WRITE_RATE_LIMIT_MAX     = 30;
+    private const int WRITE_RATE_LIMIT_WINDOW  = HOUR_IN_SECONDS;
+    private const int SEARCH_RATE_LIMIT_MAX    = 60;
+    private const int SEARCH_RATE_LIMIT_WINDOW = MINUTE_IN_SECONDS;
 
-    private const PER_PAGE_MAX             = 50;
-    private const SEARCH_MAX_LENGTH        = 100;
+    private const int PER_PAGE_MAX             = 50;
+    // A shorter location search is a 400; the form waits for this many
+    // characters (PLACE_SEARCH_MIN in inc/launchpad/Assets/opportunities/actions.ts).
+    private const int SEARCH_MIN_LENGTH        = 2;
+    private const int SEARCH_MAX_LENGTH        = 100;
     // Category and beneficiary limits live in OpportunitiesService (the form shows them too).
-    private const SUBCATEGORY_MAX_ITEMS    = 30;
-    private const LOCATIONS_MAX_ITEMS      = 20;
-    private const STATUSES_MAX_ITEMS       = 3;
-    private const LEVELS_MAX_ITEMS         = 4;
-
-    private OpportunitiesService $service;
-    private ProfileService $profileService;
+    private const int SUBCATEGORY_MAX_ITEMS    = 30;
+    private const int LOCATIONS_MAX_ITEMS      = 20;
+    private const int STATUSES_MAX_ITEMS       = 3;
+    private const int LEVELS_MAX_ITEMS         = 4;
 
     /**
      * Constructor with Dependency Injection.
      * Ensure this is injected in LaunchpadCore.php
      */
-    public function __construct(OpportunitiesService $service, ProfileService $profileService)
-    {
-        $this->service = $service;
-        $this->profileService = $profileService;
-    }
+    public function __construct(
+        private readonly OpportunitiesService $service,
+        private readonly ProfileService $profileService,
+    ) {}
 
     /**
      * Register REST API routes.
      */
+    #[\Override]
     public function registerRoutes(): void
     {
         // Define shared validation/sanitization arguments for Create/Update
@@ -67,9 +68,7 @@ class OpportunitiesController extends AbstractLaunchpadController
             'status' => [
                 'required' => false,
                 'sanitize_callback' => 'sanitize_key',
-                'validate_callback' => function ($param) {
-                    return in_array($param, ['draft', 'pending'], true);
-                }
+                'validate_callback' => OpportunityStatus::isSettable(...),
             ],
             'company'         => ['sanitize_callback' => 'sanitize_text_field'],
             // Dates are stored typed (DATE column in wp_opportunity_details).
@@ -230,7 +229,7 @@ class OpportunitiesController extends AbstractLaunchpadController
                 'status' => [
                     'required'          => true,
                     'sanitize_callback' => 'sanitize_key',
-                    'validate_callback' => fn($param) => in_array($param, ['pending', 'draft'], true),
+                    'validate_callback' => OpportunityStatus::isSettable(...),
                 ],
             ],
         ]);
@@ -245,7 +244,7 @@ class OpportunitiesController extends AbstractLaunchpadController
                     'required'          => true,
                     'sanitize_callback' => 'sanitize_text_field',
                     'validate_callback' => RestArg::stringLength(
-                        2,
+                        self::SEARCH_MIN_LENGTH,
                         self::SEARCH_MAX_LENGTH,
                         __('Search term', 'starwishx')
                     ),
@@ -331,7 +330,7 @@ class OpportunitiesController extends AbstractLaunchpadController
             'items'       => $items,
             'total'       => $total,
             'page'        => $page,
-            'total_pages' => ceil($total / $perPage),
+            'total_pages' => (int) ceil($total / $perPage),
         ]);
     }
 

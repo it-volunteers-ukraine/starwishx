@@ -255,7 +255,6 @@ final class LaunchpadCore
                     'passwordPolicy'      => PasswordPolicy::getClientRules(),
                     'usernamePolicy'      => UsernamePolicy::getClientRules(),
                     'messengerPolicy'     => MessengerPolicy::getClientRules(),
-                    'validationStrings'   => PasswordPolicy::getClientValidationStrings(),
                     'phoneConfig'         => [
                         'initialCountry'   => 'ua',
                         'countryOrder'     => ['ua', 'pl', 'de', 'us', 'gb'],

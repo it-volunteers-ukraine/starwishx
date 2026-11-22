@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Launchpad\Services;
 
 use Launchpad\Data\Repositories\CountriesRepository;
+use Launchpad\Enums\OpportunityStatus;
 use Launchpad\Data\Repositories\OpportunityCountriesRepository;
 use Launchpad\Data\Repositories\OpportunityDetailsRepository;
 use Shared\Policy\UrlPolicy;
@@ -12,18 +13,18 @@ use WP_Error;
 
 class OpportunitiesService
 {
-    public const ITEMS_PER_PAGE = 4;
+    public const int ITEMS_PER_PAGE = 4;
 
-    public const TITLE_MIN_LENGTH = 30;
-    public const TITLE_MAX_LENGTH = 108;
+    public const int TITLE_MIN_LENGTH = 30;
+    public const int TITLE_MAX_LENGTH = 108;
 
-    public const COMPANY_MIN_LENGTH     = 2;
-    public const DESCRIPTION_MIN_LENGTH = 50;
+    public const int COMPANY_MIN_LENGTH     = 2;
+    public const int DESCRIPTION_MIN_LENGTH = 50;
 
     // Multi-select limits: the REST validators (OpportunitiesController) and
     // the form's counters / disabled options (OpportunitiesPanel) both read these.
-    public const CATEGORY_MAX_ITEMS      = 10;
-    public const BENEFICIARIES_MAX_ITEMS = 10;
+    public const int CATEGORY_MAX_ITEMS      = 10;
+    public const int BENEFICIARIES_MAX_ITEMS = 10;
 
     private OpportunityDetailsRepository $detailsRepository;
     private OpportunityCountriesRepository $countriesRepository;
@@ -126,18 +127,12 @@ class OpportunitiesService
      */
     public static function getStatusLabel(string $slug): string
     {
-        $labels = [
-            'draft'   => __('Draft', 'starwishx'),
-            'pending' => __('Pending Review', 'starwishx'),
-            'publish' => __('Published', 'starwishx'),
-        ];
-
-        return $labels[$slug] ?? ucfirst($slug);
+        return OpportunityStatus::tryFrom($slug)?->label() ?? ucfirst($slug);
     }
 
-    public const DESCRIPTION_MAX_LENGTH  = 4000;
-    public const REQUIREMENTS_MAX_LENGTH = 3000;
-    public const DETAILS_MAX_LENGTH      = 2000;
+    public const int DESCRIPTION_MAX_LENGTH  = 4000;
+    public const int REQUIREMENTS_MAX_LENGTH = 3000;
+    public const int DETAILS_MAX_LENGTH      = 2000;
 
     /**
      * Get list of opportunities with flexible filtering.
@@ -162,8 +157,7 @@ class OpportunitiesService
         // 1. Filter by Statuses (Dynamic)
         if (!empty($filters['statuses'])) {
             // Only allow valid statuses to be queried
-            $allowed = ['publish', 'draft', 'pending'];
-            $args['post_status'] = array_intersect($filters['statuses'], $allowed);
+            $args['post_status'] = OpportunityStatus::values(OpportunityStatus::fromList($filters['statuses']));
         }
         // 2. Filter by Categories (Existing)
         if (!empty($filters['categories'])) {
@@ -286,8 +280,7 @@ class OpportunitiesService
         ];
 
         if (!empty($filters['statuses'])) {
-            $allowed = ['publish', 'draft', 'pending'];
-            $args['post_status'] = array_intersect($filters['statuses'], $allowed);
+            $args['post_status'] = OpportunityStatus::values(OpportunityStatus::fromList($filters['statuses']));
         }
 
         $query = new \WP_Query($args);

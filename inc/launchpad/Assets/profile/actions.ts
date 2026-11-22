@@ -18,6 +18,7 @@ import type {
   ItemContext,
   LaunchpadState,
   LoadedPanel,
+  PasswordPolicy,
   PhoneWidget,
   ProfileData,
   ProfilePanelData,
@@ -33,6 +34,7 @@ import {
   isObject,
   isProfileUpdate,
   loadedPanel,
+  unloadPanel,
   normalizeUrl,
   scrollToFirstError,
   scrollToPageTop,
@@ -77,6 +79,9 @@ const NAME_FIELDS: readonly string[] = [
 
 const PASSWORD_FIELDS = ["current", "new"] as const;
 const EMAIL_POPUP_FIELDS = ["newEmail", "password"] as const;
+
+/** validateName()'s error keys, which the server's field_errors also use. */
+const NAME_ERRORS = ["nameMinLength", "nameMaxLength", "nameInvalid"] as const;
 
 // --- Helpers ------------------------------------------------------------
 
@@ -126,17 +131,23 @@ function openView(view: "profile" | "password"): void {
 }
 
 /**
- * The role changed with the save: the opportunities panel reloads on its
- * next visit, which clears (or brings back) the onboarding lock screen.
+ * What is wrong with a new password, per the hydrated PasswordPolicy, or null
+ * when it passes. A UX guard only: the server checks it again. The message
+ * may be "" when the policy sends none, which still blocks the submit.
  */
-function invalidateOpportunities(
-  state: LaunchpadState,
-  isLocked: boolean,
-): void {
-  const opp = loadedPanel(state, "opportunities");
-  if (!opp) return;
-  opp.isLocked = isLocked;
-  Object.assign(opp, { _loaded: false });
+function passwordProblem(
+  password: string,
+  policy: PasswordPolicy = {},
+): string | null {
+  const messages = policy.messages ?? {};
+  if (password.length < (policy.minLength ?? 12)) {
+    return messages.tooShort ?? "";
+  }
+  const mixed =
+    /[A-Z]/.test(password) &&
+    /[0-9]/.test(password) &&
+    /[^A-Za-z0-9]/.test(password);
+  return mixed ? null : (messages.tooWeak ?? "");
 }
 
 /** A dropdown item's Enter/Space/arrows/Escape (display name). */
@@ -454,8 +465,12 @@ export const profileActions = {
         p._originalTelegram = data.telegram ?? "";
         // Sync widget with server-returned value
         if (phoneWidget && data.phone) phoneWidget.setNumber(data.phone);
-        if (data._roleUpgraded) invalidateOpportunities(state, false);
-        if (data._roleDegraded) invalidateOpportunities(state, true);
+        // A role change locks or unlocks the opportunities panel: it
+        // reloads on its next visit, showing (or clearing) the onboarding
+        // screen.
+        if (data._roleUpgraded || data._roleDegraded) {
+          unloadPanel(state, "opportunities");
+        }
         // Role change → refresh tour scenarios so button triggers correct tour
         if (data._roleUpgraded || data._roleDegraded) {
           void tourStore().actions.refreshScenarios();
@@ -468,10 +483,7 @@ export const profileActions = {
       // Map backend field_errors keys to translated messages
       if (error instanceof ApiError && error.fieldErrors) {
         for (const [field, key] of Object.entries(error.fieldErrors)) {
-          p.fieldErrors[field] = isKeyOf(
-            ["nameMinLength", "nameMaxLength", "nameInvalid"] as const,
-            key,
-          )
+          p.fieldErrors[field] = isKeyOf(NAME_ERRORS, key)
             ? (p.validationMessages[key] ?? key)
             : key;
         }
@@ -568,20 +580,12 @@ export const profileActions = {
     if (!p) return;
 
     // ── Client-side validation (UX guard — server re-validates) ──────────
-    const policy = state.launchpadSettings.passwordPolicy ?? {};
-    const messages = policy.messages ?? {};
-    const password = p.passwordData.new;
-
-    const problem =
-      password.length < (policy.minLength ?? 12)
-        ? messages.tooShort
-        : !/[A-Z]/.test(password) ||
-            !/[0-9]/.test(password) ||
-            !/[^A-Za-z0-9]/.test(password)
-          ? messages.tooWeak
-          : null;
+    const problem = passwordProblem(
+      p.passwordData.new,
+      state.launchpadSettings.passwordPolicy,
+    );
     if (problem !== null) {
-      flashError(p, problem ?? "");
+      flashError(p, problem);
       scrollToFirstError();
       return;
     }

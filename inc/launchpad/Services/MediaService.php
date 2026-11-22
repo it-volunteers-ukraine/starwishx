@@ -14,7 +14,8 @@ class MediaService
         'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
     ];
 
-    private const MAX_SIZE = 5 * 1024 * 1024; // 5MB
+    /** Upload cap; OpportunitiesPanel hydrates it as uploadMaxBytes for the form's check. */
+    public const int MAX_SIZE = 5 * 1024 * 1024; // 5MB
 
     /**
      * Handle the file upload securely.

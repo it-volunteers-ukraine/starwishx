@@ -11,9 +11,6 @@ import { favoritesStore, launchpadStore } from "../stores.ts";
 import type { FavoriteItem } from "../types.ts";
 import { apiErrorMessage, fetchJson, loadedPanel } from "../utils.ts";
 
-/** The favorites panel's page size (FavoritesPanel). */
-const PER_PAGE = 20;
-
 /** GET favorites - FavoritesController (inc/favorites). */
 interface FavoritesPage {
   items: FavoriteItem[];
@@ -43,7 +40,7 @@ export const favoritesActions = {
     try {
       const nextPage = p.page + 1;
       const data = await fetchJson(
-        `${restUrl}favorites?page=${nextPage}&per_page=${PER_PAGE}`,
+        `${restUrl}favorites?page=${nextPage}&per_page=${p.perPage}`,
         isFavoritesPage,
       );
       if (data) {

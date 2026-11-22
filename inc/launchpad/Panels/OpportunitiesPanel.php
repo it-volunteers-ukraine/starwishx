@@ -5,35 +5,44 @@ declare(strict_types=1);
 
 namespace Launchpad\Panels;
 
+use Launchpad\Enums\OpportunityStatus;
+use Launchpad\Enums\OpportunityView;
+use Launchpad\Services\MediaService;
 use Launchpad\Services\OpportunitiesService;
 use Launchpad\Services\ProfileService;
 
-class OpportunitiesPanel extends AbstractPanel
+final class OpportunitiesPanel extends AbstractPanel
 {
-    private OpportunitiesService $service;
-    private ProfileService $profileService;
+    /**
+     * The view getInitialState() settled on (an edit of a post that isn't
+     * the user's falls back to the list), so render() shows the same one.
+     */
+    private ?OpportunityView $view = null;
 
-    public function __construct(OpportunitiesService $service, ProfileService $profileService)
-    {
-        $this->service = $service;
-        $this->profileService = $profileService;
-    }
+    public function __construct(
+        private readonly OpportunitiesService $service,
+        private readonly ProfileService $profileService,
+    ) {}
 
+    #[\Override]
     public function getId(): string
     {
         return 'opportunities';
     }
 
+    #[\Override]
     public function getLabel(): string
     {
         return __('Opportunities', 'starwishx');
     }
 
+    #[\Override]
     public function getIcon(): string
     {
         return 'icon-opportunities';
     }
 
+    #[\Override]
     public function getInitialState(?int $userId = null): array
     {
         // Check profile completeness regardless of role
@@ -72,11 +81,14 @@ class OpportunitiesPanel extends AbstractPanel
 
         // Early return: skip all expensive queries for locked users
         if ($isLocked) {
+            $this->view = OpportunityView::LIST;
             return [
                 'isLocked'    => true,
-                'currentView' => 'list',
+                'currentView' => $this->view->value,
                 'items'       => [],
                 'total'       => 0,
+                'perPage'     => OpportunitiesService::ITEMS_PER_PAGE,
+                'uploadMaxBytes' => MediaService::MAX_SIZE,
                 'options'     => [],
                 'formData'    => $emptyForm,
                 'emptyForm'   => $emptyForm,
@@ -86,21 +98,22 @@ class OpportunitiesPanel extends AbstractPanel
         $options = $this->service->getFormOptions();
 
         // 3. Routing Logic (List vs Edit vs Add)
-        $view = isset($_GET['view']) ? sanitize_text_field($_GET['view']) : 'list';
+        $view = OpportunityView::fromRequest();
         $editId = isset($_GET['id']) ? (int) $_GET['id'] : 0;
 
         $currentFormData = $emptyForm;
         $error = null;
 
-        if ($view === 'edit' && $editId > 0) {
+        if ($view === OpportunityView::EDIT && $editId > 0) {
             $fetchedData = $this->service->getSingleOpportunity($userId, $editId);
             if ($fetchedData) {
                 $currentFormData = $fetchedData;
             } else {
                 $error = __('Opportunity not found or access denied.', 'starwishx');
-                $view = 'list'; // Fallback
+                $view = OpportunityView::LIST; // Fallback
             }
         }
+        $this->view = $view;
 
         // 4. Fetch List Items
         $opportunities = $this->service->getUserOpportunities($userId);
@@ -109,14 +122,18 @@ class OpportunitiesPanel extends AbstractPanel
 
         return [
             'isLocked'    => $isLocked, // Check user capabilities
-            'currentView' => $view,
+            'currentView' => $view->value,
             'options'     => $options,     // Dropdown lists
             'formData'    => $currentFormData, // Actual form values
             'emptyForm'   => $emptyForm,
             'items'       => $opportunities,
             'total'       => $total,
             'page'        => 1,
-            'totalPages'  => ceil($total / OpportunitiesService::ITEMS_PER_PAGE),
+            // The list's page size and the upload cap, so the client asks
+            // and checks exactly what the server serves and accepts.
+            'perPage'     => OpportunitiesService::ITEMS_PER_PAGE,
+            'uploadMaxBytes' => MediaService::MAX_SIZE,
+            'totalPages'  => (int) ceil($total / OpportunitiesService::ITEMS_PER_PAGE),
             'hasMore'     => $total > OpportunitiesService::ITEMS_PER_PAGE,
             'error'       => $error,
             'fieldErrors' => (object) [],
@@ -200,6 +217,7 @@ class OpportunitiesPanel extends AbstractPanel
         ];
     }
 
+    #[\Override]
     public function render(): string
     {
         // 1. Calculate lock state for initial server-side render
@@ -207,10 +225,11 @@ class OpportunitiesPanel extends AbstractPanel
         // $roles = $current_user->roles;
         // $isLocked = in_array('subscriber', $roles) && !in_array('contributor', $roles) && !in_array('administrator', $roles);
 
-        // Determine the view on the server so we can set 'hidden' attributes
-        $view = isset($_GET['view']) ? sanitize_text_field($_GET['view']) : 'list';
-        $isListView = ($view === 'list');
-        $isFormView = ($view === 'add' || $view === 'edit');
+        // The view the state holds, for the 'hidden' attributes (the request's
+        // own ?view when this panel isn't the active one)
+        $view = $this->view ?? OpportunityView::fromRequest();
+        $isListView = !$view->isForm();
+        $isFormView = $view->isForm();
         // 2. Adjust visibility logic so list and form are hidden immediately if locked
         // $isListView = !$isLocked && ($view === 'list');
         // $isFormView = !$isLocked && ($view === 'add' || $view === 'edit');
@@ -317,19 +336,13 @@ class OpportunitiesPanel extends AbstractPanel
                         <div class="launchpad-filters" data-wp-init="actions.opportunities.initFilters">
                             <span class="filter-label"><?php esc_html_e('Filter by status:', 'starwishx'); ?></span>
                             <div class="filter-checkboxes">
-                                <?php
-                                $statuses = [
-                                    'draft'   => __('Drafts', 'starwishx'),
-                                    'pending' => __('Pending', 'starwishx'),
-                                    'publish' => __('Published', 'starwishx'),
-                                ];
-                                foreach ($statuses as $slug => $label) : ?>
+                                <?php foreach (OpportunityStatus::cases() as $status) : ?>
                                     <label class="filter-checkbox">
                                         <input type="checkbox"
-                                            value="<?php echo $slug; ?>"
+                                            value="<?= esc_attr($status->value) ?>"
                                             checked
                                             data-wp-on--change="actions.opportunities.toggleFilter">
-                                        <span><?php echo $label; ?></span>
+                                        <span><?= esc_html($status->filterLabel()) ?></span>
                                     </label>
                                 <?php endforeach; ?>
                             </div>

@@ -4,7 +4,11 @@ declare(strict_types=1);
 
 namespace Launchpad\Core;
 
-class StateAggregator
+/**
+ * Builds the Launchpad's hydrated state (templates/page-launchpad.php):
+ * the TS ServerState in inc/launchpad/Assets/types.ts.
+ */
+final readonly class StateAggregator
 {
     public function aggregate(array $panels, int $userId, string $activePanelId): array
     {
@@ -44,10 +48,5 @@ class StateAggregator
         }
 
         return $state;
-    }
-
-    private function toCamelCase(string $id): string
-    {
-        return lcfirst(str_replace(' ', '', ucwords(str_replace(['-', '_'], ' ', $id))));
     }
 }

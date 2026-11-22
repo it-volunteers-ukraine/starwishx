@@ -44,6 +44,12 @@ interface FetchOptions {
   abortKey?: string;
 }
 
+/** Cancel the request in flight under `abortKey`, if any (it resolves to undefined). */
+export function cancelRequest(abortKey: string): void {
+  controllers.get(abortKey)?.abort();
+  controllers.delete(abortKey);
+}
+
 /**
  * Fetch helper for the Launchpad's REST calls: the WP nonce, JSON bodies,
  * per-key cancellation.
@@ -220,15 +226,43 @@ export function ensurePanel(
   return created;
 }
 
+/** The pending clear of each flashError() target. */
+const errorTimers = new WeakMap<object, ReturnType<typeof setTimeout>>();
+
 /** Show `message` in `target.error` for five seconds. */
 export function flashError(
   target: { error: string | null },
   message: string,
 ): void {
+  // One timer per target: a newer message restarts the five seconds rather
+  // than being cleared early by the older message's timer. (The store hands
+  // out one proxy per object, so the proxy is a stable key.)
+  clearTimeout(errorTimers.get(target));
   target.error = message;
-  setTimeout(() => {
-    target.error = null;
-  }, 5000);
+  errorTimers.set(
+    target,
+    setTimeout(() => {
+      target.error = null;
+      errorTimers.delete(target);
+    }, 5000),
+  );
+}
+
+/**
+ * Drop a panel's loaded state: its next visit loads it afresh (after a role
+ * change, say). Replaces the state instead of flipping `_loaded`, so the
+ * types follow - the stale data goes with it.
+ */
+export function unloadPanel(
+  state: LaunchpadState,
+  panelId: KnownPanelId,
+): void {
+  state.panels[panelId] = {
+    _loaded: false,
+    isLoading: false,
+    isSaving: false,
+    error: null,
+  };
 }
 
 // --- History ------------------------------------------------------------

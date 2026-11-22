@@ -27,7 +27,7 @@ export function isRecord(value: unknown): value is Record<string, unknown> {
  * Is `key` one of `keys`? Narrows a string from the DOM (a data-field, an
  * input's value) to the keys an action may write.
  */
-export function isKeyOf<K extends string>(
+export function isKeyOf<const K extends string>(
   keys: readonly K[],
   key: string | undefined,
 ): key is K {
@@ -37,11 +37,6 @@ export function isKeyOf<K extends string>(
 /** A fetch cancelled through its AbortController. */
 export function isAbortError(error: unknown): boolean {
   return error instanceof DOMException && error.name === "AbortError";
-}
-
-/** The message of whatever a `catch` caught. */
-export function errorMessage(error: unknown): string {
-  return error instanceof Error ? error.message : String(error);
 }
 
 // --- Fetching ---------------------------------------------------------

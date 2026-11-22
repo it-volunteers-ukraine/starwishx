@@ -30,6 +30,7 @@ import type {
 import {
   apiErrorMessage,
   boundElement,
+  cancelRequest,
   currentUrl,
   fetchJson,
   flashError,
@@ -90,8 +91,11 @@ const MESSAGE_KEYS = [
 const STATUSES: readonly OpportunityStatus[] = ["draft", "pending", "publish"];
 const LAYOUTS: readonly Layout[] = ["compact", "card", "grid"];
 
-/** Max upload size; MediaService enforces the same. */
-const MAX_UPLOAD_BYTES = 5 * 1024 * 1024;
+/**
+ * The shortest location search the server takes (SEARCH_MIN_LENGTH in
+ * OpportunitiesController); a shorter one is a 400.
+ */
+const PLACE_SEARCH_MIN = 2;
 
 // --- Helpers ------------------------------------------------------------
 
@@ -145,10 +149,6 @@ const cloneForm = (form: OpportunityForm): OpportunityForm => ({
 /** Add or remove `id` in a list of ids. */
 const toggleId = (ids: readonly number[], id: number, on: boolean): number[] =>
   on ? [...new Set([...ids, id])] : ids.filter((other) => other !== id);
-
-/** The page size of the list (not hydrated today: 4). */
-const perPage = (): number =>
-  launchpadStore().state.launchpadSettings.perPage ?? 4;
 
 /** Show a failed call's message above the panel. */
 function showError(p: Panel, error: unknown): void {
@@ -319,7 +319,7 @@ async function fetchFilteredList(p: Panel): Promise<void> {
   for (const status of p.filters?.statuses ?? []) {
     params.append("statuses[]", status);
   }
-  params.append("per_page", String(perPage()));
+  params.append("per_page", String(p.perPage));
 
   try {
     const data = await fetchJson(
@@ -353,8 +353,11 @@ function searchPlaces(
   const p = opportunities(state);
   if (!p) return;
 
+  // Each keystroke restarts the box's debounce; a query too short to search
+  // also drops the box's request in flight and its results.
   clearTimeout(placeSearchTimers.get(resultKey));
-  if (query.length < 1) {
+  if (query.trim().length < PLACE_SEARCH_MIN) {
+    cancelRequest(`places:${resultKey}`);
     p.formData[resultKey] = [];
     return;
   }
@@ -455,8 +458,8 @@ export const opportunitiesActions = {
     const file = input.files?.[0];
     if (!file) return;
 
-    // Client-side size guard (backend enforces same limit in MediaService)
-    if (file.size > MAX_UPLOAD_BYTES) {
+    // Client-side size guard: MediaService's own cap, hydrated
+    if (file.size > p.uploadMaxBytes) {
       p.fieldErrors.document = p.validationMessages?.document ?? null;
       input.value = "";
       return;
@@ -634,7 +637,7 @@ export const opportunitiesActions = {
       const nextPage = (p.page ?? 1) + 1;
       const params = new URLSearchParams({
         page: String(nextPage),
-        per_page: String(perPage()),
+        per_page: String(p.perPage),
       });
       for (const status of p.filters?.statuses ?? []) {
         params.append("statuses[]", status);

@@ -4,35 +4,35 @@ declare(strict_types=1);
 
 namespace Launchpad\Panels;
 
+use Launchpad\Enums\ProfileView;
 use Launchpad\Services\ProfileService;
 use Shared\Policy\MessengerPolicy;
 use Shared\Policy\PasswordPolicy;
 use Shared\Policy\UsernamePolicy;
 
-class ProfilePanel extends AbstractPanel
+final class ProfilePanel extends AbstractPanel
 {
-    private ProfileService $service;
+    public function __construct(private readonly ProfileService $service) {}
 
-    public function __construct(ProfileService $service)
-    {
-        $this->service = $service;
-    }
-
+    #[\Override]
     public function getId(): string
     {
         return 'profile';
     }
 
+    #[\Override]
     public function getLabel(): string
     {
         return __('Profile', 'starwishx');
     }
 
+    #[\Override]
     public function getIcon(): string
     {
         return 'icon-settings';
     }
 
+    #[\Override]
     public function getInitialState(?int $userId = null): array
     {
 
@@ -44,11 +44,11 @@ class ProfilePanel extends AbstractPanel
 
         $data = $this->service->getProfileData($userId);
 
-        $view = isset($_GET['view']) ? sanitize_text_field($_GET['view']) : '';
+        $view = ProfileView::fromRequest();
 
         return array_merge($data, [
-            'isEditing'          => ($view === 'profile'),
-            'isChangingPassword' => ($view === 'password'),
+            'isEditing'          => $view === ProfileView::PROFILE,
+            'isChangingPassword' => $view === ProfileView::PASSWORD,
             'isDisplayNameDropdownOpen' => false,
             'fieldErrors'        => (object) [],
             // Snapshot for validate-on-change: client compares current
@@ -60,10 +60,6 @@ class ProfilePanel extends AbstractPanel
             'nameLimits'         => [
                 'min' => ProfileService::NAME_MIN_LENGTH,
                 'max' => ProfileService::NAME_MAX_LENGTH,
-            ],
-            'usernameLimits'     => [
-                'min' => UsernamePolicy::MIN_LENGTH,
-                'max' => UsernamePolicy::MAX_LENGTH,
             ],
             'validationMessages' => [
                 'nameInvalid'   => __('Only letters, spaces, hyphens, and apostrophes allowed.', 'starwishx'),
@@ -105,13 +101,14 @@ class ProfilePanel extends AbstractPanel
         ]);
     }
 
+    #[\Override]
     public function render(): string
     {
         // Determine the view on the server so we can set 'hidden' attributes
-        $view = isset($_GET['view']) ? sanitize_text_field($_GET['view']) : '';
-        $isCardVisible  = ($view !== 'profile' && $view !== 'password');
-        $isProfileForm  = ($view === 'profile');
-        $isPasswordForm = ($view === 'password');
+        $view = ProfileView::fromRequest();
+        $isCardVisible  = $view === ProfileView::CARD;
+        $isProfileForm  = $view === ProfileView::PROFILE;
+        $isPasswordForm = $view === ProfileView::PASSWORD;
 
         $this->startBuffer();
 

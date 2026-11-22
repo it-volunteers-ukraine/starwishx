@@ -25,7 +25,6 @@ export interface FavoritesStore {
 
 /** The shared login popup (inc/shared/Assets/popup-store.js). */
 export interface PopupStore {
-  state: { isOpen: boolean };
   actions: {
     open(): void;
   };

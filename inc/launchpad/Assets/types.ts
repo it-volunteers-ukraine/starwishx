@@ -52,8 +52,6 @@ export interface LaunchpadSettings {
     requiredFields?: string;
     passwordRequired?: string;
   };
-  /** Not hydrated today: the list's page size falls back to 4. */
-  perPage?: number;
 }
 
 // --- Panels (StateAggregator, Panels/*::getInitialState) ------------------
@@ -81,9 +79,10 @@ export type FieldErrors = Record<string, string | null>;
 
 // Opportunities ------------------------------------------------------------
 
+/** Launchpad\Enums\OpportunityStatus. */
 export type OpportunityStatus = "draft" | "pending" | "publish";
 
-/** The panel's routing (?view): the list, or the form. */
+/** The panel's routing (?view): the list, or the form - Launchpad\Enums\OpportunityView. */
 export type OpportunityView = "list" | "add" | "edit";
 
 /** A list card - OpportunitiesService::getUserOpportunities(). */
@@ -223,6 +222,10 @@ export interface OpportunitiesData {
   currentView: OpportunityView;
   items: OpportunityListItem[];
   total: number;
+  /** The list's page size (OpportunitiesService::ITEMS_PER_PAGE). */
+  perPage: number;
+  /** The document upload cap (MediaService::MAX_SIZE). */
+  uploadMaxBytes: number;
   options: FormOptions;
   formData: OpportunityForm & LocationSearch;
   emptyForm?: OpportunityForm;
@@ -338,6 +341,8 @@ export interface FavoritesPanelData {
   items: FavoriteItem[];
   total: number;
   page: number;
+  /** FavoritesPanel::PER_PAGE. */
+  perPage: number;
   totalPages: number;
   hasMore: boolean;
 }
