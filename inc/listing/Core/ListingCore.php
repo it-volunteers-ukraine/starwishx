@@ -488,6 +488,9 @@ final class ListingCore
                 'removeFilter' => __('Remove filter', 'starwishx'),
                 // The "Favorites" filter's chip.
                 'favoritesChip' => __('Favorites', 'starwishx'),
+                // A logged-in search refused for an expired nonce, which
+                // only a reload renews (fetchResults in grid/actions.js).
+                'sessionExpired' => __('Your session has expired. Please reload the page.', 'starwishx'),
             ],
         ]);
     }

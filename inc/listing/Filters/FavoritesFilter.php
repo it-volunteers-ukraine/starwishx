@@ -15,9 +15,11 @@ namespace Listing\Filters;
  * table stays in MySQL as a subquery: no id list in PHP, however long the
  * user's list is.
  *
- * The REST search runs as a guest unless this filter is on: the client then
- * sends the favorites store's nonce (fetchJson() in inc/listing/Assets/utils.js).
- * ListingQuery drops the flag for guests, so ?favorites=1 alone does nothing.
+ * Logged-in users' REST searches send the favorites store's nonce, so the
+ * server knows the user (fetchResults() in inc/listing/Assets/grid/actions.js;
+ * an expired nonce with this filter on ends in a "reload" alert rather than an
+ * unfiltered list). ListingQuery drops the flag for guests, so ?favorites=1
+ * alone does nothing.
  *
  * Count: ListingService::getFacets() puts it in facets.favorites.
  */
@@ -113,10 +115,10 @@ class FavoritesFilter extends AbstractFilter
                 value="1"
                 data-wp-bind--checked="state.query.favorites"
                 data-wp-on--change="actions.filters.toggleFavorites">
-                <span class="label-text"><?php esc_html_e('Favorites', 'starwishx'); ?></span>
-                <svg class="icon-heart" aria-hidden="true" focusable="false">
-                    <use href="<?php echo esc_url(get_template_directory_uri()); ?>/assets/img/sprites.svg#icon-heart"></use>
-                </svg>
+            <span class="label-text"><?php esc_html_e('Favorites', 'starwishx'); ?></span>
+            <svg class="icon-heart" aria-hidden="true" focusable="false">
+                <use href="<?php echo esc_url(get_template_directory_uri()); ?>/assets/img/sprites.svg#icon-heart"></use>
+            </svg>
             <data class="count" data-wp-bind--value="state.facets.favorites" data-wp-text="state.facets.favorites"></data>
         </label>
 <?php

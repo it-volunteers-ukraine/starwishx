@@ -36,18 +36,17 @@ export function debounce(func, wait) {
 /**
  * Standardized Fetch Helper for the Listing Module.
  *
- * Listing reads are anonymous: no X-WP-Nonce. Core checks a nonce whenever
- * one is sent, guests included, and answers a stale one (a tab left open
- * overnight, a cached page) with a 403 - that is what used to freeze the
- * filters. Without one the request runs as a guest's; the one per-user
- * detail, favorites, comes from the favorites store (fetchResults in
- * grid/actions.js).
+ * Without `auth` the request is anonymous: no X-WP-Nonce, so it runs as a
+ * guest's - every guest request does. Core checks a nonce whenever one is
+ * sent and answers a stale one (a tab left open overnight, a cached page)
+ * with a 403, which used to freeze the filters.
  *
- * The one exception is `auth`: the "Favorites" filter is the user's
- * own list, so while it is on the request carries the nonce the favorites
- * store hydrates (FavoritesCore) - the server then knows the user
- * (FavoritesFilter), and core marks the response private / no-store. A stale
- * nonce fails only those requests, into the error alert's Try again.
+ * With `auth` it carries the nonce the favorites store hydrates
+ * (FavoritesCore): fetchResults in grid/actions.js sets it for logged-in
+ * users, whose searches the "Favorites" filter and its count depend on
+ * (FavoritesFilter, ListingService::getFacets), and core marks the response
+ * private / no-store. A stale nonce comes back as code
+ * `rest_cookie_invalid_nonce`; fetchResults then carries on as a guest.
  *
  * A failed response throws an Error that also carries `status`, the WP error
  * `code`, the server's own (translated) `serverMessage` and its

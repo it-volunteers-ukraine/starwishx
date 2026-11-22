@@ -121,13 +121,34 @@ store("listing", {
           return;
         }
 
+        // The "Favorites" filter's count follows the heart. It counts the
+        // user's favorites among the posts the other filters leave, and
+        // every card shown is one of those, so one heart is exactly one.
+        const { state } = store("listing");
+        const shiftCount = (delta) => {
+          if (typeof state.facets?.favorites === "number") {
+            state.facets.favorites += delta;
+          }
+        };
+
         // OPTIMISTIC UPDATE (Local Context): the browser has ticked the box;
         // flip the item so state.isFavorited agrees with it.
         item.isFavorite = !item.isFavorite;
+        shiftCount(item.isFavorite ? 1 : -1);
 
         // Call Global Store
         // This updates the Global Array, which triggers the getter again.
         await store("favorites").actions.toggle(item.id);
+
+        // The favorites store puts its list back when saving fails: follow
+        // it, or the heart and the count would keep the unsaved change.
+        const saved = (store("favorites").state.myFavoriteIds ?? []).some(
+          (id) => Number(id) === Number(item.id),
+        );
+        if (saved !== item.isFavorite) {
+          item.isFavorite = saved;
+          shiftCount(saved ? 1 : -1);
+        }
       }
     }),
   },

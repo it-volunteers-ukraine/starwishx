@@ -44,6 +44,16 @@ function cacheFacetLabels(state) {
 let failedRequest = null;
 
 /**
+ * Set once the hydrated nonce is refused - the tab outlived it (12-24h) or
+ * the user logged out elsewhere. Searches then run as a guest's, except with
+ * "Favorites" on, which only the user's own request can answer.
+ */
+let nonceExpired = false;
+
+/** Core's code for a nonce that no longer matches the session. */
+const INVALID_NONCE = "rest_cookie_invalid_nonce";
+
+/**
  * Internal orchestration to fetch data from the REST API.
  *
  * @param {Object} options
@@ -79,19 +89,31 @@ async function fetchResults({ append = false, history = "push" } = {}) {
   try {
     const { state: settingsState } = store("listingSettings");
     const baseUrl = settingsState.config.restUrl;
+    const url = `${baseUrl}search?${params.toString()}`;
+    const request = (auth) =>
+      fetchJson(state, url, { requestId: "main-search", auth });
 
-    const data = await fetchJson(
-      state,
-      `${baseUrl}search?${params.toString()}`,
-      // "Favorites" needs to know the user: see fetchJson().
-      { requestId: "main-search", auth: !!state.query.favorites },
-    );
+    // Logged-in users search as themselves (see fetchJson): the server
+    // filters by and counts their favorites. Once the nonce is refused,
+    // carry on as a guest - unless "Favorites" is on: a guest's request
+    // would ignore it and list everything under a ticked box.
+    let data;
+    try {
+      data = await request(
+        !!state.isUserLoggedIn && (!!state.query.favorites || !nonceExpired),
+      );
+    } catch (e) {
+      if (e.code !== INVALID_NONCE) throw e;
+      nonceExpired = true;
+      if (state.query.favorites) throw e;
+      data = await request(false);
+    }
 
     if (data) {
-      // The request ran as a guest's (see fetchJson), so whether a card is
-      // in the visitor's favorites comes from the favorites store, which
-      // FavoritesCore hydrates for logged-in users and every toggle keeps
-      // current. Guests have none.
+      // Whether a card is in the visitor's favorites comes from the
+      // favorites store, which FavoritesCore hydrates for logged-in users
+      // and every toggle keeps current (the server skips that query for
+      // REST, see ListingService::preloadPostData). Guests have none.
       const favoriteIds = store("favorites").state.myFavoriteIds ?? [];
       for (const item of data.items) {
         item.isFavorite = favoriteIds.includes(item.id);
@@ -109,6 +131,11 @@ async function fetchResults({ append = false, history = "push" } = {}) {
       }
       if (data.facets) {
         cacheFacetLabels(state);
+        // A guest's response (expired nonce) has no "Favorites" count: keep
+        // the last one rather than show none.
+        if (state.isUserLoggedIn && data.facets.favorites === undefined) {
+          data.facets.favorites = state.facets?.favorites;
+        }
         state.facets = data.facets;
       }
       if (history !== "none") {
@@ -118,9 +145,11 @@ async function fetchResults({ append = false, history = "push" } = {}) {
   } catch (e) {
     if (e.name === "AbortError") return;
     console.error("Listing Search Error:", e);
-    // The server's own message when it sent one (rate limit, validation) -
-    // translated on its side - otherwise the generic one PHP hydrated.
+    // An expired nonce: Try again would only repeat it, the page must be
+    // reloaded. Otherwise the server's own message when it sent one (rate
+    // limit, validation) - translated on its side - or the generic one.
     state.error =
+      (e.code === INVALID_NONCE && state.i18n?.sessionExpired) ||
       Object.values(e.fieldErrors ?? {})[0] ||
       e.serverMessage ||
       state.i18n?.loadError ||

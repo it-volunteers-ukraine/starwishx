@@ -94,6 +94,11 @@
         color: $text-light;
         font-size: 14px;
 
+        // No number, no "()" (a facet missing from a response).
+        &:empty {
+            display: none;
+        }
+
         &::before {
             content: " (";
         }
