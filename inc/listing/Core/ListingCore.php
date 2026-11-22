@@ -22,6 +22,7 @@ use Listing\Filters\CategoryFilter;
 use Listing\Filters\CountryFilter;
 use Listing\Filters\LocationsFilterSimple;
 use Listing\Filters\BeneficiariesFilter;
+use Listing\Filters\FavoritesFilter;
 use Listing\Services\TermCountingService;
 use Favorites\Services\FavoritesService;
 use Shared\Http\QueryStringParser;
@@ -130,6 +131,8 @@ final class ListingCore
         // archive's main query, which nothing renders, never hit the database.
         add_filter('posts_pre_query', [TermCountingService::class, 'skipSqlOnly'], 10, 2);
         add_filter('posts_pre_query', [$this, 'skipArchiveMainQuery'], 10, 2);
+        // "Only my favorites": a no-op unless FavoritesFilter tagged the query.
+        add_filter('posts_where', [FavoritesFilter::class, 'where'], 10, 2);
         add_action('init', fn() => do_action('listing_register_filters', $this->registry), 20);
         add_action('listing_register_filters', [$this, 'registerDefaultFilters'], 5);
         // Invalidate the category term map transient whenever a term is saved.
@@ -419,6 +422,8 @@ final class ListingCore
         $categoryFilter = new CategoryFilter();
         $categoryFilter->setTermCounter($this->termCounter);
         $registry->register('category', $categoryFilter,              10);
+        // Logged-in users only (FavoritesFilter::render()).
+        $registry->register('favorites', new FavoritesFilter(),       15);
         $registry->register('location', new LocationsFilterSimple(),  20);
         $registry->register('beneficiaries',  new BeneficiariesFilter(),          30);
         $registry->register('country',  new CountryFilter(),          40);
@@ -481,6 +486,8 @@ final class ListingCore
                 'found'        => __('Found', 'starwishx'),
                 // "Remove filter: {label}" on each chip's button (state.chipRemoveLabel).
                 'removeFilter' => __('Remove filter', 'starwishx'),
+                // The "Only my favorites" filter's chip.
+                'favoritesChip' => __('My favorites', 'starwishx'),
             ],
         ]);
     }

@@ -98,6 +98,8 @@ export const filterActions = {
 
     if (field === "location") {
       state.query.location = "";
+    } else if (field === "favorites") {
+      state.query.favorites = false;
     } else if (field === "category") {
       // If removing a parent, also remove all its children
       const tree = state.facets["category-oportunities"] || [];
@@ -129,6 +131,17 @@ export const filterActions = {
     state.query.country = [];
     state.query.location = "";
     state.query.beneficiaries = [];
+    state.query.favorites = false;
+    refreshResults();
+  },
+
+  /**
+   * "Only my favorites" (logged-in users only). A boolean, so not toggle(),
+   * which reads the input's value as an id.
+   */
+  toggleFavorites() {
+    const { state } = store("listing");
+    state.query.favorites = getElement().ref.checked;
     refreshResults();
   },
 
@@ -255,7 +268,8 @@ export const filterActions = {
   restoreFromHistory(saved) {
     const { state } = store("listing");
     if (saved) {
-      Object.assign(state.query, saved);
+      // Entries written before a filter existed lack its key: default it.
+      Object.assign(state.query, { favorites: false }, saved);
     } else {
       syncUrlToState(state.query);
     }

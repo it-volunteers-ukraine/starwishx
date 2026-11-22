@@ -43,18 +43,24 @@ export function debounce(func, wait) {
  * detail, favorites, comes from the favorites store (fetchResults in
  * grid/actions.js).
  *
+ * The one exception is `auth`: the "Only my favorites" filter is the user's
+ * own list, so while it is on the request carries the nonce the favorites
+ * store hydrates (FavoritesCore) - the server then knows the user
+ * (FavoritesFilter), and core marks the response private / no-store. A stale
+ * nonce fails only those requests, into the error alert's Try again.
+ *
  * A failed response throws an Error that also carries `status`, the WP error
  * `code`, the server's own (translated) `serverMessage` and its
  * `fieldErrors` (`data.field_errors`, see AbstractApiController).
  *
  * @param {Object} state - The 'listing' store state.
  * @param {string} url - API endpoint.
- * @param {Object} options - Fetch options (method, body, requestId).
+ * @param {Object} options - Fetch options (method, body, requestId, auth).
  */
 export async function fetchJson(
   state,
   url,
-  { method = "GET", body = null, requestId = "main" } = {},
+  { method = "GET", body = null, requestId = "main", auth = false } = {},
 ) {
   // Cancel previous request with the same ID
   if (searchControllers.has(requestId)) {
@@ -67,6 +73,10 @@ export async function fetchJson(
   try {
     const headers = { "X-Requested-With": "XMLHttpRequest" };
     if (body) headers["Content-Type"] = "application/json";
+    if (auth) {
+      const nonce = store("favorites").state.config?.nonce;
+      if (nonce) headers["X-WP-Nonce"] = nonce;
+    }
 
     const response = await fetch(url, {
       method,
@@ -157,6 +167,9 @@ export function syncStateToUrl(query, { replace = false } = {}) {
     } else if (Array.isArray(value)) {
       // Clean URL: ?beneficiaries=75 (no brackets, repeated key)
       value.forEach((val) => params.append(key, val));
+    } else if (value === true) {
+      // Boolean filters (favorites): ?favorites=1, not "true"
+      params.set(key, "1");
     } else {
       params.set(key, value);
     }
@@ -244,6 +257,8 @@ export function syncUrlToState(queryState) {
   Object.keys(queryState).forEach((key) => {
     if (Array.isArray(queryState[key])) {
       queryState[key] = [];
+    } else if (typeof queryState[key] === "boolean") {
+      queryState[key] = false;
     } else {
       queryState[key] = key === "page" ? 1 : "";
     }
@@ -305,6 +320,11 @@ export function syncUrlToState(queryState) {
     } else if (cleanKey === "page") {
       // Forced numeric type
       queryState[cleanKey] = Number(value);
+    } else if (cleanKey === "favorites") {
+      // Boolean, and the user's own list: guests keep false, as the
+      // server's ListingQuery does for them.
+      queryState.favorites =
+        !!state.isUserLoggedIn && (value === "1" || value === "true");
     } else {
       // Standard strings (city, search)
       queryState[cleanKey] = value;

@@ -113,6 +113,31 @@ class FavoritesRepository
         return (int) $wpdb->get_var($sql);
     }
 
+    /**
+     * How many of the user's favorite posts are among the ids $idsSql
+     * selects - a subquery built elsewhere (the listing's filtered-ID SQL,
+     * TermCountingService::filteredIdsSql()), embedded, never run alone.
+     * Kept out of prepare(): the subquery is already prepared and may carry
+     * literal % (LIKE patterns).
+     */
+    public function countAmong(int $userId, string $idsSql): int
+    {
+        if ($idsSql === '') {
+            return 0;
+        }
+
+        global $wpdb;
+
+        $sql = $wpdb->prepare(
+            "SELECT COUNT(*) FROM {$this->getTable()}
+             WHERE user_id = %d AND object_type = 'post'
+             AND object_id IN ",
+            $userId
+        ) . "({$idsSql})";
+
+        return (int) $wpdb->get_var($sql);
+    }
+
     public function deleteByPost(int $postId): bool
     {
         global $wpdb;

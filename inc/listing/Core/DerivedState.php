@@ -209,6 +209,15 @@ final class DerivedState
             ];
         }
 
+        if (!empty($query['favorites'])) {
+            $chips[] = [
+                'key'   => 'favorites',
+                'field' => 'favorites',
+                'value' => true,
+                'label' => self::chipLabel((string) ($state['i18n']['favoritesChip'] ?? '')),
+            ];
+        }
+
         return $chips;
     }
 

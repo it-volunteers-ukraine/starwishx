@@ -29,6 +29,8 @@ final class ListingQuery
      * @param int[] $category      Term ids (category-oportunities).
      * @param int[] $country       ISO numeric country ids.
      * @param int[] $beneficiaries Term ids (category-beneficiaries).
+     * @param bool  $favorites     Only the current user's favorites; always
+     *                             false for guests (FavoritesFilter).
      */
     private function __construct(
         public readonly string $s,
@@ -36,6 +38,7 @@ final class ListingQuery
         public readonly array $country,
         public readonly array $beneficiaries,
         public readonly string $location,
+        public readonly bool $favorites,
         public readonly int $page,
     ) {}
 
@@ -52,6 +55,9 @@ final class ListingQuery
             self::resolveCountries(self::values($raw['country'] ?? []), $countries),
             self::ids(self::values($raw['beneficiaries'] ?? [])),
             sanitize_text_field(self::scalar($raw['location'] ?? '')),
+            // The client writes ?favorites=1; anything truthy is accepted.
+            filter_var(self::scalar($raw['favorites'] ?? ''), FILTER_VALIDATE_BOOLEAN)
+                && get_current_user_id() > 0,
             max(1, absint(self::scalar($raw['paged'] ?? $raw['page'] ?? 1))),
         );
     }
@@ -68,6 +74,7 @@ final class ListingQuery
             'country'       => $this->country,
             'location'      => $this->location,
             'beneficiaries' => $this->beneficiaries,
+            'favorites'     => $this->favorites,
             'page'          => $this->page,
         ];
     }
@@ -80,6 +87,7 @@ final class ListingQuery
             $this->country,
             $this->beneficiaries,
             $this->location,
+            $this->favorites,
             max(1, $page)
         );
     }

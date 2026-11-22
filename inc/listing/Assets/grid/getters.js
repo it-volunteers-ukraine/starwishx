@@ -342,6 +342,16 @@ export const gridGetters = {
       });
     }
 
+    // --- Favorites (boolean, logged-in users only) ---
+    if (this.query.favorites) {
+      chips.push({
+        key: "favorites",
+        field: "favorites",
+        value: true,
+        label: tr(this.i18n?.favoritesChip ?? ""),
+      });
+    }
+
     return chips;
   },
 

@@ -69,6 +69,8 @@ async function fetchResults({ append = false, history = "push" } = {}) {
     if (key === "page" && value === 1) return;
     if (Array.isArray(value)) {
       value.forEach((val) => params.append(key, val));
+    } else if (value === true) {
+      params.set(key, "1");
     } else {
       params.set(key, value);
     }
@@ -81,7 +83,8 @@ async function fetchResults({ append = false, history = "push" } = {}) {
     const data = await fetchJson(
       state,
       `${baseUrl}search?${params.toString()}`,
-      { requestId: "main-search" },
+      // "Only my favorites" needs to know the user: see fetchJson().
+      { requestId: "main-search", auth: !!state.query.favorites },
     );
 
     if (data) {
