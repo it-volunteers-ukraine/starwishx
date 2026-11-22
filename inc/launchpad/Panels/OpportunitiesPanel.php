@@ -403,6 +403,11 @@ final class OpportunitiesPanel extends AbstractPanel
                     <?= sw_svg('icon-doc', 32); ?>
                     <p><?php esc_html_e('No opportunities yet.', 'starwishx'); ?></p>
                 </div>
+                <!-- The status filter leaves nothing; hidden on load (all statuses ticked) -->
+                <div class="opportunities-empty" hidden data-wp-bind--hidden="!state.showOppFilteredEmpty">
+                    <?= sw_svg('icon-doc', 32); ?>
+                    <p><?php esc_html_e('No opportunities match the selected statuses.', 'starwishx'); ?></p>
+                </div>
 
                 <!-- Grid -->
                 <div class="opportunities-grid placeholder-box" data-wp-bind--hidden="!state.showOppGrid" data-wp-bind--data-layout="state.panels.opportunities.layout">

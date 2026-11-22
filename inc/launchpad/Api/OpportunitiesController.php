@@ -189,10 +189,27 @@ class OpportunitiesController extends AbstractLaunchpadController
                     'sanitize_callback' => function ($val) {
                         return array_map('sanitize_key', (array)$val);
                     },
-                    'validate_callback' => RestArg::arrayMaxItems(
-                        self::STATUSES_MAX_ITEMS,
-                        __('Statuses filter', 'starwishx')
-                    ),
+                    // Absent means every status. Present, each must be one:
+                    // an unknown value used to turn into WordPress's
+                    // publish-only default.
+                    'validate_callback' => static function ($value): true|WP_Error {
+                        $label = __('Statuses filter', 'starwishx');
+                        $check = RestArg::arrayMaxItems(self::STATUSES_MAX_ITEMS, $label)($value);
+                        if ($check !== true) {
+                            return $check;
+                        }
+                        return OpportunityStatus::isList($value)
+                            ? true
+                            : new WP_Error(
+                                'invalid_status',
+                                sprintf(
+                                    /* translators: %s: name of the field that received an invalid value */
+                                    __('%s: unknown status.', 'starwishx'),
+                                    $label
+                                ),
+                                ['status' => 422]
+                            );
+                    },
                 ],
             ],
         ]);

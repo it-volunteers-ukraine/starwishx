@@ -419,6 +419,7 @@ export interface OpportunitiesGetters {
   readonly isOppFormVisible: boolean;
   readonly hasOppItems: boolean;
   readonly showOppEmpty: boolean;
+  readonly showOppFilteredEmpty: boolean;
   readonly showOppGrid: boolean;
   readonly opportunityFormHeaders: string | undefined;
   readonly isBeneficiaryChecked: boolean;

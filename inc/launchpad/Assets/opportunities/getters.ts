@@ -17,7 +17,12 @@ import type {
   OpportunitiesGetters,
   OpportunityStatus,
 } from "../types.ts";
-import { opportunities, selectionLimit, selectionSize } from "../utils.ts";
+import {
+  isStatusFilterActive,
+  opportunities,
+  selectionLimit,
+  selectionSize,
+} from "../utils.ts";
 
 /** "n / max" for a text field's character counter. */
 const counter = (length: number, max: number): string => `${length} / ${max}`;
@@ -62,8 +67,17 @@ export const opportunitiesGetters = {
     return !!opportunities(this)?.items.length;
   },
 
+  /** "No opportunities yet": none at all, not just none the filter keeps. */
   get showOppEmpty(): boolean {
-    return !opportunities(this)?.isLoading && !this.hasOppItems;
+    const p = opportunities(this);
+    if (p && isStatusFilterActive(p)) return false;
+    return !p?.isLoading && !this.hasOppItems;
+  },
+
+  /** The status filter leaves nothing (the user has opportunities). */
+  get showOppFilteredEmpty(): boolean {
+    const p = opportunities(this);
+    return !!p && isStatusFilterActive(p) && !p.isLoading && !this.hasOppItems;
   },
 
   get showOppGrid(): boolean {

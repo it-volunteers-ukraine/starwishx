@@ -74,6 +74,15 @@ enum OpportunityStatus: string
     }
 
     /**
+     * Is `$value` a list of status values only? For a REST array argument,
+     * whose raw value may be anything (WordPress validates before sanitizing).
+     */
+    public static function isList(mixed $value): bool
+    {
+        return is_array($value) && count(self::fromList($value)) === count($value);
+    }
+
+    /**
      * The values of `$statuses`, for WP_Query's post_status.
      *
      * @param list<self> $statuses

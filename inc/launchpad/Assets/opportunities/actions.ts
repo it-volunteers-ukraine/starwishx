@@ -24,7 +24,6 @@ import type {
   LocationResultKey,
   OpportunitiesData,
   OpportunityForm,
-  OpportunityStatus,
   OpportunityValidationMessages,
 } from "../types.ts";
 import {
@@ -46,6 +45,7 @@ import {
   scrollToPageTop,
   selectionLimit,
   selectionSize,
+  STATUSES,
   targetElement,
   writeUrl,
 } from "../utils.ts";
@@ -88,7 +88,6 @@ const MESSAGE_KEYS = [
   "description",
 ] as const satisfies readonly (keyof OpportunityValidationMessages)[];
 
-const STATUSES: readonly OpportunityStatus[] = ["draft", "pending", "publish"];
 const LAYOUTS: readonly Layout[] = ["compact", "card", "grid"];
 
 /**
@@ -310,15 +309,29 @@ async function saveForm(status?: "pending"): Promise<void> {
   }
 }
 
-/** Reload the list's first page for the status filters. */
+/**
+ * Reload the list's first page for the status filters. No status ticked is
+ * an empty list, not a request: the boxes describe the list (the server
+ * reads a missing `statuses` as "all").
+ */
 async function fetchFilteredList(p: Panel): Promise<void> {
+  const statuses = p.filters?.statuses ?? STATUSES;
+  if (!statuses.length) {
+    // A request still in flight mustn't land after the list was emptied.
+    cancelRequest("opportunities:list");
+    p.items = [];
+    p.total = 0;
+    p.totalPages = 0;
+    p.hasMore = false;
+    p.isLoading = false;
+    return;
+  }
+
   const { restUrl } = launchpadStore().state.launchpadSettings;
   p.isLoading = true;
 
   const params = new URLSearchParams();
-  for (const status of p.filters?.statuses ?? []) {
-    params.append("statuses[]", status);
-  }
+  for (const status of statuses) params.append("statuses[]", status);
   params.append("per_page", String(p.perPage));
 
   try {

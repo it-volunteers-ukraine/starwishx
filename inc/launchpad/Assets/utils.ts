@@ -25,6 +25,7 @@ import type {
   OpportunitiesData,
   OpportunityForm,
   OpportunityListResponse,
+  OpportunityStatus,
   PanelData,
   PatternPolicy,
   ProfileUpdateResponse,
@@ -199,6 +200,20 @@ export function loadedPanel<K extends KnownPanelId>(
   const panel: Lazy<PanelData[K]> | undefined = state.panels[id];
   return panel?._loaded ? panel : undefined;
 }
+
+/** Every status, in the list filter's order (Launchpad\Enums\OpportunityStatus). */
+export const STATUSES: readonly OpportunityStatus[] = [
+  "draft",
+  "pending",
+  "publish",
+];
+
+/**
+ * Does the list's status filter leave a status out? The boxes start all
+ * ticked, so this is the user having unticked at least one.
+ */
+export const isStatusFilterActive = (p: OpportunitiesData): boolean =>
+  (p.filters?.statuses.length ?? STATUSES.length) < STATUSES.length;
 
 /** The opportunities panel once loaded (the getters' shorthand). */
 export const opportunities = (
