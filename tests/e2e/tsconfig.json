@@ -1,0 +1,12 @@
+{
+  // The E2E specs (Playwright, `pnpm test:e2e`): Node for the runner and the
+  // test-data helper, the DOM for code that runs in the page, and the
+  // Gateway store's types (inc/). Checked by `pnpm typecheck`.
+  "extends": "../../inc/tsconfig.json",
+  "compilerOptions": {
+    "target": "esnext",
+    "lib": ["esnext", "dom", "dom.iterable"],
+    "types": ["node"]
+  },
+  "include": ["**/*.ts"]
+}

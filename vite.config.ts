@@ -21,6 +21,8 @@ const notOurs = [
   "src/js/vendor/**",
   "vendor/**",
   "tests/php/vendor/**",
+  "tests/e2e/.report/**",
+  "tests/e2e/.results/**",
   "node_modules/**",
   "docs/**",
   ".void/**",
@@ -42,6 +44,11 @@ export default defineConfig({
       {
         files: ["tools/**", "vite.config.ts"],
         env: { browser: false, node: true },
+      },
+      {
+        // The Playwright runner (Node) plus the code it runs in the page.
+        files: ["tests/e2e/**"],
+        env: { browser: true, node: true },
       },
       {
         // These read JSDoc as if it were real types, so in plain JS they
