@@ -7,7 +7,7 @@
  *
  * File: inc/listing/Assets/types.ts
  */
-import type { withSyncEvent } from "@wordpress/interactivity";
+import type { SyncAwareAction } from "../../shared/Assets/store-utils.ts";
 import type { filterActions } from "./filters/actions.ts";
 import type { gridActions } from "./grid/actions.ts";
 
@@ -220,9 +220,6 @@ export type ListingState = ServerState &
 
 // --- Stores -------------------------------------------------------------
 
-/** What withSyncEvent() returns: an action that may use the event synchronously. */
-type SyncAwareAction = ReturnType<typeof withSyncEvent>;
-
 /** The listing store's actions (listing-store.ts checks itself against it). */
 export type ListingActions = typeof gridActions & {
   filters: typeof filterActions;
@@ -246,30 +243,6 @@ export interface ListingSettingsStore {
       prettyCategoryUrls?: boolean;
       archivePath?: string;
     };
-  };
-}
-
-/**
- * The parts of the "favorites" store (inc/favorites/Assets/favorites-store.js,
- * hydrated by FavoritesCore) the listing uses. Moves to that module once it
- * is TypeScript.
- */
-export interface FavoritesStore {
-  // Guests don't load the favorites module (ListingCore::enqueueAssets()),
-  // so for them store("favorites") is an empty store: everything optional.
-  state: {
-    myFavoriteIds?: number[];
-    config?: { nonce?: string; restUrl?: string };
-  };
-  actions: {
-    toggle(id: number): Promise<void>;
-  };
-}
-
-/** The shared login popup (inc/shared/Assets/popup-store.js). */
-export interface PopupStore {
-  actions: {
-    open(): void;
   };
 }
 

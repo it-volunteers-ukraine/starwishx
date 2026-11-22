@@ -8,18 +8,12 @@
  * File: inc/listing/Assets/stores.ts
  */
 import { store } from "@wordpress/interactivity";
-import type {
-  FavoritesStore,
-  ListingSettingsStore,
-  ListingStore,
-  PopupStore,
-} from "./types.ts";
+import type { ListingSettingsStore, ListingStore } from "./types.ts";
+
+// The other modules' stores the listing uses.
+export { favoritesStore, popupStore } from "../../shared/Assets/stores.ts";
 
 export const listingStore = () => store<ListingStore>("listing");
 
 export const settingsStore = () =>
   store<ListingSettingsStore>("listingSettings");
-
-export const favoritesStore = () => store<FavoritesStore>("favorites");
-
-export const popupStore = () => store<PopupStore>("popup");

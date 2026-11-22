@@ -4,6 +4,11 @@
  * Handles URL synchronization, debounced API calls, and standardized fetching.
  * File: inc/listing/Assets/utils.ts
  */
+import {
+  ApiError,
+  historyState,
+  isRecord,
+} from "../../shared/Assets/store-utils.ts";
 import { favoritesStore, listingStore, settingsStore } from "./stores.ts";
 import type {
   HistoryEntry,
@@ -13,11 +18,6 @@ import type {
 } from "./types.ts";
 
 // --- Narrowing helpers --------------------------------------------------
-
-/** A non-null object whose properties can be read as unknown. */
-function isRecord(value: unknown): value is Record<string, unknown> {
-  return typeof value === "object" && value !== null;
-}
 
 function isNumberArray(value: unknown): value is number[] {
   return Array.isArray(value) && value.every((v) => typeof v === "number");
@@ -32,11 +32,6 @@ const LIST_KEYS: readonly ListFilterKey[] = [
 
 export function isListKey(key: unknown): key is ListFilterKey {
   return LIST_KEYS.some((listKey) => listKey === key);
-}
-
-/** A fetch cancelled by a newer one (AbortController.abort()). */
-export function isAbortError(error: unknown): boolean {
-  return error instanceof DOMException && error.name === "AbortError";
 }
 
 // --- Timing -------------------------------------------------------------
@@ -56,35 +51,6 @@ export function debounce<A extends unknown[]>(
 }
 
 // --- Fetching -----------------------------------------------------------
-
-/**
- * A failed response: its HTTP status, the WP error `code`, the server's own
- * (translated) `serverMessage` and its `fieldErrors` (`data.field_errors`,
- * see AbstractApiController).
- */
-export class ListingApiError extends Error {
-  override readonly name = "ListingApiError";
-  readonly status: number;
-  readonly code: string;
-  readonly serverMessage: string;
-  readonly fieldErrors: Record<string, string> | null;
-
-  constructor(status: number, statusText: string, body: unknown) {
-    super(`${status} ${statusText}`);
-    const error = isRecord(body) ? body : {};
-    const data = isRecord(error.data) ? error.data : {};
-    this.status = status;
-    this.code = typeof error.code === "string" ? error.code : "";
-    this.serverMessage = typeof error.message === "string" ? error.message : "";
-    this.fieldErrors = isRecord(data.field_errors)
-      ? Object.fromEntries(
-          Object.entries(data.field_errors).filter(
-            (entry): entry is [string, string] => typeof entry[1] === "string",
-          ),
-        )
-      : null;
-  }
-}
 
 /** The /search response, checked at the edge before the store trusts it. */
 export function isSearchResponse(value: unknown): value is SearchResponse {
@@ -123,7 +89,7 @@ interface FetchOptions {
  * `rest_cookie_invalid_nonce`; fetchResults then carries on as a guest.
  *
  * The JSON is checked with `isValid` - the response's shape is the one
- * thing the compiler can't see. A failed response throws ListingApiError.
+ * thing the compiler can't see. A failed response throws ApiError.
  */
 export async function fetchJson<T>(
   url: string,
@@ -158,7 +124,7 @@ export async function fetchJson<T>(
       try {
         error = await response.json();
       } catch {}
-      throw new ListingApiError(response.status, response.statusText, error);
+      throw new ApiError(response.status, response.statusText, error);
     }
 
     const data: unknown = await response.json();
@@ -191,18 +157,12 @@ function snapshotQuery(query: ListingQuery): ListingQuery {
 }
 
 /**
- * history.state for an entry the listing writes: the query, next to what the
- * current entry already holds. Core's Interactivity API runtime stamps the
- * page's entry with `wpInteractivityId` and reloads the page on Back/Forward
- * to any entry without it (it takes it for another session's) - entries
- * written as just `{ query }` made every Back a full page load.
+ * history.state for an entry the listing writes: the query, next to core's
+ * `wpInteractivityId` (see historyState()) - entries written as just
+ * `{ query }` made every Back a full page load.
  */
 export function historyEntry(query: ListingQuery): HistoryEntry {
-  const current: unknown = window.history.state;
-  return {
-    ...(isRecord(current) ? current : {}),
-    query: snapshotQuery(query),
-  };
+  return historyState({ query: snapshotQuery(query) });
 }
 
 /**
@@ -451,25 +411,6 @@ export function syncUrlToState(queryState: ListingQuery): void {
         break;
     }
   }
-}
-
-// --- State --------------------------------------------------------------
-
-/**
- * Utility: Safely merges source objects into a target object,
- * preserving Getters/Setters instead of evaluating them - so a getter's
- * `this` stays the reactive state. Returns the target, typed as all three.
- */
-export function extendState<
-  T extends object,
-  A extends object,
-  B extends object,
->(target: T, a: A, b: B): T & A & B;
-export function extendState(target: object, ...sources: object[]): object {
-  for (const source of sources) {
-    Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
-  }
-  return target;
 }
 
 // --- Highlight ----------------------------------------------------------

@@ -19,12 +19,8 @@ import { gridActions } from "./grid/actions.ts";
 import { gridGetters } from "./grid/getters.ts";
 import { favoritesStore, listingStore, popupStore } from "./stores.ts";
 import type { CardContext, ClientState, ListingActions } from "./types.ts";
-import {
-  extendState,
-  highlightTerms,
-  historyEntry,
-  historyQuery,
-} from "./utils.ts";
+import { extendState } from "../../shared/Assets/store-utils.ts";
+import { highlightTerms, historyEntry, historyQuery } from "./utils.ts";
 
 /**
  * Base State Definition
@@ -104,7 +100,7 @@ const listingActions = {
    * A click on the card's favorites checkbox - directly, via its label
    * text, or Space. withSyncEvent because a guest's click is cancelled:
    * the box must not tick (nor be announced as checked) when nothing was
-   * saved - same as single-opportunity-store.js.
+   * saved - same as single-opportunity-store.ts.
    */
   toggleFavorite: withSyncEvent(async (event: Event): Promise<void> => {
     const { item } = getContext<Partial<CardContext>>();

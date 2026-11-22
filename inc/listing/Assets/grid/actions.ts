@@ -8,13 +8,8 @@
 import { getElement } from "@wordpress/interactivity";
 import { favoritesStore, listingStore, settingsStore } from "../stores.ts";
 import type { ListingState, SearchResponse } from "../types.ts";
-import {
-  fetchJson,
-  isAbortError,
-  isSearchResponse,
-  ListingApiError,
-  syncStateToUrl,
-} from "../utils.ts";
+import { ApiError, isAbortError } from "../../../shared/Assets/store-utils.ts";
+import { fetchJson, isSearchResponse, syncStateToUrl } from "../utils.ts";
 
 /**
  * What a successful response writes to the URL: a new Back step (a filter
@@ -113,7 +108,7 @@ async function fetchResults({
         state.isUserLoggedIn && (state.query.favorites || !nonceExpired),
       );
     } catch (e) {
-      if (!(e instanceof ListingApiError) || e.code !== INVALID_NONCE) throw e;
+      if (!(e instanceof ApiError) || e.code !== INVALID_NONCE) throw e;
       nonceExpired = true;
       if (state.query.favorites) throw e;
       data = await request(false);
@@ -156,7 +151,7 @@ async function fetchResults({
     // An expired nonce: Try again would only repeat it, the page must be
     // reloaded. Otherwise the server's own message when it sent one (rate
     // limit, validation) - translated on its side - or the generic one.
-    const apiError = e instanceof ListingApiError ? e : null;
+    const apiError = e instanceof ApiError ? e : null;
     state.error =
       (apiError?.code === INVALID_NONCE ? state.i18n.sessionExpired : "") ||
       Object.values(apiError?.fieldErrors ?? {})[0] ||

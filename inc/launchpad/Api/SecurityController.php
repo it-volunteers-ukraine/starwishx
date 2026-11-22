@@ -94,7 +94,8 @@ class SecurityController extends AbstractLaunchpadController
         RateLimitPolicy::clear($rlKey);
 
         // Note: wp_set_password invalidates auth cookies.
-        // The frontend launchpad-store.js must handle the redirect to login immediately.
+        // The launchpad store (inc/launchpad/Assets/profile/actions.ts) must
+        // handle the redirect to login immediately.
         return $this->success([
             'success' => true,
             'message' => __('Password changed. Please log in again.', 'starwishx'),
