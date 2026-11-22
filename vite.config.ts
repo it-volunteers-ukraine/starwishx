@@ -28,9 +28,10 @@ const notOurs = [
 export default defineConfig({
   lint: {
     // Type-checks (tsrs) the TypeScript projects - the build tools
-    // (tsconfig.json) and src/js (src/js/tsconfig.json). Rules such as
-    // no-floating-promises also reach the theme's JS through inferred types.
-    // `pnpm typecheck` runs the TypeScript compiler itself on both projects.
+    // (tsconfig.json), src/js (src/js/tsconfig.json) and the iAPI stores
+    // (inc/tsconfig.json); each file takes its nearest tsconfig. Rules such
+    // as no-floating-promises also reach the theme's JS through inferred
+    // types. `pnpm typecheck` runs the TypeScript compiler on all three.
     options: { typeAware: true, typeCheck: true },
     ignorePatterns: notOurs,
     env: { browser: true, es2024: true },

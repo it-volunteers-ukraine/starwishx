@@ -3,6 +3,7 @@
   // its own tsconfig that extends this one, with its own lib and types:
   //   tsconfig.json         the build tools (Node)
   //   src/js/tsconfig.json  the classic scripts (browser, bundled by Rolldown)
+  //   inc/tsconfig.json     the Interactivity API stores (browser, script modules)
   // Checked by `pnpm typecheck` (tsc) and `vp check` (tsrs).
   "compilerOptions": {
     "strict": true,

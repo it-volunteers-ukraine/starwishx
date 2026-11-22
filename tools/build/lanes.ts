@@ -79,10 +79,11 @@ export const lanes: Lane[] = [
   {
     id: "stores",
     type: "js",
-    // Entry points follow the *-store.js convention, one bundle per module.
-    // Everything else under Assets/ (utils.js, tour-manager.js, and all of
-    // inc/shared/Assets) is imported by a store and bundled into it.
-    include: ["inc/*/Assets/*-store.{js,mjs}"],
+    // Entry points follow the *-store convention, one bundle per module:
+    // TypeScript (inc/tsconfig.json, inc/listing so far) or plain JS until
+    // migrated. Everything else under Assets/ (utils, tour-manager.js, and
+    // all of inc/shared/Assets) is imported by a store and bundled into it.
+    include: ["inc/*/Assets/*-store.{js,mjs,ts}"],
     exclude: ["inc/shared/Assets/**"],
     out: (file) => `assets/js/${name(file)}.module.js`,
     format: "es",

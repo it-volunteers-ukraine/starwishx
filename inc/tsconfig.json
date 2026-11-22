@@ -1,0 +1,24 @@
+{
+  // The Interactivity API stores under inc/*/Assets, bundled by Rolldown as
+  // script modules - see the "stores" lane in tools/build/lanes.ts. Stores
+  // move to TypeScript one module at a time; inc/listing is the first.
+  "extends": "../tsconfig.base.json",
+  "compilerOptions": {
+    // The syntax Rolldown emits (TARGET in tools/build/js.ts).
+    "target": "es2022",
+    // The APIs "baseline widely available" ships: nothing is polyfilled.
+    "lib": ["es2024", "dom"],
+    // Rolldown resolves the imports; `./x.ts` names the file on disk.
+    "module": "preserve",
+    "allowImportingTsExtensions": true,
+    "noUncheckedIndexedAccess": true,
+    // TypeScript stores still import the shared modules that are plain JS
+    // (inc/shared/Assets): their JSDoc types them, they aren't checked.
+    "allowJs": true,
+    "checkJs": false,
+    // @wordpress/interactivity is resolved by WordPress' import map at run
+    // time; the devDependency only provides its types.
+    "types": []
+  },
+  "include": ["**/*.ts"]
+}
