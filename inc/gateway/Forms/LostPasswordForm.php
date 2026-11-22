@@ -28,6 +28,7 @@ class LostPasswordForm extends AbstractForm
             'isSubmitting'   => false,
             'error'          => null,
             'success'        => false,
+            'fieldErrors'    => ['userLogin' => null],
         ];
     }
 
@@ -47,6 +48,11 @@ class LostPasswordForm extends AbstractForm
                         placeholder="<?php _ex('Latin letters, digits, . - _ @', 'gateway', 'starwishx'); ?>"
                         data-wp-bind--value="state.forms.<?php echo esc_attr($this->getJsId()); ?>.userLogin"
                         data-wp-on--input="actions.<?php echo esc_attr($this->getJsId()); ?>.updateField" data-field="userLogin">
+                    <span
+                        class="exclamation-circle__error"
+                        data-wp-bind--hidden="!state.forms.<?php echo esc_attr($this->getJsId()); ?>.fieldErrors.userLogin"
+                        data-wp-text="state.forms.<?php echo esc_attr($this->getJsId()); ?>.fieldErrors.userLogin">
+                    </span>
                 </div>
 
                 <button type="submit" class="btn btn-submit"
