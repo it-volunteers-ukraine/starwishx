@@ -10,18 +10,23 @@ declare(strict_types=1);
 
 namespace Gateway\Forms;
 
-class LoginForm extends AbstractForm
+use Gateway\Enums\GatewayView;
+
+final class LoginForm extends AbstractForm
 {
+    #[\Override]
     public function getId(): string
     {
-        return 'login';
+        return GatewayView::LOGIN->value;
     }
 
+    #[\Override]
     public function getLabel(): string
     {
         return _x('Login', 'gateway', 'starwishx');
     }
 
+    #[\Override]
     public function getInitialState(?int $userId = null): array
     {
         return [
@@ -38,6 +43,7 @@ class LoginForm extends AbstractForm
         ];
     }
 
+    #[\Override]
     public function render(): string
     {
         $this->startBuffer();

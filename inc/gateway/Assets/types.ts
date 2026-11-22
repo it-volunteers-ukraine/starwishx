@@ -17,7 +17,10 @@ import type { registerActions } from "./register/actions.ts";
 
 // --- Forms ----------------------------------------------------------------
 
-/** The FormRegistry ids (GatewayCore::registerForms), also `?view=`. */
+/**
+ * The built-in forms' FormRegistry ids, also `?view=`: the PHP enum
+ * Gateway\Enums\GatewayView (inc/gateway/Enums/GatewayView.php).
+ */
 export type FormId = "login" | "register" | "lost-password" | "reset-password";
 
 /** "lost-password" -> "lostPassword": AbstractForm::getJsId(). */
@@ -83,12 +86,6 @@ export interface Forms {
   resetPassword: ResetPasswordForm;
 }
 
-/** Any one form. */
-export type AnyForm = Forms[FormKey];
-
-/** A form with inline field errors. */
-export type FormWithFieldErrors = Extract<AnyForm, { fieldErrors: object }>;
-
 // --- Hydrated settings and policies ---------------------------------------
 
 export interface GatewaySettings {
@@ -135,7 +132,6 @@ export type GatewayServerState = {
 } & Record<ActiveFlag, boolean>;
 
 export interface GatewayGetters {
-  readonly currentForm: AnyForm | undefined;
   readonly resetPasswordInputType: "text" | "password";
   readonly loginPasswordInputType: "text" | "password";
 }

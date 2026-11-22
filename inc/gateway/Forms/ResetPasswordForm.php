@@ -7,18 +7,27 @@
  */
 
 
+declare(strict_types=1);
+
 namespace Gateway\Forms;
 
-class ResetPasswordForm extends AbstractForm
+use Gateway\Enums\GatewayView;
+
+final class ResetPasswordForm extends AbstractForm
 {
+    #[\Override]
     public function getId(): string
     {
-        return 'reset-password';
+        return GatewayView::RESET_PASSWORD->value;
     }
+
+    #[\Override]
     public function getLabel(): string
     {
         return _x('Reset Password', 'gateway', 'starwishx');
     }
+
+    #[\Override]
     public function getInitialState(?int $userId = null): array
     {
         return [
@@ -32,6 +41,8 @@ class ResetPasswordForm extends AbstractForm
             'successMessage'    => null,
         ];
     }
+
+    #[\Override]
     public function render(): string
     {
         $this->startBuffer();

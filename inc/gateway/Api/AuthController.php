@@ -4,25 +4,26 @@ declare(strict_types=1);
 
 namespace Gateway\Api;
 
-use Shared\Core\AbstractApiController;
+use Gateway\Enums\GatewayView;
 use Gateway\Services\AuthService;
+use Shared\Core\AbstractApiController;
+use Shared\Validation\RestArg;
+use WP_Error;
 use WP_REST_Request;
 use WP_REST_Response;
-use WP_Error;
 
 /**
  * REST controller for authentication endpoints.
  */
-class AuthController extends AbstractApiController
+final class AuthController extends AbstractApiController
 {
     protected $namespace = 'gateway/v1';
-    private AuthService $service;
 
-    public function __construct(?AuthService $service = null)
-    {
-        $this->service = $service ?? new AuthService();
-    }
+    public function __construct(
+        private readonly AuthService $service = new AuthService()
+    ) {}
 
+    #[\Override]
     public function registerRoutes(): void
     {
         // POST /gateway/v1/login
@@ -34,6 +35,7 @@ class AuthController extends AbstractApiController
                 'username' => [
                     'required'          => true,
                     'type'              => 'string',
+                    'validate_callback' => RestArg::string(__('Username', 'starwishx')),
                     'sanitize_callback' => 'sanitize_user',
                 ],
                 'password' => [
@@ -68,9 +70,7 @@ class AuthController extends AbstractApiController
 
         if (is_wp_error($result)) {
             return $this->mapServiceError($result, [
-                // AuthService wraps WP errors and returns these codes:
-                'auth_failed' => 401,  // Invalid credentials (AuthService.php:54)
-                // Note: rate_limited is in default_map, not repeated here
+                'auth_failed' => 401, // invalid credentials (rate_limited: default map, 429)
             ]);
         }
 
@@ -93,7 +93,7 @@ class AuthController extends AbstractApiController
 
         return $this->success([
             'success'    => true,
-            'redirectTo' => home_url('/gateway/'),
+            'redirectTo' => GatewayView::LOGIN->url(),
         ]);
     }
 }

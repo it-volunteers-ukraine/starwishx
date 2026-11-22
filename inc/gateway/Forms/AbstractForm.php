@@ -11,33 +11,55 @@ use Shared\Core\Traits\BufferedRenderTrait;
 /**
  * Base class for Gateway forms.
  * Mirrors Launchpad's AbstractPanel pattern.
+ *
+ * The form's id is its FormRegistry id and `?view=` value; the JS names
+ * derive from it (getJsId(), getStateKey()) and the TS store derives the
+ * same names by type (inc/gateway/Assets/types.ts: FormKey, ActiveFlag).
  */
 abstract class AbstractForm implements RenderableInterface, StateProviderInterface
 {
     use BufferedRenderTrait;
 
+    #[\Override]
     abstract public function getId(): string;
+
+    #[\Override]
     abstract public function getLabel(): string;
+
+    /**
+     * The form's state under `state.forms.<jsId>`.
+     *
+     * @return array<string, mixed>
+     */
+    #[\Override]
     abstract public function getInitialState(?int $userId = null): array;
+
+    #[\Override]
     abstract public function render(): string;
 
     /**
-     * Standardizes the key used in JS: 'login' -> 'isLoginActive'
+     * The form's visibility flag in JS: 'lost-password' -> 'isLostPasswordActive'.
      */
+    #[\Override]
     public function getStateKey(): string
     {
-        $id = $this->getId();
-        $camel = str_replace(' ', '', ucwords(str_replace(['-', '_'], ' ', $id)));
-        return 'is' . $camel . 'Active';
+        return 'is' . $this->pascalId() . 'Active';
     }
 
     /**
-     * Returns JavaScript-friendly ID (camelCase).
-     * Converts: 'lost-password' → 'lostPassword', 'reset-password' → 'resetPassword'
-     * Ensures alignment with JS store action naming.
+     * The form's key in JS (state.forms, actions): 'lost-password' -> 'lostPassword'.
      */
     public function getJsId(): string
     {
-        return str_replace(' ', '', lcfirst(ucwords(str_replace(['-', '_'], ' ', $this->getId()))));
+        return lcfirst($this->pascalId());
+    }
+
+    /** 'lost-password' / 'lost_password' -> 'LostPassword'. */
+    private function pascalId(): string
+    {
+        return $this->getId()
+            |> (static fn(string $id): string => str_replace(['-', '_'], ' ', $id))
+            |> ucwords(...)
+            |> (static fn(string $words): string => str_replace(' ', '', $words));
     }
 }

@@ -6,7 +6,7 @@
  * Author: DevFrappe
  * Email: dev.frappe@proton.me
  * License: GPL v2 or later
- * 
+ *
  */
 
 // File: inc/gateway/Core/GatewayCore.php
@@ -18,6 +18,11 @@ namespace Gateway\Core;
 use Gateway\Api\AuthController;
 use Gateway\Api\RegisterController;
 use Gateway\Api\PasswordController;
+use Gateway\Enums\GatewayView;
+use Gateway\Forms\LoginForm;
+use Gateway\Forms\LostPasswordForm;
+use Gateway\Forms\RegisterForm;
+use Gateway\Forms\ResetPasswordForm;
 use Shared\Policy\PasswordPolicy;
 use Shared\Policy\UsernamePolicy;
 use Shared\Build\AssetFile;
@@ -29,9 +34,6 @@ use Shared\Build\AssetFile;
 final class GatewayCore
 {
     private static ?self $instance = null;
-    private FormRegistry $registry;
-    private StateAggregator $stateAggregator;
-    private RedirectHandler $redirectHandler;
 
     /**
      * Get singleton instance with optional DI for testing.
@@ -41,14 +43,11 @@ final class GatewayCore
         ?StateAggregator $aggregator = null,
         ?RedirectHandler $redirect = null
     ): self {
-        if (!self::$instance) {
-            self::$instance = new self(
-                $registry ?? new FormRegistry(),
-                $aggregator ?? new StateAggregator(),
-                $redirect ?? new RedirectHandler()
-            );
-        }
-        return self::$instance;
+        return self::$instance ??= new self(
+            $registry ?? new FormRegistry(),
+            $aggregator ?? new StateAggregator(),
+            $redirect ?? new RedirectHandler()
+        );
     }
 
     /**
@@ -60,14 +59,10 @@ final class GatewayCore
     }
 
     private function __construct(
-        FormRegistry $registry,
-        StateAggregator $aggregator,
-        RedirectHandler $redirect
+        private readonly FormRegistry $registry,
+        private readonly StateAggregator $stateAggregator,
+        private readonly RedirectHandler $redirectHandler
     ) {
-        $this->registry = $registry;
-        $this->stateAggregator = $aggregator;
-        $this->redirectHandler = $redirect;
-
         $this->bootstrap();
     }
 
@@ -130,7 +125,8 @@ final class GatewayCore
      * rel="nofollow" on those links is a hint the crawler may ignore — noindex
      * on the page itself is the directive that settles it.
      *
-     * @param array $robots Directive map, e.g. ['index' => 'index'].
+     * @param array<string, string> $robots Directive map, e.g. ['index' => 'index'].
+     * @return array<string, string>
      */
     public function filterRobots(array $robots): array
     {
@@ -143,6 +139,9 @@ final class GatewayCore
 
     /**
      * Same directive through core's wp_robots, for when Rank Math is inactive.
+     *
+     * @param array<string, bool|string> $robots
+     * @return array<string, bool|string>
      */
     public function filterCoreRobots(array $robots): array
     {
@@ -158,19 +157,20 @@ final class GatewayCore
      */
     public function registerDefaultForms(FormRegistry $registry): void
     {
-        $registry->register('login', new \Gateway\Forms\LoginForm(), 10);
-        $registry->register('register', new \Gateway\Forms\RegisterForm(), 20);
-        $registry->register('lost-password', new \Gateway\Forms\LostPasswordForm(), 30);
-        $registry->register('reset-password', new \Gateway\Forms\ResetPasswordForm(), 40);
+        $registry->register(GatewayView::LOGIN->value, new LoginForm(), 10);
+        $registry->register(GatewayView::REGISTER->value, new RegisterForm(), 20);
+        $registry->register(GatewayView::LOST_PASSWORD->value, new LostPasswordForm(), 30);
+        $registry->register(GatewayView::RESET_PASSWORD->value, new ResetPasswordForm(), 40);
     }
 
     /**
-     * Enqueue assets only on Gateway page.
+     * Enqueue assets only on the Gateway page - the same test as the robots
+     * filters, so it holds whatever the page's slug.
      * Mirrors LaunchpadCore::enqueueAssets()
      */
     public function enqueueAssets(): void
     {
-        if (!is_page('gateway')) {
+        if (!$this->isGatewayPage()) {
             return;
         }
 
@@ -197,7 +197,7 @@ final class GatewayCore
             'gatewaySettings' => [
                 'nonce'   => wp_create_nonce('wp_rest'),
                 'restUrl' => rest_url('gateway/v1/'),
-                'baseUrl' => home_url('/gateway/'),
+                'baseUrl' => GatewayView::LOGIN->url(),
             ],
             'passwordPolicy'    => PasswordPolicy::getClientRules(),
             'usernamePolicy'    => UsernamePolicy::getClientRules(),
@@ -210,19 +210,15 @@ final class GatewayCore
      */
     public function registerRestRoutes(): void
     {
-        $controllers = [
-            new AuthController(),
-            new RegisterController(),
-            new PasswordController(),
-        ];
-
-        foreach ($controllers as $controller) {
+        foreach ([new AuthController(), new RegisterController(), new PasswordController()] as $controller) {
             $controller->registerRoutes();
         }
     }
 
     /**
      * Get aggregated state for SSR hydration.
+     *
+     * @return array<string, mixed>
      */
     public function getState(string $activeFormId): array
     {

@@ -10,17 +10,23 @@ declare(strict_types=1);
 
 namespace Gateway\Forms;
 
-class RegisterForm extends AbstractForm
+use Gateway\Enums\GatewayView;
+
+final class RegisterForm extends AbstractForm
 {
+    #[\Override]
     public function getId(): string
     {
-        return 'register';
+        return GatewayView::REGISTER->value;
     }
+
+    #[\Override]
     public function getLabel(): string
     {
         return _x('Register', 'gateway', 'starwishx');
     }
 
+    #[\Override]
     public function getInitialState(?int $userId = null): array
     {
         return [
@@ -33,9 +39,10 @@ class RegisterForm extends AbstractForm
         ];
     }
 
+    #[\Override]
     public function render(): string
     {
-        $jsId = $this->getJsId();
+        $jsId = esc_attr($this->getJsId());
         $this->startBuffer();
 ?>
         <form class="gateway-form" data-wp-on--submit="actions.<?php echo $jsId; ?>.submit">

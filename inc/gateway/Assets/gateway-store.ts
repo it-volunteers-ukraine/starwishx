@@ -24,7 +24,6 @@ import {
 import { registerActions } from "./register/actions.ts";
 import { gatewayStore } from "./stores.ts";
 import type {
-  AnyForm,
   CamelCase,
   FormId,
   FormKey,
@@ -46,9 +45,17 @@ const FORM_KEYS = {
   "reset-password": "resetPassword",
 } as const satisfies { [Id in FormId]: CamelCase<Id> };
 
-/** Is `view` a registered form (a key of the hydrated formMap)? */
+/**
+ * Is `view` a form this store drives (FORM_KEYS) that is registered (the
+ * hydrated formMap)? A form added through `gateway_register_forms` has no
+ * actions here, and one a plugin removed has no state: both fall back.
+ */
 function isFormId(state: GatewayState, view: string | null): view is FormId {
-  return view !== null && Object.hasOwn(state.formMap, view);
+  return (
+    view !== null &&
+    Object.hasOwn(FORM_KEYS, view) &&
+    Object.hasOwn(state.formMap, view)
+  );
 }
 
 /**
@@ -65,10 +72,6 @@ function resetForm<K extends FormKey>(key: K): void {
 }
 
 const getters = {
-  get currentForm(): AnyForm | undefined {
-    return this.forms[FORM_KEYS[this.activeView]];
-  },
-
   get resetPasswordInputType(): "text" | "password" {
     return this.forms.resetPassword.isPasswordVisible ? "text" : "password";
   },

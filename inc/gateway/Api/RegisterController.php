@@ -4,33 +4,32 @@ declare(strict_types=1);
 
 namespace Gateway\Api;
 
+use Gateway\Services\RegisterService;
 use Shared\Core\AbstractApiController;
 use Shared\Http\ClientIp;
 use Shared\Policy\EmailPolicy;
 use Shared\Policy\RateLimitPolicy;
 use Shared\Policy\UsernamePolicy;
-use Gateway\Services\RegisterService;
+use Shared\Validation\RestArg;
+use WP_Error;
 use WP_REST_Request;
 use WP_REST_Response;
-use WP_Error;
 
 /**
  * REST controller for registration endpoints.
  */
-class RegisterController extends AbstractApiController
+final class RegisterController extends AbstractApiController
 {
     protected $namespace = 'gateway/v1';
 
-    private const RATE_LIMIT_MAX    = 5;
-    private const RATE_LIMIT_WINDOW = HOUR_IN_SECONDS;
+    private const int RATE_LIMIT_MAX    = 5;
+    private const int RATE_LIMIT_WINDOW = HOUR_IN_SECONDS;
 
-    private RegisterService $service;
+    public function __construct(
+        private readonly RegisterService $service = new RegisterService()
+    ) {}
 
-    public function __construct(?RegisterService $service = null)
-    {
-        $this->service = $service ?? new RegisterService();
-    }
-
+    #[\Override]
     public function registerRoutes(): void
     {
         register_rest_route($this->namespace, '/register', [
@@ -40,23 +39,24 @@ class RegisterController extends AbstractApiController
             'args'                => [
                 'username' => [
                     'required'          => true,
+                    'type'              => 'string',
+                    'validate_callback' => RestArg::string(
+                        __('Username', 'starwishx'),
+                        UsernamePolicy::validate(...)
+                    ),
                     'sanitize_callback' => 'sanitize_user',
-                    'validate_callback' => function ($value) {
-                        if (empty($value)) {
-                            return false;
-                        }
-                        return UsernamePolicy::validate((string) $value);
-                    },
                 ],
                 'email'    => [
                     'required'          => true,
+                    'type'              => 'string',
+                    // EmailPolicy accepts '' (optional fields elsewhere):
+                    // required here, so empty fails first.
+                    'validate_callback' => RestArg::string(
+                        __('Email', 'starwishx'),
+                        static fn(string $email): bool|WP_Error
+                            => trim($email) === '' ? false : EmailPolicy::validate($email)
+                    ),
                     'sanitize_callback' => 'sanitize_email',
-                    'validate_callback' => function ($value) {
-                        if (empty($value)) {
-                            return false;
-                        }
-                        return EmailPolicy::validate($value);
-                    },
                 ],
             ],
         ]);
@@ -86,10 +86,10 @@ class RegisterController extends AbstractApiController
 
         if (is_wp_error($result)) {
             return $this->mapServiceError($result, [
-                // Note: invalid_data is in default_map, not repeated here
+                // invalid_data: default map
                 'invalid_username_format' => 422,
-                'username_exists'        => 409,
-                'email_exists'           => 409,
+                'username_exists'         => 409,
+                'email_exists'            => 409,
             ]);
         }
 
