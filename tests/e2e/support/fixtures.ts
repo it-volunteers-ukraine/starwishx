@@ -113,15 +113,15 @@ export class Gateway {
   }
 
   /**
-   * Fires the form's submit event, which the store cancels. It skips the
-   * browser's own constraint validation (required, type=email), which would
-   * stop Enter before the store sees it: these specs test the store's
-   * checks, which also run where the browser's don't.
+   * Submits the form the way Enter or its submit button does
+   * (requestSubmit), and the store cancels the navigation. The forms are
+   * `novalidate`, so the browser's own constraint checks (required,
+   * type=email) don't get in first and the store's checks run - without
+   * it, a required field left empty would stop the submit right here.
    */
   async submit(key: FormKey): Promise<void> {
-    await this.form(key).dispatchEvent("submit", {
-      bubbles: true,
-      cancelable: true,
+    await this.form(key).evaluate((form) => {
+      if (form instanceof HTMLFormElement) form.requestSubmit();
     });
   }
 

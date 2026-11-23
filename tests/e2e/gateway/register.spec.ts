@@ -29,7 +29,7 @@ test("policy, pattern and email errors show inline, with no request", async ({
   expect(gateway.requestsTo("register")).toBe(0);
 });
 
-test("a taken username is refused, and no account is made", async ({
+test("a taken username shows at the field, and no account is made", async ({
   gateway,
   wp,
 }) => {
@@ -43,6 +43,9 @@ test("a taken username is refused, and no account is made", async ({
   await gateway.submit("register");
 
   await expect.poll(() => gateway.requestsTo("register")).toBe(1);
-  await expect(gateway.banner("register")).toBeVisible();
+  // The 409 carries field_errors: under the username, not in the banner.
+  await expect(gateway.fieldError("register", "username")).toBeVisible();
+  await expect(gateway.fieldError("register", "email")).toBeHidden();
+  await expect(gateway.banner("register")).toBeHidden();
   expect(await gateway.state((s) => s.forms.register.success)).toBe(false);
 });

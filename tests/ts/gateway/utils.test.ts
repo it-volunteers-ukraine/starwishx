@@ -18,7 +18,7 @@ import {
   validateUsername,
   validators,
 } from "../../../inc/gateway/Assets/utils.ts";
-import { installGateway, REST_URL } from "../support/gateway.ts";
+import { installGateway, REST_URL, serverState } from "../support/gateway.ts";
 
 describe("validators", () => {
   it("required: whitespace is empty", () => {
@@ -35,7 +35,7 @@ describe("validators", () => {
 });
 
 describe("validateUsername", () => {
-  const policy = installGateway().usernamePolicy;
+  const policy = serverState().usernamePolicy;
 
   it.each([
     ["ab", "u short"],
@@ -53,10 +53,14 @@ describe("validateUsername", () => {
 });
 
 describe("validatePassword (PasswordPolicy::validate()'s classes)", () => {
-  const policy = installGateway().passwordPolicy;
+  const policy = serverState().passwordPolicy;
 
   it.each([
     ["Short1!", "too short"],
+    // In characters (code points), as mb_strlen() on the server: 9 here...
+    ["Aпароль1!", "too short"],
+    // ...and 10 here, though `.length` (UTF-16 units) would say 16.
+    ["Ab1!😀😀😀😀😀😀", "too short"],
     ["alllowercase1!", "too weak"],
     ["NoDigitsHere!!", "too weak"],
     ["NoSymbols12345", "too weak"],

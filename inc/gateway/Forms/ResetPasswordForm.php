@@ -48,7 +48,8 @@ final class ResetPasswordForm extends AbstractForm
         $this->startBuffer();
 ?>
         <form class="gateway-form gateway-form--reset-password"
-            data-wp-on--submit="actions.<?php echo esc_attr($this->getJsId()); ?>.submit">
+            data-wp-on--submit="actions.<?php echo esc_attr($this->getJsId()); ?>.submit"
+            novalidate>
             <h2 class="gateway-form__title"><?php esc_html_e('Set New Password', 'starwishx'); ?></h2>
             <p class="gateway-form__intro">
                 <?php esc_html_e('Your new password has been pre-generated. You can modify it or generate a new one.', 'starwishx'); ?>
@@ -76,13 +77,13 @@ final class ResetPasswordForm extends AbstractForm
                             <span data-wp-bind--hidden="state.forms.<?php echo esc_attr($this->getJsId()); ?>.isPasswordVisible">
                                 <!-- < ?php esc_html_e('Show', 'starwishx'); ?> -->
                                 <svg width="23" height="23" class="btn-hide-pw__icon">
-                                    <use href="/wp-content/themes/starwishx/assets/img/sprites.svg#icon-eye-opened"></use>
+                                    <use href="<?php echo esc_url($this->sprite('icon-eye-opened')); ?>"></use>
                                 </svg>
                             </span>
                             <span data-wp-bind--hidden="!state.forms.<?php echo esc_attr($this->getJsId()); ?>.isPasswordVisible">
                                 <!-- < ?php esc_html_e('Hide', 'starwishx'); ?> -->
                                 <svg width="23" height="23" class="btn-hide-pw__icon">
-                                    <use href="/wp-content/themes/starwishx/assets/img/sprites.svg#icon-eye-closed"></use>
+                                    <use href="<?php echo esc_url($this->sprite('icon-eye-closed')); ?>"></use>
                                 </svg>
                             </span>
                         </button>

@@ -56,11 +56,13 @@ final class RegisterService
         }
 
         // 3. Existence Checks (Standard WP behavior allows these leaks on registration for UX)
+        // The message also goes in field_errors, so the form shows it under
+        // the field (see AbstractApiController's error-shape contract).
         if (username_exists($username)) {
-            return new WP_Error('username_exists', __('This username is already taken.', 'starwishx'));
+            return self::taken('username_exists', 'username', __('This username is already taken.', 'starwishx'));
         }
         if (email_exists($email)) {
-            return new WP_Error('email_exists', __('This email is already registered.', 'starwishx'));
+            return self::taken('email_exists', 'email', __('This email is already registered.', 'starwishx'));
         }
 
         // 4. Create User with Random Password
@@ -85,6 +87,12 @@ final class RegisterService
 
         // 6. Send Activation Email
         return $this->sendActivationEmail($user);
+    }
+
+    /** A conflict on one field: the banner message, and the same one inline. */
+    private static function taken(string $code, string $field, string $message): WP_Error
+    {
+        return new WP_Error($code, $message, ['field_errors' => [$field => $message]]);
     }
 
     /**

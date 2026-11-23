@@ -5,7 +5,8 @@
   "extends": "../../inc/tsconfig.json",
   "compilerOptions": {
     "target": "esnext",
-    "lib": ["esnext", "dom", "dom.iterable"],
+    // "dom" includes the iterable DOM types since TypeScript 6.
+    "lib": ["esnext", "dom"],
     "types": ["node"]
   },
   "include": ["**/*.ts"]

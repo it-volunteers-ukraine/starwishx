@@ -54,6 +54,15 @@ abstract class AbstractForm implements RenderableInterface, StateProviderInterfa
         return lcfirst($this->pascalId());
     }
 
+    /**
+     * An icon in the theme's sprite, wherever the theme is installed (the
+     * folder name and a WordPress in a subdirectory both vary).
+     */
+    protected function sprite(string $icon): string
+    {
+        return get_template_directory_uri() . '/assets/img/sprites.svg#' . $icon;
+    }
+
     /** 'lost-password' / 'lost_password' -> 'LostPassword'. */
     private function pascalId(): string
     {

@@ -10,8 +10,9 @@
  *
  * File: tests/ts/gateway/contract.test.ts
  */
-import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vite-plus/test";
+// An ES2025 JSON module. Read as unknown: the test is about its shape.
+import fixtureJson from "../../fixtures/gateway-state.json" with { type: "json" };
 import { LOGIN_FIELDS } from "../../../inc/gateway/Assets/auth/actions.ts";
 import {
   LOST_FIELDS,
@@ -22,12 +23,7 @@ import { FORM_KEYS } from "../../../inc/gateway/Assets/views.ts";
 import { isRecord } from "../../../inc/shared/Assets/store-utils.ts";
 import { serverState } from "../support/gateway.ts";
 
-const fixture: unknown = JSON.parse(
-  readFileSync(
-    new URL("../../fixtures/gateway-state.json", import.meta.url),
-    "utf8",
-  ),
-);
+const fixture: unknown = fixtureJson;
 
 /** Keys and JSON value types, as StateContractTest::shape() writes them. */
 function shape(value: unknown): unknown {
@@ -56,12 +52,13 @@ describe("gateway state contract (tests/fixtures/gateway-state.json)", () => {
     expect(shape(hydrated)).toEqual(fixture);
   });
 
+  // Key lists compare as Sets: the same members, in any order.
   it("every registered view has a form key the store knows", () => {
-    expect(Object.keys(at("formMap")).sort()).toEqual(
-      Object.keys(FORM_KEYS).sort(),
+    expect(new Set(Object.keys(at("formMap")))).toEqual(
+      new Set(Object.keys(FORM_KEYS)),
     );
-    expect(Object.keys(at("forms")).sort()).toEqual(
-      Object.values(FORM_KEYS).sort(),
+    expect(new Set(Object.keys(at("forms")))).toEqual(
+      new Set(Object.values(FORM_KEYS)),
     );
   });
 
@@ -84,8 +81,8 @@ describe("gateway state contract (tests/fixtures/gateway-state.json)", () => {
       ["register", REGISTER_FIELDS],
       ["lostPassword", LOST_FIELDS],
     ] as const) {
-      expect(Object.keys(at("forms", form, "fieldErrors")).sort()).toEqual(
-        [...fields].sort(),
+      expect(new Set(Object.keys(at("forms", form, "fieldErrors")))).toEqual(
+        new Set(fields),
       );
     }
   });

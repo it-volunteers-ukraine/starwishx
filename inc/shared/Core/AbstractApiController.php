@@ -38,8 +38,10 @@ use WP_REST_Request;
 abstract class AbstractApiController extends WP_REST_Controller
 {
     /**
-     * Every child must define its own namespace (e.g., 'launchpad/v1')
+     * Every child must define its own namespace (e.g., 'launchpad/v1').
+     * Untyped, as in WP_REST_Controller: a redeclared property can't add a type.
      */
+    #[\Override]
     protected $namespace;
 
     /**

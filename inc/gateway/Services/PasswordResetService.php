@@ -82,9 +82,13 @@ final class PasswordResetService
     /**
      * Validation: Check if the key/login combo is still valid.
      * Used to protect the Reset Password form.
+     *
+     * The key and the password are #[\SensitiveParameter]: PHP 8.5 prints
+     * backtraces for fatal errors, and a live reset key is as good as the
+     * password it sets.
      */
     #[\NoDiscard]
-    public function validateKey(string $key, string $login): WP_User|WP_Error
+    public function validateKey(#[\SensitiveParameter] string $key, string $login): WP_User|WP_Error
     {
         $user = check_password_reset_key($key, $login);
 
@@ -100,7 +104,11 @@ final class PasswordResetService
      * Validates the key one last time and updates the password.
      */
     #[\NoDiscard]
-    public function resetPassword(string $key, string $login, string $new_password): bool|WP_Error
+    public function resetPassword(
+        #[\SensitiveParameter] string $key,
+        string $login,
+        #[\SensitiveParameter] string $new_password
+    ): bool|WP_Error
     {
         $user = $this->validateKey($key, $login);
         if (is_wp_error($user)) {

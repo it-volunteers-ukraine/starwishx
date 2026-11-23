@@ -3,7 +3,7 @@
 /**
  * Where the Gateway sends people: its URLs (GatewayView), the WordPress
  * login/register/lost-password/logout URL filters, the wp-login.php
- * interception, and the names the forms give the JS.
+ * interception, and which views the registry knows.
  *
  * File: tests/php/Gateway/RoutingTest.php
  */
@@ -14,7 +14,6 @@ namespace Starwishx\Tests\Gateway;
 
 use Gateway\Core\RedirectHandler;
 use Gateway\Enums\GatewayView;
-use Gateway\Forms\AbstractForm;
 
 /** Thrown from wp_redirect, so interceptWpLogin()'s exit is never reached. */
 final class RedirectIntercepted extends \RuntimeException
@@ -85,6 +84,30 @@ final class RoutingTest extends GatewayTestCase
         );
     }
 
+    /** @return array<string, array{string, string}> */
+    public static function awkwardKeysAndLogins(): array
+    {
+        return [
+            'query syntax' => ['a+b=c', 'x&y'],
+            'percent'      => ['100%', '50%off'],
+            'space and @'  => ['K3y', 'jo hn@example.com'],
+            'hash'         => ['k#1', 'a.b-c_d'],
+        ];
+    }
+
+    /**
+     * Whatever the key and login, the link gives them back unchanged - read
+     * by the WHATWG parser, as the browser reads the link in the mail.
+     *
+     * @dataProvider awkwardKeysAndLogins
+     */
+    public function test_reset_url_round_trips_key_and_login(string $key, string $login): void
+    {
+        $query = self::queryOf(GatewayView::resetUrl($key, $login));
+
+        $this->assertSame(['view' => 'reset-password', 'key' => $key, 'login' => $login], $query);
+    }
+
     // --- WordPress URL filters ---------------------------------------------
 
     public function test_wordpress_auth_urls_point_at_the_gateway(): void
@@ -153,20 +176,7 @@ final class RoutingTest extends GatewayTestCase
         );
     }
 
-    // --- Forms --------------------------------------------------------------
-
-    public function test_form_ids_become_js_names(): void
-    {
-        $form = new class extends AbstractForm {
-            public function getId(): string { return 'magic_link-login'; }
-            public function getLabel(): string { return ''; }
-            public function getInitialState(?int $userId = null): array { return []; }
-            public function render(): string { return ''; }
-        };
-
-        $this->assertSame('magicLinkLogin', $form->getJsId());
-        $this->assertSame('isMagicLinkLoginActive', $form->getStateKey());
-    }
+    // --- Registry -----------------------------------------------------------
 
     public function test_unknown_view_falls_back_to_login_in_the_registry(): void
     {
@@ -175,23 +185,5 @@ final class RoutingTest extends GatewayTestCase
             $this->assertTrue($registry->has($view->value), $view->value);
         }
         $this->assertFalse($registry->has('foo'));
-    }
-
-    // --- PHP 8.5 guard rails ------------------------------------------------
-
-    public function test_ignoring_a_rate_limit_result_warns(): void
-    {
-        $warning = '';
-        set_error_handler(static function (int $no, string $message) use (&$warning): bool {
-            $warning = $message;
-            return true;
-        });
-        try {
-            \Shared\Policy\RateLimitPolicy::check('rl_test_nodiscard', 5, 60);
-        } finally {
-            restore_error_handler();
-        }
-
-        $this->assertStringContainsString('RateLimitPolicy::check()', $warning);
     }
 }

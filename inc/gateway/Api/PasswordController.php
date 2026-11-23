@@ -21,6 +21,7 @@ use WP_REST_Response;
 
 final class PasswordController extends AbstractApiController
 {
+    #[\Override]
     protected $namespace = 'gateway/v1';
 
     // Per-IP budget — caps SMTP-flooding / cross-user email bombing.

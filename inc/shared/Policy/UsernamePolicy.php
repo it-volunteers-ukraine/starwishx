@@ -16,11 +16,16 @@ use WP_Error;
  */
 final class UsernamePolicy
 {
-    public const MIN_LENGTH = 3;
-    public const MAX_LENGTH = 60;
+    public const int MIN_LENGTH = 3;
+    public const int MAX_LENGTH = 60;
 
-    /** Latin letters, digits, dot, underscore, hyphen. No spaces, no '@'. */
-    public const PATTERN = '/^[a-zA-Z0-9._-]+$/';
+    /**
+     * Latin letters, digits, dot, underscore, hyphen. No spaces, no '@'.
+     * The bare source is what the client's RegExp gets (getClientRules()),
+     * so PHP and JS always test the same pattern.
+     */
+    public const string PATTERN_SOURCE = '^[a-zA-Z0-9._-]+$';
+    public const string PATTERN = '/' . self::PATTERN_SOURCE . '/';
 
     public static function getMinLength(): int
     {
@@ -38,6 +43,7 @@ final class UsernamePolicy
      *
      * Not called on empty input — callers decide whether the field is required.
      */
+    #[\NoDiscard('a username is only checked when the result is acted on')]
     public static function validate(string $value): bool|WP_Error
     {
         $len = strlen($value);
@@ -58,11 +64,14 @@ final class UsernamePolicy
     /**
      * Rules + i18n strings for client-side JS pre-validation.
      * Hydrated into Interactivity state via wp_interactivity_state().
+     * TS: UsernamePolicy in inc/gateway/Assets/types.ts.
+     *
+     * @return array{pattern: string, minLength: int, maxLength: int, messages: array{tooShort: string, tooLong: string, invalid: string}}
      */
     public static function getClientRules(): array
     {
         return [
-            'pattern'   => '^[a-zA-Z0-9._-]+$', // no delimiters — JS RegExp takes the bare source
+            'pattern'   => self::PATTERN_SOURCE, // no delimiters: JS RegExp takes the bare source
             'minLength' => self::MIN_LENGTH,
             'maxLength' => self::MAX_LENGTH,
             'messages'  => [

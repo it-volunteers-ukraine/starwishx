@@ -45,14 +45,12 @@ final class PasswordTest extends GatewayTestCase
     {
         $user = $this->user('anna');
 
-        foreach (['anna', 'anna@example.com'] as $i => $userLogin) {
+        foreach (['anna', 'anna@example.com'] as $userLogin) {
             reset_phpmailer_instance();
             $this->assertSame(200, $this->lost($userLogin)->get_status());
 
-            $mail = $this->sentMail();
-            $this->assertCount(1, $mail, $userLogin);
-            $this->assertSame('anna@example.com', $mail[0]['to'][0][0]);
-            parse_str((string) parse_url(self::gatewayLink($mail[0]['body']), PHP_URL_QUERY), $query);
+            $this->assertCount(1, $this->sentMail(), $userLogin);
+            $query = self::queryOf(self::gatewayLink($this->onlyMailTo('anna@example.com')['body']));
             $this->assertSame('reset-password', $query['view']);
             $this->assertSame($user->ID, check_password_reset_key($query['key'], 'anna')->ID);
         }
@@ -113,6 +111,8 @@ final class PasswordTest extends GatewayTestCase
     {
         return [
             'too short'      => ['Sh0rt!', 'password_too_short'],
+            // 9 characters, 15 bytes: the minimum is in characters.
+            'short in characters, long in bytes' => ['Aпароль1!', 'password_too_short'],
             'no capital'     => ['n0capitals!here', 'password_too_weak'],
             'no digit'       => ['NoDigits!Here', 'password_too_weak'],
             'no symbol'      => ['NoSymbols1Here', 'password_too_weak'],
@@ -132,19 +132,34 @@ final class PasswordTest extends GatewayTestCase
         $this->assertSame($code, self::code($response));
     }
 
-    public function test_malformed_input_is_a_client_error_not_a_crash(): void
+    /** @return array<string, array{string, array<string, mixed>, string}> */
+    public static function malformed(): array
     {
-        foreach ([
-            ['login' => ['anna'], 'key' => 'k', 'password' => self::NEW_PASSWORD],
-            ['login' => 'anna', 'key' => ['k'], 'password' => self::NEW_PASSWORD],
-            ['login' => 'anna', 'key' => 'k', 'password' => 12345678],
-            ['login' => 'anna', 'key' => 'k'],
-        ] as $body) {
-            $status = $this->rest('POST', 'password/reset', $body)->get_status();
-            $this->assertGreaterThanOrEqual(400, $status, (string) wp_json_encode($body));
-            $this->assertLessThan(500, $status, (string) wp_json_encode($body));
-        }
-        $this->assertSame(422, $this->rest('POST', 'password/lost', ['user_login' => ['anna']])->get_status());
+        return [
+            'array login'     => ['password/reset', ['login' => ['anna'], 'key' => 'k', 'password' => self::NEW_PASSWORD], 'login'],
+            'array key'       => ['password/reset', ['login' => 'anna', 'key' => ['k'], 'password' => self::NEW_PASSWORD], 'key'],
+            'number password' => ['password/reset', ['login' => 'anna', 'key' => 'k', 'password' => 12345678], 'password'],
+            'array user_login' => ['password/lost', ['user_login' => ['anna']], 'user_login'],
+        ];
+    }
+
+    /**
+     * A wrong type is a field error, never a crash.
+     *
+     * @dataProvider malformed
+     * @param array<string, mixed> $body
+     */
+    public function test_malformed_input_is_a_field_error(string $route, array $body, string $field): void
+    {
+        $this->assertFieldError($this->rest('POST', $route, $body), $field);
+    }
+
+    public function test_a_missing_password_is_a_bad_request(): void
+    {
+        $response = $this->rest('POST', 'password/reset', ['login' => 'anna', 'key' => 'k']);
+
+        $this->assertSame(400, $response->get_status());
+        $this->assertSame('rest_missing_callback_param', self::code($response));
     }
 
     // --- Generate --------------------------------------------------------------

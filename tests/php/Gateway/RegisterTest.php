@@ -30,12 +30,9 @@ final class RegisterTest extends GatewayTestCase
         $this->assertSame(['subscriber'], $user->roles);
         $this->assertFalse(\users()->stateService()->isActivated($user->ID));
 
-        $mail = $this->mailTo('newbie@example.com');
-        $this->assertCount(1, $mail);
-
         // The link opens the reset view with a key that works for this user.
-        $link = self::gatewayLink($mail[0]['body']);
-        parse_str((string) parse_url($link, PHP_URL_QUERY), $query);
+        $link = self::gatewayLink($this->onlyMailTo('newbie@example.com')['body']);
+        $query = self::queryOf($link);
         $this->assertStringStartsWith(GatewayView::RESET_PASSWORD->url(), $link);
         $this->assertSame('newbie', $query['login']);
         $this->assertInstanceOf(\WP_User::class, check_password_reset_key($query['key'], 'newbie'));
@@ -44,7 +41,7 @@ final class RegisterTest extends GatewayTestCase
     public function test_the_new_account_cannot_log_in_until_it_sets_a_password(): void
     {
         $this->register('newbie', 'newbie@example.com');
-        parse_str((string) parse_url(self::gatewayLink($this->mailTo('newbie@example.com')[0]['body']), PHP_URL_QUERY), $query);
+        $query = self::queryOf(self::gatewayLink($this->onlyMailTo('newbie@example.com')['body']));
 
         $reset = $this->rest('POST', 'password/reset', [
             'login'    => $query['login'],
@@ -60,12 +57,19 @@ final class RegisterTest extends GatewayTestCase
     public function test_a_privileged_default_role_never_reaches_self_registration(): void
     {
         update_option('default_role', 'administrator');
-        $log = ini_set('error_log', (string) tempnam(sys_get_temp_dir(), 'gw')); // the expected warning
-
-        $this->assertSame(200, $this->register('sneaky', 'sneaky@example.com')->get_status());
+        // The service logs the refused role: catch it in a file of our own.
+        $logFile = (string) tempnam(sys_get_temp_dir(), 'gw');
+        $previous = ini_set('error_log', $logFile);
+        try {
+            $this->assertSame(200, $this->register('sneaky', 'sneaky@example.com')->get_status());
+            $logged = (string) file_get_contents($logFile);
+        } finally {
+            ini_set('error_log', (string) $previous);
+            unlink($logFile);
+        }
 
         $this->assertSame(['subscriber'], get_user_by('login', 'sneaky')->roles);
-        ini_set('error_log', (string) $log);
+        $this->assertStringContainsString('default_role "administrator"', $logged);
     }
 
     public function test_contributor_default_role_is_kept(): void
@@ -77,13 +81,13 @@ final class RegisterTest extends GatewayTestCase
         $this->assertSame(['contributor'], get_user_by('login', 'writer')->roles);
     }
 
-    public function test_taken_username_or_email_is_a_conflict(): void
+    public function test_taken_username_or_email_is_a_conflict_shown_at_the_field(): void
     {
         $this->user('anna');
 
-        $this->assertSame('username_exists', self::code($this->register('anna', 'other@example.com')));
-        $this->assertSame(409, $this->register('anna', 'other@example.com')->get_status());
-        $this->assertSame('email_exists', self::code($this->register('other', 'anna@example.com')));
+        $this->assertFieldError($this->register('anna', 'other@example.com'), 'username', 409, 'username_exists');
+        $this->assertFieldError($this->register('other', 'anna@example.com'), 'email', 409, 'email_exists');
+        $this->assertCount(0, $this->mailTo('other@example.com'));
     }
 
     /** @return array<string, array{string, string, string}> */
@@ -101,11 +105,7 @@ final class RegisterTest extends GatewayTestCase
     /** @dataProvider invalidFields */
     public function test_invalid_fields_come_back_as_field_errors(string $username, string $email, string $field): void
     {
-        $response = $this->register($username, $email);
-
-        $this->assertSame(422, $response->get_status());
-        $this->assertSame('invalid_data', self::code($response));
-        $this->assertArrayHasKey($field, $response->get_data()['data']['field_errors']);
+        $this->assertFieldError($this->register($username, $email), $field);
         $this->assertCount(0, $this->mailTo('ok@example.com'));
     }
 
@@ -116,10 +116,7 @@ final class RegisterTest extends GatewayTestCase
         add_filter('starwishx/email_dns_check', static fn(bool $on, string $email): bool => $on && str_ends_with($email, '.invalid'), 30, 2);
 
         // .invalid never resolves (RFC 2606): no network is needed to fail.
-        $response = $this->register('goodname', 'someone@nothing.invalid');
-
-        $this->assertSame(422, $response->get_status());
-        $this->assertArrayHasKey('email', $response->get_data()['data']['field_errors']);
+        $this->assertFieldError($this->register('goodname', 'someone@nothing.invalid'), 'email');
     }
 
     public function test_five_registrations_per_ip_per_hour(): void
@@ -140,16 +137,15 @@ final class RegisterTest extends GatewayTestCase
         $this->assertSame('already_authenticated', self::code($this->register('newbie', 'newbie@example.com')));
     }
 
-    public function test_malformed_input_is_a_client_error_not_a_crash(): void
+    public function test_malformed_input_is_a_field_error_not_a_crash(): void
     {
         foreach ([
-            ['username' => ['newbie'], 'email' => 'newbie@example.com'],
-            ['username' => 'newbie', 'email' => ['x']],
-            ['username' => 12345, 'email' => 'newbie@example.com'],
-        ] as $body) {
-            $status = $this->rest('POST', 'register', $body)->get_status();
-            $this->assertSame(422, $status, (string) wp_json_encode($body));
+            'username' => ['username' => ['newbie'], 'email' => 'newbie@example.com'],
+            'email'    => ['username' => 'newbie', 'email' => ['x']],
+        ] as $field => $body) {
+            $this->assertFieldError($this->rest('POST', 'register', $body), $field);
         }
+        $this->assertFieldError($this->rest('POST', 'register', ['username' => 12345, 'email' => 'newbie@example.com']), 'username');
         $this->assertFalse(get_user_by('login', 'newbie'));
     }
 }

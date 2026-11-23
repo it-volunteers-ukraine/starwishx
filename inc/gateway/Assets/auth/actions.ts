@@ -75,6 +75,9 @@ export const loginActions = {
       );
       // Logged in: the cookie is set, so even an unexpected redirect target
       // only decides where to go - the gateway page forwards logged-in users.
+      // The form stays submitting while the browser leaves: another click
+      // could only send a doomed second login (and a reload on top). A
+      // return from the back-forward cache reloads (reloadIfRestored).
       const target =
         sameOriginUrl(data.redirectTo) ?? state.gatewaySettings.baseUrl;
       window.location.href = target.toString();
@@ -83,7 +86,6 @@ export const loginActions = {
       // checkLoggedOut() (already_authenticated), or couldn't be made.
       if (reloadIfSessionChanged(error)) return;
       showFailure(form, error, LOGIN_FIELDS);
-    } finally {
       form.isSubmitting = false;
     }
   }),

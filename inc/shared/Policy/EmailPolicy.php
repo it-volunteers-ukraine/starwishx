@@ -20,7 +20,7 @@ use WP_Error;
 final class EmailPolicy
 {
     /** Enable MX/A/AAAA DNS lookup to verify the domain accepts mail. */
-    public const DNS_CHECK_ENABLED = true;
+    public const bool DNS_CHECK_ENABLED = true;
 
     /**
      * Validate an email address.
@@ -29,6 +29,7 @@ final class EmailPolicy
      *
      * @return true|WP_Error
      */
+    #[\NoDiscard('an address is only checked when the result is acted on')]
     public static function validate(string $email): bool|WP_Error
     {
         $email = trim($email);

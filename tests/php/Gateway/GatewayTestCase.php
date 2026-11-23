@@ -15,6 +15,7 @@ declare(strict_types=1);
 
 namespace Starwishx\Tests\Gateway;
 
+use Uri\WhatWg\Url;
 use WP_REST_Request;
 use WP_REST_Response;
 use WP_UnitTestCase;
@@ -81,6 +82,22 @@ abstract class GatewayTestCase extends WP_UnitTestCase
     }
 
     /**
+     * The response is an error the form shows under `$field`: the status,
+     * the code, and a message in `data.field_errors` (the store routes those
+     * inline - AbstractApiController's error-shape contract).
+     */
+    protected function assertFieldError(
+        WP_REST_Response $response,
+        string $field,
+        int $status = 422,
+        string $code = 'invalid_data'
+    ): void {
+        $this->assertSame($status, $response->get_status());
+        $this->assertSame($code, self::code($response));
+        $this->assertIsString($response->get_data()['data']['field_errors'][$field] ?? null, "no field error for {$field}");
+    }
+
+    /**
      * A user with self::PASSWORD, activated unless said otherwise (the users
      * module starts every new account unactivated).
      */
@@ -122,10 +139,37 @@ abstract class GatewayTestCase extends WP_UnitTestCase
         ));
     }
 
+    /**
+     * The one mail sent to `$address`: fails unless there is exactly one.
+     *
+     * @return array{to: array<int, array<int, string>>, subject: string, body: string}
+     */
+    protected function onlyMailTo(string $address): array
+    {
+        $mail = $this->mailTo($address);
+        $this->assertCount(1, $mail, "mails to {$address}");
+        return array_first($mail);
+    }
+
     /** The first link to the gateway in a mail body. */
     protected static function gatewayLink(string $body): string
     {
         preg_match('~https?://\S+/gateway/\S*~', $body, $m);
         return $m[0] ?? '';
+    }
+
+    /**
+     * A URL's query, decoded. Parsed by the WHATWG URL parser (PHP 8.5's URI
+     * extension), as a browser would: a link that isn't a valid URL fails
+     * here instead of going out in a mail.
+     *
+     * @return array<string, mixed>
+     */
+    protected static function queryOf(string $url): array
+    {
+        $parsed = Url::parse($url);
+        self::assertNotNull($parsed, "not a valid URL: {$url}");
+        parse_str($parsed->getQuery() ?? '', $query);
+        return $query;
     }
 }

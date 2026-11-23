@@ -8,10 +8,11 @@ import {
   gatewayActions,
   gatewayGetters,
   isFormId,
+  reloadIfRestored,
 } from "../../../inc/gateway/Assets/views.ts";
 import type { GatewayState } from "../../../inc/gateway/Assets/types.ts";
 import { history, location, resetDom } from "../support/dom.ts";
-import { installGateway } from "../support/gateway.ts";
+import { installGateway, serverState } from "../support/gateway.ts";
 import { fake } from "../support/interactivity.ts";
 
 const flags = (state: GatewayState) =>
@@ -33,6 +34,9 @@ describe("syncStateFromUrl", () => {
     ["?view=foo", "login", "1000"], // unknown: login, as the server renders
     ["?view=__proto__", "login", "1000"],
     ["?view=", "login", "1000"],
+    // Read as sanitize_key() reads it on the server: lower case, [a-z0-9_-].
+    ["?view=Register", "register", "0100"],
+    ["?view=lost-password!", "lost-password", "0010"],
   ])("%s -> %s", (query, view, expected) => {
     resetDom(`https://site.test/gateway/${query}`);
     const state = installGateway();
@@ -55,6 +59,51 @@ describe("syncStateFromUrl", () => {
     Object.defineProperty(state, "formMap", { value: rest });
     gatewayActions.syncStateFromUrl();
     expect(state.activeView).toBe("login");
+  });
+
+  it("Back or Forward (popstate) puts the form it leaves back as it started", () => {
+    resetDom("https://site.test/gateway/?view=register");
+    const state = installGateway();
+    gatewayActions.syncStateFromUrl();
+    Object.assign(state.forms.register, { username: "anna", error: "Taken." });
+    state.forms.register.fieldErrors.email = "Bad.";
+
+    // What Back does before popstate fires: the URL changes under the page.
+    location.href = "https://site.test/gateway/";
+    gatewayActions.syncStateFromUrl();
+
+    expect(state.activeView).toBe("login");
+    expect(state.forms.register).toEqual(serverState().forms.register);
+  });
+
+  it("the first sync keeps what's typed in the view it shows", () => {
+    const state = installGateway();
+    state.forms.login.username = "anna";
+    gatewayActions.syncStateFromUrl();
+    expect(state.forms.login.username).toBe("anna");
+  });
+
+  it("a plugin's view hydrated as active is left without a reset", () => {
+    const state = installGateway();
+    const formMap: Record<string, string> = state.formMap;
+    formMap["magic-link"] = "isMagicLinkActive";
+    // What page-gateway.php hydrates for ?view=magic-link.
+    Object.assign(state, { activeView: "magic-link" });
+
+    expect(() => gatewayActions.syncStateFromUrl()).not.toThrow();
+    expect(state.activeView).toBe("login");
+  });
+});
+
+describe("reloadIfRestored (pageshow)", () => {
+  it("a page back from the back-forward cache reloads", () => {
+    reloadIfRestored({ persisted: true });
+    expect(location.reload).toHaveBeenCalledTimes(1);
+  });
+
+  it("a fresh load doesn't", () => {
+    reloadIfRestored({ persisted: false });
+    expect(location.reload).not.toHaveBeenCalled();
   });
 });
 

@@ -64,6 +64,24 @@ test("switching views changes the URL and history, not the page", async ({
   expect(await gateway.isMarked()).toBe(true);
 });
 
+test("Back and Forward reset the form they leave, like a link does", async ({
+  gateway,
+  page,
+}) => {
+  await gateway.goto();
+  await gateway.link("register").click();
+  await expect(gateway.form("register")).toBeVisible();
+  await gateway.type("register", "username", "half-typed");
+
+  await page.goBack();
+  await expect(gateway.form("login")).toBeVisible();
+  await page.goForward();
+  await expect(gateway.form("register")).toBeVisible();
+
+  await expect(gateway.input("register", "username")).toHaveValue("");
+  expect(await gateway.state((s) => s.forms.register.username)).toBe("");
+});
+
 test("leaving a form clears its banner", async ({ gateway }) => {
   await gateway.goto();
   await gateway.type("login", "username", "nobody-e2e-zz");

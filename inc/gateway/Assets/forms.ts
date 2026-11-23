@@ -23,10 +23,13 @@ type FieldTarget<K extends string> = Record<K, string> & {
  * reach isSubmitting, success or error. Typing clears the field's inline
  * error, and with `clearBanner` the form's banner too (a form whose errors
  * have no inline slot).
+ *
+ * NoInfer: `fields` alone decides K, so a form without one of them is the
+ * error - not a K widened to whatever the form happens to have.
  */
 export function fieldUpdater<const K extends string>(
   fields: readonly K[],
-  getForm: () => FieldTarget<K> | undefined,
+  getForm: () => FieldTarget<NoInfer<K>> | undefined,
   { clearBanner = false } = {},
 ): () => void {
   return () => {
@@ -68,11 +71,14 @@ export function reloadIfSessionChanged(error: unknown): boolean {
  * AbstractApiController) in the inline slots of the form's own `fields`,
  * else - including for errors on fields the form has no slot for - the
  * message in the banner. Never neither.
+ *
+ * The form's slots decide K (NoInfer on `fields`): passing another form's
+ * field list is a type error.
  */
 export function showFailure<K extends string>(
   form: { error: string | null; fieldErrors: Record<K, string | null> },
   error: unknown,
-  fields: readonly K[],
+  fields: readonly NoInfer<K>[],
 ): void {
   const serverErrors = error instanceof ApiError ? error.fieldErrors : null;
   let routed = false;

@@ -121,11 +121,29 @@ routes PHP's built-in server. The job also adds Secure Custom Fields, because
 - **PHP:** extend `Gateway\GatewayTestCase`.
   - `rest()` calls an endpoint as the store does (JSON body plus a `wp_rest`
     nonce).
+  - `assertFieldError($response, $field)` checks an error the form shows
+    under a field: the status (422 by default), the code and
+    `data.field_errors[$field]`, which is what the store routes inline.
   - `user()` makes an activated user with a known password.
-  - `mailTo()` reads what was "sent".
+  - `mailTo()` and `onlyMailTo()` read what was "sent".
+  - `queryOf($url)` decodes a link's query after parsing it with PHP 8.5's
+    WHATWG URL parser, so a link that isn't a valid URL fails there.
   - `fromIp()` sets the client IP for the rate limits.
+  - `HardeningTest` holds the language-level guard rails:
+    - ignoring a check's result warns (`#[\NoDiscard]`), and `(void)`
+      marks a deliberate discard;
+    - passwords and reset keys are `#[\SensitiveParameter]`.
+  - `FormsTest` reads each form's markup with `Dom\HTMLDocument` and checks
+    what the store relies on: `novalidate`, the submit handler, and that every
+    `data-field` names a string field of the state and has a label.
+  - Tests of shared code (`inc/shared`) go in `tests/php/Shared/`.
 - **TS:** import the store modules directly, not `*-store.ts`, because those
   register the store as a side effect.
+  - For a form's state while its request is still open, answer `fetch`
+    later: `Promise.withResolvers()` (see `pendingFetch()` in
+    `submit.test.ts`).
+  - The tests type-check in the stores' own environment (browser lib, no
+    Node types). The contract fixture is imported as a JSON module.
   - `tests/ts/setup.ts` mocks `@wordpress/interactivity` with
     `support/interactivity.ts`. Put the state in `fake.stores` and the clicked
     element in `fake.ref`.
@@ -138,8 +156,10 @@ routes PHP's built-in server. The job also adds Secure Custom Fields, because
       form;
     - `state(s => …)` reads the store's state in the page;
     - `requestsTo(route)` counts the REST calls made.
-  - `submit()` fires the submit event, so it tests the store's own checks
-    rather than the browser's constraint validation.
+  - `submit()` calls `requestSubmit()`, the path Enter and the submit
+    button take. The forms are `novalidate`, so the store's own checks run
+    rather than the browser's constraint validation; without it, an empty
+    required field would stop the submit, and the specs would fail.
   - Assert structure (which form shows, whether an error slot is filled,
     URLs, requests), never translated text: the same specs run on the local
     site and on plain WordPress in CI.

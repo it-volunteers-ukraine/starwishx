@@ -20,7 +20,7 @@ import {
 } from "./recovery/actions.ts";
 import { registerActions } from "./register/actions.ts";
 import type { GatewayActions, GatewayStore } from "./types.ts";
-import { gatewayActions, gatewayGetters } from "./views.ts";
+import { gatewayActions, gatewayGetters, reloadIfRestored } from "./views.ts";
 
 store<GatewayStore>("gateway", {
   state: gatewayGetters,
@@ -38,6 +38,7 @@ store<GatewayStore>("gateway", {
 // Plain calls, not through the store proxy: gatewayStore() needs no scope.
 const sync = (): void => gatewayActions.syncStateFromUrl();
 window.addEventListener("popstate", sync);
+window.addEventListener("pageshow", reloadIfRestored);
 if (document.readyState === "loading") {
   document.addEventListener("DOMContentLoaded", sync);
 } else {

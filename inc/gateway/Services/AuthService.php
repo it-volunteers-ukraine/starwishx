@@ -42,7 +42,8 @@ final class AuthService
     #[\NoDiscard]
     public function authenticate(
         string $username,
-        string $password,
+        // PHP 8.5 prints backtraces for fatal errors: never with this in them.
+        #[\SensitiveParameter] string $password,
         bool $remember = false
     ): array|WP_Error {
         $keys = $this->rateLimitKeys($username);
@@ -135,7 +136,7 @@ final class AuthService
      */
     private function rateLimitKeys(string $username): array
     {
-        $name = strtolower(trim($username));
+        $name = $username |> trim(...) |> strtolower(...);
         $user = get_user_by('login', $name)
             ?: (str_contains($name, '@') ? get_user_by('email', $name) : false);
         $ip = ClientIp::resolve();

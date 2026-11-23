@@ -35,6 +35,16 @@ export const FORM_KEYS = {
 } as const satisfies { [Id in FormId]: CamelCase<Id> };
 
 /**
+ * ?view as page-gateway.php reads it - sanitize_key(): lower case, only
+ * [a-z0-9_-] - so `?view=Register` shows the same form before and after
+ * hydration. null when there's no ?view.
+ */
+export function viewFromUrl(href: string): string | null {
+  const view = new URL(href).searchParams.get("view");
+  return view === null ? null : view.toLowerCase().replace(/[^a-z0-9_-]/g, "");
+}
+
+/**
  * Is `view` a form this store drives (FORM_KEYS) that is registered (the
  * hydrated formMap)? A form added through `gateway_register_forms` has no
  * actions here, and one a plugin removed has no state: both fall back.
@@ -73,12 +83,32 @@ export const gatewayGetters = {
   },
 } satisfies GatewayGetters & ThisType<GatewayState>;
 
+/**
+ * pageshow: a page restored from the back-forward cache comes back as it was
+ * left - after a login, with its form stuck on "Logging in..." and a nonce
+ * for a session that has changed. Reload instead: page-gateway.php sends a
+ * logged-in user on, and a guest gets a fresh page.
+ */
+export function reloadIfRestored(
+  event: Pick<PageTransitionEvent, "persisted">,
+): void {
+  if (event.persisted) window.location.reload();
+}
+
 export const gatewayActions = {
-  /** The view from ?view: the active view and the visibility flags. */
+  /**
+   * The view from ?view: the active view and the visibility flags. Leaving
+   * a view - by a link, Back or Forward - puts its form back as the server
+   * rendered it: no stale values or errors when it's shown again.
+   */
   syncStateFromUrl(): void {
     const { state } = gatewayStore();
-    const requested = new URL(window.location.href).searchParams.get("view");
+    const requested = viewFromUrl(window.location.href);
     const view = isFormId(state, requested) ? requested : DEFAULT_VIEW;
+
+    // The hydrated activeView can be a plugin's form, which has no key here.
+    const left: string = state.activeView;
+    if (left !== view && isFormId(state, left)) resetForm(FORM_KEYS[left]);
 
     state.activeView = view;
     for (const [id, flag] of Object.entries(state.formMap)) {
@@ -86,15 +116,14 @@ export const gatewayActions = {
     }
   },
 
-  /** A link to another view. withSyncEvent: it cancels the navigation. */
+  /**
+   * A link to another view. withSyncEvent: it cancels the navigation.
+   * syncStateFromUrl() resets the form it leaves.
+   */
   switchView: withSyncEvent((event: Event): void => {
     const { ref } = getElement();
     if (!(ref instanceof HTMLAnchorElement)) return;
     event.preventDefault();
-
-    // Leave the current form as it started: no stale values or errors.
-    const { state } = gatewayStore();
-    resetForm(FORM_KEYS[state.activeView]);
 
     // historyState(): an entry without core's wpInteractivityId would make
     // Back reload the page.

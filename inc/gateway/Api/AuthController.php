@@ -17,6 +17,7 @@ use WP_REST_Response;
  */
 final class AuthController extends AbstractApiController
 {
+    #[\Override]
     protected $namespace = 'gateway/v1';
 
     public function __construct(
@@ -70,7 +71,8 @@ final class AuthController extends AbstractApiController
 
         if (is_wp_error($result)) {
             return $this->mapServiceError($result, [
-                'auth_failed' => 401, // invalid credentials (rate_limited: default map, 429)
+                'auth_failed'           => 401, // invalid credentials (rate_limited: default map, 429)
+                'account_not_activated' => 403, // right password, no session until activated
             ]);
         }
 

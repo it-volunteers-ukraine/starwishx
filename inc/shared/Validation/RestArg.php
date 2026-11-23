@@ -155,8 +155,9 @@ final class RestArg
     /**
      * Validate string length is within bounds (inclusive).
      *
-     * Trim is applied before the min check so whitespace-only strings fail.
-     * Length uses mb_strlen — counts characters, not bytes.
+     * Trim is applied before the min check so whitespace-only strings fail -
+     * mb_trim(), so Unicode spaces (U+00A0 no-break, U+3000...) count as
+     * whitespace too. Length uses mb_strlen — counts characters, not bytes.
      */
     public static function stringLength(int $min, int $max, string $fieldLabel): Closure
     {
@@ -173,7 +174,7 @@ final class RestArg
                 );
             }
 
-            if (mb_strlen(trim($value)) < $min) {
+            if (mb_strlen(mb_trim($value)) < $min) {
                 return new WP_Error(
                     'too_short',
                     sprintf(

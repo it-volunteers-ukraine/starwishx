@@ -20,6 +20,7 @@ use WP_REST_Response;
  */
 final class RegisterController extends AbstractApiController
 {
+    #[\Override]
     protected $namespace = 'gateway/v1';
 
     private const int RATE_LIMIT_MAX    = 5;

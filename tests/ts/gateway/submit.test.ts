@@ -37,6 +37,22 @@ async function submit(action: SyncAwareAction): Promise<Event> {
   return event;
 }
 
+/** Start a submit without waiting for it: the request may still be open. */
+function start(action: SyncAwareAction): Promise<unknown> {
+  const done: unknown = action(new Event("submit", { cancelable: true }));
+  return Promise.resolve(done);
+}
+
+/**
+ * A fetch that stays open until the test answers it (ES2024
+ * Promise.withResolvers), to look at a form while its request runs.
+ */
+function pendingFetch(): (response: Response) => void {
+  const { promise, resolve } = Promise.withResolvers<Response>();
+  fetchMock.mockReturnValueOnce(promise);
+  return resolve;
+}
+
 /** The JSON bodies sent, by route. */
 const sent = () =>
   fetchMock.mock.calls.map(([input, init]): [string, unknown] => {
@@ -69,7 +85,7 @@ describe("login", () => {
     expect(fetchMock).not.toHaveBeenCalled();
   });
 
-  it("success: goes to the server's same-origin redirect", async () => {
+  it("success: goes to the server's same-origin redirect, still busy", async () => {
     Object.assign(state.forms.login, {
       username: "anna",
       password: "pw",
@@ -83,6 +99,8 @@ describe("login", () => {
       ["login", { username: "anna", password: "pw", remember: true }],
     ]);
     expect(location.href).toBe("https://site.test/launchpad/");
+    // The browser is leaving: no second click until it has.
+    expect(state.forms.login.isSubmitting).toBe(true);
   });
 
   it("a foreign redirect goes to the gateway instead", async () => {
@@ -117,10 +135,18 @@ describe("login", () => {
     expect(state.forms.login.error).toBeNull();
   });
 
-  it("a second submit while one is running is ignored", async () => {
-    state.forms.login.isSubmitting = true;
+  it("while the request is open: busy, and a second submit sends nothing", async () => {
+    Object.assign(state.forms.login, { username: "anna", password: "pw" });
+    const answer = pendingFetch();
+
+    const first = start(loginActions.submit);
+    expect(state.forms.login.isSubmitting).toBe(true);
     await submit(loginActions.submit);
-    expect(fetchMock).not.toHaveBeenCalled();
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+
+    answer(json({ code: "auth_failed", message: "Wrong." }, 401));
+    await first;
+    expect(state.forms.login.isSubmitting).toBe(false);
   });
 });
 
@@ -156,6 +182,30 @@ describe("register", () => {
     expect(state.forms.register.error).toBeNull();
   });
 
+  it("a taken username (409) shows at the field, not in the banner", async () => {
+    Object.assign(state.forms.register, { username: "anna", email: "a@b.co" });
+    fetchMock.mockResolvedValue(
+      json(
+        {
+          code: "username_exists",
+          message: "This username is already taken.",
+          data: {
+            status: 409,
+            field_errors: { username: "This username is already taken." },
+          },
+        },
+        409,
+      ),
+    );
+    await submit(registerActions.submit);
+    expect(state.forms.register.fieldErrors).toEqual({
+      username: "This username is already taken.",
+      email: null,
+    });
+    expect(state.forms.register.error).toBeNull();
+    expect(state.forms.register.isSubmitting).toBe(false);
+  });
+
   it("success clears the form", async () => {
     Object.assign(state.forms.register, { username: "anna", email: "a@b.co" });
     fetchMock.mockResolvedValue(
@@ -188,6 +238,19 @@ describe("lost password", () => {
     await submit(lostPasswordActions.submit);
     expect(sent()).toEqual([["password/lost", { user_login: "anna" }]]);
     expect(state.forms.lostPassword.success).toBe(true);
+  });
+
+  it("a rate limit shows in the banner", async () => {
+    state.forms.lostPassword.userLogin = "anna";
+    fetchMock.mockResolvedValue(
+      json({ code: "rate_limited", message: "Too many attempts." }, 429),
+    );
+    await submit(lostPasswordActions.submit);
+    expect(state.forms.lostPassword).toMatchObject({
+      error: "Too many attempts.",
+      success: false,
+      isSubmitting: false,
+    });
   });
 
   it("a stale nonce reloads (a guest gets no fresh nonce to retry with)", async () => {
@@ -270,5 +333,39 @@ describe("reset password", () => {
       isPasswordVisible: true,
       isGenerating: false,
     });
+  });
+
+  it("generate: one request at a time", async () => {
+    const answer = pendingFetch();
+
+    const first = resetPasswordActions.generate();
+    expect(state.forms.resetPassword.isGenerating).toBe(true);
+    await resetPasswordActions.generate();
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+
+    answer(json({ success: true, password: "New#Generated9" }));
+    await first;
+    expect(state.forms.resetPassword.isGenerating).toBe(false);
+  });
+
+  it("generate: a failure shows in the banner, the password stays", async () => {
+    fetchMock.mockResolvedValue(
+      json({ code: "rest_no_route", message: "No route." }, 404),
+    );
+    await resetPasswordActions.generate();
+    expect(state.forms.resetPassword).toMatchObject({
+      error: "No route.",
+      newPassword: "Generated#Password1",
+      isGenerating: false,
+    });
+  });
+
+  it("generate: a stale nonce reloads", async () => {
+    fetchMock.mockResolvedValue(
+      json({ code: "rest_cookie_invalid_nonce", message: "x" }, 403),
+    );
+    await resetPasswordActions.generate();
+    expect(location.reload).toHaveBeenCalledTimes(1);
+    expect(state.forms.resetPassword.error).toBeNull();
   });
 });

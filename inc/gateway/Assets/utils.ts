@@ -166,14 +166,18 @@ export function validateUsername(
 
 /**
  * The PasswordPolicy message `value` breaks, or null. The character classes
- * are PasswordPolicy::validate()'s: change them together.
+ * are PasswordPolicy::validate()'s: change them together. The length is in
+ * code points, as mb_strlen() counts on the server (`value.length` counts
+ * UTF-16 units: an emoji would count twice).
  */
 export function validatePassword(
   value: string,
   policy: PasswordPolicy | undefined,
 ): string | null {
   const minLength = policy?.minLength ?? 12;
-  if (value.length < minLength) return policy?.messages.tooShort ?? "";
+  // Code points on purpose: mb_strlen()'s count (graphemes would be fewer).
+  // eslint-disable-next-line typescript/no-misused-spread
+  if ([...value].length < minLength) return policy?.messages.tooShort ?? "";
   if (
     !/[A-Z]/.test(value) ||
     !/[0-9]/.test(value) ||

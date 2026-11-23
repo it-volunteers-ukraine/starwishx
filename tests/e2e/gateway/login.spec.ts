@@ -33,6 +33,19 @@ test("empty or blank input: inline errors and no request", async ({
   await expect(gateway.fieldError("login", "password")).toBeVisible();
 });
 
+test("Enter on the empty form: the store's messages, not the browser's", async ({
+  gateway,
+}) => {
+  await gateway.goto();
+  // The inputs are `required`; without the form's novalidate, the browser
+  // would stop this Enter with its own popup and the store would see nothing.
+  await gateway.input("login", "username").press("Enter");
+
+  await expect(gateway.fieldError("login", "username")).toBeVisible();
+  await expect(gateway.fieldError("login", "password")).toBeVisible();
+  expect(gateway.requestsTo("login")).toBe(0);
+});
+
 test("a wrong password shows the banner and stays on the page", async ({
   gateway,
   wp,

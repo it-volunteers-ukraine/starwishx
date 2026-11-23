@@ -1,7 +1,8 @@
 <?php
 
 /**
- * POST gateway/v1/login: who gets in, what a failure reveals, the lockout.
+ * POST gateway/v1/login and logout: who gets in, what a failure reveals,
+ * the lockout, and leaving.
  *
  * File: tests/php/Gateway/LoginTest.php
  */
@@ -9,6 +10,8 @@
 declare(strict_types=1);
 
 namespace Starwishx\Tests\Gateway;
+
+use Gateway\Enums\GatewayView;
 
 final class LoginTest extends GatewayTestCase
 {
@@ -56,8 +59,28 @@ final class LoginTest extends GatewayTestCase
 
         $response = $this->login('fresh');
 
+        $this->assertSame(403, $response->get_status());
         $this->assertSame('account_not_activated', self::code($response));
         $this->assertSame(0, get_current_user_id());
+    }
+
+    public function test_logout_ends_the_session_and_points_at_the_gateway(): void
+    {
+        wp_set_current_user($this->user('anna')->ID);
+
+        $response = $this->rest('POST', 'logout');
+
+        $this->assertSame(200, $response->get_status());
+        $this->assertSame(GatewayView::LOGIN->url(), $response->get_data()['redirectTo']);
+        $this->assertSame(0, get_current_user_id());
+    }
+
+    public function test_logout_needs_a_session(): void
+    {
+        $response = $this->rest('POST', 'logout');
+
+        $this->assertSame(401, $response->get_status());
+        $this->assertSame('not_authenticated', self::code($response));
     }
 
     public function test_logged_in_users_are_refused(): void
@@ -142,26 +165,32 @@ final class LoginTest extends GatewayTestCase
         $this->assertSame(429, $this->login('anna')->get_status());
     }
 
-    /** @return array<string, array{array<string, mixed>}> */
+    /** @return array<string, array{array<string, mixed>, string}> */
     public static function malformed(): array
     {
         return [
-            'array username'  => [['username' => ['anna'], 'password' => 'x']],
-            'array password'  => [['username' => 'anna', 'password' => ['x']]],
-            'number password' => [['username' => 'anna', 'password' => 12345678]],
-            'missing password' => [['username' => 'anna']],
+            'array username'  => [['username' => ['anna'], 'password' => 'x'], 'username'],
+            'array password'  => [['username' => 'anna', 'password' => ['x']], 'password'],
+            'number password' => [['username' => 'anna', 'password' => 12345678], 'password'],
         ];
     }
 
     /**
+     * A wrong type is a field error, never a crash: the inline contract.
+     *
      * @dataProvider malformed
      * @param array<string, mixed> $body
      */
-    public function test_malformed_input_is_a_client_error(array $body): void
+    public function test_malformed_input_is_a_field_error(array $body, string $field): void
     {
-        $response = $this->rest('POST', 'login', $body);
+        $this->assertFieldError($this->rest('POST', 'login', $body), $field);
+    }
 
-        $this->assertGreaterThanOrEqual(400, $response->get_status());
-        $this->assertLessThan(500, $response->get_status());
+    public function test_a_missing_parameter_is_a_bad_request(): void
+    {
+        $response = $this->rest('POST', 'login', ['username' => 'anna']);
+
+        $this->assertSame(400, $response->get_status());
+        $this->assertSame('rest_missing_callback_param', self::code($response));
     }
 }
