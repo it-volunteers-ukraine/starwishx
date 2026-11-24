@@ -140,7 +140,7 @@ class CommentsController extends AbstractApiController
             'items'       => $items,
             'total'       => $total,
             'page'        => $page,
-            'total_pages' => ceil($total / $perPage),
+            'total_pages' => (int) ceil($total / $perPage),
         ]);
     }
 

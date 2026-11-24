@@ -80,8 +80,8 @@ export const lanes: Lane[] = [
     id: "stores",
     type: "js",
     // Entry points follow the *-store convention, one bundle per module:
-    // TypeScript (inc/tsconfig.json; inc/listing and inc/launchpad so far)
-    // or plain JS until migrated. Everything else under Assets/ (utils,
+    // TypeScript (inc/tsconfig.json: listing, launchpad, gateway, comments
+    // so far) or plain JS until migrated. Everything else under Assets/ (utils,
     // tour-manager.js, and all of inc/shared/Assets) is imported by a store
     // and bundled into it.
     include: ["inc/*/Assets/*-store.{js,mjs,ts}"],

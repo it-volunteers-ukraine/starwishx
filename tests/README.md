@@ -10,15 +10,17 @@ can see it.
 | PHP regression table | plain PHP                                 | `tests/url-policy.php` | UrlPolicy against the PHP version's URL parser                                  |
 | E2E                  | Playwright (Edge locally, Chromium in CI) | `tests/e2e/`           | The journeys in a real browser, against a running site                          |
 
-The **contract fixture** `fixtures/gateway-state.json` ties the two sides
-together. It holds the shape (keys and value types) of the state PHP hydrates
-for the Gateway store:
+The **contract fixtures** tie the two sides together. Each holds the shape
+(keys and value types) of what PHP sends a store:
 
-- `php/Gateway/StateContractTest.php` checks PHP's output against it.
-- `ts/gateway/contract.test.ts` checks the TS-typed sample state against it.
+- `fixtures/gateway-state.json`: the Gateway's hydrated state, checked by
+  `php/Gateway/StateContractTest.php` and `ts/gateway/contract.test.ts`;
+- `fixtures/comments-state.json`: the comments store's hydrated state (a post
+  with a rated review and a reply) and a write response, checked by
+  `php/Comments/StateContractTest.php` and `ts/comments/contract.test.ts`.
 
 If you change a field on one side only, one of them fails. After a deliberate
-change, update `inc/gateway/Assets/types.ts` and regenerate the fixture with
+change, update the store's `types.ts` and regenerate the fixture with
 `UPDATE_FIXTURES=1`.
 
 ## Running
@@ -136,7 +138,8 @@ routes PHP's built-in server. The job also adds Secure Custom Fields, because
   - `FormsTest` reads each form's markup with `Dom\HTMLDocument` and checks
     what the store relies on: `novalidate`, the submit handler, and that every
     `data-field` names a string field of the state and has a label.
-  - Tests of shared code (`inc/shared`) go in `tests/php/Shared/`.
+  - Tests of shared code (`inc/shared`) go in `tests/php/Shared/`, of the
+    comments module in `tests/php/Comments/` (each folder is a testsuite).
 - **TS:** import the store modules directly, not `*-store.ts`, because those
   register the store as a side effect.
   - For a form's state while its request is still open, answer `fetch`
@@ -145,8 +148,12 @@ routes PHP's built-in server. The job also adds Secure Custom Fields, because
   - The tests type-check in the stores' own environment (browser lib, no
     Node types). The contract fixture is imported as a JSON module.
   - `tests/ts/setup.ts` mocks `@wordpress/interactivity` with
-    `support/interactivity.ts`. Put the state in `fake.stores` and the clicked
-    element in `fake.ref`.
+    `support/interactivity.ts`. Put the state in `fake.stores`, the clicked
+    element in `fake.ref` and what `getContext()` returns in `fake.context`.
+  - Comments: `installComments()` (`support/comments.ts`) installs the
+    hydrated state with the store's real getters; `inContext({ item, reply })`
+    acts as if inside the list loop. Call `cancelPendingCloses()` before each
+    test, so no delayed form close outlives the test that started it.
   - `support/dom.ts` provides `window.location` and `history`, plus the
     element classes the stores check with `instanceof`.
 - **E2E:** import `test` and `expect` from `tests/e2e/support/fixtures.ts`.

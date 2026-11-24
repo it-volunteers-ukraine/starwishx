@@ -92,19 +92,28 @@ final class CommentsCore
         // Infrastructure config — static per request, no post-specific knowledge needed.
         // wp_interactivity_state() merges: the template part (comments-interactive.php)
         // adds application state (comments list, aggregates, form states) on top.
-        wp_interactivity_state('comments', [
-            'config' => [
-                'nonce'    => wp_create_nonce('wp_rest'),
-                'restUrl'  => rest_url('comments/v1/'),
-                'messages' => [
-                    'reviewPosted'    => __('Review posted successfully!', 'starwishx'),
-                    'updateSaved'     => __('Update saved.', 'starwishx'),
-                    'submitError'     => __('An error occurred while posting.', 'starwishx'),
-                    /* translators: %avg% = average rating, %count% = number of reviews */
-                    'ratingBadgeLabel' => __('Average rating: %avg% out of 5 based on %count% reviews', 'starwishx'),
-                ],
+        wp_interactivity_state('comments', ['config' => $this->getConfig()]);
+    }
+
+    /**
+     * The store's `config`: REST access and the strings only the client
+     * shows. Typed on the TS side as CommentsConfig.
+     *
+     * @return array{nonce: string, restUrl: string, messages: array<string, string>}
+     */
+    public function getConfig(): array
+    {
+        return [
+            'nonce'    => wp_create_nonce('wp_rest'),
+            'restUrl'  => rest_url('comments/v1/'),
+            'messages' => [
+                'reviewPosted'     => __('Review posted successfully!', 'starwishx'),
+                'updateSaved'      => __('Update saved.', 'starwishx'),
+                'submitError'      => __('An error occurred while posting.', 'starwishx'),
+                /* translators: %avg% = average rating, %count% = number of reviews */
+                'ratingBadgeLabel' => __('Average rating: %avg% out of 5 based on %count% reviews', 'starwishx'),
             ],
-        ]);
+        ];
     }
 
     // --- Public Accessors ---

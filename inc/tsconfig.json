@@ -1,7 +1,8 @@
 {
   // The Interactivity API stores under inc/*/Assets, bundled by Rolldown as
   // script modules - see the "stores" lane in tools/build/lanes.ts. Stores
-  // move to TypeScript one module at a time (inc/listing, inc/launchpad);
+  // move to TypeScript one module at a time (listing, launchpad, gateway,
+  // comments so far);
   // what they share is in inc/shared/Assets/store-utils.ts and stores.ts.
   "extends": "../tsconfig.base.json",
   "compilerOptions": {

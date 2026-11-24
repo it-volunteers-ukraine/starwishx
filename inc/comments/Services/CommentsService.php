@@ -15,6 +15,50 @@ class CommentsService
     public const ALLOWED_POST_TYPES = ['opportunity', 'project', 'news'];
 
     /**
+     * The post-specific state template-parts/comments-interactive.php
+     * hydrates for the comments store (CommentsCore::getConfig() adds
+     * `config`). Its shape is the PHP side of the contract in
+     * tests/fixtures/comments-state.json; the TS side is
+     * inc/comments/Assets/types.ts (CommentsServerState).
+     *
+     * hasComments, hasRatings and roundedAvg are server-render mirrors of
+     * the store's getters of the same names, which replace them on the client.
+     *
+     * @return array{
+     *   canComment: bool, isPostAuthor: bool, list: list<array<string, mixed>>,
+     *   aggregates: array{count: int, avg: float}, page: int, hasMore: bool,
+     *   hasComments: bool, newContent: string, newRating: int, error: null,
+     *   successMessage: null, isSubmitting: bool, isLoading: bool,
+     *   showForm: bool, hasRatings: bool, roundedAvg: int
+     * }
+     */
+    public function getInitialState(int $postId): array
+    {
+        $total      = $this->countPostComments($postId);
+        $aggregates = $this->getAggregates($postId);
+
+        return [
+            'canComment'     => get_post_status($postId) === 'publish',
+            'isPostAuthor'   => is_user_logged_in()
+                && get_current_user_id() === (int) get_post_field('post_author', $postId),
+            'list'           => $this->getPostComments($postId, self::ITEMS_PER_PAGE, 0),
+            'aggregates'     => $aggregates,
+            'page'           => 1,
+            'hasMore'        => $total > self::ITEMS_PER_PAGE,
+            'hasComments'    => $total > 0,
+            'newContent'     => '',
+            'newRating'      => 5,
+            'error'          => null,
+            'successMessage' => null,
+            'isSubmitting'   => false,
+            'isLoading'      => false,
+            'showForm'       => false,
+            'hasRatings'     => $aggregates['count'] > 0,
+            'roundedAvg'     => (int) round($aggregates['avg']),
+        ];
+    }
+
+    /**
      * Get comments with rating data (Optimized to avoid N+1 queries)
      */
     public function getPostComments(int $postId, int $limit = self::ITEMS_PER_PAGE, int $offset = 0): array

@@ -3,51 +3,27 @@
 /**
  * Interactive Comments Template
  * 
- * File: templates/parts/comments-interactive.php
+ * Which item is being edited or replied to is the store's editingId /
+ * replyingId, read through the state.isEditing / state.isReplyOpen getters:
+ * one editor and one reply form at a time. Neither is in the PHP state, so
+ * the server renders every item in view mode.
+ *
+ * File: template-parts/comments-interactive.php
  */
 
 declare(strict_types=1);
 
 defined('ABSPATH') || exit;
 
-$post_id = get_the_ID();
+$post_id = (int) get_the_ID();
 
-/** @var \Comments\Services\CommentsService $service */
-$service = \comments()->service();
+// Post-specific state. The config (nonce, restUrl, messages) is hydrated by
+// CommentsCore::enqueueAssets(); wp_interactivity_state() merges the two.
+$state = \comments()->service()->getInitialState($post_id);
+wp_interactivity_state('comments', $state);
 
-$limit = \Comments\Services\CommentsService::ITEMS_PER_PAGE;
-$initial_comments  = $service->getPostComments($post_id, $limit, 0);
-$total_count       = $service->countPostComments($post_id);
-$aggregates        = $service->getAggregates($post_id);
-// $has_comments      = !empty($initial_comments);
-
-// Application state — post-specific data. Infrastructure config (config, nonce, restUrl)
-// is already hydrated by CommentsCore::enqueueAssets() — wp_interactivity_state() merges.
-$post_status    = get_post_status($post_id);
-$has_ratings    = $aggregates['count'] > 0;
-$rounded_avg    = (int) round((float) $aggregates['avg']);
-$is_post_author = get_current_user_id() === (int) get_post_field('post_author', $post_id);
-
-wp_interactivity_state('comments', [
-    'canComment'     => $post_status === 'publish',
-    'isPostAuthor'   => $is_post_author,
-    'list'           => $initial_comments,
-    'aggregates'     => $aggregates,
-    'page'           => 1,
-    'hasMore'        => $total_count > $limit,
-    'hasComments'    => $total_count > 0,
-    'newContent'     => '',
-    'newRating'      => 5,
-    'error'          => null,
-    'successMessage' => null,
-    'isSubmitting'   => false,
-    'isLoading'      => false,
-    'showForm'       => false,
-    // SSR mirrors of JS getters — enables server-side directive processing.
-    // JS getters with same names override these for client-side reactivity.
-    'hasRatings'     => $has_ratings,
-    'roundedAvg'     => $rounded_avg,
-]);
+$aggregates = $state['aggregates'];
+$sprite_star = get_template_directory_uri() . '/assets/img/sprites.svg#icon-star';
 ?>
 
 <footer id="comments" class="comments-area"
@@ -60,15 +36,15 @@ wp_interactivity_state('comments', [
         <div class="comments-header__info">
             <h5 id="reviews-heading" class="h5"><?php esc_html_e('Reviews', 'starwishx'); ?></h5>
             <span class="rating-badge"
-                <?php if (!$has_ratings) echo 'hidden'; ?>
+                <?php if (!$state['hasRatings']) echo 'hidden'; ?>
                 data-wp-bind--hidden="!state.hasRatings"
                 role="group" data-wp-bind--aria-label="state.ratingBadgeLabel">
                 <span class="stars-display" data-wp-bind--data-rating="state.roundedAvg"
-                    data-rating="<?php echo round((float) $aggregates['avg']); ?>"
+                    data-rating="<?php echo (int) $state['roundedAvg']; ?>"
                     aria-hidden="true">
                     <?php for ($s = 1; $s <= 5; $s++): ?>
                         <svg class="icon-star star-<?php echo $s; ?>" width="16" height="16" aria-hidden="true">
-                            <use href="<?php echo get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-star"></use>
+                            <use href="<?php echo esc_url($sprite_star); ?>"></use>
                         </svg>
                     <?php endfor; ?>
                 </span>
@@ -162,16 +138,16 @@ wp_interactivity_state('comments', [
 
     <!-- COMMENTS LIST -->
     <div class="comments-list">
-        <div <?php if ($total_count > 0) echo 'hidden'; ?>
+        <div <?php if ($state['hasComments']) echo 'hidden'; ?>
             data-wp-bind--hidden="state.hasComments">
             <p><?php esc_html_e('No comments yet.', 'starwishx'); ?></p>
         </div>
 
-        <template data-wp-each--item="state.list">
-            <div class="comment-item" data-wp-context='{ "isEditing": false, "isReplying": false }'>
+        <template data-wp-each--item="state.list" data-wp-each-key="context.item.id">
+            <div class="comment-item">
 
                 <!-- VIEW mode. Hidden if this item is being edited -->
-                <div class="comment-view" data-wp-bind--hidden="context.isEditing">
+                <div class="comment-view" data-wp-bind--hidden="state.isEditing">
                     <div class="comment-header">
                         <div class="comment-author">
                             <img data-wp-bind--src="context.item.avatar" data-wp-bind--alt="context.item.author" class="avatar" alt="">
@@ -195,7 +171,7 @@ wp_interactivity_state('comments', [
                                 role="img" data-wp-bind--aria-label="context.item.ratingLabel">
                                 <?php for ($s = 1; $s <= 5; $s++): ?>
                                     <svg class="icon-star star-<?php echo $s; ?>" aria-hidden="true">
-                                        <use href="<?php echo get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-star"></use>
+                                        <use href="<?php echo esc_url($sprite_star); ?>"></use>
                                     </svg>
                                 <?php endfor; ?>
                             </div>
@@ -218,7 +194,7 @@ wp_interactivity_state('comments', [
                 </div>
 
                 <!-- EDIT mode (In-Place) Visible only if this item is being edited -->
-                <div class="comment-edit-mode" data-wp-bind--hidden="!context.isEditing">
+                <div class="comment-edit-mode" data-wp-bind--hidden="!state.isEditing">
                     <form class="comment-form comment-form--inline" data-wp-on--submit="actions.saveEdit">
                         <!-- FIELDSET: Locks on isUpdating -->
                         <fieldset data-wp-bind--disabled="state.isUpdating">
@@ -271,10 +247,10 @@ wp_interactivity_state('comments', [
                 <!-- REPLIES Thread -->
                 <div class="comment-replies">
                     <div class="replies-list" data-wp-bind--hidden="!context.item.hasReplies">
-                        <template data-wp-each--reply="context.item.replies">
-                            <div class="reply-item" data-wp-context='{ "isEditing": false }'>
+                        <template data-wp-each--reply="context.item.replies" data-wp-each-key="context.reply.id">
+                            <div class="reply-item">
                                 <!-- Reply VIEW mode -->
-                                <div class="reply-view" data-wp-bind--hidden="context.isEditing">
+                                <div class="reply-view" data-wp-bind--hidden="state.isEditing">
                                     <div class="reply-header">
                                         <div class="comment-author">
                                             <img data-wp-bind--src="context.reply.avatar" data-wp-bind--alt="context.reply.author" class="avatar-small" alt="">
@@ -310,7 +286,7 @@ wp_interactivity_state('comments', [
                                 </div>
 
                                 <!-- Reply EDIT mode (Inline) -->
-                                <div class="reply-edit-mode" data-wp-bind--hidden="!context.isEditing">
+                                <div class="reply-edit-mode" data-wp-bind--hidden="!state.isEditing">
                                     <form class="comment-form comment-form--inline" data-wp-on--submit="actions.saveReplyEdit">
                                         <!-- FIELDSET: Locks on isUpdating -->
                                         <fieldset data-wp-bind--disabled="state.isUpdating">
@@ -347,14 +323,14 @@ wp_interactivity_state('comments', [
                     </div>
 
                     <!-- Reply Form -->
-                    <div class="reply-form-wrapper" data-wp-bind--hidden="!context.isReplying">
-                        <!-- Local Error (Reusing state.error works because context implies focus) -->
+                    <div class="reply-form-wrapper" data-wp-bind--hidden="!state.isReplyOpen">
+                        <!-- Local error: one reply form is open at a time (state.isReplyOpen) -->
                         <div class="form-status-area" data-wp-bind--hidden="!state.error">
                             <div class="alert-inline" data-wp-text="state.error"></div>
                         </div>
                         <form class="comment-form comment-form--reply" data-wp-on--submit="actions.submitReply">
-                            <!-- FIELDSET: Locks on isReplying -->
-                            <fieldset data-wp-bind--disabled="state.isReplying">
+                            <!-- FIELDSET: Locks on isSendingReply -->
+                            <fieldset data-wp-bind--disabled="state.isSendingReply">
                                 <div class="form-field">
                                     <textarea class="form-control" rows="2"
                                         placeholder="<?php esc_attr_e('Write a reply...', 'starwishx'); ?>"
@@ -365,14 +341,14 @@ wp_interactivity_state('comments', [
                                     <button type="button" class="btn-secondary__small" data-wp-on--click="actions.cancelReply">
                                         <?php esc_html_e('Cancel', 'starwishx'); ?>
                                     </button>
-                                    <button type="submit" class="btn__small" data-wp-bind--disabled="state.isReplying">
+                                    <button type="submit" class="btn__small" data-wp-bind--disabled="state.isSendingReply">
                                         <?php esc_html_e('Reply', 'starwishx'); ?>
                                     </button>
                                 </div>
                             </fieldset>
                             <!-- LOCALIZED STATUS -->
                             <div class="form-status-area">
-                                <div class="sending-message" data-wp-bind--hidden="!state.isReplying">
+                                <div class="sending-message" data-wp-bind--hidden="!state.isSendingReply">
                                     <?php esc_html_e('Sending...', 'starwishx'); ?>
                                 </div>
                                 <div class="status-message" data-wp-bind--hidden="!state.successMessage" data-wp-text="state.successMessage"></div>

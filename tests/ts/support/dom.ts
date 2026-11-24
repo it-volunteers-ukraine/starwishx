@@ -16,6 +16,10 @@ class FakeInputElement extends FakeElement {
   checked = false;
 }
 
+class FakeTextAreaElement extends FakeElement {
+  value = "";
+}
+
 class FakeAnchorElement extends FakeElement {
   href = "";
 }
@@ -47,6 +51,7 @@ export function installDom(): void {
   for (const [name, value] of Object.entries({
     HTMLElement: FakeElement,
     HTMLInputElement: FakeInputElement,
+    HTMLTextAreaElement: FakeTextAreaElement,
     HTMLAnchorElement: FakeAnchorElement,
     window: { location, history },
   })) {
