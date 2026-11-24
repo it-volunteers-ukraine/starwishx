@@ -86,6 +86,19 @@ describe("errorMessage", () => {
       "fallback",
     );
   });
+
+  it("puts a field error first: the forms have no field slots", () => {
+    const tooLong = new ApiError(422, "Unprocessable Entity", {
+      code: "invalid_data",
+      message: "Please correct the highlighted fields.",
+      data: {
+        field_errors: { content: "Comment: maximum 2000 characters allowed." },
+      },
+    });
+    expect(errorMessage(tooLong, "fallback")).toBe(
+      "Comment: maximum 2000 characters allowed.",
+    );
+  });
 });
 
 describe("guards", () => {

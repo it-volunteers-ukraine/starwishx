@@ -91,10 +91,16 @@ export async function commentsFetch<T>(
   return data;
 }
 
-/** The text to show for a failed call: the server's message, else `fallback`. */
+/**
+ * The text to show for a failed call. The comments forms have no per-field
+ * slots, so a field error comes first (say, the comment is too long: its
+ * 422's own message is only "Please correct the highlighted fields."), then
+ * the server's message, else `fallback`.
+ */
 export function errorMessage(error: unknown, fallback: string): string {
-  if (error instanceof ApiError) return error.serverMessage || fallback;
-  return fallback;
+  if (!(error instanceof ApiError)) return fallback;
+  const [fieldError] = Object.values(error.fieldErrors ?? {});
+  return fieldError || error.serverMessage || fallback;
 }
 
 // --- Response guards ----------------------------------------------------

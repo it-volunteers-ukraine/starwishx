@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-11-22T20:28:32+00:00\n"
+"POT-Creation-Date: 2026-11-24T06:47:11+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: starwishx\n"
@@ -164,7 +164,7 @@ msgstr ""
 #: inc/launchpad/Panels/OpportunitiesPanel.php:1096
 #: production/archive-opportunity.php:206
 #: production/header.php:107
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:1091
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:1096
 #: production/template-parts/element-popup.php:52
 #: template-parts/element-popup.php:52
 msgid "Close"
@@ -292,9 +292,9 @@ msgid "Login"
 msgstr ""
 
 #: header.php:127
-#: inc/gateway/Forms/RegisterForm.php:77
+#: inc/gateway/Forms/RegisterForm.php:84
 #: production/header.php:127
-#: production/inc/gateway/Forms/RegisterForm.php:77
+#: production/inc/gateway/Forms/RegisterForm.php:84
 #: production/template-parts/element-popup.php:72
 #: template-parts/element-popup.php:72
 msgid "Register"
@@ -581,7 +581,7 @@ msgstr ""
 #. translators: 1: action name (e.g., "Password change"), 2: human-readable wait duration
 #. translators: 1: action name (e.g., "Tour changes"), 2: human-readable wait duration
 #: inc/chat/Api/ActivityController.php:202
-#: inc/comments/Api/CommentsController.php:208
+#: inc/comments/Api/CommentsController.php:232
 #: inc/contact/Api/ContactController.php:52
 #: inc/launchpad/Api/MediaController.php:146
 #: inc/launchpad/Api/OpportunitiesController.php:555
@@ -593,7 +593,7 @@ msgstr ""
 #: production/inc/comments/Api/CommentsController.php:208
 #: production/inc/contact/Api/ContactController.php:52
 #: production/inc/launchpad/Api/MediaController.php:146
-#: production/inc/launchpad/Api/OpportunitiesController.php:538
+#: production/inc/launchpad/Api/OpportunitiesController.php:555
 #: production/inc/launchpad/Api/ProfileController.php:360
 #: production/inc/launchpad/Api/SecurityController.php:128
 #: production/inc/listing/Api/MainController.php:169
@@ -692,7 +692,7 @@ msgstr ""
 #: production/inc/launchpad/Panels/FavoritesPanel.php:67
 #: production/inc/launchpad/Panels/OpportunitiesPanel.php:399
 #: production/template-parts/comments-interactive.php:394
-#: template-parts/comments-interactive.php:394
+#: template-parts/comments-interactive.php:376
 msgid "Loading..."
 msgstr ""
 
@@ -702,17 +702,17 @@ msgstr ""
 #: inc/listing/Core/ResultsGrid.php:94
 #: production/inc/chat/Panels/ChatPanel.php:134
 #: production/inc/launchpad/Panels/FavoritesPanel.php:137
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:535
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:540
 #: production/inc/listing/Core/ResultsGrid.php:94
 msgid "Load More"
 msgstr ""
 
-#: inc/comments/Api/CommentsController.php:39
+#: inc/comments/Api/CommentsController.php:58
 #: production/inc/comments/Api/CommentsController.php:39
 msgid "Comment"
 msgstr ""
 
-#: inc/comments/Api/CommentsController.php:64
+#: inc/comments/Api/CommentsController.php:81
 #: inc/launchpad/Api/OpportunitiesController.php:182
 #: production/inc/comments/Api/CommentsController.php:64
 #: production/inc/launchpad/Api/OpportunitiesController.php:182
@@ -721,41 +721,47 @@ msgstr ""
 msgid "Items per page"
 msgstr ""
 
-#: inc/comments/Api/CommentsController.php:209
+#: inc/comments/Api/CommentsController.php:121
+#: inc/favorites/Api/FavoritesController.php:203
+#: production/inc/favorites/Api/FavoritesController.php:203
+msgid "Post not found."
+msgstr ""
+
+#: inc/comments/Api/CommentsController.php:233
 #: production/inc/comments/Api/CommentsController.php:209
 msgid "Comment posting"
 msgstr ""
 
-#: inc/comments/Core/CommentsCore.php:100
+#: inc/comments/Core/CommentsCore.php:139
 #: production/inc/comments/Core/CommentsCore.php:100
 msgid "Review posted successfully!"
 msgstr ""
 
-#: inc/comments/Core/CommentsCore.php:101
+#: inc/comments/Core/CommentsCore.php:140
 #: production/inc/comments/Core/CommentsCore.php:101
 msgid "Update saved."
 msgstr ""
 
-#: inc/comments/Core/CommentsCore.php:102
+#: inc/comments/Core/CommentsCore.php:141
 #: production/inc/comments/Core/CommentsCore.php:102
 msgid "An error occurred while posting."
 msgstr ""
 
 #. translators: %avg% = average rating, %count% = number of reviews
-#: inc/comments/Core/CommentsCore.php:104
+#: inc/comments/Core/CommentsCore.php:143
 #: production/inc/comments/Core/CommentsCore.php:104
 #, php-format
 msgid "Average rating: %avg% out of 5 based on %count% reviews"
 msgstr ""
 
 #. translators: %d: star rating number 1-5
-#: inc/comments/Services/CommentsService.php:146
+#: inc/comments/Services/CommentsService.php:177
 #: production/inc/comments/Services/CommentsService.php:146
 #, php-format
 msgid "Rating: %d out of 5 stars"
 msgstr ""
 
-#: inc/comments/Services/CommentsService.php:161
+#: inc/comments/Services/CommentsService.php:203
 #: inc/launchpad/Services/ProfileService.php:371
 #: inc/launchpad/Services/ProfileService.php:420
 #: production/inc/comments/Services/CommentsService.php:161
@@ -764,54 +770,71 @@ msgstr ""
 msgid "User not found."
 msgstr ""
 
-#: inc/comments/Services/CommentsService.php:167
+#: inc/comments/Services/CommentsService.php:208
 #: production/inc/comments/Services/CommentsService.php:167
 msgid "Comments are only allowed on published posts."
 msgstr ""
 
-#: inc/comments/Services/CommentsService.php:171
+#: inc/comments/Services/CommentsService.php:212
 #: production/inc/comments/Services/CommentsService.php:171
 msgid "Comments are not allowed on this content."
 msgstr ""
 
-#: inc/comments/Services/CommentsService.php:179
+#: inc/comments/Services/CommentsService.php:217
 #: production/inc/comments/Services/CommentsService.php:179
 msgid "You cannot review your own post."
 msgstr ""
 
-#: inc/comments/Services/CommentsService.php:185
+#: inc/comments/Services/CommentsService.php:225
 #: production/inc/comments/Services/CommentsService.php:185
 msgid "Parent comment not found."
 msgstr ""
 
-#: inc/comments/Services/CommentsService.php:191
+#: inc/comments/Services/CommentsService.php:231
 #: production/inc/comments/Services/CommentsService.php:191
 msgid "Invalid parent comment."
 msgstr ""
 
-#: inc/comments/Services/CommentsService.php:204
+#: inc/comments/Services/CommentsService.php:236
 #: production/inc/comments/Services/CommentsService.php:204
 msgid "You cannot reply to this thread."
 msgstr ""
 
-#: inc/comments/Services/CommentsService.php:220
+#: inc/comments/Services/CommentsService.php:263
+#: inc/comments/Services/CommentsService.php:455
+msgid "Your comment could not be published."
+msgstr ""
+
+#: inc/comments/Services/CommentsService.php:268
 #: production/inc/comments/Services/CommentsService.php:220
 msgid "Failed to post comment."
 msgstr ""
 
-#: inc/comments/Services/CommentsService.php:259
+#: inc/comments/Services/CommentsService.php:311
 #: production/inc/comments/Services/CommentsService.php:259
 msgid "Comment not found."
 msgstr ""
 
-#: inc/comments/Services/CommentsService.php:262
+#: inc/comments/Services/CommentsService.php:314
 #: production/inc/comments/Services/CommentsService.php:262
 msgid "You cannot edit this comment."
 msgstr ""
 
-#: inc/comments/Services/CommentsService.php:270
+#: inc/comments/Services/CommentsService.php:319
 #: production/inc/comments/Services/CommentsService.php:270
 msgid "Edit time limit expired (15 min)."
+msgstr ""
+
+#: inc/comments/Services/CommentsService.php:326
+msgid "Failed to save the comment."
+msgstr ""
+
+#: inc/comments/Services/CommentsService.php:453
+msgid "You have already posted this."
+msgstr ""
+
+#: inc/comments/Services/CommentsService.php:454
+msgid "You are posting too quickly. Please wait a moment."
 msgstr ""
 
 #: inc/contact/Api/ContactController.php:53
@@ -828,10 +851,10 @@ msgstr ""
 
 #: inc/contact/Api/ContactController.php:84
 #: inc/contact/Api/ContactController.php:114
-#: inc/shared/Policy/PasswordPolicy.php:103
+#: inc/shared/Policy/PasswordPolicy.php:115
 #: production/inc/contact/Api/ContactController.php:84
 #: production/inc/contact/Api/ContactController.php:114
-#: production/inc/shared/Policy/PasswordPolicy.php:103
+#: production/inc/shared/Policy/PasswordPolicy.php:115
 msgid "Please enter a valid email address"
 msgstr ""
 
@@ -895,10 +918,12 @@ msgstr ""
 
 #: inc/contact/Channels/EmailChannel.php:58
 #: inc/contact/Channels/TelegramChannel.php:82
+#: inc/gateway/Api/RegisterController.php:56
 #: inc/launchpad/Panels/ProfilePanel.php:145
 #: inc/launchpad/Panels/ProfilePanel.php:256
 #: production/inc/contact/Channels/EmailChannel.php:58
 #: production/inc/contact/Channels/TelegramChannel.php:82
+#: production/inc/gateway/Api/RegisterController.php:56
 #: production/inc/launchpad/Panels/ProfilePanel.php:145
 #: production/inc/launchpad/Panels/ProfilePanel.php:256
 #: production/template-parts/contact-section.php:51
@@ -984,11 +1009,6 @@ msgstr ""
 msgid "Post ID"
 msgstr ""
 
-#: inc/favorites/Api/FavoritesController.php:203
-#: production/inc/favorites/Api/FavoritesController.php:203
-msgid "Post not found."
-msgstr ""
-
 #: inc/favorites/Api/FavoritesController.php:211
 #: production/inc/favorites/Api/FavoritesController.php:211
 msgid "Favorites are only allowed on published posts."
@@ -1016,349 +1036,367 @@ msgstr ""
 msgid "Post"
 msgstr ""
 
-#: inc/gateway/Api/PasswordController.php:83
-#: inc/gateway/Api/PasswordController.php:94
-#: production/inc/gateway/Api/PasswordController.php:83
-#: production/inc/gateway/Api/PasswordController.php:94
+#: inc/gateway/Api/AuthController.php:39
+#: inc/gateway/Api/PasswordController.php:67
+#: inc/gateway/Api/RegisterController.php:45
+#: production/inc/gateway/Api/AuthController.php:39
+#: production/inc/gateway/Api/PasswordController.php:67
+#: production/inc/gateway/Api/RegisterController.php:45
+msgid "Username"
+msgstr ""
+
+#: inc/gateway/Api/PasswordController.php:52
+#: production/inc/gateway/Api/PasswordController.php:52
+msgid "Username or email"
+msgstr ""
+
+#: inc/gateway/Api/PasswordController.php:73
+#: production/inc/gateway/Api/PasswordController.php:73
+msgid "Key"
+msgstr ""
+
+#: inc/gateway/Api/PasswordController.php:106
+#: inc/gateway/Api/PasswordController.php:117
+#: production/inc/gateway/Api/PasswordController.php:106
+#: production/inc/gateway/Api/PasswordController.php:117
 msgid "Too many password reset attempts. Please try again later."
 msgstr ""
 
-#: inc/gateway/Api/PasswordController.php:113
-#: production/inc/gateway/Api/PasswordController.php:113
+#: inc/gateway/Api/PasswordController.php:136
+#: production/inc/gateway/Api/PasswordController.php:136
 msgid "If an account exists, a reset link has been sent."
 msgstr ""
 
-#: inc/gateway/Api/PasswordController.php:133
-#: production/inc/gateway/Api/PasswordController.php:133
+#: inc/gateway/Api/PasswordController.php:157
+#: production/inc/gateway/Api/PasswordController.php:157
 msgid "Password reset successfully!"
 msgstr ""
 
-#: inc/gateway/Api/RegisterController.php:75
-#: production/inc/gateway/Api/RegisterController.php:75
+#: inc/gateway/Api/RegisterController.php:76
+#: production/inc/gateway/Api/RegisterController.php:76
 msgid "Too many registration attempts. Please try again later."
 msgstr ""
 
-#: inc/gateway/Api/RegisterController.php:98
-#: production/inc/gateway/Api/RegisterController.php:98
+#: inc/gateway/Api/RegisterController.php:99
+#: production/inc/gateway/Api/RegisterController.php:99
 msgid "Registration successful! Please check your email to set your password."
 msgstr ""
 
-#: inc/gateway/Forms/LoginForm.php:22
-#: production/inc/gateway/Forms/LoginForm.php:22
+#: inc/gateway/Forms/LoginForm.php:26
+#: production/inc/gateway/Forms/LoginForm.php:26
 msgctxt "gateway"
 msgid "Login"
 msgstr ""
 
-#: inc/gateway/Forms/LoginForm.php:51
-#: production/inc/gateway/Forms/LoginForm.php:51
+#: inc/gateway/Forms/LoginForm.php:58
+#: production/inc/gateway/Forms/LoginForm.php:58
 msgid "Welcome Back"
 msgstr ""
 
-#: inc/gateway/Forms/LoginForm.php:57
-#: inc/gateway/Forms/LostPasswordForm.php:45
-#: production/inc/gateway/Forms/LoginForm.php:57
-#: production/inc/gateway/Forms/LostPasswordForm.php:45
+#: inc/gateway/Forms/LoginForm.php:64
+#: inc/gateway/Forms/LostPasswordForm.php:54
+#: production/inc/gateway/Forms/LoginForm.php:64
+#: production/inc/gateway/Forms/LostPasswordForm.php:54
 msgctxt "gateway"
 msgid "Login name or Email"
 msgstr ""
 
-#: inc/gateway/Forms/LoginForm.php:65
-#: inc/gateway/Forms/LostPasswordForm.php:47
-#: production/inc/gateway/Forms/LoginForm.php:65
-#: production/inc/gateway/Forms/LostPasswordForm.php:47
+#: inc/gateway/Forms/LoginForm.php:72
+#: inc/gateway/Forms/LostPasswordForm.php:56
+#: production/inc/gateway/Forms/LoginForm.php:72
+#: production/inc/gateway/Forms/LostPasswordForm.php:56
 msgctxt "gateway"
 msgid "Latin letters, digits, . - _ @"
 msgstr ""
 
-#: inc/gateway/Forms/LoginForm.php:80
+#: inc/gateway/Forms/LoginForm.php:87
 #: inc/launchpad/Api/ProfileController.php:190
 #: inc/launchpad/Api/ProfileController.php:207
-#: production/inc/gateway/Forms/LoginForm.php:80
+#: production/inc/gateway/Forms/LoginForm.php:87
 #: production/inc/launchpad/Api/ProfileController.php:190
 #: production/inc/launchpad/Api/ProfileController.php:207
 msgid "Password"
 msgstr ""
 
-#: inc/gateway/Forms/LoginForm.php:97
-#: production/inc/gateway/Forms/LoginForm.php:97
+#: inc/gateway/Forms/LoginForm.php:104
+#: production/inc/gateway/Forms/LoginForm.php:104
 msgid "Show password"
 msgstr ""
 
-#: inc/gateway/Forms/LoginForm.php:103
-#: production/inc/gateway/Forms/LoginForm.php:103
+#: inc/gateway/Forms/LoginForm.php:110
+#: production/inc/gateway/Forms/LoginForm.php:110
 msgid "Hide password"
 msgstr ""
 
-#: inc/gateway/Forms/LoginForm.php:132
+#: inc/gateway/Forms/LoginForm.php:139
 #: inc/launchpad/Panels/ProfilePanel.php:542
-#: production/inc/gateway/Forms/LoginForm.php:132
+#: production/inc/gateway/Forms/LoginForm.php:139
 #: production/inc/launchpad/Panels/ProfilePanel.php:542
 msgid "Log In"
 msgstr ""
 
-#: inc/gateway/Forms/LoginForm.php:135
-#: production/inc/gateway/Forms/LoginForm.php:135
+#: inc/gateway/Forms/LoginForm.php:142
+#: production/inc/gateway/Forms/LoginForm.php:142
 msgid "Logging in..."
 msgstr ""
 
-#: inc/gateway/Forms/LoginForm.php:143
-#: production/inc/gateway/Forms/LoginForm.php:143
+#: inc/gateway/Forms/LoginForm.php:150
+#: production/inc/gateway/Forms/LoginForm.php:150
 msgid "Create account"
 msgstr ""
 
-#: inc/gateway/Forms/LoginForm.php:156
-#: production/inc/gateway/Forms/LoginForm.php:156
+#: inc/gateway/Forms/LoginForm.php:163
+#: production/inc/gateway/Forms/LoginForm.php:163
 msgid "Remember me"
 msgstr ""
 
-#: inc/gateway/Forms/LoginForm.php:164
-#: production/inc/gateway/Forms/LoginForm.php:164
+#: inc/gateway/Forms/LoginForm.php:171
+#: production/inc/gateway/Forms/LoginForm.php:171
 msgid "Forgot password?"
 msgstr ""
 
-#: inc/gateway/Forms/LostPasswordForm.php:21
-#: production/inc/gateway/Forms/LostPasswordForm.php:21
+#: inc/gateway/Forms/LostPasswordForm.php:26
+#: production/inc/gateway/Forms/LostPasswordForm.php:26
 msgctxt "gateway"
 msgid "Lost Password"
 msgstr ""
 
-#: inc/gateway/Forms/LostPasswordForm.php:40
-#: production/inc/gateway/Forms/LostPasswordForm.php:40
+#: inc/gateway/Forms/LostPasswordForm.php:49
+#: production/inc/gateway/Forms/LostPasswordForm.php:49
 msgid "Lost Password"
 msgstr ""
 
-#: inc/gateway/Forms/LostPasswordForm.php:43
-#: production/inc/gateway/Forms/LostPasswordForm.php:43
+#: inc/gateway/Forms/LostPasswordForm.php:52
+#: production/inc/gateway/Forms/LostPasswordForm.php:52
 msgid "Enter your login or email to receive a reset link."
 msgstr ""
 
-#: inc/gateway/Forms/LostPasswordForm.php:55
-#: production/inc/gateway/Forms/LostPasswordForm.php:55
+#: inc/gateway/Forms/LostPasswordForm.php:69
+#: production/inc/gateway/Forms/LostPasswordForm.php:69
 msgctxt "gateway"
 msgid "Get New Password"
 msgstr ""
 
-#: inc/gateway/Forms/LostPasswordForm.php:58
-#: production/inc/gateway/Forms/LostPasswordForm.php:58
+#: inc/gateway/Forms/LostPasswordForm.php:72
+#: production/inc/gateway/Forms/LostPasswordForm.php:72
 msgid "Processing..."
 msgstr ""
 
-#: inc/gateway/Forms/LostPasswordForm.php:65
-#: production/inc/gateway/Forms/LostPasswordForm.php:65
+#: inc/gateway/Forms/LostPasswordForm.php:79
+#: production/inc/gateway/Forms/LostPasswordForm.php:79
 msgctxt "gateway"
 msgid "Check your email for the confirmation link."
 msgstr ""
 
-#: inc/gateway/Forms/LostPasswordForm.php:70
-#: production/inc/gateway/Forms/LostPasswordForm.php:70
+#: inc/gateway/Forms/LostPasswordForm.php:84
+#: production/inc/gateway/Forms/LostPasswordForm.php:84
 msgctxt "gateway"
 msgid "Back to Login"
 msgstr ""
 
-#: inc/gateway/Forms/RegisterForm.php:21
-#: production/inc/gateway/Forms/RegisterForm.php:21
+#: inc/gateway/Forms/RegisterForm.php:26
+#: production/inc/gateway/Forms/RegisterForm.php:26
 msgctxt "gateway"
 msgid "Register"
 msgstr ""
 
-#: inc/gateway/Forms/RegisterForm.php:42
-#: production/inc/gateway/Forms/RegisterForm.php:42
+#: inc/gateway/Forms/RegisterForm.php:49
+#: production/inc/gateway/Forms/RegisterForm.php:49
 msgid "Create Account"
 msgstr ""
 
-#: inc/gateway/Forms/RegisterForm.php:45
-#: production/inc/gateway/Forms/RegisterForm.php:45
+#: inc/gateway/Forms/RegisterForm.php:52
+#: production/inc/gateway/Forms/RegisterForm.php:52
 msgid "Enter your details to receive an activation link."
 msgstr ""
 
-#: inc/gateway/Forms/RegisterForm.php:48
-#: production/inc/gateway/Forms/RegisterForm.php:48
+#: inc/gateway/Forms/RegisterForm.php:55
+#: production/inc/gateway/Forms/RegisterForm.php:55
 msgctxt "gateway"
 msgid "Login (latin letters unique username for login)"
 msgstr ""
 
-#: inc/gateway/Forms/RegisterForm.php:50
-#: production/inc/gateway/Forms/RegisterForm.php:50
+#: inc/gateway/Forms/RegisterForm.php:57
+#: production/inc/gateway/Forms/RegisterForm.php:57
 msgctxt "gateway"
 msgid "Latin letters, digits, . - _"
 msgstr ""
 
-#: inc/gateway/Forms/RegisterForm.php:54
-#: production/inc/gateway/Forms/RegisterForm.php:54
+#: inc/gateway/Forms/RegisterForm.php:61
+#: production/inc/gateway/Forms/RegisterForm.php:61
 msgctxt "gateway"
 msgid "f.ex.: Oleg12, kat33, grew.panda"
 msgstr ""
 
-#: inc/gateway/Forms/RegisterForm.php:63
-#: production/inc/gateway/Forms/RegisterForm.php:63
+#: inc/gateway/Forms/RegisterForm.php:70
+#: production/inc/gateway/Forms/RegisterForm.php:70
 msgctxt "gateway"
 msgid "Email"
 msgstr ""
 
-#: inc/gateway/Forms/RegisterForm.php:80
-#: production/inc/gateway/Forms/RegisterForm.php:80
+#: inc/gateway/Forms/RegisterForm.php:87
+#: production/inc/gateway/Forms/RegisterForm.php:87
 msgid "Registering..."
 msgstr ""
 
-#: inc/gateway/Forms/RegisterForm.php:86
-#: production/inc/gateway/Forms/RegisterForm.php:86
+#: inc/gateway/Forms/RegisterForm.php:93
+#: production/inc/gateway/Forms/RegisterForm.php:93
 msgid "Registration successful! Please check your email for the activation link."
 msgstr ""
 
-#: inc/gateway/Forms/RegisterForm.php:92
-#: inc/gateway/Forms/ResetPasswordForm.php:122
-#: production/inc/gateway/Forms/RegisterForm.php:92
-#: production/inc/gateway/Forms/ResetPasswordForm.php:122
+#: inc/gateway/Forms/RegisterForm.php:99
+#: inc/gateway/Forms/ResetPasswordForm.php:134
+#: production/inc/gateway/Forms/RegisterForm.php:99
+#: production/inc/gateway/Forms/ResetPasswordForm.php:134
 msgid "Back to Login"
 msgstr ""
 
-#: inc/gateway/Forms/ResetPasswordForm.php:20
-#: production/inc/gateway/Forms/ResetPasswordForm.php:20
+#: inc/gateway/Forms/ResetPasswordForm.php:27
+#: production/inc/gateway/Forms/ResetPasswordForm.php:27
 msgctxt "gateway"
 msgid "Reset Password"
 msgstr ""
 
-#: inc/gateway/Forms/ResetPasswordForm.php:41
-#: production/inc/gateway/Forms/ResetPasswordForm.php:41
+#: inc/gateway/Forms/ResetPasswordForm.php:53
+#: production/inc/gateway/Forms/ResetPasswordForm.php:53
 msgid "Set New Password"
 msgstr ""
 
-#: inc/gateway/Forms/ResetPasswordForm.php:43
-#: production/inc/gateway/Forms/ResetPasswordForm.php:43
+#: inc/gateway/Forms/ResetPasswordForm.php:55
+#: production/inc/gateway/Forms/ResetPasswordForm.php:55
 msgid "Your new password has been pre-generated. You can modify it or generate a new one."
 msgstr ""
 
-#: inc/gateway/Forms/ResetPasswordForm.php:48
+#: inc/gateway/Forms/ResetPasswordForm.php:60
 #: inc/launchpad/Panels/ProfilePanel.php:478
-#: production/inc/gateway/Forms/ResetPasswordForm.php:48
+#: production/inc/gateway/Forms/ResetPasswordForm.php:60
 #: production/inc/launchpad/Panels/ProfilePanel.php:478
-#: production/inc/launchpad/Panels/SecurityPanel.php:70
 msgid "New Password"
 msgstr ""
 
-#: inc/gateway/Forms/ResetPasswordForm.php:93
-#: production/inc/gateway/Forms/ResetPasswordForm.php:93
+#: inc/gateway/Forms/ResetPasswordForm.php:105
+#: production/inc/gateway/Forms/ResetPasswordForm.php:105
 msgid "Generate New Password"
 msgstr ""
 
-#: inc/gateway/Forms/ResetPasswordForm.php:96
+#: inc/gateway/Forms/ResetPasswordForm.php:108
 #: inc/launchpad/Panels/ProfilePanel.php:507
-#: production/inc/gateway/Forms/ResetPasswordForm.php:96
+#: production/inc/gateway/Forms/ResetPasswordForm.php:108
 #: production/inc/launchpad/Panels/ProfilePanel.php:507
 msgid "Generating..."
 msgstr ""
 
-#: inc/gateway/Forms/ResetPasswordForm.php:104
-#: production/inc/gateway/Forms/ResetPasswordForm.php:104
+#: inc/gateway/Forms/ResetPasswordForm.php:116
+#: production/inc/gateway/Forms/ResetPasswordForm.php:116
 msgid "Save Password"
 msgstr ""
 
-#: inc/gateway/Forms/ResetPasswordForm.php:107
+#: inc/gateway/Forms/ResetPasswordForm.php:119
 #: inc/launchpad/Panels/ProfilePanel.php:432
-#: production/inc/gateway/Forms/ResetPasswordForm.php:107
+#: production/inc/gateway/Forms/ResetPasswordForm.php:119
 #: production/inc/launchpad/Panels/ProfilePanel.php:432
 msgid "Saving..."
 msgstr ""
 
-#: inc/gateway/Forms/ResetPasswordForm.php:116
-#: production/inc/gateway/Forms/ResetPasswordForm.php:116
+#: inc/gateway/Forms/ResetPasswordForm.php:128
+#: production/inc/gateway/Forms/ResetPasswordForm.php:128
 msgid "Password Reset Successful!"
 msgstr ""
 
-#: inc/gateway/Services/AuthService.php:41
-#: production/inc/gateway/Services/AuthService.php:41
+#: inc/gateway/Services/AuthService.php:50
+#: production/inc/gateway/Services/AuthService.php:50
 msgid "Too many login attempts. Please wait 15 minutes."
 msgstr ""
 
-#: inc/gateway/Services/AuthService.php:54
-#: production/inc/gateway/Services/AuthService.php:54
+#: inc/gateway/Services/AuthService.php:69
+#: production/inc/gateway/Services/AuthService.php:69
 msgid "Invalid username or password."
 msgstr ""
 
-#: inc/gateway/Services/AuthService.php:64
-#: production/inc/gateway/Services/AuthService.php:64
+#: inc/gateway/Services/AuthService.php:79
+#: production/inc/gateway/Services/AuthService.php:79
 msgid "Please activate your account via the link sent to your email."
 msgstr ""
 
-#: inc/gateway/Services/PasswordResetService.php:34
-#: production/inc/gateway/Services/PasswordResetService.php:34
+#: inc/gateway/Services/PasswordResetService.php:39
+#: production/inc/gateway/Services/PasswordResetService.php:39
 msgid "Please enter a username or email."
 msgstr ""
 
-#: inc/gateway/Services/PasswordResetService.php:67
-#: production/inc/gateway/Services/PasswordResetService.php:67
+#: inc/gateway/Services/PasswordResetService.php:61
+#: production/inc/gateway/Services/PasswordResetService.php:61
 msgid "Someone has requested a password reset for the following account:"
+msgstr ""
+
+#: inc/gateway/Services/PasswordResetService.php:62
+#: production/inc/gateway/Services/PasswordResetService.php:62
+#, php-format
+msgid "Site Name: %s"
+msgstr ""
+
+#: inc/gateway/Services/PasswordResetService.php:63
+#: production/inc/gateway/Services/PasswordResetService.php:63
+#, php-format
+msgid "Username: %s"
+msgstr ""
+
+#: inc/gateway/Services/PasswordResetService.php:64
+#: production/inc/gateway/Services/PasswordResetService.php:64
+msgid "If this was a mistake, ignore this email and nothing will happen."
+msgstr ""
+
+#: inc/gateway/Services/PasswordResetService.php:65
+#: production/inc/gateway/Services/PasswordResetService.php:65
+msgid "To reset your password, visit the following address:"
 msgstr ""
 
 #: inc/gateway/Services/PasswordResetService.php:68
 #: production/inc/gateway/Services/PasswordResetService.php:68
 #, php-format
-msgid "Site Name: %s"
-msgstr ""
-
-#: inc/gateway/Services/PasswordResetService.php:69
-#: production/inc/gateway/Services/PasswordResetService.php:69
-#, php-format
-msgid "Username: %s"
-msgstr ""
-
-#: inc/gateway/Services/PasswordResetService.php:70
-#: production/inc/gateway/Services/PasswordResetService.php:70
-msgid "If this was a mistake, ignore this email and nothing will happen."
-msgstr ""
-
-#: inc/gateway/Services/PasswordResetService.php:71
-#: production/inc/gateway/Services/PasswordResetService.php:71
-msgid "To reset your password, visit the following address:"
-msgstr ""
-
-#: inc/gateway/Services/PasswordResetService.php:74
-#: production/inc/gateway/Services/PasswordResetService.php:74
-#, php-format
 msgid "[%s] Password Reset"
 msgstr ""
 
-#: inc/gateway/Services/PasswordResetService.php:101
-#: production/inc/gateway/Services/PasswordResetService.php:101
+#: inc/gateway/Services/PasswordResetService.php:96
+#: production/inc/gateway/Services/PasswordResetService.php:96
 msgid "This link is invalid or expired. Please request a new one."
 msgstr ""
 
-#: inc/gateway/Services/RegisterService.php:28
-#: inc/gateway/Services/RegisterService.php:32
-#: production/inc/gateway/Services/RegisterService.php:28
-#: production/inc/gateway/Services/RegisterService.php:32
+#: inc/gateway/Services/RegisterService.php:41
+#: inc/gateway/Services/RegisterService.php:82
+#: production/inc/gateway/Services/RegisterService.php:41
+#: production/inc/gateway/Services/RegisterService.php:82
 msgid "Please provide a valid username and email address."
 msgstr ""
 
-#: inc/gateway/Services/RegisterService.php:51
-#: production/inc/gateway/Services/RegisterService.php:51
+#: inc/gateway/Services/RegisterService.php:62
+#: production/inc/gateway/Services/RegisterService.php:62
 msgid "This username is already taken."
 msgstr ""
 
-#: inc/gateway/Services/RegisterService.php:54
-#: production/inc/gateway/Services/RegisterService.php:54
+#: inc/gateway/Services/RegisterService.php:65
+#: production/inc/gateway/Services/RegisterService.php:65
 msgid "This email is already registered."
 msgstr ""
 
-#: inc/gateway/Services/RegisterService.php:93
-#: production/inc/gateway/Services/RegisterService.php:93
+#: inc/gateway/Services/RegisterService.php:128
+#: production/inc/gateway/Services/RegisterService.php:128
 #, php-format
 msgid "[%s] Activate Your Account"
 msgstr ""
 
-#: inc/gateway/Services/RegisterService.php:95
-#: production/inc/gateway/Services/RegisterService.php:95
+#: inc/gateway/Services/RegisterService.php:130
+#: production/inc/gateway/Services/RegisterService.php:130
 #, php-format
 msgid "Welcome, %s!"
 msgstr ""
 
-#: inc/gateway/Services/RegisterService.php:96
-#: production/inc/gateway/Services/RegisterService.php:96
+#: inc/gateway/Services/RegisterService.php:131
+#: production/inc/gateway/Services/RegisterService.php:131
 msgid "To complete your registration and set your password, click the link below:"
 msgstr ""
 
-#: inc/gateway/Services/RegisterService.php:98
-#: production/inc/gateway/Services/RegisterService.php:98
+#: inc/gateway/Services/RegisterService.php:133
+#: production/inc/gateway/Services/RegisterService.php:133
 msgid "If you did not request this, please ignore this email."
 msgstr ""
 
@@ -1426,7 +1464,7 @@ msgstr ""
 #: inc/tour/Scenarios/OpportunityFormScenario.php:100
 #: production/inc/launchpad/Api/OpportunitiesController.php:130
 #: production/inc/launchpad/Panels/OpportunitiesPanel.php:190
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:896
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:901
 #: production/inc/listing/Enums/Taxonomy.php:38
 #: production/inc/listing/Filters/BeneficiariesFilter.php:23
 #: production/inc/tour/Scenarios/OpportunityFormScenario.php:100
@@ -1436,58 +1474,59 @@ msgid "Beneficiaries"
 msgstr ""
 
 #: inc/launchpad/Api/OpportunitiesController.php:196
-#: production/inc/launchpad/Api/OpportunitiesController.php:194
+#: production/inc/launchpad/Api/OpportunitiesController.php:196
 msgid "Statuses filter"
 msgstr ""
 
 #. translators: %s: name of the field that received an invalid value
 #: inc/launchpad/Api/OpportunitiesController.php:207
+#: production/inc/launchpad/Api/OpportunitiesController.php:207
 #, php-format
 msgid "%s: unknown status."
 msgstr ""
 
 #: inc/launchpad/Api/OpportunitiesController.php:266
-#: production/inc/launchpad/Api/OpportunitiesController.php:249
+#: production/inc/launchpad/Api/OpportunitiesController.php:266
 msgid "Search term"
 msgstr ""
 
 #: inc/launchpad/Api/OpportunitiesController.php:278
-#: production/inc/launchpad/Api/OpportunitiesController.php:261
+#: production/inc/launchpad/Api/OpportunitiesController.php:278
 msgid "Levels filter"
 msgstr ""
 
 #: inc/launchpad/Api/OpportunitiesController.php:321
-#: production/inc/launchpad/Api/OpportunitiesController.php:304
+#: production/inc/launchpad/Api/OpportunitiesController.php:321
 msgid "Status updated."
 msgstr ""
 
 #: inc/launchpad/Api/OpportunitiesController.php:364
-#: production/inc/launchpad/Api/OpportunitiesController.php:347
+#: production/inc/launchpad/Api/OpportunitiesController.php:364
 msgid "Opportunity not found."
 msgstr ""
 
 #: inc/launchpad/Api/OpportunitiesController.php:441
-#: production/inc/launchpad/Api/OpportunitiesController.php:424
+#: production/inc/launchpad/Api/OpportunitiesController.php:441
 msgid "Updated successfully"
 msgstr ""
 
 #: inc/launchpad/Api/OpportunitiesController.php:441
-#: production/inc/launchpad/Api/OpportunitiesController.php:424
+#: production/inc/launchpad/Api/OpportunitiesController.php:441
 msgid "Created successfully"
 msgstr ""
 
 #: inc/launchpad/Api/OpportunitiesController.php:452
-#: production/inc/launchpad/Api/OpportunitiesController.php:435
+#: production/inc/launchpad/Api/OpportunitiesController.php:452
 msgid "Please complete your profile (name and phone) before posting opportunities."
 msgstr ""
 
 #: inc/launchpad/Api/OpportunitiesController.php:512
-#: production/inc/launchpad/Api/OpportunitiesController.php:495
+#: production/inc/launchpad/Api/OpportunitiesController.php:512
 msgid "Opportunity changes"
 msgstr ""
 
 #: inc/launchpad/Api/OpportunitiesController.php:529
-#: production/inc/launchpad/Api/OpportunitiesController.php:512
+#: production/inc/launchpad/Api/OpportunitiesController.php:529
 msgid "Location search"
 msgstr ""
 
@@ -1555,9 +1594,9 @@ msgid "Organization"
 msgstr ""
 
 #: inc/launchpad/Api/ProfileController.php:177
-#: inc/shared/Policy/EmailPolicy.php:45
+#: inc/shared/Policy/EmailPolicy.php:46
 #: production/inc/launchpad/Api/ProfileController.php:177
-#: production/inc/shared/Policy/EmailPolicy.php:45
+#: production/inc/shared/Policy/EmailPolicy.php:46
 msgid "Please enter a valid email address."
 msgstr ""
 
@@ -1877,46 +1916,47 @@ msgid "No opportunities yet."
 msgstr ""
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:409
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:409
 msgid "No opportunities match the selected statuses."
 msgstr ""
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:444
 #: inc/launchpad/Panels/OpportunitiesPanel.php:447
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:439
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:442
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:444
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:447
 #: production/templates/single-opportunity.php:106
 #: templates/single-opportunity.php:106
 msgid "Lasts"
 msgstr ""
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:445
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:440
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:445
 #: production/templates/single-opportunity.php:108
 #: templates/single-opportunity.php:108
 msgid "from"
 msgstr ""
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:447
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:442
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:447
 #: production/templates/single-opportunity.php:114
 #: templates/single-opportunity.php:114
 msgid "to"
 msgstr ""
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:453
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:448
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:453
 msgid "Finished"
 msgstr ""
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:464
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:459
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:464
 msgid "Created"
 msgstr ""
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:486
 #: inc/launchpad/Panels/StatsPanel.php:68
 #: inc/listing/Core/ResultsGrid.php:228
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:481
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:486
 #: production/inc/launchpad/Panels/StatsPanel.php:68
 #: production/inc/listing/Core/ResultsGrid.php:228
 msgid "Comments"
@@ -1925,70 +1965,70 @@ msgstr ""
 #: inc/launchpad/Panels/OpportunitiesPanel.php:520
 #: inc/launchpad/Panels/OpportunitiesPanel.php:1070
 #: inc/launchpad/Panels/OpportunitiesPanel.php:1104
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:515
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:1065
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:1099
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:520
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:1070
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:1104
 msgid "Submit for Review"
 msgstr ""
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:528
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:523
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:528
 #: production/template-parts/comments-interactive.php:208
 #: production/template-parts/comments-interactive.php:301
-#: template-parts/comments-interactive.php:208
-#: template-parts/comments-interactive.php:301
+#: template-parts/comments-interactive.php:187
+#: template-parts/comments-interactive.php:281
 msgid "Edit"
 msgstr ""
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:558
 #: inc/launchpad/Panels/OpportunitiesPanel.php:1075
 #: inc/tour/Core/TourCore.php:163
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:553
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:1070
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:558
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:1075
 #: production/inc/tour/Core/TourCore.php:163
 msgid "Back"
 msgstr ""
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:566
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:561
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:566
 msgid "Opportunity Title"
 msgstr ""
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:569
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:564
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:569
 #, php-format
 msgid "Add title min %1$d, max %2$d characters"
 msgstr ""
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:589
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:584
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:589
 msgid "Opportunity Info"
 msgstr ""
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:593
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:588
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:593
 msgid "Company"
 msgstr ""
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:606
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:601
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:606
 msgid "Start Date"
 msgstr ""
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:611
 #: inc/launchpad/Panels/OpportunitiesPanel.php:624
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:606
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:619
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:611
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:624
 msgid "Open calendar"
 msgstr ""
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:619
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:614
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:619
 msgid "End Date"
 msgstr ""
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:638
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:633
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:638
 #: production/templates/single-opportunity.php:205
 #: production/templates/single-opportunity.php:214
 #: templates/single-opportunity.php:205
@@ -1997,86 +2037,86 @@ msgid "Link"
 msgstr ""
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:648
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:643
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:648
 msgid "Application Form URL"
 msgstr ""
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:659
 #: inc/listing/Filters/CountryFilter.php:33
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:654
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:659
 #: production/inc/listing/Filters/CountryFilter.php:33
 msgid "Country"
 msgstr ""
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:670
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:665
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:670
 msgid "Select Country"
 msgstr ""
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:682
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:677
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:682
 msgid "Search country..."
 msgstr ""
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:683
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:678
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:683
 msgid "Search country"
 msgstr ""
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:700
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:695
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:700
 msgid "No countries match your search."
 msgstr ""
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:724
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:719
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:724
 msgid "Not necessary. Only if you want to point that your opportunity is available for particular locations: City, District, Hromada, etc."
 msgstr ""
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:753
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:748
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:753
 msgid "if opportynity for Oblast"
 msgstr ""
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:756
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:751
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:756
 msgid "Kyivska, Lvivska..."
 msgstr ""
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:786
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:781
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:786
 msgid "if for Raion, District, Hromada"
 msgstr ""
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:789
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:784
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:789
 msgid "Buchanskyi r-n, Dolynska tg.."
 msgstr ""
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:818
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:813
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:818
 msgid "if for City, Settlement, City district"
 msgstr ""
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:821
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:816
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:821
 msgid "Bucha c., Vesele v., Obolon..."
 msgstr ""
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:847
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:842
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:847
 msgid "If you want you coud to select the required administrative level. If the opportunity is provided throughout the Oblast - select from (1) Oblast, if the opportunity is for a district or community - select from (2) District, if the opportunity concerns a city or village select the required City or Village from (3)."
 msgstr ""
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:851
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:846
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:851
 msgid "Opportunity Category"
 msgstr ""
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:928
 #: inc/launchpad/Panels/ProfilePanel.php:395
 #: inc/tour/Scenarios/OpportunityFormScenario.php:109
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:923
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:928
 #: production/inc/launchpad/Panels/ProfilePanel.php:395
 #: production/inc/tour/Scenarios/OpportunityFormScenario.php:109
 #: inc/blocks/accordion-opportunities/build/editor.js:87
@@ -2087,67 +2127,67 @@ msgid "Description"
 msgstr ""
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:931
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:926
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:931
 msgid "Describe the opportunity"
 msgstr ""
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:934
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:929
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:934
 #, php-format
 msgid "Add information about the opportunity. Describe the essence. Min %1$d, max %2$d characters"
 msgstr ""
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:946
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:941
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:946
 #: production/templates/single-opportunity.php:194
 #: templates/single-opportunity.php:194
 msgid "Requirements"
 msgstr ""
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:959
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:954
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:959
 msgid "Details"
 msgstr ""
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:971
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:966
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:971
 msgid "required fields"
 msgstr ""
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:977
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:972
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:977
 #: production/templates/single-opportunity.php:233
 #: templates/single-opportunity.php:233
 msgid "Document"
 msgstr ""
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:991
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:986
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:991
 msgid "Attach File"
 msgstr ""
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:1023
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:1018
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:1023
 msgid "Pending Save"
 msgstr ""
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:1040
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:1035
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:1040
 msgid "Format (PDF, DOCX). Max size 5Mb."
 msgstr ""
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:1058
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:1053
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:1058
 msgid "Save Draft"
 msgstr ""
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:1107
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:1102
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:1107
 msgid "Submit your changes and request a review from the moderation team?"
 msgstr ""
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:1115
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:1110
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:1115
 msgid "Submit"
 msgstr ""
 
@@ -2156,7 +2196,7 @@ msgstr ""
 #: inc/launchpad/Panels/ProfilePanel.php:517
 #: inc/launchpad/Panels/ProfilePanel.php:619
 #: inc/launchpad/Panels/ProfilePanel.php:686
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:1114
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:1119
 #: production/inc/launchpad/Panels/ProfilePanel.php:437
 #: production/inc/launchpad/Panels/ProfilePanel.php:517
 #: production/inc/launchpad/Panels/ProfilePanel.php:619
@@ -2165,10 +2205,10 @@ msgstr ""
 #: production/template-parts/comments-interactive.php:251
 #: production/template-parts/comments-interactive.php:328
 #: production/template-parts/comments-interactive.php:366
-#: template-parts/comments-interactive.php:138
-#: template-parts/comments-interactive.php:251
-#: template-parts/comments-interactive.php:328
-#: template-parts/comments-interactive.php:366
+#: template-parts/comments-interactive.php:117
+#: template-parts/comments-interactive.php:231
+#: template-parts/comments-interactive.php:309
+#: template-parts/comments-interactive.php:348
 msgid "Cancel"
 msgstr ""
 
@@ -2183,17 +2223,17 @@ msgid "Only letters, spaces, hyphens, and apostrophes allowed."
 msgstr ""
 
 #: inc/launchpad/Panels/ProfilePanel.php:67
-#: inc/shared/Policy/UsernamePolicy.php:79
+#: inc/shared/Policy/UsernamePolicy.php:88
 #: production/inc/launchpad/Panels/ProfilePanel.php:67
-#: production/inc/shared/Policy/UsernamePolicy.php:79
+#: production/inc/shared/Policy/UsernamePolicy.php:88
 #, php-format
 msgid "Must be at least %d characters."
 msgstr ""
 
 #: inc/launchpad/Panels/ProfilePanel.php:71
-#: inc/shared/Policy/UsernamePolicy.php:87
+#: inc/shared/Policy/UsernamePolicy.php:96
 #: production/inc/launchpad/Panels/ProfilePanel.php:71
-#: production/inc/shared/Policy/UsernamePolicy.php:87
+#: production/inc/shared/Policy/UsernamePolicy.php:96
 #, php-format
 msgid "Must not exceed %d characters."
 msgstr ""
@@ -2227,8 +2267,6 @@ msgstr ""
 
 #: inc/launchpad/Panels/ProfilePanel.php:219
 #: production/inc/launchpad/Panels/ProfilePanel.php:219
-#: production/inc/launchpad/Panels/SecurityPanel.php:56
-#: production/inc/launchpad/Panels/SecurityPanel.php:97
 msgid "Change Password"
 msgstr ""
 
@@ -2325,8 +2363,8 @@ msgstr ""
 #: production/inc/launchpad/Panels/ProfilePanel.php:429
 #: production/template-parts/comments-interactive.php:255
 #: production/template-parts/comments-interactive.php:332
-#: template-parts/comments-interactive.php:255
-#: template-parts/comments-interactive.php:332
+#: template-parts/comments-interactive.php:235
+#: template-parts/comments-interactive.php:313
 msgid "Save"
 msgstr ""
 
@@ -2339,7 +2377,6 @@ msgstr ""
 #: inc/launchpad/Panels/ProfilePanel.php:580
 #: production/inc/launchpad/Panels/ProfilePanel.php:454
 #: production/inc/launchpad/Panels/ProfilePanel.php:580
-#: production/inc/launchpad/Panels/SecurityPanel.php:59
 msgid "Current Password"
 msgstr ""
 
@@ -2456,10 +2493,10 @@ msgstr ""
 
 #: inc/launchpad/Services/OpportunitiesService.php:503
 #: inc/launchpad/Services/ProfileService.php:258
-#: inc/shared/Core/AbstractApiController.php:131
+#: inc/shared/Core/AbstractApiController.php:128
 #: production/inc/launchpad/Services/OpportunitiesService.php:503
 #: production/inc/launchpad/Services/ProfileService.php:258
-#: production/inc/shared/Core/AbstractApiController.php:131
+#: production/inc/shared/Core/AbstractApiController.php:128
 msgid "Please correct the highlighted fields."
 msgstr ""
 
@@ -2503,8 +2540,8 @@ msgstr ""
 #: production/inc/launchpad/Services/ProfileService.php:62
 #: production/template-parts/comments-interactive.php:180
 #: production/template-parts/comments-interactive.php:283
-#: template-parts/comments-interactive.php:180
-#: template-parts/comments-interactive.php:283
+#: template-parts/comments-interactive.php:159
+#: template-parts/comments-interactive.php:263
 msgid "Author"
 msgstr ""
 
@@ -2640,7 +2677,7 @@ msgstr ""
 #: production/inc/news/Core/NewsCore.php:116
 #: production/template-parts/comments-interactive.php:393
 #: production/template-parts/pagination.php:131
-#: template-parts/comments-interactive.php:393
+#: template-parts/comments-interactive.php:375
 #: template-parts/pagination.php:131
 msgid "Show more"
 msgstr ""
@@ -2823,23 +2860,23 @@ msgstr ""
 msgid "Home"
 msgstr ""
 
-#: inc/shared/Core/AbstractApiController.php:152
-#: production/inc/shared/Core/AbstractApiController.php:152
+#: inc/shared/Core/AbstractApiController.php:149
+#: production/inc/shared/Core/AbstractApiController.php:149
 msgid "You must be logged in to access this resource."
 msgstr ""
 
-#: inc/shared/Core/AbstractApiController.php:176
-#: production/inc/shared/Core/AbstractApiController.php:176
+#: inc/shared/Core/AbstractApiController.php:173
+#: production/inc/shared/Core/AbstractApiController.php:173
 msgid "You are already logged in."
 msgstr ""
 
-#: inc/shared/Core/AbstractApiController.php:208
-#: production/inc/shared/Core/AbstractApiController.php:208
+#: inc/shared/Core/AbstractApiController.php:205
+#: production/inc/shared/Core/AbstractApiController.php:205
 msgid "Cookie check failed."
 msgstr ""
 
-#: inc/shared/Policy/EmailPolicy.php:55
-#: production/inc/shared/Policy/EmailPolicy.php:55
+#: inc/shared/Policy/EmailPolicy.php:58
+#: production/inc/shared/Policy/EmailPolicy.php:58
 msgid "This email domain doesn't appear to accept mail."
 msgstr ""
 
@@ -2850,45 +2887,45 @@ msgstr ""
 msgid "Must be %1$d–%2$d characters, start with a letter, and use only latin letters, digits, and underscores."
 msgstr ""
 
-#: inc/shared/Policy/PasswordPolicy.php:34
-#: inc/shared/Policy/PasswordPolicy.php:84
-#: production/inc/shared/Policy/PasswordPolicy.php:34
-#: production/inc/shared/Policy/PasswordPolicy.php:84
+#: inc/shared/Policy/PasswordPolicy.php:42
+#: inc/shared/Policy/PasswordPolicy.php:93
+#: production/inc/shared/Policy/PasswordPolicy.php:42
+#: production/inc/shared/Policy/PasswordPolicy.php:93
 #, php-format
 msgid "Password must be at least %d characters long."
 msgstr ""
 
-#: inc/shared/Policy/PasswordPolicy.php:48
-#: inc/shared/Policy/PasswordPolicy.php:87
-#: production/inc/shared/Policy/PasswordPolicy.php:48
-#: production/inc/shared/Policy/PasswordPolicy.php:87
+#: inc/shared/Policy/PasswordPolicy.php:56
+#: inc/shared/Policy/PasswordPolicy.php:96
+#: production/inc/shared/Policy/PasswordPolicy.php:56
+#: production/inc/shared/Policy/PasswordPolicy.php:96
 msgid "Please use a mix of uppercase letters, numbers, and symbols."
 msgstr ""
 
-#: inc/shared/Policy/PasswordPolicy.php:64
-#: inc/shared/Policy/PasswordPolicy.php:88
-#: production/inc/shared/Policy/PasswordPolicy.php:64
-#: production/inc/shared/Policy/PasswordPolicy.php:88
+#: inc/shared/Policy/PasswordPolicy.php:71
+#: inc/shared/Policy/PasswordPolicy.php:97
+#: production/inc/shared/Policy/PasswordPolicy.php:71
+#: production/inc/shared/Policy/PasswordPolicy.php:97
 msgid "Password cannot contain your username, email, or name."
 msgstr ""
 
-#: inc/shared/Policy/PasswordPolicy.php:100
-#: production/inc/shared/Policy/PasswordPolicy.php:100
+#: inc/shared/Policy/PasswordPolicy.php:112
+#: production/inc/shared/Policy/PasswordPolicy.php:112
 msgid "Username is required"
 msgstr ""
 
-#: inc/shared/Policy/PasswordPolicy.php:101
-#: production/inc/shared/Policy/PasswordPolicy.php:101
+#: inc/shared/Policy/PasswordPolicy.php:113
+#: production/inc/shared/Policy/PasswordPolicy.php:113
 msgid "Password is required"
 msgstr ""
 
-#: inc/shared/Policy/PasswordPolicy.php:102
-#: production/inc/shared/Policy/PasswordPolicy.php:102
+#: inc/shared/Policy/PasswordPolicy.php:114
+#: production/inc/shared/Policy/PasswordPolicy.php:114
 msgid "Email is required"
 msgstr ""
 
-#: inc/shared/Policy/PasswordPolicy.php:104
-#: production/inc/shared/Policy/PasswordPolicy.php:104
+#: inc/shared/Policy/PasswordPolicy.php:116
+#: production/inc/shared/Policy/PasswordPolicy.php:116
 msgid "Please enter your username or email"
 msgstr ""
 
@@ -2908,8 +2945,8 @@ msgid "Please enter a valid phone number in international format (e.g. +38044123
 msgstr ""
 
 #. translators: %d: minutes until rate limit resets
-#: inc/shared/Policy/RateLimitPolicy.php:66
-#: production/inc/shared/Policy/RateLimitPolicy.php:66
+#: inc/shared/Policy/RateLimitPolicy.php:67
+#: production/inc/shared/Policy/RateLimitPolicy.php:67
 #, php-format
 msgid "Too many attempts. Please try again in %d minutes."
 msgstr ""
@@ -2949,8 +2986,8 @@ msgstr ""
 msgid "Please enter a valid URL (e.g. https://example.com)."
 msgstr ""
 
-#: inc/shared/Policy/UsernamePolicy.php:94
-#: production/inc/shared/Policy/UsernamePolicy.php:94
+#: inc/shared/Policy/UsernamePolicy.php:103
+#: production/inc/shared/Policy/UsernamePolicy.php:103
 msgid "Only latin letters, digits, and the characters . _ - are allowed."
 msgstr ""
 
@@ -3000,22 +3037,24 @@ msgid "%s: not a valid calendar date."
 msgstr ""
 
 #. translators: %s: name of the field that received an invalid value
-#: inc/shared/Validation/RestArg.php:169
-#: production/inc/shared/Validation/RestArg.php:169
+#: inc/shared/Validation/RestArg.php:170
+#: inc/shared/Validation/RestArg.php:225
+#: production/inc/shared/Validation/RestArg.php:170
+#: production/inc/shared/Validation/RestArg.php:225
 #, php-format
 msgid "%s: expected a string."
 msgstr ""
 
 #. translators: 1: field name, 2: minimum character count
-#: inc/shared/Validation/RestArg.php:181
-#: production/inc/shared/Validation/RestArg.php:181
+#: inc/shared/Validation/RestArg.php:182
+#: production/inc/shared/Validation/RestArg.php:182
 #, php-format
 msgid "%1$s: at least %2$d characters required."
 msgstr ""
 
 #. translators: 1: field name, 2: maximum character count
-#: inc/shared/Validation/RestArg.php:194
-#: production/inc/shared/Validation/RestArg.php:194
+#: inc/shared/Validation/RestArg.php:195
+#: production/inc/shared/Validation/RestArg.php:195
 #, php-format
 msgid "%1$s: maximum %2$d characters allowed."
 msgstr ""
@@ -3259,22 +3298,6 @@ msgstr ""
 msgid "That's everything you need to know. Go ahead and create your first opportunity — every submission helps people find the support they need."
 msgstr ""
 
-#: production/inc/launchpad/Panels/SecurityPanel.php:17
-msgid "Security"
-msgstr ""
-
-#: production/inc/launchpad/Panels/SecurityPanel.php:40
-msgid "Security Settings"
-msgstr ""
-
-#: production/inc/launchpad/Panels/SecurityPanel.php:50
-msgid "Password changed successfully."
-msgstr ""
-
-#: production/inc/launchpad/Panels/SecurityPanel.php:82
-msgid "Confirm Password"
-msgstr ""
-
 #. translators: %s: search query.
 #: production/search.php:49
 #: search.php:49
@@ -3293,33 +3316,33 @@ msgid "Breadcrumbs"
 msgstr ""
 
 #: production/template-parts/comments-interactive.php:61
-#: template-parts/comments-interactive.php:61
+#: template-parts/comments-interactive.php:39
 msgid "Reviews"
 msgstr ""
 
 #: production/template-parts/comments-interactive.php:89
-#: template-parts/comments-interactive.php:89
+#: template-parts/comments-interactive.php:67
 msgid "Add review"
 msgstr ""
 
 #: production/template-parts/comments-interactive.php:93
-#: template-parts/comments-interactive.php:93
+#: template-parts/comments-interactive.php:71
 msgid "Enter to comment"
 msgstr ""
 
 #: production/template-parts/comments-interactive.php:114
-#: template-parts/comments-interactive.php:114
+#: template-parts/comments-interactive.php:92
 msgid "Your Rating:"
 msgstr ""
 
 #: production/template-parts/comments-interactive.php:131
-#: template-parts/comments-interactive.php:131
+#: template-parts/comments-interactive.php:110
 msgid "Write your review here..."
 msgstr ""
 
 #: production/template-parts/comments-interactive.php:141
 #: production/template-parts/contact-section.php:299
-#: template-parts/comments-interactive.php:141
+#: template-parts/comments-interactive.php:120
 #: template-parts/contact-section.php:299
 msgid "Send"
 msgstr ""
@@ -3327,40 +3350,40 @@ msgstr ""
 #: production/template-parts/comments-interactive.php:142
 #: production/template-parts/comments-interactive.php:376
 #: production/template-parts/contact-section.php:302
-#: template-parts/comments-interactive.php:142
-#: template-parts/comments-interactive.php:376
+#: template-parts/comments-interactive.php:121
+#: template-parts/comments-interactive.php:358
 #: template-parts/contact-section.php:302
 msgid "Sending..."
 msgstr ""
 
 #: production/template-parts/comments-interactive.php:150
-#: template-parts/comments-interactive.php:150
+#: template-parts/comments-interactive.php:129
 msgid "Publishing..."
 msgstr ""
 
 #: production/template-parts/comments-interactive.php:167
-#: template-parts/comments-interactive.php:167
+#: template-parts/comments-interactive.php:146
 msgid "No comments yet."
 msgstr ""
 
 #: production/template-parts/comments-interactive.php:214
 #: production/template-parts/comments-interactive.php:306
 #: production/template-parts/comments-interactive.php:369
-#: template-parts/comments-interactive.php:214
-#: template-parts/comments-interactive.php:306
-#: template-parts/comments-interactive.php:369
+#: template-parts/comments-interactive.php:193
+#: template-parts/comments-interactive.php:286
+#: template-parts/comments-interactive.php:351
 msgid "Reply"
 msgstr ""
 
 #: production/template-parts/comments-interactive.php:263
 #: production/template-parts/comments-interactive.php:339
-#: template-parts/comments-interactive.php:263
-#: template-parts/comments-interactive.php:339
+#: template-parts/comments-interactive.php:243
+#: template-parts/comments-interactive.php:320
 msgid "Updating..."
 msgstr ""
 
 #: production/template-parts/comments-interactive.php:360
-#: template-parts/comments-interactive.php:360
+#: template-parts/comments-interactive.php:342
 msgid "Write a reply..."
 msgstr ""
 
@@ -3641,8 +3664,8 @@ msgstr ""
 msgid "Gateway Page"
 msgstr ""
 
-#: production/templates/page-gateway.php:134
-#: templates/page-gateway.php:134
+#: production/templates/page-gateway.php:136
+#: templates/page-gateway.php:136
 msgid "Назад"
 msgstr ""
 

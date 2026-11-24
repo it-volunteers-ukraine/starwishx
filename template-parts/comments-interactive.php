@@ -24,12 +24,14 @@ wp_interactivity_state('comments', $state);
 
 $aggregates = $state['aggregates'];
 $sprite_star = get_template_directory_uri() . '/assets/img/sprites.svg#icon-star';
+// The REST validator's limit, so the browser stops typing where it would refuse.
+$max_length = \Comments\Services\CommentsService::CONTENT_MAX_LENGTH;
 ?>
 
 <footer id="comments" class="comments-area"
     aria-labelledby="reviews-heading"
     data-wp-interactive="comments"
-    data-wp-context='{ "postId": <?php echo $post_id; ?> }'>
+    <?php echo wp_interactivity_data_wp_context(['postId' => $post_id]); ?>>
 
     <!-- HEADER SECTION -->
     <div class="comments-header">
@@ -65,7 +67,7 @@ $sprite_star = get_template_directory_uri() . '/assets/img/sprites.svg#icon-star
                 <?php esc_html_e('Add review', 'starwishx'); ?>
             </button>
         <?php else: ?>
-            <a href="<?php echo wp_login_url(get_permalink()); ?>" class="btn__small" rel="nofollow">
+            <a href="<?php echo esc_url(wp_login_url(get_permalink())); ?>" class="btn__small" rel="nofollow">
                 <?php esc_html_e('Enter to comment', 'starwishx'); ?>
             </a>
         <?php endif; ?>
@@ -104,6 +106,7 @@ $sprite_star = get_template_directory_uri() . '/assets/img/sprites.svg#icon-star
                         <textarea
                             class="form-control"
                             rows="4"
+                            maxlength="<?php echo $max_length; ?>"
                             placeholder="<?php esc_attr_e('Write your review here...', 'starwishx'); ?>"
                             data-wp-bind--value="state.newContent"
                             data-wp-on--input="actions.updateContent"></textarea>
@@ -217,6 +220,7 @@ $sprite_star = get_template_directory_uri() . '/assets/img/sprites.svg#icon-star
                                 <textarea
                                     class="form-control"
                                     rows="3"
+                                    maxlength="<?php echo $max_length; ?>"
                                     data-wp-bind--value="state.editDraft"
                                     data-wp-on--input="actions.updateEditDraft"></textarea>
                             </div>
@@ -294,6 +298,7 @@ $sprite_star = get_template_directory_uri() . '/assets/img/sprites.svg#icon-star
                                                 <textarea
                                                     class="form-control"
                                                     rows="2"
+                                                    maxlength="<?php echo $max_length; ?>"
                                                     data-wp-bind--value="state.editDraft"
                                                     data-wp-on--input="actions.updateEditDraft"></textarea>
                                             </div>
@@ -333,6 +338,7 @@ $sprite_star = get_template_directory_uri() . '/assets/img/sprites.svg#icon-star
                             <fieldset data-wp-bind--disabled="state.isSendingReply">
                                 <div class="form-field">
                                     <textarea class="form-control" rows="2"
+                                        maxlength="<?php echo $max_length; ?>"
                                         placeholder="<?php esc_attr_e('Write a reply...', 'starwishx'); ?>"
                                         data-wp-bind--value="state.replyDraft"
                                         data-wp-on--input="actions.updateReplyDraft"></textarea>

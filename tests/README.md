@@ -140,6 +140,20 @@ routes PHP's built-in server. The job also adds Secure Custom Fields, because
     `data-field` names a string field of the state and has a label.
   - Tests of shared code (`inc/shared`) go in `tests/php/Shared/`, of the
     comments module in `tests/php/Comments/` (each folder is a testsuite).
+  - Comments tests extend `CommentsTestCase`:
+    - It registers the allowed post types when they're missing. On the site
+      they come from SCF's acf-json, which the test run doesn't load.
+    - `comment()` posts through the service as a given user.
+    - `rest()` calls `comments/v1` with the nonce.
+    - `backdate()` ages a comment, for the edit window and the flood check.
+    - WordPress's 15-second flood check is off, except in the flood test.
+    - The client IP is `127.0.0.1`. Approving a comment mails the post's
+      author, and that mail reverse-resolves the IP, which takes seconds for
+      any other address.
+    - `CommentsServiceTest` covers the rating rules, text coming back as
+      typed, and who may edit.
+    - `CommentsRestTest` covers who may read, the field errors, and each
+      refusal's code and status.
 - **TS:** import the store modules directly, not `*-store.ts`, because those
   register the store as a side effect.
   - For a form's state while its request is still open, answer `fetch`
