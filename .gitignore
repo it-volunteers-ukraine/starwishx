@@ -37,3 +37,4 @@ skills-lock.json
 /tests/e2e/.env.local.json
 /tests/e2e/.report/
 /tests/e2e/.results/
+.vitest/
