@@ -22,22 +22,19 @@ namespace Comments\Core;
 use Comments\Services\CommentsService;
 use Comments\Api\CommentsController;
 use Shared\Build\AssetFile;
+use WP_Comment;
 
 final class CommentsCore
 {
-    private static ?self $instance = null;
+    /** Which AGGREGATES_VERSION the cached ratings were last counted under. */
+    private const string AGGREGATES_OPTION = 'starwishx_comments_aggregates_version';
 
-    private CommentsService $service;
+    private static ?self $instance = null;
 
     public static function instance(
         ?CommentsService $service = null
     ): self {
-        if (!self::$instance) {
-            $service = $service ?? new CommentsService();
-            self::$instance = new self($service);
-        }
-
-        return self::$instance;
+        return self::$instance ??= new self($service ?? new CommentsService());
     }
 
     public static function reset(): void
@@ -45,9 +42,9 @@ final class CommentsCore
         self::$instance = null;
     }
 
-    private function __construct(CommentsService $service)
-    {
-        $this->service = $service;
+    private function __construct(
+        private readonly CommentsService $service
+    ) {
         $this->bootstrap();
     }
 
@@ -58,11 +55,43 @@ final class CommentsCore
 
         // Asset enqueueing
         add_action('wp_enqueue_scripts', [$this, 'enqueueAssets']);
+
+        // Cached ratings: moderation in wp-admin changes which reviews
+        // count, and a change of counting rules recounts them all once.
+        add_action('transition_comment_status', [$this, 'onCommentStatusChange'], 10, 3);
+        add_action('admin_init', [$this, 'maybeRefreshAllAggregates']);
     }
 
     public function registerRestRoutes(): void
     {
-        (new CommentsController($this->service))->registerRoutes();
+        new CommentsController($this->service)->registerRoutes();
+    }
+
+    /**
+     * Approve, unapprove, spam, trash, restore or delete: recount the
+     * post's rating. WP passes status names ('approved', 'trash'), never
+     * '0'/'1'.
+     */
+    public function onCommentStatusChange(string $newStatus, string $oldStatus, WP_Comment $comment): void
+    {
+        $postId = (int) $comment->comment_post_ID;
+        if (in_array(get_post_type($postId), CommentsService::ALLOWED_POST_TYPES, true)) {
+            $this->service->refreshAggregates($postId);
+        }
+    }
+
+    /**
+     * Recount every rated post once per CommentsService::AGGREGATES_VERSION:
+     * on the first wp-admin request after a deploy that changed the rules.
+     */
+    public function maybeRefreshAllAggregates(): void
+    {
+        if ((int) get_option(self::AGGREGATES_OPTION, 0) >= CommentsService::AGGREGATES_VERSION) {
+            return;
+        }
+
+        $this->service->refreshAllAggregates();
+        update_option(self::AGGREGATES_OPTION, CommentsService::AGGREGATES_VERSION, true);
     }
 
     /**
@@ -92,19 +121,28 @@ final class CommentsCore
         // Infrastructure config — static per request, no post-specific knowledge needed.
         // wp_interactivity_state() merges: the template part (comments-interactive.php)
         // adds application state (comments list, aggregates, form states) on top.
-        wp_interactivity_state('comments', [
-            'config' => [
-                'nonce'    => wp_create_nonce('wp_rest'),
-                'restUrl'  => rest_url('comments/v1/'),
-                'messages' => [
-                    'reviewPosted'    => __('Review posted successfully!', 'starwishx'),
-                    'updateSaved'     => __('Update saved.', 'starwishx'),
-                    'submitError'     => __('An error occurred while posting.', 'starwishx'),
-                    /* translators: %avg% = average rating, %count% = number of reviews */
-                    'ratingBadgeLabel' => __('Average rating: %avg% out of 5 based on %count% reviews', 'starwishx'),
-                ],
+        wp_interactivity_state('comments', ['config' => $this->getConfig()]);
+    }
+
+    /**
+     * The store's `config`: REST access and the strings only the client
+     * shows. Typed on the TS side as CommentsConfig.
+     *
+     * @return array{nonce: string, restUrl: string, messages: array<string, string>}
+     */
+    public function getConfig(): array
+    {
+        return [
+            'nonce'    => wp_create_nonce('wp_rest'),
+            'restUrl'  => rest_url('comments/v1/'),
+            'messages' => [
+                'reviewPosted'     => __('Review posted successfully!', 'starwishx'),
+                'updateSaved'      => __('Update saved.', 'starwishx'),
+                'submitError'      => __('An error occurred while posting.', 'starwishx'),
+                /* translators: %avg% = average rating, %count% = number of reviews */
+                'ratingBadgeLabel' => __('Average rating: %avg% out of 5 based on %count% reviews', 'starwishx'),
             ],
-        ]);
+        ];
     }
 
     // --- Public Accessors ---

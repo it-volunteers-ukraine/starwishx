@@ -3,7 +3,7 @@
  *
  * Helpers every Interactivity API store needs, written once: getter mixing,
  * history entries the core runtime accepts, and narrowing. Imported by the
- * TypeScript stores (inc/listing, inc/launchpad) and bundled into each.
+ * TypeScript stores and bundled into each.
  *
  * File: inc/shared/Assets/store-utils.ts
  */

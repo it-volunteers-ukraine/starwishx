@@ -12,21 +12,40 @@ use WP_REST_Request;
 use WP_REST_Response;
 use WP_Error;
 
-class CommentsController extends AbstractApiController
+final class CommentsController extends AbstractApiController
 {
+    #[\Override]
     protected $namespace = 'comments/v1';
 
-    private const RATE_LIMIT_MAX    = 10;
-    private const RATE_LIMIT_WINDOW = HOUR_IN_SECONDS;
-    private const PER_PAGE_MAX      = 50;
+    private const int RATE_LIMIT_MAX    = 10;
+    private const int RATE_LIMIT_WINDOW = HOUR_IN_SECONDS;
+    private const int PER_PAGE_MAX      = 50;
 
-    private CommentsService $service;
+    /**
+     * The HTTP status of each CommentsService error code. Unlisted codes are
+     * 400, and not_found 404 (mapServiceError()'s defaults). The store shows
+     * the message either way; the status is for everything else.
+     */
+    private const array ERROR_STATUS = [
+        'invalid_user'         => 401,
+        'not_published'        => 403,
+        'not_commentable'      => 403,
+        'self_review'          => 403,
+        'forbidden'            => 403,
+        'timeout'              => 403,
+        'comment_duplicate'    => 409,
+        'invalid_parent'       => 422,
+        'parent_post_mismatch' => 422,
+        'comment_rejected'     => 422,
+        'comment_flood'        => 429,
+        'comment_failed'       => 500,
+    ];
 
-    public function __construct(CommentsService $service)
-    {
-        $this->service = $service;
-    }
+    public function __construct(
+        private readonly CommentsService $service
+    ) {}
 
+    #[\Override]
     public function registerRoutes(): void
     {
         // Shared validator: required, non-empty, capped length.
@@ -40,21 +59,19 @@ class CommentsController extends AbstractApiController
             ),
         ];
 
-        // 1. Get List with Pagination
-        // GET /comments/v1/comments
+        // Typed ids: WP validates them (422 field_errors through the shared
+        // error-shape filter). A negative parent_id used to slip past both
+        // the reply and the self-review checks.
+        $postIdArg = ['required' => true, 'type' => 'integer', 'minimum' => 1];
+
+        // GET /comments/v1/comments: readable as far as the post is.
         register_rest_route($this->namespace, '/comments', [
             'methods'             => 'GET',
             'callback'            => [$this, 'getComments'],
-            'permission_callback' => '__return_true', // Publicly readable
+            'permission_callback' => [$this, 'checkPostReadable'],
             'args'                => [
-                'post_id' => [
-                    'required'          => true,
-                    'sanitize_callback' => 'absint',
-                ],
-                'page' => [
-                    'default'           => 1,
-                    'sanitize_callback' => 'absint',
-                ],
+                'post_id'  => $postIdArg,
+                'page'     => ['type' => 'integer', 'default' => 1, 'minimum' => 1],
                 'per_page' => [
                     'default'           => CommentsService::ITEMS_PER_PAGE,
                     'sanitize_callback' => 'absint',
@@ -67,20 +84,20 @@ class CommentsController extends AbstractApiController
             ],
         ]);
 
-        // 2. POST (Create)
+        // POST /comments/v1/comments: a review, or a reply (parent_id).
         register_rest_route($this->namespace, '/comments', [
             'methods'             => 'POST',
             'callback'            => [$this, 'createComment'],
             'permission_callback' => [$this, 'checkLoggedInWithNonce'],
             'args'                => [
-                'post_id'   => ['required' => true, 'sanitize_callback' => 'absint'],
+                'post_id'   => $postIdArg,
                 'content'   => $contentArg,
                 'rating'    => ['type' => 'integer', 'minimum' => 0, 'maximum' => 5],
-                'parent_id' => ['type' => 'integer', 'default' => 0],
+                'parent_id' => ['type' => 'integer', 'default' => 0, 'minimum' => 0],
             ],
         ]);
 
-        // 3. PUT (Update)
+        // PUT /comments/v1/comments/{id}: edit one's own.
         register_rest_route($this->namespace, '/comments/(?P<id>\d+)', [
             'methods'             => 'PUT',
             'callback'            => [$this, 'updateComment'],
@@ -91,6 +108,17 @@ class CommentsController extends AbstractApiController
                 'rating'  => ['type' => 'integer', 'minimum' => 0, 'maximum' => 5],
             ],
         ]);
+    }
+
+    /**
+     * GET: the comments of a post the user may read (CommentsService::canRead()).
+     * Anything else is 404, as for a post that doesn't exist: a draft's or a
+     * private post's comments don't leak, nor does whether it exists.
+     */
+    public function checkPostReadable(WP_REST_Request $request): true|WP_Error
+    {
+        return $this->service->canRead((int) $request->get_param('post_id'))
+            ?: new WP_Error('not_found', __('Post not found.', 'starwishx'), ['status' => 404]);
     }
 
     /**
@@ -131,16 +159,14 @@ class CommentsController extends AbstractApiController
         $page    = (int) $request->get_param('page');
         $perPage = (int) $request->get_param('per_page');
 
-        $offset  = ($page - 1) * $perPage;
-
-        $items = $this->service->getPostComments($postId, $perPage, $offset);
+        $items = $this->service->getPostComments($postId, $perPage, ($page - 1) * $perPage);
         $total = $this->service->countPostComments($postId);
 
         return $this->success([
             'items'       => $items,
             'total'       => $total,
             'page'        => $page,
-            'total_pages' => ceil($total / $perPage),
+            'total_pages' => (int) ceil($total / $perPage),
         ]);
     }
 
@@ -153,18 +179,17 @@ class CommentsController extends AbstractApiController
             return $rateLimited;
         }
 
-        $postId   = (int) $request->get_param('post_id');
-        $content  = $request->get_param('content');
-        $rating   = (int) $request->get_param('rating');
-        $parentId = (int) $request->get_param('parent_id');
+        $result = $this->service->addComment(
+            $userId,
+            (int) $request->get_param('post_id'),
+            (string) $request->get_param('content'),
+            (int) $request->get_param('rating'),
+            (int) $request->get_param('parent_id')
+        );
 
-        $result = $this->service->addComment($userId, $postId, $content, $rating, $parentId);
-
-        if (is_wp_error($result)) {
-            return $this->error($result->get_error_message());
-        }
-
-        return $this->success($result);
+        return is_wp_error($result)
+            ? $this->mapServiceError($result, self::ERROR_STATUS)
+            : $this->success($result);
     }
 
     public function updateComment(WP_REST_Request $request): WP_REST_Response|WP_Error
@@ -176,17 +201,16 @@ class CommentsController extends AbstractApiController
             return $rateLimited;
         }
 
-        $commentId = (int) $request->get_param('id');
-        $content   = $request->get_param('content');
-        $rating    = (int) $request->get_param('rating');
+        $result = $this->service->updateComment(
+            $userId,
+            (int) $request->get_param('id'),
+            (string) $request->get_param('content'),
+            (int) $request->get_param('rating')
+        );
 
-        $result = $this->service->updateComment($userId, $commentId, $content, $rating);
-
-        if (is_wp_error($result)) {
-            return $this->error($result->get_error_message());
-        }
-
-        return $this->success($result);
+        return is_wp_error($result)
+            ? $this->mapServiceError($result, self::ERROR_STATUS)
+            : $this->success($result);
     }
 
     /**

@@ -15,30 +15,25 @@
  * require_once get_template_directory() . '/inc/comments/setup.php';
  */
 
+declare(strict_types=1);
+
 namespace Comments;
 
 // Load helper functions first
 require_once __DIR__ . '/helpers.php';
 
-// Autoloader
-spl_autoload_register(function ($class) {
-    $prefix = 'Comments\\';
-    $base_dir = __DIR__ . '/';
-
-    $len = strlen($prefix);
-    if (strncmp($prefix, $class, $len) !== 0) {
+// PSR-4 for Comments\*: Comments\Api\CommentsController is Api/CommentsController.php
+spl_autoload_register(static function (string $class): void {
+    if (!str_starts_with($class, __NAMESPACE__ . '\\')) {
         return;
     }
 
-    $relative_class = substr($class, $len);
-    $file = $base_dir . str_replace('\\', '/', $relative_class) . '.php';
+    $file = __DIR__ . '/' . str_replace('\\', '/', substr($class, strlen(__NAMESPACE__) + 1)) . '.php';
 
-    if (file_exists($file)) {
+    if (is_file($file)) {
         require $file;
     }
 });
 
 // Initialize Comments (before Launchpad, same priority as Favorites)
-add_action('after_setup_theme', function () {
-    \comments();
-}, 15);
+add_action('after_setup_theme', static fn() => \comments(), 15);

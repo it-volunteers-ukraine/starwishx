@@ -7,6 +7,7 @@
 import { beforeEach, vi } from "vite-plus/test";
 import { installDom, resetDom } from "./support/dom.ts";
 import { installGateway } from "./support/gateway.ts";
+import { fake } from "./support/interactivity.ts";
 
 vi.mock(
   "@wordpress/interactivity",
@@ -18,6 +19,7 @@ installDom();
 beforeEach(() => {
   resetDom();
   installGateway();
+  fake.context = {};
   vi.unstubAllGlobals();
   vi.useRealTimers();
 });

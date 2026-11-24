@@ -4,29 +4,107 @@ declare(strict_types=1);
 
 namespace Comments\Services;
 
-use WP_Error;
+use DateTimeImmutable;
+use DateTimeZone;
+use Shared\Http\ClientIp;
 use WP_Comment;
+use WP_Error;
+use WP_Post;
 
-class CommentsService
+/**
+ * Reviews (top-level comments, optionally rated) and their replies.
+ *
+ * Text: WordPress stores comment text entity-encoded (sanitize_textarea_field,
+ * kses on update) and wp_insert_comment() / wp_update_comment() unslash what
+ * they're given. So writes go in wp_slash()ed and the formatter decodes what
+ * it sends: the store prints it as text (data-wp-text).
+ *
+ * Ratings: only top-level comments carry one. The post's cached average
+ * (refreshAggregates()) counts each author's latest rating once.
+ */
+final class CommentsService
 {
-    public const ITEMS_PER_PAGE = 2;
-    public const EDIT_TIMEOUT_SECONDS = 15 * 60;
-    public const CONTENT_MAX_LENGTH = 2000;
-    public const ALLOWED_POST_TYPES = ['opportunity', 'project', 'news'];
+    public const int ITEMS_PER_PAGE = 2;
+    public const int EDIT_TIMEOUT_SECONDS = 15 * 60;
+    public const int CONTENT_MAX_LENGTH = 2000;
+    public const array ALLOWED_POST_TYPES = ['opportunity', 'project', 'news'];
 
     /**
-     * Get comments with rating data (Optimized to avoid N+1 queries)
+     * The counting rules of refreshAggregates(). Bump it when they change:
+     * CommentsCore recounts every rated post once.
+     */
+    public const int AGGREGATES_VERSION = 2;
+
+    private const string RATING_KEY = '_star_rating';
+    private const string COUNT_KEY  = '_opportunity_rating_count';
+    private const string AVG_KEY    = '_opportunity_rating_avg';
+
+    /**
+     * The post-specific state template-parts/comments-interactive.php
+     * hydrates for the comments store (CommentsCore::getConfig() adds
+     * `config`). Its shape is the PHP side of the contract in
+     * tests/fixtures/comments-state.json; the TS side is
+     * inc/comments/Assets/types.ts (CommentsServerState).
+     *
+     * hasComments, hasRatings and roundedAvg are server-render mirrors of
+     * the store's getters of the same names, which replace them on the client.
+     *
+     * @return array{
+     *   canComment: bool, isPostAuthor: bool, list: list<array<string, mixed>>,
+     *   aggregates: array{count: int, avg: float}, page: int, hasMore: bool,
+     *   hasComments: bool, newContent: string, newRating: int, error: null,
+     *   successMessage: null, isSubmitting: bool, isLoading: bool,
+     *   showForm: bool, hasRatings: bool, roundedAvg: int
+     * }
+     */
+    public function getInitialState(int $postId): array
+    {
+        $total      = $this->countPostComments($postId);
+        $aggregates = $this->getAggregates($postId);
+
+        return [
+            'canComment'     => get_post_status($postId) === 'publish',
+            'isPostAuthor'   => $this->viewer($postId)->isPostAuthor,
+            'list'           => $this->getPostComments($postId, self::ITEMS_PER_PAGE, 0),
+            'aggregates'     => $aggregates,
+            'page'           => 1,
+            'hasMore'        => $total > self::ITEMS_PER_PAGE,
+            'hasComments'    => $total > 0,
+            'newContent'     => '',
+            'newRating'      => 5,
+            'error'          => null,
+            'successMessage' => null,
+            'isSubmitting'   => false,
+            'isLoading'      => false,
+            'showForm'       => false,
+            'hasRatings'     => $aggregates['count'] > 0,
+            'roundedAvg'     => (int) round($aggregates['avg']),
+        ];
+    }
+
+    /**
+     * May the current user read the post's comments? As far as they may
+     * read the post: a public one of an allowed type, or one of theirs (a
+     * draft's author loading more comments in the preview).
+     */
+    public function canRead(int $postId): bool
+    {
+        $post = get_post($postId);
+
+        return $post instanceof WP_Post
+            && in_array($post->post_type, self::ALLOWED_POST_TYPES, true)
+            && (is_post_publicly_viewable($post) || current_user_can('read_post', $post->ID));
+    }
+
+    /**
+     * A page of threads, newest first, each with all its replies (oldest
+     * first). Three queries whatever the page size: the threads, their
+     * replies, and their authors.
+     *
+     * @return list<array<string, mixed>>
      */
     public function getPostComments(int $postId, int $limit = self::ITEMS_PER_PAGE, int $offset = 0): array
     {
-        $currentUserId = get_current_user_id();
-
-        // Context: Is the logged-in user the author of the Post (Opportunity)?
-        $post = get_post($postId);
-        $postAuthorId = $post ? (int) $post->post_author : 0;
-        $currentUserIsPostAuthor = $currentUserId > 0 && $currentUserId === $postAuthorId;
-
-        // 1. Fetch TOP LEVEL comments (Parents)
         $parents = get_comments([
             'post_id' => $postId,
             'status'  => 'approve',
@@ -36,124 +114,88 @@ class CommentsService
             'offset'  => $offset,
         ]);
 
-        if (empty($parents)) {
+        if ($parents === []) {
             return [];
         }
 
-        // 2. Extract Parent IDs to fetch all children in ONE query
-        $parentIds = array_column($parents, 'comment_ID');
-
-        // 3. Fetch ALL replies for these specific parents
-        // This replaces the loop of get_comments() inside the formatter
         $replies = get_comments([
             'post_id'    => $postId,
             'status'     => 'approve',
-            'parent__in' => $parentIds,
+            'parent__in' => array_column($parents, 'comment_ID'),
             'order'      => 'ASC',
-            'orderby'    => 'comment_date_gmt'
+            'orderby'    => 'comment_date_gmt',
         ]);
 
-        // 4. Group replies by their Parent ID in memory
-        $groupedReplies = [];
+        // Every author's display name in one query, not one per comment.
+        $authorIds = array_column([...$parents, ...$replies], 'user_id')
+            |> (static fn(array $ids): array => array_map(intval(...), $ids))
+            |> array_filter(...)
+            |> array_unique(...);
+        cache_users($authorIds);
+
+        $repliesByParent = [];
         foreach ($replies as $reply) {
-            $parentId = (int) $reply->comment_parent;
-            if (!isset($groupedReplies[$parentId])) {
-                $groupedReplies[$parentId] = [];
-            }
-            $groupedReplies[$parentId][] = $reply;
+            $repliesByParent[(int) $reply->comment_parent][] = $reply;
         }
 
-        // 5. Map Parents and inject their specific children
-        return array_map(function ($parent) use ($groupedReplies, $currentUserId, $postAuthorId, $currentUserIsPostAuthor) {
+        $viewer = $this->viewer($postId);
+        $format = fn(WP_Comment $comment): array => $this->formatSingleComment($comment, $viewer);
 
-            $childrenObjects = $groupedReplies[$parent->comment_ID] ?? [];
-
-            // Format the children first
-            $formattedChildren = array_map(function ($child) use ($currentUserId, $postAuthorId, $currentUserIsPostAuthor) {
-                return $this->formatSingleComment($child, $currentUserId, $postAuthorId, $currentUserIsPostAuthor);
-            }, $childrenObjects);
-
-            // Format the parent and attach children
-            $formattedParent = $this->formatSingleComment($parent, $currentUserId, $postAuthorId, $currentUserIsPostAuthor);
-
-            $formattedParent['replies']    = $formattedChildren;
-            $formattedParent['hasReplies'] = count($formattedChildren) > 0;
-
-            return $formattedParent;
-        }, $parents);
+        return array_map(
+            static function (WP_Comment $parent) use ($repliesByParent, $format): array {
+                $thread = array_map($format, $repliesByParent[(int) $parent->comment_ID] ?? []);
+                return [...$format($parent), 'replies' => $thread, 'hasReplies' => $thread !== []];
+            },
+            $parents
+        );
     }
 
     /**
-     * New Helper: Formats a single WP_Comment object into an array.
-     * Purely data mapping, NO database queries here.
+     * A comment as the store's CommentNode (inc/comments/Assets/types.ts).
+     * No queries of its own: meta and users are primed by the caller.
      *
-     * @param WP_Comment $comment The comment object
-     * @param int $currentUserId ID of currently logged in user
-     * @param int $postAuthorId ID of the author of the generic POST (Opportunity)
-     * @param bool $currentUserIsPostAuthor Is current user the owner of the Opportunity?
+     * @return array<string, mixed>
      */
-    private function formatSingleComment(WP_Comment $comment, int $currentUserId, int $postAuthorId, bool $currentUserIsPostAuthor): array
+    private function formatSingleComment(WP_Comment $comment, CommentViewer $viewer): array
     {
         $commentId     = (int) $comment->comment_ID;
         $commentUserId = (int) $comment->user_id;
-
-        // Metadata (Ratings are usually pre-cached by WP, but simple get_metadata is fast)
-        $rating = (int) get_comment_meta($commentId, '_star_rating', true);
-
-        // Logic: Author Display Name — use display_name (set by the user
-        // via "Display name publicly as" selector in Launchpad profile).
-        $display_author = $comment->comment_author;
-        if ($commentUserId > 0) {
-            $user = get_userdata($commentUserId);
-            if ($user) {
-                $display_author = $user->display_name;
-            }
-        }
-
-        // Permissions
-        $isMine = ($commentUserId === $currentUserId);
-        $canReply = $currentUserId > 0 && ($currentUserIsPostAuthor || $isMine);
-
-        // --- Time-based Editing Restrictions ---
-        $isEditable = false;
-        if ($isMine) {
-            // Use GMT dates to avoid server timezone offsets issues
-            $postedTime = strtotime($comment->comment_date_gmt);
-            $now = time(); // Returns UTC timestamp
-
-            // Allow edit if within timeout OR if user is a moderator (can bypass limits)
-            if (($now - $postedTime) <= self::EDIT_TIMEOUT_SECONDS) {
-                $isEditable = true;
-            } elseif (user_can($currentUserId, 'moderate_comments')) {
-                // Admins/Moderators should always be able to edit
-                $isEditable = true;
-            }
-        }
-        // ---------------------------------------
-
-        // Logic: CPT author Badges
-        $isCommentByPostAuthor = ($commentUserId === $postAuthorId);
+        $rating        = (int) get_comment_meta($commentId, self::RATING_KEY, true);
+        // The name the user chose to show ("Display name publicly as").
+        $author        = $commentUserId > 0 ? get_userdata($commentUserId) : false;
+        $isMine        = $viewer->isLoggedIn && $commentUserId === $viewer->userId;
 
         return [
             'id'           => $commentId,
-            'author'       => $display_author,
-            'content'      => $comment->comment_content,
+            'author'       => $author ? $author->display_name : $comment->comment_author,
+            'content'      => wp_specialchars_decode($comment->comment_content, ENT_QUOTES),
             'date'         => get_comment_date('d.m.y H:i', $comment),
             'dateIso'      => get_comment_date('c', $comment),
             'avatar'       => get_avatar_url($comment, ['size' => 96]),
             'rating'       => $rating > 0 ? $rating : null,
             /* translators: %d: star rating number 1-5 */
             'ratingLabel'  => $rating > 0 ? sprintf(__('Rating: %d out of 5 stars', 'starwishx'), $rating) : '',
-            'isMine'       => $commentUserId === $currentUserId,
-            'isPostAuthor' => $isCommentByPostAuthor,
-            'canReply'     => $canReply,
-            'isEditable'   => $isEditable, // Edit State Property
-            // Default empty for structure consistency, populated by getPostComments if needed
+            'isMine'       => $isMine,
+            'isPostAuthor' => $commentUserId > 0 && $commentUserId === $viewer->postAuthorId,
+            'canReply'     => $viewer->isPostAuthor || $isMine,
+            // Moderators may edit theirs after the window too.
+            'isEditable'   => $isMine && ($viewer->canModerate || self::withinEditWindow($comment)),
+            // getPostComments() fills these for threads.
             'replies'      => [],
             'hasReplies'   => false,
         ];
     }
 
+    /**
+     * Post a review (`$parentId` 0, optionally rated 1-5) or a reply to one.
+     *
+     * Honours the site's Discussion settings (duplicates, flooding, the
+     * disallowed-words list) through wp_allow_comment(), but publishes
+     * straight away: there's no "awaiting moderation" in this UI.
+     *
+     * @return array{comment: array<string, mixed>, aggregates: array{count: int, avg: float}}|WP_Error
+     */
+    #[\NoDiscard('a refused comment is only reported when the result is acted on')]
     public function addComment(int $userId, int $postId, string $content, int $rating = 0, int $parentId = 0): array|WP_Error
     {
         $user = get_userdata($userId);
@@ -161,79 +203,77 @@ class CommentsService
             return new WP_Error('invalid_user', __('User not found.', 'starwishx'));
         }
 
-        // Only allow comments on published posts
         $post = get_post($postId);
         if (!$post || $post->post_status !== 'publish') {
-            return new WP_Error('not_published', __('Comments are only allowed on published posts.', 'starwishx'), ['status' => 403]);
+            return new WP_Error('not_published', __('Comments are only allowed on published posts.', 'starwishx'));
         }
 
         if (!in_array($post->post_type, self::ALLOWED_POST_TYPES, true)) {
-            return new WP_Error('not_commentable', __('Comments are not allowed on this content.', 'starwishx'), ['status' => 403]);
+            return new WP_Error('not_commentable', __('Comments are not allowed on this content.', 'starwishx'));
         }
 
-        $author_name = $user->display_name ?: $user->user_login;
-
-        // Prevent post author from self-reviewing (top-level comments).
-        // Replies are allowed — the canReply check below handles that path.
+        // Authors reply to reviews of their post; they don't review it.
         if ($parentId === 0 && $userId === (int) $post->post_author) {
-            return new WP_Error('self_review', __('You cannot review your own post.', 'starwishx'), ['status' => 403]);
+            return new WP_Error('self_review', __('You cannot review your own post.', 'starwishx'));
         }
 
-        // Validation
-        if ($parentId > 0) {
-            $parentComm = get_comment($parentId);
-            if (!$parentComm) return new WP_Error('invalid_parent', __('Parent comment not found.', 'starwishx'));
+        if ($parentId !== 0) {
+            $parent = get_comment($parentId);
 
-            // Cross-post guard: without this, a client could submit
-            // post_id=A & parent_id=<comment of B> and graft an orphan reply
-            // onto the wrong thread.
-            if ((int) $parentComm->comment_post_ID !== $postId) {
-                return new WP_Error('parent_post_mismatch', __('Invalid parent comment.', 'starwishx'), ['status' => 422]);
+            // Replies go under an approved review: the list shows no deeper.
+            if (!$parent || (int) $parent->comment_parent !== 0 || $parent->comment_approved !== '1') {
+                return new WP_Error('invalid_parent', __('Parent comment not found.', 'starwishx'));
             }
 
-            // Server-side canReply validation
-            $postAuthorId        = (int) $post->post_author;
-            $parentCommentUserId = (int) $parentComm->user_id;
+            // Without this, post_id=A & parent_id=<a comment on B> would graft
+            // a reply onto the wrong thread.
+            if ((int) $parent->comment_post_ID !== $postId) {
+                return new WP_Error('parent_post_mismatch', __('Invalid parent comment.', 'starwishx'));
+            }
 
-            $canReply = (
-                $userId === $postAuthorId ||            // Post author can reply to anyone
-                $userId === $parentCommentUserId        // Thread starter can reply
-            );
-
-            if (!$canReply) {
+            // The post's author replies to anyone; others in their own thread.
+            if ($userId !== (int) $post->post_author && $userId !== (int) $parent->user_id) {
                 return new WP_Error('forbidden', __('You cannot reply to this thread.', 'starwishx'));
             }
         }
 
+        // The author's email, IP and agent: what WP's flood, duplicate and
+        // disallowed-words checks look at (an empty email would match every
+        // comment without one), and what its privacy exporter finds them by.
         $data = [
-            'comment_post_ID'  => $postId,
-            'comment_content'  => sanitize_textarea_field($content),
-            'user_id'          => $userId,
-            'comment_author'   => $author_name,
-            'comment_approved' => 1,
-            'comment_parent'   => $parentId,
+            'comment_post_ID'      => $postId,
+            'comment_parent'       => $parentId,
+            'user_id'              => $userId,
+            'comment_author'       => $user->display_name ?: $user->user_login,
+            'comment_author_email' => $user->user_email,
+            'comment_author_url'   => '',
+            'comment_author_IP'    => ClientIp::resolve(),
+            'comment_agent'        => substr((string) ($_SERVER['HTTP_USER_AGENT'] ?? ''), 0, 254),
+            'comment_content'      => sanitize_textarea_field($content),
+            'comment_type'         => 'comment',
+            'comment_date'         => current_time('mysql'),
+            'comment_date_gmt'     => current_time('mysql', true),
         ];
 
-        $commentId = wp_insert_comment($data);
+        $verdict = wp_allow_comment(wp_slash($data), true);
+        if (is_wp_error($verdict)) {
+            return self::refused($verdict);
+        }
+        if ($verdict === 'spam' || $verdict === 'trash') {
+            return new WP_Error('comment_rejected', __('Your comment could not be published.', 'starwishx'));
+        }
 
+        $commentId = wp_insert_comment(wp_slash([...$data, 'comment_approved' => 1]));
         if (!$commentId) {
             return new WP_Error('comment_failed', __('Failed to post comment.', 'starwishx'));
         }
 
-        // Handle Rating
-        if ($parentId === 0 && $rating > 0 && $rating <= 5) {
-            update_comment_meta($commentId, '_star_rating', $rating);
-            $this->updatePostAggregateRating($postId);
+        if ($parentId === 0 && $rating >= 1 && $rating <= 5) {
+            update_comment_meta($commentId, self::RATING_KEY, $rating);
+            $this->refreshAggregates($postId);
         }
 
-        // Prepare return data using new formatter
-        $newCommentObj = get_comment($commentId);
-        $post = get_post($postId);
-        $postAuthorId = (int) $post->post_author;
-        $currentUserIsPostAuthor = ($userId === $postAuthorId);
-
-        // Note: New comments have no replies yet
-        $formatted = $this->formatSingleComment($newCommentObj, $userId, $postAuthorId, $currentUserIsPostAuthor);
+        $formatted = $this->formatSingleComment(get_comment($commentId), CommentViewer::of($userId, $post));
 
         do_action('sw_comment_posted', $commentId, [
             'user_id'   => $userId,
@@ -244,111 +284,175 @@ class CommentsService
 
         return [
             'comment'    => $formatted,
-            'aggregates' => $this->getAggregates($postId)
+            'aggregates' => $this->getAggregates($postId),
         ];
     }
 
     /**
-     * Update an existing comment
+     * Edit one's own approved comment, within EDIT_TIMEOUT_SECONDS unless a
+     * moderator. A rating (1-5) applies to reviews only; 0 keeps it.
+     *
+     * The node comes back with replies: [] - the store keeps the replies it
+     * has.
+     *
+     * @return array{comment: array<string, mixed>, aggregates: array{count: int, avg: float}}|WP_Error
      */
+    #[\NoDiscard('a refused edit is only reported when the result is acted on')]
     public function updateComment(int $userId, int $commentId, string $content, int $rating = 0): array|WP_Error
     {
         $comment = get_comment($commentId);
+        $post    = $comment ? get_post((int) $comment->comment_post_ID) : null;
 
-        if (!$comment) {
+        if (
+            !$comment || !$post
+            || $comment->comment_approved !== '1'
+            || !in_array($post->post_type, self::ALLOWED_POST_TYPES, true)
+        ) {
             return new WP_Error('not_found', __('Comment not found.', 'starwishx'));
         }
         if ((int) $comment->user_id !== $userId) {
             return new WP_Error('forbidden', __('You cannot edit this comment.', 'starwishx'));
         }
 
-        // --- Edit Timeout Server-Side Validation ---
-        if (!user_can($userId, 'moderate_comments')) {
-            $postedTime = strtotime($comment->comment_date_gmt);
-            $now = time();
-            if (($now - $postedTime) > self::EDIT_TIMEOUT_SECONDS) {
-                return new WP_Error('timeout', __('Edit time limit expired (15 min).', 'starwishx'));
+        $viewer = CommentViewer::of($userId, $post);
+        if (!$viewer->canModerate && !self::withinEditWindow($comment)) {
+            return new WP_Error('timeout', __('Edit time limit expired (15 min).', 'starwishx'));
+        }
+
+        $text = sanitize_textarea_field($content);
+        if ($text !== $comment->comment_content) {
+            $updated = wp_update_comment(wp_slash(['comment_ID' => $commentId, 'comment_content' => $text]), true);
+            if ($updated === false || is_wp_error($updated)) {
+                return new WP_Error('comment_failed', __('Failed to save the comment.', 'starwishx'));
             }
         }
-        // -------------------------------------------
 
-        $args = [
-            'comment_ID'      => $commentId,
-            'comment_content' => sanitize_textarea_field($content),
-        ];
-
-        if ($comment->comment_content !== $args['comment_content']) {
-            wp_update_comment($args);
+        // Replies carry no rating: a post's author could rate their own post
+        // through one.
+        if ((int) $comment->comment_parent === 0 && $rating >= 1 && $rating <= 5) {
+            update_comment_meta($commentId, self::RATING_KEY, $rating);
+            $this->refreshAggregates($post->ID);
         }
-
-        if ($rating > 0 && $rating <= 5) {
-            update_comment_meta($commentId, '_star_rating', $rating);
-            $this->updatePostAggregateRating((int) $comment->comment_post_ID);
-        }
-
-        // Fetch fresh object
-        $updatedComment          = get_comment($commentId);
-        $post                    = get_post($comment->comment_post_ID);
-        $postAuthorId            = (int) $post->post_author;
-        $currentUserIsPostAuthor = ($userId === $postAuthorId);
-
-        // Note: When updating, we just return the item data.
-        // We preserve existing 'replies' in the store via JS, so we return empty array here
-        // or the Frontend needs to be smart enough not to overwrite replies with empty array.
-        // For safety, this service just returns the node data.
-        $formatted = $this->formatSingleComment($updatedComment, $userId, $postAuthorId, $currentUserIsPostAuthor);
 
         return [
-            'comment'    => $formatted,
-            'aggregates' => $this->getAggregates((int) $comment->comment_post_ID)
+            'comment'    => $this->formatSingleComment(get_comment($commentId), $viewer),
+            'aggregates' => $this->getAggregates($post->ID),
         ];
     }
 
     /**
-     * Helper: Recalculate Post Average Rating
+     * Recount the post's cached rating (the header badge, the listing and
+     * Launchpad cards): approved reviews only, each author's latest rating
+     * once, so posting more reviews doesn't add weight. A guest review
+     * (user_id 0) counts on its own.
      */
-    private function updatePostAggregateRating(int $postId): void
+    public function refreshAggregates(int $postId): void
     {
         global $wpdb;
 
-        $sql = "SELECT count(meta_value) as cnt, avg(meta_value) as avg
-                FROM {$wpdb->commentmeta}
-                WHERE meta_key = '_star_rating'
-                AND comment_id IN (
-                    SELECT comment_ID FROM {$wpdb->comments}
-                    WHERE comment_post_ID = %d AND comment_approved = '1'
-                )";
+        $rows = $wpdb->get_results($wpdb->prepare(
+            "SELECT c.comment_ID AS id, c.user_id AS user_id, m.meta_value AS rating
+               FROM {$wpdb->comments} c
+               JOIN {$wpdb->commentmeta} m ON m.comment_id = c.comment_ID AND m.meta_key = %s
+              WHERE c.comment_post_ID = %d AND c.comment_approved = '1' AND c.comment_parent = 0
+              ORDER BY c.comment_ID ASC",
+            self::RATING_KEY,
+            $postId
+        )) ?? [];
 
-        $result = $wpdb->get_row($wpdb->prepare($sql, $postId));
+        $ratingsByAuthor = [];
+        foreach ($rows as $row) {
+            $rating = (int) $row->rating;
+            if ($rating >= 1 && $rating <= 5) {
+                $author = (int) $row->user_id > 0 ? "user:{$row->user_id}" : "comment:{$row->id}";
+                $ratingsByAuthor[$author][] = $rating;
+            }
+        }
 
-        $count  = (int) $result->cnt;
-        $avg    = round((float) $result->avg, 1);
+        // Oldest first, so the last is the one that counts.
+        $latest = array_map(array_last(...), $ratingsByAuthor);
+        $count  = count($latest);
 
-        update_post_meta($postId, '_opportunity_rating_count', $count);
-        update_post_meta($postId, '_opportunity_rating_avg', $avg);
+        update_post_meta($postId, self::COUNT_KEY, $count);
+        update_post_meta($postId, self::AVG_KEY, $count > 0 ? round(array_sum($latest) / $count, 1) : 0);
     }
 
     /**
-     * Get Aggregates for Header
+     * Recount every post that has ratings or a cached count: the catch-up
+     * when AGGREGATES_VERSION changes.
+     *
+     * @return int The posts recounted.
+     */
+    public function refreshAllAggregates(): int
+    {
+        global $wpdb;
+
+        $postIds = array_map(intval(...), $wpdb->get_col($wpdb->prepare(
+            "SELECT DISTINCT c.comment_post_ID
+               FROM {$wpdb->comments} c
+               JOIN {$wpdb->commentmeta} m ON m.comment_id = c.comment_ID AND m.meta_key = %s
+             UNION
+             SELECT post_id FROM {$wpdb->postmeta} WHERE meta_key = %s",
+            self::RATING_KEY,
+            self::COUNT_KEY
+        )));
+
+        foreach ($postIds as $postId) {
+            $this->refreshAggregates($postId);
+        }
+
+        return count($postIds);
+    }
+
+    /**
+     * The post's cached rating.
+     *
+     * @return array{count: int, avg: float}
      */
     public function getAggregates(int $postId): array
     {
         return [
-            'count' => (int) get_post_meta($postId, '_opportunity_rating_count', true),
-            'avg'   => (float) get_post_meta($postId, '_opportunity_rating_avg', true),
+            'count' => (int) get_post_meta($postId, self::COUNT_KEY, true),
+            'avg'   => (float) get_post_meta($postId, self::AVG_KEY, true),
         ];
     }
 
-    /**
-     * Count approved comments for pagination calculation.
-     */
+    /** Approved threads (top-level comments): what the pages are counted in. */
     public function countPostComments(int $postId): int
     {
-        return get_comments([
+        return (int) get_comments([
             'post_id' => $postId,
             'status'  => 'approve',
             'count'   => true,
-            'parent'  => 0 // Count only threads for pagination matching getPostComments limit
+            'parent'  => 0,
         ]);
+    }
+
+    private function viewer(int $postId): CommentViewer
+    {
+        return CommentViewer::of(get_current_user_id(), get_post($postId));
+    }
+
+    /** Posted less than EDIT_TIMEOUT_SECONDS ago? Read in GMT, whatever the default timezone. */
+    private static function withinEditWindow(WP_Comment $comment): bool
+    {
+        $posted = new DateTimeImmutable($comment->comment_date_gmt, new DateTimeZone('UTC'))->getTimestamp();
+
+        return time() - $posted <= self::EDIT_TIMEOUT_SECONDS;
+    }
+
+    /**
+     * wp_allow_comment()'s refusal, in this theme's words: core's duplicate
+     * message carries an HTML entity the store would print as is.
+     */
+    private static function refused(WP_Error $error): WP_Error
+    {
+        $code = (string) $error->get_error_code();
+
+        return new WP_Error($code, match ($code) {
+            'comment_duplicate' => __('You have already posted this.', 'starwishx'),
+            'comment_flood'     => __('You are posting too quickly. Please wait a moment.', 'starwishx'),
+            default             => __('Your comment could not be published.', 'starwishx'),
+        });
     }
 }

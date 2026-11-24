@@ -21,6 +21,9 @@
         <testsuite name="gateway">
             <directory suffix="Test.php">Gateway</directory>
         </testsuite>
+        <testsuite name="comments">
+            <directory suffix="Test.php">Comments</directory>
+        </testsuite>
         <testsuite name="shared">
             <directory suffix="Test.php">Shared</directory>
         </testsuite>

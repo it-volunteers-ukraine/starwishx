@@ -1,0 +1,89 @@
+{
+    "state": {
+        "canComment": "boolean",
+        "isPostAuthor": "boolean",
+        "list": [
+            {
+                "id": "number",
+                "author": "string",
+                "content": "string",
+                "date": "string",
+                "dateIso": "string",
+                "avatar": "string",
+                "rating": "number",
+                "ratingLabel": "string",
+                "isMine": "boolean",
+                "isPostAuthor": "boolean",
+                "canReply": "boolean",
+                "isEditable": "boolean",
+                "replies": [
+                    {
+                        "id": "number",
+                        "author": "string",
+                        "content": "string",
+                        "date": "string",
+                        "dateIso": "string",
+                        "avatar": "string",
+                        "rating": "null",
+                        "ratingLabel": "string",
+                        "isMine": "boolean",
+                        "isPostAuthor": "boolean",
+                        "canReply": "boolean",
+                        "isEditable": "boolean",
+                        "replies": [],
+                        "hasReplies": "boolean"
+                    }
+                ],
+                "hasReplies": "boolean"
+            }
+        ],
+        "aggregates": {
+            "count": "number",
+            "avg": "number"
+        },
+        "page": "number",
+        "hasMore": "boolean",
+        "hasComments": "boolean",
+        "newContent": "string",
+        "newRating": "number",
+        "error": "null",
+        "successMessage": "null",
+        "isSubmitting": "boolean",
+        "isLoading": "boolean",
+        "showForm": "boolean",
+        "hasRatings": "boolean",
+        "roundedAvg": "number",
+        "config": {
+            "nonce": "string",
+            "restUrl": "string",
+            "messages": {
+                "reviewPosted": "string",
+                "updateSaved": "string",
+                "submitError": "string",
+                "ratingBadgeLabel": "string"
+            }
+        }
+    },
+    "write": {
+        "comment": {
+            "id": "number",
+            "author": "string",
+            "content": "string",
+            "date": "string",
+            "dateIso": "string",
+            "avatar": "string",
+            "rating": "number",
+            "ratingLabel": "string",
+            "isMine": "boolean",
+            "isPostAuthor": "boolean",
+            "canReply": "boolean",
+            "isEditable": "boolean",
+            "replies": [],
+            "hasReplies": "boolean"
+        },
+        "aggregates": {
+            "count": "number",
+            "avg": "number"
+        }
+    }
+}
