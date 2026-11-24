@@ -1,0 +1,81 @@
+{
+    "activeView": "string",
+    "formMap": {
+        "login": "string",
+        "register": "string",
+        "lost-password": "string",
+        "reset-password": "string"
+    },
+    "forms": {
+        "login": {
+            "username": "string",
+            "password": "string",
+            "rememberMe": "boolean",
+            "isPasswordVisible": "boolean",
+            "isSubmitting": "boolean",
+            "error": "null",
+            "fieldErrors": {
+                "username": "null",
+                "password": "null"
+            }
+        },
+        "register": {
+            "username": "string",
+            "email": "string",
+            "isSubmitting": "boolean",
+            "success": "boolean",
+            "error": "null",
+            "fieldErrors": {
+                "username": "null",
+                "email": "null"
+            }
+        },
+        "lostPassword": {
+            "userLogin": "string",
+            "isSubmitting": "boolean",
+            "error": "null",
+            "success": "boolean",
+            "fieldErrors": {
+                "userLogin": "null"
+            }
+        },
+        "resetPassword": {
+            "newPassword": "string",
+            "isPasswordVisible": "boolean",
+            "isGenerating": "boolean",
+            "isSubmitting": "boolean",
+            "error": "null",
+            "success": "boolean",
+            "successMessage": "null"
+        }
+    },
+    "isLoginActive": "boolean",
+    "isRegisterActive": "boolean",
+    "isLostPasswordActive": "boolean",
+    "isResetPasswordActive": "boolean",
+    "passwordPolicy": {
+        "minLength": "number",
+        "messages": {
+            "tooShort": "string",
+            "tooWeak": "string",
+            "hasUserData": "string"
+        }
+    },
+    "usernamePolicy": {
+        "pattern": "string",
+        "minLength": "number",
+        "maxLength": "number",
+        "messages": {
+            "tooShort": "string",
+            "tooLong": "string",
+            "invalid": "string"
+        }
+    },
+    "validationStrings": {
+        "usernameRequired": "string",
+        "passwordRequired": "string",
+        "emailRequired": "string",
+        "emailInvalid": "string",
+        "userLoginRequired": "string"
+    }
+}

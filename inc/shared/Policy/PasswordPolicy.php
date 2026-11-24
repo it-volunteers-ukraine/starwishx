@@ -9,7 +9,8 @@ use WP_User;
 
 final class PasswordPolicy
 {
-    public const MIN_LENGTH = 12;
+    /** In characters (code points), as the client counts them. */
+    public const int MIN_LENGTH = 12;
 
     public static function getMinLength(): int
     {
@@ -20,14 +21,21 @@ final class PasswordPolicy
      * Single source of truth for password validation.
      * Used by both Gateway (reset) and Launchpad (change password).
      *
+     * The length is in characters: in bytes, a Cyrillic password of
+     * 9 characters would pass a 12 minimum. The client's validatePassword()
+     * (inc/gateway/Assets/utils.ts) counts the same way.
+     *
      * @param string       $password The new password to validate.
      * @param WP_User|null $user     Optional user — enables "no personal data" rule.
      * @return true|WP_Error
      */
-    public static function validate(string $password, ?WP_User $user = null): bool|WP_Error
-    {
+    #[\NoDiscard('a password is only checked when the result is acted on')]
+    public static function validate(
+        #[\SensitiveParameter] string $password,
+        ?WP_User $user = null
+    ): bool|WP_Error {
         // 1. Minimum length
-        if (strlen($password) < self::MIN_LENGTH) {
+        if (mb_strlen($password) < self::MIN_LENGTH) {
             return new WP_Error(
                 'password_too_short',
                 sprintf(
@@ -51,19 +59,17 @@ final class PasswordPolicy
 
         // 3. No personal data (only when a user is provided)
         if ($user) {
-            $check_data = array_filter([
+            $personal = array_filter([
                 $user->user_login,
                 $user->user_email,
                 $user->display_name,
             ]);
 
-            foreach ($check_data as $check) {
-                if (stripos($password, $check) !== false) {
-                    return new WP_Error(
-                        'password_contains_userdata',
-                        __('Password cannot contain your username, email, or name.', 'starwishx')
-                    );
-                }
+            if (array_any($personal, static fn(string $data): bool => stripos($password, $data) !== false)) {
+                return new WP_Error(
+                    'password_contains_userdata',
+                    __('Password cannot contain your username, email, or name.', 'starwishx')
+                );
             }
         }
 
@@ -73,7 +79,10 @@ final class PasswordPolicy
     /**
      * Provide policy rules + i18n strings for client-side JS validation.
      * Hydrated into state via wp_interactivity_state() — no hardcoded
-     * English strings in JS files.
+     * English strings in JS files. TS: PasswordPolicy in
+     * inc/gateway/Assets/types.ts.
+     *
+     * @return array{minLength: int, messages: array{tooShort: string, tooWeak: string, hasUserData: string}}
      */
     public static function getClientRules(): array
     {
@@ -93,6 +102,9 @@ final class PasswordPolicy
     /**
      * Provide generic client-side validation strings (non-password).
      * Covers "required field" messages used across Gateway forms.
+     * TS: ValidationStrings in inc/gateway/Assets/types.ts.
+     *
+     * @return array{usernameRequired: string, passwordRequired: string, emailRequired: string, emailInvalid: string, userLoginRequired: string}
      */
     public static function getClientValidationStrings(): array
     {

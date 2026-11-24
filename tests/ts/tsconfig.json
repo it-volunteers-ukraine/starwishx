@@ -1,0 +1,10 @@
+{
+  // The TS unit tests (Vitest, `vp test`): the stores' own environment
+  // (inc/: browser lib, no Node types), plus JSON modules for the contract
+  // fixture. Checked by `pnpm typecheck`.
+  "extends": "../../inc/tsconfig.json",
+  "compilerOptions": {
+    "resolveJsonModule": true
+  },
+  "include": ["**/*.ts"]
+}

@@ -21,10 +21,13 @@ abstract class AbstractListingController extends AbstractApiController
     /**
      * Permission Callback: Allows public access to search.
      *
-     * The listing client sends no nonce (fetchJson() in
-     * inc/listing/Assets/utils.js), so every request runs as a guest's: no
-     * per-user data in the response, and no 403 from core's nonce check when
-     * the page that made the request is a day old or came from a cache.
+     * Guests' requests carry no nonce (fetchJson() in
+     * inc/listing/Assets/utils.ts), so they never meet core's nonce check -
+     * no 403 when the page that made the request is a day old or came from a
+     * cache. Logged-in users' searches send the favorites nonce: the
+     * "Favorites" filter and its count are per user (FavoritesFilter), and
+     * when that nonce has expired the client carries on as a guest
+     * (fetchResults() in inc/listing/Assets/grid/actions.ts).
      */
     public function publicAccess(WP_REST_Request $request): bool
     {

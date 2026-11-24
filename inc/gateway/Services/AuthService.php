@@ -5,6 +5,8 @@ declare(strict_types=1);
 
 namespace Gateway\Services;
 
+use Shared\Http\ClientIp;
+use Shared\Policy\RateLimitPolicy;
 use WP_Error;
 use WP_User;
 
@@ -16,37 +18,50 @@ use WP_User;
  * - Returns typed data or WP_Error
  * - Accepts primitives, returns structured data
  */
-class AuthService
+final class AuthService
 {
-    private const MAX_ATTEMPTS = 5;
-    private const LOCKOUT_DURATION = 15 * MINUTE_IN_SECONDS;
+    /** Failed logins allowed per account and IP... */
+    private const int ACCOUNT_MAX_FAILURES = 5;
+
+    /** ...and per IP over all accounts (password spraying from one IP). */
+    private const int IP_MAX_FAILURES = 20;
+
+    private const int LOCKOUT_WINDOW = 15 * MINUTE_IN_SECONDS;
 
     /**
      * Authenticate user with rate limiting protection.
+     *
+     * Only failures count. Success clears the account's counter but not the
+     * IP's - logging into one's own account must not reset a spray.
      *
      * @param string $username Username or email
      * @param string $password Plain text password
      * @param bool $remember Create persistent cookie
      * @return array{user: WP_User, redirect_to: string}|WP_Error
      */
+    #[\NoDiscard]
     public function authenticate(
         string $username,
-        string $password,
+        // PHP 8.5 prints backtraces for fatal errors: never with this in them.
+        #[\SensitiveParameter] string $password,
         bool $remember = false
     ): array|WP_Error {
-        // Rate limiting check (by username + IP)
-        if ($this->isRateLimited($username)) {
-            return new WP_Error(
-                'rate_limited',
-                __('Too many login attempts. Please wait 15 minutes.', 'starwishx')
-            );
+        $keys = $this->rateLimitKeys($username);
+        $message = __('Too many login attempts. Please wait 15 minutes.', 'starwishx');
+
+        foreach ([[$keys['account'], self::ACCOUNT_MAX_FAILURES], [$keys['ip'], self::IP_MAX_FAILURES]] as [$key, $max]) {
+            $check = RateLimitPolicy::check($key, $max, self::LOCKOUT_WINDOW, $message);
+            if (is_wp_error($check)) {
+                return $check; // rate_limited
+            }
         }
 
         // Authenticate via WordPress
         $user = wp_authenticate($username, $password);
 
         if (is_wp_error($user)) {
-            $this->recordFailedAttempt($username);
+            RateLimitPolicy::hit($keys['account'], self::LOCKOUT_WINDOW);
+            RateLimitPolicy::hit($keys['ip'], self::LOCKOUT_WINDOW);
 
             // Return generic error to prevent user enumeration
             return new WP_Error(
@@ -65,8 +80,7 @@ class AuthService
             );
         }
 
-        // Success - clear rate limiting
-        $this->clearAttempts($username);
+        RateLimitPolicy::clear($keys['account']);
 
         // Set authentication cookies
         wp_set_auth_cookie($user->ID, $remember);
@@ -89,103 +103,47 @@ class AuthService
         wp_set_current_user(0);
     }
 
-
     /**
      * Determine post-login redirect.
-     * 
-     * Now strictly agnostic. It handles basic WP roles and 
-     * defers specialized logic to external modules via filters.
+     *
+     * Strictly agnostic: basic WP roles here, specialized logic (the
+     * Launchpad) through the filter.
      */
     private function determineRedirect(WP_User $user): string
     {
-        // 1. Default fallback: Home page
-        $redirect_to = home_url('/');
-
-        // 2. Default WP behavior: Admins to dashboard
-        if (user_can($user, 'manage_options')) {
-            $redirect_to = admin_url();
-        }
+        $redirect_to = user_can($user, 'manage_options') ? admin_url() : home_url('/');
 
         /**
          * Filter the Gateway redirect URL.
-         * 
-         * This allows Launchpad (or any other module) to hijack 
+         *
+         * This allows Launchpad (or any other module) to hijack
          * the redirect without the Gateway knowing it exists.
-         * 
+         *
          * @param string  $redirect_to The proposed URL.
          * @param WP_User $user        The authenticated user object.
          */
-        return apply_filters('gateway_auth_redirect_url', $redirect_to, $user);
-
-        /*// Check if Launchpad is active and user should use it
-        if (function_exists('launchpad')) {
-            try {
-                $launchpad = \launchpad();
-                // Use reflection or method check for safety
-                $accessController = $launchpad->registry(); // Placeholder
-
-                // Check for AccessController method
-                if (
-                    method_exists($launchpad, 'accessController') &&
-                    $launchpad->accessController() instanceof \Launchpad\Core\AccessController
-                ) {
-                    $access = $launchpad->accessController();
-                    if (
-                        method_exists($access, 'shouldUseLaunchpad') &&
-                        $access->shouldUseLaunchpad($user->ID)
-                    ) {
-                        return home_url('/launchpad/');
-                    }
-                }
-            } catch (\Throwable $e) {
-                // Launchpad not properly initialized, fall through
-            }
-        }
-
-        // Admins go to wp-admin
-        if (user_can($user, 'manage_options')) {
-            return admin_url();
-        }
-        // Default: home page
-        return home_url('/'); */
+        return (string) apply_filters('gateway_auth_redirect_url', $redirect_to, $user);
     }
 
     /**
-     * Check if user/IP combination is rate limited.
+     * The failure counters for an attempt: one for the account from this IP,
+     * one for the IP. WordPress takes a login in any letter case, or the
+     * email, so the account is keyed by the user it names - every spelling
+     * of an account shares one counter - and a name no account has by its
+     * lower-cased self.
+     *
+     * @return array{account: string, ip: string}
      */
-    private function isRateLimited(string $username): bool
+    private function rateLimitKeys(string $username): array
     {
-        $key = $this->getRateLimitKey($username);
-        $attempts = (int) get_transient($key);
+        $name = $username |> trim(...) |> strtolower(...);
+        $user = get_user_by('login', $name)
+            ?: (str_contains($name, '@') ? get_user_by('email', $name) : false);
+        $ip = ClientIp::resolve();
 
-        return $attempts >= self::MAX_ATTEMPTS;
-    }
-
-    /**
-     * Record a failed login attempt.
-     */
-    private function recordFailedAttempt(string $username): void
-    {
-        $key = $this->getRateLimitKey($username);
-        $attempts = (int) get_transient($key);
-
-        set_transient($key, $attempts + 1, self::LOCKOUT_DURATION);
-    }
-
-    /**
-     * Clear rate limiting on successful login.
-     */
-    private function clearAttempts(string $username): void
-    {
-        delete_transient($this->getRateLimitKey($username));
-    }
-
-    /**
-     * Generate rate limit key from username and IP.
-     */
-    private function getRateLimitKey(string $username): string
-    {
-        $ip = $_SERVER['REMOTE_ADDR'] ?? '0.0.0.0';
-        return 'gw_login_' . md5($username . $ip);
+        return [
+            'account' => RateLimitPolicy::key('gateway.login', $user ? "user:{$user->ID}" : "name:{$name}", $ip),
+            'ip'      => RateLimitPolicy::key('gateway.login_ip', $ip),
+        ];
     }
 }

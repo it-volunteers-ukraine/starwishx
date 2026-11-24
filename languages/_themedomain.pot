@@ -2,14 +2,14 @@
 # This file is distributed under the GNU General Public License v2 or later.
 msgid ""
 msgstr ""
-"Project-Id-Version: StarWishX 1.0.0\n"
+"Project-Id-Version: StarWishX 0.7.5\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/theme/starwishx\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-10-28T13:00:47+00:00\n"
+"POT-Creation-Date: 2026-11-22T20:28:32+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: starwishx\n"
@@ -26,7 +26,7 @@ msgstr ""
 
 #. Description of the theme
 #: production
-msgid "starwishx - A modern and responsive WordPress theme designed for bloggers and creatives who want to showcase their content with style and elegance."
+msgid "StarWishX - Volunteer sharing free opportunities custom WordPress theme"
 msgstr ""
 
 #. Author of the theme
@@ -79,17 +79,17 @@ msgid "View all"
 msgstr ""
 
 #: archive-opportunity.php:63
-#: inc/launchpad/Panels/OpportunitiesPanel.php:29
-#: inc/listing/Core/ListingCore.php:168
+#: inc/launchpad/Panels/OpportunitiesPanel.php:36
+#: inc/listing/Core/ListingCore.php:169
 #: inc/listing/Core/ListingSeoProvider.php:81
 #: inc/listing/Core/ListingSeoProvider.php:101
 #: inc/listing/Core/ListingSeoProvider.php:233
 #: inc/listing/Core/ListingSeoProvider.php:236
 #: inc/listing/setup.php:55
 #: inc/tour/Scenarios/LaunchpadIntroScenario.php:70
-#: production/archive-opportunity.php:72
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:29
-#: production/inc/listing/Core/ListingCore.php:161
+#: production/archive-opportunity.php:63
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:36
+#: production/inc/listing/Core/ListingCore.php:169
 #: production/inc/listing/Core/ListingSeoProvider.php:81
 #: production/inc/listing/Core/ListingSeoProvider.php:101
 #: production/inc/listing/Core/ListingSeoProvider.php:233
@@ -105,7 +105,7 @@ msgstr ""
 #: inc/blocks/Core/BlocksCore.php:266
 #: inc/listing/Enums/Taxonomy.php:37
 #: inc/listing/Filters/CategoryFilter.php:31
-#: production/archive-opportunity.php:74
+#: production/archive-opportunity.php:65
 #: production/inc/blocks/Core/BlocksCore.php:266
 #: production/inc/listing/Enums/Taxonomy.php:37
 #: production/inc/listing/Filters/CategoryFilter.php:31
@@ -115,25 +115,28 @@ msgid "Category"
 msgstr ""
 
 #: archive-opportunity.php:92
-#: production/archive-opportunity.php:95
+#: production/archive-opportunity.php:92
 msgid "Filters"
 msgstr ""
 
 #: archive-opportunity.php:129
 #: archive-opportunity.php:205
-#: production/archive-opportunity.php:191
+#: production/archive-opportunity.php:129
+#: production/archive-opportunity.php:205
 msgid "Close filters"
 msgstr ""
 
 #: archive-opportunity.php:134
-#: production/archive-opportunity.php:113
+#: production/archive-opportunity.php:134
 msgid "Refine Search"
 msgstr ""
 
 #: archive-opportunity.php:142
-#: inc/listing/Core/ListingCore.php:481
+#: inc/listing/Core/ListingCore.php:488
 #: inc/listing/Core/ResultsGrid.php:27
-#: production/archive-opportunity.php:130
+#: production/archive-opportunity.php:142
+#: production/inc/listing/Core/ListingCore.php:488
+#: production/inc/listing/Core/ResultsGrid.php:27
 #: production/template-parts/sortby-and-result-posts.php:52
 #: template-parts/sortby-and-result-posts.php:52
 msgid "Found"
@@ -141,35 +144,35 @@ msgstr ""
 
 #: archive-opportunity.php:147
 #: inc/listing/Core/ResultsGrid.php:65
-#: production/archive-opportunity.php:135
-#: production/inc/listing/Core/ResultsGrid.php:41
+#: production/archive-opportunity.php:147
+#: production/inc/listing/Core/ResultsGrid.php:65
 msgid "Clear all"
 msgstr ""
 
 #: archive-opportunity.php:172
-#: production/archive-opportunity.php:160
+#: production/archive-opportunity.php:172
 msgid "Keyword search"
 msgstr ""
 
 #: archive-opportunity.php:187
-#: production/archive-opportunity.php:173
+#: production/archive-opportunity.php:187
 msgid "Search by keyword..."
 msgstr ""
 
 #: archive-opportunity.php:206
 #: header.php:107
-#: inc/launchpad/Panels/OpportunitiesPanel.php:1088
-#: production/archive-opportunity.php:192
+#: inc/launchpad/Panels/OpportunitiesPanel.php:1096
+#: production/archive-opportunity.php:206
 #: production/header.php:107
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:1088
-#: production/template-parts/element-popup.php:42
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:1091
+#: production/template-parts/element-popup.php:52
 #: template-parts/element-popup.php:52
 msgid "Close"
 msgstr ""
 
 #: archive-opportunity.php:223
 #: header.php:115
-#: production/archive-opportunity.php:206
+#: production/archive-opportunity.php:223
 #: production/header.php:115
 #: production/templates/single-opportunity.php:265
 #: production/templates/single-project.php:163
@@ -179,7 +182,7 @@ msgid "Hi!"
 msgstr ""
 
 #: archive-opportunity.php:224
-#: production/archive-opportunity.php:207
+#: production/archive-opportunity.php:224
 #: production/templates/single-opportunity.php:266
 #: templates/single-opportunity.php:266
 msgid "Add to favorites is only available for registered users."
@@ -207,42 +210,6 @@ msgstr ""
 #: archive-project.php:107
 #: production/archive-project.php:107
 msgid "No projects found."
-msgstr ""
-
-#. Template Name of the theme
-msgid "about"
-msgstr ""
-
-#. Template Name of the theme
-msgid "blog"
-msgstr ""
-
-#. Template Name of the theme
-msgid "contact"
-msgstr ""
-
-#. Template Name of the theme
-msgid "home"
-msgstr ""
-
-#: docs/trident-bem/inc/breadcrumbs-sample.php:58
-#: inc/shared/Breadcrumbs/Trail.php:74
-#: production/inc/shared/Breadcrumbs/Trail.php:74
-msgid "Home"
-msgstr ""
-
-#: docs/trident-bem/inc/breadcrumbs-sample.php:163
-#: production/template-parts/breadcrumbs.php:49
-#: template-parts/breadcrumbs.php:49
-msgid "Breadcrumbs"
-msgstr ""
-
-#. Template Name of the theme
-msgid "Legal"
-msgstr ""
-
-#. Template Name of the theme
-msgid "pricing"
 msgstr ""
 
 #: footer.php:90
@@ -295,8 +262,8 @@ msgstr ""
 #: inc/shared/Breadcrumbs/Trail.php:80
 #: production/functions.php:204
 #: production/functions.php:233
-#: production/inc/listing/Api/MainController.php:92
-#: production/inc/listing/Api/MainController.php:199
+#: production/inc/listing/Api/MainController.php:74
+#: production/inc/listing/Api/MainController.php:135
 #: production/inc/shared/Breadcrumbs/Trail.php:80
 #: production/template-parts/search-modal.php:42
 #: template-parts/search-modal.php:42
@@ -305,6 +272,8 @@ msgstr ""
 
 #: functions.php:217
 #: production/functions.php:217
+#: production/template-parts/control-header-translate.php:32
+#: template-parts/control-header-translate.php:32
 msgid "Language"
 msgstr ""
 
@@ -316,7 +285,7 @@ msgstr ""
 #: header.php:124
 #: production/header.php:124
 #: production/template-parts/control-header-auth.php:38
-#: production/template-parts/element-popup.php:59
+#: production/template-parts/element-popup.php:69
 #: template-parts/control-header-auth.php:38
 #: template-parts/element-popup.php:69
 msgid "Login"
@@ -326,69 +295,9 @@ msgstr ""
 #: inc/gateway/Forms/RegisterForm.php:77
 #: production/header.php:127
 #: production/inc/gateway/Forms/RegisterForm.php:77
-#: production/template-parts/element-popup.php:62
+#: production/template-parts/element-popup.php:72
 #: template-parts/element-popup.php:72
 msgid "Register"
-msgstr ""
-
-#: inc/acf/blocks/accordion-one-photo/register.php:4
-#: production/inc/acf/blocks/accordion-one-photo/register.php:4
-msgid "Block accordion one photo"
-msgstr ""
-
-#: inc/acf/blocks/accordion-one-photo/register.php:5
-#: production/inc/acf/blocks/accordion-one-photo/register.php:5
-msgid "Block accordion with one photo"
-msgstr ""
-
-#: inc/acf/blocks/accordion-opportunities/register.php:4
-#: production/inc/acf/blocks/accordion-opportunities/register.php:4
-msgid "Block accordion opportunities (legacy)"
-msgstr ""
-
-#: inc/acf/blocks/accordion-opportunities/register.php:5
-#: production/inc/acf/blocks/accordion-opportunities/register.php:5
-msgid "Block accordion opportunities"
-msgstr ""
-
-#: inc/acf/blocks/accordion-two-photo-compact/register.php:4
-#: production/inc/acf/blocks/accordion-two-photo-compact/register.php:4
-msgid "Block accordion two photo compact (legacy)"
-msgstr ""
-
-#: inc/acf/blocks/accordion-two-photo-compact/register.php:5
-#: production/inc/acf/blocks/accordion-two-photo-compact/register.php:5
-msgid "Block accordion with two photo compact"
-msgstr ""
-
-#: inc/acf/blocks/accordion-two-photo/register.php:4
-#: production/inc/acf/blocks/accordion-two-photo/register.php:4
-msgid "Block accordion two photo"
-msgstr ""
-
-#: inc/acf/blocks/accordion-two-photo/register.php:5
-#: production/inc/acf/blocks/accordion-two-photo/register.php:5
-msgid "Block accordion with two photo"
-msgstr ""
-
-#: inc/acf/blocks/animated-text/register.php:4
-#: production/inc/acf/blocks/animated-text/register.php:4
-msgid "Animated Text (legacy)"
-msgstr ""
-
-#: inc/acf/blocks/animated-text/register.php:5
-#: production/inc/acf/blocks/animated-text/register.php:5
-msgid "Block for displaying animated text on the homepage"
-msgstr ""
-
-#: inc/acf/blocks/breadcrumbs/register.php:4
-#: production/inc/acf/blocks/breadcrumbs/register.php:4
-msgid "Breadcrumbs (legacy)"
-msgstr ""
-
-#: inc/acf/blocks/breadcrumbs/register.php:5
-#: production/inc/acf/blocks/breadcrumbs/register.php:5
-msgid "Block breadcrumbs"
 msgstr ""
 
 #: inc/acf/blocks/christmas-tree/register.php:4
@@ -396,108 +305,6 @@ msgstr ""
 #: production/inc/acf/blocks/christmas-tree/register.php:4
 #: production/inc/acf/blocks/christmas-tree/register.php:5
 msgid "ChristmasTree"
-msgstr ""
-
-#: inc/acf/blocks/contact_form/register.php:15
-#: production/inc/acf/blocks/contact_form/register.php:15
-msgid "Contact Form"
-msgstr ""
-
-#: inc/acf/blocks/contact_form/register.php:16
-#: production/inc/acf/blocks/contact_form/register.php:16
-msgid "Контактний блок з формою і контактною інформацією"
-msgstr ""
-
-#: inc/acf/blocks/contact_page/register.php:5
-#: production/inc/acf/blocks/contact_page/register.php:5
-msgid "Contact Promo Card (legacy)"
-msgstr ""
-
-#: inc/acf/blocks/contact_page/register.php:6
-#: production/inc/acf/blocks/contact_page/register.php:6
-msgid "Картка з фото, текстом та контактами"
-msgstr ""
-
-#: inc/acf/blocks/faq/register.php:4
-#: production/inc/acf/blocks/faq/register.php:4
-msgid "FAQ Block (legacy)"
-msgstr ""
-
-#: inc/acf/blocks/faq/register.php:5
-#: production/inc/acf/blocks/faq/register.php:5
-msgid "Frequently Asked Questions Block"
-msgstr ""
-
-#: inc/acf/blocks/hero/register.php:4
-#: production/inc/acf/blocks/hero/register.php:4
-msgid "Hero (legacy)"
-msgstr ""
-
-#: inc/acf/blocks/hero/register.php:5
-#: production/inc/acf/blocks/hero/register.php:5
-msgid "Block Hero"
-msgstr ""
-
-#: inc/acf/blocks/news/register.php:4
-#: production/inc/acf/blocks/news/register.php:4
-msgid "Block News (legacy)"
-msgstr ""
-
-#: inc/acf/blocks/news/register.php:5
-#: production/inc/acf/blocks/news/register.php:5
-msgid "Block News"
-msgstr ""
-
-#: inc/acf/blocks/photo-text/register.php:4
-#: production/inc/acf/blocks/photo-text/register.php:4
-msgid "Block Photo & Text & Contacts (legacy)"
-msgstr ""
-
-#: inc/acf/blocks/photo-text/register.php:5
-#: production/inc/acf/blocks/photo-text/register.php:5
-msgid "Block with title, photo, text and contact"
-msgstr ""
-
-#: inc/acf/blocks/projects/register.php:4
-#: production/inc/acf/blocks/projects/register.php:4
-msgid "Projects Carousel (legacy)"
-msgstr ""
-
-#: inc/acf/blocks/projects/register.php:5
-#: production/inc/acf/blocks/projects/register.php:5
-msgid "Carousel of project cards"
-msgstr ""
-
-#: inc/acf/blocks/title-page/register.php:4
-#: production/inc/acf/blocks/title-page/register.php:4
-msgid "Title Page"
-msgstr ""
-
-#: inc/acf/blocks/title-page/register.php:5
-#: production/inc/acf/blocks/title-page/register.php:5
-msgid "Block Title Page"
-msgstr ""
-
-#: inc/acf/blocks/video-text/register.php:4
-#: production/inc/acf/blocks/video-text/register.php:4
-msgid "Video & Text (legacy)"
-msgstr ""
-
-#: inc/acf/blocks/video-text/register.php:5
-#: production/inc/acf/blocks/video-text/register.php:5
-msgid "Block with title, video & text"
-msgstr ""
-
-#: inc/acf/blocks/video-text/video-text.php:82
-#: inc/blocks/video-text/render.php:45
-#: production/inc/acf/blocks/video-text/video-text.php:82
-#: production/inc/blocks/video-text/render.php:45
-msgid "Play video"
-msgstr ""
-
-#: inc/acf/blocks/video-text/video-text.php:86
-#: production/inc/acf/blocks/video-text/video-text.php:86
-msgid "Video cover"
 msgstr ""
 
 #: inc/blocks/accordion-opportunities-item/labels.php:14
@@ -723,6 +530,11 @@ msgstr ""
 msgid "Play video: %s"
 msgstr ""
 
+#: inc/blocks/video-text/render.php:45
+#: production/inc/blocks/video-text/render.php:45
+msgid "Play video"
+msgstr ""
+
 #: inc/chat/Api/ActivityController.php:56
 #: inc/favorites/Api/FavoritesController.php:58
 #: inc/favorites/Services/FavoritesService.php:20
@@ -730,7 +542,7 @@ msgstr ""
 #: production/inc/chat/Api/ActivityController.php:56
 #: production/inc/favorites/Api/FavoritesController.php:58
 #: production/inc/favorites/Services/FavoritesService.php:20
-#: production/inc/listing/Api/MainController.php:70
+#: production/inc/listing/Api/MainController.php:53
 msgid "Page"
 msgstr ""
 
@@ -772,19 +584,19 @@ msgstr ""
 #: inc/comments/Api/CommentsController.php:208
 #: inc/contact/Api/ContactController.php:52
 #: inc/launchpad/Api/MediaController.php:146
-#: inc/launchpad/Api/OpportunitiesController.php:539
+#: inc/launchpad/Api/OpportunitiesController.php:555
 #: inc/launchpad/Api/ProfileController.php:360
-#: inc/launchpad/Api/SecurityController.php:127
+#: inc/launchpad/Api/SecurityController.php:128
 #: inc/listing/Api/MainController.php:169
 #: inc/tour/Api/TourController.php:246
 #: production/inc/chat/Api/ActivityController.php:202
 #: production/inc/comments/Api/CommentsController.php:208
 #: production/inc/contact/Api/ContactController.php:52
 #: production/inc/launchpad/Api/MediaController.php:146
-#: production/inc/launchpad/Api/OpportunitiesController.php:539
+#: production/inc/launchpad/Api/OpportunitiesController.php:538
 #: production/inc/launchpad/Api/ProfileController.php:360
-#: production/inc/launchpad/Api/SecurityController.php:127
-#: production/inc/listing/Api/MainController.php:239
+#: production/inc/launchpad/Api/SecurityController.php:128
+#: production/inc/listing/Api/MainController.php:169
 #: production/inc/tour/Api/TourController.php:246
 #, php-format
 msgid "%1$s limit reached. Please wait %2$s before trying again."
@@ -874,24 +686,24 @@ msgid "Refresh"
 msgstr ""
 
 #: inc/chat/Panels/ChatPanel.php:80
-#: inc/launchpad/Panels/FavoritesPanel.php:66
-#: inc/launchpad/Panels/OpportunitiesPanel.php:386
+#: inc/launchpad/Panels/FavoritesPanel.php:67
+#: inc/launchpad/Panels/OpportunitiesPanel.php:399
 #: production/inc/chat/Panels/ChatPanel.php:80
-#: production/inc/launchpad/Panels/FavoritesPanel.php:66
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:386
+#: production/inc/launchpad/Panels/FavoritesPanel.php:67
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:399
 #: production/template-parts/comments-interactive.php:394
 #: template-parts/comments-interactive.php:394
 msgid "Loading..."
 msgstr ""
 
-#: inc/chat/Panels/ChatPanel.php:136
-#: inc/launchpad/Panels/FavoritesPanel.php:134
-#: inc/launchpad/Panels/OpportunitiesPanel.php:522
+#: inc/chat/Panels/ChatPanel.php:134
+#: inc/launchpad/Panels/FavoritesPanel.php:137
+#: inc/launchpad/Panels/OpportunitiesPanel.php:540
 #: inc/listing/Core/ResultsGrid.php:94
-#: production/inc/chat/Panels/ChatPanel.php:136
-#: production/inc/launchpad/Panels/FavoritesPanel.php:134
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:522
-#: production/inc/listing/Core/ResultsGrid.php:69
+#: production/inc/chat/Panels/ChatPanel.php:134
+#: production/inc/launchpad/Panels/FavoritesPanel.php:137
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:535
+#: production/inc/listing/Core/ResultsGrid.php:94
 msgid "Load More"
 msgstr ""
 
@@ -901,9 +713,9 @@ msgid "Comment"
 msgstr ""
 
 #: inc/comments/Api/CommentsController.php:64
-#: inc/launchpad/Api/OpportunitiesController.php:183
+#: inc/launchpad/Api/OpportunitiesController.php:182
 #: production/inc/comments/Api/CommentsController.php:64
-#: production/inc/launchpad/Api/OpportunitiesController.php:183
+#: production/inc/launchpad/Api/OpportunitiesController.php:182
 #: production/template-parts/pagination.php:147
 #: template-parts/pagination.php:147
 msgid "Items per page"
@@ -1062,13 +874,13 @@ msgstr ""
 #: inc/contact/Channels/EmailChannel.php:56
 #: inc/contact/Channels/TelegramChannel.php:80
 #: inc/launchpad/Api/ProfileController.php:129
-#: inc/launchpad/Panels/ProfilePanel.php:180
-#: inc/launchpad/Panels/ProfilePanel.php:250
+#: inc/launchpad/Panels/ProfilePanel.php:177
+#: inc/launchpad/Panels/ProfilePanel.php:247
 #: production/inc/contact/Channels/EmailChannel.php:56
 #: production/inc/contact/Channels/TelegramChannel.php:80
 #: production/inc/launchpad/Api/ProfileController.php:129
-#: production/inc/launchpad/Panels/ProfilePanel.php:180
-#: production/inc/launchpad/Panels/ProfilePanel.php:250
+#: production/inc/launchpad/Panels/ProfilePanel.php:177
+#: production/inc/launchpad/Panels/ProfilePanel.php:247
 #: production/template-parts/contact-section.php:50
 #: template-parts/contact-section.php:50
 msgid "Phone"
@@ -1083,12 +895,12 @@ msgstr ""
 
 #: inc/contact/Channels/EmailChannel.php:58
 #: inc/contact/Channels/TelegramChannel.php:82
-#: inc/launchpad/Panels/ProfilePanel.php:148
-#: inc/launchpad/Panels/ProfilePanel.php:259
+#: inc/launchpad/Panels/ProfilePanel.php:145
+#: inc/launchpad/Panels/ProfilePanel.php:256
 #: production/inc/contact/Channels/EmailChannel.php:58
 #: production/inc/contact/Channels/TelegramChannel.php:82
-#: production/inc/launchpad/Panels/ProfilePanel.php:148
-#: production/inc/launchpad/Panels/ProfilePanel.php:259
+#: production/inc/launchpad/Panels/ProfilePanel.php:145
+#: production/inc/launchpad/Panels/ProfilePanel.php:256
 #: production/template-parts/contact-section.php:51
 #: template-parts/contact-section.php:51
 msgid "Email"
@@ -1141,8 +953,9 @@ msgid "Your message has been sent successfully."
 msgstr ""
 
 #: inc/contact/Core/ContactCore.php:196
-#: inc/listing/Core/ListingCore.php:479
+#: inc/listing/Core/ListingCore.php:486
 #: production/inc/contact/Core/ContactCore.php:196
+#: production/inc/listing/Core/ListingCore.php:486
 msgid "Something went wrong. Please try again later."
 msgstr ""
 
@@ -1277,9 +1090,9 @@ msgid "Hide password"
 msgstr ""
 
 #: inc/gateway/Forms/LoginForm.php:132
-#: inc/launchpad/Panels/ProfilePanel.php:545
+#: inc/launchpad/Panels/ProfilePanel.php:542
 #: production/inc/gateway/Forms/LoginForm.php:132
-#: production/inc/launchpad/Panels/ProfilePanel.php:545
+#: production/inc/launchpad/Panels/ProfilePanel.php:542
 msgid "Log In"
 msgstr ""
 
@@ -1416,10 +1229,9 @@ msgid "Your new password has been pre-generated. You can modify it or generate a
 msgstr ""
 
 #: inc/gateway/Forms/ResetPasswordForm.php:48
-#: inc/launchpad/Panels/ProfilePanel.php:481
-#: inc/launchpad/Panels/SecurityPanel.php:70
+#: inc/launchpad/Panels/ProfilePanel.php:478
 #: production/inc/gateway/Forms/ResetPasswordForm.php:48
-#: production/inc/launchpad/Panels/ProfilePanel.php:481
+#: production/inc/launchpad/Panels/ProfilePanel.php:478
 #: production/inc/launchpad/Panels/SecurityPanel.php:70
 msgid "New Password"
 msgstr ""
@@ -1430,9 +1242,9 @@ msgid "Generate New Password"
 msgstr ""
 
 #: inc/gateway/Forms/ResetPasswordForm.php:96
-#: inc/launchpad/Panels/ProfilePanel.php:510
+#: inc/launchpad/Panels/ProfilePanel.php:507
 #: production/inc/gateway/Forms/ResetPasswordForm.php:96
-#: production/inc/launchpad/Panels/ProfilePanel.php:510
+#: production/inc/launchpad/Panels/ProfilePanel.php:507
 msgid "Generating..."
 msgstr ""
 
@@ -1442,9 +1254,9 @@ msgid "Save Password"
 msgstr ""
 
 #: inc/gateway/Forms/ResetPasswordForm.php:107
-#: inc/launchpad/Panels/ProfilePanel.php:435
+#: inc/launchpad/Panels/ProfilePanel.php:432
 #: production/inc/gateway/Forms/ResetPasswordForm.php:107
-#: production/inc/launchpad/Panels/ProfilePanel.php:435
+#: production/inc/launchpad/Panels/ProfilePanel.php:432
 msgid "Saving..."
 msgstr ""
 
@@ -1555,10 +1367,10 @@ msgstr ""
 msgid "Gateway"
 msgstr ""
 
-#: inc/launchpad/Api/MainController.php:39
-#: inc/launchpad/Api/MainController.php:56
-#: production/inc/launchpad/Api/MainController.php:39
-#: production/inc/launchpad/Api/MainController.php:56
+#: inc/launchpad/Api/MainController.php:35
+#: inc/launchpad/Api/MainController.php:52
+#: production/inc/launchpad/Api/MainController.php:35
+#: production/inc/launchpad/Api/MainController.php:52
 msgid "Panel not found."
 msgstr ""
 
@@ -1577,44 +1389,44 @@ msgstr ""
 msgid "File upload"
 msgstr ""
 
-#: inc/launchpad/Api/OpportunitiesController.php:81
-#: production/inc/launchpad/Api/OpportunitiesController.php:81
+#: inc/launchpad/Api/OpportunitiesController.php:80
+#: production/inc/launchpad/Api/OpportunitiesController.php:80
 msgid "Start date"
 msgstr ""
 
-#: inc/launchpad/Api/OpportunitiesController.php:85
-#: production/inc/launchpad/Api/OpportunitiesController.php:85
+#: inc/launchpad/Api/OpportunitiesController.php:84
+#: production/inc/launchpad/Api/OpportunitiesController.php:84
 msgid "End date"
 msgstr ""
 
-#: inc/launchpad/Api/OpportunitiesController.php:92
-#: inc/launchpad/Panels/OpportunitiesPanel.php:167
+#: inc/launchpad/Api/OpportunitiesController.php:91
+#: inc/launchpad/Panels/OpportunitiesPanel.php:184
 #: inc/tour/Scenarios/OpportunityFormScenario.php:91
-#: production/inc/launchpad/Api/OpportunitiesController.php:92
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:167
+#: production/inc/launchpad/Api/OpportunitiesController.php:91
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:184
 #: production/inc/tour/Scenarios/OpportunityFormScenario.php:91
 msgid "Categories"
 msgstr ""
 
-#: inc/launchpad/Api/OpportunitiesController.php:100
-#: production/inc/launchpad/Api/OpportunitiesController.php:100
+#: inc/launchpad/Api/OpportunitiesController.php:99
+#: production/inc/launchpad/Api/OpportunitiesController.php:99
 msgid "Subcategories"
 msgstr ""
 
-#: inc/launchpad/Api/OpportunitiesController.php:121
-#: production/inc/launchpad/Api/OpportunitiesController.php:121
+#: inc/launchpad/Api/OpportunitiesController.php:120
+#: production/inc/launchpad/Api/OpportunitiesController.php:120
 msgid "Locations"
 msgstr ""
 
-#: inc/launchpad/Api/OpportunitiesController.php:131
-#: inc/launchpad/Panels/OpportunitiesPanel.php:173
-#: inc/launchpad/Panels/OpportunitiesPanel.php:885
+#: inc/launchpad/Api/OpportunitiesController.php:130
+#: inc/launchpad/Panels/OpportunitiesPanel.php:190
+#: inc/launchpad/Panels/OpportunitiesPanel.php:901
 #: inc/listing/Enums/Taxonomy.php:38
 #: inc/listing/Filters/BeneficiariesFilter.php:23
 #: inc/tour/Scenarios/OpportunityFormScenario.php:100
-#: production/inc/launchpad/Api/OpportunitiesController.php:131
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:173
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:885
+#: production/inc/launchpad/Api/OpportunitiesController.php:130
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:190
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:896
 #: production/inc/listing/Enums/Taxonomy.php:38
 #: production/inc/listing/Filters/BeneficiariesFilter.php:23
 #: production/inc/tour/Scenarios/OpportunityFormScenario.php:100
@@ -1623,54 +1435,59 @@ msgstr ""
 msgid "Beneficiaries"
 msgstr ""
 
-#: inc/launchpad/Api/OpportunitiesController.php:195
-#: production/inc/launchpad/Api/OpportunitiesController.php:195
+#: inc/launchpad/Api/OpportunitiesController.php:196
+#: production/inc/launchpad/Api/OpportunitiesController.php:194
 msgid "Statuses filter"
 msgstr ""
 
-#: inc/launchpad/Api/OpportunitiesController.php:250
-#: production/inc/launchpad/Api/OpportunitiesController.php:250
+#. translators: %s: name of the field that received an invalid value
+#: inc/launchpad/Api/OpportunitiesController.php:207
+#, php-format
+msgid "%s: unknown status."
+msgstr ""
+
+#: inc/launchpad/Api/OpportunitiesController.php:266
+#: production/inc/launchpad/Api/OpportunitiesController.php:249
 msgid "Search term"
 msgstr ""
 
-#: inc/launchpad/Api/OpportunitiesController.php:262
-#: production/inc/launchpad/Api/OpportunitiesController.php:262
+#: inc/launchpad/Api/OpportunitiesController.php:278
+#: production/inc/launchpad/Api/OpportunitiesController.php:261
 msgid "Levels filter"
 msgstr ""
 
-#: inc/launchpad/Api/OpportunitiesController.php:305
-#: production/inc/launchpad/Api/OpportunitiesController.php:305
+#: inc/launchpad/Api/OpportunitiesController.php:321
+#: production/inc/launchpad/Api/OpportunitiesController.php:304
 msgid "Status updated."
 msgstr ""
 
-#: inc/launchpad/Api/OpportunitiesController.php:348
-#: production/inc/launchpad/Api/OpportunitiesController.php:348
+#: inc/launchpad/Api/OpportunitiesController.php:364
+#: production/inc/launchpad/Api/OpportunitiesController.php:347
 msgid "Opportunity not found."
 msgstr ""
 
-#: inc/launchpad/Api/OpportunitiesController.php:425
-#: production/inc/launchpad/Api/OpportunitiesController.php:425
+#: inc/launchpad/Api/OpportunitiesController.php:441
+#: production/inc/launchpad/Api/OpportunitiesController.php:424
 msgid "Updated successfully"
 msgstr ""
 
-#: inc/launchpad/Api/OpportunitiesController.php:425
-#: production/inc/launchpad/Api/OpportunitiesController.php:425
+#: inc/launchpad/Api/OpportunitiesController.php:441
+#: production/inc/launchpad/Api/OpportunitiesController.php:424
 msgid "Created successfully"
 msgstr ""
 
-#: inc/launchpad/Api/OpportunitiesController.php:436
-#: production/inc/launchpad/Api/OpportunitiesController.php:436
+#: inc/launchpad/Api/OpportunitiesController.php:452
+#: production/inc/launchpad/Api/OpportunitiesController.php:435
 msgid "Please complete your profile (name and phone) before posting opportunities."
 msgstr ""
 
-#: inc/launchpad/Api/OpportunitiesController.php:496
-#: production/inc/launchpad/Api/OpportunitiesController.php:496
+#: inc/launchpad/Api/OpportunitiesController.php:512
+#: production/inc/launchpad/Api/OpportunitiesController.php:495
 msgid "Opportunity changes"
 msgstr ""
 
-#: inc/launchpad/Api/OpportunitiesController.php:513
-#: production/inc/launchpad/Api/OpportunitiesController.php:513
-#: production/inc/listing/Api/MainController.php:215
+#: inc/launchpad/Api/OpportunitiesController.php:529
+#: production/inc/launchpad/Api/OpportunitiesController.php:512
 msgid "Location search"
 msgstr ""
 
@@ -1685,9 +1502,9 @@ msgid "Last name"
 msgstr ""
 
 #: inc/launchpad/Api/ProfileController.php:96
-#: inc/launchpad/Panels/ProfilePanel.php:312
+#: inc/launchpad/Panels/ProfilePanel.php:309
 #: production/inc/launchpad/Api/ProfileController.php:96
-#: production/inc/launchpad/Panels/ProfilePanel.php:312
+#: production/inc/launchpad/Panels/ProfilePanel.php:309
 msgid "Nickname"
 msgstr ""
 
@@ -1702,9 +1519,9 @@ msgid "Website URL"
 msgstr ""
 
 #: inc/launchpad/Api/ProfileController.php:120
-#: inc/launchpad/Panels/ProfilePanel.php:210
+#: inc/launchpad/Panels/ProfilePanel.php:207
 #: production/inc/launchpad/Api/ProfileController.php:120
-#: production/inc/launchpad/Panels/ProfilePanel.php:210
+#: production/inc/launchpad/Panels/ProfilePanel.php:207
 msgid "Bio"
 msgstr ""
 
@@ -1714,11 +1531,11 @@ msgid "Phone country"
 msgstr ""
 
 #: inc/launchpad/Api/ProfileController.php:145
-#: inc/launchpad/Panels/ProfilePanel.php:192
-#: inc/launchpad/Panels/ProfilePanel.php:373
+#: inc/launchpad/Panels/ProfilePanel.php:189
+#: inc/launchpad/Panels/ProfilePanel.php:370
 #: production/inc/launchpad/Api/ProfileController.php:145
-#: production/inc/launchpad/Panels/ProfilePanel.php:192
-#: production/inc/launchpad/Panels/ProfilePanel.php:373
+#: production/inc/launchpad/Panels/ProfilePanel.php:189
+#: production/inc/launchpad/Panels/ProfilePanel.php:370
 #: production/template-parts/social-share.php:81
 #: production/template-parts/social-share.php:83
 #: template-parts/social-share.php:81
@@ -1727,12 +1544,12 @@ msgid "Telegram"
 msgstr ""
 
 #: inc/launchpad/Api/ProfileController.php:153
-#: inc/launchpad/Panels/ProfilePanel.php:204
-#: inc/launchpad/Panels/ProfilePanel.php:324
+#: inc/launchpad/Panels/ProfilePanel.php:201
+#: inc/launchpad/Panels/ProfilePanel.php:321
 #: inc/tour/Scenarios/OpportunityFormScenario.php:73
 #: production/inc/launchpad/Api/ProfileController.php:153
-#: production/inc/launchpad/Panels/ProfilePanel.php:204
-#: production/inc/launchpad/Panels/ProfilePanel.php:324
+#: production/inc/launchpad/Panels/ProfilePanel.php:201
+#: production/inc/launchpad/Panels/ProfilePanel.php:321
 #: production/inc/tour/Scenarios/OpportunityFormScenario.php:73
 msgid "Organization"
 msgstr ""
@@ -1789,39 +1606,74 @@ msgstr ""
 msgid "Password change"
 msgstr ""
 
-#: inc/launchpad/Api/SecurityController.php:100
-#: production/inc/launchpad/Api/SecurityController.php:100
+#: inc/launchpad/Api/SecurityController.php:101
+#: production/inc/launchpad/Api/SecurityController.php:101
 msgid "Password changed. Please log in again."
+msgstr ""
+
+#: inc/launchpad/Core/LaunchpadCore.php:265
+#: production/inc/launchpad/Core/LaunchpadCore.php:265
+msgid "Please enter a valid phone number."
 msgstr ""
 
 #: inc/launchpad/Core/LaunchpadCore.php:266
 #: production/inc/launchpad/Core/LaunchpadCore.php:266
-msgid "Please enter a valid phone number."
+msgid "Please fill in all fields."
 msgstr ""
 
 #: inc/launchpad/Core/LaunchpadCore.php:267
 #: production/inc/launchpad/Core/LaunchpadCore.php:267
-msgid "Please fill in all fields."
-msgstr ""
-
-#: inc/launchpad/Core/LaunchpadCore.php:268
-#: production/inc/launchpad/Core/LaunchpadCore.php:268
 msgid "Please enter your password."
 msgstr ""
 
-#: inc/launchpad/Panels/FavoritesPanel.php:28
-#: inc/launchpad/Panels/StatsPanel.php:61
+#: inc/launchpad/Enums/OpportunityStatus.php:25
+#: production/inc/launchpad/Enums/OpportunityStatus.php:25
+msgid "Draft"
+msgstr ""
+
+#: inc/launchpad/Enums/OpportunityStatus.php:26
+#: production/inc/launchpad/Enums/OpportunityStatus.php:26
+msgid "Pending Review"
+msgstr ""
+
+#: inc/launchpad/Enums/OpportunityStatus.php:27
+#: inc/launchpad/Enums/OpportunityStatus.php:39
+#: production/inc/launchpad/Enums/OpportunityStatus.php:27
+#: production/inc/launchpad/Enums/OpportunityStatus.php:39
+msgid "Published"
+msgstr ""
+
+#: inc/launchpad/Enums/OpportunityStatus.php:37
+#: production/inc/launchpad/Enums/OpportunityStatus.php:37
+msgid "Drafts"
+msgstr ""
+
+#: inc/launchpad/Enums/OpportunityStatus.php:38
+#: production/inc/launchpad/Enums/OpportunityStatus.php:38
+msgid "Pending"
+msgstr ""
+
+#: inc/launchpad/Panels/FavoritesPanel.php:25
+#: inc/launchpad/Panels/FavoritesPanel.php:58
+#: inc/launchpad/Panels/StatsPanel.php:63
+#: inc/listing/Core/ListingCore.php:492
 #: inc/listing/Core/ResultsGrid.php:147
 #: inc/listing/Core/ResultsGrid.php:165
+#: inc/listing/Filters/FavoritesFilter.php:45
+#: inc/listing/Filters/FavoritesFilter.php:123
 #: inc/tour/Scenarios/LaunchpadIntroScenario.php:79
-#: production/inc/launchpad/Panels/FavoritesPanel.php:28
-#: production/inc/launchpad/Panels/StatsPanel.php:61
-#: production/inc/listing/Core/ResultsGrid.php:117
-#: production/inc/listing/Core/ResultsGrid.php:137
+#: production/inc/launchpad/Panels/FavoritesPanel.php:25
+#: production/inc/launchpad/Panels/FavoritesPanel.php:58
+#: production/inc/launchpad/Panels/StatsPanel.php:63
+#: production/inc/listing/Core/ListingCore.php:492
+#: production/inc/listing/Core/ResultsGrid.php:147
+#: production/inc/listing/Core/ResultsGrid.php:165
+#: production/inc/listing/Filters/FavoritesFilter.php:45
+#: production/inc/listing/Filters/FavoritesFilter.php:123
 #: production/inc/tour/Scenarios/LaunchpadIntroScenario.php:79
-#: production/template-parts/control-favorites.php:43
-#: production/template-parts/control-favorites.php:48
-#: production/template-parts/control-favorites.php:68
+#: production/template-parts/control-favorites.php:50
+#: production/template-parts/control-favorites.php:55
+#: production/template-parts/control-favorites.php:74
 #: production/template-parts/project-card-opportunity.php:42
 #: production/template-parts/project-card-opportunity.php:60
 #: production/template-parts/project-card-opportunity.php:98
@@ -1836,269 +1688,251 @@ msgstr ""
 msgid "Favorites"
 msgstr ""
 
-#: inc/launchpad/Panels/FavoritesPanel.php:57
-#: production/inc/launchpad/Panels/FavoritesPanel.php:57
-msgid "My Favorites"
-msgstr ""
-
-#: inc/launchpad/Panels/FavoritesPanel.php:72
-#: production/inc/launchpad/Panels/FavoritesPanel.php:72
+#: inc/launchpad/Panels/FavoritesPanel.php:73
+#: production/inc/launchpad/Panels/FavoritesPanel.php:73
 msgid "No favorites yet."
 msgstr ""
 
-#: inc/launchpad/Panels/FavoritesPanel.php:113
-#: production/inc/launchpad/Panels/FavoritesPanel.php:113
+#: inc/launchpad/Panels/FavoritesPanel.php:116
+#: production/inc/launchpad/Panels/FavoritesPanel.php:116
 msgid "View"
 msgstr ""
 
-#: inc/launchpad/Panels/FavoritesPanel.php:121
-#: production/inc/launchpad/Panels/FavoritesPanel.php:121
+#: inc/launchpad/Panels/FavoritesPanel.php:124
+#: production/inc/launchpad/Panels/FavoritesPanel.php:124
 msgid "Remove"
 msgstr ""
 
-#: inc/launchpad/Panels/OpportunitiesPanel.php:100
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:100
+#: inc/launchpad/Panels/OpportunitiesPanel.php:112
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:112
 msgid "Opportunity not found or access denied."
 msgstr ""
 
-#: inc/launchpad/Panels/OpportunitiesPanel.php:145
-#: inc/launchpad/Services/OpportunitiesService.php:795
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:145
-#: production/inc/launchpad/Services/OpportunitiesService.php:795
+#: inc/launchpad/Panels/OpportunitiesPanel.php:162
+#: inc/launchpad/Services/OpportunitiesService.php:788
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:162
+#: production/inc/launchpad/Services/OpportunitiesService.php:788
 msgid "Title is required."
 msgstr ""
 
-#: inc/launchpad/Panels/OpportunitiesPanel.php:147
-#: inc/launchpad/Services/OpportunitiesService.php:798
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:147
-#: production/inc/launchpad/Services/OpportunitiesService.php:798
+#: inc/launchpad/Panels/OpportunitiesPanel.php:164
+#: inc/launchpad/Services/OpportunitiesService.php:791
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:164
+#: production/inc/launchpad/Services/OpportunitiesService.php:791
 #, php-format
 msgid "Title must be at least %d characters."
 msgstr ""
 
-#: inc/launchpad/Panels/OpportunitiesPanel.php:150
-#: inc/launchpad/Services/OpportunitiesService.php:820
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:150
-#: production/inc/launchpad/Services/OpportunitiesService.php:820
+#: inc/launchpad/Panels/OpportunitiesPanel.php:167
+#: inc/launchpad/Services/OpportunitiesService.php:813
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:167
+#: production/inc/launchpad/Services/OpportunitiesService.php:813
 msgid "Company is required."
 msgstr ""
 
-#: inc/launchpad/Panels/OpportunitiesPanel.php:152
-#: inc/launchpad/Services/OpportunitiesService.php:823
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:152
-#: production/inc/launchpad/Services/OpportunitiesService.php:823
+#: inc/launchpad/Panels/OpportunitiesPanel.php:169
+#: inc/launchpad/Services/OpportunitiesService.php:816
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:169
+#: production/inc/launchpad/Services/OpportunitiesService.php:816
 #, php-format
 msgid "Company must be at least %d characters."
 msgstr ""
 
-#: inc/launchpad/Panels/OpportunitiesPanel.php:155
-#: inc/launchpad/Services/OpportunitiesService.php:828
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:155
-#: production/inc/launchpad/Services/OpportunitiesService.php:828
+#: inc/launchpad/Panels/OpportunitiesPanel.php:172
+#: inc/launchpad/Services/OpportunitiesService.php:821
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:172
+#: production/inc/launchpad/Services/OpportunitiesService.php:821
 msgid "Source link is required."
 msgstr ""
 
-#: inc/launchpad/Panels/OpportunitiesPanel.php:156
-#: inc/launchpad/Services/OpportunitiesService.php:809
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:156
-#: production/inc/launchpad/Services/OpportunitiesService.php:809
+#: inc/launchpad/Panels/OpportunitiesPanel.php:173
+#: inc/launchpad/Services/OpportunitiesService.php:802
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:173
+#: production/inc/launchpad/Services/OpportunitiesService.php:802
 msgid "Description is required."
 msgstr ""
 
-#: inc/launchpad/Panels/OpportunitiesPanel.php:158
-#: inc/launchpad/Services/OpportunitiesService.php:812
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:158
-#: production/inc/launchpad/Services/OpportunitiesService.php:812
+#: inc/launchpad/Panels/OpportunitiesPanel.php:175
+#: inc/launchpad/Services/OpportunitiesService.php:805
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:175
+#: production/inc/launchpad/Services/OpportunitiesService.php:805
 #, php-format
 msgid "Description must be at least %d characters."
 msgstr ""
 
-#: inc/launchpad/Panels/OpportunitiesPanel.php:161
-#: inc/launchpad/Services/OpportunitiesService.php:834
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:161
-#: production/inc/launchpad/Services/OpportunitiesService.php:834
+#: inc/launchpad/Panels/OpportunitiesPanel.php:178
+#: inc/launchpad/Services/OpportunitiesService.php:827
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:178
+#: production/inc/launchpad/Services/OpportunitiesService.php:827
 msgid "At least one category is required."
 msgstr ""
 
-#: inc/launchpad/Panels/OpportunitiesPanel.php:162
-#: inc/launchpad/Services/OpportunitiesService.php:840
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:162
-#: production/inc/launchpad/Services/OpportunitiesService.php:840
+#: inc/launchpad/Panels/OpportunitiesPanel.php:179
+#: inc/launchpad/Services/OpportunitiesService.php:833
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:179
+#: production/inc/launchpad/Services/OpportunitiesService.php:833
 msgid "At least one beneficiary type is required."
 msgstr ""
 
 #. translators: 1: field name, 2: maximum allowed item count
-#: inc/launchpad/Panels/OpportunitiesPanel.php:166
-#: inc/launchpad/Panels/OpportunitiesPanel.php:172
+#: inc/launchpad/Panels/OpportunitiesPanel.php:183
+#: inc/launchpad/Panels/OpportunitiesPanel.php:189
 #: inc/shared/Validation/RestArg.php:59
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:166
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:172
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:183
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:189
 #: production/inc/shared/Validation/RestArg.php:59
 #, php-format
 msgid "%1$s: maximum %2$d items allowed."
 msgstr ""
 
-#: inc/launchpad/Panels/OpportunitiesPanel.php:176
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:176
+#: inc/launchpad/Panels/OpportunitiesPanel.php:193
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:193
 msgid "End date cannot be before start date."
 msgstr ""
 
-#: inc/launchpad/Panels/OpportunitiesPanel.php:177
-#: inc/launchpad/Services/MediaService.php:26
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:177
-#: production/inc/launchpad/Services/MediaService.php:26
+#: inc/launchpad/Panels/OpportunitiesPanel.php:194
+#: inc/launchpad/Services/MediaService.php:27
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:194
+#: production/inc/launchpad/Services/MediaService.php:27
 msgid "File is too large. Max 5MB."
 msgstr ""
 
-#: inc/launchpad/Panels/OpportunitiesPanel.php:190
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:190
+#: inc/launchpad/Panels/OpportunitiesPanel.php:207
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:207
 msgid "New Opportunity"
 msgstr ""
 
-#: inc/launchpad/Panels/OpportunitiesPanel.php:191
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:191
+#: inc/launchpad/Panels/OpportunitiesPanel.php:208
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:208
 msgid "Edit Opportunity"
 msgstr ""
 
 #. translators: %d: number of selected categories in one category group
-#: inc/launchpad/Panels/OpportunitiesPanel.php:195
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:195
+#: inc/launchpad/Panels/OpportunitiesPanel.php:212
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:212
 #, php-format
 msgid "%d selected"
 msgstr ""
 
 #. translators: %d: maximum number of options that can be selected
-#: inc/launchpad/Panels/OpportunitiesPanel.php:237
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:237
+#: inc/launchpad/Panels/OpportunitiesPanel.php:256
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:256
 #, php-format
 msgid "(max. %d)"
 msgstr ""
 
-#: inc/launchpad/Panels/OpportunitiesPanel.php:267
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:267
+#: inc/launchpad/Panels/OpportunitiesPanel.php:286
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:286
 msgid "Post an Opportunity"
 msgstr ""
 
-#: inc/launchpad/Panels/OpportunitiesPanel.php:269
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:269
+#: inc/launchpad/Panels/OpportunitiesPanel.php:288
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:288
 msgid "To publish an opportunity, we need a bit more information about you. Please complete your profile with your name and contact phone number."
 msgstr ""
 
-#: inc/launchpad/Panels/OpportunitiesPanel.php:270
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:270
+#: inc/launchpad/Panels/OpportunitiesPanel.php:289
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:289
 msgid "This helps keep the platform safe and easy to use for everyone, and it makes it easier for interested people to reach out to you about your opportunity."
 msgstr ""
 
-#: inc/launchpad/Panels/OpportunitiesPanel.php:271
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:271
+#: inc/launchpad/Panels/OpportunitiesPanel.php:290
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:290
 msgid "When you publish opportunities, you are doing more than sharing information — you are helping others find support, new chances, and a way through difficult times. Every action you take here can make a real difference for someone."
 msgstr ""
 
-#: inc/launchpad/Panels/OpportunitiesPanel.php:272
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:272
+#: inc/launchpad/Panels/OpportunitiesPanel.php:291
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:291
 msgid "It only takes a few minutes to complete your profile, but it can greatly increase trust in your opportunities and make them more effective."
 msgstr ""
 
-#: inc/launchpad/Panels/OpportunitiesPanel.php:277
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:277
+#: inc/launchpad/Panels/OpportunitiesPanel.php:296
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:296
 msgid "Fill Profile"
-msgstr ""
-
-#: inc/launchpad/Panels/OpportunitiesPanel.php:299
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:299
-msgid "Opportunities List"
-msgstr ""
-
-#: inc/launchpad/Panels/OpportunitiesPanel.php:300
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:300
-msgid "You can add new opportunities, edit existing ones, and submit them for review. All opportunity data is reviewed and moderated by the site administration team before being approved for publication or rejected. Please contact the site staff if you have any questions."
 msgstr ""
 
 #: inc/launchpad/Panels/OpportunitiesPanel.php:318
 #: production/inc/launchpad/Panels/OpportunitiesPanel.php:318
+msgid "Opportunities List"
+msgstr ""
+
+#: inc/launchpad/Panels/OpportunitiesPanel.php:319
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:319
+msgid "You can add new opportunities, edit existing ones, and submit them for review. All opportunity data is reviewed and moderated by the site administration team before being approved for publication or rejected. Please contact the site staff if you have any questions."
+msgstr ""
+
+#: inc/launchpad/Panels/OpportunitiesPanel.php:337
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:337
 msgid "Filter by status:"
 msgstr ""
 
-#: inc/launchpad/Panels/OpportunitiesPanel.php:322
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:322
-msgid "Drafts"
-msgstr ""
-
-#: inc/launchpad/Panels/OpportunitiesPanel.php:323
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:323
-msgid "Pending"
-msgstr ""
-
-#: inc/launchpad/Panels/OpportunitiesPanel.php:324
-#: inc/launchpad/Services/OpportunitiesService.php:132
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:324
-#: production/inc/launchpad/Services/OpportunitiesService.php:132
-msgid "Published"
-msgstr ""
-
-#: inc/launchpad/Panels/OpportunitiesPanel.php:376
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:376
+#: inc/launchpad/Panels/OpportunitiesPanel.php:389
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:389
 msgid "Add New"
 msgstr ""
 
-#: inc/launchpad/Panels/OpportunitiesPanel.php:391
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:391
+#: inc/launchpad/Panels/OpportunitiesPanel.php:404
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:404
 msgid "No opportunities yet."
 msgstr ""
 
-#: inc/launchpad/Panels/OpportunitiesPanel.php:426
-#: inc/launchpad/Panels/OpportunitiesPanel.php:429
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:426
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:429
+#: inc/launchpad/Panels/OpportunitiesPanel.php:409
+msgid "No opportunities match the selected statuses."
+msgstr ""
+
+#: inc/launchpad/Panels/OpportunitiesPanel.php:444
+#: inc/launchpad/Panels/OpportunitiesPanel.php:447
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:439
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:442
 #: production/templates/single-opportunity.php:106
 #: templates/single-opportunity.php:106
 msgid "Lasts"
 msgstr ""
 
-#: inc/launchpad/Panels/OpportunitiesPanel.php:427
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:427
+#: inc/launchpad/Panels/OpportunitiesPanel.php:445
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:440
 #: production/templates/single-opportunity.php:108
 #: templates/single-opportunity.php:108
 msgid "from"
 msgstr ""
 
-#: inc/launchpad/Panels/OpportunitiesPanel.php:429
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:429
+#: inc/launchpad/Panels/OpportunitiesPanel.php:447
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:442
 #: production/templates/single-opportunity.php:114
 #: templates/single-opportunity.php:114
 msgid "to"
 msgstr ""
 
-#: inc/launchpad/Panels/OpportunitiesPanel.php:435
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:435
+#: inc/launchpad/Panels/OpportunitiesPanel.php:453
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:448
 msgid "Finished"
 msgstr ""
 
-#: inc/launchpad/Panels/OpportunitiesPanel.php:446
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:446
+#: inc/launchpad/Panels/OpportunitiesPanel.php:464
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:459
 msgid "Created"
 msgstr ""
 
-#: inc/launchpad/Panels/OpportunitiesPanel.php:468
-#: inc/launchpad/Panels/StatsPanel.php:66
-#: inc/listing/Core/ResultsGrid.php:232
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:468
-#: production/inc/launchpad/Panels/StatsPanel.php:66
-#: production/inc/listing/Core/ResultsGrid.php:195
+#: inc/launchpad/Panels/OpportunitiesPanel.php:486
+#: inc/launchpad/Panels/StatsPanel.php:68
+#: inc/listing/Core/ResultsGrid.php:228
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:481
+#: production/inc/launchpad/Panels/StatsPanel.php:68
+#: production/inc/listing/Core/ResultsGrid.php:228
 msgid "Comments"
 msgstr ""
 
-#: inc/launchpad/Panels/OpportunitiesPanel.php:502
-#: inc/launchpad/Panels/OpportunitiesPanel.php:1060
-#: inc/launchpad/Panels/OpportunitiesPanel.php:1096
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:502
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:1060
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:1096
+#: inc/launchpad/Panels/OpportunitiesPanel.php:520
+#: inc/launchpad/Panels/OpportunitiesPanel.php:1070
+#: inc/launchpad/Panels/OpportunitiesPanel.php:1104
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:515
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:1065
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:1099
 msgid "Submit for Review"
 msgstr ""
 
-#: inc/launchpad/Panels/OpportunitiesPanel.php:510
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:510
+#: inc/launchpad/Panels/OpportunitiesPanel.php:528
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:523
 #: production/template-parts/comments-interactive.php:208
 #: production/template-parts/comments-interactive.php:301
 #: template-parts/comments-interactive.php:208
@@ -2106,55 +1940,55 @@ msgstr ""
 msgid "Edit"
 msgstr ""
 
-#: inc/launchpad/Panels/OpportunitiesPanel.php:542
-#: inc/launchpad/Panels/OpportunitiesPanel.php:1067
+#: inc/launchpad/Panels/OpportunitiesPanel.php:558
+#: inc/launchpad/Panels/OpportunitiesPanel.php:1075
 #: inc/tour/Core/TourCore.php:163
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:542
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:1067
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:553
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:1070
 #: production/inc/tour/Core/TourCore.php:163
 msgid "Back"
 msgstr ""
 
-#: inc/launchpad/Panels/OpportunitiesPanel.php:550
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:550
+#: inc/launchpad/Panels/OpportunitiesPanel.php:566
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:561
 msgid "Opportunity Title"
 msgstr ""
 
-#: inc/launchpad/Panels/OpportunitiesPanel.php:553
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:553
+#: inc/launchpad/Panels/OpportunitiesPanel.php:569
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:564
 #, php-format
 msgid "Add title min %1$d, max %2$d characters"
 msgstr ""
 
-#: inc/launchpad/Panels/OpportunitiesPanel.php:573
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:573
+#: inc/launchpad/Panels/OpportunitiesPanel.php:589
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:584
 msgid "Opportunity Info"
 msgstr ""
 
-#: inc/launchpad/Panels/OpportunitiesPanel.php:577
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:577
+#: inc/launchpad/Panels/OpportunitiesPanel.php:593
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:588
 msgid "Company"
 msgstr ""
 
-#: inc/launchpad/Panels/OpportunitiesPanel.php:590
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:590
+#: inc/launchpad/Panels/OpportunitiesPanel.php:606
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:601
 msgid "Start Date"
 msgstr ""
 
-#: inc/launchpad/Panels/OpportunitiesPanel.php:595
-#: inc/launchpad/Panels/OpportunitiesPanel.php:608
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:595
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:608
+#: inc/launchpad/Panels/OpportunitiesPanel.php:611
+#: inc/launchpad/Panels/OpportunitiesPanel.php:624
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:606
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:619
 msgid "Open calendar"
 msgstr ""
 
-#: inc/launchpad/Panels/OpportunitiesPanel.php:603
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:603
+#: inc/launchpad/Panels/OpportunitiesPanel.php:619
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:614
 msgid "End Date"
 msgstr ""
 
-#: inc/launchpad/Panels/OpportunitiesPanel.php:622
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:622
+#: inc/launchpad/Panels/OpportunitiesPanel.php:638
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:633
 #: production/templates/single-opportunity.php:205
 #: production/templates/single-opportunity.php:214
 #: templates/single-opportunity.php:205
@@ -2162,88 +1996,88 @@ msgstr ""
 msgid "Link"
 msgstr ""
 
-#: inc/launchpad/Panels/OpportunitiesPanel.php:632
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:632
+#: inc/launchpad/Panels/OpportunitiesPanel.php:648
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:643
 msgid "Application Form URL"
 msgstr ""
 
-#: inc/launchpad/Panels/OpportunitiesPanel.php:643
+#: inc/launchpad/Panels/OpportunitiesPanel.php:659
 #: inc/listing/Filters/CountryFilter.php:33
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:643
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:654
 #: production/inc/listing/Filters/CountryFilter.php:33
 msgid "Country"
 msgstr ""
 
-#: inc/launchpad/Panels/OpportunitiesPanel.php:654
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:654
+#: inc/launchpad/Panels/OpportunitiesPanel.php:670
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:665
 msgid "Select Country"
 msgstr ""
 
-#: inc/launchpad/Panels/OpportunitiesPanel.php:666
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:666
+#: inc/launchpad/Panels/OpportunitiesPanel.php:682
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:677
 msgid "Search country..."
 msgstr ""
 
-#: inc/launchpad/Panels/OpportunitiesPanel.php:667
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:667
+#: inc/launchpad/Panels/OpportunitiesPanel.php:683
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:678
 msgid "Search country"
 msgstr ""
 
-#: inc/launchpad/Panels/OpportunitiesPanel.php:684
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:684
+#: inc/launchpad/Panels/OpportunitiesPanel.php:700
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:695
 msgid "No countries match your search."
 msgstr ""
 
-#: inc/launchpad/Panels/OpportunitiesPanel.php:708
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:708
+#: inc/launchpad/Panels/OpportunitiesPanel.php:724
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:719
 msgid "Not necessary. Only if you want to point that your opportunity is available for particular locations: City, District, Hromada, etc."
 msgstr ""
 
-#: inc/launchpad/Panels/OpportunitiesPanel.php:737
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:737
+#: inc/launchpad/Panels/OpportunitiesPanel.php:753
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:748
 msgid "if opportynity for Oblast"
 msgstr ""
 
-#: inc/launchpad/Panels/OpportunitiesPanel.php:740
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:740
+#: inc/launchpad/Panels/OpportunitiesPanel.php:756
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:751
 msgid "Kyivska, Lvivska..."
 msgstr ""
 
-#: inc/launchpad/Panels/OpportunitiesPanel.php:770
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:770
+#: inc/launchpad/Panels/OpportunitiesPanel.php:786
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:781
 msgid "if for Raion, District, Hromada"
 msgstr ""
 
-#: inc/launchpad/Panels/OpportunitiesPanel.php:773
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:773
+#: inc/launchpad/Panels/OpportunitiesPanel.php:789
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:784
 msgid "Buchanskyi r-n, Dolynska tg.."
 msgstr ""
 
-#: inc/launchpad/Panels/OpportunitiesPanel.php:802
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:802
+#: inc/launchpad/Panels/OpportunitiesPanel.php:818
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:813
 msgid "if for City, Settlement, City district"
 msgstr ""
 
-#: inc/launchpad/Panels/OpportunitiesPanel.php:805
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:805
+#: inc/launchpad/Panels/OpportunitiesPanel.php:821
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:816
 msgid "Bucha c., Vesele v., Obolon..."
 msgstr ""
 
-#: inc/launchpad/Panels/OpportunitiesPanel.php:831
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:831
+#: inc/launchpad/Panels/OpportunitiesPanel.php:847
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:842
 msgid "If you want you coud to select the required administrative level. If the opportunity is provided throughout the Oblast - select from (1) Oblast, if the opportunity is for a district or community - select from (2) District, if the opportunity concerns a city or village select the required City or Village from (3)."
 msgstr ""
 
-#: inc/launchpad/Panels/OpportunitiesPanel.php:835
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:835
+#: inc/launchpad/Panels/OpportunitiesPanel.php:851
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:846
 msgid "Opportunity Category"
 msgstr ""
 
-#: inc/launchpad/Panels/OpportunitiesPanel.php:912
-#: inc/launchpad/Panels/ProfilePanel.php:398
+#: inc/launchpad/Panels/OpportunitiesPanel.php:928
+#: inc/launchpad/Panels/ProfilePanel.php:395
 #: inc/tour/Scenarios/OpportunityFormScenario.php:109
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:912
-#: production/inc/launchpad/Panels/ProfilePanel.php:398
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:923
+#: production/inc/launchpad/Panels/ProfilePanel.php:395
 #: production/inc/tour/Scenarios/OpportunityFormScenario.php:109
 #: inc/blocks/accordion-opportunities/build/editor.js:87
 #: inc/blocks/accordion-opportunities/editor/item.js:96
@@ -2252,81 +2086,81 @@ msgstr ""
 msgid "Description"
 msgstr ""
 
-#: inc/launchpad/Panels/OpportunitiesPanel.php:915
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:915
+#: inc/launchpad/Panels/OpportunitiesPanel.php:931
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:926
 msgid "Describe the opportunity"
 msgstr ""
 
-#: inc/launchpad/Panels/OpportunitiesPanel.php:918
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:918
+#: inc/launchpad/Panels/OpportunitiesPanel.php:934
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:929
 #, php-format
 msgid "Add information about the opportunity. Describe the essence. Min %1$d, max %2$d characters"
 msgstr ""
 
-#: inc/launchpad/Panels/OpportunitiesPanel.php:930
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:930
+#: inc/launchpad/Panels/OpportunitiesPanel.php:946
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:941
 #: production/templates/single-opportunity.php:194
 #: templates/single-opportunity.php:194
 msgid "Requirements"
 msgstr ""
 
-#: inc/launchpad/Panels/OpportunitiesPanel.php:943
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:943
+#: inc/launchpad/Panels/OpportunitiesPanel.php:959
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:954
 msgid "Details"
 msgstr ""
 
-#: inc/launchpad/Panels/OpportunitiesPanel.php:955
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:955
+#: inc/launchpad/Panels/OpportunitiesPanel.php:971
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:966
 msgid "required fields"
 msgstr ""
 
-#: inc/launchpad/Panels/OpportunitiesPanel.php:961
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:961
+#: inc/launchpad/Panels/OpportunitiesPanel.php:977
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:972
 #: production/templates/single-opportunity.php:233
 #: templates/single-opportunity.php:233
 msgid "Document"
 msgstr ""
 
-#: inc/launchpad/Panels/OpportunitiesPanel.php:979
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:979
+#: inc/launchpad/Panels/OpportunitiesPanel.php:991
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:986
 msgid "Attach File"
 msgstr ""
 
-#: inc/launchpad/Panels/OpportunitiesPanel.php:1011
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:1011
+#: inc/launchpad/Panels/OpportunitiesPanel.php:1023
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:1018
 msgid "Pending Save"
 msgstr ""
 
-#: inc/launchpad/Panels/OpportunitiesPanel.php:1030
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:1030
+#: inc/launchpad/Panels/OpportunitiesPanel.php:1040
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:1035
 msgid "Format (PDF, DOCX). Max size 5Mb."
 msgstr ""
 
-#: inc/launchpad/Panels/OpportunitiesPanel.php:1048
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:1048
+#: inc/launchpad/Panels/OpportunitiesPanel.php:1058
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:1053
 msgid "Save Draft"
 msgstr ""
 
-#: inc/launchpad/Panels/OpportunitiesPanel.php:1099
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:1099
+#: inc/launchpad/Panels/OpportunitiesPanel.php:1107
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:1102
 msgid "Submit your changes and request a review from the moderation team?"
 msgstr ""
 
-#: inc/launchpad/Panels/OpportunitiesPanel.php:1107
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:1107
+#: inc/launchpad/Panels/OpportunitiesPanel.php:1115
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:1110
 msgid "Submit"
 msgstr ""
 
-#: inc/launchpad/Panels/OpportunitiesPanel.php:1111
-#: inc/launchpad/Panels/ProfilePanel.php:440
-#: inc/launchpad/Panels/ProfilePanel.php:520
-#: inc/launchpad/Panels/ProfilePanel.php:622
-#: inc/launchpad/Panels/ProfilePanel.php:689
-#: production/inc/launchpad/Panels/OpportunitiesPanel.php:1111
-#: production/inc/launchpad/Panels/ProfilePanel.php:440
-#: production/inc/launchpad/Panels/ProfilePanel.php:520
-#: production/inc/launchpad/Panels/ProfilePanel.php:622
-#: production/inc/launchpad/Panels/ProfilePanel.php:689
+#: inc/launchpad/Panels/OpportunitiesPanel.php:1119
+#: inc/launchpad/Panels/ProfilePanel.php:437
+#: inc/launchpad/Panels/ProfilePanel.php:517
+#: inc/launchpad/Panels/ProfilePanel.php:619
+#: inc/launchpad/Panels/ProfilePanel.php:686
+#: production/inc/launchpad/Panels/OpportunitiesPanel.php:1114
+#: production/inc/launchpad/Panels/ProfilePanel.php:437
+#: production/inc/launchpad/Panels/ProfilePanel.php:517
+#: production/inc/launchpad/Panels/ProfilePanel.php:619
+#: production/inc/launchpad/Panels/ProfilePanel.php:686
 #: production/template-parts/comments-interactive.php:138
 #: production/template-parts/comments-interactive.php:251
 #: production/template-parts/comments-interactive.php:328
@@ -2338,159 +2172,157 @@ msgstr ""
 msgid "Cancel"
 msgstr ""
 
-#: inc/launchpad/Panels/ProfilePanel.php:28
-#: production/inc/launchpad/Panels/ProfilePanel.php:28
+#: inc/launchpad/Panels/ProfilePanel.php:26
+#: production/inc/launchpad/Panels/ProfilePanel.php:26
 msgid "Profile"
 msgstr ""
 
-#: inc/launchpad/Panels/ProfilePanel.php:69
-#: production/inc/launchpad/Panels/ProfilePanel.php:69
+#: inc/launchpad/Panels/ProfilePanel.php:65
+#: production/inc/launchpad/Panels/ProfilePanel.php:65
 msgid "Only letters, spaces, hyphens, and apostrophes allowed."
 msgstr ""
 
-#: inc/launchpad/Panels/ProfilePanel.php:71
+#: inc/launchpad/Panels/ProfilePanel.php:67
 #: inc/shared/Policy/UsernamePolicy.php:79
-#: production/inc/launchpad/Panels/ProfilePanel.php:71
+#: production/inc/launchpad/Panels/ProfilePanel.php:67
 #: production/inc/shared/Policy/UsernamePolicy.php:79
 #, php-format
 msgid "Must be at least %d characters."
 msgstr ""
 
-#: inc/launchpad/Panels/ProfilePanel.php:75
+#: inc/launchpad/Panels/ProfilePanel.php:71
 #: inc/shared/Policy/UsernamePolicy.php:87
-#: production/inc/launchpad/Panels/ProfilePanel.php:75
+#: production/inc/launchpad/Panels/ProfilePanel.php:71
 #: production/inc/shared/Policy/UsernamePolicy.php:87
 #, php-format
 msgid "Must not exceed %d characters."
 msgstr ""
 
-#: inc/launchpad/Panels/ProfilePanel.php:122
-#: production/inc/launchpad/Panels/ProfilePanel.php:122
+#: inc/launchpad/Panels/ProfilePanel.php:119
+#: production/inc/launchpad/Panels/ProfilePanel.php:119
 msgid "Profile Information"
 msgstr ""
 
-#: inc/launchpad/Panels/ProfilePanel.php:123
-#: production/inc/launchpad/Panels/ProfilePanel.php:123
+#: inc/launchpad/Panels/ProfilePanel.php:120
+#: production/inc/launchpad/Panels/ProfilePanel.php:120
 msgid "View/edit personal information, change password"
 msgstr ""
 
-#: inc/launchpad/Panels/ProfilePanel.php:160
-#: production/inc/launchpad/Panels/ProfilePanel.php:160
+#: inc/launchpad/Panels/ProfilePanel.php:157
+#: production/inc/launchpad/Panels/ProfilePanel.php:157
 msgid "Login name"
 msgstr ""
 
-#: inc/launchpad/Panels/ProfilePanel.php:207
-#: inc/launchpad/Panels/ProfilePanel.php:385
-#: production/inc/launchpad/Panels/ProfilePanel.php:207
-#: production/inc/launchpad/Panels/ProfilePanel.php:385
+#: inc/launchpad/Panels/ProfilePanel.php:204
+#: inc/launchpad/Panels/ProfilePanel.php:382
+#: production/inc/launchpad/Panels/ProfilePanel.php:204
+#: production/inc/launchpad/Panels/ProfilePanel.php:382
 msgid "Website"
 msgstr ""
 
-#: inc/launchpad/Panels/ProfilePanel.php:218
-#: production/inc/launchpad/Panels/ProfilePanel.php:218
+#: inc/launchpad/Panels/ProfilePanel.php:215
+#: production/inc/launchpad/Panels/ProfilePanel.php:215
 msgid "Edit Profile"
 msgstr ""
 
-#: inc/launchpad/Panels/ProfilePanel.php:222
-#: inc/launchpad/Panels/SecurityPanel.php:56
-#: inc/launchpad/Panels/SecurityPanel.php:97
-#: production/inc/launchpad/Panels/ProfilePanel.php:222
+#: inc/launchpad/Panels/ProfilePanel.php:219
+#: production/inc/launchpad/Panels/ProfilePanel.php:219
 #: production/inc/launchpad/Panels/SecurityPanel.php:56
 #: production/inc/launchpad/Panels/SecurityPanel.php:97
 msgid "Change Password"
 msgstr ""
 
-#: inc/launchpad/Panels/ProfilePanel.php:237
-#: production/inc/launchpad/Panels/ProfilePanel.php:237
+#: inc/launchpad/Panels/ProfilePanel.php:234
+#: production/inc/launchpad/Panels/ProfilePanel.php:234
 msgid "First Name"
 msgstr ""
 
-#: inc/launchpad/Panels/ProfilePanel.php:239
-#: production/inc/launchpad/Panels/ProfilePanel.php:239
+#: inc/launchpad/Panels/ProfilePanel.php:236
+#: production/inc/launchpad/Panels/ProfilePanel.php:236
 msgid "e.g. Jane"
 msgstr ""
 
-#: inc/launchpad/Panels/ProfilePanel.php:264
-#: inc/launchpad/Panels/ProfilePanel.php:561
-#: inc/launchpad/Panels/ProfilePanel.php:614
-#: production/inc/launchpad/Panels/ProfilePanel.php:264
-#: production/inc/launchpad/Panels/ProfilePanel.php:561
-#: production/inc/launchpad/Panels/ProfilePanel.php:614
+#: inc/launchpad/Panels/ProfilePanel.php:261
+#: inc/launchpad/Panels/ProfilePanel.php:558
+#: inc/launchpad/Panels/ProfilePanel.php:611
+#: production/inc/launchpad/Panels/ProfilePanel.php:261
+#: production/inc/launchpad/Panels/ProfilePanel.php:558
+#: production/inc/launchpad/Panels/ProfilePanel.php:611
 msgid "Change Email"
 msgstr ""
 
-#: inc/launchpad/Panels/ProfilePanel.php:275
-#: production/inc/launchpad/Panels/ProfilePanel.php:275
+#: inc/launchpad/Panels/ProfilePanel.php:272
+#: production/inc/launchpad/Panels/ProfilePanel.php:272
 msgid "If you want to be an active part of the StarwishX community, sharing opportunities with others and receive Contributor status, the First Name and Phone fields in your profile must be filled in. We want real people to post and receive real opportunities."
 msgstr ""
 
-#: inc/launchpad/Panels/ProfilePanel.php:277
-#: production/inc/launchpad/Panels/ProfilePanel.php:277
+#: inc/launchpad/Panels/ProfilePanel.php:274
+#: production/inc/launchpad/Panels/ProfilePanel.php:274
 msgid "Note: The information in your profile is not publicly available."
+msgstr ""
+
+#: inc/launchpad/Panels/ProfilePanel.php:283
+#: production/inc/launchpad/Panels/ProfilePanel.php:283
+msgid "Show More"
 msgstr ""
 
 #: inc/launchpad/Panels/ProfilePanel.php:286
 #: production/inc/launchpad/Panels/ProfilePanel.php:286
-msgid "Show More"
-msgstr ""
-
-#: inc/launchpad/Panels/ProfilePanel.php:289
-#: production/inc/launchpad/Panels/ProfilePanel.php:289
 msgid "Show Less"
 msgstr ""
 
-#: inc/launchpad/Panels/ProfilePanel.php:298
-#: production/inc/launchpad/Panels/ProfilePanel.php:298
+#: inc/launchpad/Panels/ProfilePanel.php:295
+#: production/inc/launchpad/Panels/ProfilePanel.php:295
 msgid "Last Name"
 msgstr ""
 
-#: inc/launchpad/Panels/ProfilePanel.php:300
-#: production/inc/launchpad/Panels/ProfilePanel.php:300
+#: inc/launchpad/Panels/ProfilePanel.php:297
+#: production/inc/launchpad/Panels/ProfilePanel.php:297
 msgid "e.g. Dow"
 msgstr ""
 
-#: inc/launchpad/Panels/ProfilePanel.php:315
-#: production/inc/launchpad/Panels/ProfilePanel.php:315
+#: inc/launchpad/Panels/ProfilePanel.php:312
+#: production/inc/launchpad/Panels/ProfilePanel.php:312
 msgid "e.g. Janie, kat25"
 msgstr ""
 
-#: inc/launchpad/Panels/ProfilePanel.php:326
-#: production/inc/launchpad/Panels/ProfilePanel.php:326
+#: inc/launchpad/Panels/ProfilePanel.php:323
+#: production/inc/launchpad/Panels/ProfilePanel.php:323
 msgid "If you represent any organization"
 msgstr ""
 
-#: inc/launchpad/Panels/ProfilePanel.php:338
-#: production/inc/launchpad/Panels/ProfilePanel.php:338
+#: inc/launchpad/Panels/ProfilePanel.php:335
+#: production/inc/launchpad/Panels/ProfilePanel.php:335
 msgid "Display name publicly as"
 msgstr ""
 
-#: inc/launchpad/Panels/ProfilePanel.php:387
-#: production/inc/launchpad/Panels/ProfilePanel.php:387
+#: inc/launchpad/Panels/ProfilePanel.php:384
+#: production/inc/launchpad/Panels/ProfilePanel.php:384
 msgid "dou.ua, https://me.ua"
 msgstr ""
 
-#: inc/launchpad/Panels/ProfilePanel.php:400
-#: production/inc/launchpad/Panels/ProfilePanel.php:400
+#: inc/launchpad/Panels/ProfilePanel.php:397
+#: production/inc/launchpad/Panels/ProfilePanel.php:397
 msgid "Biographical Info"
 msgstr ""
 
-#: inc/launchpad/Panels/ProfilePanel.php:410
-#: production/inc/launchpad/Panels/ProfilePanel.php:410
+#: inc/launchpad/Panels/ProfilePanel.php:407
+#: production/inc/launchpad/Panels/ProfilePanel.php:407
 msgid "Delete profile"
+msgstr ""
+
+#: inc/launchpad/Panels/ProfilePanel.php:418
+#: production/inc/launchpad/Panels/ProfilePanel.php:418
+msgid "Receive email notifications"
 msgstr ""
 
 #: inc/launchpad/Panels/ProfilePanel.php:421
 #: production/inc/launchpad/Panels/ProfilePanel.php:421
-msgid "Receive email notifications"
-msgstr ""
-
-#: inc/launchpad/Panels/ProfilePanel.php:424
-#: production/inc/launchpad/Panels/ProfilePanel.php:424
 msgid "Get notified by email when someone comments on your content."
 msgstr ""
 
-#: inc/launchpad/Panels/ProfilePanel.php:432
-#: production/inc/launchpad/Panels/ProfilePanel.php:432
+#: inc/launchpad/Panels/ProfilePanel.php:429
+#: production/inc/launchpad/Panels/ProfilePanel.php:429
 #: production/template-parts/comments-interactive.php:255
 #: production/template-parts/comments-interactive.php:332
 #: template-parts/comments-interactive.php:255
@@ -2498,193 +2330,162 @@ msgstr ""
 msgid "Save"
 msgstr ""
 
-#: inc/launchpad/Panels/ProfilePanel.php:454
-#: production/inc/launchpad/Panels/ProfilePanel.php:454
+#: inc/launchpad/Panels/ProfilePanel.php:451
+#: production/inc/launchpad/Panels/ProfilePanel.php:451
 msgid "Update Security Credentials"
 msgstr ""
 
-#: inc/launchpad/Panels/ProfilePanel.php:457
-#: inc/launchpad/Panels/ProfilePanel.php:583
-#: inc/launchpad/Panels/SecurityPanel.php:59
-#: production/inc/launchpad/Panels/ProfilePanel.php:457
-#: production/inc/launchpad/Panels/ProfilePanel.php:583
+#: inc/launchpad/Panels/ProfilePanel.php:454
+#: inc/launchpad/Panels/ProfilePanel.php:580
+#: production/inc/launchpad/Panels/ProfilePanel.php:454
+#: production/inc/launchpad/Panels/ProfilePanel.php:580
 #: production/inc/launchpad/Panels/SecurityPanel.php:59
 msgid "Current Password"
 msgstr ""
 
-#: inc/launchpad/Panels/ProfilePanel.php:465
-#: inc/launchpad/Panels/ProfilePanel.php:490
-#: inc/launchpad/Panels/ProfilePanel.php:593
-#: inc/launchpad/Panels/ProfilePanel.php:660
-#: production/inc/launchpad/Panels/ProfilePanel.php:465
-#: production/inc/launchpad/Panels/ProfilePanel.php:490
-#: production/inc/launchpad/Panels/ProfilePanel.php:593
-#: production/inc/launchpad/Panels/ProfilePanel.php:660
+#: inc/launchpad/Panels/ProfilePanel.php:462
+#: inc/launchpad/Panels/ProfilePanel.php:487
+#: inc/launchpad/Panels/ProfilePanel.php:590
+#: inc/launchpad/Panels/ProfilePanel.php:657
+#: production/inc/launchpad/Panels/ProfilePanel.php:462
+#: production/inc/launchpad/Panels/ProfilePanel.php:487
+#: production/inc/launchpad/Panels/ProfilePanel.php:590
+#: production/inc/launchpad/Panels/ProfilePanel.php:657
 msgid "Toggle password visibility"
 msgstr ""
 
-#: inc/launchpad/Panels/ProfilePanel.php:507
-#: production/inc/launchpad/Panels/ProfilePanel.php:507
+#: inc/launchpad/Panels/ProfilePanel.php:504
+#: production/inc/launchpad/Panels/ProfilePanel.php:504
 msgid "Generate Strong Password"
 msgstr ""
 
-#: inc/launchpad/Panels/ProfilePanel.php:517
-#: production/inc/launchpad/Panels/ProfilePanel.php:517
+#: inc/launchpad/Panels/ProfilePanel.php:514
+#: production/inc/launchpad/Panels/ProfilePanel.php:514
 msgid "Update Password"
+msgstr ""
+
+#: inc/launchpad/Panels/ProfilePanel.php:532
+#: production/inc/launchpad/Panels/ProfilePanel.php:532
+msgid "Password Changed"
 msgstr ""
 
 #: inc/launchpad/Panels/ProfilePanel.php:535
 #: production/inc/launchpad/Panels/ProfilePanel.php:535
-msgid "Password Changed"
-msgstr ""
-
-#: inc/launchpad/Panels/ProfilePanel.php:538
-#: production/inc/launchpad/Panels/ProfilePanel.php:538
 msgid "Your password has been changed successfully. You will need to log in again with your new password."
 msgstr ""
 
-#: inc/launchpad/Panels/ProfilePanel.php:564
-#: production/inc/launchpad/Panels/ProfilePanel.php:564
+#: inc/launchpad/Panels/ProfilePanel.php:561
+#: production/inc/launchpad/Panels/ProfilePanel.php:561
 msgid "Enter your new email address and current password to confirm the change."
 msgstr ""
 
-#: inc/launchpad/Panels/ProfilePanel.php:573
-#: production/inc/launchpad/Panels/ProfilePanel.php:573
+#: inc/launchpad/Panels/ProfilePanel.php:570
+#: production/inc/launchpad/Panels/ProfilePanel.php:570
 msgid "New Email"
 msgstr ""
 
-#: inc/launchpad/Panels/ProfilePanel.php:617
-#: production/inc/launchpad/Panels/ProfilePanel.php:617
+#: inc/launchpad/Panels/ProfilePanel.php:614
+#: production/inc/launchpad/Panels/ProfilePanel.php:614
 msgid "Changing..."
+msgstr ""
+
+#: inc/launchpad/Panels/ProfilePanel.php:635
+#: production/inc/launchpad/Panels/ProfilePanel.php:635
+msgid "Delete Account"
 msgstr ""
 
 #: inc/launchpad/Panels/ProfilePanel.php:638
 #: production/inc/launchpad/Panels/ProfilePanel.php:638
-msgid "Delete Account"
-msgstr ""
-
-#: inc/launchpad/Panels/ProfilePanel.php:641
-#: production/inc/launchpad/Panels/ProfilePanel.php:641
 msgid "This action is permanent and cannot be undone. All your personal data will be removed. Your published content will be preserved."
 msgstr ""
 
-#: inc/launchpad/Panels/ProfilePanel.php:650
-#: production/inc/launchpad/Panels/ProfilePanel.php:650
+#: inc/launchpad/Panels/ProfilePanel.php:647
+#: production/inc/launchpad/Panels/ProfilePanel.php:647
 msgid "Enter your password to confirm"
+msgstr ""
+
+#: inc/launchpad/Panels/ProfilePanel.php:678
+#: production/inc/launchpad/Panels/ProfilePanel.php:678
+msgid "Delete my account"
 msgstr ""
 
 #: inc/launchpad/Panels/ProfilePanel.php:681
 #: production/inc/launchpad/Panels/ProfilePanel.php:681
-msgid "Delete my account"
+msgid "Deleting..."
 msgstr ""
 
-#: inc/launchpad/Panels/ProfilePanel.php:684
-#: production/inc/launchpad/Panels/ProfilePanel.php:684
-msgid "Deleting..."
+#: inc/launchpad/Panels/ProfilePanel.php:702
+#: production/inc/launchpad/Panels/ProfilePanel.php:702
+msgid "Account Deleted"
 msgstr ""
 
 #: inc/launchpad/Panels/ProfilePanel.php:705
 #: production/inc/launchpad/Panels/ProfilePanel.php:705
-msgid "Account Deleted"
-msgstr ""
-
-#: inc/launchpad/Panels/ProfilePanel.php:708
-#: production/inc/launchpad/Panels/ProfilePanel.php:708
 msgid "Your account has been successfully deleted. You will be redirected to the home page."
 msgstr ""
 
-#: inc/launchpad/Panels/ProfilePanel.php:715
-#: production/inc/launchpad/Panels/ProfilePanel.php:715
+#: inc/launchpad/Panels/ProfilePanel.php:712
+#: production/inc/launchpad/Panels/ProfilePanel.php:712
 msgid "OK"
 msgstr ""
 
-#: inc/launchpad/Panels/SecurityPanel.php:17
-#: production/inc/launchpad/Panels/SecurityPanel.php:17
-msgid "Security"
-msgstr ""
-
-#: inc/launchpad/Panels/SecurityPanel.php:40
-#: production/inc/launchpad/Panels/SecurityPanel.php:40
-msgid "Security Settings"
-msgstr ""
-
-#: inc/launchpad/Panels/SecurityPanel.php:50
-#: production/inc/launchpad/Panels/SecurityPanel.php:50
-msgid "Password changed successfully."
-msgstr ""
-
-#: inc/launchpad/Panels/SecurityPanel.php:82
-#: production/inc/launchpad/Panels/SecurityPanel.php:82
-msgid "Confirm Password"
-msgstr ""
-
-#: inc/launchpad/Panels/StatsPanel.php:27
-#: production/inc/launchpad/Panels/StatsPanel.php:27
+#: inc/launchpad/Panels/StatsPanel.php:29
+#: production/inc/launchpad/Panels/StatsPanel.php:29
 msgid "Stats"
 msgstr ""
 
-#: inc/launchpad/Panels/StatsPanel.php:50
-#: production/inc/launchpad/Panels/StatsPanel.php:50
+#: inc/launchpad/Panels/StatsPanel.php:52
+#: production/inc/launchpad/Panels/StatsPanel.php:52
 msgid "Your Statistics"
 msgstr ""
 
-#: inc/launchpad/Panels/StatsPanel.php:56
-#: production/inc/launchpad/Panels/StatsPanel.php:56
+#: inc/launchpad/Panels/StatsPanel.php:58
+#: production/inc/launchpad/Panels/StatsPanel.php:58
 msgid "Views"
 msgstr ""
 
-#: inc/launchpad/Panels/StatsPanel.php:71
-#: production/inc/launchpad/Panels/StatsPanel.php:71
+#: inc/launchpad/Panels/StatsPanel.php:73
+#: production/inc/launchpad/Panels/StatsPanel.php:73
 msgid "Recent Activity"
 msgstr ""
 
-#: inc/launchpad/Services/MediaService.php:35
-#: production/inc/launchpad/Services/MediaService.php:35
+#: inc/launchpad/Services/MediaService.php:36
+#: production/inc/launchpad/Services/MediaService.php:36
 msgid "Invalid file type. Only PDF and DOC/DOCX allowed."
 msgstr ""
 
-#: inc/launchpad/Services/OpportunitiesService.php:130
-#: production/inc/launchpad/Services/OpportunitiesService.php:130
-msgid "Draft"
-msgstr ""
-
-#: inc/launchpad/Services/OpportunitiesService.php:131
-#: production/inc/launchpad/Services/OpportunitiesService.php:131
-msgid "Pending Review"
-msgstr ""
-
-#: inc/launchpad/Services/OpportunitiesService.php:510
+#: inc/launchpad/Services/OpportunitiesService.php:503
 #: inc/launchpad/Services/ProfileService.php:258
 #: inc/shared/Core/AbstractApiController.php:131
-#: production/inc/launchpad/Services/OpportunitiesService.php:510
+#: production/inc/launchpad/Services/OpportunitiesService.php:503
 #: production/inc/launchpad/Services/ProfileService.php:258
 #: production/inc/shared/Core/AbstractApiController.php:131
 msgid "Please correct the highlighted fields."
 msgstr ""
 
-#: inc/launchpad/Services/OpportunitiesService.php:732
-#: production/inc/launchpad/Services/OpportunitiesService.php:732
+#: inc/launchpad/Services/OpportunitiesService.php:725
+#: production/inc/launchpad/Services/OpportunitiesService.php:725
 msgid "Could not save opportunity. Please try again."
 msgstr ""
 
-#: inc/launchpad/Services/OpportunitiesService.php:747
-#: production/inc/launchpad/Services/OpportunitiesService.php:747
+#: inc/launchpad/Services/OpportunitiesService.php:740
+#: production/inc/launchpad/Services/OpportunitiesService.php:740
 msgid "Access denied."
 msgstr ""
 
-#: inc/launchpad/Services/OpportunitiesService.php:753
-#: production/inc/launchpad/Services/OpportunitiesService.php:753
+#: inc/launchpad/Services/OpportunitiesService.php:746
+#: production/inc/launchpad/Services/OpportunitiesService.php:746
 msgid "Only drafts can be submitted for review."
 msgstr ""
 
-#: inc/launchpad/Services/OpportunitiesService.php:803
-#: production/inc/launchpad/Services/OpportunitiesService.php:803
+#: inc/launchpad/Services/OpportunitiesService.php:796
+#: production/inc/launchpad/Services/OpportunitiesService.php:796
 #, php-format
 msgid "Title must not exceed %d characters."
 msgstr ""
 
-#: inc/launchpad/Services/OpportunitiesService.php:854
-#: production/inc/launchpad/Services/OpportunitiesService.php:854
+#: inc/launchpad/Services/OpportunitiesService.php:847
+#: production/inc/launchpad/Services/OpportunitiesService.php:847
 msgid "Please fill in all required fields before submitting for review."
 msgstr ""
 
@@ -2751,37 +2552,43 @@ msgstr ""
 
 #: inc/listing/Api/MainController.php:62
 #: inc/listing/Filters/LocationsFilterSimple.php:35
-#: production/inc/listing/Api/MainController.php:79
-#: production/inc/listing/Filters/LocationsFilter.php:28
-#: production/inc/listing/Filters/LocationsFilterSimple.php:34
+#: production/inc/listing/Api/MainController.php:62
+#: production/inc/listing/Filters/LocationsFilterSimple.php:35
 #: production/templates/single-opportunity.php:129
 #: templates/single-opportunity.php:129
 msgid "Location"
 msgstr ""
 
-#: inc/listing/Core/ListingCore.php:483
+#: inc/listing/Core/ListingCore.php:490
 #: inc/listing/Core/ResultsGrid.php:56
-#: production/inc/listing/Core/ResultsGrid.php:33
+#: production/inc/listing/Core/ListingCore.php:490
+#: production/inc/listing/Core/ResultsGrid.php:56
 msgid "Remove filter"
 msgstr ""
 
+#: inc/listing/Core/ListingCore.php:495
+#: production/inc/listing/Core/ListingCore.php:495
+msgid "Your session has expired. Please reload the page."
+msgstr ""
+
 #: inc/listing/Core/ResultsGrid.php:44
+#: production/inc/listing/Core/ResultsGrid.php:44
 msgid "Try again"
 msgstr ""
 
 #: inc/listing/Core/ResultsGrid.php:71
-#: production/inc/listing/Core/ResultsGrid.php:47
+#: production/inc/listing/Core/ResultsGrid.php:71
 msgid "Nothing found matching your criteria"
 msgstr ""
 
 #: inc/listing/Core/ResultsGrid.php:73
-#: production/inc/listing/Core/ResultsGrid.php:49
+#: production/inc/listing/Core/ResultsGrid.php:73
 msgid "Clear all filters"
 msgstr ""
 
 #: inc/listing/Core/ResultsGrid.php:138
-#: production/inc/listing/Core/ResultsGrid.php:108
-#: production/template-parts/control-favorites.php:42
+#: production/inc/listing/Core/ResultsGrid.php:138
+#: production/template-parts/control-favorites.php:49
 #: production/template-parts/project-card-opportunity.php:33
 #: production/template-parts/project-card-opportunity.php:89
 #: template-parts/control-favorites.php:49
@@ -2791,7 +2598,7 @@ msgid "Add to favorites"
 msgstr ""
 
 #: inc/listing/Core/ResultsGrid.php:141
-#: production/inc/listing/Core/ResultsGrid.php:111
+#: production/inc/listing/Core/ResultsGrid.php:141
 #: production/template-parts/project-card-opportunity.php:36
 #: production/template-parts/project-card-opportunity.php:92
 #: template-parts/project-card-opportunity.php:36
@@ -2800,17 +2607,17 @@ msgid "In favorites"
 msgstr ""
 
 #: inc/listing/Core/ResultsGrid.php:190
-#: production/inc/listing/Core/ResultsGrid.php:155
+#: production/inc/listing/Core/ResultsGrid.php:190
 msgid "From:"
 msgstr ""
 
 #: inc/listing/Core/ResultsGrid.php:194
-#: production/inc/listing/Core/ResultsGrid.php:159
+#: production/inc/listing/Core/ResultsGrid.php:194
 msgid "To:"
 msgstr ""
 
 #: inc/listing/Filters/LocationsFilterSimple.php:135
-#: production/inc/listing/Filters/LocationsFilterSimple.php:132
+#: production/inc/listing/Filters/LocationsFilterSimple.php:135
 msgid "City, Raion, Oblast..."
 msgstr ""
 
@@ -3011,6 +2818,11 @@ msgstr ""
 msgid "Every Five Minutes"
 msgstr ""
 
+#: inc/shared/Breadcrumbs/Trail.php:74
+#: production/inc/shared/Breadcrumbs/Trail.php:74
+msgid "Home"
+msgstr ""
+
 #: inc/shared/Core/AbstractApiController.php:152
 #: production/inc/shared/Core/AbstractApiController.php:152
 msgid "You must be logged in to access this resource."
@@ -3097,7 +2909,7 @@ msgstr ""
 
 #. translators: %d: minutes until rate limit resets
 #: inc/shared/Policy/RateLimitPolicy.php:66
-#: production/inc/shared/Policy/RateLimitPolicy.php:59
+#: production/inc/shared/Policy/RateLimitPolicy.php:66
 #, php-format
 msgid "Too many attempts. Please try again in %d minutes."
 msgstr ""
@@ -3132,8 +2944,8 @@ msgstr ""
 msgid "Telegram rejected the bot token."
 msgstr ""
 
-#: inc/shared/Policy/UrlPolicy.php:81
-#: production/inc/shared/Policy/UrlPolicy.php:81
+#: inc/shared/Policy/UrlPolicy.php:164
+#: production/inc/shared/Policy/UrlPolicy.php:164
 msgid "Please enter a valid URL (e.g. https://example.com)."
 msgstr ""
 
@@ -3447,57 +3259,20 @@ msgstr ""
 msgid "That's everything you need to know. Go ahead and create your first opportunity — every submission helps people find the support they need."
 msgstr ""
 
-#: production/inc/listing/Api/MainController.php:111
-msgid "Search query"
+#: production/inc/launchpad/Panels/SecurityPanel.php:17
+msgid "Security"
 msgstr ""
 
-#. translators: %s: filter identifier supplied by client
-#: production/inc/listing/Api/MainController.php:127
-#: production/inc/listing/Services/ListingService.php:368
-#, php-format
-msgid "Filter \"%s\" is not supported."
+#: production/inc/launchpad/Panels/SecurityPanel.php:40
+msgid "Security Settings"
 msgstr ""
 
-#: production/inc/listing/Core/ResultsGrid.php:124
-#: production/inc/listing/Core/ResultsGrid.php:144
-#: production/template-parts/control-favorites.php:56
-#: production/template-parts/control-favorites.php:76
-#: production/template-parts/project-card-opportunity.php:48
-#: production/template-parts/project-card-opportunity.php:66
-#: production/template-parts/project-card-opportunity.php:105
-#: production/template-parts/project-card-opportunity.php:125
-#: template-parts/control-favorites.php:37
-#: template-parts/project-card-opportunity.php:48
-#: template-parts/project-card-opportunity.php:66
-#: template-parts/project-card-opportunity.php:105
-#: template-parts/project-card-opportunity.php:125
-msgid "Toggle Favorite"
+#: production/inc/launchpad/Panels/SecurityPanel.php:50
+msgid "Password changed successfully."
 msgstr ""
 
-#: production/inc/listing/Filters/CityFilter.php:18
-msgid "City"
-msgstr ""
-
-#: production/inc/listing/Filters/CityFilter.php:78
-msgid "Find city..."
-msgstr ""
-
-#: production/inc/listing/Filters/CityFilter.php:111
-msgid "Clear selection"
-msgstr ""
-
-#: production/inc/listing/Filters/LocationsFilter.php:101
-msgid "Find location..."
-msgstr ""
-
-#: production/inc/listing/Filters/LocationsFilter.php:111
-#: production/template-parts/search-modal.php:38
-#: template-parts/search-modal.php:38
-msgid "Clear"
-msgstr ""
-
-#: production/inc/listing/Services/ListingService.php:394
-msgid "Failed to fetch location options."
+#: production/inc/launchpad/Panels/SecurityPanel.php:82
+msgid "Confirm Password"
 msgstr ""
 
 #. translators: %s: search query.
@@ -3510,6 +3285,11 @@ msgstr ""
 #: production/search.php:77
 #: search.php:77
 msgid "Nothing found. Try a different search term."
+msgstr ""
+
+#: production/template-parts/breadcrumbs.php:49
+#: template-parts/breadcrumbs.php:49
+msgid "Breadcrumbs"
 msgstr ""
 
 #: production/template-parts/comments-interactive.php:61
@@ -3677,6 +3457,19 @@ msgstr ""
 msgid "Continue reading<span class=\"screen-reader-text\"> \"%s\"</span>"
 msgstr ""
 
+#: production/template-parts/control-favorites.php:37
+#: production/template-parts/project-card-opportunity.php:48
+#: production/template-parts/project-card-opportunity.php:66
+#: production/template-parts/project-card-opportunity.php:105
+#: production/template-parts/project-card-opportunity.php:125
+#: template-parts/control-favorites.php:37
+#: template-parts/project-card-opportunity.php:48
+#: template-parts/project-card-opportunity.php:66
+#: template-parts/project-card-opportunity.php:105
+#: template-parts/project-card-opportunity.php:125
+msgid "Toggle Favorite"
+msgstr ""
+
 #: production/template-parts/control-header-auth.php:44
 #: production/template-parts/control-header-auth.php:67
 #: template-parts/control-header-auth.php:44
@@ -3719,6 +3512,11 @@ msgstr ""
 #: production/template-parts/search-modal.php:29
 #: template-parts/search-modal.php:29
 msgid "Enter a search term"
+msgstr ""
+
+#: production/template-parts/search-modal.php:38
+#: template-parts/search-modal.php:38
+msgid "Clear"
 msgstr ""
 
 #: production/template-parts/social-share.php:39

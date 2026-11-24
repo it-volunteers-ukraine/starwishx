@@ -50,6 +50,7 @@ final class RateLimitPolicy
      * @param string $message      Optional custom error message.
      * @return true|WP_Error       True if under limit, WP_Error if exceeded.
      */
+    #[\NoDiscard('a rate limit only applies when its result is acted on')]
     public static function check(
         string $key,
         int $maxAttempts,

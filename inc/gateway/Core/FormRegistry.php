@@ -10,18 +10,20 @@ use Gateway\Forms\AbstractForm;
 
 /**
  * Registry for Gateway forms.
- * Extends shared AbstractRegistry with form-specific typing.
+ * Extends shared AbstractRegistry with form-specific typing: only
+ * AbstractForm instances get in, so everything read back is one.
  */
-class FormRegistry extends AbstractRegistry
+final class FormRegistry extends AbstractRegistry
 {
     /**
      * Register a form with priority.
      */
+    #[\Override]
     public function register(string $id, object $instance, int $priority = 10): void
     {
         if (!$instance instanceof AbstractForm) {
             throw new \InvalidArgumentException(
-                sprintf('Form must extend AbstractForm, got %s', get_class($instance))
+                sprintf('Form must extend AbstractForm, got %s', $instance::class)
             );
         }
 
@@ -31,6 +33,7 @@ class FormRegistry extends AbstractRegistry
     /**
      * Get form by ID with proper typing.
      */
+    #[\Override]
     public function get(string $id): ?AbstractForm
     {
         $item = parent::get($id);
@@ -42,6 +45,7 @@ class FormRegistry extends AbstractRegistry
      *
      * @return array<string, AbstractForm>
      */
+    #[\Override]
     public function getAll(): array
     {
         return parent::getAll();

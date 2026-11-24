@@ -79,10 +79,12 @@ export const lanes: Lane[] = [
   {
     id: "stores",
     type: "js",
-    // Entry points follow the *-store.js convention, one bundle per module.
-    // Everything else under Assets/ (utils.js, tour-manager.js, and all of
-    // inc/shared/Assets) is imported by a store and bundled into it.
-    include: ["inc/*/Assets/*-store.{js,mjs}"],
+    // Entry points follow the *-store convention, one bundle per module:
+    // TypeScript (inc/tsconfig.json; inc/listing and inc/launchpad so far)
+    // or plain JS until migrated. Everything else under Assets/ (utils,
+    // tour-manager.js, and all of inc/shared/Assets) is imported by a store
+    // and bundled into it.
+    include: ["inc/*/Assets/*-store.{js,mjs,ts}"],
     exclude: ["inc/shared/Assets/**"],
     out: (file) => `assets/js/${name(file)}.module.js`,
     format: "es",
@@ -94,10 +96,11 @@ export const lanes: Lane[] = [
   {
     id: "scripts",
     type: "js",
-    // Classic deferred scripts. `_*.js` are partials that app.js imports (one
-    // feature each), the same convention as Sass partials.
-    include: ["src/js/*.js"],
-    exclude: ["src/js/_*.js"],
+    // Classic deferred scripts, TypeScript (src/js/tsconfig.json) or plain JS
+    // until migrated. `_*` are partials that app.ts imports (one feature
+    // each), the same convention as Sass partials.
+    include: ["src/js/*.{ts,js}"],
+    exclude: ["src/js/_*", "src/js/*.d.ts"],
     out: (file) => `assets/js/${name(file)}.js`,
     format: "iife",
     asset: true,

@@ -20,6 +20,9 @@ const notOurs = [
   "inc/acf/**",
   "src/js/vendor/**",
   "vendor/**",
+  "tests/php/vendor/**",
+  "tests/e2e/.report/**",
+  "tests/e2e/.results/**",
   "node_modules/**",
   "docs/**",
   ".void/**",
@@ -27,8 +30,11 @@ const notOurs = [
 
 export default defineConfig({
   lint: {
-    // Type-checks what tsconfig.json includes (the build tools). Rules such as
-    // no-floating-promises also reach the theme's JS through inferred types.
+    // Type-checks (tsrs) the TypeScript projects - the build tools
+    // (tsconfig.json), src/js (src/js/tsconfig.json) and the iAPI stores
+    // (inc/tsconfig.json); each file takes its nearest tsconfig. Rules such
+    // as no-floating-promises also reach the theme's JS through inferred
+    // types. `pnpm typecheck` runs the TypeScript compiler on all three.
     options: { typeAware: true, typeCheck: true },
     ignorePatterns: notOurs,
     env: { browser: true, es2024: true },
@@ -40,9 +46,15 @@ export default defineConfig({
         env: { browser: false, node: true },
       },
       {
+        // The Playwright runner (Node) plus the code it runs in the page.
+        files: ["tests/e2e/**"],
+        env: { browser: true, node: true },
+      },
+      {
         // These read JSDoc as if it were real types, so in plain JS they
         // report loose comments ({Object}, untyped packages), not bugs.
-        files: ["inc/**", "src/**"],
+        // TypeScript files have real types and keep them.
+        files: ["inc/**/*.{js,mjs}", "src/**/*.js"],
         rules: {
           "typescript/no-misused-spread": "off",
           "typescript/no-redundant-type-constituents": "off",
@@ -72,10 +84,20 @@ export default defineConfig({
       // Written by ACF and wp-cli.
       "acf-json/**",
       "languages/**",
+      // Written by tests/php (UPDATE_FIXTURES=1).
+      "tests/fixtures/**",
       "pnpm-lock.yaml",
       "composer.json",
       "composer.lock",
     ],
+  },
+
+  // `vp test` (Vitest, bundled with Vite+): the TS unit tests. The stores
+  // run in Node against a stand-in Interactivity API (tests/ts/setup.ts).
+  test: {
+    include: ["tests/ts/**/*.test.ts"],
+    environment: "node",
+    setupFiles: ["tests/ts/setup.ts"],
   },
 
   staged: {

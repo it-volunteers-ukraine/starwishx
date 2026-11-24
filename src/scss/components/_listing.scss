@@ -94,6 +94,11 @@
         color: $text-light;
         font-size: 14px;
 
+        // No number, no "()" (a facet missing from a response).
+        &:empty {
+            display: none;
+        }
+
         &::before {
             content: " (";
         }
@@ -299,6 +304,34 @@
         .listing-filter-items li {
             padding: 8px 10px;
         }
+    }
+}
+
+// A group with a single control and no <details> disclosure
+// ("Favorites", FavoritesFilter): padded like a summary row.
+.listing-filter-group--single {
+    padding: 14px;
+
+    @include media.min-tablet {
+        padding: 12px;
+    }
+
+    .filter-checkbox {
+        width: 100%;
+    }
+}
+
+.filter-checkbox--favorites {
+    .icon-heart {
+        flex: 0 0 auto;
+        transition: color 0.2s ease-in-out;
+        width: 16px;
+        height: 15px;
+        color: $text-light;
+    }
+
+    input[type="checkbox"]:checked ~ .icon-heart {
+        color: $icon-color-fill;
     }
 }
 

@@ -30,6 +30,7 @@
 /skills-lock.json
 /vite.config.ts
 /tsconfig.json
+/tsconfig.base.json
 /biome.jsonc
 /README.md
 

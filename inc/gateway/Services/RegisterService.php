@@ -3,7 +3,7 @@
 /**
  * Service handling user registration with email activation.
  * Aligns with WordPress native behavior: register with email, then set password via link.
- * 
+ *
  * File: inc/gateway/Services/RegisterService.php
  */
 
@@ -11,6 +11,7 @@ declare(strict_types=1);
 
 namespace Gateway\Services;
 
+use Gateway\Enums\GatewayView;
 use Shared\Policy\EmailPolicy;
 use Shared\Policy\UsernamePolicy;
 use WP_Error;
@@ -19,16 +20,24 @@ use WP_User;
 /**
  * Service handling user registration via email activation.
  */
-class RegisterService
+final class RegisterService
 {
+    /**
+     * The roles a self-registered account may get: the Launchpad audience
+     * (see BackOfficePolicy). The `default_role` option is used only when it
+     * is one of them - a default_role switched to administrator (by mistake,
+     * or by an option-overwrite bug in some plugin) must not turn the public
+     * form into an admin sign-up.
+     */
+    private const array SELF_SERVICE_ROLES = ['subscriber', 'contributor'];
+
+    private const string FALLBACK_ROLE = 'subscriber';
+
+    #[\NoDiscard]
     public function handleRegistration(string $username, string $email): bool|WP_Error
     {
         // 1. Basic Validation
-        if (empty($username)) {
-            return new WP_Error('invalid_data', __('Please provide a valid username and email address.', 'starwishx'));
-        }
-
-        if (empty($email)) {
+        if ($username === '' || $email === '') {
             return new WP_Error('invalid_data', __('Please provide a valid username and email address.', 'starwishx'));
         }
 
@@ -47,11 +56,13 @@ class RegisterService
         }
 
         // 3. Existence Checks (Standard WP behavior allows these leaks on registration for UX)
+        // The message also goes in field_errors, so the form shows it under
+        // the field (see AbstractApiController's error-shape contract).
         if (username_exists($username)) {
-            return new WP_Error('username_exists', __('This username is already taken.', 'starwishx'));
+            return self::taken('username_exists', 'username', __('This username is already taken.', 'starwishx'));
         }
         if (email_exists($email)) {
-            return new WP_Error('email_exists', __('This email is already registered.', 'starwishx'));
+            return self::taken('email_exists', 'email', __('This email is already registered.', 'starwishx'));
         }
 
         // 4. Create User with Random Password
@@ -59,7 +70,7 @@ class RegisterService
             'user_login'   => $username,
             'user_email'   => $email,
             'user_pass'    => wp_generate_password(24, true, true),
-            'role'         => get_option('default_role', 'subscriber'),
+            'role'         => self::registrationRole(),
         ]);
 
         if (is_wp_error($user_id)) {
@@ -67,12 +78,40 @@ class RegisterService
         }
 
         $user = get_user_by('id', $user_id);
+        if (!$user instanceof WP_User) {
+            return new WP_Error('invalid_data', __('Please provide a valid username and email address.', 'starwishx'));
+        }
 
         // 5. Trigger standard WP registration hook for plugin compatibility
         do_action('register_new_user', $user_id);
 
         // 6. Send Activation Email
         return $this->sendActivationEmail($user);
+    }
+
+    /** A conflict on one field: the banner message, and the same one inline. */
+    private static function taken(string $code, string $field, string $message): WP_Error
+    {
+        return new WP_Error($code, $message, ['field_errors' => [$field => $message]]);
+    }
+
+    /**
+     * The role for a new account: `default_role` when it is a self-service
+     * role, else the fallback (logged - someone should look at the option).
+     */
+    private static function registrationRole(): string
+    {
+        $role = (string) get_option('default_role', self::FALLBACK_ROLE);
+        if (in_array($role, self::SELF_SERVICE_ROLES, true)) {
+            return $role;
+        }
+
+        error_log(sprintf(
+            '[Gateway] default_role "%s" is not a self-service role; registering as "%s".',
+            $role,
+            self::FALLBACK_ROLE
+        ));
+        return self::FALLBACK_ROLE;
     }
 
     private function sendActivationEmail(WP_User $user): bool|WP_Error
@@ -83,11 +122,7 @@ class RegisterService
         }
 
         // Reuse the Reset Password view
-        $activation_url = add_query_arg([
-            'view'  => 'reset-password',
-            'key'   => $key,
-            'login' => rawurlencode($user->user_login),
-        ], home_url('/gateway/'));
+        $activation_url = GatewayView::resetUrl($key, $user->user_login);
 
         $site_name = wp_specialchars_decode(get_option('blogname'), ENT_QUOTES);
         $subject   = sprintf(__('[%s] Activate Your Account', 'starwishx'), $site_name);
@@ -97,12 +132,10 @@ class RegisterService
         $message .= $activation_url . "\r\n\r\n";
         $message .= __('If you did not request this, please ignore this email.', 'starwishx');
 
-        $sent = wp_mail($user->user_email, $subject, $message);
-
-        if (!$sent) {
-            // Log but return true to prevent UI breakage/enumeration
+        if (!wp_mail($user->user_email, $subject, $message)) {
+            // Log but report success: the account exists either way, and the
+            // user can ask for a new link through Lost Password.
             error_log("[Gateway] Email failed for registered user: {$user->user_login}");
-            return true;
         }
 
         return true;

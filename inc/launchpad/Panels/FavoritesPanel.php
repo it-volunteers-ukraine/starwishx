@@ -6,55 +6,56 @@ namespace Launchpad\Panels;
 
 use Favorites\Services\FavoritesService;
 
-class FavoritesPanel extends AbstractPanel
+final class FavoritesPanel extends AbstractPanel
 {
-    private FavoritesService $service;
+    /** Favorites per page: the first page here, the next ones in favorites/actions.ts. */
+    public const int PER_PAGE = 20;
 
-    /**
-     * Dependency Injection via Constructor
-     */
-    public function __construct(FavoritesService $service)
-    {
-        $this->service = $service;
-    }
+    public function __construct(private readonly FavoritesService $service) {}
 
+    #[\Override]
     public function getId(): string
     {
         return 'favorites';
     }
 
+    #[\Override]
     public function getLabel(): string
     {
         return __('Favorites', 'starwishx');
     }
 
+    #[\Override]
     public function getIcon(): string
     {
         return 'icon-heart';
     }
 
+    #[\Override]
     public function getInitialState(?int $userId = null): array
     {
         // We'r injected service here instead of 'new FavoritesService()'
-        $favorites = $this->service->getUserFavorites($userId, 20, 0);
+        $favorites = $this->service->getUserFavorites($userId, self::PER_PAGE, 0);
         $total     = $this->service->countUserFavorites($userId);
 
         return [
             'items'       => $favorites,
             'total'       => $total,
             'page'        => 1,
-            'totalPages'  => ceil($total / 20),
-            'hasMore'     => $total > 20,
+            'perPage'     => self::PER_PAGE,
+            'totalPages'  => (int) ceil($total / self::PER_PAGE),
+            'hasMore'     => $total > self::PER_PAGE,
         ];
     }
 
+    #[\Override]
     public function render(): string
     {
         $this->startBuffer();
 ?>
         <!-- Outer wrapper uses main launchpad store -->
         <div class="launchpad-panel launchpad-panel--favorites" data-wp-interactive="launchpad">
-            <h2 class="panel-title"><?php esc_html_e('My Favorites', 'starwishx'); ?></h2>
+            <h2 class="panel-title"><?php esc_html_e('Favorites', 'starwishx'); ?></h2>
             <div
                 class="launchpad-alert launchpad-alert--error"
                 data-wp-bind--hidden="!<?= $this->statePath('error') ?>"

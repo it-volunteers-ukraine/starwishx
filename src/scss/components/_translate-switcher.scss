@@ -1,7 +1,7 @@
 @use "../variables" as *;
 
 // Flags that translate the page (template-parts/control-header-translate.php,
-// src/js/_translate.js). Each flag sits in a 24 px target, the WCAG minimum.
+// src/js/_translate.ts). Each flag sits in a 24 px target, the WCAG minimum.
 .translate-switcher {
     display: flex;
     align-items: center;

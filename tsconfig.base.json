@@ -1,0 +1,20 @@
+{
+  // What every TypeScript project in the theme shares. Each environment has
+  // its own tsconfig that extends this one, with its own lib and types:
+  //   tsconfig.json         the build tools (Node)
+  //   src/js/tsconfig.json  the classic scripts (browser, bundled by Rolldown)
+  //   inc/tsconfig.json     the Interactivity API stores (browser, script modules)
+  // Checked by `pnpm typecheck` (tsc) and `vp check` (tsrs).
+  "compilerOptions": {
+    "strict": true,
+    "noEmit": true,
+    "skipLibCheck": true,
+    // Node and Oxc (inside Rolldown) only strip types, so no syntax that
+    // would need compiling: enums, namespaces, parameter properties.
+    "erasableSyntaxOnly": true,
+    "verbatimModuleSyntax": true,
+    // A file without imports or exports (app.ts' partials) is still a
+    // module: its top-level names stay its own, and it can `declare global`.
+    "moduleDetection": "force"
+  }
+}

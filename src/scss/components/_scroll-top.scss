@@ -2,7 +2,7 @@
 @use "../mixins/media" as *;
 
 /*
- * Back-to-top control — rendered in footer.php, toggled by src/js/_scroll-top.js.
+ * Back-to-top control — rendered in footer.php, toggled by src/js/_scroll-top.ts.
  *
  * Hidden with visibility rather than display so the fade can play, and kept
  * out of the tab order while hidden.

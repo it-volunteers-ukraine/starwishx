@@ -29,3 +29,12 @@ docs/
 skills-lock.json
 
 /languages/*.po~
+# PHP test tooling (tests/php): its own Composer install and local DB settings
+/tests/php/vendor/
+/tests/php/.env.local.php
+/tests/php/.phpunit.cache/
+# E2E (tests/e2e): local site settings and Playwright's output
+/tests/e2e/.env.local.json
+/tests/e2e/.report/
+/tests/e2e/.results/
+.vitest/

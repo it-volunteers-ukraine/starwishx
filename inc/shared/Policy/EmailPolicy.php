@@ -20,7 +20,7 @@ use WP_Error;
 final class EmailPolicy
 {
     /** Enable MX/A/AAAA DNS lookup to verify the domain accepts mail. */
-    public const DNS_CHECK_ENABLED = true;
+    public const bool DNS_CHECK_ENABLED = true;
 
     /**
      * Validate an email address.
@@ -29,6 +29,7 @@ final class EmailPolicy
      *
      * @return true|WP_Error
      */
+    #[\NoDiscard('an address is only checked when the result is acted on')]
     public static function validate(string $email): bool|WP_Error
     {
         $email = trim($email);
@@ -46,8 +47,10 @@ final class EmailPolicy
             );
         }
 
-        // Optional DNS probe — verifies the domain has MX/A/AAAA records
-        if (self::DNS_CHECK_ENABLED) {
+        // Optional DNS probe — verifies the domain has MX/A/AAAA records.
+        // The filter lets the tests run without the network (and a site
+        // whose resolver is unreliable turn it off).
+        if ((bool) apply_filters('starwishx/email_dns_check', self::DNS_CHECK_ENABLED, $email)) {
             $dnsValidator = new EmailValidator();
             if (!$dnsValidator->isValid($email, new DNSCheckValidation())) {
                 return new WP_Error(

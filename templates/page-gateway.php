@@ -73,11 +73,13 @@ if (is_user_logged_in()) {
 $gateway      = \gateway();
 $registry     = $gateway->registry();
 $all_forms    = $registry->getAll();
-$current_view = isset($_GET['view']) ? sanitize_key($_GET['view']) : 'login';
+$requested    = $_GET['view'] ?? '';
+$current_view = is_string($requested) ? sanitize_key($requested) : '';
 
 // Fallback to login if a requested view doesn't exist in our registry
+// (the TS store's syncStateFromUrl() falls back the same way).
 if (!$registry->has($current_view)) {
-    $current_view = 'login';
+    $current_view = \Gateway\Enums\GatewayView::LOGIN->value;
 }
 
 /**
@@ -144,7 +146,7 @@ $back_url = $referer ? $referer : home_url();
     <nav class="gateway-breadcrumbs">
         <a href="<?php echo esc_url($back_url); ?>" class="gateway-breadcrumbs-back">
             <svg width="13" height="16" class="icon-arrow-left">
-                <use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/img/sprites.svg#icon-long-arrow-left"></use>
+                <use xlink:href="<?php echo esc_url(get_template_directory_uri() . '/assets/img/sprites.svg#icon-long-arrow-left'); ?>"></use>
             </svg> <span><?php echo esc_html($back_label); ?></span></a>
     </nav>
     <div class="gateway-layout">
@@ -152,13 +154,11 @@ $back_url = $referer ? $referer : home_url();
 
             <!-- BRANDING SECTION -->
             <header class="gateway-header">
-                <!-- <a href="< ?php echo esc_url(home_url('/')); ? >" class="gateway-logo" rel="home"> -->
                 <?php if (has_custom_logo()) : ?>
                     <?php the_custom_logo(); ?>
                 <?php else : ?>
                     <h1 class="gateway-title"><?php bloginfo('name'); ?></h1>
                 <?php endif; ?>
-                </a>
             </header>
 
             <!-- REACTIVE FORM CONTAINER -->
@@ -177,7 +177,7 @@ $back_url = $referer ? $referer : home_url();
                         class="gateway-form-wrapper"
                         id="gateway-view-<?php echo esc_attr($id); ?>"
                         <?php echo $isHidden ? 'hidden' : ''; ?>
-                        data-wp-bind--hidden="!state.<?php echo $stateKey; ?>">
+                        data-wp-bind--hidden="!state.<?php echo esc_attr($stateKey); ?>">
 
                         <?php
                         /**

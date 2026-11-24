@@ -8,7 +8,7 @@
  * which meant is_search() was never true.
  *
  * A native <dialog>, opened with showModal() by the header buttons that carry
- * aria-controls="searchModal" (src/js/_search-dialog.js): focus containment,
+ * aria-controls="searchModal" (src/js/_search-dialog.ts): focus containment,
  * Escape, the inert page behind it and focus return come from the browser.
  */
 

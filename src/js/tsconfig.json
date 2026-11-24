@@ -1,0 +1,17 @@
+{
+  // The classic scripts (app.ts and its partials), bundled by Rolldown into
+  // assets/js/ - see the "scripts" lane in tools/build/lanes.ts.
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    // The syntax Rolldown emits (TARGET in tools/build/js.ts).
+    "target": "es2022",
+    // The APIs "baseline widely available" ships: nothing is polyfilled.
+    "lib": ["es2024", "dom"],
+    // Rolldown resolves the imports; `./_x.ts` names the file on disk.
+    "module": "preserve",
+    "allowImportingTsExtensions": true,
+    "noUncheckedIndexedAccess": true,
+    "types": []
+  },
+  "include": ["**/*.ts"]
+}

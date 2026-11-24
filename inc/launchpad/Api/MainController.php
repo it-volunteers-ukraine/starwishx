@@ -12,13 +12,9 @@ use WP_Error;
 
 class MainController extends AbstractLaunchpadController
 {
-    private PanelRegistry $registry;
+    public function __construct(private readonly PanelRegistry $registry) {}
 
-    public function __construct(PanelRegistry $registry)
-    {
-        $this->registry = $registry;
-    }
-
+    #[\Override]
     public function registerRoutes(): void
     {
         // Endpoint: GET /wp-json/launchpad/v1/panel/{id}/state

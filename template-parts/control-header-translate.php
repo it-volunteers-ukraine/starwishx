@@ -5,7 +5,7 @@
  *
  * Purpose: Flags that translate the page with Google's website translator.
  * Google's script loads only when a visitor picks a language, or already has
- * one active (src/js/_translate.js), so no page waits for Google.
+ * one active (src/js/_translate.ts), so no page waits for Google.
  * Location: Header (Desktop & Mobile variants supported via $args['variant']).
  *
  * File: template-parts/control-header-translate.php

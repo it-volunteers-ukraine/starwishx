@@ -1,5 +1,8 @@
-# Checks and builds the theme on every pull request and push to main, and
-# keeps the deployable copy (production/) as a workflow artifact.
+# Checks, tests and builds the theme on every pull request and push to main,
+# and keeps the deployable copy (production/) as a workflow artifact. The
+# tests: Vitest in the build job, then two jobs with a MySQL service - the
+# PHP integration tests, and the Playwright E2E journeys against a fresh
+# WordPress running that production/ package (see tests/README.md).
 #
 # Deploying is manual: Actions -> CI -> Run workflow on main, tick "deploy".
 # It uploads production/ to the server with the FTP_* / REMOTE_HOST secrets.
@@ -46,6 +49,14 @@ jobs:
       - name: Format, lint and type-check (Oxfmt, Oxlint)
         run: vp check
 
+      # The whole of each tsconfig program, by the pinned TypeScript compiler.
+      - name: Type-check (TypeScript 7)
+        run: vpr typecheck
+
+      # The stores' unit tests (Vitest, bundled with Vite+): tests/ts.
+      - name: Unit-test the TypeScript (Vitest)
+        run: vp test
+
       - name: Lint the SCSS (Biome)
         run: vpr style:lint
 
@@ -74,8 +85,157 @@ jobs:
           path: production/
           retention-days: 7
 
-  deploy:
+  # The PHP integration tests (tests/php): the WordPress test suite with the
+  # theme active, against a throwaway MySQL. Each test runs in a transaction
+  # that is rolled back, so the REST endpoints are tested for real.
+  php-integration:
+    runs-on: ubuntu-latest
+    services:
+      mysql:
+        image: mysql:8.4
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: starwish_tests
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -proot"
+          --health-interval=5s --health-timeout=5s --health-retries=20
+    env:
+      # The core the site runs; wp-phpunit (tests/php/composer.lock) follows it.
+      WP_VERSION: "7.1.5"
+      WP_TESTS_DB_NAME: starwish_tests
+      WP_TESTS_DB_USER: root
+      WP_TESTS_DB_PASSWORD: root
+      WP_TESTS_DB_HOST: 127.0.0.1:3306
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - uses: shivammathur/setup-php@eb7c497e18156a6bbabfef1d3a82760b9eda3962 # 2.40.0
+        with:
+          php-version: "8.5"
+          extensions: mysqli
+          coverage: none
+          tools: composer
+
+      # Its own Composer project: test tooling never enters the deployed vendor/.
+      - name: Install the PHP test tools
+        run: composer install --no-interaction --no-progress --working-dir=tests/php
+
+      - name: Download WordPress ${{ env.WP_VERSION }}
+        run: |
+          mkdir -p "$RUNNER_TEMP/wordpress"
+          curl -fsSL "https://wordpress.org/wordpress-${WP_VERSION}.tar.gz" \
+            | tar -xz --strip-components=1 -C "$RUNNER_TEMP/wordpress"
+
+      - name: PHP integration tests (PHPUnit + WordPress test suite)
+        run: |
+          export WP_TESTS_ABSPATH="$RUNNER_TEMP/wordpress"
+          php tests/php/vendor/bin/phpunit -c tests/php/phpunit.xml.dist
+
+  # The E2E journeys (tests/e2e, Playwright) against the package that would
+  # deploy: a fresh WordPress with the build's production/ as its theme,
+  # served by PHP's built-in server. The specs make and delete their own
+  # e2e- users; no mail is sent.
+  e2e:
     needs: build
+    runs-on: ubuntu-latest
+    services:
+      mysql:
+        image: mysql:8.4
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: starwish_e2e_test
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -proot"
+          --health-interval=5s --health-timeout=5s --health-retries=20
+    env:
+      WP_VERSION: "7.1.5"
+      # footer.php reads ACF fields, so the theme needs the plugin.
+      SCF_VERSION: "6.9.10"
+      E2E_BASE_URL: http://127.0.0.1:8080
+      E2E_CHANNEL: chromium
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - uses: voidzero-dev/setup-vp@68f39c78aaf39be468cabd2afb09c162574c84af # v1.21.2
+        with:
+          cache: true
+
+      - uses: shivammathur/setup-php@eb7c497e18156a6bbabfef1d3a82760b9eda3962 # 2.40.0
+        with:
+          php-version: "8.5"
+          extensions: mysqli
+          coverage: none
+          tools: none
+
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: production
+          path: ${{ runner.temp }}/production
+
+      - name: Set up WordPress ${{ env.WP_VERSION }} with the theme
+        run: |
+          WP="$RUNNER_TEMP/wordpress"
+          echo "E2E_WP_PATH=$WP" >> "$GITHUB_ENV"
+          mkdir -p "$WP"
+          curl -fsSL "https://wordpress.org/wordpress-${WP_VERSION}.tar.gz" \
+            | tar -xz --strip-components=1 -C "$WP"
+          curl -fsSLo "$RUNNER_TEMP/scf.zip" \
+            "https://downloads.wordpress.org/plugin/secure-custom-fields.${SCF_VERSION}.zip"
+          unzip -q "$RUNNER_TEMP/scf.zip" -d "$WP/wp-content/plugins"
+          cp -r "$RUNNER_TEMP/production" "$WP/wp-content/themes/starwishx"
+          {
+            echo "<?php"
+            echo "define('DB_NAME', 'starwish_e2e_test');"
+            echo "define('DB_USER', 'root');"
+            echo "define('DB_PASSWORD', 'root');"
+            echo "define('DB_HOST', '127.0.0.1:3306');"
+            echo "define('DB_CHARSET', 'utf8mb4');"
+            echo "define('DB_COLLATE', '');"
+            for key in AUTH_KEY SECURE_AUTH_KEY LOGGED_IN_KEY NONCE_KEY \
+                       AUTH_SALT SECURE_AUTH_SALT LOGGED_IN_SALT NONCE_SALT; do
+              echo "define('$key', '$(openssl rand -hex 32)');"
+            done
+            echo "\$table_prefix = 'wp_';"
+            echo "define('WP_DEBUG', false);"
+            echo "if (!defined('ABSPATH')) define('ABSPATH', __DIR__ . '/');"
+            echo "require_once ABSPATH . 'wp-settings.php';"
+          } > "$WP/wp-config.php"
+          php tests/e2e/support/install.php "$WP" "$E2E_BASE_URL" starwishx \
+            secure-custom-fields/secure-custom-fields.php
+
+      - name: Serve the site
+        run: |
+          php -S 127.0.0.1:8080 -t "$E2E_WP_PATH" tests/e2e/support/router.php \
+            > "$RUNNER_TEMP/php-server.log" 2>&1 &
+          for i in $(seq 1 30); do
+            curl -fs -o /dev/null "$E2E_BASE_URL/gateway/" && exit 0
+            sleep 1
+          done
+          echo "/gateway/ never answered 200"; cat "$RUNNER_TEMP/php-server.log"; exit 1
+
+      - name: Install Chromium for Playwright
+        run: pnpm exec playwright install --with-deps chromium
+
+      - name: E2E tests (Playwright)
+        run: pnpm test:e2e
+
+      - if: failure()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: e2e-report
+          path: |
+            tests/e2e/.report/
+            tests/e2e/.results/
+            ${{ runner.temp }}/php-server.log
+          retention-days: 7
+
+  deploy:
+    # Nothing ships unless the build, the integration and the E2E tests pass.
+    needs: [build, php-integration, e2e]
     if: github.event_name == 'workflow_dispatch' && inputs.deploy && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:

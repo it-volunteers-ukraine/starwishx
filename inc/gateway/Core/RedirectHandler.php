@@ -1,32 +1,26 @@
 <?php
-// File: Gateway\Core\RedirectHandler.php
+// File: inc/gateway/Core/RedirectHandler.php
 
 declare(strict_types=1);
 
 namespace Gateway\Core;
 
+use Gateway\Enums\GatewayView;
+
 /**
  * Intercepts WordPress authentication URLs and redirects to Gateway.
  *
  * This class handles the delicate task of hijacking wp-login.php
- * while preserving functionality that MUST go through native WP.
+ * while preserving functionality that MUST go through native WP
+ * (logout, postpass, confirmaction, 2FA and social-login actions, POSTs).
  */
-class RedirectHandler
+final class RedirectHandler
 {
     /**
-     * Actions that must be allowed through to native wp-login.php
+     * The wp-login.php actions the Gateway handles; every other action
+     * passes through to WordPress.
      */
-    // private const PASSTHROUGH_ACTIONS = [
-    //     'logout',           // Logout must use WP's logout logic for cookies
-    //     'postpass',         // Password-protected posts
-    //     'confirmaction',    // Email confirmation actions
-    //     'login_link_m',     // Magic link login plugins
-    // ];
-
-    /**
-     * Actions the Gateway is explicitly designed to handle.
-     */
-    private const SUPPORTED_ACTIONS = [
+    private const array SUPPORTED_ACTIONS = [
         'login',
         'register',
         'lostpassword',
@@ -44,40 +38,50 @@ class RedirectHandler
     public function interceptWpLogin(): void
     {
         // 1. Safety checks (AJAX, XML-RPC)
-        if ((defined('DOING_AJAX') && DOING_AJAX) || (defined('XMLRPC_REQUEST') && XMLRPC_REQUEST)) {
+        if (wp_doing_ajax() || (defined('XMLRPC_REQUEST') && XMLRPC_REQUEST)) {
             return;
         }
 
-        // 2. Determine the current action
-        $action = $_REQUEST['action'] ?? 'login'; // wp-login.php defaults to login
+        // 2. The action: wp-login.php defaults to login. Anything that isn't
+        // a plain string isn't ours.
+        $action = $_REQUEST['action'] ?? 'login';
+        if (!is_string($action)) {
+            return;
+        }
 
-        // 3. Extensibility: Allow other modules to register actions they want Gateway to handle
-        $supported_actions = apply_filters('gateway_supported_actions', self::SUPPORTED_ACTIONS);
+        // 3. Extensibility: other modules may add actions for the Gateway.
+        $supported = (array) apply_filters('gateway_supported_actions', self::SUPPORTED_ACTIONS);
 
-        // 4. THE CRITICAL CHANGE: Only intercept if we explicitly support the action
-        if (!in_array($action, $supported_actions, true)) {
+        // 4. Only intercept actions we explicitly support.
+        if (!in_array($action, $supported, true)) {
             return; // Let WordPress handle it (2FA, Social Login, Logout, etc.)
         }
 
-        // 5. Special Case: If it's a POST request to wp-login.php, 
-        // it's likely a native form submission or a plugin hook. 
-        // DON'T redirect POSTs or you break form processing.
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        // 5. A POST to wp-login.php is a native form submission or a plugin
+        // hook: redirecting it would break the form processing.
+        if (($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST') {
             return;
         }
 
-        // 6. Map and Redirect
-        $redirect = match ($action) {
-            'register'        => $this->buildGatewayUrl('register'),
-            'lostpassword',
-            'retrievepassword' => $this->buildGatewayUrl('lost-password'),
-            'rp',
-            'resetpass'       => $this->buildResetUrl(),
-            default           => $this->buildGatewayUrl('login'),
+        // 6. Map and redirect
+        $view = match ($action) {
+            'register'                       => GatewayView::REGISTER,
+            'lostpassword', 'retrievepassword' => GatewayView::LOST_PASSWORD,
+            'rp', 'resetpass'                => GatewayView::RESET_PASSWORD,
+            default                          => GatewayView::LOGIN,
         };
 
-        if (!empty($_GET['redirect_to'])) {
-            $redirect = add_query_arg('redirect_to', urlencode($_GET['redirect_to']), $redirect);
+        $redirect = $view === GatewayView::RESET_PASSWORD
+            // Keep WP's token parameters for the reset form.
+            ? GatewayView::resetUrl(
+                sanitize_text_field(self::query('key')),
+                sanitize_user(self::query('login'))
+            )
+            : $view->url();
+
+        $redirectTo = self::query('redirect_to');
+        if ($redirectTo !== '') {
+            $redirect = add_query_arg('redirect_to', urlencode($redirectTo), $redirect);
         }
 
         wp_safe_redirect($redirect);
@@ -85,27 +89,13 @@ class RedirectHandler
     }
 
     /**
-     * Build Gateway URL with view parameter.
+     * A query parameter as a string: '' when missing or not a string
+     * (`?key[]=` must not reach a string function).
      */
-    private function buildGatewayUrl(string $view = 'login'): string
+    private static function query(string $name): string
     {
-        $base = home_url('/gateway/');
-        return $view === 'login' ? $base : add_query_arg('view', $view, $base);
-    }
-
-    /**
-     * Build password reset URL preserving WP's token parameters.
-     */
-    private function buildResetUrl(): string
-    {
-        $key = isset($_GET['key']) ? sanitize_text_field($_GET['key']) : '';
-        $login = isset($_GET['login']) ? sanitize_user($_GET['login']) : '';
-
-        return add_query_arg([
-            'view'  => 'reset-password',
-            'key'   => $key,
-            'login' => rawurlencode($login),
-        ], home_url('/gateway/'));
+        $value = $_GET[$name] ?? '';
+        return is_string($value) ? wp_unslash($value) : '';
     }
 
     /**
@@ -113,15 +103,13 @@ class RedirectHandler
      *
      * Override wp_login_url() to return Gateway URL.
      */
-    public function filterLoginUrl(string $url, string $redirect = ''): string
+    public function filterLoginUrl(string $url, ?string $redirect = ''): string
     {
-        $gateway = home_url('/gateway/');
+        $gateway = GatewayView::LOGIN->url();
 
-        if ($redirect) {
-            $gateway = add_query_arg('redirect_to', urlencode($redirect), $gateway);
-        }
-
-        return $gateway;
+        return $redirect
+            ? add_query_arg('redirect_to', urlencode($redirect), $gateway)
+            : $gateway;
     }
 
     /**
@@ -129,7 +117,7 @@ class RedirectHandler
      */
     public function filterRegisterUrl(string $url): string
     {
-        return home_url('/gateway/?view=register');
+        return GatewayView::REGISTER->url();
     }
 
     /**
@@ -137,61 +125,22 @@ class RedirectHandler
      */
     public function filterLostPasswordUrl(string $url): string
     {
-        return home_url('/gateway/?view=lost-password');
+        return GatewayView::LOST_PASSWORD->url();
     }
 
     /**
      * Filter: logout_url
      *
-     * We keep logout going through wp-login.php?action=logout
-     * but redirect after to Gateway instead of wp-login.php
+     * Logout keeps going through wp-login.php?action=logout (WordPress clears
+     * the cookies), then lands on the Gateway instead of wp-login.php. Built
+     * by hand: calling wp_logout_url() here would re-enter this filter.
      */
-    // public function filterLogoutUrl(string $url, string $redirect = ''): string
-    // {
-    //     $logout_redirect = $redirect ?: home_url('/gateway/');
-
-    //     // Build the logout URL manually instead of calling wp_logout_url()
-    //     $logout_url = wp_nonce_url(
-    //         add_query_arg('action', 'logout', wp_login_url()),
-    //         'log-out'
-    //     );
-
-    //     // Add redirect parameter if provided
-    //     if ($logout_redirect) {
-    //         $logout_url = add_query_arg('redirect_to', urlencode($logout_redirect), $logout_url);
-    //     }
-
-    //     return $logout_url;
-    // }
-
-    // private static $inFilter = false;
-    // public function filterLogoutUrl(string $url, string $redirect = ''): string
-    // {
-    //     if (self::$inFilter) {
-    //         return $url; // Prevent infinite recursion
-    //     }
-
-    //     self::$inFilter = true;
-    //     $result = wp_logout_url($redirect ?: home_url('/gateway/'));
-    //     self::$inFilter = false;
-
-    //     return $result;
-    // }
-
-    public function filterLogoutUrl(string $url, string $redirect = ''): string
+    public function filterLogoutUrl(string $url, ?string $redirect = ''): string
     {
-        // Manually build the logout URL to bypass other filters
-        $args = [
-            'action' => 'logout',
-            '_wpnonce' => wp_create_nonce('log-out'),
-        ];
-
-        if ($redirect) {
-            $args['redirect_to'] = urlencode($redirect);
-        } else {
-            $args['redirect_to'] = urlencode(home_url('/gateway/'));
-        }
-
-        return add_query_arg($args, site_url('wp-login.php', 'login'));
+        return add_query_arg([
+            'action'      => 'logout',
+            '_wpnonce'    => wp_create_nonce('log-out'),
+            'redirect_to' => urlencode($redirect ?: GatewayView::LOGIN->url()),
+        ], site_url('wp-login.php', 'login'));
     }
 }

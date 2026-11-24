@@ -16,6 +16,7 @@ abstract class AbstractPanel implements PanelInterface
     /**
      * Converts 'my-panel-id' to 'isMyPanelIdActive'
      */
+    #[\Override]
     public function getStateKey(): string
     {
         $id = $this->getId();
@@ -29,6 +30,7 @@ abstract class AbstractPanel implements PanelInterface
         return sprintf('state.panels.%s.%s', $this->getId(), $key);
     }
 
+    #[\Override]
     public function getIcon(): string
     {
         return 'icon-settings';

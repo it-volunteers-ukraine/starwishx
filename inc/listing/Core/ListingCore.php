@@ -22,6 +22,7 @@ use Listing\Filters\CategoryFilter;
 use Listing\Filters\CountryFilter;
 use Listing\Filters\LocationsFilterSimple;
 use Listing\Filters\BeneficiariesFilter;
+use Listing\Filters\FavoritesFilter;
 use Listing\Services\TermCountingService;
 use Favorites\Services\FavoritesService;
 use Shared\Http\QueryStringParser;
@@ -419,6 +420,11 @@ final class ListingCore
         $categoryFilter = new CategoryFilter();
         $categoryFilter->setTermCounter($this->termCounter);
         $registry->register('category', $categoryFilter,              10);
+        // Logged-in users only (FavoritesFilter::render()). Its posts_where
+        // restriction does nothing unless applyQuery() tagged the query.
+        $favoritesFilter = new FavoritesFilter(\favorites()->repository());
+        add_filter('posts_where', [$favoritesFilter, 'where'], 10, 2);
+        $registry->register('favorites', $favoritesFilter,             15);
         $registry->register('location', new LocationsFilterSimple(),  20);
         $registry->register('beneficiaries',  new BeneficiariesFilter(),          30);
         $registry->register('country',  new CountryFilter(),          40);
@@ -454,8 +460,9 @@ final class ListingCore
             wp_enqueue_script_module('@starwishx/listing');
         }
 
-        // No nonce: listing reads are anonymous, see fetchJson() in
-        // inc/listing/Assets/utils.js.
+        // No nonce of its own: guests' listing reads are anonymous, logged-in
+        // searches send the favorites store's - see fetchJson() in
+        // inc/listing/Assets/utils.ts.
         $listingConfig = [
             'restUrl' => rest_url('listing/v1/'),
         ];
@@ -481,6 +488,11 @@ final class ListingCore
                 'found'        => __('Found', 'starwishx'),
                 // "Remove filter: {label}" on each chip's button (state.chipRemoveLabel).
                 'removeFilter' => __('Remove filter', 'starwishx'),
+                // The "Favorites" filter's chip.
+                'favoritesChip' => __('Favorites', 'starwishx'),
+                // A logged-in search refused for an expired nonce, which
+                // only a reload renews (fetchResults in grid/actions.js).
+                'sessionExpired' => __('Your session has expired. Please reload the page.', 'starwishx'),
             ],
         ]);
     }

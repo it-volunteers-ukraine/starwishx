@@ -207,10 +207,6 @@ class ResultsGrid implements RenderableInterface
                         < ?php esc_html_e('Country', 'starwishx'); ?>:&nbsp;
                         <span class="country" data-wp-bind--hidden="!context.item.country" data-wp-text="context.item.country"></span>
                     </span> */
-                    /* <span data-wp-bind--hidden="!state.beneficiariesList">
-                        < ?php esc_html_e('Beneficiaries', 'starwishx'); ?>:&nbsp;
-                        <span data-wp-text="state.beneficiariesList"></span>
-                    </span> */
                     ?>
                     <div class="listing-card__engage">
                         <span class="listing-card__rating rating-badge" data-wp-bind--hidden="!context.item.ratingCount">

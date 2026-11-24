@@ -14,7 +14,8 @@ class MediaService
         'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
     ];
 
-    private const MAX_SIZE = 5 * 1024 * 1024; // 5MB
+    /** Upload cap; OpportunitiesPanel hydrates it as uploadMaxBytes for the form's check. */
+    public const int MAX_SIZE = 5 * 1024 * 1024; // 5MB
 
     /**
      * Handle the file upload securely.
@@ -29,7 +30,7 @@ class MediaService
         // 2. Strict MIME Validation (Magic Bytes)
         $finfo = finfo_open(FILEINFO_MIME_TYPE);
         $realMime = finfo_file($finfo, $file['tmp_name']);
-        finfo_close($finfo);
+        // No finfo_close(): deprecated in PHP 8.5, the object frees itself.
 
         if (!in_array($realMime, self::ALLOWED_MIMES)) {
             return new WP_Error('invalid_mime', __('Invalid file type. Only PDF and DOC/DOCX allowed.', 'starwishx'));

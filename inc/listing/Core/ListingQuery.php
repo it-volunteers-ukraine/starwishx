@@ -16,27 +16,32 @@ use Launchpad\Data\Repositories\CountriesRepository;
  * client. Country values may be ISO numeric ids or alpha-2 codes. Unknown
  * slugs and codes are dropped. Every list is de-duplicated and capped before
  * any lookup, so a URL repeating a key thousands of times stays cheap.
+ *
+ * Immutable: withPage() returns a changed copy.
  */
-final class ListingQuery
+final readonly class ListingQuery
 {
     /**
      * Most values one list filter keeps: more than any selection the UI can
      * make (a parent plus all its children), few enough to bound the lookups.
      */
-    public const LIST_MAX = 100;
+    public const int LIST_MAX = 100;
 
     /**
      * @param int[] $category      Term ids (category-oportunities).
      * @param int[] $country       ISO numeric country ids.
      * @param int[] $beneficiaries Term ids (category-beneficiaries).
+     * @param bool  $favorites     Only the current user's favorites; always
+     *                             false for guests (FavoritesFilter).
      */
     private function __construct(
-        public readonly string $s,
-        public readonly array $category,
-        public readonly array $country,
-        public readonly array $beneficiaries,
-        public readonly string $location,
-        public readonly int $page,
+        public string $s,
+        public array $category,
+        public array $country,
+        public array $beneficiaries,
+        public string $location,
+        public bool $favorites,
+        public int $page,
     ) {}
 
     /**
@@ -52,6 +57,9 @@ final class ListingQuery
             self::resolveCountries(self::values($raw['country'] ?? []), $countries),
             self::ids(self::values($raw['beneficiaries'] ?? [])),
             sanitize_text_field(self::scalar($raw['location'] ?? '')),
+            // The client writes ?favorites=1; anything truthy is accepted.
+            filter_var(self::scalar($raw['favorites'] ?? ''), FILTER_VALIDATE_BOOLEAN)
+                && get_current_user_id() > 0,
             max(1, absint(self::scalar($raw['paged'] ?? $raw['page'] ?? 1))),
         );
     }
@@ -68,20 +76,19 @@ final class ListingQuery
             'country'       => $this->country,
             'location'      => $this->location,
             'beneficiaries' => $this->beneficiaries,
+            'favorites'     => $this->favorites,
             'page'          => $this->page,
         ];
     }
 
+    /**
+     * The same filters on another page. clone-with copies every other field,
+     * so a new filter needs no change here.
+     */
+    #[\NoDiscard('ListingQuery is immutable: use the copy withPage() returns')]
     public function withPage(int $page): self
     {
-        return new self(
-            $this->s,
-            $this->category,
-            $this->country,
-            $this->beneficiaries,
-            $this->location,
-            max(1, $page)
-        );
+        return clone($this, ['page' => max(1, $page)]);
     }
 
     /**
@@ -110,7 +117,7 @@ final class ListingQuery
     private static function scalar(mixed $raw): string
     {
         if (is_array($raw)) {
-            $raw = end($raw);
+            $raw = array_last($raw);
         }
 
         return is_scalar($raw) ? (string) $raw : '';
@@ -122,7 +129,22 @@ final class ListingQuery
      */
     private static function ids(array $values): array
     {
-        return array_values(array_unique(array_filter(array_map('absint', $values))));
+        return self::uniqueIds(array_map(absint(...), $values));
+    }
+
+    /**
+     * Ids as a list: zeros (absint()'s answer to anything that isn't one)
+     * dropped, each id once, in first-seen order.
+     *
+     * @param int[] $ids
+     * @return list<int>
+     */
+    private static function uniqueIds(array $ids): array
+    {
+        return $ids
+            |> array_filter(...)
+            |> array_unique(...)
+            |> array_values(...);
     }
 
     /**
@@ -159,11 +181,11 @@ final class ListingQuery
             ]);
 
             if (!is_wp_error($children)) {
-                $ids = array_merge($ids, array_map('absint', $children));
+                $ids = array_merge($ids, array_map(absint(...), $children));
             }
         }
 
-        return array_values(array_unique(array_filter($ids)));
+        return self::uniqueIds($ids);
     }
 
     /**
@@ -190,6 +212,6 @@ final class ListingQuery
             }
         }
 
-        return array_values(array_unique(array_filter($ids)));
+        return self::uniqueIds($ids);
     }
 }

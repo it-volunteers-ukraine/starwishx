@@ -3,7 +3,7 @@
 /**
  * Service handling the two-step password recovery flow.
  * Matches WP Core: lostpassword (request) and rp (reset).
- * 
+ *
  * File: inc/gateway/Services/PasswordResetService.php
  */
 
@@ -11,38 +11,37 @@ declare(strict_types=1);
 
 namespace Gateway\Services;
 
+use Gateway\Enums\GatewayView;
+use Shared\Http\ClientIp;
 use Shared\Policy\PasswordPolicy;
 use WP_Error;
 use WP_User;
 
-class PasswordResetService
+final class PasswordResetService
 {
     /**
      * Phase 1: Handle the "Lost Password" request.
      * Generates a key and sends the email link.
      *
-     * Rate limiting lives at the controller edge (PasswordController) and
-     * runs before this method, so enumeration timing attacks see identical
-     * latency regardless of whether the account exists.
+     * The answer is the same whether or not the account exists. The time
+     * isn't (an existing account costs a key and an email), but /register
+     * deliberately says whether a login or email is taken, so hiding it
+     * here alone would buy nothing; the controller's rate limits apply to
+     * both.
      *
      * @param string $user_login Username or Email.
      * @return true|WP_Error
      */
+    #[\NoDiscard]
     public function handleLostPassword(string $user_login): bool|WP_Error
     {
-        if (empty($user_login)) {
+        if ($user_login === '') {
             return new WP_Error('empty_username', __('Please enter a username or email.', 'starwishx'));
         }
 
-        // Identify user by login or email
-        if (strpos($user_login, '@')) {
-            $user = get_user_by('email', $user_login);
-            if (!$user) {
-                $user = get_user_by('login', $user_login);
-            }
-        } else {
-            $user = get_user_by('login', $user_login);
-        }
+        // Identify user by email (when it looks like one) or login
+        $user = (str_contains($user_login, '@') ? get_user_by('email', $user_login) : false)
+            ?: get_user_by('login', $user_login);
 
         // Security: If user doesn't exist, return true so we don't leak account existence.
         if (!$user) {
@@ -55,12 +54,7 @@ class PasswordResetService
             return $key;
         }
 
-        // Build the "rp" (Reset Password) URL for our Gateway app
-        $reset_url = add_query_arg([
-            'view'  => 'reset-password',
-            'key'   => $key,
-            'login' => rawurlencode($user->user_login),
-        ], home_url('/gateway/'));
+        $reset_url = GatewayView::resetUrl($key, $user->user_login);
 
         $site_name = wp_specialchars_decode(get_option('blogname'), ENT_QUOTES);
 
@@ -73,17 +67,13 @@ class PasswordResetService
 
         $subject = sprintf(__('[%s] Password Reset', 'starwishx'), $site_name);
 
-        $sent = wp_mail($user->user_email, $subject, $message);
-
-        if (!$sent) {
-            // SECURITY: Log failure but return true to prevent user enumeration
+        if (!wp_mail($user->user_email, $subject, $message)) {
+            // Log, but answer as for any other request.
             error_log(sprintf(
                 '[Gateway] Password reset email failed for user: %s (IP: %s)',
                 $user->user_login,
-                $_SERVER['REMOTE_ADDR'] ?? 'unknown'
+                ClientIp::resolve()
             ));
-            // Still return true - don't leak user existence via email failures
-            return true;
         }
 
         return true;
@@ -92,8 +82,13 @@ class PasswordResetService
     /**
      * Validation: Check if the key/login combo is still valid.
      * Used to protect the Reset Password form.
+     *
+     * The key and the password are #[\SensitiveParameter]: PHP 8.5 prints
+     * backtraces for fatal errors, and a live reset key is as good as the
+     * password it sets.
      */
-    public function validateKey(string $key, string $login): WP_User|WP_Error
+    #[\NoDiscard]
+    public function validateKey(#[\SensitiveParameter] string $key, string $login): WP_User|WP_Error
     {
         $user = check_password_reset_key($key, $login);
 
@@ -105,10 +100,15 @@ class PasswordResetService
     }
 
     /**
-     * Phase 2: The "rp" action. 
+     * Phase 2: The "rp" action.
      * Validates the key one last time and updates the password.
      */
-    public function resetPassword(string $key, string $login, string $new_password): bool|WP_Error
+    #[\NoDiscard]
+    public function resetPassword(
+        #[\SensitiveParameter] string $key,
+        string $login,
+        #[\SensitiveParameter] string $new_password
+    ): bool|WP_Error
     {
         $user = $this->validateKey($key, $login);
         if (is_wp_error($user)) {
@@ -121,20 +121,19 @@ class PasswordResetService
             return $validation;
         }
 
-        // Uses the function from your provided user.php (Line 2118)
+        // Core's reset: sets the password (which also clears the reset key)
+        // and fires password_reset / after_password_reset.
         reset_password($user, $new_password);
 
         return true;
     }
 
     /**
-     * Generate a strong password.
-     * 
-     * @return string
+     * Generate a strong password: 24 characters, with standard and extra
+     * special characters.
      */
     public function generatePassword(): string
     {
-        // 24 characters, with standard and extra special characters
         return wp_generate_password(24, true, true);
     }
 }

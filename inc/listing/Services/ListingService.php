@@ -84,8 +84,10 @@ class ListingService
      *
      * Queries per request:
      *   - 1 × get_terms          (category map, only on transient cache miss)
-     *   - 1 × favorite ids       (logged-in page loads only - REST reads run
-     *                              as a guest, see fetchJson() in Assets/utils.js)
+     *   - 1 × favorite ids       (logged-in page loads only - REST searches,
+     *                              logged-in ones included, take isFavorite
+     *                              from the favorites store, see fetchResults()
+     *                              in Assets/grid/actions.ts)
      */
     private function preloadPostData(): array
     {
@@ -110,8 +112,9 @@ class ListingService
 
         // --- Favorites (current user only) ----------------------------------
         // The user's ids in one query, not one isFavorite() query per card.
+        // Page loads only: the client overwrites isFavorite on REST results.
         $userId      = get_current_user_id();
-        $favoriteIds = $userId > 0
+        $favoriteIds = $userId > 0 && !wp_is_serving_rest_request()
             ? array_fill_keys(
                 $this->favoritesService->getRepository()->getFavoriteIds($userId, 'post', 9999, 0),
                 true
@@ -211,6 +214,19 @@ class ListingService
         $contextForCountry = $filters;
         unset($contextForCountry['country']);
         $facets['country'] = $this->buildCountryFacets($contextForCountry);
+
+        // "Favorites" count, logged-in users only (the filter isn't
+        // rendered for guests, and they pay no query). Exclude Self as above:
+        // the user's favorites among the posts the other filters leave.
+        $userId = get_current_user_id();
+        if ($userId > 0) {
+            $contextForFavorites = $filters;
+            unset($contextForFavorites['favorites']);
+            $facets['favorites'] = $this->favoritesService->getRepository()->countAmong(
+                $userId,
+                $this->termCounter->filteredIdsSql($contextForFavorites)
+            );
+        }
 
         return $facets;
     }

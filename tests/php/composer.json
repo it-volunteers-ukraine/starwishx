@@ -1,0 +1,23 @@
+{
+    "name": "starwishx/tests-php",
+    "description": "PHP test tooling for the theme. Kept out of the theme's own vendor/, which is committed and deployed: a test framework must never reach the server.",
+    "type": "project",
+    "license": "proprietary",
+    "require-dev": {
+        "php": ">=8.5.12",
+        "phpunit/phpunit": "^9.6",
+        "wp-phpunit/wp-phpunit": "^7.1",
+        "yoast/phpunit-polyfills": "^4.0"
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Starwishx\\Tests\\": ""
+        }
+    },
+    "config": {
+        "platform": {
+            "php": "8.5.12"
+        },
+        "sort-packages": true
+    }
+}

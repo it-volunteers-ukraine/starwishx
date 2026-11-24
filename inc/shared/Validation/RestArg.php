@@ -155,8 +155,9 @@ final class RestArg
     /**
      * Validate string length is within bounds (inclusive).
      *
-     * Trim is applied before the min check so whitespace-only strings fail.
-     * Length uses mb_strlen — counts characters, not bytes.
+     * Trim is applied before the min check so whitespace-only strings fail -
+     * mb_trim(), so Unicode spaces (U+00A0 no-break, U+3000...) count as
+     * whitespace too. Length uses mb_strlen — counts characters, not bytes.
      */
     public static function stringLength(int $min, int $max, string $fieldLabel): Closure
     {
@@ -173,7 +174,7 @@ final class RestArg
                 );
             }
 
-            if (mb_strlen(trim($value)) < $min) {
+            if (mb_strlen(mb_trim($value)) < $min) {
                 return new WP_Error(
                     'too_short',
                     sprintf(
@@ -200,6 +201,35 @@ final class RestArg
             }
 
             return true;
+        };
+    }
+
+    /**
+     * Validate value is a string, then optionally hand it to `$then` - a
+     * policy check returning true|WP_Error - which so only ever sees one.
+     *
+     * WordPress validates the raw value, before sanitize_callback: from a
+     * JSON body it may be an array or a number, and a policy typed `string`
+     * would throw a TypeError (a 500) instead of answering.
+     *
+     * @param (Closure(string): (bool|WP_Error))|null $then
+     */
+    public static function string(string $fieldLabel, ?Closure $then = null): Closure
+    {
+        return static function ($value) use ($fieldLabel, $then) {
+            if (!is_string($value)) {
+                return new WP_Error(
+                    'invalid_type',
+                    sprintf(
+                        /* translators: %s: name of the field that received an invalid value */
+                        __('%s: expected a string.', 'starwishx'),
+                        $fieldLabel
+                    ),
+                    ['status' => 400]
+                );
+            }
+
+            return $then === null ? true : $then($value);
         };
     }
 }
